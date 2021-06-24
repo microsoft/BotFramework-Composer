@@ -12,6 +12,11 @@ export const showAuthDialogState = atom<boolean>({
   default: false,
 });
 
+export const requiresGraphState = atom<boolean>({
+  key: getFullyQualifiedKey('requiresGraph'),
+  default: false,
+});
+
 export const primaryTokenState = atom<string>({
   key: getFullyQualifiedKey('primaryToken'),
   default: '',

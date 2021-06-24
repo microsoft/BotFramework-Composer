@@ -16,8 +16,6 @@ import {
   dispatcherState,
   localBotPublishHistorySelector,
   localBotsDataSelector,
-  isAuthenticatedState,
-  showAuthDialogState,
   currentUserState,
 } from '../../recoilModel';
 import { createNotification } from '../../recoilModel/dispatchers/notification';
@@ -77,8 +75,6 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
   const showNotificationsRef = useRef<Record<string, boolean>>({});
 
   const currentUser = useRecoilValue(currentUserState);
-  const isAuthenticated = useRecoilValue(isAuthenticatedState);
-  const showAuthDialog = useRecoilValue(showAuthDialogState);
 
   const [activeTab, setActiveTab] = useState<string>('publish');
   const [provisionProject, setProvisionProject] = useState(projectId);
@@ -407,7 +403,7 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
 
   return (
     <Fragment>
-      {publishDialogVisible && !showAuthDialog && (
+      {publishDialogVisible && (
         <PublishDialog
           items={selectedBots.filter((bot) => !!bot.publishTarget)}
           onDismiss={() => setPublishDialogVisiblity(false)}

@@ -17,7 +17,6 @@ import { PluginHost } from '../../../components/PluginHost/PluginHost';
 import { defaultPublishSurface, pvaPublishSurface, azurePublishSurface } from '../../publish/styles';
 import TelemetryClient from '../../../telemetry/TelemetryClient';
 import { dispatcherState, currentUserState } from '../../../recoilModel';
-import { createNotification } from '../../../recoilModel/dispatchers/notification';
 
 import { ProfileFormDialog } from './ProfileFormDialog';
 
@@ -160,38 +159,12 @@ export const PublishProfileDialog: React.FC<PublishProfileDialogProps> = (props)
     PluginAPI.publish.savePublishConfig = (config) => {
       savePublishTarget(name, targetType, JSON.stringify(config) || '{}');
     };
-    PluginAPI.publish.startProvision = async (config) => {
+    PluginAPI.publish.startProvision = async (config, arm: string, graph: string) => {
       const fullConfig = { ...config, name: name, type: targetType };
-
-      let tenantId = config.tenantId;
-
-      if (!tenantId) {
-        // eslint-disable-next-line no-console
-        console.log('Provision config does not include tenant id, using tenant id from cache.');
-        tenantId = getTenantIdFromCache();
-      }
-
-      // require tenant id to be set by plugin (handles multiple tenant scenario)
-      if (!tenantId) {
-        TelemetryClient.track('ProvisioningProfileCreateFailure', { message: 'azure tenant not set' });
-        const notification = createNotification({
-          type: 'error',
-          title: formatMessage('Error provisioning.'),
-          description: formatMessage(
-            'An Azure tenant must be set in order to provision resources. Try recreating the publish profile and try again.'
-          ),
-        });
-        addNotification(notification);
-        return;
-      }
-
-      const arm = currentUser.token;
-      const graph = currentUser.graph;
-
       await provisionToTarget(fullConfig, config.type, projectId, arm, graph, current?.item);
       onUpdateIsCreateProfileFromSkill?.(true);
     };
-  }, [currentUser, name, targetType, types, savePublishTarget]);
+  }, [name, targetType, types, savePublishTarget]);
 
   return (
     <Fragment>

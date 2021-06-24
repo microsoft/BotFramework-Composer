@@ -117,7 +117,7 @@ export type AuthContext = {
 };
 
 export type AuthContextApi = {
-  requireUserLogin: (tenantId?: string) => void;
+  requireUserLogin: (tenantId?: string, options?: { graph: boolean }) => void;
 };
 
 export type LuContextApi = {

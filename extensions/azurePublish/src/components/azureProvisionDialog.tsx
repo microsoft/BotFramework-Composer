@@ -427,7 +427,7 @@ export const AzureProvisionDialog: React.FC = () => {
 
   useEffect(() => {
     if (page === PageTypes.ConfigProvision) {
-      requireUserLogin(formData.tenantId);
+      requireUserLogin(formData.tenantId, { graph: true });
     }
   }, [page]);
 
@@ -612,19 +612,22 @@ export const AzureProvisionDialog: React.FC = () => {
     [extensionResourceOptions]
   );
 
-  const onSubmit = useCallback((options) => {
-    // call back to the main Composer API to begin this process...
+  const onSubmit = useCallback(
+    (options) => {
+      // call back to the main Composer API to begin this process...
 
-    telemetryClient?.track('ProvisionStart', {
-      region: options.location,
-      subscriptionId: options.subscription,
-      externalResources: options.externalResources,
-    });
+      telemetryClient?.track('ProvisionStart', {
+        region: options.location,
+        subscriptionId: options.subscription,
+        externalResources: options.externalResources,
+      });
 
-    startProvision(options);
-    clearAll();
-    closeDialog();
-  }, []);
+      startProvision(options, currentUser.token, currentUser.graph);
+      clearAll();
+      closeDialog();
+    },
+    [currentUser]
+  );
 
   const onSave = useCallback(() => {
     savePublishConfig(removePlaceholder(importConfig));
@@ -907,7 +910,7 @@ export const AzureProvisionDialog: React.FC = () => {
   );
 
   const PageFooter = useMemo(() => {
-    const isSignedInAndCreateCreationType = currentUser && formData.creationType === 'create';
+    const isSignedInAndCreateCreationType = isAuthenticated && formData.creationType === 'create';
     if (page === PageTypes.ChooseAction) {
       return (
         <ProvisonActions showSignout={isSignedInAndCreateCreationType}>
@@ -962,7 +965,7 @@ export const AzureProvisionDialog: React.FC = () => {
     } else if (page === PageTypes.ConfigProvision) {
       return (
         <ProvisonActions showSignout={isSignedInAndCreateCreationType}>
-          {currentUser ? (
+          {isAuthenticated ? (
             <Persona
               secondaryText={formatMessage('Sign out')}
               size={PersonaSize.size40}
@@ -1078,7 +1081,7 @@ export const AzureProvisionDialog: React.FC = () => {
     } else if (page === PageTypes.ReviewResource) {
       return (
         <ProvisonActions showSignout={isSignedInAndCreateCreationType}>
-          {currentUser ? (
+          {isAuthenticated ? (
             <Persona
               secondaryText={formatMessage('Sign out')}
               size={PersonaSize.size40}

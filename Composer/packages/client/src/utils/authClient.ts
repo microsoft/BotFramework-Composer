@@ -127,7 +127,6 @@ async function getARMTokenForTenant(tenantId: string): Promise<string> {
   }
   // do we have a valid token in the cache for this tenant?
   if (getTokenFromCache(`token-${tenantId}`)) {
-    const tokenInCache = getTokenFromCache(`token-${tenantId}`);
     return getTokenFromCache(`token-${tenantId}`);
   } else {
     const result = await fetch(`/api/auth/getARMTokenForTenant?tenantId=${tenantId}`, options);

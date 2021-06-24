@@ -3,13 +3,15 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { DialogWrapper, DialogTypes } from '@bfc/ui-shared';
+// import { DialogWrapper, DialogTypes } from '@bfc/ui-shared';
 import formatMessage from 'format-message';
-import { DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
+import { Dialog, DialogType, DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
 import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { useCallback, useState } from 'react';
 import { useRecoilValue } from 'recoil';
+import { FontWeights } from 'office-ui-fabric-react/lib/Styling';
+import { FontSizes } from '@uifabric/fluent-theme';
 
 import { dispatcherState } from '../../recoilModel/atoms';
 import { isTokenExpired } from '../../utils/auth';
@@ -19,6 +21,27 @@ export interface AuthDialogProps {
   onDismiss: () => void;
   next?: () => void;
 }
+
+const authDialogStyles = {
+  dialog: {
+    title: {
+      fontWeight: FontWeights.bold,
+      fontSize: FontSizes.size20,
+      paddingTop: '14px',
+      paddingBottom: '11px',
+    },
+    subText: {
+      fontSize: FontSizes.size14,
+    },
+  },
+  modal: {
+    main: {
+      // maxWidth: '416px !important',
+      maxWidth: '80% !important',
+      width: '960px !important',
+    },
+  },
+};
 export const AuthDialog: React.FC<AuthDialogProps> = (props) => {
   const { setCurrentUser, setGraphToken } = useRecoilValue(dispatcherState);
 
@@ -40,14 +63,20 @@ export const AuthDialog: React.FC<AuthDialogProps> = (props) => {
   }, [accessToken, graphToken]);
 
   return (
-    <DialogWrapper
-      isBlocking
-      isOpen
-      dialogType={DialogTypes.CreateFlow}
-      subText={formatMessage(
-        'To perform provisioning and publishing actions, Composer requires access to your Azure and MS Graph accounts.  Paste access tokens from the az command line tool using the commands highlighted below.'
-      )}
-      title={formatMessage('Provide access tokens')}
+    <Dialog
+      dialogContentProps={{
+        type: DialogType.close,
+        title: formatMessage('Provide access tokens'),
+        subText: formatMessage(
+          'To perform provisioning and publishing actions, Composer requires access to your Azure and MS Graph accounts.  Paste access tokens from the az command line tool using the commands highlighted below.'
+        ),
+        styles: authDialogStyles.dialog,
+      }}
+      hidden={false}
+      modalProps={{
+        isBlocking: true,
+        styles: authDialogStyles.modal,
+      }}
       onDismiss={props.onDismiss}
     >
       <TextField
@@ -57,7 +86,6 @@ export const AuthDialog: React.FC<AuthDialogProps> = (props) => {
         placeholder={formatMessage('Paste token here')}
         rows={4}
         onChange={(event, newValue) => {
-          console.log('firing on change in auth dialog token field');
           newValue && setAccessToken(newValue);
           if (isTokenExpired(newValue || '')) {
             setTokenError('Token Expire or token invalid');
@@ -93,12 +121,11 @@ export const AuthDialog: React.FC<AuthDialogProps> = (props) => {
           onClick={() => {
             props.onDismiss();
             // cache tokens
-            setCurrentUser(accessToken);
-            setGraphToken(graphToken);
+            setCurrentUser(accessToken, graphToken);
             if (props.next) props.next();
           }}
         />
       </DialogFooter>
-    </DialogWrapper>
+    </Dialog>
   );
 };

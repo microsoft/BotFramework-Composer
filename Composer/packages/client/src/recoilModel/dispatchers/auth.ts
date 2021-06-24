@@ -22,6 +22,7 @@ import {
   currentTenantState,
   currentUserState,
   isAuthenticatedState,
+  requiresGraphState,
 } from '../atoms/authState';
 import { AuthClient } from '../../utils/authClient';
 import storage from '../../utils/storage';
@@ -29,10 +30,17 @@ import { graphScopes } from '../../constants';
 
 import { addNotificationInternal, createNotification } from './notification';
 
+export type UserLoginOptions = {
+  graph: boolean;
+};
+
 export const authDispatcher = () => {
-  const setShowAuthDialog = useRecoilCallback((callbackHelpers: CallbackInterface) => (show: boolean) => {
-    callbackHelpers.set(showAuthDialogState, show);
-  });
+  const setShowAuthDialog = useRecoilCallback(
+    (callbackHelpers: CallbackInterface) => (show: boolean, graph: boolean) => {
+      callbackHelpers.set(showAuthDialogState, show);
+      callbackHelpers.set(requiresGraphState, graph);
+    }
+  );
 
   const setPrimaryToken = useRecoilCallback((callbackHelpers: CallbackInterface) => (token: string) => {
     callbackHelpers.set(primaryTokenState, token);
@@ -51,7 +59,6 @@ export const authDispatcher = () => {
       if (tenant) {
         // get arm token for tenant
         try {
-          console.log('Get arm token for tenant', tenant);
           const token = await AuthClient.getARMTokenForTenant(tenant);
           const graph = await AuthClient.getAccessToken(graphScopes);
 
@@ -108,6 +115,9 @@ export const authDispatcher = () => {
           sessionExpired: false,
         });
         callbackHelpers.set(isAuthenticatedState, true);
+
+        callbackHelpers.set(currentTenantState, decoded.tid);
+        setTenantId(decoded.tid);
       } else {
         callbackHelpers.set(currentUserState, {});
         callbackHelpers.set(isAuthenticatedState, false);
@@ -136,22 +146,20 @@ export const authDispatcher = () => {
   });
 
   const requireUserLogin = useRecoilCallback(
-    (callbackHelpers: CallbackInterface) => async (desiredTenantId?: string) => {
+    (callbackHelpers: CallbackInterface) => async (desiredTenantId?: string, options?: UserLoginOptions) => {
+      console.log('Require user login!');
       if (userShouldProvideTokens()) {
-        if (isShowAuthDialog(false)) {
-          setShowAuthDialog(true);
+        if (isShowAuthDialog(options?.graph || false)) {
+          setShowAuthDialog(true, options?.graph || false);
         } else {
           // update app state with token from cache
-          setCurrentUser(getTokenFromCache('accessToken'));
-          setGraphToken(getTokenFromCache('graphToken'));
+          setCurrentUser(getTokenFromCache('accessToken'), getTokenFromCache('graphToken'));
         }
       } else if (desiredTenantId) {
-        console.log('Logging into specific tenant:', desiredTenantId);
         setCurrentTenant(desiredTenantId);
       } else {
         const cachedTenantId = getTenantIdFromCache();
         let tenantId;
-        console.log('Getting list of tenants...');
         try {
           const tenants = await AuthClient.getTenants();
           setAvailableTenants(tenants);

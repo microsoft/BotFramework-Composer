@@ -8,8 +8,6 @@ import { useRecoilValue } from 'recoil';
 import { PublishTarget } from '@bfc/shared';
 
 import { dispatcherState, settingsState, publishTypesState } from '../../recoilModel';
-import { AuthDialog } from '../../components/Auth/AuthDialog';
-import { isShowAuthDialog } from '../../utils/auth';
 
 import { PublishProfileDialog } from './create-publish-profile/PublishProfileDialog';
 
@@ -29,14 +27,13 @@ export const PublishProfileWrapperDialog: React.FC<PublishProfileWrapperDialogPr
   const publishTypes = useRecoilValue(publishTypesState(projectId));
 
   const [showPublishProfileDialog, setShowPublishProfileDialog] = useState(false);
-  const [showAuthDialog, setShowAuthDialog] = useState(false);
 
   const [currentPublishProfile, setCurrentPublishProfile] = useState<{ index: number; item: PublishTarget } | null>(
     null
   );
 
   useEffect(() => {
-    isShowAuthDialog(true) ? setShowAuthDialog(true) : setShowPublishProfileDialog(true);
+    setShowPublishProfileDialog(true);
   });
 
   useEffect(() => {
@@ -47,19 +44,6 @@ export const PublishProfileWrapperDialog: React.FC<PublishProfileWrapperDialogPr
 
   return (
     <Fragment>
-      {showAuthDialog && (
-        <AuthDialog
-          needGraph
-          next={() => {
-            setShowPublishProfileDialog(true);
-            onOpen();
-          }}
-          onDismiss={() => {
-            setShowAuthDialog(false);
-            onClose();
-          }}
-        />
-      )}
       {showPublishProfileDialog ? (
         <PublishProfileDialog
           closeDialog={() => {

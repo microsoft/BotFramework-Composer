@@ -19,6 +19,7 @@ import {
   dispatcherState,
   showAuthDialogState,
   showTenantDialogState,
+  requiresGraphState,
 } from '../../recoilModel/atoms';
 import { setTenantId } from '../../utils/auth';
 import { zIndices } from '../../utils/zIndices';
@@ -59,16 +60,11 @@ export const AuthCard: React.FC = () => {
   const currentUser = useRecoilValue(currentUserState);
   const showAuthDialog = useRecoilValue(showAuthDialogState);
   const showTenantDialog = useRecoilValue(showTenantDialogState);
+  const requiresGraph = useRecoilValue(requiresGraphState);
 
   useEffect(() => {
     refreshLoginStatus();
   }, []);
-
-  const switchTenants = () => {
-    setTenantId('');
-    requireUserLogin();
-    toggleAuthCardVisibility();
-  };
 
   const logout = () => {
     logoutUser();
@@ -76,6 +72,12 @@ export const AuthCard: React.FC = () => {
 
   const toggleAuthCardVisibility = () => {
     setAuthCardVisible(!authCardVisible);
+  };
+
+  const switchTenants = () => {
+    setTenantId('');
+    requireUserLogin();
+    toggleAuthCardVisibility();
   };
 
   return (
@@ -144,9 +146,10 @@ export const AuthCard: React.FC = () => {
 
       {showAuthDialog && (
         <AuthDialog
-          needGraph={false}
+          needGraph={requiresGraph}
           onDismiss={() => {
-            setShowAuthDialog(false);
+            console.log('HIDE AUTH DIALOG');
+            setShowAuthDialog(false, false);
           }}
         />
       )}

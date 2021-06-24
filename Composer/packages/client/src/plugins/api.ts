@@ -3,6 +3,7 @@
 
 import { AuthParameters, AzureTenant } from '@botframework-composer/types';
 
+import { UserLoginOptions } from '../recoilModel/dispatchers/auth';
 import { AuthClient } from '../utils/authClient';
 
 interface IAPI {
@@ -40,7 +41,7 @@ interface PublishAPI {
   userShouldProvideTokens?: () => boolean;
   getTenantIdFromCache?: () => string;
   setTenantId?: (value: string) => void;
-  requireUserLogin: (tenantId?: string) => void;
+  requireUserLogin: (tenantId?: string, options?: UserLoginOptions) => void;
   getPrimaryToken: () => string;
 }
 
