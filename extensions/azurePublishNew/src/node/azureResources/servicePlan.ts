@@ -2,19 +2,9 @@
 // Licensed under the MIT License.
 
 import { parseRuntimeKey } from '../../../../../Composer/packages/lib/shared';
-import { AZURE_HOSTING_GROUP_NAME } from '../getResources';
 import { ProvisionMethod, ProvisionWorkingSet, ResourceProvisionService } from '../types';
 
 import { AppServiceConfig } from './types';
-
-export const servicePlanDefinition = {
-  key: 'servicePlan',
-  description:
-    'App Service plans give you the flexibility to allocate specific apps to a given set of resources and further optimize your Azure resource utilization. This way, if you want to save money on your testing environment you can share a plan across multiple apps.',
-  text: 'Microsoft App Service Plan',
-  tier: 'S1 Standard',
-  group: AZURE_HOSTING_GROUP_NAME,
-};
 
 const getAppServiceProvisionMethod = (): ProvisionMethod => {
   return (config: AppServiceConfig, workingSet: ProvisionWorkingSet): Promise<ProvisionWorkingSet> => {

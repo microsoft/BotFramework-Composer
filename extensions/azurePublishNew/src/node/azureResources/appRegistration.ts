@@ -5,23 +5,9 @@ import { AxiosRequestConfig } from 'axios';
 import * as rp from 'request-promise';
 
 import { createCustomizeError, ProvisionErrors } from '../../../../azurePublish/src/node/utils/errorHandler';
-import {
-  ProvisionCredentials,
-  ProvisionMethod,
-  ProvisionWorkingSet,
-  ResourceDefinition,
-  ResourceProvisionService,
-} from '../types';
+import { ProvisionCredentials, ProvisionMethod, ProvisionWorkingSet, ResourceProvisionService } from '../types';
 
 import { AppRegistrationConfig, AppRegistrationResult } from './types';
-
-export const appRegistrationDefinition: ResourceDefinition = {
-  key: 'appRegistration',
-  text: 'Microsoft Application Registration',
-  description: 'Required registration allowing your bot to communicate with Azure services.',
-  tier: 'Free',
-  group: 'Azure Hosting',
-};
 
 const sleep = (waitTimeInMs) => new Promise((resolve) => setTimeout(resolve, waitTimeInMs));
 
