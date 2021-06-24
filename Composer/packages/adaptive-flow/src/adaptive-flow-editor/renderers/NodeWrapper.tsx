@@ -59,9 +59,10 @@ export type NodeWrapperProps = React.PropsWithChildren<{
   tab?: PromptTab;
   data: any;
   onEvent: (eventName: NodeEventTypes, eventData: any) => any;
+  hideComment?: boolean;
 }>;
 
-export const ActionNodeWrapper = ({ id, tab, data, onEvent, children }: NodeWrapperProps): JSX.Element => {
+export const ActionNodeWrapper = ({ id, tab, data, onEvent, hideComment, children }: NodeWrapperProps): JSX.Element => {
   const selectableId = tab ? `${id}${tab}` : id;
   const { focusedId, focusedEvent, focusedTab } = useContext(NodeRendererContext);
   const { selectedIds, getNodeIndex } = useContext(SelectionContext);
@@ -143,7 +144,7 @@ export const ActionNodeWrapper = ({ id, tab, data, onEvent, children }: NodeWrap
     </div>
   );
 
-  return data.$designer?.comment ? (
+  return !hideComment && data.$designer?.comment ? (
     <TooltipHost
       calloutProps={{
         directionalHint: DirectionalHint.rightTopEdge,

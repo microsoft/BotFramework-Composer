@@ -38,6 +38,7 @@ export const CardTemplate: FC<CardTemplateProps> = ({
   footer,
   disabled,
   data,
+  hideComment,
   onClick,
   onClickHeader,
   onClickBody,
@@ -58,7 +59,7 @@ export const CardTemplate: FC<CardTemplateProps> = ({
 
   const renderBody = (body: ReactNode) => (
     <div className="CardNode__Body" css={bodyCSS} onClick={onClickBody}>
-      {flowCommentsVisible && comment && <CardComment comment={comment} />}
+      {!hideComment && flowCommentsVisible && comment && <CardComment comment={comment} />}
       <TextDiv css={{ width: '100%' }}>{body}</TextDiv>
     </div>
   );
