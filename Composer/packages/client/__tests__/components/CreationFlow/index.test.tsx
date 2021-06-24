@@ -13,6 +13,7 @@ import {
   dispatcherState,
   featureFlagsState,
   templateProjectsState,
+  selectedTemplateVersionState,
 } from '../../../src/recoilModel';
 import { CreationFlowStatus } from '../../../src/constants';
 import CreationFlow from '../../../src/components/CreationFlow/CreationFlow';
@@ -61,6 +62,8 @@ describe('<CreationFlow/>', () => {
         },
       ],
     });
+
+    set(selectedTemplateVersionState, '1.0.0');
   };
 
   function renderWithRouter(ui, { route = '', history = createHistory(createMemorySource(route)) } = {}) {
@@ -122,12 +125,11 @@ describe('<CreationFlow/>', () => {
       alias: undefined,
       eTag: undefined,
       preserveRoot: undefined,
-      qnqKbUrls: undefined,
+      qnaKbUrls: undefined,
       runtimeType: 'webapp',
       templateDir: undefined,
       urlSuffix: undefined,
       profile: undefined,
-      qnaKbUrls: undefined,
       runtimeLanguage: 'dotnet',
       source: undefined,
       isLocalGenerator: false,

@@ -3,7 +3,7 @@
 
 import { LuFile, DialogInfo, Diagnostic, DiagnosticSeverity } from '@bfc/shared';
 
-import { getReferredLuFiles, checkLuisBuild } from '../../src/utils/luUtil';
+import { getReferredLuFiles, checkLuisBuild } from '../luUtil';
 
 describe('getReferredLuFiles', () => {
   it('returns referred luFiles from dialog', () => {

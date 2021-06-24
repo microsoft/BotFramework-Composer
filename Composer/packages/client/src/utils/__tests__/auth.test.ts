@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { isTokenExpired } from '../../src/utils/auth';
+import { isTokenExpired } from '../auth';
 
 // token that expires on Sep 5, 2019 @ 14:00 PDT
 const jwtToken =

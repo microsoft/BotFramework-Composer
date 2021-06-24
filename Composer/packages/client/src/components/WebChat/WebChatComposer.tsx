@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 import React from 'react';
-import { createStyleSet, Components } from 'botframework-webchat';
+import { createStyleSet, Components } from 'botframework-webchat-component';
 import { CommunicationColors, NeutralColors } from '@uifabric/fluent-theme';
 
 import { ConversationService } from './utils/conversationService';
@@ -10,7 +10,7 @@ import { ChatData, ActivityType } from './types';
 import { ActivityHighlightWrapper } from './ActivityHighlightWrapper';
 import { WebChatHooksContainer } from './hooks/WebChatHooksContainer';
 
-const { BasicWebChat, Composer } = Components;
+const { Composer, BasicWebChat } = Components;
 
 export type WebChatComposerProps = {
   currentConversation: string;
