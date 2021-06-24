@@ -1,14 +1,14 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 import { createSingleMessage, isDiagnosticWithInRange } from '@bfc/indexers';
-import { Diagnostic, DialogInfo, LuFile, LgFile, LgNamePattern } from '@bfc/shared';
+import { Diagnostic, DialogInfo, LuFile, LgFile, LgNamePattern, ITrigger } from '@bfc/shared';
+import { DiagnosticSeverity } from '@botframework-composer/types';
 import get from 'lodash/get';
 import formatMessage from 'format-message';
 
-import { getBaseName } from '../../utils/fileUtil';
-import { replaceDialogDiagnosticLabel } from '../../utils/dialogUtil';
-import { convertPathToUrl, createBotSettingUrl } from '../../utils/navigation';
-export const DiagnosticSeverity = ['Error', 'Warning']; //'Information', 'Hint'
+import { getBaseName } from '../../../../../utils/fileUtil';
+import { replaceDialogDiagnosticLabel } from '../../../../../utils/dialogUtil';
+import { convertPathToUrl, createBotSettingUrl } from '../../../../../utils/navigation';
 
 export enum DiagnosticType {
   DIALOG,
@@ -25,7 +25,7 @@ export interface IDiagnosticInfo {
   rootProjectId: string;
   projectId: string;
   id: string;
-  severity: string;
+  severity: DiagnosticSeverity;
   type: DiagnosticType;
   location: string;
   message: string;
@@ -35,13 +35,53 @@ export interface IDiagnosticInfo {
   getUrl: (hash?: string) => string;
   learnMore?: string;
   title?: string;
+  friendlyLocationBreadcrumbItems?: string[];
 }
+
+const getFriendlyPath = (dialogPath: string | undefined, dialogs: DialogInfo[]) => {
+  const breadcrumb: string[] = [];
+  try {
+    if (!dialogPath) {
+      return [];
+    }
+    const [dialogName, triggerPath, ...actionPaths] = dialogPath.split('#')[0]?.split('.');
+    if (dialogName) {
+      const matchedDialog = dialogs.find(({ displayName }) => displayName === dialogName);
+
+      if (matchedDialog && triggerPath) {
+        breadcrumb.push(matchedDialog.displayName);
+        const trigger: ITrigger = get(matchedDialog, triggerPath, '');
+        if (trigger.displayName) {
+          breadcrumb.push(trigger.displayName);
+        }
+
+        if (trigger) {
+          let currentPath = trigger.content;
+          for (let i = 0; i < actionPaths.length; i++) {
+            if (!currentPath) {
+              break;
+            }
+            const actionPath = actionPaths[i];
+            currentPath = get(currentPath, actionPath, null);
+
+            if (currentPath.$kind) {
+              breadcrumb.push(currentPath.$kind);
+            }
+          }
+        }
+      }
+    }
+    return breadcrumb;
+  } catch (ex) {
+    return [];
+  }
+};
 
 export abstract class DiagnosticInfo implements IDiagnosticInfo {
   rootProjectId: string;
   projectId: string;
   id: string;
-  severity: string;
+  severity: DiagnosticSeverity;
   type = DiagnosticType.GENERAL;
   location: string;
   message = '';
@@ -51,13 +91,14 @@ export abstract class DiagnosticInfo implements IDiagnosticInfo {
   getUrl = () => '';
   learnMore?: string;
   title?: string;
+  friendlyLocationBreadcrumbItems?: string[];
 
   constructor(rootProjectId: string, projectId: string, id: string, location: string, diagnostic: Diagnostic) {
     this.rootProjectId = rootProjectId;
     this.projectId = projectId;
     this.id = id;
     this.resourceId = getBaseName(id);
-    this.severity = DiagnosticSeverity[diagnostic.severity] || '';
+    this.severity = diagnostic.severity;
     this.diagnostic = diagnostic;
     this.location = location;
   }
@@ -68,6 +109,9 @@ export class BotDiagnostic extends DiagnosticInfo {
   constructor(rootProjectId: string, projectId: string, id: string, location: string, diagnostic: Diagnostic) {
     super(rootProjectId, projectId, id, location, diagnostic);
     this.message = diagnostic.message;
+    if (this.location === 'manifest.json') {
+      this.friendlyLocationBreadcrumbItems = [formatMessage('Skill Manifest')];
+    }
   }
 
   getUrl = () => {
@@ -79,17 +123,27 @@ export class BotDiagnostic extends DiagnosticInfo {
         break;
       }
     }
-
     return url;
   };
 }
 
 export class DialogDiagnostic extends DiagnosticInfo {
   type = DiagnosticType.DIALOG;
-  constructor(rootProjectId: string, projectId: string, id: string, location: string, diagnostic: Diagnostic) {
+  constructor(
+    rootProjectId: string,
+    projectId: string,
+    id: string,
+    location: string,
+    diagnostic: Diagnostic,
+    dialogs: DialogInfo[]
+  ) {
     super(rootProjectId, projectId, id, location, diagnostic);
     this.message = `In ${replaceDialogDiagnosticLabel(diagnostic.path)} ${diagnostic.message}`;
     this.dialogPath = diagnostic.path;
+    const friendlyPath = getFriendlyPath(this.dialogPath, dialogs);
+    if (friendlyPath.length) {
+      this.friendlyLocationBreadcrumbItems = friendlyPath;
+    }
   }
 
   getUrl = () => {
@@ -102,8 +156,15 @@ export class DialogDiagnostic extends DiagnosticInfo {
 
 export class SchemaDiagnostic extends DialogDiagnostic {
   type = DiagnosticType.SCHEMA;
-  constructor(rootProjectId: string, projectId: string, id: string, location: string, diagnostic: Diagnostic) {
-    super(rootProjectId, projectId, id, location, diagnostic);
+  constructor(
+    rootProjectId: string,
+    projectId: string,
+    id: string,
+    location: string,
+    diagnostic: Diagnostic,
+    dialogs: DialogInfo[]
+  ) {
+    super(rootProjectId, projectId, id, location, diagnostic, dialogs);
     this.message = diagnostic.message;
     this.title = formatMessage('Deactivated action.');
     this.learnMore = formatMessage('Learn more about custom actions');
@@ -134,6 +195,7 @@ export class SettingDiagnostic extends DiagnosticInfo {
     super(rootProjectId, projectId, id, location, diagnostic);
     this.message = `${replaceDialogDiagnosticLabel(diagnostic.path)} ${diagnostic.message}`;
     this.dialogPath = diagnostic.path;
+    this.friendlyLocationBreadcrumbItems = ['Settings'];
   }
   getUrl = (hash?: string) => {
     return createBotSettingUrl(this.rootProjectId, this.projectId, hash);
@@ -154,7 +216,12 @@ export class LgDiagnostic extends DiagnosticInfo {
     super(rootProjectId, projectId, id, location, diagnostic);
     this.message = createSingleMessage(diagnostic);
     this.dialogPath = this.findDialogPath(lgFile, dialogs, diagnostic);
+    const friendlyPath = getFriendlyPath(this.dialogPath, dialogs);
+    if (friendlyPath.length) {
+      this.friendlyLocationBreadcrumbItems = friendlyPath;
+    }
   }
+
   private findDialogPath(lgFile: LgFile, dialogs: DialogInfo[], diagnostic: Diagnostic) {
     const mappedTemplate = lgFile.templates.find(
       (t) =>
@@ -167,6 +234,7 @@ export class LgDiagnostic extends DiagnosticInfo {
       const dialog = dialogs.find((d) => d.lgFile === this.resourceId);
       const lgTemplate = dialog ? dialog.lgTemplates.find((lg) => lg.name === lgTemplateName) : null;
       const path = lgTemplate ? lgTemplate.path : '';
+
       return path;
     }
   }
@@ -196,6 +264,10 @@ export class LuDiagnostic extends DiagnosticInfo {
   ) {
     super(rootProjectId, projectId, id, location, diagnostic);
     this.dialogPath = this.findDialogPath(luFile, dialogs, diagnostic);
+    const friendlyPath = getFriendlyPath(this.dialogPath, dialogs);
+    if (friendlyPath.length) {
+      this.friendlyLocationBreadcrumbItems = friendlyPath;
+    }
     this.message = createSingleMessage(diagnostic);
   }
 
