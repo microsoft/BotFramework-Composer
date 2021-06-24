@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import * as React from 'react';
-import { render, fireEvent, act, findByTestId } from '@botframework-composer/test-utils';
+import { render, fireEvent, act } from '@botframework-composer/test-utils';
 import { createHistory, createMemorySource, LocationProvider } from '@reach/router';
 import { RecoilRoot } from 'recoil';
 import { getDefaultFeatureFlags } from '@bfc/shared';
