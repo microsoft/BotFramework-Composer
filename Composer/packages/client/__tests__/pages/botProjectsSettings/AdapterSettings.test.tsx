@@ -63,6 +63,11 @@ const mockSchemas = {
 
 const setSettingsMock = jest.fn();
 
+const mockNavigationTo = jest.fn();
+jest.mock('../../../src/utils/navigation', () => ({
+  navigateTo: (...args) => mockNavigationTo(...args),
+}));
+
 const makeInitialState = (newSettings: {}) => ({ set }) => {
   set(currentProjectIdState, PROJECT_ID);
   set(settingsState(PROJECT_ID), newSettings);
@@ -222,5 +227,16 @@ describe('ExternalAdapterSettings', () => {
         },
       })
     );
+  });
+
+  it('deep link should nav to package manager', async () => {
+    const { getByTestId } = renderWithRecoilAndCustomDispatchers(
+      <ExternalAdapterSettings projectId={PROJECT_ID} />,
+      makeInitialState({})
+    );
+
+    fireEvent.click(getByTestId('packageManagerDeepLink'));
+
+    expect(mockNavigationTo).toHaveBeenCalledWith(`/bot/${PROJECT_ID}/plugin/package-manager/package-manager`);
   });
 });
