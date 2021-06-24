@@ -12,6 +12,7 @@ import {
   deployLocationState,
   luisRegionState,
   hostNameState,
+  operatingSystemState,
 } from '../recoilModel/atoms/resourceConfigurationState';
 import { LuisAuthoringSupportLocation } from '../constants';
 import { LuisRegion } from '../types';
@@ -30,6 +31,7 @@ export const useResourceConfiguration = () => {
     setDeployLocation,
     setLuisRegion,
     setHostName,
+    setAppServiceOperatingSystem,
   } = useDispatcher();
 
   const tenantId = useRecoilValue(tenantState);
@@ -39,6 +41,7 @@ export const useResourceConfiguration = () => {
   const deployLocation = useRecoilValue(deployLocationState);
   const luisRegion = useRecoilValue(luisRegionState);
   const hostName = useRecoilValue(hostNameState);
+  const appServiceOperatingSystem = useRecoilValue(operatingSystemState);
 
   const { setItem } = useLocalStorage();
 
@@ -122,6 +125,7 @@ export const useResourceConfiguration = () => {
       deployLocation,
       luisRegion,
       hostName,
+      appServiceOperatingSystem,
     });
   };
 
@@ -134,11 +138,13 @@ export const useResourceConfiguration = () => {
       luisRegion,
       isNewResourceGroup: isNew,
       hostName,
+      appServiceOperatingSystem,
     },
     handleChangeTenant,
     handleChangeSubscription,
     handleChangeResourceGroup,
     handleFetchDeployLocation: setDeployLocations,
+    handleChangeOperatingSystem: setAppServiceOperatingSystem,
     handleValidateHostName,
     handleValidateResourceGroupName,
     handleChangeDeployLocation,
