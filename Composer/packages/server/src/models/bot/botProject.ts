@@ -17,6 +17,7 @@ import {
   FileExtensions,
   DialogUtils,
   checkForPVASchema,
+  isManifestJson,
 } from '@bfc/shared';
 import merge from 'lodash/merge';
 import { UserIdentity } from '@bfc/extension';
@@ -747,14 +748,12 @@ export class BotProject implements IBotProject {
   }
 
   private async createSkillFilesFromZip(zipContent) {
-    const manifestKey = Object.keys(zipContent).find((key) => key.indexOf('.json') > -1 && key.indexOf('manifest'));
+    const manifestKey = Object.keys(zipContent).find((key) => isManifestJson(zipContent[key]));
     if (!manifestKey) {
       throw new Error('Can not find manifest json');
     }
 
-    const keys = Object.keys(zipContent).filter(
-      (key) => zipContent[key] !== '' && !(key.indexOf('.json') > -1 && key.indexOf('manifest'))
-    );
+    const keys = Object.keys(zipContent).filter((key) => zipContent[key] !== '' && !isManifestJson(zipContent[key]));
     for (let i = 0; i < keys.length; i++) {
       await this._createFile(`skills/${keys[i]}`, zipContent[keys[i]]);
     }
@@ -769,7 +768,7 @@ export class BotProject implements IBotProject {
     const file = { name: '', content: '' };
     for (let i = 0; i < urls.length; i++) {
       file.name = Path.basename(urls[i], '.lu');
-      file.content = await getSkillManifest(urls[i], false);
+      file.content = await getSkillManifest(urls[i], '', false);
       await this._createSkillFile(file.name, file.content, skillName, 'lu');
     }
   }

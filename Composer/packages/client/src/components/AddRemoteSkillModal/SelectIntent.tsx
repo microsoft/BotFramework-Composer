@@ -1,6 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 /** @jsx jsx */
+import { join } from 'path';
+
 import { jsx, css } from '@emotion/core';
 import React, { Fragment, useState, useMemo, useEffect, useCallback } from 'react';
 import formatMessage from 'format-message';
@@ -23,7 +25,6 @@ import { localeState, dispatcherState } from '../../recoilModel';
 import { recognizersSelectorFamily } from '../../recoilModel/selectors/recognizers';
 
 import { EnableOrchestrator } from './EnableOrchestrator';
-import { join } from 'path';
 
 const detailListContainer = css`
   width: 100%;
@@ -203,7 +204,7 @@ export const SelectIntent: React.FC<SelectIntentProps> = (props) => {
       const skillLanguages = manifest.dispatchModels?.languages;
       getRemoteLuFiles(skillLanguages, languages, setWarningMsg, zipContent, manifestDirPath)
         .then((items) => {
-          for (let key in items) {
+          for (const key in items) {
             getParsedLuFiles(items[key], luFeatures, []).then((files) => {
               setLufiles(files);
               files.map((file) => {

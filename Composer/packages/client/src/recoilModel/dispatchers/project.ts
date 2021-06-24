@@ -190,7 +190,12 @@ export const projectDispatcher = () => {
         const rootBotProjectId = await snapshot.getPromise(rootBotProjectIdSelector);
         if (!rootBotProjectId) return;
 
-        const botExists = await checkIfBotExistsInBotProjectFile(callbackHelpers, manifestUrl, true);
+        const manifestFromZip = getManifestJsonFromZip(zipContent);
+        const botExists = await checkIfBotExistsInBotProjectFile(
+          callbackHelpers,
+          manifestFromZip.name ? manifestFromZip.name : manifestUrl,
+          true
+        );
         if (botExists) {
           throw new Error(
             formatMessage('This operation cannot be completed. The skill is already part of the Bot Project')
@@ -199,8 +204,11 @@ export const projectDispatcher = () => {
 
         set(botOpeningState, true);
 
-        const manifestFromZip = getManifestJsonFromZip(zipContent);
-        const { projectId } = await openRemoteSkill(callbackHelpers, manifestUrl, manifestFromZip);
+        const { projectId } = await openRemoteSkill(callbackHelpers, {
+          manifestUrl,
+          manifestFromZip,
+          rootBotProjectId,
+        });
         set(botProjectIdsState, (current) => [...current, projectId]);
         await dispatcher.addRemoteSkillToBotProjectFile(projectId, manifestUrl, zipContent, endpointName);
         // update appsetting

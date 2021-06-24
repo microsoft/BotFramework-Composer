@@ -571,9 +571,7 @@ export const removeRecentProject = async (callbackHelpers: CallbackInterface, pa
 
 export const openRemoteSkill = async (
   callbackHelpers: CallbackInterface,
-  manifestUrl: string,
-  manifestFromZip: { name: string; content: Record<string, any> },
-  botNameIdentifier = ''
+  { manifestUrl, manifestFromZip = { name: '', content: {} }, rootBotProjectId = '', botNameIdentifier = '' }
 ) => {
   const { set } = callbackHelpers;
 
@@ -592,7 +590,7 @@ export const openRemoteSkill = async (
 
     manifestResponseData = (
       await httpClient.get(
-        `/projects/${projectId}/skill/retrieveSkillManifest?${stringified}&ignoreProjectValidation=true`
+        `/projects/${rootBotProjectId}/skill/retrieveSkillManifest?${stringified}&ignoreProjectValidation=true`
       )
     ).data;
   }
@@ -743,7 +741,11 @@ export const openRootBotAndSkills = async (callbackHelpers: CallbackInterface, d
           skillPromise = openLocalSkill(callbackHelpers, absoluteSkillPath, storageId, nameIdentifier);
         } else if (skill.manifest) {
           isRemote = true;
-          skillPromise = openRemoteSkill(callbackHelpers, skill.manifest, nameIdentifier);
+          skillPromise = openRemoteSkill(callbackHelpers, {
+            manifestUrl: skill.manifest,
+            rootBotProjectId: projectData.id,
+            botNameIdentifier: nameIdentifier,
+          });
         }
         if (skillPromise) {
           skillPromise

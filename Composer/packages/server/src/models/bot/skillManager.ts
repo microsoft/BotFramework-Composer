@@ -3,6 +3,8 @@
 
 import * as msRest from '@azure/ms-rest-js';
 
+import { Path } from '../../utility/path';
+
 import logger from './../../logger';
 
 const log = logger.extend('skill-manager');
@@ -18,7 +20,7 @@ const client = new msRest.ServiceClient(creds, clientOptions);
 const urlRegex = /^http[s]?:\/\/\w+/;
 const filePathRegex = /([^<>/\\:""]+\.\w+$)/;
 
-export const getSkillManifest = async (url: string, isJson = true): Promise<any> => {
+export const getSkillManifest = async (url: string, rootDir = '', isJson = true): Promise<any> => {
   if (urlRegex.test(url)) {
     // get remote manifest
     const { bodyAsText: content } = await client.sendRequest({
@@ -32,6 +34,6 @@ export const getSkillManifest = async (url: string, isJson = true): Promise<any>
   } else if (filePathRegex.test(url)) {
     // get local manifest
     // eslint-disable-next-line security/detect-non-literal-require
-    return require(url);
+    return require(Path.join(rootDir, url));
   }
 };

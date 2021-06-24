@@ -204,6 +204,7 @@ export const CreateSkillModal: React.FC<CreateSkillModalProps> = (props) => {
       const manifestFiles: JSZipObject[] = [];
       const zipContent: Record<string, string> = {};
       for (const fPath in files) {
+        // eslint-disable-next-line no-useless-escape
         if (fPath.match(/\.([^\.]+)$/)?.[1] === 'json') {
           manifestFiles.push(files[fPath]);
           setManifestDirPath(fPath.substr(0, fPath.lastIndexOf('/') + 1));

@@ -333,8 +333,8 @@ async function getSkill(req: Request, res: Response) {
   const projectId = req.params.projectId;
   const user = await ExtensionContext.getUserFromRequest(req);
   const ignoreProjectValidation: boolean = req.query.ignoreProjectValidation;
+  const currentProject = await BotProjectService.getProjectById(projectId, user);
   if (!ignoreProjectValidation) {
-    const currentProject = await BotProjectService.getProjectById(projectId, user);
     if (currentProject === undefined) {
       res.status(404).json({
         message: 'No such bot project found',
@@ -342,7 +342,8 @@ async function getSkill(req: Request, res: Response) {
     }
   }
   try {
-    const content = await getSkillManifest(req.query.url);
+    const rootDir = currentProject.dir;
+    const content = await getSkillManifest(req.query.url, rootDir);
     res.status(200).json(content);
   } catch (err) {
     res.status(404).json({

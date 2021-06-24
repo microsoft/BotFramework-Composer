@@ -1,8 +1,9 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-import axios from 'axios';
 import { readFile } from 'fs';
 import { promisify } from 'util';
+
+import axios from 'axios';
 
 export const getDialogNameFromFile = (file: string) => {
   const tokens = file.split('.');

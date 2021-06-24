@@ -1,9 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { generateDesignerId } from '@bfc/shared';
-
-import { manifestUrl } from '../../pages/design/styles';
+import { generateDesignerId, isManifestJson } from '@bfc/shared';
 
 export const createActionFromManifest = (manifestIdentifier) => {
   // get identifier
@@ -24,7 +22,7 @@ export const createActionFromManifest = (manifestIdentifier) => {
 
 export const getManifestJsonFromZip = (zipContent) => {
   try {
-    const manifestUrl = Object.keys(zipContent).find((key) => key.indexOf('.json') > 0 && key.indexOf('manifest') > 0);
+    const manifestUrl = Object.keys(zipContent).find((key) => zipContent[key] && isManifestJson(zipContent[key]));
     return manifestUrl
       ? { name: `skills/${manifestUrl}`, content: JSON.parse(zipContent[manifestUrl]) }
       : { name: '', content: null };
