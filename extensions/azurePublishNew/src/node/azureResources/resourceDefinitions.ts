@@ -11,7 +11,7 @@ export const webAppResourceDefinition: ResourceDefinition = {
   key: 'webApp',
   description:
     'App Service Web Apps lets you quickly build, deploy, and scale enterprise-grade web, mobile, and API apps running on any platform. Hosting for your bot.',
-  text: AZURE_HOSTING_GROUP_NAME,
+  text: 'App Services',
   tier: 'S1 Standard',
   group: AZURE_HOSTING_GROUP_NAME,
 };
