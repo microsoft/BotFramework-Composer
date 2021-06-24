@@ -95,6 +95,7 @@ export const TeamsManifestGeneratorModal = (props: TeamsManifestGeneratorModalPr
         <Text style={{ fontWeight: 700 }}>{formatMessage('Teams manifest for your bot:')}</Text>
         <IconButton
           ariaLabel={formatMessage('Download Icon')}
+          data-testid={'teamsDownloadIcon'}
           download={'teamsManifest.json'}
           href={'data:text/plain;charset=utf-8,' + encodeURIComponent(generateTeamsManifest())}
           menuIconProps={{ iconName: 'Download' }}
@@ -112,6 +113,7 @@ export const TeamsManifestGeneratorModal = (props: TeamsManifestGeneratorModalPr
       <TextField
         multiline
         componentRef={textFieldRef}
+        data-testId={'teamsManifestTextField'}
         rows={25}
         styles={{ root: { marginTop: '10px' }, fieldGroup: { backgroundColor: '#f3f2f1' } }}
         value={generateTeamsManifest()}
