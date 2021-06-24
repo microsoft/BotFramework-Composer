@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import * as React from 'react';
-import { render, fireEvent, act } from '@botframework-composer/test-utils';
+import { render, fireEvent, act, findByTestId } from '@botframework-composer/test-utils';
 import { createHistory, createMemorySource, LocationProvider } from '@reach/router';
 import { RecoilRoot } from 'recoil';
 import { getDefaultFeatureFlags } from '@bfc/shared';
@@ -77,6 +77,7 @@ describe('<CreationFlow/>', () => {
   it('should render the component', async () => {
     const {
       findByText,
+      findByTestId,
       history: { navigate },
     } = renderWithRouter(
       <RecoilRoot initializeState={initRecoilState}>
@@ -84,11 +85,26 @@ describe('<CreationFlow/>', () => {
       </RecoilRoot>
     );
 
-    navigate('create/dotnet/%40microsoft%2Fgenerator-bot-empty');
-    const node = await findByText('Create');
+    act(() => {
+      navigate('create/dotnet/%40microsoft%2Fgenerator-bot-empty');
+    });
+
+    const dropdown = await await findByTestId('NewDialogRuntimeType');
+
+    expect(dropdown).toBeDefined();
+
+    await act(async () => {
+      if (dropdown) {
+        fireEvent.click(dropdown);
+        fireEvent.click(await findByText('Azure Web App'));
+      }
+    });
+
+    const createButton = await findByText('Create');
+    expect(createButton).toBeDefined();
 
     act(() => {
-      fireEvent.click(node);
+      fireEvent.click(createButton);
     });
 
     let expectedLocation = '/test-folder/Desktop';
