@@ -60,6 +60,7 @@ const Content = styled.div`
   flex-direction: column;
   justify-content: space-between;
   min-height: 430px;
+  height: calc(100vh - 65px);
 `;
 
 const FooterButton = styled(DefaultButton)`

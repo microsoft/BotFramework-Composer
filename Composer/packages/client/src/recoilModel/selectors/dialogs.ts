@@ -10,10 +10,10 @@ export const dialogsSelectorFamily = selectorFamily<DialogInfo[], string>({
   key: 'dialogs',
   get: (projectId: string) => ({ get }) => {
     const dialogIds = get(dialogIdsState(projectId));
-
     return dialogIds
       .map((dialogId) => {
-        return get(dialogState({ projectId, dialogId }));
+        const result = get(dialogState({ projectId, dialogId }));
+        return result;
       })
       .filter((d) => !d.isTopic);
   },
