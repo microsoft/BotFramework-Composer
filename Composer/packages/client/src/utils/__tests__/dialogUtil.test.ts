@@ -1,6 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { DialogInfo } from '@bfc/shared';
+
 import {
   getDialogData,
   setDialogData,
@@ -11,7 +13,7 @@ import {
   deleteTrigger,
   getBreadcrumbLabel,
   getSelected,
-} from '../../src/utils/dialogUtil';
+} from '../dialogUtil';
 
 const dialogsMap = {
   Dialog1: {
@@ -36,7 +38,7 @@ const dialogsMap = {
   },
 };
 
-const dialogs = [
+const dialogs = ([
   {
     content: {
       $kind: 'kind1',
@@ -55,7 +57,7 @@ const dialogs = [
     displayName: 'toBeCleaned',
     id: 'id3',
   },
-];
+] as unknown) as DialogInfo[];
 
 describe('getDialogData', () => {
   it('return empty string if no dialogId', () => {
@@ -143,6 +145,8 @@ describe('generateNewDialog', () => {
       errors: { triggerPhrases: '' },
       event: 'aaaa',
       triggerPhrases: '',
+      intent: '',
+      regEx: '',
     };
     const schema = {};
     const length = dialogs[0].content.triggers.length;
@@ -173,13 +177,13 @@ describe('deleteTrigger', () => {
   it('delete trigger', () => {
     const length = dialogs[0].content.triggers.length;
     const dialogContent = deleteTrigger(dialogs, 'id1', 2);
-    expect(dialogContent.triggers.length).toBe(length - 1);
+    expect(dialogContent?.triggers.length).toBe(length - 1);
   });
 });
 
 describe('getBreadcrumbLabel', () => {
   it('return breadcrumb label', () => {
-    const name = getBreadcrumbLabel(dialogs, 'id1', null, null);
+    const name = getBreadcrumbLabel(dialogs, 'id1', '', '');
     expect(name).toBe('MainDialog');
   });
 });
