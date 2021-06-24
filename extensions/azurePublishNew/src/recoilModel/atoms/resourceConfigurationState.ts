@@ -6,32 +6,32 @@ import { atom } from 'recoil';
 import { UserInfo, ResourceGroup, LuisRegion, ResourcesItem } from '../../types';
 
 export const subscriptionState = atom<string>({
-  key: 'resourceConfiguration_subscription',
+  key: 'resourceConfigurationSubscription',
   default: '',
 });
 
 export const tenantState = atom<string>({
-  key: 'resourceConfiguration_tenant',
+  key: 'resourceConfigurationTenant',
   default: '',
 });
 
 export const luisRegionState = atom<LuisRegion>({
-  key: 'resourceConfiguration_luisRegion',
+  key: 'resourceConfigurationLuisRegion',
   default: undefined,
 });
 
 export const deployLocationState = atom<string>({
-  key: 'resourceConfiguration_deployLocation',
+  key: 'resourceConfigurationDeployLocation',
   default: '',
 });
 
 export const resourceGroupState = atom<ResourceGroup>({
-  key: 'resourceConfiguration_resourceGroup',
+  key: 'resourceConfigurationResourceGroup',
   default: { name: '', isNew: false },
 });
 
 export const hostNameState = atom<string>({
-  key: 'resourceConfiguration_hostName',
+  key: 'resourceConfigurationHostName',
   default: '',
 });
 
@@ -40,12 +40,17 @@ export const userInfoState = atom<UserInfo>({
   default: undefined,
 });
 
+export const operatingSystemState = atom<string>({
+  key: 'resourceConfigurationOperatingSystem',
+  default: '',
+});
+
 export const enabledResourcesState = atom<ResourcesItem[] | undefined>({
-  key: 'rc_optional_resources',
+  key: 'resourceConfigurationOptionalResources',
   default: undefined,
 });
 
 export const requiredResourcesState = atom<ResourcesItem[]>({
-  key: 'rc_required_resources',
+  key: 'resourceConfigurationRequiredResources',
   default: [],
 });

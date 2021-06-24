@@ -6,6 +6,6 @@ import { atom } from 'recoil';
 import { ImportConfiguration } from '../../types';
 
 export const importConfigurationState = atom<ImportConfiguration>({
-  key: 'import_configuration',
+  key: 'importConfiguration',
   default: { isValidConfiguration: true, config: '{}' },
 });
