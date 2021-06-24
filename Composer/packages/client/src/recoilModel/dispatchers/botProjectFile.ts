@@ -14,6 +14,8 @@ import { rootBotProjectIdSelector } from '../selectors';
 import { setRootBotSettingState } from './setting';
 import { addSkillFiles, deleteSkillFiles } from './utils/skills';
 
+const urlRegex = /^http[s]?:\/\/\w+/;
+
 export const botProjectFileDispatcher = () => {
   const addLocalSkill = useRecoilCallback(({ set, snapshot }: CallbackInterface) => async (skillId: string) => {
     const rootBotProjectId = await snapshot.getPromise(rootBotProjectIdSelector);
@@ -49,14 +51,20 @@ export const botProjectFileDispatcher = () => {
         return;
       }
       const botName = await snapshot.getPromise(botNameIdentifierState(skillId));
-      const data = await addSkillFiles(rootBotProjectId, botName, manifestUrl, zipContent);
-      if (data.error) {
-        throw data.error;
+      let finalManifestUrl: string | undefined;
+      if (urlRegex.test(manifestUrl)) {
+        finalManifestUrl = manifestUrl;
+      } else {
+        const data = await addSkillFiles(rootBotProjectId, botName, manifestUrl, zipContent);
+        if (data.error) {
+          throw data.error;
+        }
+        finalManifestUrl = data.manifest?.relativePath;
       }
       set(botProjectFileState(rootBotProjectId), (current) => {
         const result = produce(current, (draftState) => {
           const skill: BotProjectSpaceSkill = {
-            manifest: data.manifest?.relativePath,
+            manifest: finalManifestUrl,
             remote: true,
             endpointName,
           };
