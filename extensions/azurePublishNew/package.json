@@ -6,7 +6,11 @@
   "license": "MIT",
   "scripts": {
     "build": "node ../scripts/build.js",
-    "watch": "yarn build --watch"
+    "watch": "yarn build --watch",
+    "test": "jest"
+  },
+  "jest": {
+    "testEnvironment": "node"
   },
   "composer": {
     "enabled": true,
@@ -44,13 +48,12 @@
     "@azure/cosmos": "^3.7.4",
     "@azure/graph": "5.0.1",
     "@azure/keyvault-secrets": "^4.1.0",
-    "@monaco-editor/react": "^3.1.0",
-    "monaco-editor": "^0.19.0",
-    "monaco-languageclient": "^0.10.0",
     "@bfc/extension-client": "file:../../Composer/packages/extension-client",
     "@bfc/ui-shared": "../../Composer/packages/lib/ui-shared",
+    "@bfc/shared": "../../Composer/packages/lib/shared",
     "@emotion/core": "^10.0.27",
     "@emotion/styled": "^10.0.27",
+    "@monaco-editor/react": "^3.1.0",
     "adal-node": "0.2.1",
     "archiver": "^5.0.2",
     "axios": "^0.21.1",
@@ -61,11 +64,14 @@
     "lodash": "^4.17.20",
     "md5": "2.2.1",
     "minimist": "1.2.5",
+    "monaco-editor": "^0.19.0",
+    "monaco-languageclient": "^0.10.0",
     "office-ui-fabric-react": "^7.145.0",
     "react": "^16.13.0",
     "react-dom": "^16.13.0",
     "recoil": "^0.3.1",
     "request": "2.88.2",
+    "request-promise": "^4.2.6",
     "url-loader": "^4.1.1",
     "uuid": "7.0.3"
   },
@@ -83,11 +89,11 @@
     "@types/react": "^16.9.53",
     "@types/react-dom": "^16.9.8",
     "@types/request": "2.48.4",
+    "@uifabric/fluent-theme": "^7.1.4",
     "html-webpack-plugin": "^4.3.0",
     "ts-loader": "^8.0.0",
     "typescript": "^3.9.6",
     "webpack": "^4.43.0",
-    "webpack-cli": "^3.3.12",
-    "@uifabric/fluent-theme": "^7.1.4"
+    "webpack-cli": "^3.3.12"
   }
 }
