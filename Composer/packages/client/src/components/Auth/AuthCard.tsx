@@ -29,8 +29,7 @@ import { TenantDialog } from './TenantDialog';
 
 const styles = {
   username: {
-    display: 'block',
-    fontWeight: 'bold',
+    fontWeight: 600,
   },
   email: {
     display: 'block',
@@ -116,8 +115,8 @@ export const AuthCard: React.FC = () => {
                     <Persona hidePersonaDetails initialsColor={NeutralColors.gray160} text={currentUser?.name} />
                   </Stack.Item>
                   <Stack.Item>
-                    <span css={styles.username}>{currentUser.name}</span>
-                    <span css={styles.email}>{currentUser.email}</span>
+                    <div style={styles.username}>{currentUser.name}</div>
+                    <div style={styles.email}>{currentUser.email}</div>
                     <Link
                       href={'https://myaccount.microsoft.com/'}
                       styles={styles.link as ILinkStyles}
@@ -148,7 +147,6 @@ export const AuthCard: React.FC = () => {
         <AuthDialog
           needGraph={requiresGraph}
           onDismiss={() => {
-            console.log('HIDE AUTH DIALOG');
             setShowAuthDialog(false, false);
           }}
         />

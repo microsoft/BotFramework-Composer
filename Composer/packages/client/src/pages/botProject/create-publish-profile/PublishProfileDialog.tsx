@@ -16,7 +16,7 @@ import { PluginAPI } from '../../../plugins/api';
 import { PluginHost } from '../../../components/PluginHost/PluginHost';
 import { defaultPublishSurface, pvaPublishSurface, azurePublishSurface } from '../../publish/styles';
 import TelemetryClient from '../../../telemetry/TelemetryClient';
-import { dispatcherState, currentUserState } from '../../../recoilModel';
+import { dispatcherState } from '../../../recoilModel';
 
 import { ProfileFormDialog } from './ProfileFormDialog';
 
@@ -58,11 +58,10 @@ export const PublishProfileDialog: React.FC<PublishProfileDialogProps> = (props)
   } = props;
   const [name, setName] = useState(current?.item.name || '');
   const [targetType, setTargetType] = useState<string>(current?.item.type || '');
-  const currentUser = useRecoilValue(currentUserState);
 
   const [page, setPage] = useState(Page.ProfileForm);
   const [publishSurfaceStyles, setStyles] = useState(defaultPublishSurface);
-  const { provisionToTarget, addNotification, requireUserLogin } = useRecoilValue(dispatcherState);
+  const { provisionToTarget } = useRecoilValue(dispatcherState);
   const [selectedType, setSelectType] = useState<PublishType | undefined>();
 
   const [dialogTitle, setTitle] = useState(formatDialogTitle(current));
@@ -96,9 +95,6 @@ export const PublishProfileDialog: React.FC<PublishProfileDialogProps> = (props)
     PluginAPI.publish.onBack = () => {
       setPage(Page.ProfileForm);
       setTitle(formatDialogTitle(current));
-    };
-    PluginAPI.publish.requireUserLogin = () => {
-      return requireUserLogin();
     };
     PluginAPI.publish.setTitle = (value) => {
       setTitle(value);

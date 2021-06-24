@@ -25,7 +25,6 @@ import { navigateTo } from '../../../utils/navigation';
 import { botDisplayNameState, settingsState } from '../../../recoilModel';
 import httpClient from '../../../utils/httpUtil';
 import { dispatcherState, currentUserState, isAuthenticatedState } from '../../../recoilModel';
-// import { armScopes } from '../../../constants';
 import {
   tableHeaderRow,
   tableRow,
@@ -116,35 +115,6 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
     }
   };
 
-  // const getTokenInteractively = async (tenantId: string) => {
-  //   let newtoken = '';
-  //   try {
-  //     // if tenantId is present, use this to retrieve the arm token.
-  //     // absence of a tenantId indicates this was a legacy (pre-tenant support) provisioning profile
-  //     if (!tenantId) {
-  //       const tenants = await AuthClient.getTenants();
-  //       const cachedTenantId = getTenantIdFromCache();
-
-  //       if (tenants.length === 0) {
-  //         throw new Error('No Azure Directories were found.');
-  //       } else if (cachedTenantId && tenants.map((t) => t.tenantId).includes(cachedTenantId)) {
-  //         tenantId = cachedTenantId;
-  //       } else {
-  //         tenantId = tenants[0].tenantId;
-  //       }
-  //     }
-  //     if (tenantId) {
-  //       newtoken = await AuthClient.getARMTokenForTenant(tenantId);
-  //     } else {
-  //       newtoken = await AuthClient.getAccessToken(armScopes);
-  //     }
-  //   } catch (error) {
-  //     setErrorMessage(error.message || error.toString());
-  //     setCurrentResource(undefined);
-  //   }
-  //   return newtoken;
-  // };
-
   const onSelectProfile = async (_, opt) => {
     if (opt.key === 'manageProfiles') {
       TelemetryClient.track('ConnectionsAddNewProfile');
@@ -155,7 +125,9 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
       if (profile) {
         const config = JSON.parse(profile.configuration);
 
-        // TODO: handle case where config does not have a tenant id and we need to fall back to getAccessToken
+        // NOTE: if config.tenantId is missing (as might be the case with a pre-1.4 composer publish profile)
+        // this will cause the user to be prompted for the correct tenant when they login.
+        // if they choose the WRONG tenant, an error will appear.
         requireUserLogin(config.tenantId);
 
         setCurrentResource({
@@ -383,21 +355,6 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
     }
   };
 
-  // const hasAuth = async () => {
-  //   if (currentResource) {
-  //     let newtoken = '';
-  //     if (userShouldProvideTokens()) {
-  //       if (isShowAuthDialog(false)) {
-  //         setShowAuthDialog(true);
-  //       }
-  //       newtoken = getTokenFromCache('accessToken');
-  //     } else {
-  //       newtoken = await getTokenInteractively(currentResource.tenantId);
-  //     }
-  //     setToken(newtoken);
-  //   }
-  // };
-
   const toggleService = (channel) => {
     return async (_, enabled) => {
       TelemetryClient.track('ConnectionsToggleChannel', { channel, enabled });
@@ -597,15 +554,6 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
 
   return (
     <React.Fragment>
-      {/* {showAuthDialog && (
-        <AuthDialog
-          needGraph={false}
-          next={hasAuth}
-          onDismiss={() => {
-            setShowAuthDialog(false);
-          }}
-        />
-      )} */}
       <ManageSpeech
         hidden={!showSpeechModal}
         onDismiss={() => {

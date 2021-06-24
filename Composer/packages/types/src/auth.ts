@@ -32,7 +32,7 @@ export type WebAuthParameters = {
 };
 
 export type CurrentUser = {
-  token: string | null; // aad token
+  token: string; // aad token
   graph: string | null; // graph token
   email?: string;
   name?: string;

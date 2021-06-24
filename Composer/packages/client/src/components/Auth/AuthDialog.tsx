@@ -3,7 +3,6 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-// import { DialogWrapper, DialogTypes } from '@bfc/ui-shared';
 import formatMessage from 'format-message';
 import { Dialog, DialogType, DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
 import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button';
@@ -19,7 +18,6 @@ import { isTokenExpired } from '../../utils/auth';
 export interface AuthDialogProps {
   needGraph: boolean;
   onDismiss: () => void;
-  next?: () => void;
 }
 
 const authDialogStyles = {
@@ -43,7 +41,7 @@ const authDialogStyles = {
   },
 };
 export const AuthDialog: React.FC<AuthDialogProps> = (props) => {
-  const { setCurrentUser, setGraphToken } = useRecoilValue(dispatcherState);
+  const { setCurrentUser } = useRecoilValue(dispatcherState);
 
   const [graphToken, setLocalGraphToken] = useState('');
   const [accessToken, setAccessToken] = useState('');
@@ -120,9 +118,7 @@ export const AuthDialog: React.FC<AuthDialogProps> = (props) => {
           text={formatMessage('Continue')}
           onClick={() => {
             props.onDismiss();
-            // cache tokens
             setCurrentUser(accessToken, graphToken);
-            if (props.next) props.next();
           }}
         />
       </DialogFooter>

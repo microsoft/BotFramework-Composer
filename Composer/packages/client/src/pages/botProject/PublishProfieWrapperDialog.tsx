@@ -16,12 +16,11 @@ import { PublishProfileDialog } from './create-publish-profile/PublishProfileDia
 type PublishProfileWrapperDialogProps = {
   projectId: string;
   onClose: () => void;
-  onOpen: () => void;
   onUpdateIsCreateProfileFromSkill: (isCreateProfileFromSkill: boolean) => void;
 };
 
 export const PublishProfileWrapperDialog: React.FC<PublishProfileWrapperDialogProps> = (props) => {
-  const { projectId, onClose, onOpen, onUpdateIsCreateProfileFromSkill } = props;
+  const { projectId, onClose, onUpdateIsCreateProfileFromSkill } = props;
   const { publishTargets } = useRecoilValue(settingsState(projectId));
   const { getPublishTargetTypes, setPublishTargets } = useRecoilValue(dispatcherState);
   const publishTypes = useRecoilValue(publishTypesState(projectId));

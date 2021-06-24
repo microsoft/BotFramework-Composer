@@ -31,7 +31,7 @@ import { graphScopes } from '../../constants';
 import { addNotificationInternal, createNotification } from './notification';
 
 export type UserLoginOptions = {
-  graph: boolean;
+  graph?: boolean;
 };
 
 export const authDispatcher = () => {
@@ -107,8 +107,8 @@ export const authDispatcher = () => {
         const decoded = decodeToken(token);
 
         callbackHelpers.set(currentUserState, {
-          token,
-          graph,
+          token: token ?? null,
+          graph: graph ?? null,
           email: decoded.upn,
           name: decoded.name,
           expiration: (decoded.exp || 0) * 1000, // convert to ms,
@@ -119,7 +119,11 @@ export const authDispatcher = () => {
         callbackHelpers.set(currentTenantState, decoded.tid);
         setTenantId(decoded.tid);
       } else {
-        callbackHelpers.set(currentUserState, {});
+        callbackHelpers.set(currentUserState, {
+          token: null,
+          graph: null,
+          sessionExpired: true,
+        });
         callbackHelpers.set(isAuthenticatedState, false);
       }
     }
@@ -147,7 +151,6 @@ export const authDispatcher = () => {
 
   const requireUserLogin = useRecoilCallback(
     (callbackHelpers: CallbackInterface) => async (desiredTenantId?: string, options?: UserLoginOptions) => {
-      console.log('Require user login!');
       if (userShouldProvideTokens()) {
         if (isShowAuthDialog(options?.graph || false)) {
           setShowAuthDialog(true, options?.graph || false);

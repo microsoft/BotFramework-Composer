@@ -282,7 +282,7 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
       if (target && isPublishingToAzure(target)) {
         const { tenantId } = JSON.parse(target.configuration);
 
-        if (userShouldProvideTokens()) {
+        if (userShouldProvideTokens() && currentUser) {
           token = currentUser.token;
         } else if (tenantId) {
           token = tenantTokenMap.get(tenantId) ?? (await AuthClient.getARMTokenForTenant(tenantId));

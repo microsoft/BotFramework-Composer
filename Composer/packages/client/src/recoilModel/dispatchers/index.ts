@@ -20,7 +20,6 @@ import { provisionDispatcher } from './provision';
 import { provisionQNADispatcher } from './provisionQNA';
 import { settingsDispatcher } from './setting';
 import { skillDispatcher } from './skill';
-import { userDispatcher } from './user';
 import { multilangDispatcher } from './multilang';
 import { notificationDispatcher } from './notification';
 import { extensionsDispatcher } from './extensions';
@@ -52,7 +51,6 @@ const createDispatchers = () => {
     ...provisionQNADispatcher(),
     ...settingsDispatcher(),
     ...skillDispatcher(),
-    ...userDispatcher(),
     ...multilangDispatcher(),
     ...notificationDispatcher(),
     ...extensionsDispatcher(),

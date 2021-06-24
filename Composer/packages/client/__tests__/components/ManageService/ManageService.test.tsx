@@ -154,10 +154,6 @@ describe('<ManageService />', () => {
       fireEvent.click(nextButton);
     });
 
-    // const tenantOption = await findByTestId('service-useexisting-tenant-selection');
-    // expect(tenantOption).toBeDefined();
-    // expect(tenantOption).toBeEnabled();
-
     const subscriptionOption = await findByTestId('service-useexisting-subscription-selection');
     expect(subscriptionOption).toBeDefined();
     expect(subscriptionOption).toBeEnabled();
@@ -262,10 +258,6 @@ describe('<ManageService />', () => {
     const nextButton2 = await findByRole('button', { name: 'Next' });
     expect(nextButton2).toBeDefined();
     expect(nextButton2).toBeDisabled();
-
-    // const tenantOption = await findByTestId('service-create-tenant-selection');
-    // expect(tenantOption).toBeDefined();
-    // expect(tenantOption).toBeEnabled();
 
     const subscriptionOption = await findByTestId('service-create-subscription-selection');
     expect(subscriptionOption).toBeDefined();
@@ -400,10 +392,6 @@ describe('<ManageService />', () => {
     const nextButton2 = await findByRole('button', { name: 'Next' });
     expect(nextButton2).toBeDefined();
     expect(nextButton2).toBeDisabled();
-
-    // const tenantOption = await findByTestId('service-create-tenant-selection');
-    // expect(tenantOption).toBeDefined();
-    // expect(tenantOption).toBeEnabled();
 
     const subscriptionOption = await findByTestId('service-create-subscription-selection');
     expect(subscriptionOption).toBeDefined();
@@ -557,10 +545,6 @@ describe('<ManageService />', () => {
     const nextButton2 = await findByRole('button', { name: 'Next' });
     expect(nextButton2).toBeDefined();
     expect(nextButton2).toBeDisabled();
-
-    // const tenantOption = await findByTestId('service-create-tenant-selection');
-    // expect(tenantOption).toBeDefined();
-    // expect(tenantOption).toBeEnabled();
 
     const subscriptionOption = await findByTestId('service-create-subscription-selection');
     expect(subscriptionOption).toBeDefined();
