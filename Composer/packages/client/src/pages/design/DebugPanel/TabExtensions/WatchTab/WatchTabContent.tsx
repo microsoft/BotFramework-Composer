@@ -9,6 +9,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { ConversationActivityTrafficItem, Activity } from '@botframework-composer/types';
 import { IIconProps } from 'office-ui-fabric-react/lib/Icon';
 import { CommandBarButton } from 'office-ui-fabric-react/lib/Button';
+import { Stack } from 'office-ui-fabric-react/lib/Stack';
 import {
   DetailsList,
   DetailsListLayoutMode,
@@ -23,6 +24,9 @@ import {
 } from 'office-ui-fabric-react/lib/DetailsList';
 import formatMessage from 'format-message';
 import get from 'lodash/get';
+import { ScrollablePane } from 'office-ui-fabric-react/lib/ScrollablePane';
+import { Sticky, StickyPositionType } from 'office-ui-fabric-react/lib/Sticky';
+import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
 
 import { DebugPanelTabHeaderProps } from '../types';
 import { rootBotProjectIdSelector, webChatTrafficState } from '../../../../../recoilModel';
@@ -32,27 +36,7 @@ import { WatchDataPayload } from '../../WatchVariablePicker/utils/helpers';
 
 import { WatchTabObjectValue } from './WatchTabObjectValue';
 
-const contentContainer = css`
-  display: flex;
-  flex-flow: column nowrap;
-  height: 100%;
-  width: 100%;
-`;
-
-const toolbar = css`
-  display: flex;
-  flex-flow: row nowrap;
-  flex-shrink: 0;
-  height: 24px;
-  padding: 8px 16px;
-`;
-
-const content = css`
-  display: flex;
-  flex-flow: column nowrap;
-  height: calc(100% - 40px);
-  width: 100%;
-`;
+const toolbarHeight = 24;
 
 const undefinedValue = css`
   font-family: Segoe UI;
@@ -64,12 +48,7 @@ const undefinedValue = css`
 
 const watchTableStyles: Partial<IDetailsListStyles> = {
   root: {
-    height: '100%',
-    selectors: {
-      '& > div[role="grid"]': {
-        height: '100%',
-      },
-    },
+    maxHeight: `calc(100% - ${toolbarHeight}px)`,
   },
   contentWrapper: {
     overflowY: 'auto' as 'auto',
@@ -271,9 +250,27 @@ export const WatchTabContent: React.FC<DebugPanelTabHeaderProps> = () => {
     return !selectedVariables?.length;
   }, [selectedVariables]);
 
+  function onRenderDetailsHeader(props, defaultRender) {
+    return (
+      <Sticky isScrollSynced stickyPosition={StickyPositionType.Header}>
+        {defaultRender({
+          ...props,
+          onRenderColumnHeaderTooltip: (tooltipHostProps) => <TooltipHost {...tooltipHostProps} />,
+        })}
+      </Sticky>
+    );
+  }
+
   return (
-    <div css={contentContainer}>
-      <div css={toolbar}>
+    <Stack verticalFill>
+      <Stack.Item
+        css={{
+          height: `${toolbarHeight}px`,
+          marginTop: '14px',
+          padding: '0 16px',
+          alignItems: 'center',
+        }}
+      >
         <CommandBarButton iconProps={addIcon} text={formatMessage('Add property')} onClick={onClickAdd} />
         <CommandBarButton
           disabled={removeIsDisabled}
@@ -281,19 +278,27 @@ export const WatchTabContent: React.FC<DebugPanelTabHeaderProps> = () => {
           text={formatMessage('Remove from list')}
           onClick={onClickRemove}
         />
-      </div>
-      <div css={content}>
-        <DetailsList
-          columns={watchTableColumns}
-          items={refreshedWatchedVariables}
-          layoutMode={watchTableLayout}
-          selection={watchedVariablesSelection.current}
-          selectionMode={SelectionMode.multiple}
-          styles={watchTableStyles}
-          onRenderItemColumn={renderColumn}
-          onRenderRow={renderRow}
-        />
-      </div>
-    </div>
+      </Stack.Item>
+      <Stack.Item
+        css={{
+          height: `calc(100% - 55px)`,
+          position: 'relative',
+        }}
+      >
+        <ScrollablePane>
+          <DetailsList
+            columns={watchTableColumns}
+            items={refreshedWatchedVariables}
+            layoutMode={watchTableLayout}
+            selection={watchedVariablesSelection.current}
+            selectionMode={SelectionMode.multiple}
+            styles={watchTableStyles}
+            onRenderDetailsHeader={onRenderDetailsHeader}
+            onRenderItemColumn={renderColumn}
+            onRenderRow={renderRow}
+          />
+        </ScrollablePane>
+      </Stack.Item>
+    </Stack>
   );
 };
