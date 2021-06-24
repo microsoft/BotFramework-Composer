@@ -3,10 +3,7 @@
 
 import { SDKKinds } from '@bfc/shared';
 
-import {
-  decodeDesignerPathToArrayPath,
-  encodeArrayPathToDesignerPath,
-} from '../../../src/utils/convertUtils/designerPathEncoder';
+import { decodeDesignerPathToArrayPath, encodeArrayPathToDesignerPath } from '../designerPathEncoder';
 
 const dialog = {
   triggers: [

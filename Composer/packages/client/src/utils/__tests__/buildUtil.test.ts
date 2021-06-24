@@ -3,7 +3,7 @@
 
 import { DialogInfo, LuFile } from '@bfc/shared';
 
-import { createCrossTrainConfig } from '../../src/utils/buildUtil';
+import { createCrossTrainConfig } from '../buildUtil';
 
 describe('createCrossTrainConfig', () => {
   it('should create crosstrain config', () => {
