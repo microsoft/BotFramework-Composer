@@ -56,6 +56,7 @@ export const useSurveyNotification = () => {
               // eslint-disable-next-line security/detect-non-literal-fs-filename
               window.open(url, '_blank');
               TelemetryClient.track('HATSSurveyAccepted');
+              deleteNotification('survey');
             },
           },
 
@@ -64,6 +65,7 @@ export const useSurveyNotification = () => {
             label: formatMessage('Remind me later'),
             onClick: () => {
               TelemetryClient.track('HATSSurveyDismissed');
+              deleteNotification('survey');
             },
           },
         ],
@@ -73,6 +75,7 @@ export const useSurveyNotification = () => {
             onClick: () => {
               TelemetryClient.track('HATSSurveyRejected');
               surveyStorage.set('optedOut', true);
+              deleteNotification('survey');
             },
           },
         ],
