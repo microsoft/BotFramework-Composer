@@ -46,13 +46,15 @@ export function useBotOperations() {
   const startRootBot = async (skipBuild?: boolean) => {
     setProjectsToTrack([]);
     await updateSettingsForSkillsWithoutManifest();
-    const { projectId, configuration, buildRequired, status, sensitiveSettings } = builderEssentials[0];
-    if (status !== BotStatus.connected) {
-      let isBuildRequired = buildRequired;
-      if (skipBuild) {
-        isBuildRequired = false;
+    if (builderEssentials.length) {
+      const { projectId, configuration, buildRequired, status, sensitiveSettings } = builderEssentials[0];
+      if (status !== BotStatus.connected) {
+        let isBuildRequired = buildRequired;
+        if (skipBuild) {
+          isBuildRequired = false;
+        }
+        handleBotStart(projectId, configuration, sensitiveSettings, isBuildRequired);
       }
-      handleBotStart(projectId, configuration, sensitiveSettings, isBuildRequired);
     }
   };
 

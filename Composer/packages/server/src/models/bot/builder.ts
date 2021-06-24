@@ -160,11 +160,11 @@ export class Builder {
 
   public setBuildConfig(
     config: IConfig,
-    downSamplingConfig: DownSamplingConfig,
+    downSamplingConfig?: DownSamplingConfig,
     crossTrainingSetting?: { inter?: boolean; intra?: boolean }
   ) {
     this.config = config;
-    this.downSamplingConfig = downSamplingConfig;
+    if (downSamplingConfig) this.downSamplingConfig = downSamplingConfig;
     if (!crossTrainingSetting) return;
     if (crossTrainingSetting.inter !== undefined) this.crossTrainingSetting.inter = crossTrainingSetting.inter;
     if (crossTrainingSetting.intra !== undefined) this.crossTrainingSetting.intra = crossTrainingSetting.intra;

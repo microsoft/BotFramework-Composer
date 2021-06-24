@@ -4,7 +4,7 @@
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core';
 import React, { useState, useCallback } from 'react';
-import { FontSizes } from '@uifabric/fluent-theme';
+import { FontSizes, FluentTheme } from '@uifabric/fluent-theme';
 import { DefaultPalette } from '@uifabric/styling';
 import { OverflowSet, IOverflowSetItemProps } from 'office-ui-fabric-react/lib/OverflowSet';
 import { TooltipHost, DirectionalHint } from 'office-ui-fabric-react/lib/Tooltip';
@@ -184,7 +184,7 @@ const statusIcon = {
 
 const warningIcon = {
   ...statusIcon,
-  color: '#BE880A',
+  color: FluentTheme.palette.yellow,
 };
 
 const errorIcon = {
