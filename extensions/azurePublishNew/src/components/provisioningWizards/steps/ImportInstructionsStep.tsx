@@ -58,7 +58,7 @@ export const ImportInstructionsStep = () => {
           <Text>- {formatMessage('Microsoft Application Registration')}</Text>
         </ResourceTitle>
         <ResourceTitle>
-          <Text>- {formatMessage('Azure Hosting')}</Text>
+          <Text>- {formatMessage('App Services')}</Text>
         </ResourceTitle>
         <ResourceTitle>
           <Text>- {formatMessage('Microsoft Bot Channels Registration')}</Text>

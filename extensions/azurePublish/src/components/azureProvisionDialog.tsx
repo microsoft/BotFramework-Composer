@@ -9,6 +9,7 @@ import { DefaultButton, PrimaryButton } from 'office-ui-fabric-react/lib/Button'
 import {
   logOut,
   usePublishApi,
+  useProjectApi,
   getTenants,
   getARMTokenForTenant,
   useLocalStorage,
@@ -41,6 +42,8 @@ import {
   IStackTokens,
   IStackItemStyles,
   Link,
+  ChoiceGroup,
+  IChoiceGroupOption,
 } from 'office-ui-fabric-react';
 import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
 import { JsonEditor } from '@bfc/code-editor';
@@ -59,7 +62,7 @@ import {
   getResourceGroups,
 } from './api';
 import { ChooseResourcesList } from './ChooseResourcesList';
-import { getExistResources, removePlaceholder, decodeToken, defaultExtensionState } from './util';
+import { getExistResources, removePlaceholder, decodeToken, defaultExtensionState, parseRuntimeKey } from './util';
 import { ResourceGroupPicker } from './ResourceGroupPicker';
 import { ChooseProvisionAction } from './ChooseProvisionAction';
 
@@ -71,6 +74,7 @@ type ProvisionFormData = {
   hostname: string;
   region: string;
   luisLocation: string;
+  appServiceOperatingSystem: string;
   enabledResources: ResourcesItem[];
   requiredResources: ResourcesItem[];
 };
@@ -129,6 +133,10 @@ const LearnMoreLink = styled(Link)`
   user-select: none;
   font-size: 14px;
 `;
+
+const appOSChoiceGroupStyles = {
+  flexContainer: { display: 'flex', flexDirection: 'row', alignItems: 'center' },
+};
 
 const PageTypes = {
   ChooseAction: 'chooseAction',
@@ -280,6 +288,7 @@ const getLogoutNotificationSettings = (description: string, type: Notification['
     ),
   };
 };
+
 const getDefaultFormData = (currentProfile, defaults) => {
   return {
     creationType: defaults.creationType ?? 'create',
@@ -289,6 +298,8 @@ const getDefaultFormData = (currentProfile, defaults) => {
     hostname: getHostname(currentProfile) ?? defaults.hostname,
     region: currentProfile?.region ?? defaults.region,
     luisLocation: currentProfile?.settings?.luis?.region ?? defaults.luisLocation,
+    appServiceOperatingSystem:
+      currentProfile?.settings?.appServiceOperatingSystem ?? defaults.appServiceOperatingSystem,
     enabledResources: defaults.enabledResources ?? [],
     requiredResources: defaults.requireResources ?? [],
   };
@@ -296,7 +307,7 @@ const getDefaultFormData = (currentProfile, defaults) => {
 
 export const AzureProvisionDialog: React.FC = () => {
   const {
-    currentProjectId,
+    currentProjectId: getCurrentProjectId,
     publishConfig,
     startProvision,
     closeDialog,
@@ -312,12 +323,44 @@ export const AzureProvisionDialog: React.FC = () => {
     setTenantId,
   } = usePublishApi();
 
+  const { projectCollection } = useProjectApi();
+
+  const currentProjectId = getCurrentProjectId();
+
   const telemetryClient = useTelemetryClient();
 
   const { setItem, getItem, clearAll } = useLocalStorage();
   // set type of publish - azurePublish or azureFunctionsPublish
   const publishType = getType();
   const profileName = getName();
+
+  const getPreferredAppServiceOS = () => {
+    const project = projectCollection.find((project) => project.projectId === currentProjectId);
+    const runtimeKey = project?.setting.runtime.key;
+    if (runtimeKey) {
+      const { runtimeLanguage, runtimeType } = parseRuntimeKey(runtimeKey);
+
+      switch (runtimeLanguage) {
+        case 'dotnet':
+          return 'windows';
+        case 'js':
+          switch (runtimeType) {
+            case 'webapp':
+              return 'linux';
+            case 'function':
+              return 'windows';
+            default:
+              return 'windows';
+          }
+          break;
+        default:
+          return 'windows';
+      }
+    } else {
+      return 'windows';
+    }
+  };
+
   const currentConfig = removePlaceholder(publishConfig);
   const extensionState = { ...defaultExtensionState, ...getItem(profileName) };
 
@@ -334,7 +377,10 @@ export const AzureProvisionDialog: React.FC = () => {
   const [luisLocations, setLuisLocations] = useState<DeployLocation[]>([]);
   const [extensionResourceOptions, setExtensionResourceOptions] = useState<ResourcesItem[]>([]);
 
-  const [formData, setFormData] = useState<ProvisionFormData>(getDefaultFormData(currentConfig, extensionState));
+  const preferredAppServiceOS = useMemo(getPreferredAppServiceOS, [currentProjectId, projectCollection]);
+  const [formData, setFormData] = useState<ProvisionFormData>(
+    getDefaultFormData(currentConfig, { ...extensionState, appServiceOperatingSystem: preferredAppServiceOS })
+  );
 
   const [isLoading, setIsLoading] = useState(true);
   const [loadingErrorMessage, setLoadingErrorMessage] = useState<string>();
@@ -555,7 +601,7 @@ export const AzureProvisionDialog: React.FC = () => {
 
   const getResources = async () => {
     try {
-      const resources = await getResourceList(currentProjectId(), publishType);
+      const resources = await getResourceList(currentProjectId, publishType);
       setExtensionResourceOptions(resources);
     } catch (err) {
       // todo: how do we handle API errors in this component
@@ -846,6 +892,25 @@ export const AzureProvisionDialog: React.FC = () => {
     );
   };
 
+  const getAppServiceOSOptions = useCallback((): IChoiceGroupOption[] => {
+    return [
+      {
+        key: 'windows',
+        text: preferredAppServiceOS === 'windows' ? formatMessage('Windows (Recommended)') : formatMessage('Windows'),
+        styles: {
+          root: { marginTop: '4px' },
+        },
+      },
+      {
+        key: 'linux',
+        text: preferredAppServiceOS === 'linux' ? formatMessage('Linux (Recommended)') : formatMessage('Linux'),
+        styles: {
+          root: { marginTop: '4px', marginLeft: '8px' },
+        },
+      },
+    ];
+  }, [preferredAppServiceOS]);
+
   const PageFormConfig = (
     <ScrollablePane
       data-is-scrollable="true"
@@ -919,6 +984,28 @@ export const AzureProvisionDialog: React.FC = () => {
                 setIsNewResourceGroup(choice.isNew);
                 updateFormData('resourceGroup', choice.name);
                 setErrorResourceGroupName(choice.errorMessage);
+              }}
+            />
+          </Stack>
+          <ConfigureResourcesSectionName>
+            {formatMessage('App Service (Web App or Function)')}
+          </ConfigureResourcesSectionName>
+          <Stack horizontal tokens={configureResourcePropertyStackTokens} verticalAlign="start">
+            <Stack horizontal styles={configureResourcePropertyLabelStackStyles} verticalAlign="center">
+              <ConfigureResourcesPropertyLabel required>
+                {formatMessage('Operating System')}
+              </ConfigureResourcesPropertyLabel>
+              {renderPropertyInfoIcon(
+                formatMessage('Select the operating system that will host your application service.')
+              )}
+            </Stack>
+            <ChoiceGroup
+              required
+              options={getAppServiceOSOptions()}
+              selectedKey={formData.appServiceOperatingSystem}
+              styles={appOSChoiceGroupStyles}
+              onChange={(_e, o) => {
+                updateFormData('appServiceOperatingSystem', o.key as string);
               }}
             />
           </Stack>
@@ -1249,6 +1336,7 @@ export const AzureProvisionDialog: React.FC = () => {
                   hostname: formData.hostname,
                   location: formData.region,
                   luisLocation: formData.luisLocation || formData.region,
+                  appServiceOperatingSystem: formData.appServiceOperatingSystem,
                   type: publishType,
                   externalResources: selectedResources,
                 });
