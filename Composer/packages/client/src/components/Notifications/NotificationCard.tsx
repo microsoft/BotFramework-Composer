@@ -260,6 +260,9 @@ export const NotificationCard = React.memo((props: NotificationProps) => {
         css={cancelButton}
         iconProps={{ iconName: 'Cancel', styles: { root: { fontSize: '12px' } } }}
         onClick={() => {
+          // This lets us add custom actions to closing a card if we want to.
+          // For instance, telemetry to track when the user dismisses a specific
+          // type of card.
           cardProps?.onDismiss?.(id);
           onDismiss(id);
         }}

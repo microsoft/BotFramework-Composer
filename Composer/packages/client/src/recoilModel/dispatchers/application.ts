@@ -178,12 +178,14 @@ export const applicationDispatcher = () => {
       surveyStorage.set('days', days);
     }
     if (
-      // we need to have used Composer enough different calendar days to become eligible...
+      // To be eligible for the survey, the user needs to have used Composer
+      // some minimum number of days.
       days >= SURVEY_PARAMETERS.daysUntilEligible &&
-      // ... and have either never taken the survey or it's been long enough since we did
+      // Also, either the user must have never taken the survey before or
+      // the last time they took it must be long enough in the past.
       (lastTaken == null || Date.now() - lastTaken > SURVEY_PARAMETERS.timeUntilNextSurvey)
     ) {
-      // do we hit the probability of the survey appearing?
+      // If the above conditions are true, there's a fixed chance the card will appear.
       set(surveyEligibilityState, Math.random() < SURVEY_PARAMETERS.chanceToAppear);
     }
     surveyStorage.set('dateLastUsed', today);
