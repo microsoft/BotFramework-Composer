@@ -5,20 +5,13 @@ import { WebSiteManagementClient } from '@azure/arm-appservice';
 import { TokenCredentials } from '@azure/ms-rest-js';
 import { parseRuntimeKey } from '@bfc/shared';
 
-import { ProvisionCredentials, ProvisionMethod, ProvisionWorkingSet, ResourceProvisionService } from '../types';
+import { ProvisionConfig, ProvisionWorkingSet, ResourceProvisionService } from '../types';
 
-import { WebAppConfig } from './types';
-
-const createWebApp = async (
-  webAppManagementClient: WebSiteManagementClient,
-  resourceGroupName: string,
-  location: string,
-  webAppName: string,
-  serverFarmId: string
-) => {
-  return await webAppManagementClient.webApps.createOrUpdate(resourceGroupName, webAppName, {
+const createWebApp = async (client: WebSiteManagementClient, config: ProvisionConfig) => {
+  const { resourceGroupName, webAppName, serverFarm, location } = config;
+  return await client.webApps.createOrUpdate(resourceGroupName, webAppName, {
     name: webAppName,
-    serverFarmId: serverFarmId,
+    serverFarmId: serverFarm,
     location: location,
     kind: 'app',
     siteConfig: {
@@ -36,30 +29,32 @@ const createWebApp = async (
   });
 };
 
-const getWebAppProvisionMethod = (credentials: ProvisionCredentials): ProvisionMethod => {
-  const tokenCredentials = new TokenCredentials(credentials.token);
-  const webSiteManagementClient = new WebSiteManagementClient(tokenCredentials, credentials.subscriptionId);
+const webAppProvisionMethod = async (
+  client: WebSiteManagementClient,
+  config: ProvisionConfig,
+  workingSet: {}
+): Promise<ProvisionWorkingSet> => {
+  // const appRegistrationResult = workingSet.appRegistration;
+  const webAppResult = await createWebApp(client, config);
+  const hostname = webAppResult?.hostNames?.[0];
 
-  return async (config: WebAppConfig, workingSet: ProvisionWorkingSet): Promise<ProvisionWorkingSet> => {
-    // const appRegistrationResult = workingSet.appRegistration;
-    const webAppResult = await createWebApp(webSiteManagementClient, 'rg-1', 'west-us', 'appName', 'serverfarmid');
-    const hostname = webAppResult?.hostNames?.[0];
-
-    const result = { hostname: hostname };
-    return {
-      ...workingSet,
-      webAppResult: result,
-    };
+  const result = { hostname: hostname };
+  return {
+    ...workingSet,
+    webAppResult: result,
   };
 };
 
-export const getWebAppProvisionService = (credentials: ProvisionCredentials): ResourceProvisionService => {
+export const getWebAppProvisionService = (config: ProvisionConfig): ResourceProvisionService => {
+  const tokenCredentials = new TokenCredentials(config.credentials.token);
+  const webSiteManagementClient = new WebSiteManagementClient(tokenCredentials, config.subscriptionId);
+
   return {
     getDependencies: () => ['appRegistration', 'servicePlan'],
     getRecommendationForProject: (project) => {
       const { runtimeType } = parseRuntimeKey(project.settings?.runtime?.key);
       return runtimeType !== 'functions' ? 'required' : 'notAllowed';
     },
-    provision: getWebAppProvisionMethod(credentials),
+    provision: () => webAppProvisionMethod(webSiteManagementClient, config, {}),
   };
 };

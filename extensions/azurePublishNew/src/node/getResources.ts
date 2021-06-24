@@ -3,7 +3,6 @@
 
 import { IBotProject } from '@botframework-composer/types';
 
-import { getProvisionServices } from './provisionService';
 import { GetResourcesResult, ResourceDefinition, ResourceProvisionService } from './types';
 import {
   appInsightsDefinition,
@@ -34,7 +33,7 @@ const availableResources: ResourceDefinition[] = [
 ];
 
 export const getResources = (project: IBotProject): GetResourcesResult[] => {
-  const provisionServices: Record<string, ResourceProvisionService> = getProvisionServices();
+  const provisionServices: Record<string, ResourceProvisionService> = {};
 
   return availableResources.reduce((resources: GetResourcesResult[], currentResource: ResourceDefinition) => {
     const service = provisionServices[currentResource.key];

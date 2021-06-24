@@ -25,12 +25,19 @@ export type GetResourcesResult = ResourceDefinition & {
 };
 export type ProvisionConfig = {
   key: string;
+  credentials: ProvisionCredentials;
+  subscriptionId: string;
+  resourceGroupName: string;
+  location: string;
+  webAppName: string;
+  serverFarm: string;
 };
+
 export type ProvisionCredentials = {
   token: string;
-  graphToken: string;
-  subscriptionId: string;
+  graphToken?: string;
 };
+
 export type ResourceConfig = {
   key: string;
 };

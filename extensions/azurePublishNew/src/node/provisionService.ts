@@ -12,14 +12,14 @@ import { getBlogStorageProvisionService } from './azureResources/blobStorage';
 import { getQnAProvisionService } from './azureResources/qna';
 import { getAppServiceProvisionService } from './azureResources/servicePlan';
 import { getAppInsightsProvisionService } from './azureResources/appInsights';
-import { ProvisionConfig, ProvisionCredentials, ResourceConfig, ResourceProvisionService } from './types';
+import { ProvisionConfig, ResourceConfig, ResourceProvisionService } from './types';
 
 // bot project => candidate resources => select & configure resources => order & provision
 
-export const getProvisionServices = (credentials: ProvisionCredentials): Record<string, ResourceProvisionService> => {
+export const getProvisionServices = (config: ProvisionConfig): Record<string, ResourceProvisionService> => {
   return {
-    appRegistration: getAppRegistrationProvisionService(credentials),
-    webApp: getWebAppProvisionService(credentials),
+    appRegistration: getAppRegistrationProvisionService(config),
+    webApp: getWebAppProvisionService(config),
     botRegistration: getBotChannelProvisionService(),
     azureFunctionApp: getAzureFunctionsProvisionService(),
     cosmosDB: getCosmosDbProvisionService(),
@@ -32,15 +32,15 @@ export const getProvisionServices = (credentials: ProvisionCredentials): Record<
   };
 };
 
-export const setUpProvisionService = (credentials: ProvisionCredentials) => {
-  const provisionServices = getProvisionServices(credentials);
+export const setUpProvisionService = (config: ProvisionConfig) => {
+  const provisionServices = getProvisionServices(config);
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const provision = (config: ProvisionConfig): void => {
+  const provision = (): void => {
     // config => sorted resource config
     const selectedResources: ResourceConfig[] = [];
 
-    const provisionServices = getProvisionServices(credentials);
+    const provisionServices = getProvisionServices(config);
 
     const workingSet: Record<string, object> = {};
     selectedResources.forEach((resourceConfig) => {
