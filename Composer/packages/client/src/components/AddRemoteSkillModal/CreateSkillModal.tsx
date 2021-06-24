@@ -412,7 +412,7 @@ export const CreateSkillModal: React.FC<CreateSkillModalProps> = (props) => {
                       styles={buttonStyle}
                       text={formatMessage('Done')}
                       onClick={(event) => {
-                        addRemoteSkill(formData.manifestUrl, formData.endpointName);
+                        addRemoteSkill(formData.manifestUrl, formData.endpointName, zipContent);
                       }}
                     />
                   )

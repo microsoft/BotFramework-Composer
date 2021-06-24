@@ -77,9 +77,9 @@ const getRemoteLuFiles = async (
   const luFiles: Record<string, { id: string; content: string }[]> = {};
   try {
     for (const [key, value] of Object.entries(skillLanguages)) {
-      if (composerLangeages.includes(key)) {
+      if (composerLangeages.includes(key) && Array.isArray(value)) {
         luFiles[key] = [];
-        value.map(async (item) => {
+        for (let item of value) {
           if (/^http[s]?:\/\/\w+/.test(item.url)) {
             // get lu file from remote
             const { data } = await httpClient.get(`/utilities/retrieveRemoteFile`, {
@@ -96,7 +96,7 @@ const getRemoteLuFiles = async (
               content: zipContent[fileKey],
             });
           }
-        });
+        }
       }
     }
     return luFiles;
