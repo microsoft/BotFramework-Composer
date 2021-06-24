@@ -11,6 +11,7 @@ import { Text } from 'office-ui-fabric-react/lib/Text';
 import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 
 import { FieldConfig, useForm } from '../../hooks/useForm';
+import { Locales } from '../../locales';
 
 import { validateName, CreateQnAFromFormProps, CreateQnAFromQnAMakerFormData } from './constants';
 import { knowledgeBaseStyle, subText, textFieldKBNameFromScratch, dropdownStyles } from './styles';
@@ -35,7 +36,7 @@ export const CreateQnAFromQnAMaker: React.FC<CreateQnAFromFormProps> = (props) =
   const { formData, updateField, hasErrors, formErrors } = useForm(formConfig);
 
   const options: IDropdownOption[] = locales.map((item) => {
-    return { key: item, text: item };
+    return { key: item, text: Locales.find(({ locale }) => locale === item)?.language || item };
   });
 
   useEffect(() => {

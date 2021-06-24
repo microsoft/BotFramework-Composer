@@ -13,6 +13,7 @@ import cloneDeep from 'lodash/cloneDeep';
 
 import { Locales } from '../../locales';
 
+import { initializeLocales } from './utilities';
 import {
   validateUrl,
   validateName,
@@ -32,16 +33,6 @@ import {
 
 const hasErrors = (errors: CreateQnAFromUrlFormDataErrors) => {
   return !!errors.name || errors.urls.some((e) => !!e);
-};
-
-const initializeLocales = (locales: string[], defaultLocale: string) => {
-  const newLocales = cloneDeep(locales);
-  const index = newLocales.findIndex((l) => l === defaultLocale);
-  if (index < 0) throw new Error(`default language ${defaultLocale} does not exist in languages`);
-  newLocales.splice(index, 1);
-  newLocales.sort();
-  newLocales.unshift(defaultLocale);
-  return newLocales;
 };
 
 export const CreateQnAFromUrl: React.FC<CreateQnAFromFormProps> = (props) => {
@@ -154,8 +145,8 @@ export const CreateQnAFromUrl: React.FC<CreateQnAFromFormProps> = (props) => {
               <TextField
                 data-testid={`add${locale}InCreateQnAFromUrlModal`}
                 errorMessage={formDataErrors.urls[i]}
-                prefix={usedLocales[i]}
                 placeholder={formatMessage('Type or paste URL')}
+                prefix={usedLocales[i]}
                 required={i === 0}
                 styles={textFieldUrl}
                 value={formData.urls[i]}
