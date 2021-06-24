@@ -18,13 +18,14 @@ const styles = {
     background-color: #fff4ce;
     padding: 14px 10px 10px 10px;
     position: relative;
+    border-radius: 3px;
 
     display: ${isEditing ? 'none' : 'block'};
   `,
   menu: css`
     position: absolute;
-    right: 2px;
-    top: 4px;
+    right: 4px;
+    top: 8px;
   `,
   noteBody: (truncate = true) => css`
     font-size: 12px;

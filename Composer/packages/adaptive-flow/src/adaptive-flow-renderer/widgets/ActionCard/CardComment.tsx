@@ -15,6 +15,7 @@ const styles = {
     background-color: #fff4ce;
     padding: 8px;
     padding-bottom: 10px;
+    border-radius: 2px;
     position: relative;
   `,
   fold: css`

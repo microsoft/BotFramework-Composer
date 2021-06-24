@@ -34,7 +34,12 @@ function scrollZoom(delta: number, rateList: number[], maxRate: number, minRate:
 
 const TooltipWrapper = ({ tooltip, children }: { tooltip: string; children: React.ReactNode }) => (
   <TooltipHost
-    calloutProps={{ directionalHint: DirectionalHint.rightCenter, gapSpace: 4, beakWidth: 12 }}
+    calloutProps={{
+      directionalHint: DirectionalHint.rightCenter,
+      gapSpace: 4,
+      beakWidth: 12,
+      styles: { container: { borderRadius: '2px' } },
+    }}
     content={tooltip}
     styles={{ root: { display: 'block' } }}
   >

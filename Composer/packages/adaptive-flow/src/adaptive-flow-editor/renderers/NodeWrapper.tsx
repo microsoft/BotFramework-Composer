@@ -35,7 +35,7 @@ const nodeBorderDoubleSelectedStyle = css`
  */
 const tooltipTargetStyle = (showComments = true) => css`
   position: absolute;
-  right: ${showComments ? 0 : '-29px'};
+  right: ${showComments ? 0 : '-32px'};
   top: 0;
   height: 24px;
   width: 24px;
@@ -151,6 +151,7 @@ export const ActionNodeWrapper = ({ id, tab, data, onEvent, hideComment, childre
         gapSpace: 4,
         beakWidth: 12,
         target: escapeId(`#${nodeId}-comment-target`),
+        styles: { container: { borderRadius: '2px' } },
       }}
       content={data.$designer?.comment}
     >
