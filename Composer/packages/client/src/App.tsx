@@ -46,8 +46,8 @@ export const App: React.FC = () => {
 
     ipcRenderer?.on('machine-info', (_event, info) => {
       setMachineInfo(info);
+      setSurveyEligibility();
     });
-    setSurveyEligibility();
   }, []);
 
   return (
