@@ -13,7 +13,7 @@ const getLuisPredictionProvisionMethod = (): ProvisionMethod => {
 
 export const getLuisPredictionProvisionService = (): ResourceProvisionService => {
   return {
-    getDependencies: () => ['appRegistration'],
+    getDependencies: () => [],
     getRecommendationForProject: (project) => {
       return project.requiresLuisPrediction; // tbd
     },

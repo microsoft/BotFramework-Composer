@@ -18,7 +18,7 @@ const getCosmosDbProvisionMethod = (): ProvisionMethod => {
 
 export const getCosmosDbProvisionService = (): ResourceProvisionService => {
   return {
-    getDependencies: () => ['appRegistration'],
+    getDependencies: () => [],
     getRecommendationForProject: (project) => 'optional',
     provision: getCosmosDbProvisionMethod(),
   };

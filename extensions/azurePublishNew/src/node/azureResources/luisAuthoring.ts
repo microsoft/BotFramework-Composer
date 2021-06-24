@@ -13,7 +13,7 @@ const getLuisAuthoringProvisionMethod = (): ProvisionMethod => {
 
 export const getLuisAuthoringProvisionService = (): ResourceProvisionService => {
   return {
-    getDependencies: () => ['appRegistration'],
+    getDependencies: () => [],
     getRecommendationForProject: (project) => {
       return project.requiresLuisAuthoring; // tbd
     },

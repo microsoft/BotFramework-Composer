@@ -18,7 +18,7 @@ const getQnAProvisionMethod = (): ProvisionMethod => {
 
 export const getQnAProvisionService = (): ResourceProvisionService => {
   return {
-    getDependencies: () => ['appRegistration'],
+    getDependencies: () => ['appRegistration', 'webApp'],
     getRecommendationForProject: (project) => {
       return project.isQnARequired; // tbd
     },

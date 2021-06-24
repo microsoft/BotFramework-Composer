@@ -18,7 +18,7 @@ const getBlobStorageProvisionMethod = (): ProvisionMethod => {
 
 export const getBlogStorageProvisionService = (): ResourceProvisionService => {
   return {
-    getDependencies: () => ['appRegistration'],
+    getDependencies: () => [],
     getRecommendationForProject: (project) => 'optional',
     provision: getBlobStorageProvisionMethod(),
   };
