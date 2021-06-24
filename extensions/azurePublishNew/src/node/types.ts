@@ -10,12 +10,15 @@ export type ResourceProvisionService = {
   getRecommendationForProject: (project: IBotProject) => 'required' | 'optional' | 'notAllowed';
   provision: ProvisionMethod;
 };
+
+type ResourceDefinitionGroup = 'App Services' | 'Cognitive Services';
+
 export type ResourceDefinition = {
   key: string;
   text: string;
   description: string;
   tier: string;
-  group: string;
+  group: ResourceDefinitionGroup;
 };
 export type GetResourcesResult = ResourceDefinition & {
   required: boolean;
