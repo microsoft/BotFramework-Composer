@@ -71,14 +71,16 @@ const cardDetail = css`
 
 const iconMargin = '4px';
 
+// Error Block Icon from Messaging Colors
 const errorType = css`
   margin-top: ${iconMargin};
   color: #a80000;
 `;
 
+// Success Icon from Messaging Colors
 const successType = css`
   margin-top: ${iconMargin};
-  color: #27ae60;
+  color: #107c10;
 `;
 
 // #fce100
@@ -257,7 +259,10 @@ export const NotificationCard = React.memo((props: NotificationProps) => {
         ariaLabel={formatMessage('Close')}
         css={cancelButton}
         iconProps={{ iconName: 'Cancel', styles: { root: { fontSize: '12px' } } }}
-        onClick={() => onDismiss(id)}
+        onClick={() => {
+          cardProps?.onDismiss?.(id);
+          onDismiss(id);
+        }}
       />
       {renderCard(cardProps)}
     </div>

@@ -281,8 +281,8 @@
   "all_4321c3a1": {
     "message": "All"
   },
-  "all_bots_649ccbd0": {
-    "message": "All bots"
+  "all_projects_5482873e": {
+    "message": "All projects"
   },
   "allowed_callers_31b26262": {
     "message": "Allowed Callers"
@@ -956,6 +956,12 @@
   "count_plural_0_no_items_selected_1_one_item_is_sel_13d3b2de": {
     "message": "{ count, plural,\n     =0 {No items selected}\n     =1 {One item is selected}\n  other {# items are selected}\n}"
   },
+  "count_plural_1_error_other_errors_c2dc01f8": {
+    "message": "{ count, plural,\n     =1 {Error}\n  other {Errors}\n}"
+  },
+  "count_plural_1_warning_other_warnings_a7258fed": {
+    "message": "{ count, plural,\n     =1 {Warning}\n  other {Warnings}\n}"
+  },
   "create_132b3be1": {
     "message": "Create"
   },
@@ -1535,14 +1541,8 @@
   "error_provisioning_25835400": {
     "message": "Error provisioning."
   },
-  "errors_a0ac8807": {
-    "message": "Errors"
-  },
   "errorscount_plural_0_no_errors_1_one_error_other_e_a8c998bb": {
     "message": "{ errorsCount, plural,\n     =0 {No errors}\n     =1 {One error}\n  other {# errors}\n}"
-  },
-  "errorsmsg_8f5d3d85": {
-    "message": "{ errorsMsg }"
   },
   "event_activity_2067a94b": {
     "message": "Event activity"
@@ -4220,14 +4220,8 @@
   "warning_aacb8c24": {
     "message": "Warning"
   },
-  "warnings_d6acbbdb": {
-    "message": "Warnings"
-  },
   "warningscount_plural_0_no_warnings_1_one_warning_o_347cc928": {
     "message": "{ warningsCount, plural,\n     =0 {No warnings}\n     =1 {One warning}\n  other {# warnings}\n}"
-  },
-  "warningsmsg_e2c04bfe": {
-    "message": "{ warningsMsg }"
   },
   "we_detected_length_custom_obj_that_are_not_support_becd85f0": {
     "message": "We detected { length } custom { obj } that are not support for Composer 2.0."

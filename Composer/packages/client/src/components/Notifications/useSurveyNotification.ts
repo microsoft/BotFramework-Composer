@@ -52,11 +52,10 @@ export const useSurveyNotification = () => {
           {
             label: formatMessage('Take survey'),
             onClick: () => {
-              // This is safe; we control what the URL that gets built is
+              // This is safe; we control the URL that gets built
               // eslint-disable-next-line security/detect-non-literal-fs-filename
               window.open(url, '_blank');
               TelemetryClient.track('HATSSurveyAccepted');
-              deleteNotification('survey');
             },
           },
 
@@ -65,7 +64,6 @@ export const useSurveyNotification = () => {
             label: formatMessage('Remind me later'),
             onClick: () => {
               TelemetryClient.track('HATSSurveyDismissed');
-              deleteNotification('survey');
             },
           },
         ],
@@ -74,11 +72,11 @@ export const useSurveyNotification = () => {
             label: formatMessage('No thanks'),
             onClick: () => {
               TelemetryClient.track('HATSSurveyRejected');
-              deleteNotification('survey');
               surveyStorage.set('optedOut', true);
             },
           },
         ],
+        onDismiss: () => TelemetryClient.track('HATSSurveyDismissed'),
       });
     }
   }, []);

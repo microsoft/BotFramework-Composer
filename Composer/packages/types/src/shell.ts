@@ -81,6 +81,7 @@ export type Notification = {
   hidden?: boolean;
   onRenderCardContent?: ((props: Notification) => JSX.Element) | React.FC<any>;
   data?: Record<string, any>;
+  onDismiss?: (id: string) => void;
 };
 
 export type ApplicationContextApi = {
