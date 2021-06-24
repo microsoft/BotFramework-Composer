@@ -2,60 +2,44 @@
 // Licensed under the MIT License.
 
 import * as React from 'react';
-import { Range, Position } from '@bfc/shared';
 import { fireEvent } from '@botframework-composer/test-utils';
+import { DiagnosticSeverity } from '@botframework-composer/types';
+import { Range, Position } from '@bfc/shared';
 
+import { renderWithRecoil } from '../../../testUtils';
+import { DiagnosticList } from '../../../../src/pages/design/DebugPanel/TabExtensions/DiagnosticsTab/DiagnosticList';
 import {
   botDiagnosticsState,
   botProjectIdsState,
   currentProjectIdState,
   dialogIdsState,
-  dialogState,
   formDialogSchemaIdsState,
   jsonSchemaFilesState,
   lgFilesSelectorFamily,
   luFilesSelectorFamily,
-  qnaFilesSelectorFamily,
   schemasState,
   settingsState,
-} from '../../../src/recoilModel';
-import mockProjectResponse from '../../../src/recoilModel/dispatchers/__tests__/mocks/mockProjectResponse.json';
-import Diagnostics from '../../../src/pages/diagnostics/Diagnostics';
-import { renderWithRecoil } from '../../testUtils/renderWithRecoil';
+  projectMetaDataState,
+  dialogState,
+} from '../../../../src/recoilModel';
+import mockProjectResponse from '../../../../src/recoilModel/dispatchers/__tests__/mocks/mockProjectResponse.json';
+import { DiagnosticsContent } from '../../../../src/pages/design/DebugPanel/TabExtensions/DiagnosticsTab/DiagnosticsTabContent';
+
+const mockNavigationTo = jest.fn();
+jest.mock('../../../../src/utils/navigation', () => ({
+  navigateTo: (...args) => mockNavigationTo(...args),
+}));
 
 const state = {
-  projectId: 'testproj',
+  projectId: 'test',
   dialogs: [
     {
       id: 'test',
-      content: { recognizer: {} },
+      content: 'test',
       luFile: 'test',
       referredLuIntents: [],
       skills: [`=settings.skill['Email-Skill'].endpointUrl`],
-      diagnostics: [
-        {
-          message: 'dialog expression error',
-          severity: 0,
-          source: 'test',
-        },
-      ],
-    },
-  ],
-  qnaFiles: [
-    {
-      content: `# ? tell a joke`,
-      id: 'test.en-us',
-      diagnostics: [
-        {
-          message: 'qna syntax error',
-          severity: 0,
-          source: 'test.en-us',
-          range: {
-            end: { character: 2, line: 7 },
-            start: { character: 0, line: 7 },
-          },
-        },
-      ],
+      projectId: 'test',
     },
   ],
   luFiles: [
@@ -73,8 +57,8 @@ const state = {
       diagnostics: [
         {
           message: 'lu syntax error',
-          severity: 0,
-          source: 'test.en-us',
+          severity: DiagnosticSeverity.Error,
+          location: 'test.en-us',
           range: {
             end: { character: 2, line: 7 },
             start: { character: 0, line: 7 },
@@ -97,8 +81,8 @@ const state = {
       diagnostics: [
         {
           message: 'lg syntax error',
-          severity: 1,
-          source: 'test.en-us',
+          severity: DiagnosticSeverity.Error,
+          location: 'test.en-us',
           range: {
             end: { character: 2, line: 13 },
             start: { character: 0, line: 13 },
@@ -116,8 +100,8 @@ const state = {
   diagnostics: [
     {
       message: 'server error',
-      severity: 0,
-      source: 'server',
+      severity: DiagnosticSeverity.Error,
+      location: 'server',
     },
   ],
   settings: {
@@ -128,23 +112,29 @@ const state = {
         name: 'Email-Skill',
       },
     },
-    languages: ['en-us'],
+    luis: {
+      name: 'luis',
+      endpointKey: 'asds',
+    },
+    qna: {
+      subscriptionKey: 'asd',
+      endpointKey: 'asds',
+    },
   },
   formDialogSchemas: [{ id: '1', content: '{}' }],
 };
-const mockNavigationTo = jest.fn();
-jest.mock('../../../src/utils/navigation', () => ({
-  navigateTo: (...args) => mockNavigationTo(...args),
-}));
-describe('<Diagnostics/>', () => {
+
+describe('<DiagnosticList/>', () => {
   const initRecoilState = ({ set }) => {
     set(currentProjectIdState, state.projectId);
     set(botProjectIdsState, [state.projectId]);
+    set(projectMetaDataState(state.projectId), {
+      isRootBot: true,
+    });
+    set(dialogState({ projectId: state.projectId, dialogId: state.dialogs[0].id }), state.dialogs[0]);
     set(dialogIdsState(state.projectId), ['test']);
-    set(dialogState({ projectId: state.projectId, dialogId: 'test' }), state.dialogs[0]);
     set(luFilesSelectorFamily(state.projectId), state.luFiles);
     set(lgFilesSelectorFamily(state.projectId), state.lgFiles);
-    set(qnaFilesSelectorFamily(state.projectId), state.qnaFiles);
     set(jsonSchemaFilesState(state.projectId), state.jsonSchemaFiles);
     set(botDiagnosticsState(state.projectId), state.diagnostics);
     set(settingsState(state.projectId), state.settings);
@@ -155,17 +145,20 @@ describe('<Diagnostics/>', () => {
     );
   };
 
-  it('should render the Diagnostics', () => {
-    const { container, getByText } = renderWithRecoil(
-      <Diagnostics projectId={state.projectId} skillId={state.projectId} />,
+  it('should render the DiagnosticList', () => {
+    const { container } = renderWithRecoil(
+      <DiagnosticList diagnosticItems={state.diagnostics as any} />,
       initRecoilState
     );
-    expect(container).toHaveTextContent('Diagnostics');
-    fireEvent.doubleClick(getByText(/test.en-us.lg/));
-    expect(mockNavigationTo).toBeCalledWith('/bot/testproj/language-generation/test/edit#L=13');
-    fireEvent.doubleClick(getByText(/test.en-us.lu/));
-    expect(mockNavigationTo).nthCalledWith(2, '/bot/testproj/language-understanding/test/edit#L=7');
-    fireEvent.doubleClick(getByText(/test.en-us.qna/));
-    expect(mockNavigationTo).nthCalledWith(3, '/bot/testproj/knowledge-base/test/edit#L=7');
+    expect(container).toHaveTextContent('server');
+  });
+
+  it('should render the Diagnostics', () => {
+    const { getByText } = renderWithRecoil(<DiagnosticsContent isActive />, initRecoilState);
+
+    fireEvent.click(getByText(/test.en-us.lg/));
+    expect(mockNavigationTo).toBeCalledWith('/bot/test/language-generation/test/edit#L=13');
+    fireEvent.click(getByText(/test.en-us.lu/));
+    expect(mockNavigationTo).nthCalledWith(2, '/bot/test/language-understanding/test/edit#L=7');
   });
 });

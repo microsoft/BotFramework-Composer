@@ -3090,6 +3090,13 @@
   dependencies:
     regenerator-runtime "^0.13.4"
 
+"@babel/runtime@7.13.10":
+  version "7.13.10"
+  resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.13.10.tgz#47d42a57b6095f4468da440388fdbad8bebf0d7d"
+  integrity sha512-4QPkjJq6Ns3V/RgpEahRk+AGfL0eO6RHHtTWoNNr5mO49G6B5+X6d6THgWEAvTrznU5xYpbAlVKRYcsCgh/Akw==
+  dependencies:
+    regenerator-runtime "^0.13.4"
+
 "@babel/runtime@7.3.1":
   version "7.3.1"
   resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.3.1.tgz#574b03e8e8a9898eaf4a872a92ea20b7846f6f2a"
@@ -4189,15 +4196,15 @@
     ts-md5 "^1.2.6"
     tslib "^1.10.0"
 
-"@microsoft/bf-generate-library@^4.14.0-preview.20210617.22e26ac":
-  version "4.14.0-preview.20210617.22e26ac"
-  resolved "https://botbuilder.myget.org/F/botframework-cli/npm/@microsoft/bf-generate-library/-/@microsoft/bf-generate-library-4.14.0-preview.20210617.22e26ac.tgz#64e4020a8e083511e686ef27ebca29ba90061b17"
-  integrity sha1-ZOQCCo4INRHmhu8n68opupAGGxc=
+"@microsoft/bf-generate-library@^4.14.0-preview.20210623.f03627c":
+  version "4.14.0-preview.20210623.f03627c"
+  resolved "https://registry.yarnpkg.com/@microsoft/bf-generate-library/-/bf-generate-library-4.14.0-preview.20210623.f03627c.tgz#2b7156d8fe55e2b16e27a2a82688a344b5b3a0a5"
+  integrity sha512-Hbv3TMgN+4sxoNXzZEWVdvhULjcG4ALdNrfnNq+spdYOUNdazEBEC7FsRpTNHNI1nP966PiMI0kFapirbypK0Q==
   dependencies:
     "@microsoft/bf-lu" latest
-    adaptive-expressions next
+    adaptive-expressions latest
     ajv "^8.2.0"
-    botbuilder-lg next
+    botbuilder-lg latest
     clone "^2.1.2"
     fs-extra "^10.0.0"
     globby "^11.0.3"
@@ -6331,6 +6338,30 @@ adaptive-expressions@4.12.0-rc1:
     xmldom "^0.4.0"
     xpath "^0.0.32"
 
+adaptive-expressions@4.13.6, adaptive-expressions@latest:
+  version "4.13.6"
+  resolved "https://registry.yarnpkg.com/adaptive-expressions/-/adaptive-expressions-4.13.6.tgz#19b62370efd20d945f2747b1b74220d78dacc8fb"
+  integrity sha512-CS0ybyrHKVKBPNsPU0xRrZ2VEdc3xbb0Xgk2vj21si1ZWnBkyPq6u1OZ/INaSZn3YXswezunVq6Yyl6+decXEw==
+  dependencies:
+    "@microsoft/recognizers-text-data-types-timex-expression" "1.3.0"
+    "@types/atob-lite" "^2.0.0"
+    "@types/btoa-lite" "^1.0.0"
+    "@types/lru-cache" "^5.1.0"
+    "@types/xmldom" "^0.1.30"
+    antlr4ts "0.5.0-alpha.3"
+    atob-lite "^2.0.0"
+    big-integer "^1.6.48"
+    btoa-lite "^1.0.0"
+    d3-format "^1.4.4"
+    dayjs "^1.10.3"
+    jspath "^0.4.0"
+    lru-cache "^5.1.1"
+    uuid "^8.3.2"
+    x2js "^3.4.0"
+    xml2js "^0.4.23"
+    xmldom "^0.5.0"
+    xpath "^0.0.32"
+
 adaptive-expressions@4.14.0-dev.391a2ab:
   version "4.14.0-dev.391a2ab"
   resolved "https://registry.yarnpkg.com/adaptive-expressions/-/adaptive-expressions-4.14.0-dev.391a2ab.tgz#25f146165a4ac48ae86c81de05f7c163ee1ca97c"
@@ -6350,30 +6381,6 @@ adaptive-expressions@4.14.0-dev.391a2ab:
     dayjs "^1.10.3"
     jspath "^0.4.0"
     lodash.isequal "^4.5.0"
-    lru-cache "^5.1.1"
-    uuid "^8.3.2"
-    x2js "^3.4.0"
-    xml2js "^0.4.23"
-    xmldom "^0.5.0"
-    xpath "^0.0.32"
-
-adaptive-expressions@4.14.0-dev.c7a22fb, adaptive-expressions@next:
-  version "4.14.0-dev.c7a22fb"
-  resolved "https://botbuilder.myget.org/F/botframework-cli/npm/adaptive-expressions/-/adaptive-expressions-4.14.0-dev.c7a22fb.tgz#d82c0cfd184ba4da8f6515fb5c3a050108d1b5e4"
-  integrity sha1-2CwM/RhLpNqPZRX7XDoFAQjRteQ=
-  dependencies:
-    "@microsoft/recognizers-text-data-types-timex-expression" "1.3.0"
-    "@types/atob-lite" "^2.0.0"
-    "@types/btoa-lite" "^1.0.0"
-    "@types/lru-cache" "^5.1.0"
-    "@types/xmldom" "^0.1.30"
-    antlr4ts "0.5.0-alpha.3"
-    atob-lite "^2.0.0"
-    big-integer "^1.6.48"
-    btoa-lite "^1.0.0"
-    d3-format "^1.4.4"
-    dayjs "^1.10.3"
-    jspath "^0.4.0"
     lru-cache "^5.1.1"
     uuid "^8.3.2"
     x2js "^3.4.0"
@@ -7394,15 +7401,20 @@ base64-arraybuffer@0.2.0:
   resolved "https://registry.yarnpkg.com/base64-arraybuffer/-/base64-arraybuffer-0.2.0.tgz#4b944fac0191aa5907afe2d8c999ccc57ce80f45"
   integrity sha512-7emyCsu1/xiBXgQZrscw/8KPRT44I4Yq9Pe6EGs3aPRTsWuggML1/1DTuZUuIaJPIm1FTDUVXl4x/yW8s0kQDQ==
 
-base64-js@1.3.1, base64-js@^1.3.1:
-  version "1.3.1"
-  resolved "https://registry.yarnpkg.com/base64-js/-/base64-js-1.3.1.tgz#58ece8cb75dd07e71ed08c736abc5fac4dbf8df1"
-  integrity sha512-mLQ4i2QO1ytvGWFWmcngKO//JXAQueZvwEKtjgQFM4jIK0kU+ytMfplL8j+n5mspOfjHwoAg+9yhb7BwAHm36g==
+base64-js@1.5.1:
+  version "1.5.1"
+  resolved "https://registry.yarnpkg.com/base64-js/-/base64-js-1.5.1.tgz#1b1b440160a5bf7ad40b650f095963481903930a"
+  integrity sha512-AKpaYlHn8t4SVbOHCy+b5+KKgvR4vrsD8vbvrbiQJps7fKDTkjkDry6ji0rUJjC0kzbNePLwzxq8iypo41qeWA==
 
 base64-js@^1.0.2:
   version "1.3.0"
   resolved "https://registry.yarnpkg.com/base64-js/-/base64-js-1.3.0.tgz#cab1e6118f051095e58b5281aea8c1cd22bfc0e3"
   integrity sha512-ccav/yGvoa80BQDljCxsmmQ3Xvx60/UpBIij5QN21W3wBi/hhIC9OoO+KLpu9IJTS9j4DRVJ3aDDF9cMSoa2lw==
+
+base64-js@^1.3.1:
+  version "1.3.1"
+  resolved "https://registry.yarnpkg.com/base64-js/-/base64-js-1.3.1.tgz#58ece8cb75dd07e71ed08c736abc5fac4dbf8df1"
+  integrity sha512-mLQ4i2QO1ytvGWFWmcngKO//JXAQueZvwEKtjgQFM4jIK0kU+ytMfplL8j+n5mspOfjHwoAg+9yhb7BwAHm36g==
 
 base64url@^3.0.1:
   version "3.0.1"
@@ -7610,12 +7622,12 @@ botbuilder-lg@4.14.0-dev.391a2ab:
     path "^0.12.7"
     uuid "^8.3.2"
 
-botbuilder-lg@next:
-  version "4.14.0-dev.c7a22fb"
-  resolved "https://botbuilder.myget.org/F/botframework-cli/npm/botbuilder-lg/-/botbuilder-lg-4.14.0-dev.c7a22fb.tgz#222f48255ea5445849b1c5f75904bae274d665c9"
-  integrity sha1-Ii9IJV6lRFhJscX3WQS64nTWZck=
+botbuilder-lg@latest:
+  version "4.13.6"
+  resolved "https://registry.yarnpkg.com/botbuilder-lg/-/botbuilder-lg-4.13.6.tgz#319c0098ceffe595cc5fd35b95c97e972fdd1ba3"
+  integrity sha512-q3y++4raX+hbWdqh0koaAiwNYo75vg92ZtuRhYr01zUdxC+GvO0FNkosUbPq4eoAzzzFtoE8ibGJ3fOYchlmZA==
   dependencies:
-    adaptive-expressions "4.14.0-dev.c7a22fb"
+    adaptive-expressions "4.13.6"
     antlr4ts "0.5.0-alpha.3"
     lodash "^4.17.19"
     path "^0.12.7"
@@ -7634,16 +7646,16 @@ botframework-directlinejs@0.14.1:
     rxjs "5.5.10"
     url-search-params-polyfill "8.0.0"
 
-botframework-directlinespeech-sdk@4.12.0:
-  version "4.12.0"
-  resolved "https://registry.yarnpkg.com/botframework-directlinespeech-sdk/-/botframework-directlinespeech-sdk-4.12.0.tgz#a4075d3a25e335aee68d6d4df4c6fcced6d6e1b9"
-  integrity sha512-fWs6ffV+1rv6Y3IgId+2k6BvwMsZed/K8NOwVz9RWXnfD3PmKP1vsAV2Z4KRWtvG8o9KKTaeCLkWw6S7v64mbg==
+botframework-directlinespeech-sdk@4.13.0:
+  version "4.13.0"
+  resolved "https://registry.yarnpkg.com/botframework-directlinespeech-sdk/-/botframework-directlinespeech-sdk-4.13.0.tgz#0dcb587eff29b43b7c99af43d33c53502568aa11"
+  integrity sha512-UhuR4QqI4zZhKPaF80nLuNSYnvaYhQv51mm0zRo8NPShTl3PsOBeG5hq0AVhUT0lsaPeuehFcYYc7Z2wwcbKvg==
   dependencies:
-    "@babel/runtime" "7.12.5"
+    "@babel/runtime" "7.13.10"
     abort-controller "3.0.0"
     abort-controller-es5 "1.2.0"
     base64-arraybuffer "0.2.0"
-    core-js "3.6.5"
+    core-js "3.9.1"
     event-as-promise "1.0.5"
     event-target-shim "5.0.1"
     event-target-shim-es5 "1.2.0"
@@ -7667,12 +7679,12 @@ botframework-streaming@4.11.0:
     uuid "^3.4.0"
     ws "^7.1.2"
 
-botframework-webchat-api@4.12.0:
-  version "4.12.0"
-  resolved "https://registry.yarnpkg.com/botframework-webchat-api/-/botframework-webchat-api-4.12.0.tgz#254d4f1358a983044f3497214b5c26dbd6a59cde"
-  integrity sha512-NyZyUknteemBYaT3D9uPOMSSfYbXp+tM9Vka9sp7M5Fa84GpVzDY4PlTaCZksH/Kspou/5+Hf6HI23frK0B47Q==
+botframework-webchat-api@4.13.0:
+  version "4.13.0"
+  resolved "https://registry.yarnpkg.com/botframework-webchat-api/-/botframework-webchat-api-4.13.0.tgz#b77cf37340844d2d4d4ede80b142aec97c64499e"
+  integrity sha512-4n7+wFlQphqaf9u2LV9axc3iXZNTk4h9Q8JXi7l8sAcAM1TLe64N8p2IgsnQATLNKd6veVhACEFLrVSdZJhNPQ==
   dependencies:
-    botframework-webchat-core "4.12.0"
+    botframework-webchat-core "4.13.0"
     event-target-shim "5.0.1"
     event-target-shim-es5 "1.2.0"
     globalize "1.6.0"
@@ -7682,19 +7694,19 @@ botframework-webchat-api@4.12.0:
     redux "4.0.5"
     simple-update-in "2.2.0"
 
-botframework-webchat-component@4.12.0:
-  version "4.12.0"
-  resolved "https://registry.yarnpkg.com/botframework-webchat-component/-/botframework-webchat-component-4.12.0.tgz#0894e7171ab68cc35279292fd4c5a2964a013b1f"
-  integrity sha512-E4hj45fgPr7BvwQY8Lpkq0gLcGqLs8fW/g4ATflXF4X8y8lv0GJRZNyrw6UuFby/dM0H+q57FK9bkSzZDFTdDA==
+botframework-webchat-component@4.13.0:
+  version "4.13.0"
+  resolved "https://registry.yarnpkg.com/botframework-webchat-component/-/botframework-webchat-component-4.13.0.tgz#15a6c834b12a90a69a59531279af543cd27b3234"
+  integrity sha512-2j0s4nqjWjcys4V3Qca+cBuRDydUipjZWydfjeyOoq9MAjWuzoFAbDKbY2FaX4fajMTjNLMNH/b2FtV1sOiogw==
   dependencies:
-    base64-js "1.3.1"
-    botframework-webchat-api "4.12.0"
-    botframework-webchat-core "4.12.0"
+    base64-js "1.5.1"
+    botframework-webchat-api "4.13.0"
+    botframework-webchat-core "4.13.0"
     classnames "2.2.6"
     create-emotion "10.0.27"
     event-target-shim "5.0.1"
     event-target-shim-es5 "1.2.0"
-    markdown-it "12.0.2"
+    markdown-it "12.0.4"
     math-random "2.0.1"
     memoize-one "5.1.1"
     prop-types "15.7.2"
@@ -7709,15 +7721,15 @@ botframework-webchat-component@4.12.0:
     simple-update-in "2.2.0"
     strip-markdown "3.0.4"
 
-botframework-webchat-core@4.12.0:
-  version "4.12.0"
-  resolved "https://registry.yarnpkg.com/botframework-webchat-core/-/botframework-webchat-core-4.12.0.tgz#1da15dfa8aaa0a8800c7ff41e1becc33955cff7e"
-  integrity sha512-Ad1WKp6FdMpScOITkH4VNwwZeW4EWeMTs07nIfk/sqXgiajRxFfcPVyrKxmzUv1Hr/wKGSWI6quKj3lnYcX/Bw==
+botframework-webchat-core@4.13.0:
+  version "4.13.0"
+  resolved "https://registry.yarnpkg.com/botframework-webchat-core/-/botframework-webchat-core-4.13.0.tgz#182a61d041ce49749e13d00d0354232b782d587e"
+  integrity sha512-4iNG6S2PslkBSgfftH4xrCxF9vleHu+0/EBiUOj9OS9F2Vf9PzXsP/ZHfhO+mNnc9zNVs0ghZ5291t87AbxFVA==
   dependencies:
-    "@babel/runtime" "7.12.5"
+    "@babel/runtime" "7.13.10"
     jsonwebtoken "8.5.1"
     math-random "2.0.1"
-    mime "2.4.6"
+    mime "2.5.2"
     p-defer "3.0.0"
     p-defer-es5 "1.2.1"
     redux "4.0.5"
@@ -7725,21 +7737,22 @@ botframework-webchat-core@4.12.0:
     redux-saga "1.1.3"
     simple-update-in "2.2.0"
 
-botframework-webchat@4.12.0:
-  version "4.12.0"
-  resolved "https://registry.yarnpkg.com/botframework-webchat/-/botframework-webchat-4.12.0.tgz#d5734f49e3ba6fa358a78c4353078502a14a3d0c"
-  integrity sha512-3xFfeAHUWQzbZYBDkuEZ9yLwmQqLOelWxz9EfZ3R27hp9LdTxyd6AGGN8foUA/Bpx/kbSYuswPrQEnC/nX3A+A==
+botframework-webchat@4.13.0:
+  version "4.13.0"
+  resolved "https://registry.yarnpkg.com/botframework-webchat/-/botframework-webchat-4.13.0.tgz#52ad264d37878d33bfecd675a478f41b59f9678c"
+  integrity sha512-g2WDzC9FRjkNT2CKGbTN4MNJn83rlyPIz/ot2VEJFqJs14p7qwVizdJkLKJA5qek8jqx0zn9IP612mcXY2sjdA==
   dependencies:
-    "@babel/runtime" "7.12.5"
+    "@babel/runtime" "7.13.10"
     adaptivecards "2.5.0"
     botframework-directlinejs "0.14.1"
-    botframework-directlinespeech-sdk "4.12.0"
-    botframework-webchat-component "4.12.0"
-    botframework-webchat-core "4.12.0"
+    botframework-directlinespeech-sdk "4.13.0"
+    botframework-webchat-api "4.13.0"
+    botframework-webchat-component "4.13.0"
+    botframework-webchat-core "4.13.0"
     classnames "2.2.6"
-    core-js "3.6.5"
-    markdown-it "12.0.2"
-    markdown-it-attrs "3.0.3"
+    core-js "3.9.1"
+    markdown-it "12.0.4"
+    markdown-it-attrs "4.0.0"
     markdown-it-attrs-es5 "1.2.0"
     markdown-it-for-inline "0.1.1"
     math-random "2.0.1"
@@ -9153,10 +9166,10 @@ core-js@3.6.4, core-js@^3.6.4:
   resolved "https://registry.yarnpkg.com/core-js/-/core-js-3.6.4.tgz#440a83536b458114b9cb2ac1580ba377dc470647"
   integrity sha512-4paDGScNgZP2IXXilaffL9X7968RuvwlkK3xWtZRVqgd8SYNiVKRJvkFd1aqqEuPfN7E68ZHEp9hDj6lHj4Hyw==
 
-core-js@3.6.5:
-  version "3.6.5"
-  resolved "https://registry.yarnpkg.com/core-js/-/core-js-3.6.5.tgz#7395dc273af37fb2e50e9bd3d9fe841285231d1a"
-  integrity sha512-vZVEEwZoIsI+vPEuoF9Iqf5H7/M3eeQqWlQnYa8FSKKePuYTf5MWnxb5SDAzCa60b3JBRS5g9b+Dq7b1y/RCrA==
+core-js@3.9.1:
+  version "3.9.1"
+  resolved "https://registry.yarnpkg.com/core-js/-/core-js-3.9.1.tgz#cec8de593db8eb2a85ffb0dbdeb312cb6e5460ae"
+  integrity sha512-gSjRvzkxQc1zjM/5paAmL4idJBFzuJoo+jDjF1tStYFMV2ERfD02HhahhCGXUyHxQRG4yFKVSdO6g62eoRMcDg==
 
 core-js@^1.0.0:
   version "1.2.7"
@@ -11128,10 +11141,10 @@ entities@^2.0.0:
   resolved "https://registry.yarnpkg.com/entities/-/entities-2.2.0.tgz#098dc90ebb83d8dffa089d55256b351d34c4da55"
   integrity sha512-p92if5Nz619I0w+akJrLZH0MX0Pb5DX39XOwQTtXSdQQOaYH03S1uIQp4mhOZtAXrxq4ViO67YTiLBo2638o9A==
 
-entities@~2.0.0:
-  version "2.0.3"
-  resolved "https://registry.yarnpkg.com/entities/-/entities-2.0.3.tgz#5c487e5742ab93c15abb5da22759b8590ec03b7f"
-  integrity sha512-MyoZ0jgnLvB2X3Lg5HqpFmn1kybDiIfEQmKzTb5apr51Rb+T3KdmMiqa70T+bhGnyv7bQ6WMj2QMHpGMmlrUYQ==
+entities@~2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/entities/-/entities-2.1.0.tgz#992d3129cf7df6870b96c57858c249a120f8b8b5"
+  integrity sha512-hCx1oky9PFrJ611mf0ifBLBRW8lUUVRlFolb5gWRfIELabBlbp9xZvrqZLZAs+NxFnbfQoeGd8wDkygjg7U85w==
 
 env-paths@^2.2.0:
   version "2.2.0"
@@ -16412,23 +16425,23 @@ markdown-it-attrs-es5@1.2.0:
     webpack "4.44.1"
     webpack-cli "3.3.12"
 
-markdown-it-attrs@3.0.3:
-  version "3.0.3"
-  resolved "https://registry.yarnpkg.com/markdown-it-attrs/-/markdown-it-attrs-3.0.3.tgz#92acdb16fe551cb056c5eb9848413443cafb5231"
-  integrity sha512-cLnICU2t61skNCr4Wih/sdza+UbQcqJGZwvqAypnbWA284nzDm+Gpc90iaRk/JjsIy4emag5v3s0rXFhFBWhCA==
+markdown-it-attrs@4.0.0:
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/markdown-it-attrs/-/markdown-it-attrs-4.0.0.tgz#eadae3ea0c7d17c5e83b98a4ec95a47f4e4960f5"
+  integrity sha512-uLjtdCmhhmL3BuZsReYkFxk74qKjj5ahe34teBpOCJ4hYZZl7/ftLyXWLowngC2moRkbLEvKwN/7TMwbhbHE/A==
 
 markdown-it-for-inline@0.1.1:
   version "0.1.1"
   resolved "https://registry.yarnpkg.com/markdown-it-for-inline/-/markdown-it-for-inline-0.1.1.tgz#435f2316f5b5e68e1450cfa2242f2b8d59adc75f"
   integrity sha1-Q18jFvW15o4UUM+iJC8rjVmtx18=
 
-markdown-it@12.0.2:
-  version "12.0.2"
-  resolved "https://registry.yarnpkg.com/markdown-it/-/markdown-it-12.0.2.tgz#4401beae8df8aa2221fc6565a7188e60a06ef0ed"
-  integrity sha512-4Lkvjbv2kK+moL9TbeV+6/NHx+1Q+R/NIdUlFlkqkkzUcTod4uiyTJRiBidKR9qXSdkNFkgv+AELY8KN9vSgVA==
+markdown-it@12.0.4:
+  version "12.0.4"
+  resolved "https://registry.yarnpkg.com/markdown-it/-/markdown-it-12.0.4.tgz#eec8247d296327eac3ba9746bdeec9cfcc751e33"
+  integrity sha512-34RwOXZT8kyuOJy25oJNJoulO8L0bTHYWXcdZBYZqFnjIy3NgjeoM3FmPXIOFQ26/lSHYMr8oc62B6adxXcb3Q==
   dependencies:
     argparse "^2.0.1"
-    entities "~2.0.0"
+    entities "~2.1.0"
     linkify-it "^3.0.1"
     mdurl "^1.0.1"
     uc.micro "^1.0.5"
@@ -16758,10 +16771,10 @@ mime@1.6.0:
   resolved "https://registry.yarnpkg.com/mime/-/mime-1.6.0.tgz#32cd9e5c64553bd58d19a568af452acff04981b1"
   integrity sha512-x0Vn8spI+wuJ1O6S7gnbaQg8Pxh4NNHb7KSINmEWKiPE4RKOplvijn+NkmYmmRgP68mc70j2EbeTFRsrswaQeg==
 
-mime@2.4.6:
-  version "2.4.6"
-  resolved "https://registry.yarnpkg.com/mime/-/mime-2.4.6.tgz#e5b407c90db442f2beb5b162373d07b69affa4d1"
-  integrity sha512-RZKhC3EmpBchfTGBVb8fb+RL2cWyw/32lshnsETttkBAyAUXSGHxbEJWWRXc751DrIxG1q04b8QwMbAwkRPpUA==
+mime@2.5.2:
+  version "2.5.2"
+  resolved "https://registry.yarnpkg.com/mime/-/mime-2.5.2.tgz#6e3dc6cc2b9510643830e5f19d5cb753da5eeabe"
+  integrity sha512-tqkh47FzKeCPD2PUiPB6pkbMzsCasjxAfC62/Wap5qrUWcb+sFasXUC5I3gYM5iBM8v/Qpn4UK0x+j0iHyFPDg==
 
 mime@^2.0.3:
   version "2.4.0"
