@@ -9,6 +9,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { ConversationActivityTrafficItem, Activity } from '@botframework-composer/types';
 import { IIconProps } from 'office-ui-fabric-react/lib/Icon';
 import { CommandBarButton } from 'office-ui-fabric-react/lib/Button';
+import { Stack } from 'office-ui-fabric-react/lib/Stack';
 import {
   DetailsList,
   DetailsListLayoutMode,
@@ -23,6 +24,7 @@ import {
 } from 'office-ui-fabric-react/lib/DetailsList';
 import formatMessage from 'format-message';
 import produce from 'immer';
+import { ScrollablePane } from 'office-ui-fabric-react/lib/ScrollablePane';
 
 import { DebugPanelTabHeaderProps } from '../types';
 import { rootBotProjectIdSelector, webChatTrafficState } from '../../../../../recoilModel';
@@ -31,6 +33,8 @@ import { getMemoryVariables } from '../../../../../recoilModel/dispatchers/utils
 import { WatchDataPayload } from '../../WatchVariableSelector/utils/helpers';
 
 import { WatchTabObjectValue } from './WatchTabObjectValue';
+
+const toolbarHeight = 24;
 
 const contentContainer = css`
   display: flex;
@@ -64,12 +68,7 @@ const undefinedValue = css`
 
 const watchTableStyles: Partial<IDetailsListStyles> = {
   root: {
-    height: '100%',
-    selectors: {
-      '& > div[role="grid"]': {
-        height: '100%',
-      },
-    },
+    maxHeight: `calc(100% - ${toolbarHeight}px)`,
   },
   contentWrapper: {
     overflowY: 'auto' as 'auto',
@@ -295,18 +294,30 @@ export const WatchTabContent: React.FC<DebugPanelTabHeaderProps> = ({ isActive }
   }, [selectedVars]);
 
   if (isActive) {
-    return (
-      <div css={contentContainer}>
-        <div css={toolbar}>
-          <CommandBarButton iconProps={addIcon} text={formatMessage('Add property')} onClick={onClickAdd} />
-          <CommandBarButton
-            disabled={removeIsDisabled}
-            iconProps={removeIcon}
-            text={formatMessage('Remove from list')}
-            onClick={onClickRemove}
-          />
-        </div>
-        <div css={content}>
+    <Stack verticalFill>
+      <Stack.Item
+        css={{
+          height: `${toolbarHeight}px`,
+          marginTop: '14px',
+          padding: '0 16px',
+          alignItems: 'center',
+        }}
+      >
+        <CommandBarButton iconProps={addIcon} text={formatMessage('Add property')} onClick={onClickAdd} />
+        <CommandBarButton
+          disabled={removeIsDisabled}
+          iconProps={removeIcon}
+          text={formatMessage('Remove from list')}
+          onClick={onClickRemove}
+        />
+      </Stack.Item>
+      <Stack.Item
+        css={{
+          height: `calc(100% - ${toolbarHeight}px)`,
+          position: 'relative',
+        }}
+      >
+        <ScrollablePane>
           <DetailsList
             columns={watchTableColumns}
             items={refreshedWatchedVars}
@@ -317,9 +328,9 @@ export const WatchTabContent: React.FC<DebugPanelTabHeaderProps> = ({ isActive }
             onRenderItemColumn={renderColumn}
             onRenderRow={renderRow}
           />
-        </div>
-      </div>
-    );
+        </ScrollablePane>
+      </Stack.Item>
+    </Stack>;
   } else {
     return null;
   }
