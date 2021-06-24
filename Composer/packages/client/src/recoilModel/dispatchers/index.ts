@@ -29,10 +29,12 @@ import { zoomDispatcher } from './zoom';
 import { recognizerDispatcher } from './recognizers';
 import { orchestratorDispatcher } from './orchestrator';
 import { webChatLogDispatcher } from './webchat';
+import { userDispatcher } from './user';
 
 const createDispatchers = () => {
   return {
     ...authDispatcher(),
+    ...userDispatcher(),
     ...editorDispatcher(),
     ...dialogsDispatcher(),
     ...dialogSchemaDispatcher(),

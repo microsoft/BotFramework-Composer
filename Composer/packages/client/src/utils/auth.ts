@@ -10,7 +10,6 @@ import jwtDecode from 'jwt-decode';
 import formatMessage from 'format-message';
 
 import { USER_TOKEN_STORAGE_KEY, BASEURL } from '../constants';
-import { Dispatcher } from '../recoilModel/dispatchers';
 import { authConfig, authUrl } from '../constants';
 
 import storage from './storage';
@@ -71,7 +70,7 @@ export function getUserTokenFromCache(): string | null {
   }
 }
 
-export function prepareAxios({ setUserSessionExpired }: Dispatcher) {
+export function prepareAxios() {
   if (process.env.COMPOSER_REQUIRE_AUTH) {
     const cancelSource = axios.CancelToken.source();
 
@@ -99,7 +98,6 @@ export function prepareAxios({ setUserSessionExpired }: Dispatcher) {
 
           // remove user token from the cache
           clearUserTokenFromCache();
-          setUserSessionExpired(true);
         }
 
         return Promise.reject(err);

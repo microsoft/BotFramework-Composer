@@ -49,11 +49,27 @@ jest.mock('../../../src/utils/authClient', () => ({
         },
       ];
     },
-    getARMTokenForTenant: async () => 'armtoken',
+    getARMTokenForTenant: async () => 'mockToken',
+    getAccessToken: async () => 'mockToken',
   },
 }));
 
-jest.mock('../../../src/utils/auth');
+jest.mock('../../../src/utils/auth', () => ({
+  decodeToken: () => {
+    return {
+      upn: 'mockUser@mockDomain.com',
+      name: 'mockUser',
+      exp: new Date().getTime(),
+      tenant: 'mockTenant',
+    };
+  },
+  userShouldProvideTokens: jest.fn(),
+  isShowAuthDialog: jest.fn(),
+  getTokenFromCache: jest.fn(),
+  setTenantId: jest.fn(),
+  getTenantIdFromCache: jest.fn(),
+  prepareAxios: jest.fn(),
+}));
 
 describe('<ManageSpeech />', () => {
   it('displays correct ui copy', async () => {

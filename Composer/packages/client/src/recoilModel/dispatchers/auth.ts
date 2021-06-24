@@ -120,8 +120,8 @@ export const authDispatcher = () => {
         setTenantId(decoded.tid);
       } else {
         callbackHelpers.set(currentUserState, {
-          token: null,
-          graph: null,
+          token: '',
+          graph: '',
           sessionExpired: true,
         });
         callbackHelpers.set(isAuthenticatedState, false);
@@ -173,6 +173,7 @@ export const authDispatcher = () => {
           } else if (tenants.length === 1) {
             tenantId = tenants[0].tenantId;
           }
+
           if (tenantId) {
             setCurrentTenant(tenantId, false);
           } else {

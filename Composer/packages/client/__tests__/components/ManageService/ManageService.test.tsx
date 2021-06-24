@@ -16,6 +16,24 @@ const serviceKeyType = 'keytype';
 const handoffInstructions = 'handoffInstructions';
 const DOWN_ARROW = { keyCode: 40 };
 
+jest.mock('../../../src/utils/auth', () => ({
+  decodeToken: () => {
+    console.log('RETURNED MOCKED TOKEN');
+    return {
+      upn: 'mockUser@mockDomain.com',
+      name: 'mockUser',
+      exp: new Date().getTime(),
+      tenant: 'mockTenant',
+    };
+  },
+  userShouldProvideTokens: jest.fn(),
+  isShowAuthDialog: jest.fn(),
+  getTokenFromCache: jest.fn(),
+  setTenantId: jest.fn(),
+  getTenantIdFromCache: jest.fn(),
+  prepareAxios: jest.fn(),
+}));
+
 jest.mock('@azure/arm-cognitiveservices', () => ({
   CognitiveServicesManagementClient: function CognitiveServicesManagementClient() {
     return {
@@ -54,11 +72,10 @@ jest.mock('../../../src/utils/authClient', () => ({
         },
       ];
     },
-    getARMTokenForTenant: async () => 'armtoken',
+    getARMTokenForTenant: async () => 'mockToken',
+    getAccessToken: async () => 'mockToken',
   },
 }));
-
-jest.mock('../../../src/utils/auth');
 
 describe('<ManageService />', () => {
   it('displays correct ui copy', async () => {
@@ -296,7 +313,7 @@ describe('<ManageService />', () => {
 
     // choose subscription
     act(() => {
-      fireEvent.click(resourceOption);
+      fireEvent.keyDown(resourceOption, DOWN_ARROW);
     });
 
     const myGroup = await findByText('mockedGroup');
@@ -430,7 +447,7 @@ describe('<ManageService />', () => {
 
     // choose subscription
     act(() => {
-      fireEvent.click(resourceOption);
+      fireEvent.keyDown(resourceOption, DOWN_ARROW);
     });
 
     const myGroup = await findByText('mockedGroup');
@@ -583,7 +600,7 @@ describe('<ManageService />', () => {
 
     // choose subscription
     act(() => {
-      fireEvent.click(resourceOption);
+      fireEvent.keyDown(resourceOption, DOWN_ARROW);
     });
 
     const myGroup = await findByText('mockedGroup');

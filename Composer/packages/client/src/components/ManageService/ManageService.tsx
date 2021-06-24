@@ -133,6 +133,7 @@ export const ManageService: React.FC<ManageServiceProps> = (props: ManageService
       return [];
     }
   };
+
   useEffect(() => {
     if (isAuthenticated) {
       setAvailableSubscriptions([]);
