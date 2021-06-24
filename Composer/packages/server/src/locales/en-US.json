@@ -2570,6 +2570,9 @@
   "no_templates_found_d8dca69b": {
     "message": "No templates found"
   },
+  "no_thanks_20701267": {
+    "message": "No thanks"
+  },
   "no_updates_available_cecd904d": {
     "message": "No updates available"
   },
@@ -3052,6 +3055,9 @@
   },
   "reloading_49d2f661": {
     "message": "Reloading"
+  },
+  "remind_me_later_6ac70c3": {
+    "message": "Remind me later"
   },
   "remote_skill_ed36a7e6": {
     "message": "Remote skill"
@@ -3634,6 +3640,9 @@
   },
   "take_a_product_tour_a2892d17": {
     "message": "Take a product tour"
+  },
+  "take_survey_a0cc4547": {
+    "message": "Take survey"
   },
   "target_da92f4e6": {
     "message": "Target"
@@ -4226,6 +4235,9 @@
   "we_need_to_define_the_endpoints_for_the_skill_to_a_5dc98d90": {
     "message": "We need to define the endpoints for the skill to allow other bots to interact with it."
   },
+  "we_read_every_response_and_will_use_your_feedback__64e44821": {
+    "message": "We read every response and will use your feedback to improve Composer."
+  },
   "web_chat_c5ca7ab6": {
     "message": "Web Chat"
   },
@@ -4309,6 +4321,9 @@
   },
   "working_with_packages_dbdddbe9": {
     "message": "Working with packages"
+  },
+  "would_you_mind_taking_a_quick_survey_5cf722ac": {
+    "message": "Would you mind taking a quick survey?"
   },
   "write_an_expression_8773ea5c": {
     "message": "Write an expression"
