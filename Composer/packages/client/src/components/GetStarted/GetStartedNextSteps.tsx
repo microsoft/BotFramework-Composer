@@ -36,22 +36,24 @@ type GetStartedProps = {
 
 export const GetStartedNextSteps: React.FC<GetStartedProps> = (props) => {
   const projectId = useRecoilValue(currentProjectIdState);
-  const botProjects = useRecoilValue(localBotsDataSelector);
-  const botProject = useMemo(() => botProjects.find((b) => b.projectId === projectId), [botProjects, projectId]);
-  const [displayManageLuis, setDisplayManageLuis] = useState<boolean>(false);
-  const [displayManageQNA, setDisplayManageQNA] = useState<boolean>(false);
-  const readme = useRecoilValue(projectReadmeState(projectId));
-  const [readmeHidden, setReadmeHidden] = useState<boolean>(true);
   const schemaDiagnostics = useRecoilValue(schemaDiagnosticsSelectorFamily(projectId));
   const { setSettings, setQnASettings, setShowGetStartedTeachingBubble } = useRecoilValue(dispatcherState);
   const rootBotProjectId = useRecoilValue(rootBotProjectIdSelector) || '';
   const settings = useRecoilValue(settingsState(projectId));
+  const readme = useRecoilValue(projectReadmeState(projectId));
+  const botProjects = useRecoilValue(localBotsDataSelector);
+  const setExpansion = useSetRecoilState(debugPanelExpansionState);
+  const setActiveTab = useSetRecoilState(debugPanelActiveTabState);
+
+  const botProject = useMemo(() => botProjects.find((b) => b.projectId === projectId), [botProjects, projectId]);
+  const [displayManageLuis, setDisplayManageLuis] = useState<boolean>(false);
+  const [displayManageQNA, setDisplayManageQNA] = useState<boolean>(false);
+  const [readmeHidden, setReadmeHidden] = useState<boolean>(true);
+
   const mergedSettings = mergePropertiesManagedByRootBot(projectId, rootBotProjectId, settings);
   const [requiredNextSteps, setRequiredNextSteps] = useState<NextStep[]>([]);
   const [recommendedNextSteps, setRecommendedNextSteps] = useState<NextStep[]>([]);
   const [optionalSteps, setOptionalSteps] = useState<NextStep[]>([]);
-  const setExpansion = useSetRecoilState(debugPanelExpansionState);
-  const setActiveTab = useSetRecoilState(debugPanelActiveTabState);
 
   const [highlightLUIS, setHighlightLUIS] = useState<boolean>(false);
   const [highlightQNA, setHighlightQNA] = useState<boolean>(false);
@@ -362,10 +364,9 @@ export const GetStartedNextSteps: React.FC<GetStartedProps> = (props) => {
     }
     return null;
   };
-
   return (
     <ScrollablePane styles={{ root: { marginTop: 60 } }}>
-      <div css={{ paddingTop: 20, paddingLeft: 27, paddingRight: 20 }}>
+      <div css={{ paddingTop: 20, paddingLeft: 27, paddingRight: 20 }} data-testid="nextSteps-list">
         <ManageLuis
           hidden={!displayManageLuis}
           onDismiss={hideManageLuis}

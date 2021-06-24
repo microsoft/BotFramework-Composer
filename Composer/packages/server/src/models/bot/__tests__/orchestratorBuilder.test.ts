@@ -18,8 +18,8 @@ const downloadModelTimeoutMs = 90000;
 
 describe('Orchestrator Tests', () => {
   beforeAll(async () => {
-    // disable Orchestrator Lib console logging across the board - interferes with Jest
-    Utility.toPrintDebuggingLogToConsole = false;
+    // disable Orchestrator Lib console logging - interferes with Jest
+    Utility.resetFlagToPrintDebuggingLogToConsole(false);
 
     const progressStatusStub = jest.fn();
     const successStatusStub = jest.fn();
@@ -34,10 +34,10 @@ describe('Orchestrator Tests', () => {
   }, downloadModelTimeoutMs);
 
   afterAll(async () => {
-    const callbackStub = jest.fn();
-    rimraf(nlrPath, callbackStub);
+    const errorCallbackStub = jest.fn();
+    rimraf(nlrPath, errorCallbackStub);
 
-    expect(callbackStub).toBeCalledWith();
+    expect(errorCallbackStub).toBeCalledTimes(0);
   });
 
   it('always lists DTE 6L model for FTs', async () => {

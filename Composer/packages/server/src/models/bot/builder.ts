@@ -160,11 +160,11 @@ export class Builder {
 
   public setBuildConfig(
     config: IConfig,
-    downSamplingConfig: DownSamplingConfig,
+    downSamplingConfig?: DownSamplingConfig,
     crossTrainingSetting?: { inter?: boolean; intra?: boolean }
   ) {
     this.config = config;
-    this.downSamplingConfig = downSamplingConfig;
+    if (downSamplingConfig) this.downSamplingConfig = downSamplingConfig;
     if (!crossTrainingSetting) return;
     if (crossTrainingSetting.inter !== undefined) this.crossTrainingSetting.inter = crossTrainingSetting.inter;
     if (crossTrainingSetting.intra !== undefined) this.crossTrainingSetting.intra = crossTrainingSetting.intra;
@@ -300,21 +300,17 @@ export class Builder {
 
   /**
    * Orchestrator: Copy language models into bot project (in preparation for publishing)
-   *
-   * Models are placed as a sibling to ComposerDialogs by default
    */
-  public async copyModelPathToBot(isUsingAdaptiveRuntime: boolean) {
+  public async copyModelPathToBot() {
     for (const lang in this.orchestratorSettings.orchestrator.models) {
       const modelName = Path.basename(this.orchestratorSettings.orchestrator.models[lang], '.onnx');
 
-      const destDir = isUsingAdaptiveRuntime
-        ? Path.resolve(this.botDir, MODEL, modelName)
-        : Path.resolve(this.botDir, '..', MODEL, modelName);
+      const destDir = Path.resolve(this.botDir, MODEL, modelName);
 
       await copy(this.orchestratorSettings.orchestrator.models[lang], destDir);
     }
 
-    await this.updateOrchestratorSetting(isUsingAdaptiveRuntime);
+    await this.updateOrchestratorSetting();
   }
 
   /**
@@ -322,9 +318,8 @@ export class Builder {
    *
    * Models are located in <project root>/model
    * In the Adaptive Runtime, Orchestrator snapshot files are located in <project root>/generated.
-   * In the Legacy Runtime, Orchestrator snapshot files are located in <project root>/ComposerDialogs/generated.
    */
-  private async updateOrchestratorSetting(isUsingAdaptiveRuntime: boolean) {
+  private async updateOrchestratorSetting() {
     const settingPath = Path.join(this.botDir, GENERATEDFOLDER, 'orchestrator.settings.json');
     const content = cloneDeep(this.orchestratorSettings);
 
@@ -336,9 +331,7 @@ export class Builder {
     keys(content.orchestrator.snapshots).forEach((key) => {
       const snapshotName = Path.basename(content.orchestrator.snapshots[key]);
 
-      content.orchestrator.snapshots[key] = isUsingAdaptiveRuntime
-        ? Path.join(GENERATEDFOLDER, snapshotName)
-        : Path.join('ComposerDialogs', GENERATEDFOLDER, snapshotName);
+      content.orchestrator.snapshots[key] = Path.join(GENERATEDFOLDER, snapshotName);
     });
 
     if (this.orchestratorSettings.orchestrator.models.en || this.orchestratorSettings.orchestrator.models.multilang) {

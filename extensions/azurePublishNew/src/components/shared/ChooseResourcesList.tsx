@@ -155,7 +155,7 @@ export const ChooseResourcesList = (props: Props) => {
 
   return (
     <FocusZone direction={FocusZoneDirection.vertical}>
-      <List items={items} onRenderCell={renderItem} />
+      <List items={[...items]} onRenderCell={renderItem} />
     </FocusZone>
   );
 };

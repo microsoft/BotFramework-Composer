@@ -24,6 +24,13 @@ import { templateGeneratorPath } from '../../settings/env';
 import { BackgroundProcessManager } from '../../services/backgroundProcessManager';
 import { FeatureFlagService } from '../../services/featureFlags';
 
+const defaultBotProjectFileContent = {
+  $schema:
+    'https://raw.githubusercontent.com/microsoft/BotFramework-Composer/main/Composer/packages/server/schemas/botproject.schema',
+  name: '',
+  skills: {},
+};
+
 export class AssetManager {
   public templateStorage: LocalDiskStorage;
   private _botProjectFileTemplate;
@@ -231,7 +238,7 @@ export class AssetManager {
 
   private getDefaultBotProjectTemplate() {
     if (!ExtensionContext.extensions.botTemplates.length) {
-      return undefined;
+      return defaultBotProjectFileContent;
     }
     const boilerplate = ExtensionContext.extensions.botTemplates[0];
 

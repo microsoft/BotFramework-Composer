@@ -4,7 +4,7 @@
 // @ts-nocheck
 
 import React from 'react';
-import { fireEvent, getAllByRole, render } from '@botframework-composer/test-utils';
+import { fireEvent, getAllByRole, render, act } from '@botframework-composer/test-utils';
 import { EditorExtension } from '@bfc/extension-client';
 
 import { SelectDialog } from '../SelectDialog';
@@ -41,10 +41,10 @@ const renderSelectDialog = ({ createDialog, navTo, onChange } = {}) => {
 };
 
 describe('Select Dialog', () => {
-  beforeAll(() => {
+  beforeEach(() => {
     jest.useFakeTimers();
   });
-  afterAll(() => {
+  afterEach(() => {
     jest.runOnlyPendingTimers();
     jest.useRealTimers();
   });
@@ -60,7 +60,9 @@ describe('Select Dialog', () => {
 
     const createItem = getAllByRole(baseElement, 'menuitem').pop();
     expect(createItem).toHaveTextContent('Create a new dialog');
-    fireEvent.click(createItem);
+    act(() => {
+      fireEvent.click(createItem);
+    });
 
     await flushPromises();
     jest.advanceTimersByTime(1000);
@@ -79,7 +81,9 @@ describe('Select Dialog', () => {
 
     const [dialog] = getAllByRole(baseElement, 'menuitem');
     expect(dialog).toHaveTextContent('dialog2');
-    fireEvent.click(dialog);
+    act(() => {
+      fireEvent.click(dialog);
+    });
 
     expect(onChange).toHaveBeenCalledWith('dialog2');
   });

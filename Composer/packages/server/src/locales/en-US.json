@@ -44,9 +44,6 @@
   "a_minimap_gives_an_overview_of_your_source_code_fo_9a897f4f": {
     "message": "A minimap gives an overview of your source code for quick navigation and code understanding."
   },
-  "a_newer_version_of_the_provisioning_scripts_has_be_85d3ad94": {
-    "message": "A newer version of the provisioning scripts has been found, and this project can be updated to the latest."
-  },
   "a_profile_with_that_name_already_exists_7c559958": {
     "message": "A profile with that name already exists."
   },
@@ -200,9 +197,6 @@
   "add_custom_a376ce51": {
     "message": "Add Custom"
   },
-  "add_custom_runtime_6b73dc44": {
-    "message": "Add custom runtime"
-  },
   "add_entity_5f769994": {
     "message": "Add entity"
   },
@@ -286,6 +280,9 @@
   },
   "all_4321c3a1": {
     "message": "All"
+  },
+  "all_bots_649ccbd0": {
+    "message": "All bots"
   },
   "allowed_callers_31b26262": {
     "message": "Allowed Callers"
@@ -388,9 +385,6 @@
   },
   "are_you_sure_you_want_to_start_over_your_progress__3b7cde9b": {
     "message": "Are you sure you want to start over? Your progress will be lost."
-  },
-  "are_you_sure_you_want_to_stop_current_runtime_and__a5f883b2": {
-    "message": "Are you sure you want to stop current runtime and replace them?"
   },
   "are_you_sure_you_want_to_uninstall_these_extension_cf6265e8": {
     "message": "Are you sure you want to uninstall these extensions?"
@@ -707,6 +701,9 @@
   "carousel_a2321ac9": {
     "message": "Carousel"
   },
+  "change_dcaa253a": {
+    "message": "Change"
+  },
   "change_recognizer_3145b93d": {
     "message": "Change Recognizer"
   },
@@ -721,6 +718,9 @@
   },
   "choose_a_location_for_your_new_bot_project_e979f2d5": {
     "message": "Choose a location for your new bot project."
+  },
+  "choose_a_recognizer_type_fa398753": {
+    "message": "Choose a recognizer type"
   },
   "choose_a_valid_publish_profile_to_continue_d4bd0b96": {
     "message": "Choose a valid publish profile to continue"
@@ -1052,14 +1052,14 @@
   "current_40c0812f": {
     "message": " - Current"
   },
+  "custom_6979cd81": {
+    "message": "Custom"
+  },
   "custom_actions_5d396747": {
     "message": "Custom Actions"
   },
   "custom_events_d6f0e45b": {
     "message": "Custom events"
-  },
-  "custom_recognizer_951bab90": {
-    "message": "Custom recognizer"
   },
   "custom_runtime_426aa34f": {
     "message": "Custom runtime"
@@ -1106,14 +1106,14 @@
   "debugging_options_20e2e9da": {
     "message": "Debugging options"
   },
+  "default_9db103d": {
+    "message": "Default"
+  },
   "default_language_486a558d": {
     "message": "Default language"
   },
   "default_language_a976938d": {
     "message": "DEFAULT LANGUAGE"
-  },
-  "default_recognizer_9c06c1a3": {
-    "message": "Default recognizer"
   },
   "define_conversation_objective_146d1cc6": {
     "message": "Define conversation objective"
@@ -1189,21 +1189,6 @@
   },
   "diagnostic_links_228dc6fe": {
     "message": "diagnostic links"
-  },
-  "diagnostic_list_89b39c2e": {
-    "message": "Diagnostic List"
-  },
-  "diagnostic_message_msg_5387e951": {
-    "message": "Diagnostic Message { msg }"
-  },
-  "diagnostic_type_e1979c21": {
-    "message": "Diagnostic type"
-  },
-  "diagnostics_a11880f6": {
-    "message": "Diagnostics"
-  },
-  "diagnostics_pane_2d77c390": {
-    "message": "Diagnostics Pane"
   },
   "diagnostics_tab_which_shows_errors_and_warnings_410e8f6": {
     "message": "Diagnostics tab which shows errors and warnings."
@@ -1388,9 +1373,6 @@
   "edit_user_input_and_triggers_333c9a0e": {
     "message": "Edit user input and triggers"
   },
-  "ejecting_runtime_f6c90614": {
-    "message": "Ejecting runtime..."
-  },
   "emit_a_custom_event_78cf318b": {
     "message": "Emit a custom event"
   },
@@ -1435,6 +1417,9 @@
   },
   "enables_creating_bots_from_local_templates_as_well_5608165d": {
     "message": "Enables creating bots from local templates as well as creating bots from older versions of published templates"
+  },
+  "enables_you_to_customize_your_own_recognizer_by_ed_c79b2f3b": {
+    "message": "Enables you to customize your own recognizer by editing JSON in the form"
   },
   "end_dialog_88fa2f7a": {
     "message": "End dialog"
@@ -1535,9 +1520,6 @@
   "error_occurred_building_the_bot_7425aa09": {
     "message": "Error occurred building the bot"
   },
-  "error_occurred_ejecting_runtime_8512129e": {
-    "message": "Error occurred ejecting runtime!"
-  },
   "error_occurred_error_event_3e7f8ad0": {
     "message": "Error occurred (Error event)"
   },
@@ -1552,6 +1534,9 @@
   },
   "error_provisioning_25835400": {
     "message": "Error provisioning."
+  },
+  "errors_a0ac8807": {
+    "message": "Errors"
   },
   "errorscount_plural_0_no_errors_1_one_error_other_e_a8c998bb": {
     "message": "{ errorsCount, plural,\n     =0 {No errors}\n     =1 {One error}\n  other {# errors}\n}"
@@ -1582,9 +1567,6 @@
   },
   "examples_for_entity_9b50e2e5": {
     "message": "Examples for entity"
-  },
-  "existing_files_in_scripts_folder_will_be_overwritt_afa8d787": {
-    "message": "Existing files in scripts/folder will be overwritten. Are you sure you want to continue?"
   },
   "expand_2f2fadbd": {
     "message": "Expand"
@@ -1799,9 +1781,6 @@
   "get_a_key_bb364e3": {
     "message": "Get a key"
   },
-  "get_a_new_copy_of_the_runtime_code_84970bf": {
-    "message": "Get a new copy of the runtime code"
-  },
   "get_activity_members_11339605": {
     "message": "Get activity members"
   },
@@ -1822,6 +1801,18 @@
   },
   "github_c7cc3613": {
     "message": "GitHub"
+  },
+  "gives_your_bot_the_ability_to_detect_and_route_use_663cf67d": {
+    "message": "Gives your bot the ability to detect and route user input to an appropriate skill or to a subsequent language understanding models."
+  },
+  "gives_your_bot_the_ability_to_extract_intent_and_e_8170cf3d": {
+    "message": "Gives your bot the ability to extract intent and entity data from an utterance based on luis modal"
+  },
+  "gives_your_bot_the_ability_to_extract_intent_and_e_b33162e7": {
+    "message": "Gives your bot the ability to extract intent and entity data from an utterance based on regular expression patterns."
+  },
+  "gives_your_bot_the_ability_to_extract_intent_and_e_c315fe1d": {
+    "message": "Gives your bot the ability to extract intent and entity data from an utterance based on a cross trained recognizer set."
   },
   "go_to_qna_all_up_view_page_d475333d": {
     "message": "Go to QnA all-up view page."
@@ -2146,6 +2137,9 @@
   },
   "learn_more_about_orchestrator_c070e031": {
     "message": "Learn more about Orchestrator"
+  },
+  "learn_more_about_recognizers_e58eb215": {
+    "message": "Learn more about recognizers"
   },
   "learn_more_about_skill_manifests_7708ce2c": {
     "message": "Learn more about skill manifests"
@@ -2711,14 +2705,11 @@
   "options_3ab0ea65": {
     "message": "Options"
   },
-  "or_4f7d4edb": {
-    "message": "Or: "
-  },
   "orchestrator_downloading_language_model_e785be44": {
     "message": "Orchestrator: Downloading language model"
   },
-  "orchestrator_recognizer_cf38b65a": {
-    "message": "Orchestrator recognizer"
+  "orchestrator_intents_only_57c08345": {
+    "message": "Orchestrator (Intents only)"
   },
   "origin_lg_file_not_found_in_store_d194cdbc": {
     "message": "origin lg file not found in store"
@@ -3023,8 +3014,8 @@
   "recent_f19e8c64": {
     "message": "Recent"
   },
-  "recognizer_type_dc591e16": {
-    "message": "Recognizer Type"
+  "recognizer_dispatch_type_309452a6": {
+    "message": "Recognizer/Dispatch type"
   },
   "recognizers_cefce9d1": {
     "message": "Recognizers"
@@ -3050,11 +3041,11 @@
   "region_939f2a6c": {
     "message": "Region"
   },
+  "regular_expression_ca08546f": {
+    "message": "Regular expression"
+  },
   "regular_expression_entity_e1cb91ce": {
     "message": "Regular expression entity"
-  },
-  "regular_expression_recognizer_44664557": {
-    "message": "Regular expression recognizer"
   },
   "release_1af20f26": {
     "message": "Release: "
@@ -3203,12 +3194,6 @@
   "running_c5a4998d": {
     "message": "Running"
   },
-  "runtime_already_exists_f181f5ec": {
-    "message": "Runtime already exists"
-  },
-  "runtime_code_location_4e94ee12": {
-    "message": "Runtime code location"
-  },
   "runtime_config_a2904ff9": {
     "message": "Runtime Config"
   },
@@ -3290,6 +3275,9 @@
   "select_a_dialog_or_topic_4df93d0f": {
     "message": "Select a dialog or topic"
   },
+  "select_a_project_356cbc95": {
+    "message": "Select a project"
+  },
   "select_a_publish_target_d4530c94": {
     "message": "Select a publish target"
   },
@@ -3355,9 +3343,6 @@
   },
   "select_resource_edaf4ef5": {
     "message": "Select resource"
-  },
-  "select_runtime_version_to_add_d63d383b": {
-    "message": "Select runtime version to add"
   },
   "select_service_resources_326b206a": {
     "message": "Select { service } resources"
@@ -3455,14 +3440,8 @@
   "short_description_for_6abb9a1b": {
     "message": "short description for"
   },
-  "show_all_diagnostics_c11f4e09": {
-    "message": "Show All Diagnostics"
-  },
   "show_code_f3e9d1cc": {
     "message": "Show code"
-  },
-  "show_item_diagnostics_f6e902c7": {
-    "message": "Show { item } Diagnostics"
   },
   "show_keys_3072a5b8": {
     "message": "Show keys"
@@ -3496,6 +3475,9 @@
   },
   "skill_host_endpoint_url_e68b65f6": {
     "message": "Skill host endpoint url"
+  },
+  "skill_manifest_d7db2e25": {
+    "message": "Skill Manifest"
   },
   "skill_manifest_url_1094fcba": {
     "message": "Skill Manifest URL"
@@ -3545,8 +3527,8 @@
   "specify_a_name_and_description_for_your_new_dialog_86eb3130": {
     "message": "Specify a name and description for your new dialog."
   },
-  "specify_a_name_description_and_location_for_your_n_667f1438": {
-    "message": "Specify a name, description, and location for your new bot project."
+  "specify_a_name_runtime_type_and_location_for_your__594518ca": {
+    "message": "Specify a name, runtime type, and location for your new bot project."
   },
   "specify_an_attachment_layout_when_there_are_more_t_28ffc0c2": {
     "message": "Specify an attachment layout when there are more than one."
@@ -3713,11 +3695,14 @@
   "the_azure_bot_created_in_azure_bot_services_contai_6a71ef26": {
     "message": "The Azure Bot created in Azure Bot Services contains bot resources that can be used as the basis for a new bot, or to add or replace resources of an existing bot."
   },
+  "the_bot_is_already_part_of_the_bot_project_ab3250b1": {
+    "message": "The bot is already part of the Bot Project"
+  },
   "the_bot_responses_page_is_where_the_language_gener_31a6666b": {
     "message": "The Bot Responses page is where the Language Generation (LG) editor locates. From here users can view all the LG templates and edit them."
   },
-  "the_capabilities_of_your_bot_are_defined_in_its_di_37d5670f": {
-    "message": "The capabilities of your bot are defined in its dialogs and triggers. Selected dialogs will be included in the manifest. Internal dialogs or actions may not be relevant to other bots. Learn more."
+  "the_capabilities_of_your_bot_are_defined_in_its_di_1a1a6232": {
+    "message": "The capabilities of your bot are defined in its dialogs and triggers. Selected dialogs will be included in the manifest. Internal dialogs or actions may not be relevant to other bots."
   },
   "the_dialog_you_have_tried_to_delete_is_currently_u_a37c7a02": {
     "message": "The dialog you have tried to delete is currently used in the below dialog(s). Removing this dialog will cause your Bot to malfunction without additional action."
@@ -3830,9 +3815,6 @@
   "this_is_a_required_field_acb9837e": {
     "message": "This is a required field."
   },
-  "this_is_a_severity_diagnostic_58312674": {
-    "message": "This is a { severity } diagnostic"
-  },
   "this_is_the_bot_language_you_are_currently_authori_4a26541": {
     "message": "This is the bot language you are currently authoring. Change the active language in the dropdown below."
   },
@@ -3905,8 +3887,8 @@
   "to_create_a_bot_from_your_own_bot_framework_templa_2c5b1f2d": {
     "message": "To create a bot from your own Bot Framework Template you need to add a path to your local templates index.js file. <templateDocLink>Learn more</templateDocLink>"
   },
-  "to_ensure_a_secure_connection_provide_the_app_id_o_6aaaba6": {
-    "message": "To ensure a secure connection, provide the App ID of the bots that can connect to your skill.  If you don’t have this information, you can also add this information in Skill Configuration. Learn more."
+  "to_ensure_a_secure_connection_provide_the_app_id_o_61ccd30d": {
+    "message": "To ensure a secure connection, provide the App ID of the bots that can connect to your skill.  If you don’t have this information, you can also add this information in Skill Configuration."
   },
   "to_ensure_a_secure_connection_the_remote_skill_nee_f382d684": {
     "message": "To ensure a secure connection, the remote skill needs to know the Microsoft App ID of your bot. "
@@ -3983,6 +3965,9 @@
   "total_plural_1_starting_bot_other_starting_bots_ru_3d173401": {
     "message": "{ total, plural,\n     =1 {Starting bot..}\n  other {Starting bots.. ({ running }/{ total } running)}\n}"
   },
+  "total_plural_1_starting_your_bot_other_starting_yo_6087bb1e": {
+    "message": "{ total, plural,\n     =1 {Starting your bot...}\n  other {Starting your bots...}\n}"
+  },
   "total_plural_1_stopping_bot_other_stopping_bots_ru_f6afe9bd": {
     "message": "{ total, plural,\n     =1 {Stopping bot..}\n  other {Stopping bots.. ({ running }/{ total } running)}\n}"
   },
@@ -4001,8 +3986,8 @@
   "triggers_are_the_main_component_of_a_dialog_they_a_ff243c17": {
     "message": "Triggers are the main component of a dialog, they are how you catch and respond to events. Each trigger has a condition and a collection of actions to execute when the condition is met."
   },
-  "triggers_selected_below_will_enable_other_bots_to__fd8353a5": {
-    "message": "Triggers selected below will enable other bots to access the capabilities of your skill. Learn more."
+  "triggers_selected_below_will_enable_other_bots_to__5357aadf": {
+    "message": "Triggers selected below will enable other bots to access the capabilities of your skill."
   },
   "true_1900d7ae": {
     "message": "true"
@@ -4115,14 +4100,8 @@
   "update_in_progress_f65e6b29": {
     "message": "Update in progress"
   },
-  "update_scripts_a3a483e": {
-    "message": "Update scripts"
-  },
   "updating_existingprojectname_will_overwrite_the_cu_1e649e50": {
     "message": "Updating { existingProjectName } will overwrite the current bot content and create a backup."
-  },
-  "updating_scripts_e17a5722": {
-    "message": "Updating scripts... "
   },
   "url_22a5f3b8": {
     "message": "URL"
@@ -4150,9 +4129,6 @@
   },
   "use_custom_qna_maker_subscription_key_126e79df": {
     "message": "Use custom QnA Maker Subscription key"
-  },
-  "use_custom_runtime_d7d323fd": {
-    "message": "Use custom runtime"
   },
   "use_existing_resources_88d21106": {
     "message": "Use existing resources"
@@ -4234,6 +4210,9 @@
   },
   "warning_aacb8c24": {
     "message": "Warning"
+  },
+  "warnings_d6acbbdb": {
+    "message": "Warnings"
   },
   "warningscount_plural_0_no_warnings_1_one_warning_o_347cc928": {
     "message": "{ warningsCount, plural,\n     =0 {No warnings}\n     =1 {One warning}\n  other {# warnings}\n}"
@@ -4382,8 +4361,8 @@
   "your_bot_is_using_luis_and_qna_for_natural_languag_53830684": {
     "message": "Your bot is using LUIS and QNA for natural language understanding."
   },
-  "your_bot_project_is_not_running_actionbutton_start_9dfc86d5": {
-    "message": "Your bot project is not running. <actionButton>Start your bot</actionButton>"
+  "your_bot_project_is_not_running_actionbutton_total_bc1c8e8c": {
+    "message": "Your bot project is not running. <actionButton>{ total, plural,\n     =1 {Start bot}\n  other {Start all bots}\n}</actionButton>"
   },
   "your_bot_project_is_running_actionbutton_test_in_w_22d5f2de": {
     "message": "Your bot project is running. <actionButton>Test in Web Chat</actionButton>"
