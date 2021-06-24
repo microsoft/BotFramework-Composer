@@ -25,6 +25,8 @@ import {
 import formatMessage from 'format-message';
 import produce from 'immer';
 import { ScrollablePane } from 'office-ui-fabric-react/lib/ScrollablePane';
+import { Sticky, StickyPositionType } from 'office-ui-fabric-react/lib/Sticky';
+import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
 
 import { DebugPanelTabHeaderProps } from '../types';
 import { rootBotProjectIdSelector, webChatTrafficState } from '../../../../../recoilModel';
@@ -35,28 +37,6 @@ import { WatchDataPayload } from '../../WatchVariableSelector/utils/helpers';
 import { WatchTabObjectValue } from './WatchTabObjectValue';
 
 const toolbarHeight = 24;
-
-const contentContainer = css`
-  display: flex;
-  flex-flow: column nowrap;
-  height: 100%;
-  width: 100%;
-`;
-
-const toolbar = css`
-  display: flex;
-  flex-flow: row nowrap;
-  flex-shrink: 0;
-  height: 24px;
-  padding: 8px 16px;
-`;
-
-const content = css`
-  display: flex;
-  flex-flow: column nowrap;
-  height: calc(100% - 40px);
-  width: 100%;
-`;
 
 const undefinedValue = css`
   font-family: Segoe UI;
@@ -293,44 +273,58 @@ export const WatchTabContent: React.FC<DebugPanelTabHeaderProps> = ({ isActive }
     return selectedVars === undefined || selectedVars.length === 0;
   }, [selectedVars]);
 
+  function onRenderDetailsHeader(props, defaultRender) {
+    return (
+      <Sticky isScrollSynced stickyPosition={StickyPositionType.Header}>
+        {defaultRender({
+          ...props,
+          onRenderColumnHeaderTooltip: (tooltipHostProps) => <TooltipHost {...tooltipHostProps} />,
+        })}
+      </Sticky>
+    );
+  }
+
   if (isActive) {
-    <Stack verticalFill>
-      <Stack.Item
-        css={{
-          height: `${toolbarHeight}px`,
-          marginTop: '14px',
-          padding: '0 16px',
-          alignItems: 'center',
-        }}
-      >
-        <CommandBarButton iconProps={addIcon} text={formatMessage('Add property')} onClick={onClickAdd} />
-        <CommandBarButton
-          disabled={removeIsDisabled}
-          iconProps={removeIcon}
-          text={formatMessage('Remove from list')}
-          onClick={onClickRemove}
-        />
-      </Stack.Item>
-      <Stack.Item
-        css={{
-          height: `calc(100% - ${toolbarHeight}px)`,
-          position: 'relative',
-        }}
-      >
-        <ScrollablePane>
-          <DetailsList
-            columns={watchTableColumns}
-            items={refreshedWatchedVars}
-            layoutMode={watchTableLayout}
-            selection={watchedVarsSelection}
-            selectionMode={SelectionMode.multiple}
-            styles={watchTableStyles}
-            onRenderItemColumn={renderColumn}
-            onRenderRow={renderRow}
+    return (
+      <Stack verticalFill>
+        <Stack.Item
+          css={{
+            height: `${toolbarHeight}px`,
+            marginTop: '14px',
+            padding: '0 16px',
+            alignItems: 'center',
+          }}
+        >
+          <CommandBarButton iconProps={addIcon} text={formatMessage('Add property')} onClick={onClickAdd} />
+          <CommandBarButton
+            disabled={removeIsDisabled}
+            iconProps={removeIcon}
+            text={formatMessage('Remove from list')}
+            onClick={onClickRemove}
           />
-        </ScrollablePane>
-      </Stack.Item>
-    </Stack>;
+        </Stack.Item>
+        <Stack.Item
+          css={{
+            height: `calc(100% - 55px)`,
+            position: 'relative',
+          }}
+        >
+          <ScrollablePane>
+            <DetailsList
+              columns={watchTableColumns}
+              items={refreshedWatchedVars}
+              layoutMode={watchTableLayout}
+              selection={watchedVarsSelection}
+              selectionMode={SelectionMode.multiple}
+              styles={watchTableStyles}
+              onRenderDetailsHeader={onRenderDetailsHeader}
+              onRenderItemColumn={renderColumn}
+              onRenderRow={renderRow}
+            />
+          </ScrollablePane>
+        </Stack.Item>
+      </Stack>
+    );
   } else {
     return null;
   }
