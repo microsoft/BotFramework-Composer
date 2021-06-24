@@ -15,7 +15,7 @@ const labelContainerStyle: IStackStyles = {
   root: { whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', height: defaultTreeItemHeight },
 };
 
-export const GetPickerContextualMenuItem = (query: string, propertyTreeExpanded: Record<string, boolean>) => (
+export const getPickerContextualMenuItem = (query: string, propertyTreeExpanded: Record<string, boolean>) => (
   itemProps: IContextualMenuItemProps
 ) => {
   const {

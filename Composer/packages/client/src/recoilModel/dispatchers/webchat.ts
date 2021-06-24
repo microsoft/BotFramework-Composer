@@ -18,7 +18,6 @@ export const webChatLogDispatcher = () => {
     const { set } = callbackHelpers;
     set(webChatTrafficState(projectId), []);
     set(webChatInspectionDataState(projectId), undefined); // clear the inspection panel
-    set(watchedVariablesState(projectId), []); // TODO: might not want to do this depending on how annoying it is for the user -- do you want to wipe variables when you restart convo?
   });
 
   const setWebChatPanelVisibility = useRecoilCallback((callbackHelpers: CallbackInterface) => (value: boolean) => {

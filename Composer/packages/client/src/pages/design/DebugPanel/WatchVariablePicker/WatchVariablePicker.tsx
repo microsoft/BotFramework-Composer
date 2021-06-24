@@ -15,7 +15,7 @@ import { getDefaultFontSettings } from '../../../../recoilModel/utils/fontUtil';
 import { PropertyItem } from './utils/components/PropertyTreeItem';
 import { useNoSearchResultMenuItem } from './utils/hooks/useNoSearchResultMenuItem';
 import { computePropertyItemTree, getAllNodes, WatchDataPayload } from './utils/helpers';
-import { GetPickerContextualMenuItem } from './utils/components/PickerContextualMenuItem';
+import { getPickerContextualMenuItem } from './utils/components/PickerContextualMenuItem';
 
 const DEFAULT_FONT_SETTINGS = getDefaultFontSettings();
 
@@ -59,15 +59,11 @@ const pickerContainer = css`
   width: '240px';
 `;
 
-const redErrorMessage = css`
-  color: ${SharedColors.red20};
-`;
-
 export const WatchVariablePicker = React.memo((props: WatchVariablePickerProps) => {
   const { errorMessage, payload, variableId, path, onSelectPath } = props;
   const [query, setQuery] = useState(path);
-  const inputBoxElement = useRef<ITextField | null>(null);
-  const pickerContainerElement = useRef<null | HTMLDivElement>(null);
+  const inputBoxElementRef = useRef<ITextField | null>(null);
+  const pickerContainerElementRef = useRef<null | HTMLDivElement>(null);
   const [showContextualMenu, setShowContextualMenu] = React.useState(false);
   const [items, setItems] = useState<IContextualMenuItem[]>([]);
   const [propertyTreeExpanded, setPropertyTreeExpanded] = React.useState<Record<string, boolean>>({});
@@ -83,6 +79,10 @@ export const WatchVariablePicker = React.memo((props: WatchVariablePickerProps) 
     const { properties } = (payload as WatchDataPayload).data;
     return { root: computePropertyItemTree(properties) };
   }, [payload]);
+
+  const onHideContextualMenu = () => {
+    setShowContextualMenu(false);
+  };
 
   const getContextualMenuItems = (): IContextualMenuItem[] => {
     const { root } = propertyTreeConfig;
@@ -123,10 +123,6 @@ export const WatchVariablePicker = React.memo((props: WatchVariablePickerProps) 
   const onShowContextualMenu = (event: FocusEvent<HTMLInputElement>) => {
     event.preventDefault();
     setShowContextualMenu(true);
-  };
-
-  const onHideContextualMenu = () => {
-    setShowContextualMenu(false);
   };
 
   const flatPropertyListItems = React.useMemo(() => {
@@ -183,7 +179,7 @@ export const WatchVariablePicker = React.memo((props: WatchVariablePickerProps) 
 
   useEffect(() => {
     handleDebouncedSearch();
-  }, [menuItems, flatPropertyListItems, noSearchResultMenuItem, query]);
+  }, [handleDebouncedSearch]);
 
   const onTextBoxFocus = (event: FocusEvent<HTMLInputElement>) => {
     onShowContextualMenu(event);
@@ -191,12 +187,11 @@ export const WatchVariablePicker = React.memo((props: WatchVariablePickerProps) 
 
   const onTextBoxKeyDown = useCallback(
     (event: KeyboardEvent<HTMLInputElement>) => {
-      // enter
-      if (event.keyCode == 13) {
+      if (event.key === 'Enter') {
         event.preventDefault();
         onSelectPath(variableId, query);
         onHideContextualMenu();
-        inputBoxElement.current?.blur();
+        inputBoxElementRef.current?.blur();
       }
     },
     [variableId, query]
@@ -208,13 +203,13 @@ export const WatchVariablePicker = React.memo((props: WatchVariablePickerProps) 
   }, []);
 
   const contextualMenuItemRenderer = useMemo(() => {
-    return GetPickerContextualMenuItem(query, propertyTreeExpanded);
+    return getPickerContextualMenuItem(query, propertyTreeExpanded);
   }, [query, propertyTreeExpanded]);
 
   return (
-    <div ref={pickerContainerElement} css={pickerContainer}>
+    <div ref={pickerContainerElementRef} css={pickerContainer}>
       <TextField
-        componentRef={inputBoxElement}
+        componentRef={inputBoxElementRef}
         errorMessage={errorMessage}
         id={variableId}
         placeholder={uiStrings.searchPlaceholder}
@@ -242,7 +237,7 @@ export const WatchVariablePicker = React.memo((props: WatchVariablePickerProps) 
             width: '240px',
           },
         }}
-        target={pickerContainerElement}
+        target={pickerContainerElementRef.current}
         onDismiss={onDismiss}
         onItemClick={onHideContextualMenu}
       />
