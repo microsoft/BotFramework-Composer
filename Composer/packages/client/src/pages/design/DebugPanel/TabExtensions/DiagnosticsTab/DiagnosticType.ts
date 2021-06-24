@@ -6,10 +6,9 @@ import { DiagnosticSeverity } from '@botframework-composer/types';
 import get from 'lodash/get';
 import formatMessage from 'format-message';
 
-import { getBaseName } from '../../../utils/fileUtil';
-import { replaceDialogDiagnosticLabel } from '../../../utils/dialogUtil';
-import { convertPathToUrl, createBotSettingUrl, generateResourcePageUrl } from '../../../utils/navigation';
-export const DiagnosticSeverity = ['Error', 'Warning']; //'Information', 'Hint'
+import { getBaseName } from '../../../../../utils/fileUtil';
+import { replaceDialogDiagnosticLabel } from '../../../../../utils/dialogUtil';
+import { convertPathToUrl, createBotSettingUrl, generateResourcePageUrl } from '../../../../../utils/navigation';
 
 export enum DiagnosticType {
   DIALOG,

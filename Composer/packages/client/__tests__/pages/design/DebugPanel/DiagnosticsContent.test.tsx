@@ -2,6 +2,8 @@
 // Licensed under the MIT License.
 
 import * as React from 'react';
+import { fireEvent } from '@botframework-composer/test-utils';
+import { DiagnosticSeverity } from '@botframework-composer/types';
 import { Range, Position } from '@bfc/shared';
 
 import { renderWithRecoil } from '../../../testUtils';
@@ -17,8 +19,16 @@ import {
   luFilesSelectorFamily,
   schemasState,
   settingsState,
+  projectMetaDataState,
+  dialogState,
 } from '../../../../src/recoilModel';
 import mockProjectResponse from '../../../../src/recoilModel/dispatchers/__tests__/mocks/mockProjectResponse.json';
+import { DiagnosticsContent } from '../../../../src/pages/design/DebugPanel/TabExtensions/DiagnosticsTab/DiagnosticsTabContent';
+
+const mockNavigationTo = jest.fn();
+jest.mock('../../../../src/utils/navigation', () => ({
+  navigateTo: (...args) => mockNavigationTo(...args),
+}));
 
 const state = {
   projectId: 'test',
@@ -29,6 +39,7 @@ const state = {
       luFile: 'test',
       referredLuIntents: [],
       skills: [`=settings.skill['Email-Skill'].endpointUrl`],
+      projectId: 'test',
     },
   ],
   luFiles: [
@@ -46,7 +57,7 @@ const state = {
       diagnostics: [
         {
           message: 'lu syntax error',
-          severity: 'Error',
+          severity: DiagnosticSeverity.Error,
           location: 'test.en-us',
           range: {
             end: { character: 2, line: 7 },
@@ -70,7 +81,7 @@ const state = {
       diagnostics: [
         {
           message: 'lg syntax error',
-          severity: 'Error',
+          severity: DiagnosticSeverity.Error,
           location: 'test.en-us',
           range: {
             end: { character: 2, line: 13 },
@@ -89,7 +100,7 @@ const state = {
   diagnostics: [
     {
       message: 'server error',
-      severity: 'Error',
+      severity: DiagnosticSeverity.Error,
       location: 'server',
     },
   ],
@@ -101,6 +112,14 @@ const state = {
         name: 'Email-Skill',
       },
     },
+    luis: {
+      name: 'luis',
+      endpointKey: 'asds',
+    },
+    qna: {
+      subscriptionKey: 'asd',
+      endpointKey: 'asds',
+    },
   },
   formDialogSchemas: [{ id: '1', content: '{}' }],
 };
@@ -109,7 +128,11 @@ describe('<DiagnosticList/>', () => {
   const initRecoilState = ({ set }) => {
     set(currentProjectIdState, state.projectId);
     set(botProjectIdsState, [state.projectId]);
-    set(dialogIdsState(state.projectId), []);
+    set(projectMetaDataState(state.projectId), {
+      isRootBot: true,
+    });
+    set(dialogState({ projectId: state.projectId, dialogId: state.dialogs[0].id }), state.dialogs[0]);
+    set(dialogIdsState(state.projectId), ['test']);
     set(luFilesSelectorFamily(state.projectId), state.luFiles);
     set(lgFilesSelectorFamily(state.projectId), state.lgFiles);
     set(jsonSchemaFilesState(state.projectId), state.jsonSchemaFiles);
@@ -128,5 +151,14 @@ describe('<DiagnosticList/>', () => {
       initRecoilState
     );
     expect(container).toHaveTextContent('server');
+  });
+
+  it('should render the Diagnostics', () => {
+    const { getByText } = renderWithRecoil(<DiagnosticsContent isActive />, initRecoilState);
+
+    fireEvent.click(getByText(/test.en-us.lg/));
+    expect(mockNavigationTo).toBeCalledWith('/bot/test/language-generation/test/edit#L=13');
+    fireEvent.click(getByText(/test.en-us.lu/));
+    expect(mockNavigationTo).nthCalledWith(2, '/bot/test/language-understanding/test/edit#L=7');
   });
 });

@@ -64,7 +64,7 @@ export class BotProjectDeploy {
       }
 
       // Update skill host endpoint
-      if (settings.skillHostEndpoint) {
+      if (settings?.skill && Object.keys(settings?.skill).length > 0) {
         settings.skillHostEndpoint = `https://${hostname}.azurewebsites.net/api/skills`;
       }
 
