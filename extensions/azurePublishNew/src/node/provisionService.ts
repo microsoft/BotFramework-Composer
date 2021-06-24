@@ -13,6 +13,7 @@ import { getQnAProvisionService } from './azureResources/qna';
 import { getAppServiceProvisionService } from './azureResources/servicePlan';
 import { getAppInsightsProvisionService } from './azureResources/appInsights';
 import { ProvisionConfig, ResourceConfig, ResourceProvisionService } from './types';
+import { AppRegistrationConfig } from './azureResources/types';
 
 // bot project => candidate resources => select & configure resources => order & provision
 
@@ -32,13 +33,42 @@ export const getProvisionServices = (config: ProvisionConfig): Record<string, Re
   };
 };
 
+type AppRegistrationProvisionConfig = ProvisionConfig & {
+  key: 'appRegistration';
+};
+
+const appRegistrationConfig: AppRegistrationProvisionConfig = {
+  key: 'appRegistration',
+  credentials: {},
+  subscriptionId: '',
+};
+
+type WebAppProvisionConfig = ProvisionConfig & {
+  key: 'webApp';
+  resourceGroupName: string;
+  location: string;
+  webAppName: string;
+  serverFarm: string;
+};
+
+const webAppConfig: WebAppProvisionConfig = {
+  key: 'webApp',
+  credentials: undefined,
+  location: '',
+  resourceGroupName: '',
+  serverFarm: '',
+  subscriptionId: '',
+  webAppName: '',
+};
+const getSelectedResources = () => [appRegistrationConfig, webAppConfig];
+
 export const setUpProvisionService = (config: ProvisionConfig) => {
   const provisionServices = getProvisionServices(config);
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const provision = (): void => {
     // config => sorted resource config
-    const selectedResources: ResourceConfig[] = [];
+    const selectedResources: ResourceConfig[] = getSelectedResources();
 
     const provisionServices = getProvisionServices(config);
 

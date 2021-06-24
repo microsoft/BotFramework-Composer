@@ -27,10 +27,6 @@ export type ProvisionConfig = {
   key: string;
   credentials: ProvisionCredentials;
   subscriptionId: string;
-  resourceGroupName: string;
-  location: string;
-  webAppName: string;
-  serverFarm: string;
 };
 
 export type ProvisionCredentials = {
