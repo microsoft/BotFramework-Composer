@@ -157,9 +157,9 @@ export type NotificationProps = {
   onHide?: (id: string) => void;
 };
 
-const makeLinkLabel = (link: NotificationLink) => (
-  <ActionButton styles={linkButton} onClick={link.onClick}>
-    {link.label}
+const makeLinkLabel = ({ label, onClick }: NotificationLink) => (
+  <ActionButton styles={linkButton} onClick={onClick}>
+    {label}
   </ActionButton>
 );
 
