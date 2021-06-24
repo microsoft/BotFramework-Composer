@@ -33,7 +33,6 @@ export const getSkillManifest = async (url: string, rootDir = '', isJson = true)
     return content;
   } else if (filePathRegex.test(url)) {
     // get local manifest
-    // eslint-disable-next-line security/detect-non-literal-require
-    return require(Path.join(rootDir, url));
+    return Path.isAbsolute(url) ? require(url) : require(Path.join(rootDir, url));
   }
 };

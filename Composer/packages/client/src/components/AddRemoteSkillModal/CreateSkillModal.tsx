@@ -9,7 +9,7 @@ import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { FontSizes } from '@uifabric/fluent-theme';
 import { useRecoilValue } from 'recoil';
 import debounce from 'lodash/debounce';
-import { isUsingAdaptiveRuntime, SDKKinds } from '@bfc/shared';
+import { isUsingAdaptiveRuntime, SDKKinds, isManifestJson } from '@bfc/shared';
 import { DialogWrapper, DialogTypes } from '@bfc/ui-shared';
 import { Separator } from 'office-ui-fabric-react/lib/Separator';
 import { Dropdown, IDropdownOption, ResponsiveMode } from 'office-ui-fabric-react/lib/Dropdown';
@@ -87,6 +87,7 @@ export const getSkillManifest = async (projectId: string, manifestUrl: string, s
     });
     setSkillManifest(data);
   } catch (error) {
+    console.log(error);
     const httpMessage = error?.response?.data?.message;
     const message = httpMessage?.match('Unexpected string in JSON')
       ? formatMessage('Error attempting to parse Skill manifest. There could be an error in its format.')
@@ -204,12 +205,12 @@ export const CreateSkillModal: React.FC<CreateSkillModalProps> = (props) => {
       const manifestFiles: JSZipObject[] = [];
       const zipContent: Record<string, string> = {};
       for (const fPath in files) {
+        zipContent[fPath] = await files[fPath].async('string');
         // eslint-disable-next-line no-useless-escape
-        if (fPath.match(/\.([^\.]+)$/)?.[1] === 'json') {
+        if (fPath.match(/\.([^\.]+)$/)?.[1] === 'json' && isManifestJson(zipContent[fPath])) {
           manifestFiles.push(files[fPath]);
           setManifestDirPath(fPath.substr(0, fPath.lastIndexOf('/') + 1));
         }
-        zipContent[fPath] = await files[fPath].async('string');
       }
 
       // update content for detail panel and show it
