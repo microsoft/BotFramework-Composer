@@ -31,7 +31,7 @@ import jwtDecode from 'jwt-decode';
 
 import TelemetryClient from '../../telemetry/TelemetryClient';
 import { AuthClient } from '../../utils/authClient';
-import { AuthDialog } from '../../components/Auth/AuthDialog';
+import { AuthDialog } from '../Auth/AuthDialog';
 import { getTokenFromCache, isShowAuthDialog, userShouldProvideTokens } from '../../utils/auth';
 import { dispatcherState } from '../../recoilModel';
 
@@ -71,7 +71,7 @@ const dialogBodyStyles = { height: 464, width: 920 };
 const serviceName = 'QnA Maker';
 const serviceKeyType = 'QnAMaker';
 
-export const ReplaceQnAFromPortalModal: React.FC<ReplaceQnAModalProps> = (props) => {
+export const ReplaceQnAFromModal: React.FC<ReplaceQnAModalProps> = (props) => {
   const { onDismiss, onSubmit, hidden, qnaFile, projectId } = props;
   const actions = useRecoilValue(dispatcherState);
   const [formData, setFormData] = useState<ReplaceQnAModalFormData>();
@@ -650,4 +650,4 @@ export const ReplaceQnAFromPortalModal: React.FC<ReplaceQnAModalProps> = (props)
   );
 };
 
-export default ReplaceQnAFromPortalModal;
+export default ReplaceQnAFromModal;

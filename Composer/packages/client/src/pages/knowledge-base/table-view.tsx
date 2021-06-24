@@ -40,7 +40,7 @@ import { dispatcherState } from '../../recoilModel';
 import { getBaseName } from '../../utils/fileUtil';
 import { EditableField } from '../../components/EditableField';
 import { EditQnAModal } from '../../components/QnA/EditQnAFrom';
-import { ReplaceQnAFromPortalModal } from '../../components/QnA/ReplaceQnAFromPortalModal';
+import { ReplaceQnAFromModal } from '../../components/QnA/ReplaceQnAFromModal';
 import { getQnAFileUrlOption } from '../../utils/qnaUtil';
 import TelemetryClient from '../../telemetry/TelemetryClient';
 
@@ -946,7 +946,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
           onSubmit={onSubmitEditKB}
         ></EditQnAModal>
       )}
-      <ReplaceQnAFromPortalModal
+      <ReplaceQnAFromModal
         containerId={importingResourceQnAFile ? importingResourceQnAFile.id : ''}
         dialogId={qnaFile ? getBaseName(qnaFile.id) : ''}
         hidden={!importingResourceQnAFile}
@@ -956,7 +956,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
           setImportingResourceQnAFile(undefined);
         }}
         onSubmit={handleImportQnA}
-      ></ReplaceQnAFromPortalModal>
+      />
     </div>
   );
 };
