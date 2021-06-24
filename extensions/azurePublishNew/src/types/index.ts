@@ -36,6 +36,7 @@ export type PublishProfileConfiguration = {
   luisRegion: string;
   deployLocation: string;
   hostName: string;
+  appServiceOperatingSystem: string;
 };
 
 export type ResourceGroup = {

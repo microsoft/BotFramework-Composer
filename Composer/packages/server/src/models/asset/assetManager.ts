@@ -22,6 +22,7 @@ import { IFileStorage } from '../storage/interface';
 import { BotProject } from '../bot/botProject';
 import { templateGeneratorPath } from '../../settings/env';
 import { BackgroundProcessManager } from '../../services/backgroundProcessManager';
+import { FeatureFlagService } from '../../services/featureFlags';
 
 const defaultBotProjectFileContent = {
   $schema:
@@ -279,36 +280,44 @@ export class AssetManager {
       const feedType = this.getFeedType();
 
       if (feedType === 'npm') {
-        return data.objects.map((result) => {
-          const { name, version, keywords, description = '' } = result.package;
-          const displayName = this.getPackageDisplayName(name);
-          const templateToReturn = {
-            id: name,
-            name: displayName,
-            description: description,
-            package: {
-              packageName: name,
-              packageSource: 'npm',
-              packageVersion: version,
-            },
-          } as BotTemplate;
-          if (isArray(keywords)) {
-            if (keywords.includes('bf-dotnet-functions') || keywords.includes('bf-dotnet-webapp')) {
-              templateToReturn.dotnetSupport = {
-                functionsSupported: keywords.includes('bf-dotnet-functions'),
-                webAppSupported: keywords.includes('bf-dotnet-webapp'),
-              };
+        const result: BotTemplate[] = await Promise.all(
+          data.objects.map(
+            async (result): Promise<BotTemplate> => {
+              const { name, version, keywords, description = '' } = result.package;
+              const shouldFetchVersions = FeatureFlagService.getFeatureFlagValue('ADVANCED_TEMPLATE_OPTIONS');
+              const versions = shouldFetchVersions ? await this.getNpmPackageVersions(name) : [];
+              const displayName = this.getPackageDisplayName(name);
+              const templateToReturn = {
+                id: name,
+                name: displayName,
+                description: description,
+                package: {
+                  packageName: name,
+                  packageSource: 'npm',
+                  packageVersion: version,
+                  availableVersions: versions,
+                },
+              } as BotTemplate;
+              if (isArray(keywords)) {
+                if (keywords.includes('bf-dotnet-functions') || keywords.includes('bf-dotnet-webapp')) {
+                  templateToReturn.dotnetSupport = {
+                    functionsSupported: keywords.includes('bf-dotnet-functions'),
+                    webAppSupported: keywords.includes('bf-dotnet-webapp'),
+                  };
+                }
+                if (keywords.includes('bf-js-functions') || keywords.includes('bf-js-webapp')) {
+                  templateToReturn.nodeSupport = {
+                    functionsSupported: keywords.includes('bf-js-functions'),
+                    webAppSupported: keywords.includes('bf-js-webapp'),
+                  };
+                }
+                templateToReturn.isMultiBotTemplate = keywords.includes('msbot-multibot-project');
+              }
+              return templateToReturn;
             }
-            if (keywords.includes('bf-js-functions') || keywords.includes('bf-js-webapp')) {
-              templateToReturn.nodeSupport = {
-                functionsSupported: keywords.includes('bf-js-functions'),
-                webAppSupported: keywords.includes('bf-js-webapp'),
-              };
-            }
-            templateToReturn.isMultiBotTemplate = keywords.includes('msbot-multibot-project');
-          }
-          return templateToReturn;
-        });
+          )
+        );
+        return result;
       } else if (feedType === 'nuget') {
         // TODO: handle nuget processing
       } else {
@@ -325,10 +334,10 @@ export class AssetManager {
 
     for (const feed of feedUrls) {
       const feedTemplates = await this.getFeedContents(feed);
-      if (feedTemplates === null) {
-        invalidFeedUrls.push(feed);
-      } else if (feedTemplates && Array.isArray(feedTemplates) && feedTemplates.length > 0) {
+      if (feedTemplates && Array.isArray(feedTemplates) && feedTemplates.length > 0) {
         templates = templates.concat(feedTemplates);
+      } else if (feedTemplates === null) {
+        invalidFeedUrls.push(feed);
       }
     }
 
@@ -340,5 +349,23 @@ export class AssetManager {
     const res = await fetch(githubUrl.toString());
 
     return await res.text();
+  }
+
+  public async getNpmPackageVersions(packageName: string): Promise<string[]> {
+    try {
+      const registryUrl = `https://registry.npmjs.org/${packageName}`;
+      const response = await fetch(registryUrl);
+      const data = await response.json();
+      const versionsMap = data?.versions ?? [];
+      const availableVersions: string[] = [];
+      for (const [key] of Object.entries(versionsMap)) {
+        if (key) {
+          availableVersions.push(key);
+        }
+      }
+      return availableVersions;
+    } catch {
+      return [];
+    }
   }
 }

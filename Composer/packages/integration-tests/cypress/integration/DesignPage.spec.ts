@@ -123,7 +123,7 @@ context('breadcrumb', () => {
     cy.findByText('Select an activity type').click();
     cy.findByText('Activities (Activity received)').click();
     cy.findByTestId('triggerFormSubmit').click();
-    cy.findAllByText('Activities').should('exist');
+    cy.findAllByText('Activities (Activity received)').should('exist');
   });
 
   it('can find Visual Designer default trigger in container', () => {

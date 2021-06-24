@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import luFileStatusStorage from '../../src/utils/luFileStatusStorage';
+import luFileStatusStorage from '../luFileStatusStorage';
 
 const fileIds = ['1', '2', '3', '4'];
 const projectId = '11111.11111111';

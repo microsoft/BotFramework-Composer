@@ -1,8 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { getExtension, getBaseName, upperCaseName, loadLocale, getUniqueName } from '../../src/utils/fileUtil';
-import httpClient from '../../src/utils/httpUtil';
+import { getExtension, getBaseName, upperCaseName, loadLocale, getUniqueName } from '../fileUtil';
+import httpClient from '../httpUtil';
 
 const files = ['a.text', 'a.b.text', 1] as string[];
 

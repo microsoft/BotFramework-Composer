@@ -383,3 +383,8 @@ export const projectsForDiagnosticsFilterState = atom<string[]>({
   key: getFullyQualifiedKey('projectsForDiagnosticsFilter'),
   default: [],
 });
+
+export const selectedTemplateVersionState = atom<string>({
+  key: getFullyQualifiedKey('selectedTemplateVersion'),
+  default: '',
+});
