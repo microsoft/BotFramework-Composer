@@ -41,7 +41,7 @@ export const blobStorageDefinition: ResourceDefinition = {
   description:
     'Azure blob storage provides scalable cloud storage, backup and recovery solutions for any data, including bot transcript logs.',
   text: 'Azure Blob Storage',
-  tier: 'Standard_LRS',
+  tier: 'Standard LRS',
   group: AZURE_HOSTING_GROUP_NAME,
 };
 export const botRegistrationDefinition: ResourceDefinition = {
