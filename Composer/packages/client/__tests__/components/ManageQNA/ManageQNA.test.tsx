@@ -11,7 +11,7 @@ const serviceName = 'QnA Maker';
 const DOWN_ARROW = { keyCode: 40 };
 
 jest.mock('@azure/arm-appservice', () => ({
-  WebSiteManagementClient: () => {
+  WebSiteManagementClient: function WebSiteManagementClient() {
     return {
       appServicePlans: {
         createOrUpdate: jest.fn(),
@@ -30,7 +30,7 @@ jest.mock('@azure/arm-appservice', () => ({
   },
 }));
 jest.mock('@azure/arm-search', () => ({
-  SearchManagementClient: () => {
+  SearchManagementClient: function SearchManagementClient() {
     return {
       services: {
         createOrUpdate: jest.fn(),
@@ -44,7 +44,7 @@ jest.mock('@azure/arm-search', () => ({
   },
 }));
 jest.mock('@azure/arm-cognitiveservices', () => ({
-  CognitiveServicesManagementClient: () => {
+  CognitiveServicesManagementClient: function CognitiveServicesManagementClient() {
     return {
       accounts: {
         create: async () => {},
@@ -136,7 +136,7 @@ describe('<ManageQNA />', () => {
     const onNext = jest.fn();
     const onToggleVisibility = jest.fn();
 
-    const { baseElement, findByText, findByTestId } = renderWithRecoil(
+    const { baseElement, findByText, findByTestId, findByRole } = renderWithRecoil(
       <ManageQNA
         hidden={false}
         onDismiss={onDismiss}
@@ -148,7 +148,7 @@ describe('<ManageQNA />', () => {
 
     // test the default option (choose existing)
     // click the next button, ensure the title changes
-    const nextButton = await findByText('Next');
+    const nextButton = await findByRole('button', { name: 'Next' });
     expect(nextButton).toBeDefined();
     await act(async () => {
       await fireEvent.click(nextButton);
@@ -169,7 +169,7 @@ describe('<ManageQNA />', () => {
 
     // ensure that since a subscription hasn't been selected
     // this button is disabled
-    const nextButton2 = await findByText('Next');
+    const nextButton2 = await findByRole('button', { name: 'Next' });
     expect(nextButton2).toBeDefined();
     expect(nextButton2).toBeDisabled();
 
@@ -221,7 +221,7 @@ describe('<ManageQNA />', () => {
     const onNext = jest.fn();
     const onToggleVisibility = jest.fn();
 
-    const { baseElement, findByText, findByTestId } = renderWithRecoil(
+    const { baseElement, findByText, findByTestId, findByRole } = renderWithRecoil(
       <ManageQNA
         hidden={false}
         onDismiss={onDismiss}
@@ -237,7 +237,7 @@ describe('<ManageQNA />', () => {
     fireEvent.click(createOption);
 
     // click the next button, ensure the title changes
-    const nextButton = await findByText('Next');
+    const nextButton = await findByRole('button', { name: 'Next' });
     expect(nextButton).toBeDefined();
     await act(async () => {
       await fireEvent.click(nextButton);
@@ -246,7 +246,7 @@ describe('<ManageQNA />', () => {
 
     // ensure that since a subscription hasn't been selected
     // this button is disabled
-    const nextButton2 = await findByText('Next');
+    const nextButton2 = await findByRole('button', { name: 'Next' });
     expect(nextButton2).toBeDefined();
     expect(nextButton2).toBeDisabled();
 
@@ -277,7 +277,7 @@ describe('<ManageQNA />', () => {
       await fireEvent.click(nextButton2);
     });
 
-    const nextButton3 = await findByText('Next');
+    const nextButton3 = await findByRole('button', { name: 'Next' });
     expect(nextButton3).toBeDefined();
     expect(nextButton3).toBeDisabled();
 
@@ -358,7 +358,7 @@ describe('<ManageQNA />', () => {
     const onNext = jest.fn();
     const onToggleVisibility = jest.fn();
 
-    const { baseElement, findByText } = renderWithRecoil(
+    const { baseElement, findByText, findByRole } = renderWithRecoil(
       <ManageQNA
         hidden={false}
         onDismiss={onDismiss}
@@ -374,7 +374,7 @@ describe('<ManageQNA />', () => {
     fireEvent.click(generateOption);
 
     // click the next button, ensure the title changes
-    const nextButton = await findByText('Next');
+    const nextButton = await findByRole('button', { name: 'Next' });
     expect(nextButton).toBeDefined();
     await act(async () => {
       await fireEvent.click(nextButton);

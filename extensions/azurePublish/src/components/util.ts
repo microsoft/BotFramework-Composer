@@ -72,3 +72,43 @@ export const defaultExtensionState = {
   requiredResources: [],
   creationType: 'create',
 };
+
+// Note: parseRuntimeKey is cut-and-pasted from skills because importing it from @bfc/shared adds a crypto dependency that the UI doesn't have.
+
+/**
+ * Returns true if the runtime key is adaptive; false otherwise.
+ * Example adaptive runtime keys: 'adaptive-runtime-dotnet-webapp' or 'adaptive-runtime-node-functions'
+ * Example older adaptive runtime keys: 'csharp-azurewebapp-v2'
+ */
+const isUsingAdaptiveRuntimeKey = (runtimeKey?: string): boolean =>
+  runtimeKey === 'csharp-azurewebapp-v2' || !!runtimeKey?.startsWith('adaptive-runtime-');
+
+/**
+ * Parses the runtime key
+ * Example adaptive runtime keys: 'adaptive-runtime-dotnet-webapp' or 'adaptive-runtime-node-functions'
+ * Example older adaptive runtime keys: 'csharp-azurewebapp-v2'
+ * @returns If the runtime is adaptive and the parsed runtime language and type
+ * @default { isUsingAdaptiveRuntime: false, runtimeLanguage: 'dotnet', runtimeType: 'webapp'}
+ */
+export const parseRuntimeKey = (
+  runtimeKey?: string
+): { isUsingAdaptiveRuntime: boolean; runtimeLanguage?: string; runtimeType?: string } => {
+  const isAdaptive = isUsingAdaptiveRuntimeKey(runtimeKey);
+
+  if (runtimeKey && isAdaptive) {
+    const parts = runtimeKey?.split('-');
+    if (parts.length === 4) {
+      return {
+        isUsingAdaptiveRuntime: isAdaptive,
+        runtimeLanguage: parts[2],
+        runtimeType: parts[3],
+      };
+    }
+  }
+
+  return {
+    isUsingAdaptiveRuntime: isAdaptive,
+    runtimeLanguage: 'dotnet',
+    runtimeType: 'webapp',
+  };
+};

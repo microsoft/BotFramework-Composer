@@ -12,7 +12,7 @@ type Props = {
   allowCreation?: boolean;
   canRefresh?: boolean;
   accessToken: string;
-  onSubscriptionChange: (subscriptionId: string) => void;
+  onChangeSubscription: (subscriptionId: string) => void;
 } & Omit<SearchableDropdownProps, 'items' | 'onSubmit'>;
 
 export const SubscriptionPicker = React.memo((props: Props) => {
@@ -58,7 +58,7 @@ export const SubscriptionPicker = React.memo((props: Props) => {
     <SearchableDropdown
       isLoading={isLoading}
       items={subscriptions.map((t) => ({ key: t.subscriptionId, text: t.displayName }))}
-      onSubmit={(option) => props.onSubscriptionChange(option.key)}
+      onSubmit={(option) => props.onChangeSubscription(option.key)}
       {...{
         ...props,
         textFieldProps: { ...localTextFieldProps, ...props.textFieldProps },
