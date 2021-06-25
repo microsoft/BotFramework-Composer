@@ -36,6 +36,7 @@ export type PublishProfileConfiguration = {
   luisRegion: string;
   deployLocation: string;
   hostName: string;
+  appServiceOperatingSystem: string;
 };
 
 export type ResourceGroup = {
@@ -57,3 +58,9 @@ export type ImportConfiguration = {
 };
 
 export type LuisRegion = 'westus' | 'australiaeast' | 'westeurope';
+
+export type PreviewResourcesItem = {
+  name: string;
+  icon: string;
+  key: string;
+};

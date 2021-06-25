@@ -54,7 +54,7 @@ export interface CreateSkillModalProps {
   onDismiss: () => void;
 }
 
-export const validateManifestUrl = async ({ formData, formDataErrors, setFormDataErrors }, skills: string[] = []) => {
+export const validateManifestUrl = ({ formData, formDataErrors, setFormDataErrors }, skills: string[] = []) => {
   const { manifestUrl } = formData;
   const { manifestUrl: _, ...errors } = formDataErrors;
 
@@ -71,6 +71,7 @@ export const validateManifestUrl = async ({ formData, formDataErrors, setFormDat
     setFormDataErrors({});
   }
 };
+
 export const getSkillManifest = async (projectId: string, manifestUrl: string, setSkillManifest, setFormDataErrors) => {
   try {
     const { data } = await httpClient.get(`/projects/${projectId}/skill/retrieveSkillManifest`, {
@@ -280,6 +281,7 @@ export const CreateSkillModal: React.FC<CreateSkillModalProps> = (props) => {
             manifest={skillManifest}
             projectId={projectId}
             rootLuFiles={luFiles}
+            runtime={runtime}
             onBack={() => {
               setTitle({
                 subText: '',

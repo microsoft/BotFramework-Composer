@@ -20,6 +20,7 @@ describe('templateSort', () => {
         packageName: '@microsoft/generator-microsoft-bot-calendar-assistant',
         packageSource: 'npm',
         packageVersion: '0.0.1-preview-20210302.2eaae0d',
+        availableVersions: [],
       },
     },
     {
@@ -30,6 +31,7 @@ describe('templateSort', () => {
         packageName: '@microsoft/generator-microsoft-bot-calendar-assistant',
         packageSource: 'npm',
         packageVersion: '0.0.1-preview-20210302.2eaae0d',
+        availableVersions: [],
       },
     },
     {
@@ -40,6 +42,7 @@ describe('templateSort', () => {
         packageName: '@microsoft/generator-microsoft-bot-calendar-assistant',
         packageSource: 'npm',
         packageVersion: '0.0.1-preview-20210302.2eaae0d',
+        availableVersions: [],
       },
     },
     {
@@ -50,6 +53,18 @@ describe('templateSort', () => {
         packageName: '@microsoft/generator-microsoft-bot-calendar',
         packageSource: 'npm',
         packageVersion: '0.0.1-preview-20210301.79c8ef3',
+        availableVersions: [],
+      },
+    },
+    {
+      id: '@microsoft/generator-bot-conversational-core',
+      name: ' Conversational Core',
+      description: 'Preview conversational core package for TESTING ONLY',
+      package: {
+        packageName: '@microsoft/generator-microsoft-bot-conversational-core',
+        packageSource: 'npm',
+        packageVersion: '1.0.0-preview-20210302.663d14c',
+        availableVersions: [],
       },
     },
     {
@@ -61,6 +76,7 @@ describe('templateSort', () => {
         packageName: '@microsoft/generator-microsoft-bot-empty',
         packageSource: 'npm',
         packageVersion: '1.0.0-preview-20210302.663d14c',
+        availableVersions: [],
       },
     },
     {
@@ -71,6 +87,7 @@ describe('templateSort', () => {
         packageName: 'generator-empty-bot',
         packageSource: 'npm',
         packageVersion: '0.0.1',
+        availableVersions: [],
       },
     },
     {
@@ -81,6 +98,7 @@ describe('templateSort', () => {
         packageName: 'generator-empty-bot',
         packageSource: 'npm',
         packageVersion: '0.0.1',
+        availableVersions: [],
       },
     },
     {
@@ -91,6 +109,7 @@ describe('templateSort', () => {
         packageName: 'generator-empty-bot',
         packageSource: 'npm',
         packageVersion: '0.0.1',
+        availableVersions: [],
       },
     },
     {
@@ -101,6 +120,7 @@ describe('templateSort', () => {
         packageName: '',
         packageSource: '',
         packageVersion: '',
+        availableVersions: [''],
       },
     },
   ];

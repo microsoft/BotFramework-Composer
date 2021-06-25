@@ -5,6 +5,7 @@
 import { jsx, css } from '@emotion/core';
 import React from 'react';
 import { useRecoilValue } from 'recoil';
+import { DiagnosticSeverity } from '@botframework-composer/types';
 
 import { allDiagnosticsSelectorFamily } from '../recoilModel';
 
@@ -20,8 +21,8 @@ type DiagnosticsHeaderProps = {
 };
 
 export const DiagnosticsHeader: React.FC<DiagnosticsHeaderProps> = React.memo(({ onClick = () => {} }) => {
-  const errors = useRecoilValue(allDiagnosticsSelectorFamily('Error'));
-  const warnings = useRecoilValue(allDiagnosticsSelectorFamily('Warning'));
+  const errors = useRecoilValue(allDiagnosticsSelectorFamily([DiagnosticSeverity.Error]));
+  const warnings = useRecoilValue(allDiagnosticsSelectorFamily([DiagnosticSeverity.Warning]));
 
   return (
     <div css={iconPosition}>

@@ -36,6 +36,11 @@ describe('should return the proper PVA base URL for the environment', () => {
     Object.assign(process.env, { COMPOSER_PVA_PUBLISH_ENV: 'PROD' });
     expect(getBaseUrl()).toBe(BASE_URLS.PROD);
   });
+
+  it('gcc', () => {
+    Object.assign(process.env, { COMPOSER_PVA_PUBLISH_ENV: 'GCC' });
+    expect(getBaseUrl()).toBe(BASE_URLS.GCC);
+  });
 });
 
 describe('it should return the proper PVA auth parameters for the base URL', () => {
@@ -60,5 +65,10 @@ describe('it should return the proper PVA auth parameters for the base URL', () 
   it('prod', () => {
     const url = 'https://powerva.microsoft.com/api/botmanagement/v1';
     expect(getAuthCredentials(url)).toEqual(AUTH_CREDENTIALS.PROD);
+  });
+
+  it('gcc', () => {
+    const url = 'https://gcc.api.powerva.microsoft.us/api/botmanagement/v1';
+    expect(getAuthCredentials(url)).toEqual(AUTH_CREDENTIALS.GCC);
   });
 });

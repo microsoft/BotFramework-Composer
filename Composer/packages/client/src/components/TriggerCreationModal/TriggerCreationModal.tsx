@@ -9,6 +9,7 @@ import { Dialog, DialogType, DialogFooter } from 'office-ui-fabric-react/lib/Dia
 import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button';
 import { SDKKinds, RegexRecognizer } from '@bfc/shared';
 import { useRecoilValue } from 'recoil';
+import { useTriggerConfig, TriggerUISchema } from '@bfc/extension-client';
 
 import { TriggerFormData, TriggerFormDataErrors } from '../../utils/dialogUtil';
 import { userSettingsState } from '../../recoilModel/atoms';
@@ -22,6 +23,13 @@ import { resolveTriggerWidget } from './resolveTriggerWidget';
 import { TriggerDropdownGroup } from './TriggerDropdownGroup';
 
 const hasError = (errors: TriggerFormDataErrors) => Object.values(errors).some((msg) => !!msg);
+
+const resolveSchemaLabel = ($kind: string, schema: TriggerUISchema): string | undefined => {
+  const options = schema[$kind];
+  if (options) {
+    return options.label;
+  }
+};
 
 export const initialFormData: TriggerFormData = {
   errors: {},
@@ -43,6 +51,7 @@ interface TriggerCreationModalProps {
 export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props) => {
   const { isOpen, onDismiss, onSubmit, dialogId, projectId } = props;
   const dialogs = useRecoilValue(dialogsSelectorFamily(projectId));
+  const triggerUISchema = useTriggerConfig();
 
   const userSettings = useRecoilValue(userSettingsState);
   const dialogFile = dialogs.find((dialog) => dialog.id === dialogId);
@@ -68,7 +77,7 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props)
       return;
     }
     onDismiss();
-    onSubmit(dialogId, { ...formData, $kind: selectedType });
+    onSubmit(dialogId, { ...formData, $kind: selectedType, label: resolveSchemaLabel(selectedType, triggerUISchema) });
     TelemetryClient.track('AddNewTriggerCompleted', { kind: formData.$kind });
   };
 
@@ -106,6 +115,7 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props)
           recognizerType={recognizer$kind}
           setTriggerType={setSelectedType}
           triggerType={selectedType}
+          triggerUISchema={triggerUISchema}
         />
         {triggerWidget}
       </div>

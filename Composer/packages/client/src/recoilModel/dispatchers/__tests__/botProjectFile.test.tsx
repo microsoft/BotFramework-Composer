@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import { selector, useRecoilValue, selectorFamily, useRecoilState } from 'recoil';
-import { act, RenderHookResult, HookResult } from '@botframework-composer/test-utils/lib/hooks';
+import { act, RenderHookResult, RenderResult } from '@botframework-composer/test-utils/lib/hooks';
 import noop from 'lodash/noop';
 import { BotProjectFile, Skill } from '@bfc/shared';
 
@@ -23,7 +23,6 @@ import {
 } from '../../atoms';
 import { Dispatcher } from '..';
 
-jest.mock('../../../utils/httpUtil');
 const rootBotProjectId = '2345.32324';
 const testSkillId = '123.1sd23';
 
@@ -83,7 +82,7 @@ describe('Bot Project File dispatcher', () => {
     };
   };
 
-  let renderedComponent: HookResult<ReturnType<typeof useRecoilTestHook>>, dispatcher: Dispatcher;
+  let renderedComponent: RenderResult<ReturnType<typeof useRecoilTestHook>>, dispatcher: Dispatcher;
   beforeEach(() => {
     const rendered: RenderHookResult<unknown, ReturnType<typeof useRecoilTestHook>> = renderRecoilHook(
       useRecoilTestHook,

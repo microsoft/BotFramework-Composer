@@ -16,7 +16,6 @@ import {
 import { OutputsTabContent } from '../DebugPanel/TabExtensions/RuntimeOutputLog/OutputTabContent';
 const projectId = '123-avw';
 
-jest.mock('../../../utils/httpUtil');
 const standardOut = `/Users/tester/Desktop/conversational_core_3/conversational_core_3/conversational_core_3.csproj : warning NU1701: Package 'Microsoft.Azure.KeyVault.Core 1.0.0' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8' instead of the project target framework '.NETCoreApp,Version=v3.1'. This package may not be fully compatible with your project.
         /Users/tester/Desktop/conversational_core_3/conversational_core_3/conversational_core_3.csproj : warning NU1701: Package 'Microsoft.Azure.KeyVault.Core 1.0.0' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8' instead of the project target framework '.NETCoreApp,Version=v3.1'. This package may not be fully compatible with your project.
         info: Microsoft.Hosting.Lifetime[0]

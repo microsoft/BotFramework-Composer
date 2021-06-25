@@ -12,6 +12,7 @@ import {
   deployLocationState,
   luisRegionState,
   hostNameState,
+  operatingSystemState,
 } from '../recoilModel/atoms/resourceConfigurationState';
 import { LuisAuthoringSupportLocation } from '../constants';
 import { LuisRegion } from '../types';
@@ -21,14 +22,16 @@ import { useDispatcher } from './useDispatcher';
 export const useResourceConfiguration = () => {
   const { userShouldProvideTokens, getName } = usePublishApi();
   const [deployLocations, setDeployLocations] = React.useState<DeployLocation[]>([]);
-  const [hasErrors, setHasErrors] = React.useState<boolean>(false);
+  const [isInvalidResourceGroupName, setIsInvalidResourceGroupName] = React.useState<boolean>(false);
+  const [isInvalidHostName, setIsInvalidHostName] = React.useState<boolean>(false);
   const {
     setTenantId,
     setSubscriptionId,
-    setResourceGroupName,
+    setResourceGroup,
     setDeployLocation,
     setLuisRegion,
     setHostName,
+    setAppServiceOperatingSystem,
   } = useDispatcher();
 
   const tenantId = useRecoilValue(tenantState);
@@ -38,8 +41,14 @@ export const useResourceConfiguration = () => {
   const deployLocation = useRecoilValue(deployLocationState);
   const luisRegion = useRecoilValue(luisRegionState);
   const hostName = useRecoilValue(hostNameState);
+  const appServiceOperatingSystem = useRecoilValue(operatingSystemState);
 
   const { setItem } = useLocalStorage();
+
+  const hasErrors = React.useMemo(() => isInvalidResourceGroupName || isInvalidHostName, [
+    isInvalidHostName,
+    isInvalidResourceGroupName,
+  ]);
 
   const isValidConfiguration = React.useMemo(
     (): boolean =>
@@ -55,78 +64,70 @@ export const useResourceConfiguration = () => {
     [tenantId, subscriptionId, resourceGroupName, hasErrors, deployLocation, luisRegion, hostName]
   );
 
-  const handleTenantChange = React.useCallback(
-    (tenantId: string) => {
-      setTenantId(tenantId);
-      if (!tenantId) {
-        setSubscriptionId('');
-      }
+  const handleChangeTenant = React.useCallback((tenantId: string) => {
+    setTenantId(tenantId);
+    if (!tenantId) {
+      setSubscriptionId('');
+    }
+  }, []);
+
+  const handleChangeSubscription = React.useCallback((subscriptionId: string) => {
+    setSubscriptionId(subscriptionId);
+    if (!subscriptionId) {
+      setResourceGroup('', false);
+      setDeployLocation('');
+      setLuisRegion(undefined);
+    }
+  }, []);
+
+  const handleChangeResourceGroup = React.useCallback((resourceGroupId: string, isNew: boolean) => {
+    setResourceGroup(resourceGroupId, isNew);
+  }, []);
+
+  const handleValidateResourceGroupName = React.useCallback(
+    (isValid: boolean) => {
+      setIsInvalidResourceGroupName(isValid);
     },
-    [setSubscriptionId, setTenantId]
+    [setIsInvalidResourceGroupName]
   );
 
-  const handleSubscriptionChange = React.useCallback(
-    (subscriptionId: string) => {
-      setSubscriptionId(subscriptionId);
-      if (!subscriptionId) {
-        setResourceGroupName('', false);
-        setDeployLocation('');
-        setLuisRegion(undefined);
-      }
-    },
-    [setResourceGroupName, setDeployLocation, setSubscriptionId]
-  );
+  const handleChangeDeployLocation = React.useCallback((deployLocationId: string) => {
+    setDeployLocation(deployLocationId);
+    if (!deployLocationId) {
+      setLuisRegion(undefined);
+    } else {
+      //Seed luis region with the deploy location or pick the first one
+      setLuisRegion(
+        (LuisAuthoringSupportLocation.includes(deployLocation)
+          ? deployLocation
+          : LuisAuthoringSupportLocation[0]) as LuisRegion
+      );
+    }
+  }, []);
 
-  const handleResourceGroupChange = React.useCallback(
-    (resourceGroupId: string, isNew: boolean, hasErrors: boolean) => {
-      setResourceGroupName(resourceGroupId, isNew);
-      setHasErrors(hasErrors);
-    },
-    [setResourceGroupName]
-  );
+  const handleChangeLuisRegion = React.useCallback((luisRegion: LuisRegion) => {
+    setLuisRegion(luisRegion);
+  }, []);
 
-  const handleDeployLocationChange = React.useCallback(
-    (deployLocationId: string) => {
-      setDeployLocation(deployLocationId);
-      if (!deployLocationId) {
-        setLuisRegion(undefined);
-      } else {
-        //Seed luis region with the deploy location or pick the first one
-        setLuisRegion(
-          (LuisAuthoringSupportLocation.includes(deployLocation)
-            ? deployLocation
-            : LuisAuthoringSupportLocation[0]) as LuisRegion
-        );
-      }
-    },
-    [setDeployLocation]
-  );
+  const handleChangeHostName = React.useCallback((hostName: string) => {
+    setHostName(hostName);
+  }, []);
 
-  const handleLuisRegionChange = React.useCallback(
-    (luisRegion: LuisRegion) => {
-      setLuisRegion(luisRegion);
-    },
-    [setLuisRegion]
-  );
+  const handleValidateHostName = React.useCallback((isValid: boolean) => {
+    setIsInvalidHostName(isValid);
+  }, []);
 
-  const handleHostNameChange = React.useCallback(
-    (hostName: string) => {
-      setHostName(hostName);
-    },
-    [setHostName]
-  );
-
-  const stashWizardState = React.useCallback(
-    () =>
-      setItem(getName(), {
-        tenantId,
-        subscriptionId,
-        resourceGroup: { name: resourceGroupName, isNew },
-        deployLocation,
-        luisRegion,
-      }),
-    [tenantId, subscriptionId, resourceGroupName, deployLocation, luisRegion]
-  );
+  const stashWizardState = () => {
+    setItem(getName(), {
+      tenantId,
+      subscriptionId,
+      resourceGroup: { name: resourceGroupName, isNew },
+      deployLocation,
+      luisRegion,
+      hostName,
+      appServiceOperatingSystem,
+    });
+  };
 
   return {
     configuration: {
@@ -137,15 +138,19 @@ export const useResourceConfiguration = () => {
       luisRegion,
       isNewResourceGroup: isNew,
       hostName,
+      appServiceOperatingSystem,
     },
-    handleTenantChange,
-    handleSubscriptionChange,
-    handleResourceGroupChange,
-    handleDeployLocationFetch: setDeployLocations,
-    handleDeployLocationChange,
-    handleLuisRegionChange,
+    handleChangeTenant,
+    handleChangeSubscription,
+    handleChangeResourceGroup,
+    handleFetchDeployLocation: setDeployLocations,
+    handleChangeOperatingSystem: setAppServiceOperatingSystem,
+    handleValidateHostName,
+    handleValidateResourceGroupName,
+    handleChangeDeployLocation,
+    handleChangeLuisRegion,
     stashWizardState,
-    handleHostNameChange,
+    handleChangeHostName,
     isValidConfiguration,
     deployLocations,
     hasErrors,

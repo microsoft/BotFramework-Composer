@@ -45,6 +45,18 @@ const locationRef = {
   path: mockCopyToPath,
 };
 
+const cleanup = (paths: string | string[]) => {
+  const targets = Array.isArray(paths) ? paths : [paths];
+
+  for (const target of targets) {
+    try {
+      rimraf.sync(target);
+    } catch {
+      // do nothing
+    }
+  }
+};
+
 beforeAll(() => {
   ExtensionContext.extensions.botTemplates.push({
     id: 'SampleBot',
@@ -54,7 +66,15 @@ beforeAll(() => {
   });
 });
 
+afterAll(() => {
+  cleanup(mockCopyToPath);
+});
+
 describe('assetManager', () => {
+  beforeEach(() => {
+    cleanup(mockCopyToPath);
+  });
+
   it('getProjectTemplate', async () => {
     const assetManager = new AssetManager();
     const result = await assetManager.getProjectTemplates();
@@ -68,12 +88,6 @@ describe('assetManager', () => {
     await assetManager.getProjectTemplates();
 
     await expect(assetManager.copyProjectTemplateTo('SampleBot', locationRef)).resolves.toBe(locationRef);
-    // remove the saveas files
-    try {
-      rimraf.sync(mockCopyToPath);
-    } catch (error) {
-      throw new Error(error);
-    }
   });
 
   describe('copyRemoteProjectTemplateTo', () => {
@@ -127,6 +141,7 @@ describe('assetManager', () => {
     fetchMock.mockResponseOnce(JSON.stringify(mockFeedResponse));
     it('Get contents of a feed and return template array', async () => {
       const assetManager = new AssetManager();
+
       const mockFeedUrl =
         'https://registry.npmjs.org/-/v1/search?text=conversationalcore&size=100&from=0&quality=0.65&popularity=0.98&maintenance=0.5';
       const templates = await assetManager.getCustomFeedTemplates([mockFeedUrl]);
@@ -140,9 +155,34 @@ describe('assetManager', () => {
             packageName: 'generator-conversational-core',
             packageSource: 'npm',
             packageVersion: '1.0.3',
+            availableVersions: [],
           },
         },
       ] as BotTemplate[]);
+    });
+  });
+
+  describe('getNpmPackageVersions', () => {
+    const mockFeedResponse = {
+      versions: {
+        '0.0.0': {
+          name: '@microsoft/generator-bot-core-language',
+          version: '0.0.0',
+        },
+        '1.0.0': {
+          name: '@microsoft/generator-bot-core-language',
+          version: '1.0.0',
+        },
+      },
+    };
+
+    enableFetchMocks();
+    fetchMock.mockResponseOnce(JSON.stringify(mockFeedResponse));
+    it('Get available versions for a given npm package', async () => {
+      const assetManager = new AssetManager();
+
+      const versions = await assetManager.getNpmPackageVersions('@microsoft/generator-bot-core-language');
+      expect(versions).toStrictEqual(['0.0.0', '1.0.0']);
     });
   });
 

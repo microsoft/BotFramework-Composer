@@ -13,6 +13,7 @@ import {
   dispatcherState,
   featureFlagsState,
   templateProjectsState,
+  selectedTemplateVersionState,
 } from '../../../src/recoilModel';
 import { CreationFlowStatus } from '../../../src/constants';
 import CreationFlow from '../../../src/components/CreationFlow/CreationFlow';
@@ -61,6 +62,8 @@ describe('<CreationFlow/>', () => {
         },
       ],
     });
+
+    set(selectedTemplateVersionState, '1.0.0');
   };
 
   function renderWithRouter(ui, { route = '', history = createHistory(createMemorySource(route)) } = {}) {
@@ -77,6 +80,7 @@ describe('<CreationFlow/>', () => {
   it('should render the component', async () => {
     const {
       findByText,
+      findByTestId,
       history: { navigate },
     } = renderWithRouter(
       <RecoilRoot initializeState={initRecoilState}>
@@ -84,11 +88,26 @@ describe('<CreationFlow/>', () => {
       </RecoilRoot>
     );
 
-    navigate('create/dotnet/%40microsoft%2Fgenerator-bot-empty');
-    const node = await findByText('Create');
+    act(() => {
+      navigate('create/dotnet/%40microsoft%2Fgenerator-bot-empty');
+    });
+
+    const dropdown = await await findByTestId('NewDialogRuntimeType');
+
+    expect(dropdown).toBeDefined();
+
+    await act(async () => {
+      if (dropdown) {
+        fireEvent.click(dropdown);
+        fireEvent.click(await findByText('Azure Web App'));
+      }
+    });
+
+    const createButton = await findByText('Create');
+    expect(createButton).toBeDefined();
 
     act(() => {
-      fireEvent.click(node);
+      fireEvent.click(createButton);
     });
 
     let expectedLocation = '/test-folder/Desktop';
@@ -106,12 +125,11 @@ describe('<CreationFlow/>', () => {
       alias: undefined,
       eTag: undefined,
       preserveRoot: undefined,
-      qnqKbUrls: undefined,
+      qnaKbUrls: undefined,
       runtimeType: 'webapp',
       templateDir: undefined,
       urlSuffix: undefined,
       profile: undefined,
-      qnaKbUrls: undefined,
       runtimeLanguage: 'dotnet',
       source: undefined,
       isLocalGenerator: false,

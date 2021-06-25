@@ -2,8 +2,10 @@
 // Licensed under the MIT License.
 
 //TODO: Remove Path module
+/** @jsx jsx */
 import Path from 'path';
 
+import { jsx } from '@emotion/core';
 import { DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
 import formatMessage from 'format-message';
 import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button';
@@ -20,6 +22,10 @@ import { RuntimeType, webAppRuntimeKey, localTemplateId } from '@bfc/shared';
 import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import camelCase from 'lodash/camelCase';
 import upperFirst from 'lodash/upperFirst';
+import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
+import { Icon } from 'office-ui-fabric-react/lib/Icon';
+import { NeutralColors } from '@uifabric/fluent-theme';
+import { Label } from 'office-ui-fabric-react/lib/Label';
 
 import { CreationFlowStatus, DialogCreationCopy, nameRegex, botNameRegex } from '../../constants';
 import { FieldConfig, useForm } from '../../hooks/useForm';
@@ -76,7 +82,7 @@ type DefineConversationFormData = {
   description: string;
   schemaUrl: string;
   runtimeLanguage: string;
-  runtimeType: RuntimeType;
+  runtimeType?: RuntimeType;
   location?: string;
   templateVersion?: string;
   profile?: Profile; // abs payload to create bot
@@ -168,6 +174,15 @@ const DefineConversation: React.FC<DefineConversationProps> = (props) => {
   };
   const { addNotification } = useRecoilValue(dispatcherState);
 
+  const [isImported, setIsImported] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (props.location?.state) {
+      const { imported } = props.location.state;
+      setIsImported(imported);
+    }
+  }, [props.location?.state]);
+
   const formConfig: FieldConfig<DefineConversationFormData> = {
     name: {
       required: true,
@@ -203,7 +218,12 @@ const DefineConversation: React.FC<DefineConversationProps> = (props) => {
       required: false,
     },
     runtimeType: {
-      required: false,
+      required: !isImported,
+      validate: (value) => {
+        if (!isImported && !value) {
+          return formatMessage('A runtime type must be selected.');
+        }
+      },
     },
     schemaUrl: {
       required: false,
@@ -217,20 +237,11 @@ const DefineConversation: React.FC<DefineConversationProps> = (props) => {
     },
   };
   const { formData, formErrors, hasErrors, updateField, updateForm, validateForm } = useForm(formConfig);
-  const [isImported, setIsImported] = useState<boolean>(false);
-
-  useEffect(() => {
-    if (props.location?.state) {
-      const { imported } = props.location.state;
-      setIsImported(imported);
-    }
-  }, [props.location?.state]);
 
   useEffect(() => {
     const formData: DefineConversationFormData = {
       name: getDefaultName(),
       runtimeLanguage: runtimeLanguage,
-      runtimeType: webAppRuntimeKey,
       description: '',
       schemaUrl: '',
       location:
@@ -307,7 +318,7 @@ const DefineConversation: React.FC<DefineConversationProps> = (props) => {
         }
       }
       TelemetryClient.track('CreationExecuted', {
-        runtimeChoice: dataToSubmit?.runtimeType,
+        runtimeChoice: dataToSubmit?.runtimeType || webAppRuntimeKey,
         runtimeLanguage: dataToSubmit?.runtimeLanguage as FeedType,
         isPva: isImported,
         isAbs: !!dataToSubmit?.source,
@@ -325,22 +336,47 @@ const DefineConversation: React.FC<DefineConversationProps> = (props) => {
     updateField('location', newPath);
   };
 
+  const renderRuntimeDropdownOption = (props) => {
+    return (
+      <Stack>
+        <Label>{props.text}</Label>
+        <div>{props.data?.description}</div>
+      </Stack>
+    );
+  };
+
+  const webAppRuntimeOption = {
+    key: webAppRuntimeKey,
+    text: formatMessage('Azure Web App'),
+    data: {
+      description: formatMessage(
+        'Fully managed compute platform that is optimized for hosting websites and web applications.'
+      ),
+    },
+  };
+
+  const functionsRuntimeOption = {
+    key: functionsRuntimeKey,
+    text: formatMessage('Azure Functions'),
+    data: {
+      description: formatMessage(
+        'Azure Functions is a solution for easily running small pieces of code, or "functions," in the cloud. '
+      ),
+    },
+  };
+
   const getSupportedRuntimesForTemplate = (): IDropdownOption[] => {
     const result: IDropdownOption[] = [];
     if (inBotMigration) {
-      result.push({ key: webAppRuntimeKey, text: formatMessage('Azure Web App') });
-      result.push({ key: functionsRuntimeKey, text: formatMessage('Azure Functions') });
+      result.push(webAppRuntimeOption);
+      result.push(functionsRuntimeOption);
     } else if (currentTemplate) {
       if (runtimeLanguage === csharpFeedKey) {
-        currentTemplate.dotnetSupport?.functionsSupported &&
-          result.push({ key: functionsRuntimeKey, text: formatMessage('Azure Functions') });
-        currentTemplate.dotnetSupport?.webAppSupported &&
-          result.push({ key: webAppRuntimeKey, text: formatMessage('Azure Web App') });
+        currentTemplate.dotnetSupport?.functionsSupported && result.push(functionsRuntimeOption);
+        currentTemplate.dotnetSupport?.webAppSupported && result.push(webAppRuntimeOption);
       } else if (runtimeLanguage === nodeFeedKey) {
-        currentTemplate.nodeSupport?.functionsSupported &&
-          result.push({ key: functionsRuntimeKey, text: formatMessage('Azure Functions') });
-        currentTemplate.nodeSupport?.webAppSupported &&
-          result.push({ key: webAppRuntimeKey, text: formatMessage('Azure Web App') });
+        currentTemplate.nodeSupport?.functionsSupported && result.push(functionsRuntimeOption);
+        currentTemplate.nodeSupport?.webAppSupported && result.push(webAppRuntimeOption);
       }
     }
 
@@ -373,6 +409,7 @@ const DefineConversation: React.FC<DefineConversationProps> = (props) => {
       />
     );
   }, [focusedStorageFolder]);
+
   const dialogCopy = isImported ? DialogCreationCopy.IMPORT_BOT_PROJECT : DialogCreationCopy.DEFINE_BOT_PROJECT;
   return (
     <Fragment>
@@ -400,9 +437,35 @@ const DefineConversation: React.FC<DefineConversationProps> = (props) => {
                       data-testid="NewDialogRuntimeType"
                       label={formatMessage('Runtime type')}
                       options={getSupportedRuntimesForTemplate()}
+                      placeholder={formatMessage('Select one')}
                       selectedKey={formData.runtimeType}
-                      styles={{ root: { width: inBotMigration ? '200px' : '420px' } }}
+                      styles={{
+                        root: { width: inBotMigration ? '200px' : '420px' },
+                        dropdownItem: { height: '100px' },
+                        dropdownItemSelected: { height: '100px' },
+                      }}
                       onChange={(_e, option) => updateField('runtimeType', option?.key.toString())}
+                      onRenderLabel={(props) => (
+                        <Stack horizontal styles={{ root: { alignItems: 'center' } }}>
+                          <Label required>{props?.label}</Label>
+                          <TooltipHost
+                            content={formatMessage(
+                              'Azure offers a number of ways to host your application code. The runtime type refers to the hosting model for the computing resources that your application runs on. Learn more'
+                            )}
+                          >
+                            <Icon
+                              iconName="Unknown"
+                              styles={{
+                                root: {
+                                  color: NeutralColors.gray160,
+                                  userSelect: 'none',
+                                },
+                              }}
+                            />
+                          </TooltipHost>
+                        </Stack>
+                      )}
+                      onRenderOption={renderRuntimeDropdownOption}
                     />
                   </StackItem>
                   {inBotMigration && (

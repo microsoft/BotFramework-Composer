@@ -19,6 +19,7 @@ import {
   IStackItemStyles,
   Link,
 } from 'office-ui-fabric-react';
+import { usePublishApi } from '@bfc/extension-client';
 
 import { useDispatcher } from '../../../hooks/useDispatcher';
 import { TenantPicker } from '../../resourceConfiguration/TenantPicker';
@@ -30,9 +31,14 @@ import { ResourceNameTextField } from '../../resourceConfiguration/ResourceNameT
 import { LuisRegionPicker } from '../../resourceConfiguration/LuisRegionPicker';
 import { LuisAuthoringSupportLocation } from '../../../constants';
 import { userInfoState } from '../../../recoilModel/atoms/resourceConfigurationState';
+import { OperatingSystemChoiceGroup } from '../../resourceConfiguration/OperatingSystemChoiceGroup';
 
 type Props = {
   onResourceConfigurationChange: (isValidConfiguration: boolean) => void;
+};
+
+const appOSChoiceGroupStyles = {
+  flexContainer: { display: 'flex', flexDirection: 'row' },
 };
 
 const ConfigureResourcesSectionName = styled(Text)`
@@ -83,18 +89,30 @@ const urls = {
 
 export const ResourceConfigurationStep = (props: Props) => {
   const { setUserInfo } = useDispatcher();
-
+  const { publishConfig } = usePublishApi();
   const userInfo = useRecoilValue(userInfoState);
 
   const {
-    configuration: { tenantId, deployLocation, resourceGroupName, subscriptionId, luisRegion, isNewResourceGroup },
-    handleResourceGroupChange,
-    handleDeployLocationChange,
-    handleSubscriptionChange,
-    handleTenantChange,
-    handleDeployLocationFetch,
-    handleLuisRegionChange,
-    handleHostNameChange,
+    configuration: {
+      tenantId,
+      deployLocation,
+      resourceGroupName,
+      subscriptionId,
+      luisRegion,
+      isNewResourceGroup,
+      hostName,
+      appServiceOperatingSystem,
+    },
+    handleChangeResourceGroup,
+    handleChangeDeployLocation,
+    handleChangeSubscription,
+    handleValidateHostName,
+    handleValidateResourceGroupName,
+    handleChangeTenant,
+    handleFetchDeployLocation,
+    handleChangeLuisRegion,
+    handleChangeHostName,
+    handleChangeOperatingSystem,
     isValidConfiguration,
     deployLocations,
   } = useResourceConfiguration();
@@ -134,14 +152,15 @@ export const ResourceConfigurationStep = (props: Props) => {
             </Stack>
             <TenantPicker
               textFieldProps={{
+                disabled: !!publishConfig?.tenantId,
                 styles: autoCompleteTextFieldStyles,
                 onChange: (e, newValue) => {
-                  if (newValue.length === 0) handleTenantChange('');
+                  if (newValue.length === 0) handleChangeTenant('');
                 },
               }}
               value={tenantId}
-              onClear={() => handleTenantChange('')}
-              onTenantChange={handleTenantChange}
+              onChangeTenant={handleChangeTenant}
+              onClear={() => handleChangeTenant('')}
               onUserInfoFetch={setUserInfo}
             />
           </Stack>
@@ -155,14 +174,15 @@ export const ResourceConfigurationStep = (props: Props) => {
             <SubscriptionPicker
               accessToken={userInfo?.token}
               textFieldProps={{
+                disabled: !!publishConfig?.subscriptionId,
                 styles: autoCompleteTextFieldStyles,
                 onChange: (_, newValue) => {
-                  if (newValue.length === 0) handleSubscriptionChange('');
+                  if (newValue.length === 0) handleChangeSubscription('');
                 },
               }}
               value={subscriptionId}
-              onClear={() => handleSubscriptionChange('')}
-              onSubscriptionChange={handleSubscriptionChange}
+              onChangeSubscription={handleChangeSubscription}
+              onClear={() => handleChangeSubscription('')}
             />
           </Stack>
           <Stack horizontal tokens={configureResourcePropertyStackTokens} verticalAlign="start">
@@ -181,14 +201,34 @@ export const ResourceConfigurationStep = (props: Props) => {
               isNewResourceGroup={isNewResourceGroup}
               subscriptionId={subscriptionId}
               textFieldProps={{
+                disabled: !!publishConfig?.resourceGroup?.name,
                 styles: autoCompleteTextFieldStyles,
                 onChange: (_, newValue) => {
-                  if (newValue.length === 0) handleResourceGroupChange('', false, false);
+                  if (newValue.length === 0) handleChangeResourceGroup('', false);
                 },
               }}
               value={resourceGroupName}
-              onClear={() => handleResourceGroupChange('', false, false)}
-              onResourceGroupChange={handleResourceGroupChange}
+              onChangeResourceGroup={handleChangeResourceGroup}
+              onClear={() => handleChangeResourceGroup('', false)}
+              onValidateResourceGroupName={handleValidateResourceGroupName}
+            />
+          </Stack>
+          <Stack horizontal tokens={configureResourcePropertyStackTokens} verticalAlign="start">
+            <Stack horizontal styles={configureResourcePropertyLabelStackStyles} verticalAlign="center">
+              <ConfigureResourcesPropertyLabel required>
+                {formatMessage('Operating System')}
+              </ConfigureResourcesPropertyLabel>
+              {renderPropertyInfoIcon(
+                formatMessage('Select the operating system that will host your application service.')
+              )}
+            </Stack>
+            <OperatingSystemChoiceGroup
+              required
+              selectedKey={appServiceOperatingSystem}
+              styles={appOSChoiceGroupStyles}
+              onChange={(_, o) => {
+                handleChangeOperatingSystem(o.key);
+              }}
             />
           </Stack>
           <ConfigureResourcesSectionName>{formatMessage('Resource details')}</ConfigureResourcesSectionName>
@@ -202,8 +242,12 @@ export const ResourceConfigurationStep = (props: Props) => {
             </Stack>
             <ResourceNameTextField
               accessToken={userInfo?.token}
+              disabled={!!publishConfig?.hostName}
               styles={autoCompleteTextFieldStyles}
-              onHostNameChange={handleHostNameChange}
+              subscriptionId={subscriptionId}
+              value={hostName}
+              onChangeHostName={handleChangeHostName}
+              onValidateHostName={handleValidateHostName}
             />
           </Stack>
           <Stack horizontal tokens={configureResourcePropertyStackTokens} verticalAlign="start">
@@ -215,15 +259,16 @@ export const ResourceConfigurationStep = (props: Props) => {
               accessToken={userInfo?.token}
               subscriptionId={subscriptionId}
               textFieldProps={{
+                disabled: !!publishConfig?.deployLocation,
                 styles: autoCompleteTextFieldStyles,
                 onChange: (_, newValue) => {
-                  if (newValue.length === 0) handleDeployLocationChange('');
+                  if (newValue.length === 0) handleChangeDeployLocation('');
                 },
               }}
               value={deployLocation}
-              onClear={() => handleDeployLocationChange('')}
-              onDeployLocationChange={handleDeployLocationChange}
-              onDeployLocationsFetch={handleDeployLocationFetch}
+              onChangeDeployLocation={handleChangeDeployLocation}
+              onClear={() => handleChangeDeployLocation('')}
+              onFetchDeployLocations={handleFetchDeployLocation}
             />
           </Stack>
           <Stack horizontal tokens={configureResourcePropertyStackTokens} verticalAlign="start">
@@ -243,14 +288,15 @@ export const ResourceConfigurationStep = (props: Props) => {
                 .filter((dl) => LuisAuthoringSupportLocation.includes(dl.name))
                 .map((i) => ({ key: i.name, text: i.displayName }))}
               textFieldProps={{
+                disabled: !!publishConfig?.settings?.luis?.region,
                 styles: autoCompleteTextFieldStyles,
                 onChange: (_, newValue) => {
-                  if (newValue.length === 0) handleLuisRegionChange(undefined);
+                  if (newValue.length === 0) handleChangeLuisRegion(undefined);
                 },
               }}
               value={luisRegion}
-              onClear={() => handleLuisRegionChange(undefined)}
-              onLuisRegionChange={handleLuisRegionChange}
+              onChangeLuisRegion={handleChangeLuisRegion}
+              onClear={() => handleChangeLuisRegion(undefined)}
             />
           </Stack>
         </Stack>
