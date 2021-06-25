@@ -109,7 +109,6 @@ const getRemoteLuFiles = async (
         }
       }
     }
-    console.log(luFiles);
     return luFiles;
   } catch (e) {
     console.log(e);
