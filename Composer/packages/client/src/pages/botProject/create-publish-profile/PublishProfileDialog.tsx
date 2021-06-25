@@ -155,7 +155,7 @@ export const PublishProfileDialog: React.FC<PublishProfileDialogProps> = (props)
     PluginAPI.publish.savePublishConfig = (config) => {
       savePublishTarget(name, targetType, JSON.stringify(config) || '{}');
     };
-    PluginAPI.publish.startProvision = async (config, arm: string, graph: string) => {
+    PluginAPI.publish.startProvision = async (config, arm?: string, graph?: string) => {
       const fullConfig = { ...config, name: name, type: targetType };
       await provisionToTarget(fullConfig, config.type, projectId, arm, graph, current?.item);
       onUpdateIsCreateProfileFromSkill?.(true);
