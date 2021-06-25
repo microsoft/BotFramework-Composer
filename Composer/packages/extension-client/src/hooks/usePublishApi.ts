@@ -58,9 +58,6 @@ export function usePublishApi() {
   function userShouldProvideTokens(): boolean {
     return window[ComposerGlobalName].userShouldProvideTokens();
   }
-  function getPrimaryToken(): boolean {
-    return window[ComposerGlobalName].getPrimaryToken();
-  }
   function requireUserLogin(tenantId: string, options?: { graph: boolean }): boolean {
     return window[ComposerGlobalName].requireUserLogin(tenantId, options);
   }
@@ -85,7 +82,6 @@ export function usePublishApi() {
     userShouldProvideTokens,
     getTenantIdFromCache,
     setTenantId,
-    getPrimaryToken,
     requireUserLogin,
   };
 }

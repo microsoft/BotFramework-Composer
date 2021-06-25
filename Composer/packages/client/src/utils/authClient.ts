@@ -132,7 +132,7 @@ async function getARMTokenForTenant(tenantId: string): Promise<string> {
     const result = await fetch(`/api/auth/getARMTokenForTenant?tenantId=${tenantId}`, options);
     if (result.status >= 400) {
       const data = await result.json();
-      throw Error(data.error?.diagnostics?.description || 'get ARM token failure');
+      throw new Error(data.error?.diagnostics?.description || 'get ARM token failure');
     } else {
       const { accessToken = '' } = await result.json();
       // cache the token so we don't overrequest it.

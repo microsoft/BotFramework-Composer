@@ -25,7 +25,7 @@ interface AuthAPI {
 
 interface PublishAPI {
   getPublishConfig?: () => PublishConfig | void;
-  startProvision?: (config: any, arm: string, graph: string) => void;
+  startProvision?: (config: any, arm?: string, graph?: string) => void;
   currentProjectId?: () => string;
   closeDialog?: () => void;
   onBack?: () => void;
