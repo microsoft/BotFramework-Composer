@@ -48,14 +48,14 @@ const TooltipWrapper = ({ tooltip, children }: { tooltip: string; children: Reac
   </TooltipHost>
 );
 
-interface FlowToolbarProps {
+type FlowToolbarProps = {
   flowZoomRate: ZoomInfo;
   focusedId: string;
   flowCommentsVisible: boolean;
   updateFlowZoomRate: (currentRate: number) => void;
   toggleFlowComments: () => void;
   children?: ReactNode;
-}
+};
 
 export const FlowToolbar: React.FC<FlowToolbarProps> = ({
   flowZoomRate,
