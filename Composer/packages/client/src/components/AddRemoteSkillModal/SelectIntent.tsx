@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 /** @jsx jsx */
-import { join } from 'path';
+import { join, isAbsolute } from 'path';
 
 import { jsx, css } from '@emotion/core';
 import React, { Fragment, useState, useMemo, useEffect, useCallback } from 'react';
@@ -80,7 +80,7 @@ const getRemoteLuFiles = async (
       if (composerLangeages.includes(key) && Array.isArray(value)) {
         luFiles[key] = [];
         for (let item of value) {
-          if (/^http[s]?:\/\/\w+/.test(item.url)) {
+          if (/^http[s]?:\/\/\w+/.test(item.url) || isAbsolute(item.url)) {
             // get lu file from remote
             const { data } = await httpClient.get(`/utilities/retrieveRemoteFile`, {
               params: {
@@ -89,16 +89,27 @@ const getRemoteLuFiles = async (
             });
             luFiles[key].push(data);
           } else {
-            // get luFile from local
+            // get luFile from local zip folder
             const fileKey = join(manifestDirPath, item.url);
-            luFiles[key].push({
-              id: fileKey.substr(fileKey.lastIndexOf('/') + 1),
-              content: zipContent[fileKey],
-            });
+            if (zipContent[fileKey]) {
+              luFiles[key].push({
+                id: fileKey.substr(fileKey.lastIndexOf('/') + 1),
+                content: zipContent[fileKey],
+              });
+            } else {
+              // get lu file from remote
+              const { data } = await httpClient.get(`/utilities/retrieveRemoteFile`, {
+                params: {
+                  url: fileKey,
+                },
+              });
+              luFiles[key].push(data);
+            }
           }
         }
       }
     }
+    console.log(luFiles);
     return luFiles;
   } catch (e) {
     console.log(e);
@@ -220,7 +231,7 @@ export const SelectIntent: React.FC<SelectIntentProps> = (props) => {
           setWarningMsg(formatMessage('get remote file fail'));
         });
     }
-  }, [manifest.dispatchModels?.languages, locale]);
+  }, [manifest.dispatchModels?.languages, locale, manifestDirPath]);
 
   useEffect(() => {
     if (selectedIntents.length > 0) {

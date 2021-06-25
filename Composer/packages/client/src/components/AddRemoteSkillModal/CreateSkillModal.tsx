@@ -194,7 +194,9 @@ export const CreateSkillModal: React.FC<CreateSkillModalProps> = (props) => {
     (event) => {
       event.preventDefault();
       setShowDetail(true);
+      const localManifestPath = formData.manifestUrl.replace(/\\/g, '/');
       getSkillManifest(projectId, formData.manifestUrl, setSkillManifest, setFormDataErrors);
+      setManifestDirPath(localManifestPath.substring(0, localManifestPath.lastIndexOf('/')));
     },
     [projectId, formData]
   );
