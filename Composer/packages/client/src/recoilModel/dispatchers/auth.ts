@@ -35,20 +35,18 @@ export type UserLoginOptions = {
 };
 
 export const authDispatcher = () => {
-  const setShowAuthDialog = useRecoilCallback(
-    (callbackHelpers: CallbackInterface) => (show: boolean, graph: boolean) => {
-      callbackHelpers.set(showAuthDialogState, show);
-      callbackHelpers.set(requiresGraphState, graph);
-    }
-  );
+  const setShowAuthDialog = useRecoilCallback(({ set }: CallbackInterface) => (show: boolean, graph: boolean) => {
+    set(showAuthDialogState, show);
+    set(requiresGraphState, graph);
+  });
 
-  const setPrimaryToken = useRecoilCallback((callbackHelpers: CallbackInterface) => (token: string) => {
-    callbackHelpers.set(primaryTokenState, token);
+  const setPrimaryToken = useRecoilCallback(({ set }: CallbackInterface) => (token: string) => {
+    set(primaryTokenState, token);
     storage.set('accessToken', token);
   });
 
-  const setGraphToken = useRecoilCallback((callbackHelpers: CallbackInterface) => (token: string) => {
-    callbackHelpers.set(graphTokenState, token);
+  const setGraphToken = useRecoilCallback(({ set }: CallbackInterface) => (token: string) => {
+    set(graphTokenState, token);
     storage.set('graphToken', token);
   });
 
@@ -75,6 +73,8 @@ export const authDispatcher = () => {
               });
               addNotificationInternal(callbackHelpers, notification);
             }
+          } else {
+            throw new Error('Could not get fetch token.');
           }
         } catch (err) {
           const notification = createNotification({
@@ -90,23 +90,19 @@ export const authDispatcher = () => {
     }
   );
 
-  const setAvailableTenants = useRecoilCallback((callbackHelpers: CallbackInterface) => (tenants: AzureTenant[]) => {
-    callbackHelpers.set(availableTenantsState, tenants);
-  });
-
-  const setShowTenantDialog = useRecoilCallback((callbackHelpers: CallbackInterface) => (show: boolean) => {
-    callbackHelpers.set(showTenantDialogState, show);
+  const setShowTenantDialog = useRecoilCallback(({ set }: CallbackInterface) => (show: boolean) => {
+    set(showTenantDialogState, show);
   });
 
   const setCurrentUser = useRecoilCallback(
-    (callbackHelpers: CallbackInterface) => (token: string | undefined, graph?: string) => {
+    ({ set }: CallbackInterface) => (token: string | undefined, graph?: string) => {
       setPrimaryToken(token || '');
       setGraphToken(graph || '');
 
       if (token) {
         const decoded = decodeToken(token);
 
-        callbackHelpers.set(currentUserState, {
+        set(currentUserState, {
           token: token ?? null,
           graph: graph ?? null,
           email: decoded.upn,
@@ -114,17 +110,17 @@ export const authDispatcher = () => {
           expiration: (decoded.exp || 0) * 1000, // convert to ms,
           sessionExpired: false,
         });
-        callbackHelpers.set(isAuthenticatedState, true);
+        set(isAuthenticatedState, true);
 
-        callbackHelpers.set(currentTenantState, decoded.tid);
+        set(currentTenantState, decoded.tid);
         setTenantId(decoded.tid);
       } else {
-        callbackHelpers.set(currentUserState, {
+        set(currentUserState, {
           token: '',
           graph: '',
           sessionExpired: true,
         });
-        callbackHelpers.set(isAuthenticatedState, false);
+        set(isAuthenticatedState, false);
       }
     }
   );
@@ -165,7 +161,7 @@ export const authDispatcher = () => {
         let tenantId;
         try {
           const tenants = await AuthClient.getTenants();
-          setAvailableTenants(tenants);
+          callbackHelpers.set(availableTenantsState, tenants);
           if (tenants.length === 0) {
             throw new Error('No Azure Directories were found.');
           } else if (cachedTenantId && tenants.map((t) => t.tenantId).includes(cachedTenantId)) {
