@@ -153,6 +153,7 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
   };
 
   const onSelectProfile = async (_, opt) => {
+    console.log('IN ON SELECT PROFILE');
     if (opt.key === 'manageProfiles') {
       TelemetryClient.track('ConnectionsAddNewProfile');
       navigateTo(`/bot/${projectId}/publish/all/#addNewPublishProfile`);
@@ -165,15 +166,22 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
         let newtoken = '';
         if (userShouldProvideTokens()) {
           if (isShowAuthDialog(false)) {
+            console.log('setting show auth dialog');
             setShowAuthDialog(true);
           }
+          console.log('getting token from cashe');
+
           newtoken = getTokenFromCache('accessToken');
+          console.log(newtoken);
         } else {
+          console.log('getting token interactivly');
+
           newtoken = await getTokenInteractively(config.tenantId);
         }
         setToken(newtoken);
 
         if (newtoken) {
+          console.log('setting curent resource');
           setCurrentResource({
             microsoftAppId: config?.settings?.MicrosoftAppId,
             resourceName: config.botName || config.name,
@@ -197,6 +205,8 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
   };
 
   const fetchChannelStatus = async (channelId: string) => {
+    console.log('IN fetchChannelStatus');
+
     if (currentResource) {
       try {
         const url = `https://management.azure.com/subscriptions/${
@@ -223,6 +233,8 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
   };
 
   const createChannelService = async (channelId: string, opts?: any) => {
+    console.log('IN createChannelService');
+
     if (currentResource) {
       const url = `https://management.azure.com/subscriptions/${
         currentResource.subscriptionId || currentResource.alternateSubscriptionId
@@ -346,6 +358,7 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
   };
 
   const deleteChannelService = async (channelId: string) => {
+    console.log('in deleteChannelService');
     if (currentResource) {
       const url = `https://management.azure.com/subscriptions/${
         currentResource.subscriptionId || currentResource.alternateSubscriptionId
@@ -366,6 +379,8 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
   };
 
   const updateChannelStatus = async () => {
+    console.log('in update');
+
     setLoadingStatus(true);
     setErrorMessage(undefined);
     // there is a chance subscriptionId is blank.
@@ -606,7 +621,6 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
       </div>
     </div>
   );
-
   return (
     <React.Fragment>
       {showAuthDialog && (
@@ -652,6 +666,7 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
       )}
       <div>
         <Dropdown
+          data-testid="publishTargetDropDown"
           options={publishTargetOptions}
           placeholder={formatMessage('Select publishing profile')}
           styles={{
