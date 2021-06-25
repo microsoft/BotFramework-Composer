@@ -2,12 +2,26 @@
 // Licensed under the MIT License.
 
 import * as React from 'react';
-import { fireEvent } from '@botframework-composer/test-utils';
+import { act, fireEvent } from '@botframework-composer/test-utils';
 
 import { renderWithRecoil } from '../../testUtils/renderWithRecoil';
 import ABSChannels from '../../../src/pages/botProject/adapters/ABSChannels';
 import { botDisplayNameState, dispatcherState, settingsState } from '../../../src/recoilModel';
 import * as authUtils from '../../../src/utils/auth';
+import httpClient from '../../../src/utils/httpUtil';
+
+jest.mock('../../../src/utils/httpUtil');
+
+const mockNavigationTo = jest.fn();
+jest.mock('../../../src/utils/navigation', () => ({
+  navigateTo: (...args) => mockNavigationTo(...args),
+}));
+
+const CHANNELS = {
+  TEAMS: 'MsTeamsChannel',
+  WEBCHAT: 'WebChatChannel',
+  SPEECH: 'DirectLineSpeechChannel',
+};
 
 const mockProjId = '123';
 const mockDisplayName = '';
@@ -67,6 +81,12 @@ const mockSettingsState = {
 
 describe('<ABSChannels />', () => {
   beforeEach(() => {
+    (httpClient.get as jest.Mock) = jest
+      .fn()
+      .mockResolvedValue({ data: { properties: { properties: { acceptedTerms: true } } } });
+    (httpClient.put as jest.Mock) = jest.fn().mockResolvedValue({});
+    (httpClient.delete as jest.Mock) = jest.fn().mockResolvedValue({});
+
     jest.spyOn(authUtils, 'isShowAuthDialog').mockReturnValue(false);
     jest.spyOn(authUtils, 'getTokenFromCache').mockReturnValue(mockTokenValue);
     jest.spyOn(authUtils, 'userShouldProvideTokens').mockReturnValue(true);
@@ -86,42 +106,143 @@ describe('<ABSChannels />', () => {
     return renderWithRecoil(<ABSChannels projectId={mockProjId} />, recoilInitState);
   }
 
-  it('should render the component with all connections', async () => {
+  async function renderComponentOnInitView() {
     const component = renderComponent();
     const dropdown = component.getByTestId('publishTargetDropDown');
-    fireEvent.click(dropdown);
-    fireEvent.click(component.getByText(mockPublishTargetName));
+
+    await act(async () => {
+      await fireEvent.click(dropdown);
+    });
+    await act(async () => {
+      await fireEvent.click(component.getByText(mockPublishTargetName));
+    });
+    return component;
+  }
+
+  it('should render the component with all connections', async () => {
+    const component = await renderComponentOnInitView();
 
     expect(component.findByText('MS Teams')).toBeTruthy();
     expect(component.findByText('Web Chat')).toBeTruthy();
     expect(component.findByText('Speech')).toBeTruthy();
+    expect(
+      httpClient.get
+    ).toBeCalledWith(
+      `https://management.azure.com/subscriptions/${mockSubscriptionId}/resourceGroups/${mockResourceGroup}/providers/Microsoft.BotService/botServices/${mockBotName}/channels/MsTeamsChannel?api-version=2020-06-02`,
+      { headers: { Authorization: `Bearer ${mockTokenValue}` } }
+    );
   });
 
-  // it('should call Teams endpoint to enable/disable', async () => {
-  //   const component = renderComponent();
-  // });
+  it('should enable/disable Teams connection', async () => {
+    const mockData = {
+      location: 'global',
+      name: `${mockBotName}/${CHANNELS.TEAMS}`,
+      properties: {
+        channelName: CHANNELS.TEAMS,
+        location: 'global',
+        properties: {
+          acceptedTerms: undefined,
+          isEnabled: true,
+        },
+      },
+    };
 
-  // it('should call webchat endpoint to enable/disable', async () => {
-  //   const component = renderComponent();
-  // });
+    const component = await renderComponentOnInitView();
 
-  // it('should call Speech endpoint to enable/disable', async () => {
-  //   const component = renderComponent();
-  // });
+    // assert that documentation and manifest link are present when enabled
+    expect(component.container).toHaveTextContent('Learn more');
+    expect(component.container).toHaveTextContent('Open manifest');
 
-  // it('should display openable manifest button when Teams is enabled', async () => {
-  //   const component = renderComponent();
-  // });
+    const teamsToggle = component.getByTestId('MsTeamsChannel_toggle');
+    await act(async () => {
+      await fireEvent.click(teamsToggle);
+    });
+    expect(
+      httpClient.delete
+    ).toBeCalledWith(
+      `https://management.azure.com/subscriptions/${mockSubscriptionId}/resourceGroups/${mockResourceGroup}/providers/Microsoft.BotService/botServices/${mockBotName}/channels/MsTeamsChannel?api-version=2020-06-02`,
+      { headers: { Authorization: `Bearer ${mockTokenValue}` } }
+    );
+    await act(async () => {
+      await fireEvent.click(teamsToggle);
+    });
+    expect(
+      httpClient.put
+    ).toBeCalledWith(
+      `https://management.azure.com/subscriptions/${mockSubscriptionId}/resourceGroups/${mockResourceGroup}/providers/Microsoft.BotService/botServices/${mockBotName}/channels/MsTeamsChannel?api-version=2020-06-02`,
+      mockData,
+      { headers: { Authorization: `Bearer ${mockTokenValue}` } }
+    );
+  });
 
-  // it('should open external docs', async () => {
-  //   const component = renderComponent();
-  // });
+  it('should call webchat endpoint to enable/disable', async () => {
+    const mockData = {
+      name: `${mockBotName}/${CHANNELS.WEBCHAT}`,
+      type: 'Microsoft.BotService/botServices/channels',
+      location: 'global',
+      properties: {
+        properties: {
+          webChatEmbedCode: null,
+          sites: [
+            {
+              siteName: 'Default Site',
+              isEnabled: true,
+              isWebchatPreviewEnabled: true,
+            },
+          ],
+        },
+        channelName: 'WebChatChannel',
+        location: 'global',
+      },
+    };
+    const component = await renderComponentOnInitView();
+    const webChatToggle = component.getByTestId(`${CHANNELS.WEBCHAT}_toggle`);
+    await act(async () => {
+      await fireEvent.click(webChatToggle);
+    });
+    expect(
+      httpClient.delete
+    ).toBeCalledWith(
+      `https://management.azure.com/subscriptions/${mockSubscriptionId}/resourceGroups/${mockResourceGroup}/providers/Microsoft.BotService/botServices/${mockBotName}/channels/${CHANNELS.WEBCHAT}?api-version=2020-06-02`,
+      { headers: { Authorization: `Bearer ${mockTokenValue}` } }
+    );
+    await act(async () => {
+      await fireEvent.click(webChatToggle);
+    });
+    expect(
+      httpClient.put
+    ).toBeCalledWith(
+      `https://management.azure.com/subscriptions/${mockSubscriptionId}/resourceGroups/${mockResourceGroup}/providers/Microsoft.BotService/botServices/${mockBotName}/channels/${CHANNELS.WEBCHAT}?api-version=2020-06-02`,
+      mockData,
+      { headers: { Authorization: `Bearer ${mockTokenValue}` } }
+    );
+  });
 
-  // it('should ask to auth if not authenticated', async () => {
-  //   const component = renderComponent();
-  // });
+  it('should call Speech endpoint to disable', async () => {
+    const component = await renderComponentOnInitView();
+    const speechToggle = component.getByTestId(`${CHANNELS.SPEECH}_toggle`);
+    await act(async () => {
+      await fireEvent.click(speechToggle);
+    });
+    expect(
+      httpClient.delete
+    ).toBeCalledWith(
+      `https://management.azure.com/subscriptions/${mockSubscriptionId}/resourceGroups/${mockResourceGroup}/providers/Microsoft.BotService/botServices/${mockBotName}/channels/${CHANNELS.SPEECH}?api-version=2020-06-02`,
+      { headers: { Authorization: `Bearer ${mockTokenValue}` } }
+    );
+  });
 
-  // it('should nav to provision profile', async () => {
-  //   const component = renderComponent();
-  // });
+  it('should nav to provision profile', async () => {
+    const component = renderComponent();
+    const dropdown = component.getByTestId('publishTargetDropDown');
+
+    await act(async () => {
+      await fireEvent.click(dropdown);
+    });
+    await act(async () => {
+      await fireEvent.click(component.getByText('Manage profiles'));
+    });
+
+    expect(mockNavigationTo).toHaveBeenCalledWith(`/bot/${mockProjId}/publish/all/#addNewPublishProfile`);
+  });
 });
