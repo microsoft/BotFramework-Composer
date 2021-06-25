@@ -169,11 +169,9 @@ export const WatchVariablePicker = React.memo((props: WatchVariablePickerProps) 
   const handleDebouncedSearch: () => void = useCallback(
     debounce(() => {
       if (query) {
-        const searchableItems = flatPropertyListItems;
-
         const predicate = getFilterPredicate(query);
 
-        const filteredItems = searchableItems.filter(predicate);
+        const filteredItems = flatPropertyListItems.filter(predicate);
 
         if (!filteredItems || !filteredItems.length) {
           filteredItems.push(noSearchResultMenuItem);
