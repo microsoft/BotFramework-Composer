@@ -371,7 +371,7 @@ export const ReplaceQnAFromModal: React.FC<ReplaceQnAModalProps> = (props) => {
               <div>
                 <div style={titleStyle}>{formatMessage('Replace with an existing KB from QnA maker portal')}</div>
                 <div style={descriptionStyle}>
-                  {formatMessage('Select this option when you want to Import existing KB from QnA maker portal. ')}
+                  {formatMessage('Select this option when you want to import existing KB from QnA maker portal. ')}
                 </div>
                 {!shouldProvideTokens &&
                   (signedInAccount ? (

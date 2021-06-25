@@ -47,18 +47,16 @@ export const CreateQnAFromQnAMaker: React.FC<CreateQnAFromFormProps> = (props) =
   return (
     <Fragment>
       <Stack>
-        <div>
-          <Text styles={knowledgeBaseStyle}>
-            {formatMessage('Import content from an existing KB on the QnA maker portal')}
-          </Text>
-          <p>
-            <span css={subText}>
-              {formatMessage(
-                'Select this option when you want to Import content from an existing KB on the QnA maker portal. The imported content will be mapped to the target locale you select.'
-              )}
-            </span>
-          </p>
-        </div>
+        <Text styles={knowledgeBaseStyle}>
+          {formatMessage('Import content from an existing KB on the QnA maker portal')}
+        </Text>
+        <p>
+          <span css={subText}>
+            {formatMessage(
+              'Select this option when you want to import content from an existing KB on the QnA maker portal. The imported content will be mapped to the target locale you select'
+            )}
+          </span>
+        </p>
       </Stack>
       <Stack>
         <TextField

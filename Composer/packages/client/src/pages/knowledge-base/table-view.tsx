@@ -459,16 +459,6 @@ const TableView: React.FC<TableViewProps> = (props) => {
                         },
                       },
                       {
-                        key: 'delete',
-                        iconProps: { iconName: 'Delete' },
-                        name: formatMessage('Delete knowledge base'),
-                        disabled: dialogId === 'all',
-                        onClick: async () => {
-                          if (!qnaFile) return;
-                          handleDeleteQnASourceFile(actualProjectId, qnaFile.id);
-                        },
-                      },
-                      {
                         key: 'update',
                         iconProps: { iconName: 'Download' },
                         name: formatMessage('Replace content'),
@@ -476,6 +466,16 @@ const TableView: React.FC<TableViewProps> = (props) => {
                         onClick: async () => {
                           if (!containerQnAFile) return;
                           setImportingResourceQnAFile(containerQnAFile);
+                        },
+                      },
+                      {
+                        key: 'delete',
+                        iconProps: { iconName: 'Delete' },
+                        name: formatMessage('Delete knowledge base'),
+                        disabled: dialogId === 'all',
+                        onClick: async () => {
+                          if (!qnaFile) return;
+                          handleDeleteQnASourceFile(actualProjectId, qnaFile.id);
                         },
                       },
                     ] as IOverflowSetItemProps[]

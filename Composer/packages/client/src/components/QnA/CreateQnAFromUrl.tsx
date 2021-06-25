@@ -9,7 +9,6 @@ import { Stack } from 'office-ui-fabric-react/lib/Stack';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { Text } from 'office-ui-fabric-react/lib/Text';
 import { Checkbox } from 'office-ui-fabric-react/lib/Checkbox';
-import cloneDeep from 'lodash/cloneDeep';
 
 import { Locales } from '../../locales';
 
@@ -69,7 +68,7 @@ export const CreateQnAFromUrl: React.FC<CreateQnAFromFormProps> = (props) => {
   };
 
   const onChangeUrlsField = (value: string | undefined, index: number) => {
-    const urls = cloneDeep(formData.urls);
+    const urls = [...formData.urls];
     urls[index] = value ?? '';
     updateUrlsField(urls);
     updateUrlsError(urls);
@@ -116,16 +115,14 @@ export const CreateQnAFromUrl: React.FC<CreateQnAFromFormProps> = (props) => {
   return (
     <Fragment>
       <Stack>
-        <div>
-          <Text styles={knowledgeBaseStyle}>{formatMessage('Create new KB from URL or file')}</Text>
-          <p>
-            <span css={subText}>
-              {formatMessage(
-                'Select this option when you want to create a KB from  content such as an FAQ available online or in a file .csv, .xls or .doc format '
-              )}
-            </span>
-          </p>
-        </div>
+        <Text styles={knowledgeBaseStyle}>{formatMessage('Create new KB from URL or file')}</Text>
+        <p>
+          <span css={subText}>
+            {formatMessage(
+              'Select this option when you want to create a KB from  content such as an FAQ available online or in a file .csv, .xls or .doc format '
+            )}
+          </span>
+        </p>
       </Stack>
       <Stack maxHeight={400} styles={urlStackStyle}>
         <TextField
