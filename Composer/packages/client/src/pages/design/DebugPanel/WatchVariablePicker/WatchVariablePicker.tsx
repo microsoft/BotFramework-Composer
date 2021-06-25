@@ -8,9 +8,11 @@ import React, { useMemo, useCallback, useEffect, useRef, FocusEvent, KeyboardEve
 import { TextField, ITextField, ITextFieldStyles } from 'office-ui-fabric-react/lib/TextField';
 import debounce from 'lodash/debounce';
 import { IContextualMenuItem, ContextualMenu, DirectionalHint } from 'office-ui-fabric-react/lib/ContextualMenu';
-import { SharedColors } from '@uifabric/fluent-theme';
+import { FontSizes, SharedColors } from '@uifabric/fluent-theme';
+import { useRecoilValue } from 'recoil';
 
 import { getDefaultFontSettings } from '../../../../recoilModel/utils/fontUtil';
+import { dispatcherState, rootBotProjectIdSelector, watchedVariablesState } from '../../../../recoilModel';
 
 import { PropertyItem } from './utils/components/PropertyTreeItem';
 import { useNoSearchResultMenuItem } from './utils/hooks/useNoSearchResultMenuItem';
@@ -22,10 +24,8 @@ const DEFAULT_FONT_SETTINGS = getDefaultFontSettings();
 type WatchVariablePickerProps = {
   payload: WatchDataPayload;
   disabled?: boolean;
-  errorMessage?: string;
   variableId: string;
   path: string;
-  onSelectPath: (id: string, selectedPath: string) => void;
 };
 
 const getStrings = () => {
@@ -38,7 +38,7 @@ const getStrings = () => {
 const textFieldStyles = (errorMessage?: string): Partial<ITextFieldStyles> => ({
   field: {
     fontFamily: DEFAULT_FONT_SETTINGS.fontFamily,
-    fontSize: 12,
+    fontSize: FontSizes.size12,
   },
   fieldGroup: {
     backgroundColor: 'transparent',
@@ -60,7 +60,11 @@ const pickerContainer = css`
 `;
 
 export const WatchVariablePicker = React.memo((props: WatchVariablePickerProps) => {
-  const { errorMessage, payload, variableId, path, onSelectPath } = props;
+  const currentProjectId = useRecoilValue(rootBotProjectIdSelector);
+  const watchedVariables = useRecoilValue(watchedVariablesState(currentProjectId ?? ''));
+  const { setWatchedVariables } = useRecoilValue(dispatcherState);
+  const { payload, variableId, path } = props;
+  const [errorMessage, setErrorMessage] = useState('');
   const [query, setQuery] = useState(path);
   const inputBoxElementRef = useRef<ITextField | null>(null);
   const pickerContainerElementRef = useRef<null | HTMLDivElement>(null);
@@ -104,11 +108,14 @@ export const WatchVariablePicker = React.memo((props: WatchVariablePickerProps) 
           event?.preventDefault();
           onToggleExpand(node.id, !propertyTreeExpanded[node.id]);
         } else {
-          const path = paths[node.id];
-          setQuery(path);
-          event?.preventDefault();
-          onHideContextualMenu();
-          onSelectPath(variableId, path);
+          if (currentProjectId) {
+            const path = paths[node.id];
+            setQuery(path);
+            event?.preventDefault();
+            setErrorMessage('');
+            setWatchedVariables(currentProjectId, { ...watchedVariables, [variableId]: path });
+            onHideContextualMenu();
+          }
         }
       },
       data: {
@@ -135,9 +142,12 @@ export const WatchVariablePicker = React.memo((props: WatchVariablePickerProps) 
       secondaryText: paths[node.id],
       onClick: (event) => {
         event?.preventDefault();
-        const path = paths[node.id];
-        onSelectPath(variableId, path);
-        onHideContextualMenu();
+        if (currentProjectId) {
+          const path = paths[node.id];
+          setErrorMessage('');
+          setWatchedVariables(currentProjectId, { ...watchedVariables, [variableId]: path });
+          onHideContextualMenu();
+        }
       },
       data: {
         node,
@@ -145,7 +155,7 @@ export const WatchVariablePicker = React.memo((props: WatchVariablePickerProps) 
         level: 0,
       },
     })) as IContextualMenuItem[];
-  }, [payload, propertyTreeConfig]);
+  }, [currentProjectId, payload, propertyTreeConfig, variableId, watchedVariables]);
 
   const getFilterPredicate = useCallback((q: string) => {
     return (item: IContextualMenuItem) =>
@@ -187,14 +197,21 @@ export const WatchVariablePicker = React.memo((props: WatchVariablePickerProps) 
 
   const onTextBoxKeyDown = useCallback(
     (event: KeyboardEvent<HTMLInputElement>) => {
-      if (event.key === 'Enter') {
+      if (currentProjectId && event.key === 'Enter') {
         event.preventDefault();
-        onSelectPath(variableId, query);
-        onHideContextualMenu();
-        inputBoxElementRef.current?.blur();
+        if (Object.values(watchedVariables).find((variable) => variable === query)) {
+          // variable is already being watched
+          setErrorMessage(formatMessage('You are already watching this property.'));
+        } else {
+          // watch the variable
+          setErrorMessage('');
+          setWatchedVariables(currentProjectId, { ...watchedVariables, [variableId]: query });
+          onHideContextualMenu();
+          inputBoxElementRef.current?.blur();
+        }
       }
     },
-    [variableId, query]
+    [currentProjectId, variableId, query, watchedVariables]
   );
 
   const onDismiss = useCallback(() => {

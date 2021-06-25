@@ -49,9 +49,9 @@ export const webChatLogDispatcher = () => {
   );
 
   const setWatchedVariables = useRecoilCallback(
-    (callbackHelpers: CallbackInterface) => (projectId: string, variables: string[]) => {
+    (callbackHelpers: CallbackInterface) => (projectId: string, variables: Record<string, string>) => {
       const { set } = callbackHelpers;
-      set(watchedVariablesState(projectId), [...variables]);
+      set(watchedVariablesState(projectId), variables);
     }
   );
 

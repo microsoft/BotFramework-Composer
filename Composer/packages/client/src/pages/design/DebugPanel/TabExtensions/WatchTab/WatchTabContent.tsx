@@ -27,21 +27,37 @@ import get from 'lodash/get';
 import { ScrollablePane } from 'office-ui-fabric-react/lib/ScrollablePane';
 import { Sticky, StickyPositionType } from 'office-ui-fabric-react/lib/Sticky';
 import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
+import { CommunicationColors, FontSizes } from '@uifabric/fluent-theme';
 
 import { DebugPanelTabHeaderProps } from '../types';
-import { rootBotProjectIdSelector, webChatTrafficState } from '../../../../../recoilModel';
+import {
+  dispatcherState,
+  rootBotProjectIdSelector,
+  watchedVariablesState,
+  webChatTrafficState,
+} from '../../../../../recoilModel';
 import { WatchVariablePicker } from '../../WatchVariablePicker/WatchVariablePicker';
 import { getMemoryVariables } from '../../../../../recoilModel/dispatchers/utils/project';
 import { WatchDataPayload } from '../../WatchVariablePicker/utils/helpers';
+import { getDefaultFontSettings } from '../../../../../recoilModel/utils/fontUtil';
 
 import { WatchTabObjectValue } from './WatchTabObjectValue';
 
+const DEFAULT_FONT_SETTINGS = getDefaultFontSettings();
+
 const toolbarHeight = 24;
 
-const undefinedValue = css`
+const unavailbleValue = css`
   font-family: Segoe UI;
-  font-size: 12px;
+  font-size: ${FontSizes.size12}px;
   font-style: italic;
+  height: 16px;
+  line-height: 16px;
+`;
+
+const primitiveValue = css`
+  font-family: ${DEFAULT_FONT_SETTINGS.fontFamily};
+  color: ${CommunicationColors.shade10};
   height: 16px;
   line-height: 16px;
 `;
@@ -81,40 +97,32 @@ const removeIcon: IIconProps = {
 
 const NameColumnKey = 'watchTabNameColumn';
 const ValueColumnKey = 'watchTabValueColumn';
-// TODO: update to office-ui-fabric-react@7.170.x to gain access to "flexGrow" column property to distribute proprotional column widths
-// (name column takes up 1/3 of space and value column takes up the remaining 2/3)
-const watchTableColumns: IColumn[] = [
-  {
-    key: NameColumnKey,
-    name: 'Name',
-    fieldName: 'name',
-    minWidth: 100,
-    maxWidth: 600,
-    isResizable: true,
-  },
-  {
-    key: ValueColumnKey,
-    name: 'Value',
-    fieldName: 'value',
-    minWidth: 100,
-    maxWidth: undefined,
-    isResizable: true,
-  },
-];
 
 const watchTableLayout: DetailsListLayoutMode = DetailsListLayoutMode.justified;
 
 // Returns the specified property from the bot state trace if it exists.
 // Ex. getValueFromBotTraceMemory('user.address.city', trace)
-const getValueFromBotTraceMemory = (valuePath: string, botTrace: Activity) => {
-  return get(botTrace?.value, valuePath, undefined);
+export const getValueFromBotTraceMemory = (
+  valuePath: string,
+  botTrace: Activity
+): { value: any; propertyIsAvailable: boolean } => {
+  const pathSegments = valuePath.split('.');
+  pathSegments.pop();
+  const parentValuePath = pathSegments.join('.');
+  const parentPropertyValue = get(botTrace?.value, parentValuePath, undefined);
+  return {
+    // if the parent key to the desired property is an object then the property is available
+    propertyIsAvailable: parentPropertyValue !== null && typeof parentPropertyValue === 'object',
+    value: get(botTrace?.value, valuePath, undefined),
+  };
 };
 
-export const WatchTabContent: React.FC<DebugPanelTabHeaderProps> = () => {
+export const WatchTabContent: React.FC<DebugPanelTabHeaderProps> = ({ isActive }) => {
   const currentProjectId = useRecoilValue(rootBotProjectIdSelector);
   const rawWebChatTraffic = useRecoilValue(webChatTrafficState(currentProjectId ?? ''));
-  const [watchedVariables, setWatchedVariables] = useState<Record<string, string>>({});
-  const [pickerErrorMessages, setPickerErrorMessages] = useState<Record<string, string>>({});
+  const watchedVariables = useRecoilValue(watchedVariablesState(currentProjectId ?? ''));
+  const { setWatchedVariables } = useRecoilValue(dispatcherState);
+  const [uncommittedWatchedVariables, setUncommittedWatchedVariables] = useState<Record<string, string>>({});
   const [selectedVariables, setSelectedVariables] = useState<IObjectWithKey[]>();
   const [memoryVariablesPayload, setMemoryVariablesPayload] = useState<WatchDataPayload>({
     kind: 'property',
@@ -154,97 +162,104 @@ export const WatchTabContent: React.FC<DebugPanelTabHeaderProps> = () => {
     }
   }, [rawWebChatTraffic]);
 
-  const onSelectPath = useCallback(
-    (variableId: string, path: string) => {
-      const watchedVar = Object.values(watchedVariables).find((varPath) => varPath === path);
-      if (watchedVar) {
-        // the variable is already being watched, so display a validation error under the picker
-        setPickerErrorMessages({
-          ...pickerErrorMessages,
-          [variableId]: formatMessage('You are already watching this property.'),
-        });
-      } else {
-        setWatchedVariables({
-          ...watchedVariables,
-          [variableId]: path,
-        });
-        // clear any error messages for the variable
-        delete pickerErrorMessages[variableId];
-        setPickerErrorMessages({ ...pickerErrorMessages });
-      }
+  const onRenderVariableName = useCallback(
+    (item: { key: string; value: string }, index: number | undefined, column: IColumn | undefined) => {
+      return (
+        <WatchVariablePicker key={item.key} path={item.value} payload={memoryVariablesPayload} variableId={item.key} />
+      );
     },
-    [pickerErrorMessages, watchedVariables]
+    [memoryVariablesPayload]
   );
 
-  // we need to refresh the details list every time a new bot state comes in
+  const onRenderVariableValue = useCallback(
+    (item: { key: string; value: string }, index: number | undefined, column: IColumn | undefined) => {
+      if (mostRecentBotState) {
+        const variable = watchedVariables[item.key];
+        if (variable === undefined) {
+          // the variable never passed the picker's validation so it is unavailable
+          return <span css={unavailbleValue}>{formatMessage('unavailable')}</span>;
+        }
+        // try to determine the value and render it accordingly
+        const { propertyIsAvailable, value } = getValueFromBotTraceMemory(variable, mostRecentBotState?.activity);
+        console.log(`${variable}: { isAvailable: ${propertyIsAvailable}, value: ${value} }`);
+        if (propertyIsAvailable) {
+          if (value !== null && typeof value === 'object') {
+            // render monaco view
+            return <WatchTabObjectValue value={value} />;
+          } else if (value === undefined) {
+            return <span css={primitiveValue}>{formatMessage('undefined')}</span>;
+          } else {
+            // render primitive view
+            return <span css={primitiveValue}>{typeof value === 'string' ? `"${value}"` : String(value)}</span>;
+          }
+        } else {
+          // the value is not available
+          return <span css={unavailbleValue}>{formatMessage('unavailable')}</span>;
+        }
+      } else {
+        // no bot trace available
+        return <span css={unavailbleValue}>{formatMessage('unavailable')}</span>;
+      }
+    },
+    [mostRecentBotState, watchedVariables]
+  );
+
+  // TODO: update to office-ui-fabric-react@7.170.x to gain access to "flexGrow" column property to distribute proprotional column widths
+  // (name column takes up 1/3 of space and value column takes up the remaining 2/3)
+  const watchTableColumns: IColumn[] = [
+    {
+      key: NameColumnKey,
+      name: 'Name',
+      fieldName: 'name',
+      minWidth: 100,
+      maxWidth: 600,
+      isResizable: true,
+      onRender: onRenderVariableName,
+    },
+    {
+      key: ValueColumnKey,
+      name: 'Value',
+      fieldName: 'value',
+      minWidth: 100,
+      maxWidth: undefined,
+      isResizable: true,
+      onRender: onRenderVariableValue,
+    },
+  ];
+
+  // we need to refresh the details list when we get a new bot state, add a new row, or submit a variable to watch
   const refreshedWatchedVariables = useMemo(() => {
-    return Object.entries(watchedVariables).map(([key, value]) => ({
+    return Object.entries(uncommittedWatchedVariables).map(([key, value]) => ({
       key,
       value,
     }));
-  }, [mostRecentBotState, pickerErrorMessages, watchedVariables]);
+  }, [mostRecentBotState, uncommittedWatchedVariables, watchedVariables]);
 
   const renderRow = useCallback((props?: IDetailsRowProps) => {
     return props ? <DetailsRow {...props} styles={rowStyles} /> : null;
   }, []);
 
-  const renderColumn = useCallback(
-    (item: { key: string; value: string }, index: number | undefined, column: IColumn | undefined) => {
-      if (column && index !== undefined) {
-        if (column.key === NameColumnKey) {
-          // render picker
-          return (
-            <WatchVariablePicker
-              key={item.key}
-              errorMessage={pickerErrorMessages[item.key]}
-              path={item.value}
-              payload={memoryVariablesPayload}
-              variableId={item.key}
-              onSelectPath={onSelectPath}
-            />
-          );
-        } else if (column.key === ValueColumnKey) {
-          // render the value display
-          if (mostRecentBotState) {
-            const value = getValueFromBotTraceMemory(item.value, mostRecentBotState?.activity);
-            if (value !== null && typeof value === 'object') {
-              // render monaco view
-              return <WatchTabObjectValue value={value} />;
-            } else if (value === undefined) {
-              // render undefined indicator
-              return <span css={undefinedValue}>{formatMessage('undefined')}</span>;
-            } else {
-              // render primitive view
-              return <span>{String(value)}</span>;
-            }
-          } else {
-            // no bot trace available;
-            // render undefined indicator
-            return <span css={undefinedValue}>{formatMessage('undefined')}</span>;
-          }
-        }
-      }
-      return null;
-    },
-    [pickerErrorMessages, mostRecentBotState, memoryVariablesPayload, watchedVariables]
-  );
-
   const onClickAdd = useCallback(() => {
-    setWatchedVariables({
-      ...watchedVariables,
+    setUncommittedWatchedVariables({
+      ...uncommittedWatchedVariables,
       [uuidv4()]: '',
     });
-  }, [watchedVariables]);
+  }, [uncommittedWatchedVariables]);
 
-  const onClickRemove = () => {
-    const updated = { ...watchedVariables };
-    if (selectedVariables?.length) {
-      selectedVariables.map((item: IObjectWithKey) => {
-        delete updated[item.key as string];
-      });
+  const onClickRemove = useCallback(() => {
+    if (currentProjectId) {
+      const updatedUncommitted = { ...uncommittedWatchedVariables };
+      const updatedCommitted = { ...watchedVariables };
+      if (selectedVariables?.length) {
+        selectedVariables.map((item: IObjectWithKey) => {
+          delete updatedUncommitted[item.key as string];
+          delete updatedCommitted[item.key as string];
+        });
+      }
+      setWatchedVariables(currentProjectId, updatedCommitted);
+      setUncommittedWatchedVariables(updatedUncommitted);
     }
-    setWatchedVariables(updated);
-  };
+  }, [currentProjectId, selectedVariables, setWatchedVariables, setUncommittedWatchedVariables]);
 
   const removeIsDisabled = useMemo(() => {
     return !selectedVariables?.length;
@@ -259,6 +274,10 @@ export const WatchTabContent: React.FC<DebugPanelTabHeaderProps> = () => {
         })}
       </Sticky>
     );
+  }
+
+  if (!isActive) {
+    return null;
   }
 
   return (
@@ -294,7 +313,6 @@ export const WatchTabContent: React.FC<DebugPanelTabHeaderProps> = () => {
             selectionMode={SelectionMode.multiple}
             styles={watchTableStyles}
             onRenderDetailsHeader={onRenderDetailsHeader}
-            onRenderItemColumn={renderColumn}
             onRenderRow={renderRow}
           />
         </ScrollablePane>
