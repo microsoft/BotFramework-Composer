@@ -19,7 +19,7 @@ import {
   graphTokenState,
   availableTenantsState,
   showTenantDialogState,
-  currentTenantState,
+  currentTenantIdState,
   currentUserState,
   isAuthenticatedState,
   requiresGraphState,
@@ -52,7 +52,7 @@ export const authDispatcher = () => {
 
   const setCurrentTenant = useRecoilCallback(
     (callbackHelpers: CallbackInterface) => async (tenant: string, notify = true) => {
-      callbackHelpers.set(currentTenantState, tenant);
+      callbackHelpers.set(currentTenantIdState, tenant);
       setTenantId(tenant);
       if (tenant) {
         // get arm token for tenant
@@ -112,7 +112,7 @@ export const authDispatcher = () => {
         });
         set(isAuthenticatedState, true);
 
-        set(currentTenantState, decoded.tid);
+        set(currentTenantIdState, decoded.tid);
         setTenantId(decoded.tid);
       } else {
         set(currentUserState, {

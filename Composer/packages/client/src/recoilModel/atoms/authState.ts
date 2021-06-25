@@ -17,11 +17,13 @@ export const requiresGraphState = atom<boolean>({
   default: false,
 });
 
+/* token is pulled from currentUser. setting independently may not be used */
 export const primaryTokenState = atom<string>({
   key: getFullyQualifiedKey('primaryToken'),
   default: '',
 });
 
+/* graph token is pulled from currentUser. setting independently may not be used */
 export const graphTokenState = atom<string>({
   key: getFullyQualifiedKey('graphToken'),
   default: '',
@@ -32,8 +34,8 @@ export const availableTenantsState = atom<AzureTenant[]>({
   default: [],
 });
 
-export const currentTenantState = atom<string>({
-  key: getFullyQualifiedKey('currentTenant'),
+export const currentTenantIdState = atom<string>({
+  key: getFullyQualifiedKey('currentTenantId'),
   default: '',
 });
 
@@ -50,10 +52,4 @@ export const currentUserState = atom<CurrentUser>({
 export const isAuthenticatedState = atom<boolean>({
   key: getFullyQualifiedKey('isAuthenticated'),
   default: false,
-});
-
-/* I believe this is not used */
-export const grahpTokenState = atom<CurrentUser>({
-  key: getFullyQualifiedKey('grahpToken'),
-  default: {} as CurrentUser,
 });

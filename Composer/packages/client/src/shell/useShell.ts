@@ -31,7 +31,7 @@ import {
   focusPathState,
   localeState,
   currentUserState,
-  currentTenantState,
+  currentTenantIdState,
   isAuthenticatedState,
   showAuthDialogState,
   qnaFilesSelectorFamily,
@@ -110,7 +110,7 @@ export function useShell(source: EventSource, projectId: string): Shell {
   const isRootBot = rootBotProjectId === projectId;
   const isAuthenticated = useRecoilValue(isAuthenticatedState);
   const currentUser = useRecoilValue(currentUserState);
-  const currentTenant = useRecoilValue(currentTenantState);
+  const currentTenant = useRecoilValue(currentTenantIdState);
   const showAuthDialog = useRecoilValue(showAuthDialogState);
   const projectCollection = useRecoilValue<BotInProject[]>(botProjectSpaceSelector).map((bot) => ({
     ...bot,
