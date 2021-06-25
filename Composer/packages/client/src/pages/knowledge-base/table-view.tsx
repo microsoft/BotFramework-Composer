@@ -346,7 +346,6 @@ const TableView: React.FC<TableViewProps> = (props) => {
       const containerQnAFile = qnaFiles.find(({ id }) => id === containerId);
       const isImportedSource = containerId.endsWith(qnaSuffix(locale));
       const sourceUrl = isImportedSource && containerQnAFile && getQnAFileUrlOption(containerQnAFile);
-      const isAllTab = dialogId === 'all';
       const isCreatingQnA = createQnAPairSettings.groupKey === containerId && createQnAPairSettings.sectionIndex > -1;
       const onRenderItem = (item: IOverflowSetItemProps): JSX.Element => {
         return (
@@ -355,7 +354,6 @@ const TableView: React.FC<TableViewProps> = (props) => {
             styles={{
               root: {
                 color: NeutralColors.black,
-                visibility: isAllTab ? 'hidden' : 'visiable',
               },
             }}
             onClick={item.onClick}
@@ -375,7 +373,6 @@ const TableView: React.FC<TableViewProps> = (props) => {
               root: {
                 padding: 0,
                 color: NeutralColors.black,
-                visibility: isAllTab ? 'hidden' : 'visiable',
               },
             }}
             title="More options"
