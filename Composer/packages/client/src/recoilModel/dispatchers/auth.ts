@@ -3,7 +3,6 @@
 // Licensed under the MIT License.
 import formatMessage from 'format-message';
 import { CallbackInterface, useRecoilCallback } from 'recoil';
-import { AzureTenant } from '@botframework-composer/types';
 
 import {
   decodeToken,
