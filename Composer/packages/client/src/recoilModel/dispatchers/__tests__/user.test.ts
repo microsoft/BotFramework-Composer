@@ -17,6 +17,7 @@ const realDate = Date.now;
 jest.mock('../../../utils/auth', () => {
   return {
     getUserTokenFromCache: jest.fn(),
+    getTokenFromCache: jest.fn(),
     loginPopup: jest.fn(),
   };
 });
