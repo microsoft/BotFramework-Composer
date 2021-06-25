@@ -185,7 +185,6 @@ export const WatchTabContent: React.FC<DebugPanelTabHeaderProps> = ({ isActive }
         }
         // try to determine the value and render it accordingly
         const { propertyIsAvailable, value } = getValueFromBotTraceMemory(variable, mostRecentBotState?.activity);
-        console.log(`${variable}: { isAvailable: ${propertyIsAvailable}, value: ${value} }`);
         if (propertyIsAvailable) {
           if (value !== null && typeof value === 'object') {
             // render monaco view
