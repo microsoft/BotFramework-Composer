@@ -94,6 +94,7 @@ export const CreateQnAModal: React.FC<CreateQnAModalProps> = (props) => {
   const [allTenants, setAllTenants] = useState<AzureTenant[]>([]);
   const [tenantsErrorMessage, setTenantsErrorMessage] = useState<string | undefined>(undefined);
   const [loading, setLoading] = useState<string | undefined>(undefined);
+  const [kbLoading, setKbLoading] = useState<string | undefined>(undefined);
   const [noKeys, setNoKeys] = useState<boolean>(false);
   const [nextAction, setNextAction] = useState<string>('url');
   const [key, setKey] = useState<KeyRec>();
@@ -300,6 +301,7 @@ export const CreateQnAModal: React.FC<CreateQnAModalProps> = (props) => {
 
   const fetchKBGroups = async () => {
     if (token && key) {
+      setKbLoading(formatMessage('Loading knowledge base...'));
       const cognitiveServicesCredentials = new CognitiveServicesCredentials(key.key);
       const resourceClient = new QnAMakerClient(cognitiveServicesCredentials, key.endpoint);
 
@@ -318,6 +320,7 @@ export const CreateQnAModal: React.FC<CreateQnAModalProps> = (props) => {
           setKbs(kblist);
         }
       }
+      setKbLoading(undefined);
     }
   };
 
@@ -565,6 +568,10 @@ export const CreateQnAModal: React.FC<CreateQnAModalProps> = (props) => {
               selection={selectedKB}
               selectionMode={SelectionMode.single}
             />
+            {kbLoading && <Spinner label={kbLoading} labelPosition="bottom" />}
+            {filteredKbs.length === 0 && !kbLoading && (
+              <p style={{ textAlign: 'center' }}> {formatMessage('No avaliable knowledge base')} </p>
+            )}
           </div>
         </div>
         <DialogFooter>

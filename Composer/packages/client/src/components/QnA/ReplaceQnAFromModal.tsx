@@ -95,6 +95,7 @@ export const ReplaceQnAFromModal: React.FC<ReplaceQnAModalProps> = (props) => {
   const [subscriptionsErrorMessage, setSubscriptionsErrorMessage] = useState<string>();
   const [keys, setKeys] = useState<KeyRec[]>([]);
   const [kbs, setKbs] = useState<KBRec[]>([]);
+  const [kbLoading, setKbLoading] = useState<string | undefined>(undefined);
   const [selectedKb, setSelectedKb] = useState<KBRec>();
   const [dialogTitle, setDialogTitle] = useState<string>('');
 
@@ -291,6 +292,7 @@ export const ReplaceQnAFromModal: React.FC<ReplaceQnAModalProps> = (props) => {
 
   const fetchKBGroups = async () => {
     if (token && key) {
+      setKbLoading(formatMessage('Loading knowledge base...'));
       const cognitiveServicesCredentials = new CognitiveServicesCredentials(key.key);
       const resourceClient = new QnAMakerClient(cognitiveServicesCredentials, key.endpoint);
 
@@ -308,6 +310,7 @@ export const ReplaceQnAFromModal: React.FC<ReplaceQnAModalProps> = (props) => {
           setKbs(kblist);
         }
       }
+      setKbLoading(undefined);
     }
   };
 
@@ -544,6 +547,10 @@ export const ReplaceQnAFromModal: React.FC<ReplaceQnAModalProps> = (props) => {
               selection={selectedKB}
               selectionMode={SelectionMode.single}
             />
+            {kbLoading && <Spinner label={kbLoading} labelPosition="bottom" />}
+            {kbs.length === 0 && !kbLoading && (
+              <p style={{ textAlign: 'center' }}> {formatMessage('No avaliable knowledge base')} </p>
+            )}
           </div>
         </div>
         <DialogFooter>

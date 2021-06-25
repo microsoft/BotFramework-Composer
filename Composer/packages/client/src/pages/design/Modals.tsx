@@ -65,10 +65,11 @@ const Modals: React.FC<ModalsProps> = ({ projectId = '' }) => {
     createTriggerForRemoteSkill,
     createQnATrigger,
     createDialogCancel,
+    createQnADialogCancel,
   } = useRecoilValue(dispatcherState);
 
   const [triggerModalInfo, setTriggerModalInfo] = useRecoilState(triggerModalInfoState);
-  const creatQnAOnInfo = useRecoilValue(createQnAOnState);
+  const createQnAOnInfo = useRecoilValue(createQnAOnState);
   const [dialogModalInfo, setDialogModalInfo] = useRecoilState(dialogModalInfoState);
   const [exportSkillModalInfo, setExportSkillModalInfo] = useRecoilState(exportSkillModalInfoState);
   const [brokenSkillInfo, setBrokenSkillInfo] = useRecoilState(brokenSkillInfoState);
@@ -94,7 +95,7 @@ const Modals: React.FC<ModalsProps> = ({ projectId = '' }) => {
   }
 
   const handleCreateQnA = async (data) => {
-    const { projectId, dialogId } = creatQnAOnInfo;
+    const { projectId, dialogId } = createQnAOnInfo;
     if (!projectId || !dialogId) return;
     await createQnATrigger(projectId, dialogId);
 
@@ -176,9 +177,12 @@ const Modals: React.FC<ModalsProps> = ({ projectId = '' }) => {
       )}
 
       <CreateQnAModal
-        dialogId={creatQnAOnInfo.dialogId}
-        projectId={creatQnAOnInfo.projectId}
+        dialogId={createQnAOnInfo.dialogId}
+        projectId={createQnAOnInfo.projectId}
         qnaFiles={qnaFiles}
+        onDismiss={() => {
+          createQnADialogCancel({ projectId: createQnAOnInfo.projectId });
+        }}
         onSubmit={handleCreateQnA}
       />
 
