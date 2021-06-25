@@ -193,7 +193,7 @@ type WebChatEvents = {
   WebChatConversationRestarted: { restartType: 'SameUserId' | 'NewUserId' };
   DrawerPaneOpened: undefined;
   DrawerPaneClosed: undefined;
-  DrawerPaneTabOpened: { tabType: 'Diagnostics' | 'WebChatInspector' | 'RuntimeLog' };
+  DrawerPaneTabOpened: { tabType: 'Diagnostics' | 'WebChatInspector' | 'RuntimeLog' | 'Watch' };
   SaveTranscriptClicked: undefined;
 };
 
