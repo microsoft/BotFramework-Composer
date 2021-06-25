@@ -6,11 +6,11 @@ import { atom } from 'recoil';
 import { ResourcesItem } from '../../types';
 
 export const enabledHandOffResourcesState = atom<ResourcesItem[] | undefined>({
-  key: 'handoff_optional_resources',
+  key: 'handoffOptionalResources',
   default: undefined,
 });
 
 export const requiredHandOffResourcesState = atom<ResourcesItem[]>({
-  key: 'handoff_required_resources',
+  key: 'handoffRequiredResources',
   default: [],
 });

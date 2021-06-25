@@ -9,6 +9,7 @@ import { DefaultButton, PrimaryButton } from 'office-ui-fabric-react/lib/Button'
 import {
   logOut,
   usePublishApi,
+  useProjectApi,
   getTenants,
   getARMTokenForTenant,
   useLocalStorage,
@@ -61,7 +62,7 @@ import {
   getResourceGroups,
 } from './api';
 import { ChooseResourcesList } from './ChooseResourcesList';
-import { getExistResources, removePlaceholder, decodeToken, defaultExtensionState } from './util';
+import { getExistResources, removePlaceholder, decodeToken, defaultExtensionState, parseRuntimeKey } from './util';
 import { ResourceGroupPicker } from './ResourceGroupPicker';
 import { ChooseProvisionAction } from './ChooseProvisionAction';
 
@@ -134,11 +135,7 @@ const LearnMoreLink = styled(Link)`
 `;
 
 const appOSChoiceGroupStyles = {
-  flexContainer: { display: 'flex', flexDirection: 'row' },
-};
-
-const appOSChoiceGroupOptionStyles = {
-  root: { marginLeft: '8px' },
+  flexContainer: { display: 'flex', flexDirection: 'row', alignItems: 'center' },
 };
 
 const PageTypes = {
@@ -291,6 +288,7 @@ const getLogoutNotificationSettings = (description: string, type: Notification['
     ),
   };
 };
+
 const getDefaultFormData = (currentProfile, defaults) => {
   return {
     creationType: defaults.creationType ?? 'create',
@@ -307,11 +305,9 @@ const getDefaultFormData = (currentProfile, defaults) => {
   };
 };
 
-const defaultAppServiceOperatingSystem = 'windows';
-
 export const AzureProvisionDialog: React.FC = () => {
   const {
-    currentProjectId,
+    currentProjectId: getCurrentProjectId,
     publishConfig,
     startProvision,
     closeDialog,
@@ -327,12 +323,44 @@ export const AzureProvisionDialog: React.FC = () => {
     setTenantId,
   } = usePublishApi();
 
+  const { projectCollection } = useProjectApi();
+
+  const currentProjectId = getCurrentProjectId();
+
   const telemetryClient = useTelemetryClient();
 
   const { setItem, getItem, clearAll } = useLocalStorage();
   // set type of publish - azurePublish or azureFunctionsPublish
   const publishType = getType();
   const profileName = getName();
+
+  const getPreferredAppServiceOS = () => {
+    const project = projectCollection.find((project) => project.projectId === currentProjectId);
+    const runtimeKey = project?.setting.runtime.key;
+    if (runtimeKey) {
+      const { runtimeLanguage, runtimeType } = parseRuntimeKey(runtimeKey);
+
+      switch (runtimeLanguage) {
+        case 'dotnet':
+          return 'windows';
+        case 'js':
+          switch (runtimeType) {
+            case 'webapp':
+              return 'linux';
+            case 'function':
+              return 'windows';
+            default:
+              return 'windows';
+          }
+          break;
+        default:
+          return 'windows';
+      }
+    } else {
+      return 'windows';
+    }
+  };
+
   const currentConfig = removePlaceholder(publishConfig);
   const extensionState = { ...defaultExtensionState, ...getItem(profileName) };
 
@@ -349,7 +377,10 @@ export const AzureProvisionDialog: React.FC = () => {
   const [luisLocations, setLuisLocations] = useState<DeployLocation[]>([]);
   const [extensionResourceOptions, setExtensionResourceOptions] = useState<ResourcesItem[]>([]);
 
-  const [formData, setFormData] = useState<ProvisionFormData>(getDefaultFormData(currentConfig, extensionState));
+  const preferredAppServiceOS = useMemo(getPreferredAppServiceOS, [currentProjectId, projectCollection]);
+  const [formData, setFormData] = useState<ProvisionFormData>(
+    getDefaultFormData(currentConfig, { ...extensionState, appServiceOperatingSystem: preferredAppServiceOS })
+  );
 
   const [isLoading, setIsLoading] = useState(true);
   const [loadingErrorMessage, setLoadingErrorMessage] = useState<string>();
@@ -570,7 +601,7 @@ export const AzureProvisionDialog: React.FC = () => {
 
   const getResources = async () => {
     try {
-      const resources = await getResourceList(currentProjectId(), publishType);
+      const resources = await getResourceList(currentProjectId, publishType);
       setExtensionResourceOptions(resources);
     } catch (err) {
       // todo: how do we handle API errors in this component
@@ -861,10 +892,24 @@ export const AzureProvisionDialog: React.FC = () => {
     );
   };
 
-  const appServiceOSOptions: IChoiceGroupOption[] = [
-    { key: 'windows', text: 'Windows' },
-    { key: 'linux', text: 'Linux', styles: appOSChoiceGroupOptionStyles },
-  ];
+  const getAppServiceOSOptions = useCallback((): IChoiceGroupOption[] => {
+    return [
+      {
+        key: 'windows',
+        text: preferredAppServiceOS === 'windows' ? formatMessage('Windows (Recommended)') : formatMessage('Windows'),
+        styles: {
+          root: { marginTop: '4px' },
+        },
+      },
+      {
+        key: 'linux',
+        text: preferredAppServiceOS === 'linux' ? formatMessage('Linux (Recommended)') : formatMessage('Linux'),
+        styles: {
+          root: { marginTop: '4px', marginLeft: '8px' },
+        },
+      },
+    ];
+  }, [preferredAppServiceOS]);
 
   const PageFormConfig = (
     <ScrollablePane
@@ -956,8 +1001,8 @@ export const AzureProvisionDialog: React.FC = () => {
             </Stack>
             <ChoiceGroup
               required
-              defaultSelectedKey={defaultAppServiceOperatingSystem}
-              options={appServiceOSOptions}
+              options={getAppServiceOSOptions()}
+              selectedKey={formData.appServiceOperatingSystem}
               styles={appOSChoiceGroupStyles}
               onChange={(_e, o) => {
                 updateFormData('appServiceOperatingSystem', o.key as string);

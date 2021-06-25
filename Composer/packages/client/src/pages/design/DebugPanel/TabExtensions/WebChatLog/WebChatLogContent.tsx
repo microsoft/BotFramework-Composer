@@ -5,7 +5,7 @@
 import { css, jsx } from '@emotion/core';
 import React, { useMemo, useEffect, useState, useRef, useCallback } from 'react';
 import { useRecoilValue } from 'recoil';
-import { ConversationTrafficItem } from '@botframework-composer/types';
+import { ConversationTrafficItem, DiagnosticSeverity } from '@botframework-composer/types';
 import formatMessage from 'format-message';
 import debounce from 'lodash/debounce';
 import { ActionButton } from 'office-ui-fabric-react/lib/Button';
@@ -19,12 +19,15 @@ import {
   webChatInspectionDataState,
   botStatusState,
   isWebChatPanelVisibleState,
+  runningBotsSelector,
+  allDiagnosticsSelectorFamily,
 } from '../../../../../recoilModel';
 import { DebugPanelTabHeaderProps } from '../types';
 import { WebChatInspectionData } from '../../../../../recoilModel/types';
 import { BotStatus } from '../../../../../constants';
 import { useBotOperations } from '../../../../../components/BotRuntimeController/useBotOperations';
 import { usePVACheck } from '../../../../../hooks/usePVACheck';
+import { isBotStarting } from '../../../../../components/BotRuntimeController/utils';
 
 import { WebChatInspectorPane } from './WebChatInspectorPane';
 import { WebChatActivityLogItem } from './WebChatActivityLogItem';
@@ -67,6 +70,7 @@ const itemIsSelected = (item: ConversationTrafficItem, currentInspectionData?: W
 
 // R12: We are showing Errors from the root bot only.
 export const WebChatLogContent: React.FC<DebugPanelTabHeaderProps> = ({ isActive }) => {
+  const runningBots = useRecoilValue(runningBotsSelector);
   const currentProjectId = useRecoilValue(rootBotProjectIdSelector);
   const rawWebChatTraffic = useRecoilValue(webChatTrafficState(currentProjectId ?? ''));
   const inspectionData = useRecoilValue(webChatInspectionDataState(currentProjectId ?? ''));
@@ -79,6 +83,7 @@ export const WebChatLogContent: React.FC<DebugPanelTabHeaderProps> = ({ isActive
   const { startAllBots } = useBotOperations();
   const isPVABot = usePVACheck(currentProjectId ?? '');
   const [isWebChatPanelOpenedOnce, setIsWebChatPanelOpenedOnce] = useState(false);
+  const projectErrors = useRecoilValue(allDiagnosticsSelectorFamily([DiagnosticSeverity.Error]));
 
   const navigateToNewestLogEntry = () => {
     if (currentLogItemCount && webChatContainerRef?.current) {
@@ -199,16 +204,26 @@ export const WebChatLogContent: React.FC<DebugPanelTabHeaderProps> = ({ isActive
       return null;
     }
 
-    if (currentStatus === BotStatus.inactive) {
+    if (currentStatus === BotStatus.inactive || currentStatus === BotStatus.failed) {
       return (
         <div css={emptyStateMessageContainer}>
-          {formatMessage.rich('Your bot project is not running. <actionButton>Start your bot</actionButton>', {
-            actionButton: ({ children }) => (
-              <ActionButton key="webchat-tab-startbot" styles={actionButton} type="button" onClick={startAllBots}>
-                {children}
-              </ActionButton>
-            ),
-          })}
+          {formatMessage.rich(
+            'Your bot project is not running. <actionButton>{ total, plural, =1 {Start bot}other {Start all bots}}</actionButton>',
+            {
+              total: runningBots.totalBots,
+              actionButton: ({ children }) => (
+                <ActionButton
+                  key="webchat-tab-startbot"
+                  disabled={projectErrors.length > 0}
+                  styles={actionButton}
+                  type="button"
+                  onClick={startAllBots}
+                >
+                  {children}
+                </ActionButton>
+              ),
+            }
+          )}
         </div>
       );
     }
@@ -226,8 +241,18 @@ export const WebChatLogContent: React.FC<DebugPanelTabHeaderProps> = ({ isActive
         </div>
       );
     }
+
+    if (isBotStarting(currentStatus)) {
+      return (
+        <div css={emptyStateMessageContainer}>
+          {formatMessage('{total, plural, =1 {Starting your bot...}other {Starting your bots...}}', {
+            total: runningBots.totalBots,
+          })}
+        </div>
+      );
+    }
     return null;
-  }, [currentStatus]);
+  }, [currentStatus, currentProjectId, projectErrors]);
 
   return (
     <div css={logContainer(isActive)}>

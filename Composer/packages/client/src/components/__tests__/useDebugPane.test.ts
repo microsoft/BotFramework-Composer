@@ -36,7 +36,7 @@ describe('useDebug pane', () => {
       },
     });
     const { result } = renderHook(() => useDebugPane());
-    expect(result.current).toBeFalsy();
+    expect(result.current).toBeTruthy();
   });
 
   it('should render in skills LG Page', async () => {
@@ -53,6 +53,16 @@ describe('useDebug pane', () => {
     mockLocation.mockReturnValue({
       location: {
         pathname: '/bot/43925.21156467697/skill/88276.36979482269/language-understanding/People',
+      },
+    });
+    const { result } = renderHook(() => useDebugPane());
+    expect(result.current).toBeTruthy();
+  });
+
+  it('should not render in Home Page', async () => {
+    mockLocation.mockReturnValue({
+      location: {
+        pathname: '/home',
       },
     });
     const { result } = renderHook(() => useDebugPane());

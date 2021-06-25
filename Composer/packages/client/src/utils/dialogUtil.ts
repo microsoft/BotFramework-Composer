@@ -33,6 +33,7 @@ export interface TriggerFormData {
   intent: string;
   triggerPhrases: string;
   regEx: string;
+  label?: string;
 }
 
 export interface TriggerFormDataErrors {
@@ -70,6 +71,11 @@ function generateNewTrigger(data: TriggerFormData, factory: DialogFactory) {
     optionalAttributes.intent = data.intent;
     optionalAttributes.$designer.name = data.intent;
   }
+
+  if (!optionalAttributes.$designer.name && data.label) {
+    optionalAttributes.$designer.name = data.label;
+  }
+
   const newStep = factory.create(data.$kind as SDKKinds, optionalAttributes);
   return newStep;
 }
@@ -234,7 +240,7 @@ export function setDialogData(dialogsMap: DialogsMap, dialogId: string, dataPath
   return set(dialog, dataPath, data);
 }
 
-export function getSelected(focused: string): string {
+export function getSelected(focused?: string): string {
   if (!focused) return '';
   return focused.split('.')[0];
 }

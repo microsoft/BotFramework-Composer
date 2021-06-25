@@ -12,6 +12,7 @@ import {
   hostNameState,
   enabledResourcesState,
   requiredResourcesState,
+  operatingSystemState,
 } from '../atoms/resourceConfigurationState';
 import { LuisRegion, ResourcesItem } from '../../types';
 
@@ -43,11 +44,15 @@ export const resourceConfigurationDispatcher = () => {
   });
 
   const setEnabledResources = useRecoilCallback(({ set }: CallbackInterface) => (resources: ResourcesItem[]) => {
-    set(enabledResourcesState, [...resources]);
+    set(enabledResourcesState, resources);
   });
 
   const setRequiredResources = useRecoilCallback(({ set }: CallbackInterface) => (resources: ResourcesItem[]) => {
-    set(requiredResourcesState, [...resources]);
+    set(requiredResourcesState, resources);
+  });
+
+  const setAppServiceOperatingSystem = useRecoilCallback(({ set }: CallbackInterface) => (operatingSystem: string) => {
+    set(operatingSystemState, operatingSystem);
   });
 
   return {
@@ -59,5 +64,6 @@ export const resourceConfigurationDispatcher = () => {
     setHostName,
     setEnabledResources,
     setRequiredResources,
+    setAppServiceOperatingSystem,
   };
 };

@@ -3,7 +3,7 @@
 
 import { PromptTab } from '@bfc/shared';
 
-import { getUrlSearch, checkUrl, getFocusPath, convertPathToUrl } from './../../src/utils/navigation';
+import { getUrlSearch, checkUrl, getFocusPath, convertPathToUrl } from '../navigation';
 
 const projectId = '123a-sdf123';
 const skillId = '98765.4321';
