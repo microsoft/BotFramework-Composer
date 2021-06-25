@@ -7,6 +7,7 @@ import { WidgetContainerProps, WidgetComponent } from '@bfc/extension-client';
 import { ActionHeader } from '../ActionHeader';
 
 import { CardTemplate } from './CardTemplate';
+import { ActionCardBody } from './ActionCardBody';
 
 export interface ActionCardProps extends WidgetContainerProps {
   header?: ReactNode;
@@ -33,6 +34,16 @@ const safeRender = (input: object | React.ReactNode) => {
   return input;
 };
 
+const renderBody = (rawBody: React.ReactNode, ctx: any) => {
+  const body = safeRender(rawBody);
+
+  if (React.isValidElement(body) && body.type === ActionCardBody) {
+    return body;
+  }
+
+  return <ActionCardBody {...ctx} body={body} />;
+};
+
 export const ActionCard: WidgetComponent<ActionCardProps> = ({
   header,
   body,
@@ -42,7 +53,7 @@ export const ActionCard: WidgetComponent<ActionCardProps> = ({
 }) => {
   const disabled = widgetContext.data.disabled === true;
   const headerNode = safeRender(header) || <ActionHeader {...widgetContext} />;
-  const bodyNode = safeRender(body);
+  const bodyNode = renderBody(body, widgetContext);
   const footerNode = hideFooter ? null : safeRender(footer);
   return (
     <CardTemplate {...widgetContext} body={bodyNode} disabled={disabled} footer={footerNode} header={headerNode} />

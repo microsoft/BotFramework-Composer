@@ -10,6 +10,7 @@ import { IIconProps } from 'office-ui-fabric-react/lib/Icon';
 import formatMessage from 'format-message';
 import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
 import { DirectionalHint } from 'office-ui-fabric-react/lib/Callout';
+import { NeutralColors } from '@uifabric/fluent-theme';
 
 import { scrollNodeIntoView } from '../utils/scrollNodeIntoView';
 import { AttrNames } from '../constants/ElementAttributes';
@@ -104,7 +105,7 @@ export const FlowToolbar: React.FC<FlowToolbarProps> = ({
   const buttonRender = () => {
     const buttonBoxStyle = css({ position: 'absolute', left: '25px', bottom: '25px', width: '35px' });
     const iconStyle = (iconName: string): IIconProps => {
-      return { iconName, styles: { root: { color: '#fff' } } };
+      return { iconName, styles: { root: { color: NeutralColors.white } } };
     };
     const buttonStyle = (overrides: { top?: string; bottom?: string; margin?: string }): IButtonStyles => ({
       root: {

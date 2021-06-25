@@ -2,10 +2,10 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-// import React from 'react';
 import { jsx, css } from '@emotion/core';
-import { WidgetContainerProps, WidgetComponent } from '@bfc/extension-client';
-import { TooltipHost, DirectionalHint } from 'office-ui-fabric-react/lib/Tooltip';
+import { WidgetContainerProps, WidgetComponent, useShellApi } from '@bfc/extension-client';
+
+import { CardComment } from './CardComment';
 
 const containerStyle = (theme?: string) => css`
   padding: 8px 8px;
@@ -35,26 +35,17 @@ interface ActionCardBodyProps extends WidgetContainerProps {
     color?: string;
   };
   truncate?: boolean;
+  hideComment?: boolean;
 }
 
-export const ActionCardBody: WidgetComponent<ActionCardBodyProps> = (props) => {
-  const { body, colors, truncate, id } = props;
-
-  if (truncate) {
-    return (
-      <TooltipHost calloutProps={{ directionalHint: DirectionalHint.rightCenter }} content={body} id={id} styles={{}}>
-        <div css={containerStyle(colors?.theme)}>
-          <div aria-describedby={id} css={textStyles(colors?.color, truncate)}>
-            {body || ' '}
-          </div>
-        </div>
-      </TooltipHost>
-    );
-  }
+export const ActionCardBody: WidgetComponent<ActionCardBodyProps> = ({ body, colors, truncate, hideComment, data }) => {
+  const { flowCommentsVisible } = useShellApi();
+  const comment = data.$designer?.comment;
 
   return (
     <div css={containerStyle(colors?.theme)}>
-      <div css={textStyles(colors?.color)}>{body || ' '}</div>
+      {!hideComment && flowCommentsVisible && comment && <CardComment comment={comment} />}
+      <div css={textStyles(colors?.color, truncate)}>{body || ' '}</div>
     </div>
   );
 };

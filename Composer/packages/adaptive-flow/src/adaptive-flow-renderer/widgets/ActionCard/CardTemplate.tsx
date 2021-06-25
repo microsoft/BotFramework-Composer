@@ -5,7 +5,7 @@
 import { jsx } from '@emotion/core';
 import { FC, ReactNode } from 'react';
 import { TextDiv } from '@bfc/ui-shared';
-import { WidgetContainerProps, useShellApi } from '@bfc/extension-client';
+import { WidgetContainerProps } from '@bfc/extension-client';
 
 import { StandardNodeWidth } from '../../constants/ElementSizes';
 import { ObiColors } from '../../constants/ElementColors';
@@ -19,7 +19,7 @@ import {
   CardContainerCSS,
   DisabledCardContainerCSS,
 } from './CardTemplateStyle';
-import { CardComment } from './CardComment';
+// import { CardComment } from './CardComment';
 
 export interface CardTemplateProps extends WidgetContainerProps {
   header: ReactNode;
@@ -37,19 +37,15 @@ export const CardTemplate: FC<CardTemplateProps> = ({
   body,
   footer,
   disabled,
-  data,
-  hideComment,
   onClick,
   onClickHeader,
   onClickBody,
   onClickFooter,
 }) => {
-  const { flowCommentsVisible } = useShellApi();
   const headerCSS = HeaderCSS;
   const bodyCSS = BodyCSS;
   const footerCSS = FooterCSS;
   const containerCSS = disabled ? DisabledCardContainerCSS : CardContainerCSS;
-  const comment = data?.$designer?.comment;
 
   const renderHeader = (header: ReactNode) => (
     <div className="CardNode__Header" css={headerCSS} onClick={onClickHeader}>
@@ -59,7 +55,6 @@ export const CardTemplate: FC<CardTemplateProps> = ({
 
   const renderBody = (body: ReactNode) => (
     <div className="CardNode__Body" css={bodyCSS} onClick={onClickBody}>
-      {!hideComment && flowCommentsVisible && comment && <CardComment comment={comment} />}
       <TextDiv css={{ width: '100%' }}>{body}</TextDiv>
     </div>
   );
