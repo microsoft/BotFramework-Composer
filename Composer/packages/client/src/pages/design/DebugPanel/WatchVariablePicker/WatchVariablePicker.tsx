@@ -80,7 +80,7 @@ export const WatchVariablePicker = React.memo((props: WatchVariablePickerProps) 
   const noSearchResultMenuItem = useNoSearchResultMenuItem(uiStrings.emptyMessage);
 
   const propertyTreeConfig = useMemo(() => {
-    const { properties } = (payload as WatchDataPayload).data;
+    const { properties } = payload.data;
     return { root: computePropertyItemTree(properties) };
   }, [payload]);
 

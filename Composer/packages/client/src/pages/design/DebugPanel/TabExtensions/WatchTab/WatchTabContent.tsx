@@ -144,14 +144,18 @@ export const WatchTabContent: React.FC<DebugPanelTabHeaderProps> = ({ isActive }
       const abortController = new AbortController();
       (async () => {
         try {
-          const variables = await getMemoryVariables(currentProjectId, { signal: abortController.signal });
+          const watched = Object.values(watchedVariables);
+          let variables = await getMemoryVariables(currentProjectId, { signal: abortController.signal });
+          // we don't want to show variables that are already being watched
+          variables = variables.filter((v) => !watched.find((watchedV) => watchedV === v));
+
           setMemoryVariablesPayload({ kind: 'property', data: { properties: variables } });
         } catch (e) {
           // error can be due to abort
         }
       })();
     }
-  }, [currentProjectId]);
+  }, [currentProjectId, watchedVariables]);
 
   const mostRecentBotState = useMemo(() => {
     const botStateTraffic = rawWebChatTraffic.filter(
