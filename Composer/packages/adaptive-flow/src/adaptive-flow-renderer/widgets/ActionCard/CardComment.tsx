@@ -5,6 +5,7 @@
 import { jsx, css } from '@emotion/core';
 import React from 'react';
 import { TruncatedText } from '@bfc/ui-shared';
+import { NeutralColors } from '@uifabric/fluent-theme';
 
 type CardCommentProps = {
   comment?: string;
@@ -25,9 +26,9 @@ const styles = {
     height: 0;
     width: 0;
     border-top: 4px solid #ded2a7;
-    border-left: 4px solid #fff;
+    border-left: 4px solid ${NeutralColors.white};
     border-right: 4px solid #ded2a7;
-    border-bottom: 4px solid #fff;
+    border-bottom: 4px solid ${NeutralColors.white};
   `,
 };
 
