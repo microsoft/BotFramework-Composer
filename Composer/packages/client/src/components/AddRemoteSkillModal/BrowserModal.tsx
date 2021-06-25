@@ -33,7 +33,7 @@ export const BrowserModal = (props) => {
     <>
       <DefaultButton
         styles={{ root: { marginLeft: '8px', float: 'right', marginTop: '29px' } }}
-        text={formatMessage('Browser')}
+        text={formatMessage('Browse')}
         onClick={onClickOpen}
       />
       <input ref={inputFileRef} accept=".zip,.rar,.7zip" style={{ display: 'none' }} type="file" onChange={onChange} />

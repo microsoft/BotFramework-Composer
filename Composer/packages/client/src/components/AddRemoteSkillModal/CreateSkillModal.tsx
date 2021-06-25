@@ -78,7 +78,13 @@ export const validateManifestUrl = ({ formData, formDataErrors, setFormDataError
   }
 };
 
-export const getSkillManifest = async (projectId: string, manifestUrl: string, setSkillManifest, setFormDataErrors) => {
+export const getSkillManifest = async (
+  projectId: string,
+  manifestUrl: string,
+  setSkillManifest,
+  setFormDataErrors,
+  setShowDetail
+) => {
   try {
     const { data } = await httpClient.get(`/projects/${projectId}/skill/retrieveSkillManifest`, {
       params: {
@@ -94,6 +100,7 @@ export const getSkillManifest = async (projectId: string, manifestUrl: string, s
       : formatMessage('Manifest URL can not be accessed');
 
     setFormDataErrors({ ...error, manifestUrl: message });
+    setShowDetail(false);
   }
 };
 const getTriggerFormData = (intent: string, content: string): TriggerFormData => ({
@@ -195,7 +202,7 @@ export const CreateSkillModal: React.FC<CreateSkillModalProps> = (props) => {
       event.preventDefault();
       setShowDetail(true);
       const localManifestPath = formData.manifestUrl.replace(/\\/g, '/');
-      getSkillManifest(projectId, formData.manifestUrl, setSkillManifest, setFormDataErrors);
+      getSkillManifest(projectId, formData.manifestUrl, setSkillManifest, setFormDataErrors, setShowDetail);
       setManifestDirPath(localManifestPath.substring(0, localManifestPath.lastIndexOf('/')));
     },
     [projectId, formData]
