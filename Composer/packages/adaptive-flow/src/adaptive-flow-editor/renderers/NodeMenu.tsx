@@ -51,8 +51,8 @@ export const NodeMenu: React.FC<NodeMenuProps> = ({ colors = { color: 'black' },
     >
       <TooltipHost content={moreLabel}>
         <IconMenu
-          autoFocus={nodeSelected}
           // eslint-disable-next-line jsx-a11y/no-autofocus
+          autoFocus={nodeSelected}
           iconName="MoreVertical"
           iconSize={12}
           iconStyles={{
