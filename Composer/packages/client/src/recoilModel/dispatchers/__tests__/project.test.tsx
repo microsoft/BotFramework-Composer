@@ -395,7 +395,7 @@ describe('Project dispatcher', () => {
     });
 
     await act(async () => {
-      await dispatcher.addRemoteSkillToBotProject('https://test.net/api/manifest/test', 'remote');
+      await dispatcher.addRemoteSkillToBotProject('https://test.net/api/manifest/test', 'remote', {});
     });
 
     expect(navigateTo).toHaveBeenLastCalledWith(`/bot/${projectId}/skill/${skillId}`);
@@ -426,7 +426,8 @@ describe('Project dispatcher', () => {
     await act(async () => {
       await dispatcher.addRemoteSkillToBotProject(
         'https://test-dev.azurewebsites.net/manifests/onenote-2-1-preview-1-manifest.json',
-        'remote'
+        'remote',
+        {}
       );
     });
     expect(renderedComponent.current.botStates.oneNoteSync).toBeDefined();
@@ -461,7 +462,8 @@ describe('Project dispatcher', () => {
     await act(async () => {
       await dispatcher.addRemoteSkillToBotProject(
         'https://test-dev.azurewebsites.net/manifests/onenote-2-1-preview-1-manifest.json',
-        'remote'
+        'remote',
+        {}
       );
     });
 
