@@ -25,13 +25,9 @@ export type GetResourcesResult = ResourceDefinition & {
 };
 export type ProvisionConfig = {
   key: string;
-  credentials: ProvisionCredentials;
+  accessToken: string;
   subscriptionId: string;
-};
-
-export type ProvisionCredentials = {
-  token: string;
-  graphToken?: string;
+  graphToken: string;
 };
 
 export type ResourceConfig = {
