@@ -12,7 +12,7 @@ import { GetResourcesResult, ProvisionConfig, ResourceDefinition, ResourceProvis
  * @returns The plug-in with properties and methods.
  */
 const createAzurePublishPlugin = (): PublishPlugin<ProvisionConfig> => {
-  const getResources = (project: IBotProject /*user?: UserIdentity*/): Promise<GetResourcesResult[]> => {
+  const getResources = (project: IBotProject): Promise<GetResourcesResult[]> => {
     const provisionServices: Record<string, ResourceProvisionService> = {};
 
     return Promise.resolve(
@@ -29,8 +29,8 @@ const createAzurePublishPlugin = (): PublishPlugin<ProvisionConfig> => {
     );
   };
 
-  const getStatus = async (/* config, project, user */) => {
-    const response = {
+  const getStatus = async () => {
+    return {
       status: 200,
       result: {
         time: new Date().toString(),
@@ -38,21 +38,15 @@ const createAzurePublishPlugin = (): PublishPlugin<ProvisionConfig> => {
         log: '',
       },
     };
-    return response;
   };
 
-  const provision = async (
-    config: ProvisionConfig,
-    project: IBotProject
-    // user?: UserIdentity,
-    // getAccessToken?: GetAccessToken
-  ): Promise<ProcessStatus> => {
+  const provision = async (config: ProvisionConfig, project: IBotProject): Promise<ProcessStatus> => {
     const jobId = BackgroundProcessManager.startProcess(202, project.id, config.key, 'Creating Azure resources...');
     setUpProvisionService(config);
     return BackgroundProcessManager.getStatus(jobId);
   };
 
-  const publish = async (_config, _project, metadata /*_user */) => {
+  const publish = async (_config, _project, metadata) => {
     const response = {
       status: 202,
       result: {

@@ -47,9 +47,7 @@ export const getProvisionServices = (config: ProvisionConfig): Record<string, Re
 export const setUpProvisionService = (config: ProvisionConfig) => {
   const provisionServices = getProvisionServices(config);
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const provision = (): void => {
-    // config => sorted resource config
     const selectedResources: ResourceConfig[] = [];
 
     const provisionServices = getProvisionServices(config);
