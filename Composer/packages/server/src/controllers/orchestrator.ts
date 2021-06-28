@@ -29,8 +29,6 @@ class OrchestratorController {
   private getModelPath = async (modelName: string) =>
     Path.resolve(await this.getModelBasePath(), modelName.replace('.onnx', ''));
 
-  private getModelList = async (): Promise<IOrchestratorNLRList> => await Orchestrator.baseModelGetVersionsAsync();
-
   private isValidModelRequest(arg: any): arg is OrchestratorModelRequest {
     return arg.kind !== undefined && arg.name !== undefined;
   }
@@ -42,6 +40,8 @@ class OrchestratorController {
     }
     res.send(this.state);
   };
+
+  public getModelList = async (): Promise<IOrchestratorNLRList> => await Orchestrator.baseModelGetVersionsAsync();
 
   public downloadLanguageModel = async (req: Request, res: Response) => {
     const modelData = req.body?.modelData;
