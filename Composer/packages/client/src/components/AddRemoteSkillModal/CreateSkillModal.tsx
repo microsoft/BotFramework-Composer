@@ -91,24 +91,23 @@ export const validateLocalZip = async (files: Record<string, JSZipObject>) => {
     for (const fPath in files) {
       zipContent[fPath] = await files[fPath].async('string');
       // eslint-disable-next-line no-useless-escape
-      console.log(isManifestJson(zipContent[fPath]));
       if (fPath.match(/\.([^\.]+)$/)?.[1] === 'json' && isManifestJson(zipContent[fPath])) {
         manifestFiles.push(files[fPath]);
-        result['path'] = fPath.substr(0, fPath.lastIndexOf('/') + 1);
+        result.path = fPath.substr(0, fPath.lastIndexOf('/') + 1);
       }
     }
 
     // update content for detail panel and show it
     if (manifestFiles.length > 1) {
-      result['error'] = { manifestUrl: formatMessage('zip folder has multiply manifest json') };
+      result.error = { manifestUrl: formatMessage('zip folder has multiply manifest json') };
     } else if (manifestFiles.length === 1) {
       const content = await manifestFiles[0].async('string');
-      result['manifestContent'] = JSON.parse(content);
-      result['zipContent'] = zipContent;
+      result.manifestContent = JSON.parse(content);
+      result.zipContent = zipContent;
     }
   } catch (err) {
     // eslint-disable-next-line format-message/literal-pattern
-    result['error'] = { manifestUrl: formatMessage(err.toString()) };
+    result.error = { manifestUrl: formatMessage(err.toString()) };
   }
   return result;
 };
