@@ -35,7 +35,7 @@ import { NeutralColors } from '@uifabric/fluent-theme';
 
 import emptyQnAIcon from '../../images/emptyQnAIcon.svg';
 import { navigateTo } from '../../utils/navigation';
-import { dialogsSelectorFamily, qnaFilesSelectorFamily, settingsState } from '../../recoilModel';
+import { dialogsSelectorFamily, qnaFileIdsState, qnaFilesSelectorFamily, settingsState } from '../../recoilModel';
 import { dispatcherState } from '../../recoilModel';
 import { getBaseName } from '../../utils/fileUtil';
 import { EditableField } from '../../components/EditableField';
@@ -97,6 +97,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
   const actions = useRecoilValue(dispatcherState);
   const dialogs = useRecoilValue(dialogsSelectorFamily(actualProjectId));
   const qnaFiles = useRecoilValue(qnaFilesSelectorFamily(actualProjectId));
+  const qnaFileIds = useRecoilValue(qnaFileIdsState(actualProjectId));
   const settings = useRecoilValue(settingsState(actualProjectId));
   const { languages } = settings;
   const {
@@ -886,7 +887,13 @@ const TableView: React.FC<TableViewProps> = (props) => {
     [dialogId, expandedIndex]
   );
 
-  if (qnaFile?.empty) {
+  const existedImports = qnaFile?.imports.filter((item) => {
+    const id = getBaseName(item.id);
+    return qnaFileIds.includes(id) || qnaFileIds.includes(`${id}.${locale}`);
+  });
+
+  // if both imports and qna section are empty, show create button
+  if (existedImports?.length === 0 && qnaFile?.qnaSections.length === 0) {
     return (
       <div className={classNames.emptyTableList} data-testid={'table-view-empty'}>
         <div className={classNames.emptyTableListCenter}>
