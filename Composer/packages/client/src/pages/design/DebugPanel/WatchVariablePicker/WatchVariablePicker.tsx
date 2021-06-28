@@ -25,13 +25,12 @@ type WatchVariablePickerProps = {
   payload: WatchDataPayload;
   disabled?: boolean;
   variableId: string;
-  path: string;
 };
 
 const getStrings = () => {
   return {
     emptyMessage: formatMessage('No properties found'),
-    searchPlaceholder: formatMessage('Add a property'),
+    searchPlaceholder: formatMessage('Add property path to watch'),
   };
 };
 
@@ -63,19 +62,15 @@ export const WatchVariablePicker = React.memo((props: WatchVariablePickerProps) 
   const currentProjectId = useRecoilValue(rootBotProjectIdSelector);
   const watchedVariables = useRecoilValue(watchedVariablesState(currentProjectId ?? ''));
   const { setWatchedVariables } = useRecoilValue(dispatcherState);
-  const { payload, variableId, path } = props;
+  const { payload, variableId } = props;
   const [errorMessage, setErrorMessage] = useState('');
-  const [query, setQuery] = useState(path);
+  const [query, setQuery] = useState('');
   const inputBoxElementRef = useRef<ITextField | null>(null);
   const pickerContainerElementRef = useRef<null | HTMLDivElement>(null);
   const [showContextualMenu, setShowContextualMenu] = React.useState(false);
   const [items, setItems] = useState<IContextualMenuItem[]>([]);
   const [propertyTreeExpanded, setPropertyTreeExpanded] = React.useState<Record<string, boolean>>({});
   const uiStrings = useMemo(() => getStrings(), []);
-
-  useEffect(() => {
-    setQuery(path);
-  }, [path]);
 
   const noSearchResultMenuItem = useNoSearchResultMenuItem(uiStrings.emptyMessage);
 
@@ -166,28 +161,33 @@ export const WatchVariablePicker = React.memo((props: WatchVariablePickerProps) 
 
   useEffect(() => setItems(menuItems), [menuItems]);
 
-  const handleDebouncedSearch: () => void = useCallback(
-    debounce(() => {
-      if (query) {
-        const predicate = getFilterPredicate(query);
+  const performDebouncedSearch = useMemo(
+    () =>
+      debounce((passedQuery?: string) => {
+        if (passedQuery) {
+          const predicate = getFilterPredicate(passedQuery);
 
-        const filteredItems = flatPropertyListItems.filter(predicate);
+          const filteredItems = flatPropertyListItems.filter(predicate);
 
-        if (!filteredItems || !filteredItems.length) {
-          filteredItems.push(noSearchResultMenuItem);
+          if (!filteredItems || !filteredItems.length) {
+            filteredItems.push(noSearchResultMenuItem);
+          }
+
+          setItems(filteredItems);
+        } else {
+          setItems(menuItems);
         }
-
-        setItems(filteredItems);
-      } else {
-        setItems(menuItems);
-      }
-    }, 500),
-    [menuItems, flatPropertyListItems, noSearchResultMenuItem, query]
+      }, 500),
+    [getFilterPredicate, menuItems]
   );
 
-  useEffect(() => {
-    handleDebouncedSearch();
-  }, [handleDebouncedSearch]);
+  const onInputChange = useCallback(
+    (_e: FormEvent<HTMLInputElement | HTMLTextAreaElement>, val: string | undefined) => {
+      setQuery(val ?? '');
+      performDebouncedSearch(val);
+    },
+    [performDebouncedSearch]
+  );
 
   const onTextBoxFocus = (event: FocusEvent<HTMLInputElement>) => {
     onShowContextualMenu(event);
@@ -209,7 +209,7 @@ export const WatchVariablePicker = React.memo((props: WatchVariablePickerProps) 
         }
       }
     },
-    [currentProjectId, variableId, query, watchedVariables]
+    [currentProjectId, onHideContextualMenu, variableId, query, watchedVariables]
   );
 
   const onDismiss = useCallback(() => {
@@ -230,9 +230,7 @@ export const WatchVariablePicker = React.memo((props: WatchVariablePickerProps) 
         placeholder={uiStrings.searchPlaceholder}
         styles={textFieldStyles(errorMessage)}
         value={query}
-        onChange={(_e: FormEvent<HTMLInputElement | HTMLTextAreaElement>, val: string | undefined) => {
-          setQuery(val ?? '');
-        }}
+        onChange={onInputChange}
         onFocus={onTextBoxFocus}
         onKeyDown={onTextBoxKeyDown}
       />

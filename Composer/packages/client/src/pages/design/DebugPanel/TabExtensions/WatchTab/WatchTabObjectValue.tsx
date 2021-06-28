@@ -5,10 +5,9 @@
 import { css, jsx } from '@emotion/core';
 import { JsonEditor } from '@bfc/code-editor';
 import React, { useMemo } from 'react';
+import { useRecoilValue } from 'recoil';
 
-import { getDefaultFontSettings } from '../../../../../recoilModel/utils/fontUtil';
-
-const DEFAULT_FONT_SETTINGS = getDefaultFontSettings();
+import { userSettingsState } from '../../../../../recoilModel';
 
 const editorStyles = css`
   border: none;
@@ -20,11 +19,12 @@ const objectCellStyle = (numLinesOfJson: number) => css`
 `;
 
 type WatchTabObjectValueProps = {
-  value: object;
+  value: any;
 };
 
 export const WatchTabObjectValue: React.FC<WatchTabObjectValueProps> = (props) => {
   const { value } = props;
+  const userSettings = useRecoilValue(userSettingsState);
   const objectCell = useMemo(() => {
     const newLineMatches = JSON.stringify(value, null, 2).match(/\n/g) || [];
     const numLinesOfJson = newLineMatches.length + 1;
@@ -36,11 +36,7 @@ export const WatchTabObjectValue: React.FC<WatchTabObjectValueProps> = (props) =
       <JsonEditor
         editorSettings={{
           fadedWhenReadOnly: false,
-          fontSettings: {
-            fontFamily: DEFAULT_FONT_SETTINGS.fontFamily,
-            fontSize: '12px',
-            fontWeight: 'normal',
-          },
+          fontSettings: { ...userSettings.codeEditor.fontSettings },
         }}
         options={{
           folding: true,

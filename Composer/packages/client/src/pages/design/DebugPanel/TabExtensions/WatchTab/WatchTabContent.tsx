@@ -8,8 +8,8 @@ import { useRecoilValue } from 'recoil';
 import { v4 as uuidv4 } from 'uuid';
 import { ConversationActivityTrafficItem, Activity } from '@botframework-composer/types';
 import { IIconProps } from 'office-ui-fabric-react/lib/Icon';
-import { CommandBarButton } from 'office-ui-fabric-react/lib/Button';
 import { Stack } from 'office-ui-fabric-react/lib/Stack';
+import { CommandBar, ICommandBarStyles } from 'office-ui-fabric-react/lib/CommandBar';
 import {
   DetailsList,
   DetailsListLayoutMode,
@@ -21,13 +21,14 @@ import {
   DetailsRow,
   IDetailsListStyles,
   IDetailsRowStyles,
+  IDetailsHeaderStyles,
 } from 'office-ui-fabric-react/lib/DetailsList';
 import formatMessage from 'format-message';
 import get from 'lodash/get';
 import { ScrollablePane } from 'office-ui-fabric-react/lib/ScrollablePane';
 import { Sticky, StickyPositionType } from 'office-ui-fabric-react/lib/Sticky';
 import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
-import { CommunicationColors, FontSizes } from '@uifabric/fluent-theme';
+import { CommunicationColors, FluentTheme } from '@uifabric/fluent-theme';
 
 import { DebugPanelTabHeaderProps } from '../types';
 import {
@@ -39,24 +40,22 @@ import {
 import { WatchVariablePicker } from '../../WatchVariablePicker/WatchVariablePicker';
 import { getMemoryVariables } from '../../../../../recoilModel/dispatchers/utils/project';
 import { WatchDataPayload } from '../../WatchVariablePicker/utils/helpers';
-import { getDefaultFontSettings } from '../../../../../recoilModel/utils/fontUtil';
 
 import { WatchTabObjectValue } from './WatchTabObjectValue';
-
-const DEFAULT_FONT_SETTINGS = getDefaultFontSettings();
 
 const toolbarHeight = 24;
 
 const unavailbleValue = css`
-  font-family: Segoe UI;
-  font-size: ${FontSizes.size12}px;
+  font-family: ${FluentTheme.fonts.small.fontFamily};
+  font-size: ${FluentTheme.fonts.small.fontSize};
   font-style: italic;
   height: 16px;
   line-height: 16px;
 `;
 
 const primitiveValue = css`
-  font-family: ${DEFAULT_FONT_SETTINGS.fontFamily};
+  font-family: ${FluentTheme.fonts.small.fontFamily};
+  font-size: ${FluentTheme.fonts.small.fontSize};
   color: ${CommunicationColors.shade10};
   height: 16px;
   line-height: 16px;
@@ -87,12 +86,11 @@ const rowStyles: Partial<IDetailsRowStyles> = {
   root: { minHeight: 32 },
 };
 
-const addIcon: IIconProps = {
-  iconName: 'Add',
-};
-
-const removeIcon: IIconProps = {
-  iconName: 'Cancel',
+const commandBarStyles: Partial<ICommandBarStyles> = { root: { height: toolbarHeight, padding: 0 } };
+const detailsHeaderStyles: Partial<IDetailsHeaderStyles> = {
+  root: {
+    paddingTop: 0,
+  },
 };
 
 const NameColumnKey = 'watchTabNameColumn';
@@ -172,9 +170,7 @@ export const WatchTabContent: React.FC<DebugPanelTabHeaderProps> = ({ isActive }
 
   const onRenderVariableName = useCallback(
     (item: { key: string; value: string }, index: number | undefined, column: IColumn | undefined) => {
-      return (
-        <WatchVariablePicker key={item.key} path={item.value} payload={memoryVariablesPayload} variableId={item.key} />
-      );
+      return <WatchVariablePicker key={item.key} payload={memoryVariablesPayload} variableId={item.key} />;
     },
     [memoryVariablesPayload]
   );
@@ -185,7 +181,7 @@ export const WatchTabContent: React.FC<DebugPanelTabHeaderProps> = ({ isActive }
         const variable = watchedVariables[item.key];
         if (variable === undefined) {
           // the variable never passed the picker's validation so it is unavailable
-          return <span css={unavailbleValue}>{formatMessage('unavailable')}</span>;
+          return <span css={unavailbleValue}>{formatMessage('not available')}</span>;
         }
         // try to determine the value and render it accordingly
         const { propertyIsAvailable, value } = getValueFromBotTraceMemory(variable, mostRecentBotState?.activity);
@@ -201,11 +197,11 @@ export const WatchTabContent: React.FC<DebugPanelTabHeaderProps> = ({ isActive }
           }
         } else {
           // the value is not available
-          return <span css={unavailbleValue}>{formatMessage('unavailable')}</span>;
+          return <span css={unavailbleValue}>{formatMessage('not available')}</span>;
         }
       } else {
         // no bot trace available
-        return <span css={unavailbleValue}>{formatMessage('unavailable')}</span>;
+        return <span css={unavailbleValue}>{formatMessage('not available')}</span>;
       }
     },
     [mostRecentBotState, watchedVariables]
@@ -234,7 +230,7 @@ export const WatchTabContent: React.FC<DebugPanelTabHeaderProps> = ({ isActive }
         onRender: onRenderVariableValue,
       },
     ],
-    [onRenderVariableName]
+    [onRenderVariableName, onRenderVariableValue]
   );
 
   // we need to refresh the details list when we get a new bot state, add a new row, or submit a variable to watch
@@ -281,6 +277,7 @@ export const WatchTabContent: React.FC<DebugPanelTabHeaderProps> = ({ isActive }
         {defaultRender({
           ...props,
           onRenderColumnHeaderTooltip: (tooltipHostProps) => <TooltipHost {...tooltipHostProps} />,
+          styles: detailsHeaderStyles,
         })}
       </Sticky>
     );
@@ -292,22 +289,29 @@ export const WatchTabContent: React.FC<DebugPanelTabHeaderProps> = ({ isActive }
 
   return (
     <Stack verticalFill>
-      <Stack.Item
+      <CommandBar
         css={{
           height: `${toolbarHeight}px`,
-          marginTop: '14px',
-          padding: '0 16px',
+          padding: '8px 16px 16px 16px',
           alignItems: 'center',
         }}
-      >
-        <CommandBarButton iconProps={addIcon} text={formatMessage('Add property')} onClick={onClickAdd} />
-        <CommandBarButton
-          disabled={removeIsDisabled}
-          iconProps={removeIcon}
-          text={formatMessage('Remove from list')}
-          onClick={onClickRemove}
-        />
-      </Stack.Item>
+        items={[
+          {
+            key: 'addProperty',
+            text: formatMessage('Add property'),
+            iconProps: { iconName: 'Add' },
+            onClick: onClickAdd,
+          },
+          {
+            disabled: removeIsDisabled,
+            key: 'removeProperty',
+            text: formatMessage('Remove from list'),
+            iconProps: { iconName: 'Cancel' },
+            onClick: onClickRemove,
+          },
+        ]}
+        styles={commandBarStyles}
+      />
       <Stack.Item
         css={{
           height: `calc(100% - 55px)`,
