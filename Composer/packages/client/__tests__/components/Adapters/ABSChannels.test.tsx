@@ -153,7 +153,7 @@ describe('<ABSChannels />', () => {
     expect(component.container).toHaveTextContent('Learn more');
     expect(component.container).toHaveTextContent('Open manifest');
 
-    const teamsToggle = component.getByTestId('MsTeamsChannel_toggle');
+    const teamsToggle = component.getByTestId(`${CHANNELS.TEAMS}_toggle`);
     await act(async () => {
       await fireEvent.click(teamsToggle);
     });
