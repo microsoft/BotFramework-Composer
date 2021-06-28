@@ -303,7 +303,7 @@ const BotController: React.FC<BotControllerProps> = ({ onHideController, isContr
                 },
                 rootHovered: { background: transparentBackground, color: NeutralColors.white },
               }}
-              title={fstartStopLabel}
+              title={startStopLabel}
               onClick={onSplitButtonClick}
             />
           </TooltipHost>
