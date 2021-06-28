@@ -1,12 +1,12 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { createProcessTracker } from '../processTracker';
+import { createProcessStatusTracker } from '../processStatusTracker';
 
-describe('processTracker', () => {
+describe('processStatusTracker', () => {
   describe('start method', () => {
-    it('start initializes with defaults', () => {
-      const tracker = createProcessTracker();
+    it('initializes with defaults', () => {
+      const tracker = createProcessStatusTracker();
       expect(tracker).toBeDefined();
 
       const actual = tracker.start({
@@ -26,8 +26,8 @@ describe('processTracker', () => {
       expect(actual.time.valueOf()).toBeLessThanOrEqual(new Date().valueOf());
     });
 
-    it('start initializes with optional values', () => {
-      const tracker = createProcessTracker();
+    it('initializes with optional values', () => {
+      const tracker = createProcessStatusTracker();
       expect(tracker).toBeDefined();
 
       const now = new Date();
@@ -56,8 +56,8 @@ describe('processTracker', () => {
       expect(actual.time.valueOf()).toEqual(now.valueOf());
     });
 
-    it('start tracks multiple processes', () => {
-      const tracker = createProcessTracker();
+    it('tracks multiple processes', () => {
+      const tracker = createProcessStatusTracker();
       expect(tracker).toBeDefined();
 
       const status1 = tracker.start({
@@ -88,9 +88,9 @@ describe('processTracker', () => {
     });
   });
 
-  describe('getByName method', () => {
-    it('getByName finds status', () => {
-      const tracker = createProcessTracker();
+  describe('getByProcessName method', () => {
+    it('finds status', () => {
+      const tracker = createProcessStatusTracker();
       expect(tracker).toBeDefined();
 
       tracker.start({
@@ -108,13 +108,13 @@ describe('processTracker', () => {
         projectId: 'project3',
       });
 
-      const actual = tracker.getByName('process2');
+      const actual = tracker.getByProcessName('process2');
       expect(actual).toBeDefined();
       expect(actual.projectId).toEqual('project2');
     });
 
-    it('getByName returns undefined when no matching status', () => {
-      const tracker = createProcessTracker();
+    it('returns undefined when no matching status', () => {
+      const tracker = createProcessStatusTracker();
       expect(tracker).toBeDefined();
 
       tracker.start({
@@ -132,12 +132,12 @@ describe('processTracker', () => {
         projectId: 'project3',
       });
 
-      const actual = tracker.getByName('does-not-exist');
+      const actual = tracker.getByProcessName('does-not-exist');
       expect(actual).toBeUndefined();
     });
 
-    it('getByName finds most recent of same name', () => {
-      const tracker = createProcessTracker();
+    it('finds most recent of same name', () => {
+      const tracker = createProcessStatusTracker();
       expect(tracker).toBeDefined();
 
       const timeA = new Date('1/1/2001');
@@ -165,15 +165,98 @@ describe('processTracker', () => {
         time: timeB,
       });
 
-      const actual = tracker.getByName('process2');
+      const actual = tracker.getByProcessName('process2');
       expect(actual).toBeDefined();
       expect(actual.projectId).toEqual('project2B');
     });
   });
 
+  describe('getByProjectId method', () => {
+    it('finds status', () => {
+      const tracker = createProcessStatusTracker();
+      expect(tracker).toBeDefined();
+
+      tracker.start({
+        processName: 'process1',
+        projectId: 'project1',
+      });
+
+      tracker.start({
+        processName: 'process2',
+        projectId: 'project2',
+      });
+
+      tracker.start({
+        processName: 'process3',
+        projectId: 'project3',
+      });
+
+      const actual = tracker.getByProjectId('project2');
+      expect(actual).toBeDefined();
+      expect(actual.processName).toEqual('process2');
+    });
+
+    it('returns undefined when no matching status', () => {
+      const tracker = createProcessStatusTracker();
+      expect(tracker).toBeDefined();
+
+      tracker.start({
+        processName: 'process1',
+        projectId: 'project1',
+      });
+
+      tracker.start({
+        processName: 'process2',
+        projectId: 'project2',
+      });
+
+      tracker.start({
+        processName: 'process3',
+        projectId: 'project3',
+      });
+
+      const actual = tracker.getByProjectId('does-not-exist');
+      expect(actual).toBeUndefined();
+    });
+
+    it('finds most recent of same ID', () => {
+      const tracker = createProcessStatusTracker();
+      expect(tracker).toBeDefined();
+
+      const timeA = new Date('1/1/2001');
+      const timeB = new Date('2/1/2001');
+
+      tracker.start({
+        processName: 'process1',
+        projectId: 'project1',
+      });
+
+      tracker.start({
+        processName: 'process2A',
+        projectId: 'project2',
+        time: timeA,
+      });
+
+      tracker.start({
+        processName: 'process3',
+        projectId: 'project3',
+      });
+
+      tracker.start({
+        processName: 'process2B',
+        projectId: 'project2',
+        time: timeB,
+      });
+
+      const actual = tracker.getByProjectId('project2');
+      expect(actual).toBeDefined();
+      expect(actual.processName).toEqual('process2B');
+    });
+  });
+
   describe('update method', () => {
-    it('update modifies status', () => {
-      const tracker = createProcessTracker();
+    it('modifies status', () => {
+      const tracker = createProcessStatusTracker();
       expect(tracker).toBeDefined();
 
       const status = tracker.start({
@@ -194,8 +277,8 @@ describe('processTracker', () => {
       expect(actual.config).toEqual(config);
     });
 
-    it('update overwrites config', () => {
-      const tracker = createProcessTracker();
+    it('overwrites config', () => {
+      const tracker = createProcessStatusTracker();
       expect(tracker).toBeDefined();
 
       const config1 = { name: 'config1' };
@@ -218,8 +301,8 @@ describe('processTracker', () => {
       expect(actual.config).toEqual(config4);
     });
 
-    it('update overwrites message', () => {
-      const tracker = createProcessTracker();
+    it('overwrites message', () => {
+      const tracker = createProcessStatusTracker();
       expect(tracker).toBeDefined();
 
       const status = tracker.start({
@@ -237,8 +320,8 @@ describe('processTracker', () => {
       expect(actual.message).toEqual('message4');
     });
 
-    it('update appends to log', () => {
-      const tracker = createProcessTracker();
+    it('appends to log', () => {
+      const tracker = createProcessStatusTracker();
       expect(tracker).toBeDefined();
 
       const status = tracker.start({
@@ -261,8 +344,8 @@ describe('processTracker', () => {
       expect(actual.message).toEqual('message4');
     });
 
-    it('update overwrites status', () => {
-      const tracker = createProcessTracker();
+    it('overwrites status', () => {
+      const tracker = createProcessStatusTracker();
       expect(tracker).toBeDefined();
 
       const status = tracker.start({
@@ -280,10 +363,10 @@ describe('processTracker', () => {
       expect(actual.status).toEqual(204);
     });
 
-    it('update no-op for non-existent process', () => {
+    it('no-op for non-existent process', () => {
       const warnSpy = jest.spyOn(console, 'warn').mockImplementation(() => {});
       try {
-        const tracker = createProcessTracker();
+        const tracker = createProcessStatusTracker();
         expect(tracker).toBeDefined();
 
         tracker.start({
@@ -311,8 +394,8 @@ describe('processTracker', () => {
   });
 
   describe('stop method', () => {
-    it('stop removes status', () => {
-      const tracker = createProcessTracker();
+    it('removes status', () => {
+      const tracker = createProcessStatusTracker();
       expect(tracker).toBeDefined();
 
       tracker.start({
@@ -340,8 +423,8 @@ describe('processTracker', () => {
       expect(actual).toBeUndefined();
     });
 
-    it('stop no-op for non-existent process', () => {
-      const tracker = createProcessTracker();
+    it('no-op for non-existent process', () => {
+      const tracker = createProcessStatusTracker();
       expect(tracker).toBeDefined();
 
       tracker.start({

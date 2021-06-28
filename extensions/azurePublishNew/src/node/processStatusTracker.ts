@@ -14,7 +14,7 @@ type ProcessStatusUpdate = Pick<Partial<ProcessStatus>, 'status' | 'message' | '
  * Creates a tracker of ProcessStatus.
  * The tracker avoids throwing errors to prevent status tracking from halting the process itself.
  */
-export const createProcessTracker = () => {
+export const createProcessStatusTracker = () => {
   const statusById: Record<string, ProcessStatus> = {};
 
   /**
@@ -41,11 +41,21 @@ export const createProcessTracker = () => {
   };
 
   /**
-   * Gets the first, most recent matching process by name.
+   * Gets the first, most recent matching process name.
    */
-  const getByName = (name: string) => {
+  const getByProcessName = (processName: string) => {
     const matches = Object.values(statusById)
-      .filter((status) => status.processName === name)
+      .filter((status) => status.processName === processName)
+      .sort((a, b) => b.time.valueOf() - a.time.valueOf());
+    return matches?.[0];
+  };
+
+  /**
+   * Gets the first, most recent matching process name.
+   */
+  const getByProjectId = (projectId: string) => {
+    const matches = Object.values(statusById)
+      .filter((status) => status.projectId === projectId)
       .sort((a, b) => b.time.valueOf() - a.time.valueOf());
     return matches?.[0];
   };
@@ -74,7 +84,8 @@ export const createProcessTracker = () => {
   return {
     start,
     get,
-    getByName,
+    getByProcessName,
+    getByProjectId,
     update,
     stop,
   };
