@@ -113,7 +113,7 @@ export const TeamsManifestGeneratorModal = (props: TeamsManifestGeneratorModalPr
       <TextField
         multiline
         componentRef={textFieldRef}
-        data-testId={'teamsManifestTextField'}
+        data-testid={'teamsManifestTextField'}
         rows={25}
         styles={{ root: { marginTop: '10px' }, fieldGroup: { backgroundColor: '#f3f2f1' } }}
         value={generateTeamsManifest()}
