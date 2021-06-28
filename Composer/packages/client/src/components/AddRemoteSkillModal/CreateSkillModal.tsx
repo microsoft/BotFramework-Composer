@@ -79,6 +79,40 @@ export const validateManifestUrl = ({ formData, formDataErrors, setFormDataError
   }
 };
 
+export const validateLocalZip = async (files: Record<string, JSZipObject>) => {
+  const result: { error: any; zipContent?: Record<string, string>; manifestContent?: any; path: string } = {
+    error: {},
+    path: '',
+  };
+  try {
+    // get manifest
+    const manifestFiles: JSZipObject[] = [];
+    const zipContent: Record<string, string> = {};
+    for (const fPath in files) {
+      zipContent[fPath] = await files[fPath].async('string');
+      // eslint-disable-next-line no-useless-escape
+      console.log(isManifestJson(zipContent[fPath]));
+      if (fPath.match(/\.([^\.]+)$/)?.[1] === 'json' && isManifestJson(zipContent[fPath])) {
+        manifestFiles.push(files[fPath]);
+        result['path'] = fPath.substr(0, fPath.lastIndexOf('/') + 1);
+      }
+    }
+
+    // update content for detail panel and show it
+    if (manifestFiles.length > 1) {
+      result['error'] = { manifestUrl: formatMessage('zip folder has multiply manifest json') };
+    } else if (manifestFiles.length === 1) {
+      const content = await manifestFiles[0].async('string');
+      result['manifestContent'] = JSON.parse(content);
+      result['zipContent'] = zipContent;
+    }
+  } catch (err) {
+    // eslint-disable-next-line format-message/literal-pattern
+    result['error'] = { manifestUrl: formatMessage(err.toString()) };
+  }
+  return result;
+};
+
 export const getSkillManifest = async (
   projectId: string,
   manifestUrl: string,
@@ -210,36 +244,6 @@ export const CreateSkillModal: React.FC<CreateSkillModalProps> = (props) => {
     [projectId, formData]
   );
 
-  const validateLocalZip = useCallback(async (files: Record<string, JSZipObject>) => {
-    try {
-      // get manifest
-      const manifestFiles: JSZipObject[] = [];
-      const zipContent: Record<string, string> = {};
-      for (const fPath in files) {
-        zipContent[fPath] = await files[fPath].async('string');
-        // eslint-disable-next-line no-useless-escape
-        if (fPath.match(/\.([^\.]+)$/)?.[1] === 'json' && isManifestJson(zipContent[fPath])) {
-          manifestFiles.push(files[fPath]);
-          setManifestDirPath(fPath.substr(0, fPath.lastIndexOf('/') + 1));
-        }
-      }
-
-      // update content for detail panel and show it
-      if (manifestFiles.length > 1) {
-        setFormDataErrors({ manifestUrl: formatMessage('zip folder has multiply manifest json') });
-      } else if (manifestFiles.length === 1) {
-        const content = await manifestFiles[0].async('string');
-        setSkillManifest(JSON.parse(content));
-        setFormDataErrors({});
-        setZipContent(zipContent);
-      }
-      setShowDetail(true);
-    } catch (err) {
-      // eslint-disable-next-line format-message/literal-pattern
-      setFormDataErrors({ manifestUrl: formatMessage(err.toString()) });
-    }
-  }, []);
-
   const handleSubmit = async (event, content: string, enable: boolean) => {
     event.preventDefault();
     // add a remote skill, add skill identifier into botProj file
@@ -289,6 +293,23 @@ export const CreateSkillModal: React.FC<CreateSkillModalProps> = (props) => {
 
   const handleGotoCreateProfile = () => {
     isShowAuthDialog(true) ? setShowAuthDialog(true) : setCreateSkillDialogHidden(true);
+  };
+
+  const handleBrowseButtonUpdate = async (path: string, files: Record<string, JSZipObject>) => {
+    // update path in input field
+    setFormData({
+      ...formData,
+      manifestUrl: path,
+    });
+
+    const result = await validateLocalZip(files);
+    result.error.manifestUrl && setFormDataErrors(result.error);
+    result.path && setManifestDirPath(result.path);
+    result.zipContent && setZipContent(result.zipContent);
+    if (result.manifestContent) {
+      setSkillManifest(result.manifestContent);
+      setShowDetail(true);
+    }
   };
 
   useEffect(() => {
@@ -371,17 +392,7 @@ export const CreateSkillModal: React.FC<CreateSkillModalProps> = (props) => {
                     value={formData.manifestUrl || ''}
                     onChange={handleManifestUrlChange}
                   />
-                  <BrowserModal
-                    onUpdate={(path: string, files: Record<string, JSZipObject>) => {
-                      // update path in input field
-                      setFormData({
-                        ...formData,
-                        manifestUrl: path,
-                      });
-
-                      validateLocalZip(files);
-                    }}
-                  />
+                  <BrowserModal onUpdate={handleBrowseButtonUpdate} />
                 </div>
                 {skillManifest?.endpoints?.length > 1 && (
                   <Dropdown
