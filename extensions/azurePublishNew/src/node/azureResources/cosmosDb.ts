@@ -21,5 +21,6 @@ export const getCosmosDbProvisionService = (): ResourceProvisionService => {
     getDependencies: () => [],
     getRecommendationForProject: (project) => 'optional',
     provision: getCosmosDbProvisionMethod(),
+    canPollStatus: false,
   };
 };

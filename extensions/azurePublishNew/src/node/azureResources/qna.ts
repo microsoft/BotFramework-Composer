@@ -23,5 +23,6 @@ export const getQnAProvisionService = (): ResourceProvisionService => {
       return project.isQnARequired; // tbd
     },
     provision: getQnAProvisionMethod(),
+    canPollStatus: false,
   };
 };

@@ -9,6 +9,7 @@ export type ResourceProvisionService = {
   getDependencies: () => string[];
   getRecommendationForProject: (project: IBotProject) => 'required' | 'optional' | 'notAllowed';
   provision: ProvisionMethod;
+  canPollStatus: boolean;
 };
 
 type ResourceDefinitionGroup = 'App Services' | 'Cognitive Services';

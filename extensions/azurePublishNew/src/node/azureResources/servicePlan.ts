@@ -58,5 +58,6 @@ export const getAppServiceProvisionService = (config: ProvisionConfig): Resource
       return runtimeType !== 'functions' ? 'required' : 'notAllowed';
     },
     provision: appServiceProvisionMethod(config),
+    canPollStatus: true,
   };
 };

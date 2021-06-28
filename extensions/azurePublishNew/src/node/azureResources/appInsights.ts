@@ -20,5 +20,6 @@ export const getAppInsightsProvisionService = (): ResourceProvisionService => {
     getDependencies: () => ['botRegistration'],
     getRecommendationForProject: (project) => 'optional',
     provision: getAppInsightsProvisionMethod(),
+    canPollStatus: false,
   };
 };

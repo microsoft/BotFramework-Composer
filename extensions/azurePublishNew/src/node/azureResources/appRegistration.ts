@@ -93,5 +93,6 @@ export const getAppRegistrationProvisionService = (config: ProvisionConfig): Res
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     getRecommendationForProject: (project) => 'required',
     provision: appRegistrationProvisionMethod(config),
+    canPollStatus: false,
   };
 };

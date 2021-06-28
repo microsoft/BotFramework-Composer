@@ -18,5 +18,6 @@ export const getLuisAuthoringProvisionService = (): ResourceProvisionService => 
       return project.requiresLuisAuthoring; // tbd
     },
     provision: getLuisAuthoringProvisionMethod(),
+    canPollStatus: false,
   };
 };

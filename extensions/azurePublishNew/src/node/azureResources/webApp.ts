@@ -65,5 +65,6 @@ export const getWebAppProvisionService = (config: ProvisionConfig): ResourceProv
       return runtimeType !== 'functions' ? 'required' : 'notAllowed';
     },
     provision: webAppProvisionMethod(config),
+    canPollStatus: true,
   };
 };
