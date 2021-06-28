@@ -4,7 +4,7 @@ import { AzureTenant, CurrentUser } from '@botframework-composer/types';
 import { atom } from 'recoil';
 
 const getFullyQualifiedKey = (value: string) => {
-  return `App_${value}_State`;
+  return `Auth_${value}_State`;
 };
 
 export const showAuthDialogState = atom<boolean>({

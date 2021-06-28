@@ -30,7 +30,7 @@ import { graphScopes } from '../../constants';
 import { addNotificationInternal, createNotification } from './notification';
 
 export type UserLoginOptions = {
-  graph?: boolean;
+  requireGraph?: boolean;
 };
 
 export const authDispatcher = () => {
@@ -147,8 +147,8 @@ export const authDispatcher = () => {
   const requireUserLogin = useRecoilCallback(
     (callbackHelpers: CallbackInterface) => async (desiredTenantId?: string, options?: UserLoginOptions) => {
       if (userShouldProvideTokens()) {
-        if (isShowAuthDialog(options?.graph || false)) {
-          setShowAuthDialog(true, options?.graph || false);
+        if (isShowAuthDialog(options?.requireGraph || false)) {
+          setShowAuthDialog(true, options?.requireGraph || false);
         } else {
           // update app state with token from cache
           setCurrentUser(getTokenFromCache('accessToken'), getTokenFromCache('graphToken'));

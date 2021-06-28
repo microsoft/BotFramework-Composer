@@ -123,20 +123,24 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
       // identify the publishing profile in the list
       const profile = publishTargets?.find((p) => p.name === opt.key);
       if (profile) {
-        const config = JSON.parse(profile.configuration);
+        try {
+          const config = JSON.parse(profile.configuration);
 
-        // NOTE: if config.tenantId is missing (as might be the case with a pre-1.4 composer publish profile)
-        // this will cause the user to be prompted for the correct tenant when they login.
-        // if they choose the WRONG tenant, an error will appear.
-        requireUserLogin(config.tenantId);
+          // NOTE: if config.tenantId is missing (as might be the case with a pre-1.4 composer publish profile)
+          // this will cause the user to be prompted for the correct tenant when they login.
+          // if they choose the WRONG tenant, an error will appear.
+          requireUserLogin(config.tenantId);
 
-        setCurrentResource({
-          microsoftAppId: config?.settings?.MicrosoftAppId,
-          resourceName: config.botName || config.name,
-          resourceGroupName: config.resourceGroup || config.botName || config.name,
-          tenantId: config.tenantId,
-          subscriptionId: config.subscriptionId,
-        });
+          setCurrentResource({
+            microsoftAppId: config.settings?.MicrosoftAppId,
+            resourceName: config.botName || config.name,
+            resourceGroupName: config.resourceGroup || config.botName || config.name,
+            tenantId: config.tenantId,
+            subscriptionId: config.subscriptionId,
+          });
+        } catch (err) {
+          setApplicationLevelError(err);
+        }
       }
     }
   };

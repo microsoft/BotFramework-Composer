@@ -3,10 +3,10 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import formatMessage from 'format-message';
-import { Fragment, useEffect, useState } from 'react';
+import { Fragment, useEffect, useState, useRef } from 'react';
 import { ActionButton } from 'office-ui-fabric-react/lib/Button';
 import { Callout } from 'office-ui-fabric-react/lib/Callout';
-import { Persona, PersonaSize } from 'office-ui-fabric-react/lib/Persona';
+import { Persona, IPersona, PersonaSize } from 'office-ui-fabric-react/lib/Persona';
 import { ILinkStyles, Link } from 'office-ui-fabric-react/lib/Link';
 import { useRecoilValue } from 'recoil';
 import { NeutralColors } from '@uifabric/fluent-theme';
@@ -61,6 +61,8 @@ export const AuthCard: React.FC = () => {
   const showTenantDialog = useRecoilValue(showTenantDialogState);
   const requiresGraph = useRecoilValue(requiresGraphState);
 
+  const personaRef = useRef<IPersona | null>(null);
+
   useEffect(() => {
     refreshLoginStatus();
   }, []);
@@ -84,7 +86,7 @@ export const AuthCard: React.FC = () => {
       {/* this is the icon that appears at the top of the header bar */}
       <Persona
         hidePersonaDetails
-        id={'persona'}
+        componentRef={personaRef}
         initialsColor={currentUser ? NeutralColors.gray160 : undefined}
         size={PersonaSize.size32}
         text={currentUser?.name}
@@ -99,14 +101,14 @@ export const AuthCard: React.FC = () => {
           styles={{
             root: { width: 320, zIndex: zIndices.authContainer, backgroundColor: NeutralColors.white },
           }}
-          target={`#persona`}
+          target={personaRef.current}
           onDismiss={toggleAuthCardVisibility}
         >
           {isAuthenticated ? (
             <Stack tokens={{ childrenGap: 10, padding: 20 }}>
               <Stack.Item align="end">
                 <Link styles={styles.logoutLink as ILinkStyles} onClick={logout}>
-                  Sign out
+                  {formatMessage('Sign out')}
                 </Link>
               </Stack.Item>
               <Stack.Item>
@@ -136,7 +138,7 @@ export const AuthCard: React.FC = () => {
           ) : (
             <div css={{ padding: 10 }}>
               <ActionButton allowDisabledFocus iconProps={{ iconName: 'FollowUser' }} onClick={switchTenants}>
-                Sign in to your Azure account
+                {formatMessage('Sign in to your Azure account')}
               </ActionButton>
             </div>
           )}
