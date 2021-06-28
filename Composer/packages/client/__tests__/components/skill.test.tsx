@@ -139,7 +139,9 @@ describe('<SkillForm />', () => {
       });
 
       expect(setFormDataErrors).toBeCalledWith(
-        expect.objectContaining({ manifestUrl: 'URL should start with http:// or https://' })
+        expect.objectContaining({
+          manifestUrl: 'URL should start with http:// or https:// or file path of your system',
+        })
       );
       expect(setSkillManifest).not.toBeCalled();
     });
