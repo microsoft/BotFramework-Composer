@@ -14,6 +14,8 @@ import { readTextFileSync, writeJsonFileSync } from './fs';
 export const persistedFilePath = path.join(app.getPath('userData'), 'persisted.json');
 
 function truncate(str: string): string {
+  // We generate machine IDs using a hash of the MAC address, so
+  // we truncate the hash to make it that much harder to reverse
   return str.slice(0, str.length * 0.8);
 }
 
