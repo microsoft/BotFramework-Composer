@@ -44,20 +44,6 @@ export const getProvisionServices = (config: ProvisionConfig): Record<string, Re
   };
 };
 
-// const getSelectedResources = () => [];
-// const SORTED_RESOURCES = ['appRegistration', 'servicePlan', 'webApp'];
-
-// provisioned: []
-// i = 0;
-// while toBeDeployed.length > 0
-// if (dependenciesAreDeployed) {
-//   service.provision()
-//   provisioned.push(toBeDeployed.pop())
-// } else {
-//   pass
-//}
-// i++;
-
 export const setUpProvisionService = (config: ProvisionConfig) => {
   const provisionServices = getProvisionServices(config);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
