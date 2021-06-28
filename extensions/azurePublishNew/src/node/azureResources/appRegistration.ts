@@ -5,12 +5,29 @@ import { AxiosRequestConfig } from 'axios';
 import * as rp from 'request-promise';
 
 import { createCustomizeError, ProvisionErrors } from '../../../../azurePublish/src/node/utils/errorHandler';
-import { ProvisionConfig, ProvisionWorkingSet, ResourceConfig, ResourceProvisionService } from '../types';
+import {
+  ProvisionConfig,
+  ProvisionWorkingSet,
+  ResourceConfig,
+  ResourceDefinition,
+  ResourceProvisionService,
+} from '../types';
+
+import { AZURE_HOSTING_GROUP_NAME, FREE_APP_REGISTRATION_TIER } from './constants';
 
 type AppRegistrationResourceConfig = ResourceConfig & {
   key: 'appRegistration';
   appName: string;
 };
+
+export const appRegistrationDefinition: ResourceDefinition = {
+  key: 'appRegistration',
+  text: 'Microsoft Application Registration',
+  description: 'Required registration allowing your bot to communicate with Azure services.',
+  tier: FREE_APP_REGISTRATION_TIER,
+  group: AZURE_HOSTING_GROUP_NAME,
+};
+
 const sleep = (waitTimeInMs) => new Promise((resolve) => setTimeout(resolve, waitTimeInMs));
 
 const postRequestWithRetry = async (requestUri: string, requestOptions: AxiosRequestConfig) => {

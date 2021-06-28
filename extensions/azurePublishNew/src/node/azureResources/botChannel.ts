@@ -9,6 +9,7 @@ import {
   ProvisionMethod,
   ProvisionWorkingSet,
   ResourceConfig,
+  ResourceDefinition,
   ResourceProvisionService,
 } from '../types';
 import {
@@ -17,11 +18,22 @@ import {
   stringifyError,
 } from '../../../../azurePublish/src/node/utils/errorHandler';
 
+import { AZURE_HOSTING_GROUP_NAME, FREE_COGNITIVE_SERVICES_TIER } from './constants';
+
 type BotServiceConfig = ResourceConfig & {
   key: 'botChannel';
   displayName: string;
   hostname: string; // probably should be derived from webapp, not here
   resourceGroupName: string;
+};
+
+export const botRegistrationDefinition: ResourceDefinition = {
+  key: 'botRegistration',
+  text: 'Microsoft Bot Channels Registration',
+  description:
+    'When registered with the Azure Bot Service, you can host your bot in any environment and enable customers from a variety of channels, such as your app or website, Direct Line Speech, Microsoft Teams and more.',
+  tier: FREE_COGNITIVE_SERVICES_TIER,
+  group: AZURE_HOSTING_GROUP_NAME,
 };
 
 const botChannelProvisionMethod = (provisionConfig: ProvisionConfig): ProvisionMethod => {
