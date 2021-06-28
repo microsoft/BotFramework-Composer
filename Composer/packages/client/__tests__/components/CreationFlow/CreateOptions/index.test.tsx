@@ -26,6 +26,7 @@ describe('<CreateOptions/>', () => {
         packageName: 'generator-conversational-core',
         packageSource: 'npm',
         packageVersion: '1.0.9',
+        availableVersions: [''],
       },
     },
   ];

@@ -31,9 +31,14 @@ import { ResourceNameTextField } from '../../resourceConfiguration/ResourceNameT
 import { LuisRegionPicker } from '../../resourceConfiguration/LuisRegionPicker';
 import { LuisAuthoringSupportLocation } from '../../../constants';
 import { userInfoState } from '../../../recoilModel/atoms/resourceConfigurationState';
+import { OperatingSystemChoiceGroup } from '../../resourceConfiguration/OperatingSystemChoiceGroup';
 
 type Props = {
   onResourceConfigurationChange: (isValidConfiguration: boolean) => void;
+};
+
+const appOSChoiceGroupStyles = {
+  flexContainer: { display: 'flex', flexDirection: 'row' },
 };
 
 const ConfigureResourcesSectionName = styled(Text)`
@@ -96,6 +101,7 @@ export const ResourceConfigurationStep = (props: Props) => {
       luisRegion,
       isNewResourceGroup,
       hostName,
+      appServiceOperatingSystem,
     },
     handleChangeResourceGroup,
     handleChangeDeployLocation,
@@ -106,6 +112,7 @@ export const ResourceConfigurationStep = (props: Props) => {
     handleFetchDeployLocation,
     handleChangeLuisRegion,
     handleChangeHostName,
+    handleChangeOperatingSystem,
     isValidConfiguration,
     deployLocations,
   } = useResourceConfiguration();
@@ -204,6 +211,24 @@ export const ResourceConfigurationStep = (props: Props) => {
               onChangeResourceGroup={handleChangeResourceGroup}
               onClear={() => handleChangeResourceGroup('', false)}
               onValidateResourceGroupName={handleValidateResourceGroupName}
+            />
+          </Stack>
+          <Stack horizontal tokens={configureResourcePropertyStackTokens} verticalAlign="start">
+            <Stack horizontal styles={configureResourcePropertyLabelStackStyles} verticalAlign="center">
+              <ConfigureResourcesPropertyLabel required>
+                {formatMessage('Operating System')}
+              </ConfigureResourcesPropertyLabel>
+              {renderPropertyInfoIcon(
+                formatMessage('Select the operating system that will host your application service.')
+              )}
+            </Stack>
+            <OperatingSystemChoiceGroup
+              required
+              selectedKey={appServiceOperatingSystem}
+              styles={appOSChoiceGroupStyles}
+              onChange={(_, o) => {
+                handleChangeOperatingSystem(o.key);
+              }}
             />
           </Stack>
           <ConfigureResourcesSectionName>{formatMessage('Resource details')}</ConfigureResourcesSectionName>

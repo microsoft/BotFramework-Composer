@@ -12,9 +12,12 @@ import {
   deployLocationState,
   resourceGroupState,
   hostNameState,
+  operatingSystemState,
 } from '../recoilModel/atoms/resourceConfigurationState';
 import { PublishProfileConfiguration } from '../types';
 import { importConfigurationState } from '../recoilModel/atoms/importConfigurationState';
+
+import { usePreferredAppServiceOS } from './usePreferredAppServiceOS';
 
 const defaultConfig: PublishProfileConfiguration = {
   tenantId: '',
@@ -23,11 +26,13 @@ const defaultConfig: PublishProfileConfiguration = {
   hostName: '',
   luisRegion: '',
   resourceGroup: { isNew: false, name: '' },
+  appServiceOperatingSystem: '',
 };
 
 export const usePublishProfileInitializer = () => {
   const { getName, publishConfig, getSchema } = usePublishApi();
   const { getItem } = useLocalStorage();
+  const preferredOS = usePreferredAppServiceOS();
 
   const currentPublishConfig: PublishProfileConfiguration = {
     deployLocation: publishConfig?.region,
@@ -36,6 +41,7 @@ export const usePublishProfileInitializer = () => {
     resourceGroup: { name: publishConfig?.resourceGroup, isNew: false },
     subscriptionId: publishConfig?.subscriptionId,
     tenantId: publishConfig?.tenantId,
+    appServiceOperatingSystem: '',
   };
 
   const initialize = ({ set }: MutableSnapshot) => {
@@ -61,6 +67,7 @@ export const usePublishProfileInitializer = () => {
       config: JSON.stringify(publishConfig || getSchema()?.default, null, 2),
       isValidConfiguration: true,
     });
+    set(operatingSystemState, preferredOS);
   };
 
   return initialize;

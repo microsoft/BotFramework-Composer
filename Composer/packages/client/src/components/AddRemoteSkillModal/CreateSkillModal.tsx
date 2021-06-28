@@ -23,6 +23,7 @@ import {
   luFilesSelectorFamily,
   publishTypesState,
   botProjectFileState,
+  rootDialogSelector,
 } from '../../recoilModel';
 import { addSkillDialog } from '../../constants';
 import httpClient from '../../utils/httpUtil';
@@ -138,6 +139,7 @@ export const CreateSkillModal: React.FC<CreateSkillModalProps> = (props) => {
     settingsState(projectId)
   );
   const { dialogId } = useRecoilValue(designPageLocationState(projectId));
+  const rootDialog = useRecoilValue(rootDialogSelector(projectId));
   const luFiles = useRecoilValue(luFilesSelectorFamily(projectId));
   const { updateRecognizer, setMicrosoftAppProperties, setPublishTargets } = useRecoilValue(dispatcherState);
   const { content: botProjectFile } = useRecoilValue(botProjectFileState(projectId));
@@ -193,16 +195,22 @@ export const CreateSkillModal: React.FC<CreateSkillModalProps> = (props) => {
     TelemetryClient.track('AddNewSkillCompleted');
     // if added remote skill fail, just not addTrigger to root.
     const skillId = location.href.match(/skill\/([^/]*)/)?.[1];
+
+    //if the root dialog is orchestrator recoginzer type or user chooses orchestrator type before connecting,
+    //add the trigger to the root dialog.
+    const boundId =
+      rootDialog && (rootDialog.luProvider === SDKKinds.OrchestratorRecognizer || enable) ? rootDialog.id : dialogId;
+
     if (skillId) {
       // add trigger with connect to skill action to root bot
       const triggerFormData = getTriggerFormData(skillManifest.name, content);
-      await addTriggerToRoot(dialogId, triggerFormData, skillId);
+      await addTriggerToRoot(boundId, triggerFormData, skillId);
       TelemetryClient.track('AddNewTriggerCompleted', { kind: 'Microsoft.OnIntent' });
     }
 
     if (enable) {
       // update recognizor type to orchestrator
-      await updateRecognizer(projectId, dialogId, SDKKinds.OrchestratorRecognizer);
+      await updateRecognizer(projectId, boundId, SDKKinds.OrchestratorRecognizer);
     }
   };
 

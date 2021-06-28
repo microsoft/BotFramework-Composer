@@ -17,6 +17,7 @@ import {
   currentProjectIdState,
   userSettingsState,
   templateProjectsState,
+  selectedTemplateVersionState,
 } from '../../recoilModel';
 import { localBotsDataSelector } from '../../recoilModel/selectors/project';
 import Home from '../../pages/home/Home';
@@ -63,6 +64,7 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
   const storage = storages[currentStorageIndex.current];
   const currentStorageId = storage ? storage.id : 'default';
   const [localTemplatePath, setLocalTemplatePath] = useState('');
+  const selectedTemplateVersion = useRecoilValue(selectedTemplateVersionState);
 
   useEffect(() => {
     if (storages?.length) {
@@ -125,9 +127,11 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
   };
 
   const handleCreateNew = async (formData, templateId: string, qnaKbUrls?: string[]) => {
-    const templateVersion = templateProjects.find((template: BotTemplate) => {
-      return template.id == templateId;
-    })?.package?.packageVersion;
+    const templateVersion =
+      selectedTemplateVersion ??
+      templateProjects.find((template: BotTemplate) => {
+        return template.id == templateId;
+      })?.package?.packageVersion;
     const newBotData = {
       templateId: templateId || '',
       templateVersion: templateVersion || '',
