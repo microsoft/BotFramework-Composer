@@ -47,7 +47,7 @@ import { subText, styles, contentBox, formContainer, choiceContainer } from './s
 import { CreateQnAFromUrl } from './CreateQnAFromUrl';
 import { CreateQnAFromScratch } from './CreateQnAFromScratch';
 import { CreateQnAFromQnAMaker } from './CreateQnAFromQnAMaker';
-import { QnALanguageToLocale } from './utilities';
+import { isLocalesOnSameLanguage } from './utilities';
 
 type KeyRec = {
   name: string;
@@ -60,7 +60,7 @@ type KeyRec = {
 type KBRec = {
   id: string;
   name: string;
-  locale: string;
+  language: string;
   lastChangedTimestamp: string;
 };
 
@@ -312,7 +312,7 @@ export const CreateQnAModal: React.FC<CreateQnAModalProps> = (props) => {
           return {
             id: item.id || '',
             name: item.name || '',
-            locale: QnALanguageToLocale(item.language) || '',
+            language: item.language || '',
             lastChangedTimestamp: item.lastChangedTimestamp || '',
           };
         });
@@ -547,7 +547,9 @@ export const CreateQnAModal: React.FC<CreateQnAModalProps> = (props) => {
       },
     ];
 
-    const filteredKbs = kbs.filter((item) => item.locale === formData?.locale);
+    const filteredKbs = kbs.filter((item) =>
+      formData?.locale ? isLocalesOnSameLanguage(formData.locale, item.language) : true
+    );
 
     return (
       <div>
