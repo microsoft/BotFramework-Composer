@@ -52,7 +52,7 @@ const appServiceProvisionMethod = (provisionConfig: ProvisionConfig) => {
 
 export const getAppServiceProvisionService = (config: ProvisionConfig): ResourceProvisionService => {
   return {
-    getDependencies: () => ['appRegistration'],
+    getDependencies: () => [],
     getRecommendationForProject: (project) => {
       const { runtimeType } = parseRuntimeKey(project.settings?.runtime?.key);
       return runtimeType !== 'functions' ? 'required' : 'notAllowed';
