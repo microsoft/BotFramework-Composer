@@ -18,11 +18,7 @@ export type LuisPredictionConfig = ResourceConfig & {};
 export type LuisAuthoringConfig = {};
 export type QnAConfigNew = ResourceConfig & {};
 export type AppServiceConfig = ResourceDefinition & {};
-export type BotServiceConfig = ResourceConfig & {
-  key: 'botChannel';
-  name: string;
-  resourceGroupName: string;
-};
+
 export type BotChannelResult = {
   botName: string;
 };
