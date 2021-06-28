@@ -5,6 +5,7 @@
 import { jsx } from '@emotion/core';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { DefaultButton, IconButton } from 'office-ui-fabric-react/lib/Button';
+import { TooltipHost, DirectionalHint } from 'office-ui-fabric-react/lib/Tooltip';
 import { IContextualMenuItem } from 'office-ui-fabric-react/lib/ContextualMenu';
 import { useRecoilValue } from 'recoil';
 import formatMessage from 'format-message';
@@ -209,6 +210,8 @@ const BotController: React.FC<BotControllerProps> = ({ onHideController, isContr
     });
   }, [projectCollection, rootBotId]);
 
+  const startStopLabel = formatMessage('Start and stop local bot runtimes');
+
   return (
     <React.Fragment>
       {projectCollection.map(({ projectId }) => {
@@ -277,31 +280,33 @@ const BotController: React.FC<BotControllerProps> = ({ onHideController, isContr
           </DefaultButton>
         </DisableFeatureToolTip>
         <div ref={onboardRef} css={[iconSectionContainer, disableStartBots ? disabledStyle : '']}>
-          <IconButton
-            ariaDescription={formatMessage('Start and stop local bot runtimes')}
-            data-testid="StartBotsPanel"
-            disabled={disableStartBots}
-            iconProps={{
-              iconName: 'List',
-            }}
-            styles={{
-              root: {
-                color: NeutralColors.white,
-                height: '36px',
-                background: isControllerHidden ? CommunicationColors.tint10 : transparentBackground,
-                selectors: {
-                  ':disabled .ms-Button-icon': {
-                    opacity: 0.6,
-                    backgroundColor: CommunicationColors.tint10,
-                    color: `${NeutralColors.white}`,
+          <TooltipHost content={startStopLabel} directionalHint={DirectionalHint.bottomCenter}>
+            <IconButton
+              ariaDescription={startStopLabel}
+              data-testid="StartBotsPanel"
+              disabled={disableStartBots}
+              iconProps={{
+                iconName: 'List',
+              }}
+              styles={{
+                root: {
+                  color: NeutralColors.white,
+                  height: '36px',
+                  background: isControllerHidden ? CommunicationColors.tint10 : transparentBackground,
+                  selectors: {
+                    ':disabled .ms-Button-icon': {
+                      opacity: 0.6,
+                      backgroundColor: CommunicationColors.tint10,
+                      color: `${NeutralColors.white}`,
+                    },
                   },
                 },
-              },
-              rootHovered: { background: transparentBackground, color: NeutralColors.white },
-            }}
-            title={formatMessage('Start and stop local bot runtimes')}
-            onClick={onSplitButtonClick}
-          />
+                rootHovered: { background: transparentBackground, color: NeutralColors.white },
+              }}
+              title={fstartStopLabel}
+              onClick={onSplitButtonClick}
+            />
+          </TooltipHost>
         </div>
       </div>
       <BotControllerMenu
