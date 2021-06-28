@@ -155,7 +155,7 @@ export const WatchVariablePicker = React.memo((props: WatchVariablePickerProps) 
         level: 0,
       },
     })) as IContextualMenuItem[];
-  }, [currentProjectId, payload, propertyTreeConfig, variableId, watchedVariables]);
+  }, [currentProjectId, onHideContextualMenu, payload, propertyTreeConfig, variableId, watchedVariables]);
 
   const getFilterPredicate = useCallback((q: string) => {
     return (item: IContextualMenuItem) =>
@@ -215,7 +215,7 @@ export const WatchVariablePicker = React.memo((props: WatchVariablePickerProps) 
   const onDismiss = useCallback(() => {
     setPropertyTreeExpanded({});
     onHideContextualMenu();
-  }, []);
+  }, [onHideContextualMenu]);
 
   const contextualMenuItemRenderer = useMemo(() => {
     return getPickerContextualMenuItem(query, propertyTreeExpanded);

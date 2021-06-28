@@ -67,7 +67,7 @@ const watchTableStyles: Partial<IDetailsListStyles> = {
     maxHeight: `calc(100% - ${toolbarHeight}px)`,
   },
   contentWrapper: {
-    overflowY: 'auto' as 'auto',
+    overflowY: 'auto' as any,
     // fill remaining space after table header row
     height: 'calc(100% - 60px)',
   },
@@ -154,6 +154,10 @@ export const WatchTabContent: React.FC<DebugPanelTabHeaderProps> = ({ isActive }
           // error can be due to abort
         }
       })();
+
+      return () => {
+        abortController.abort();
+      };
     }
   }, [currentProjectId, watchedVariables]);
 
@@ -209,26 +213,29 @@ export const WatchTabContent: React.FC<DebugPanelTabHeaderProps> = ({ isActive }
 
   // TODO: update to office-ui-fabric-react@7.170.x to gain access to "flexGrow" column property to distribute proprotional column widths
   // (name column takes up 1/3 of space and value column takes up the remaining 2/3)
-  const watchTableColumns: IColumn[] = [
-    {
-      key: NameColumnKey,
-      name: 'Name',
-      fieldName: 'name',
-      minWidth: 100,
-      maxWidth: 600,
-      isResizable: true,
-      onRender: onRenderVariableName,
-    },
-    {
-      key: ValueColumnKey,
-      name: 'Value',
-      fieldName: 'value',
-      minWidth: 100,
-      maxWidth: undefined,
-      isResizable: true,
-      onRender: onRenderVariableValue,
-    },
-  ];
+  const watchTableColumns: IColumn[] = useMemo(
+    () => [
+      {
+        key: NameColumnKey,
+        name: 'Name',
+        fieldName: 'name',
+        minWidth: 100,
+        maxWidth: 600,
+        isResizable: true,
+        onRender: onRenderVariableName,
+      },
+      {
+        key: ValueColumnKey,
+        name: 'Value',
+        fieldName: 'value',
+        minWidth: 100,
+        maxWidth: undefined,
+        isResizable: true,
+        onRender: onRenderVariableValue,
+      },
+    ],
+    [onRenderVariableName]
+  );
 
   // we need to refresh the details list when we get a new bot state, add a new row, or submit a variable to watch
   const refreshedWatchedVariables = useMemo(() => {
@@ -268,7 +275,7 @@ export const WatchTabContent: React.FC<DebugPanelTabHeaderProps> = ({ isActive }
     return !selectedVariables?.length;
   }, [selectedVariables]);
 
-  function onRenderDetailsHeader(props, defaultRender) {
+  const onRenderDetailsHeader = (props, defaultRender) => {
     return (
       <Sticky isScrollSynced stickyPosition={StickyPositionType.Header}>
         {defaultRender({
@@ -277,7 +284,7 @@ export const WatchTabContent: React.FC<DebugPanelTabHeaderProps> = ({ isActive }
         })}
       </Sticky>
     );
-  }
+  };
 
   if (!isActive) {
     return null;

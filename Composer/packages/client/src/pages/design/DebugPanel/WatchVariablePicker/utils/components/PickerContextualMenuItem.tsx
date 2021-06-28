@@ -8,11 +8,10 @@ import { Text } from 'office-ui-fabric-react/lib/Text';
 import { NeutralColors } from '@uifabric/fluent-theme';
 
 import { PropertyItem, PropertyTreeItem } from './PropertyTreeItem';
-
-const defaultTreeItemHeight = 36;
+import { DEFAULT_TREE_ITEM_HEIGHT } from './constants';
 
 const labelContainerStyle: IStackStyles = {
-  root: { whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', height: defaultTreeItemHeight },
+  root: { whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', height: DEFAULT_TREE_ITEM_HEIGHT },
 };
 
 export const getPickerContextualMenuItem = (query: string, propertyTreeExpanded: Record<string, boolean>) => (

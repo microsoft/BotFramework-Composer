@@ -7,13 +7,14 @@ import { Icon, IIconStyles } from 'office-ui-fabric-react/lib/Icon';
 import { Stack } from 'office-ui-fabric-react/lib/Stack';
 import * as React from 'react';
 
+import { DEFAULT_TREE_ITEM_HEIGHT } from './constants';
+
 export type PropertyItem = {
   id: string;
   name: string;
   children: PropertyItem[];
 };
 
-const DEFAULT_TREE_ITEM_HEIGHT = 36;
 const DEFAULT_INDENTATION_PADDING = 16;
 const expandIconWidth = 16;
 
