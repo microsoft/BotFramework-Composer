@@ -9,7 +9,7 @@ import { renderWithRecoil } from '../../testUtils/renderWithRecoil';
 const mockAppId = '123';
 const mockDisplayName = 'mockDisplayName';
 
-describe('<TeamsManifestGenerator />', async () => {
+describe('<TeamsManifestGenerator />', () => {
   function renderComponent() {
     return renderWithRecoil(
       <TeamsManifestGeneratorModal
