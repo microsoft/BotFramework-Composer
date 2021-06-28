@@ -65,7 +65,7 @@ export const StringField: React.FC<FieldProps<string>> = function StringField(pr
       <FieldLabel description={description} helpLink={uiOptions?.helpLink} id={id} label={label} required={required} />
       <TextField
         ariaLabel={label || formatMessage('string field')}
-        autoAdjustHeight={uiOptions?.multiline ?? false}
+        autoAdjustHeight={!!uiOptions?.multiline}
         autoComplete="off"
         componentRef={textFieldRef}
         data-testid="string-field"
