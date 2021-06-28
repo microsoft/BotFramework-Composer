@@ -6,7 +6,7 @@ import formatMessage from 'format-message';
 import { Fragment, useEffect, useState, useRef } from 'react';
 import { ActionButton } from 'office-ui-fabric-react/lib/Button';
 import { Callout } from 'office-ui-fabric-react/lib/Callout';
-import { Persona, IPersona, PersonaSize } from 'office-ui-fabric-react/lib/Persona';
+import { Persona, PersonaSize } from 'office-ui-fabric-react/lib/Persona';
 import { ILinkStyles, Link } from 'office-ui-fabric-react/lib/Link';
 import { useRecoilValue } from 'recoil';
 import { NeutralColors } from '@uifabric/fluent-theme';
@@ -61,7 +61,7 @@ export const AuthCard: React.FC = () => {
   const showTenantDialog = useRecoilValue(showTenantDialogState);
   const requiresGraph = useRecoilValue(requiresGraphState);
 
-  const personaRef = useRef<IPersona | null>(null);
+  const personaRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     refreshLoginStatus();
@@ -84,14 +84,16 @@ export const AuthCard: React.FC = () => {
   return (
     <Fragment>
       {/* this is the icon that appears at the top of the header bar */}
-      <Persona
-        hidePersonaDetails
-        componentRef={personaRef}
-        initialsColor={currentUser ? NeutralColors.gray160 : undefined}
-        size={PersonaSize.size32}
-        text={currentUser?.name}
-        onClick={toggleAuthCardVisibility}
-      />
+      <div ref={personaRef}>
+        <Persona
+          hidePersonaDetails
+          componentRef={personaRef}
+          initialsColor={currentUser ? NeutralColors.gray160 : undefined}
+          size={PersonaSize.size32}
+          text={currentUser?.name}
+          onClick={toggleAuthCardVisibility}
+        />
+      </div>
 
       {/* this is the actual login card */}
       {authCardVisible && (

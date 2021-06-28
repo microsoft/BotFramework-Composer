@@ -472,7 +472,7 @@ export const AzureProvisionDialog: React.FC = () => {
 
   useEffect(() => {
     if (page === PageTypes.ConfigProvision) {
-      requireUserLogin(formData.tenantId, { graph: true });
+      requireUserLogin(formData.tenantId, { requireGraph: true });
     }
   }, [page]);
 
