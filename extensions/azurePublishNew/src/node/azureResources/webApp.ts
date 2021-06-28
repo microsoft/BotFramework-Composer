@@ -5,12 +5,29 @@ import { WebSiteManagementClient } from '@azure/arm-appservice';
 import { TokenCredentials } from '@azure/ms-rest-js';
 import { parseRuntimeKey } from '@bfc/shared';
 
-import { ProvisionConfig, ProvisionWorkingSet, ResourceConfig, ResourceProvisionService } from '../types';
+import {
+  ProvisionConfig,
+  ProvisionWorkingSet,
+  ResourceConfig,
+  ResourceDefinition,
+  ResourceProvisionService,
+} from '../types';
 import {
   createCustomizeError,
   ProvisionErrors,
   stringifyError,
 } from '../../../../azurePublish/src/node/utils/errorHandler';
+
+import { AZURE_HOSTING_GROUP_NAME, S1_STANDARD_TIER } from './constants';
+
+export const webAppResourceDefinition: ResourceDefinition = {
+  key: 'webApp',
+  description:
+    'App Service Web Apps lets you quickly build, deploy, and scale enterprise-grade web, mobile, and API apps running on any platform. Hosting for your bot.',
+  text: 'App Services',
+  tier: S1_STANDARD_TIER,
+  group: AZURE_HOSTING_GROUP_NAME,
+};
 
 type WebAppResourceConfig = ResourceConfig & {
   key: 'webApp';

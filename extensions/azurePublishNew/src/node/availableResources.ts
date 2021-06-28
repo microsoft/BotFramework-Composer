@@ -1,20 +1,32 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { getAppRegistrationProvisionService } from './azureResources/appRegistration';
-import { getWebAppProvisionService } from './azureResources/webApp';
-import { getBotChannelProvisionService } from './azureResources/botChannel';
-import { getAzureFunctionsProvisionService } from './azureResources/azureFunction';
-import { getCosmosDbProvisionService } from './azureResources/cosmosDb';
-import { getLuisAuthoringProvisionService } from './azureResources/luisAuthoring';
-import { getLuisPredictionProvisionService } from './azureResources/luisPrediction';
-import { getBlogStorageProvisionService } from './azureResources/blobStorage';
-import { getQnAProvisionService } from './azureResources/qna';
-import { getAppServiceProvisionService } from './azureResources/servicePlan';
-import { getAppInsightsProvisionService } from './azureResources/appInsights';
-import { ProvisionConfig, ResourceConfig, ResourceProvisionService } from './types';
+import { ProvisionConfig, ResourceConfig, ResourceDefinition, ResourceProvisionService } from './types';
+import { appInsightsDefinition, getAppInsightsProvisionService } from './azureResources/appInsights';
+import { appRegistrationDefinition, getAppRegistrationProvisionService } from './azureResources/appRegistration';
+import { azureFunctionDefinition, getAzureFunctionsProvisionService } from './azureResources/azureFunction';
+import { blobStorageDefinition, getBlogStorageProvisionService } from './azureResources/blobStorage';
+import { botRegistrationDefinition, getBotChannelProvisionService } from './azureResources/botChannel';
+import { cosmosDbDefinition, getCosmosDbProvisionService } from './azureResources/cosmosDb';
+import { getLuisAuthoringProvisionService, luisAuthoringDefinition } from './azureResources/luisAuthoring';
+import { getLuisPredictionProvisionService, luisPredictionDefinition } from './azureResources/luisPrediction';
+import { getQnAProvisionService, qnaDefinition } from './azureResources/qna';
+import { getAppServiceProvisionService, servicePlanDefinition } from './azureResources/servicePlan';
+import { getWebAppProvisionService, webAppResourceDefinition } from './azureResources/webApp';
 
-// bot project => candidate resources => select & configure resources => order & provision
+export const availableResources: ResourceDefinition[] = [
+  appRegistrationDefinition,
+  webAppResourceDefinition,
+  botRegistrationDefinition,
+  azureFunctionDefinition,
+  cosmosDbDefinition,
+  appInsightsDefinition,
+  luisAuthoringDefinition,
+  luisPredictionDefinition,
+  blobStorageDefinition,
+  qnaDefinition,
+  servicePlanDefinition,
+];
 
 export const getProvisionServices = (config: ProvisionConfig): Record<string, ResourceProvisionService> => {
   return {
@@ -32,8 +44,8 @@ export const getProvisionServices = (config: ProvisionConfig): Record<string, Re
   };
 };
 
-const getSelectedResources = () => [];
-const SORTED_RESOURCES = ['appRegistration', 'servicePlan', 'webApp'];
+// const getSelectedResources = () => [];
+// const SORTED_RESOURCES = ['appRegistration', 'servicePlan', 'webApp'];
 
 // provisioned: []
 // i = 0;

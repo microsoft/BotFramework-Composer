@@ -5,8 +5,16 @@ import { TokenCredentials } from '@azure/ms-rest-js';
 import { WebSiteManagementClient } from '@azure/arm-appservice';
 
 import { parseRuntimeKey } from '../../../../../Composer/packages/lib/shared';
-import { ProvisionConfig, ProvisionWorkingSet, ResourceConfig, ResourceProvisionService } from '../types';
+import {
+  ProvisionConfig,
+  ProvisionWorkingSet,
+  ResourceConfig,
+  ResourceDefinition,
+  ResourceProvisionService,
+} from '../types';
 import { createCustomizeError, ProvisionErrors } from '../../../../azurePublish/src/node/utils/errorHandler';
+
+import { AZURE_HOSTING_GROUP_NAME, S1_STANDARD_TIER } from './constants';
 
 type ServicePlanConfig = ResourceConfig & {
   key: 'servicePlan';
@@ -15,6 +23,15 @@ type ServicePlanConfig = ResourceConfig & {
   appServicePlanOptions: {}; // has location, operationsystem
   location: string;
   operatingSystem: string;
+};
+
+export const servicePlanDefinition: ResourceDefinition = {
+  key: 'servicePlan',
+  description:
+    'App Service plans give you the flexibility to allocate specific apps to a given set of resources and further optimize your Azure resource utilization. This way, if you want to save money on your testing environment you can share a plan across multiple apps.',
+  text: 'Microsoft App Service Plan',
+  tier: S1_STANDARD_TIER,
+  group: AZURE_HOSTING_GROUP_NAME,
 };
 
 const appServiceProvisionMethod = (provisionConfig: ProvisionConfig) => {
