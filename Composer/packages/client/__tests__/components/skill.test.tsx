@@ -15,6 +15,46 @@ import { botProjectFileState, currentProjectIdState, settingsState } from '../..
 jest.mock('../../src/components/Modal/dialogStyle', () => ({}));
 
 const projectId = '123a.234';
+const mockManifest = `{
+  "$schema": "https://schemas.botframework.com/schemas/skills/v2.1/skill-manifest.json",
+  "$id": "djbfskill1-d2410f83-fc1b-4d34-a4ba-aa2582418306",
+  "endpoints": [
+    {
+      "protocol": "BotFrameworkV3",
+      "name": "azure",
+      "endpointUrl": "https://djtest6.azurewebsites.net/api/messages",
+      "description": "<description>",
+      "msAppId": "331877e9-da6e-4a7e-a398-79610b331cb0"
+    }
+  ],
+  "name": "djbfskill1",
+  "version": "1.0",
+  "publisherName": "Darren Jefford",
+  "activities": {
+    "djbfskill1": {
+      "type": "event",
+      "name": "djbfskill1"
+    },
+    "message": {
+      "type": "message"
+    }
+  },
+  "dispatchModels": {
+    "languages": {
+      "en-us": [
+        {
+          "name": "djbfskill1",
+          "contentType": "application/lu",
+          "url": "https://djtest6.azurewebsites.net/manifests/skill-djbfskill1.en-us.lu",
+          "description": "<description>"
+        }
+      ]
+    },
+    "intents": [
+      "Weather"
+    ]
+  }
+}`;
 
 describe('<SkillForm />', () => {
   const recoilInitState = ({ set }) => {
@@ -139,13 +179,12 @@ describe('<SkillForm />', () => {
       });
 
       expect(setFormDataErrors).toBeCalledWith(
-        expect.objectContaining({ manifestUrl: 'URL should start with http:// or https://' })
+        expect.objectContaining({
+          manifestUrl: 'URL should start with http:// or https:// or file path of your system',
+        })
       );
       expect(setSkillManifest).not.toBeCalled();
     });
-  });
-
-  describe('validateManifestUrl', () => {
     it('should set an error for a missing manifest URL', () => {
       const formData = {};
 
@@ -172,8 +211,22 @@ describe('<SkillForm />', () => {
       expect(setSkillManifest).toBeCalledWith('skill manifest');
     });
 
+    it('should try and retrieve manifest with local manifest', async () => {
+      (httpClient.get as jest.Mock) = jest.fn().mockResolvedValue({ data: JSON.parse(mockManifest) });
+
+      const manifestUrl = '/local/mock.json';
+
+      await getSkillManifest(projectId, manifestUrl, setSkillManifest, setFormDataErrors, showDetail);
+      expect(httpClient.get).toBeCalledWith(`/projects/${projectId}/skill/retrieveSkillManifest`, {
+        params: {
+          url: manifestUrl,
+        },
+      });
+      expect(setSkillManifest).toBeCalledWith(JSON.parse(mockManifest));
+    });
+
     it('should show error when it could not retrieve skill manifest', async () => {
-      (httpClient.get as jest.Mock) = jest.fn().mockRejectedValue({ message: 'skill manifest' });
+      (httpClient.get as jest.Mock) = jest.fn().mockRejectedValue({ message: 'error message' });
 
       const manifestUrl = 'https://skill';
 
