@@ -119,11 +119,13 @@ describe('<SkillForm />', () => {
   let formDataErrors;
   let setFormDataErrors;
   let setSkillManifest;
+  let showDetail;
 
   beforeEach(() => {
     formDataErrors = {};
     setFormDataErrors = jest.fn();
     setSkillManifest = jest.fn();
+    showDetail = jest.fn();
   });
 
   describe('validateManifestUrl', () => {
@@ -161,7 +163,7 @@ describe('<SkillForm />', () => {
 
       const manifestUrl = 'https://skill';
 
-      await getSkillManifest(projectId, manifestUrl, setSkillManifest, setFormDataErrors);
+      await getSkillManifest(projectId, manifestUrl, setSkillManifest, setFormDataErrors, showDetail);
       expect(httpClient.get).toBeCalledWith(`/projects/${projectId}/skill/retrieveSkillManifest`, {
         params: {
           url: manifestUrl,
@@ -175,7 +177,7 @@ describe('<SkillForm />', () => {
 
       const manifestUrl = 'https://skill';
 
-      await getSkillManifest(projectId, manifestUrl, setSkillManifest, setFormDataErrors);
+      await getSkillManifest(projectId, manifestUrl, setSkillManifest, setFormDataErrors, showDetail);
       expect(httpClient.get).toBeCalledWith(`/projects/${projectId}/skill/retrieveSkillManifest`, {
         params: {
           url: manifestUrl,
