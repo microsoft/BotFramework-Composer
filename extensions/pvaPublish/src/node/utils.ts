@@ -28,6 +28,12 @@ export const getBaseUrl = () => {
       return url;
     }
 
+    case 'gcc': {
+      const url = BASE_URLS.GCC;
+      logger.log('gcc pva publish env detected, operation using PVA url: ', url);
+      return url;
+    }
+
     default: {
       const url = BASE_URLS.PROD;
       logger.log('No pva publish env detected, operation using PVA url: ', url);
@@ -46,9 +52,10 @@ export const getAuthCredentials = (baseUrl = '') => {
 
     if (host === 'bots.int.customercareintelligence.net') {
       return AUTH_CREDENTIALS.INT;
-    }
-    if (host === 'bots.ppe.customercareintelligence.net') {
+    } else if (host === 'bots.ppe.customercareintelligence.net') {
       return AUTH_CREDENTIALS.PPE;
+    } else if (host === 'gcc.api.powerva.microsoft.us') {
+      return AUTH_CREDENTIALS.GCC;
     }
   }
   // fall back to prod

@@ -331,6 +331,7 @@ export const CreateSkillModal: React.FC<CreateSkillModalProps> = (props) => {
             manifestDirPath={manifestDirPath}
             projectId={projectId}
             rootLuFiles={luFiles}
+            runtime={runtime}
             zipContent={zipContent}
             onBack={() => {
               setTitle({

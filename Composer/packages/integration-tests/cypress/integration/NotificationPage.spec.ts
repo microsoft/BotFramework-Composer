@@ -39,7 +39,7 @@ context('Notification Page', () => {
 
     cy.findByTestId('DebugPanelDrawer').click();
 
-    cy.findAllByText('TestBot_TestSample.en-us.lu').should('exist').first().dblclick();
+    cy.findAllByText('TestBot_TestSample.en-us.lu').should('exist').first().click();
 
     cy.findAllByText('TestBot_TestSample').should('exist');
   });

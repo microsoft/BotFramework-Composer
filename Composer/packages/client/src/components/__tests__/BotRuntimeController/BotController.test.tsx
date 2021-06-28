@@ -53,7 +53,7 @@ describe('<BotController />', () => {
     mockStart.mockReset();
   });
 
-  it('should show that 2/3 bots have been started correctly', async () => {
+  fit('should show that 2/3 bots have been started correctly', async () => {
     const initRecoilState = ({ set }) => {
       const projectIds = ['123a.234', '456a.234', '789a.234'];
       set(botProjectIdsState, projectIds);

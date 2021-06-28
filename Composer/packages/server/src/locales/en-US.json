@@ -281,6 +281,9 @@
   "all_4321c3a1": {
     "message": "All"
   },
+  "all_bots_649ccbd0": {
+    "message": "All bots"
+  },
   "allowed_callers_31b26262": {
     "message": "Allowed Callers"
   },
@@ -1190,21 +1193,6 @@
   "diagnostic_links_228dc6fe": {
     "message": "diagnostic links"
   },
-  "diagnostic_list_89b39c2e": {
-    "message": "Diagnostic List"
-  },
-  "diagnostic_message_msg_5387e951": {
-    "message": "Diagnostic Message { msg }"
-  },
-  "diagnostic_type_e1979c21": {
-    "message": "Diagnostic type"
-  },
-  "diagnostics_a11880f6": {
-    "message": "Diagnostics"
-  },
-  "diagnostics_pane_2d77c390": {
-    "message": "Diagnostics Pane"
-  },
   "diagnostics_tab_which_shows_errors_and_warnings_410e8f6": {
     "message": "Diagnostics tab which shows errors and warnings."
   },
@@ -1549,6 +1537,9 @@
   },
   "error_provisioning_25835400": {
     "message": "Error provisioning."
+  },
+  "errors_a0ac8807": {
+    "message": "Errors"
   },
   "errorscount_plural_0_no_errors_1_one_error_other_e_a8c998bb": {
     "message": "{ errorsCount, plural,\n     =0 {No errors}\n     =1 {One error}\n  other {# errors}\n}"
@@ -3287,6 +3278,9 @@
   "select_a_dialog_or_topic_4df93d0f": {
     "message": "Select a dialog or topic"
   },
+  "select_a_project_356cbc95": {
+    "message": "Select a project"
+  },
   "select_a_publish_target_d4530c94": {
     "message": "Select a publish target"
   },
@@ -3449,14 +3443,8 @@
   "short_description_for_6abb9a1b": {
     "message": "short description for"
   },
-  "show_all_diagnostics_c11f4e09": {
-    "message": "Show All Diagnostics"
-  },
   "show_code_f3e9d1cc": {
     "message": "Show code"
-  },
-  "show_item_diagnostics_f6e902c7": {
-    "message": "Show { item } Diagnostics"
   },
   "show_keys_3072a5b8": {
     "message": "Show keys"
@@ -3490,6 +3478,9 @@
   },
   "skill_host_endpoint_url_e68b65f6": {
     "message": "Skill host endpoint url"
+  },
+  "skill_manifest_d7db2e25": {
+    "message": "Skill Manifest"
   },
   "skill_manifest_url_1094fcba": {
     "message": "Skill Manifest URL"
@@ -3827,9 +3818,6 @@
   "this_is_a_required_field_acb9837e": {
     "message": "This is a required field."
   },
-  "this_is_a_severity_diagnostic_58312674": {
-    "message": "This is a { severity } diagnostic"
-  },
   "this_is_the_bot_language_you_are_currently_authori_4a26541": {
     "message": "This is the bot language you are currently authoring. Change the active language in the dropdown below."
   },
@@ -3979,6 +3967,9 @@
   },
   "total_plural_1_starting_bot_other_starting_bots_ru_3d173401": {
     "message": "{ total, plural,\n     =1 {Starting bot..}\n  other {Starting bots.. ({ running }/{ total } running)}\n}"
+  },
+  "total_plural_1_starting_your_bot_other_starting_yo_6087bb1e": {
+    "message": "{ total, plural,\n     =1 {Starting your bot...}\n  other {Starting your bots...}\n}"
   },
   "total_plural_1_stopping_bot_other_stopping_bots_ru_f6afe9bd": {
     "message": "{ total, plural,\n     =1 {Stopping bot..}\n  other {Stopping bots.. ({ running }/{ total } running)}\n}"
@@ -4223,6 +4214,9 @@
   "warning_aacb8c24": {
     "message": "Warning"
   },
+  "warnings_d6acbbdb": {
+    "message": "Warnings"
+  },
   "warningscount_plural_0_no_warnings_1_one_warning_o_347cc928": {
     "message": "{ warningsCount, plural,\n     =0 {No warnings}\n     =1 {One warning}\n  other {# warnings}\n}"
   },
@@ -4370,8 +4364,8 @@
   "your_bot_is_using_luis_and_qna_for_natural_languag_53830684": {
     "message": "Your bot is using LUIS and QNA for natural language understanding."
   },
-  "your_bot_project_is_not_running_actionbutton_start_9dfc86d5": {
-    "message": "Your bot project is not running. <actionButton>Start your bot</actionButton>"
+  "your_bot_project_is_not_running_actionbutton_total_bc1c8e8c": {
+    "message": "Your bot project is not running. <actionButton>{ total, plural,\n     =1 {Start bot}\n  other {Start all bots}\n}</actionButton>"
   },
   "your_bot_project_is_running_actionbutton_test_in_w_22d5f2de": {
     "message": "Your bot project is running. <actionButton>Test in Web Chat</actionButton>"
