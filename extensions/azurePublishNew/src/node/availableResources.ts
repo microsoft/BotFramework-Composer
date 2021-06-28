@@ -46,16 +46,14 @@ export const getProvisionServices = (config: ProvisionConfig): Record<string, Re
 
 export const setUpProvisionService = (config: ProvisionConfig) => {
   const provisionServices = getProvisionServices(config);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const provision = (selectedResources: ResourceConfig[]): void => {
-    // config => sorted resource config
-    // sortResources(selectedResources);
-    const workingSet: Record<string, object> = {};
 
-    selectedResources.forEach((resourceConfig) => {
-      const service = provisionServices[resourceConfig.key];
+  const provision = (selectedResources: ResourceConfig[]): void => {
+    let workingSet: Record<string, object> = {};
+
+    selectedResources.forEach(async (resourceConfig) => {
+      const service: ResourceProvisionService = provisionServices[resourceConfig.key];
       if (service) {
-        service.provision(resourceConfig, workingSet);
+        workingSet = await service.provision(resourceConfig, workingSet);
       }
     });
   };
