@@ -182,8 +182,8 @@ export const WatchTabContent: React.FC<DebugPanelTabHeaderProps> = ({ isActive }
       if (mostRecentBotState) {
         const variable = watchedVariables[item.key];
         if (variable === undefined) {
-          // the variable never passed the picker's validation so it is unavailable
-          return <span css={unavailbleValue}>{formatMessage('not available')}</span>;
+          // the variable has not been committed yet
+          return null;
         }
         // try to determine the value and render it accordingly
         const { propertyIsAvailable, value } = getValueFromBotTraceMemory(variable, mostRecentBotState?.activity);
