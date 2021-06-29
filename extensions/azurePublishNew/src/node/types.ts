@@ -20,9 +20,11 @@ export type ResourceDefinition = {
   tier: string;
   group: ResourceDefinitionGroup;
 };
+
 export type GetResourcesResult = ResourceDefinition & {
   required: boolean;
 };
+
 export type ProvisionConfig = {
   key: string;
   credentials: ProvisionCredentials;
