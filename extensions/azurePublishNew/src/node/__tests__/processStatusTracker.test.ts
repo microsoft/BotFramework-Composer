@@ -277,6 +277,29 @@ describe('processStatusTracker', () => {
       expect(actual.config).toEqual(config);
     });
 
+    it('does not modify missing properties', () => {
+      const tracker = createProcessStatusTracker();
+      expect(tracker).toBeDefined();
+
+      const config = { name: 'config' };
+
+      const status = tracker.start({
+        processName: 'process',
+        projectId: 'project',
+        message: 'message',
+        config,
+      });
+
+      tracker.update(status.id, {});
+
+      const actual = tracker.get(status.id);
+      expect(actual).toBeDefined();
+      expect(actual.status).toEqual(202);
+      expect(actual.log.length).toEqual(1);
+      expect(actual.message).toEqual('message');
+      expect(actual.config).toEqual(config);
+    });
+
     it('overwrites config', () => {
       const tracker = createProcessStatusTracker();
       expect(tracker).toBeDefined();
@@ -344,7 +367,7 @@ describe('processStatusTracker', () => {
       expect(actual.message).toEqual('message4');
     });
 
-    it('overwrites status', () => {
+    it('overwrites status code', () => {
       const tracker = createProcessStatusTracker();
       expect(tracker).toBeDefined();
 
@@ -363,33 +386,26 @@ describe('processStatusTracker', () => {
       expect(actual.status).toEqual(204);
     });
 
-    it('no-op for non-existent process', () => {
-      const warnSpy = jest.spyOn(console, 'warn').mockImplementation(() => {});
-      try {
-        const tracker = createProcessStatusTracker();
-        expect(tracker).toBeDefined();
+    it('throws for non-existent process', () => {
+      const tracker = createProcessStatusTracker();
+      expect(tracker).toBeDefined();
 
-        tracker.start({
-          processName: 'process1',
-          projectId: 'project1',
-        });
+      tracker.start({
+        processName: 'process1',
+        projectId: 'project1',
+      });
 
-        tracker.start({
-          processName: 'process2',
-          projectId: 'project2',
-        });
+      tracker.start({
+        processName: 'process2',
+        projectId: 'project2',
+      });
 
-        tracker.start({
-          processName: 'process3',
-          projectId: 'project3',
-        });
+      tracker.start({
+        processName: 'process3',
+        projectId: 'project3',
+      });
 
-        tracker.update('does-not-exist', { status: 202, message: 'message' });
-        const actual = tracker.get('does-not-exist');
-        expect(actual).toBeUndefined();
-      } finally {
-        warnSpy.mockRestore();
-      }
+      expect(() => tracker.update('does-not-exist', { status: 202, message: 'message' })).toThrow();
     });
   });
 
@@ -423,7 +439,7 @@ describe('processStatusTracker', () => {
       expect(actual).toBeUndefined();
     });
 
-    it('no-op for non-existent process', () => {
+    it('throws for non-existent process', () => {
       const tracker = createProcessStatusTracker();
       expect(tracker).toBeDefined();
 
@@ -442,9 +458,7 @@ describe('processStatusTracker', () => {
         projectId: 'project3',
       });
 
-      tracker.stop('does-not-exist');
-      const actual = tracker.get('does-not-exist');
-      expect(actual).toBeUndefined();
+      expect(() => tracker.stop('does-not-exist')).toThrow();
     });
   });
 });
