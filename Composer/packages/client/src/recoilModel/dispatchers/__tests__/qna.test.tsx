@@ -5,7 +5,7 @@ import { useRecoilState } from 'recoil';
 import { QnAFile } from '@bfc/shared';
 import { qnaUtil } from '@bfc/indexers';
 import { useRecoilValue } from 'recoil';
-import { act, HookResult } from '@botframework-composer/test-utils/lib/hooks';
+import { act, RenderResult } from '@botframework-composer/test-utils/lib/hooks';
 
 import { qnaDispatcher } from '../qna';
 import { renderRecoilHook } from '../../../../__tests__/testUtils';
@@ -67,7 +67,7 @@ describe('QnA dispatcher', () => {
     };
   };
 
-  let renderedComponent: HookResult<ReturnType<typeof useRecoilTestHook>>, dispatcher: Dispatcher;
+  let renderedComponent: RenderResult<ReturnType<typeof useRecoilTestHook>>, dispatcher: Dispatcher;
 
   beforeEach(() => {
     const { result } = renderRecoilHook(useRecoilTestHook, {

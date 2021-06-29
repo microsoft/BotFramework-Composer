@@ -4,7 +4,7 @@
 import { DialogTypes, DialogWrapper } from '@bfc/ui-shared/lib/components/DialogWrapper';
 import { SDKKinds } from '@botframework-composer/types';
 import { Button } from 'office-ui-fabric-react/lib/components/Button/Button';
-import React, { useMemo } from 'react';
+import React, { useMemo, useEffect } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
 
 import { enableOrchestratorDialog } from '../../constants';
@@ -14,9 +14,11 @@ import {
   localeState,
   orchestratorForSkillsDialogState,
   rootBotProjectIdSelector,
+  settingsState,
 } from '../../recoilModel';
 import { recognizersSelectorFamily } from '../../recoilModel/selectors/recognizers';
 import { EnableOrchestrator } from '../AddRemoteSkillModal/EnableOrchestrator';
+import { canImportOrchestrator } from '../AddRemoteSkillModal/helper';
 
 export const OrchestratorForSkillsDialog = () => {
   const [showOrchestratorDialog, setShowOrchestratorDialog] = useRecoilState(orchestratorForSkillsDialogState);
@@ -24,6 +26,7 @@ export const OrchestratorForSkillsDialog = () => {
   const { dialogId } = useRecoilValue(designPageLocationState(rootProjectId));
   const locale = useRecoilValue(localeState(rootProjectId));
   const curRecognizers = useRecoilValue(recognizersSelectorFamily(rootProjectId));
+  const setting = useRecoilValue(settingsState(rootProjectId));
 
   const { updateRecognizer } = useRecoilValue(dispatcherState);
 
@@ -31,6 +34,12 @@ export const OrchestratorForSkillsDialog = () => {
     const fileName = `${dialogId}.${locale}.lu.dialog`;
     return curRecognizers.some((f) => f.id === fileName && f.content.$kind === SDKKinds.OrchestratorRecognizer);
   }, [curRecognizers, dialogId, locale]);
+
+  useEffect(() => {
+    if (showOrchestratorDialog && hasOrchestrator) {
+      setShowOrchestratorDialog(false);
+    }
+  }, [hasOrchestrator, showOrchestratorDialog]);
 
   const handleOrchestratorSubmit = async (event: React.MouseEvent<HTMLElement | Button>, enable?: boolean) => {
     event.preventDefault();
@@ -43,7 +52,7 @@ export const OrchestratorForSkillsDialog = () => {
 
   const setVisibility = () => {
     if (showOrchestratorDialog) {
-      if (hasOrchestrator) {
+      if (hasOrchestrator || !canImportOrchestrator(setting?.runtime?.key)) {
         setShowOrchestratorDialog(false);
         return false;
       }
@@ -63,7 +72,12 @@ export const OrchestratorForSkillsDialog = () => {
       title={enableOrchestratorDialog.title}
       onDismiss={onDismissHandler}
     >
-      <EnableOrchestrator hideBackButton projectId={rootProjectId} onSubmit={handleOrchestratorSubmit} />
+      <EnableOrchestrator
+        hideBackButton
+        projectId={rootProjectId}
+        runtime={setting?.runtime}
+        onSubmit={handleOrchestratorSubmit}
+      />
     </DialogWrapper>
   );
 };

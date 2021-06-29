@@ -8,35 +8,50 @@ import formatMessage from 'format-message';
 import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button';
 import { ChoiceGroup, IChoiceGroupOption } from 'office-ui-fabric-react/lib/ChoiceGroup';
 import { DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
-import { BotTemplate } from '@bfc/shared';
 import { FontWeights } from 'office-ui-fabric-react/lib/Styling';
 import { FontSizes } from '@uifabric/fluent-theme';
+import { BotTemplate } from '@bfc/shared';
 import { DialogWrapper, DialogTypes } from '@bfc/ui-shared';
-import { RouteComponentProps, navigate } from '@reach/router';
+import { navigate, RouteComponentProps } from '@reach/router';
 import querystring from 'query-string';
 import axios from 'axios';
+import { useRecoilValue } from 'recoil';
 
 import { DialogCreationCopy } from '../../constants';
-import { getAliasFromPayload } from '../../utils/electronUtil';
+import { getAliasFromPayload, isElectron } from '../../utils/electronUtil';
+import { creationFlowTypeState, userHasNodeInstalledState } from '../../recoilModel';
+import { InstallDepModal } from '../InstallDepModal';
+import TelemetryClient from '../../telemetry/TelemetryClient';
 
 import { CreateBot } from './CreateBot';
 
 // -------------------- CreateOptions -------------------- //
 type CreateOptionsProps = {
   templates: BotTemplate[];
+  localTemplatePath: string;
+  onUpdateLocalTemplatePath: (path: string) => void;
   onDismiss: () => void;
+  onNext: (templateName: string, templateLanguage: string, urlData?: string) => void;
   onJumpToOpenModal: (search?: string) => void;
-  onNext: (data: string) => void;
+  fetchReadMe: (moduleName: string) => {};
 } & RouteComponentProps<{}>;
 
 export function CreateOptions(props: CreateOptionsProps) {
   const [isOpenOptionsModal, setIsOpenOptionsModal] = useState(false);
   const [option, setOption] = useState('Create');
   const [isOpenCreateModal, setIsOpenCreateModal] = useState(false);
-  const { templates, onDismiss, onNext, onJumpToOpenModal } = props;
-  useEffect(() => {
-    navigate(`/v2/projects/create${props?.location?.search}`);
-  });
+  const {
+    templates,
+    onDismiss,
+    onNext,
+    onJumpToOpenModal,
+    fetchReadMe,
+    onUpdateLocalTemplatePath,
+    localTemplatePath,
+  } = props;
+  const [showNodeModal, setShowNodeModal] = useState(false);
+  const userHasNode = useRecoilValue(userHasNodeInstalledState);
+  const creationFlowType = useRecoilValue(creationFlowTypeState);
 
   useEffect(() => {
     // open bot directly if alias exist.
@@ -58,29 +73,17 @@ export function CreateOptions(props: CreateOptionsProps) {
               setIsOpenOptionsModal(true);
             });
         });
+
         return;
       }
     }
+    TelemetryClient.track('NewBotDialogOpened', {
+      isSkillBot: creationFlowType === 'Skill',
+      fromAbsHandoff: false,
+    });
     setIsOpenCreateModal(true);
   }, [props.location?.search]);
   const dialogWrapperProps = DialogCreationCopy.CREATE_OPTIONS;
-
-  const options: IChoiceGroupOption[] = [
-    { key: 'Create', text: formatMessage('Use Azure Bot to create a new conversation') },
-    { key: 'Connect', text: formatMessage('Apply my Azure Bot resources for an existing bot') },
-  ];
-
-  const handleChange = (e, option) => {
-    setOption(option.key);
-  };
-
-  const handleJumpToNext = () => {
-    if (option === 'Create') {
-      setIsOpenCreateModal(true);
-    } else {
-      onJumpToOpenModal(props.location?.search);
-    }
-  };
 
   const customerStyle = {
     dialog: {
@@ -101,6 +104,34 @@ export function CreateOptions(props: CreateOptionsProps) {
       },
     },
   };
+
+  const options: IChoiceGroupOption[] = [
+    { key: 'Create', text: formatMessage('Use Azure Bot to create a new conversation') },
+    { key: 'Connect', text: formatMessage('Apply my Azure Bot resources for an existing bot') },
+  ];
+
+  const handleChange = (e, option) => {
+    setOption(option.key);
+  };
+
+  const handleJumpToNext = () => {
+    if (option === 'Create') {
+      TelemetryClient.track('NewBotDialogOpened', {
+        isSkillBot: false,
+        fromAbsHandoff: true,
+      });
+      setIsOpenCreateModal(true);
+    } else {
+      onJumpToOpenModal(props.location?.search);
+    }
+  };
+
+  useEffect(() => {
+    if (!userHasNode) {
+      setShowNodeModal(true);
+    }
+  }, [userHasNode]);
+
   return (
     <Fragment>
       <DialogWrapper
@@ -110,19 +141,33 @@ export function CreateOptions(props: CreateOptionsProps) {
         dialogType={DialogTypes.Customer}
         onDismiss={onDismiss}
       >
-        <ChoiceGroup required defaultSelectedKey="B" options={options} onChange={handleChange} />
+        <ChoiceGroup required defaultSelectedKey="Create" options={options} onChange={handleChange} />
         <DialogFooter>
           <PrimaryButton data-testid="NextStepButton" text={formatMessage('Next')} onClick={handleJumpToNext} />
           <DefaultButton text={formatMessage('Cancel')} onClick={onDismiss} />
         </DialogFooter>
       </DialogWrapper>
       <CreateBot
+        fetchReadMe={fetchReadMe}
         isOpen={isOpenCreateModal}
+        localTemplatePath={localTemplatePath}
         location={props.location}
         templates={templates}
         onDismiss={onDismiss}
         onNext={onNext}
+        onUpdateLocalTemplatePath={onUpdateLocalTemplatePath}
       />
+      {isElectron() && showNodeModal && (
+        <InstallDepModal
+          downloadLink={'https://nodejs.org/en/download/'}
+          downloadLinkText={formatMessage('Install Node.js')}
+          text={formatMessage(
+            'Bot Framework Composer requires Node.js in order to create and run a new bot. Click “Install Node.js” to install the latest version. You will need to restart Composer after installing Node.'
+          )}
+          title={formatMessage('Node.js required')}
+          onDismiss={() => setShowNodeModal(false)}
+        />
+      )}
     </Fragment>
   );
 }

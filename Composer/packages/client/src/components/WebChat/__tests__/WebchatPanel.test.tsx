@@ -61,8 +61,12 @@ describe('<WebchatPanel />', () => {
 
     mockstartNewConversation.mockResolvedValue({
       directline: {
-        activity$: jest.fn(),
+        activity$: {
+          subscribe: jest.fn(),
+        },
         subscribe: jest.fn(),
+        connectionStatus$: { subscribe: jest.fn() },
+        postActivity: jest.fn(),
       },
       chatMode: 'conversation',
       projectId: '123-12',

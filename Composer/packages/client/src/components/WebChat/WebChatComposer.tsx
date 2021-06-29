@@ -1,13 +1,16 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 import React from 'react';
-import { createStyleSet, Components } from 'botframework-webchat';
+import { createStyleSet, Components } from 'botframework-webchat-component';
 import { CommunicationColors, NeutralColors } from '@uifabric/fluent-theme';
 
 import { ConversationService } from './utils/conversationService';
 import webChatStyleOptions from './utils/webChatTheme';
 import { ChatData, ActivityType } from './types';
-const { BasicWebChat, Composer } = Components;
+import { ActivityHighlightWrapper } from './ActivityHighlightWrapper';
+import { WebChatHooksContainer } from './hooks/WebChatHooksContainer';
+
+const { Composer, BasicWebChat } = Components;
 
 export type WebChatComposerProps = {
   currentConversation: string;
@@ -67,7 +70,11 @@ const createActivityMiddleware = () => (next: unknown) => (...setupArgs) => (...
       if (typeof next === 'function') {
         const middlewareResult = next(...setupArgs);
         if (middlewareResult) {
-          return middlewareResult(...renderArgs);
+          return (
+            <ActivityHighlightWrapper activityId={card.activity.id}>
+              {middlewareResult(...renderArgs)}
+            </ActivityHighlightWrapper>
+          );
         }
         return false;
       }
@@ -119,6 +126,7 @@ export const WebChatComposer = React.memo((props: WebChatComposerProps) => {
       userID={chatData?.user.id}
     >
       <BasicWebChat />
+      <WebChatHooksContainer />
     </Composer>
   );
 }, areEqual);

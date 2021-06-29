@@ -6,6 +6,7 @@ import { selectorFamily, selector } from 'recoil';
 import lodashGet from 'lodash/get';
 import formatMessage from 'format-message';
 import { getFriendlyName } from '@bfc/shared';
+import { DiagnosticSeverity } from '@botframework-composer/types/src';
 
 import { getReferredLuFiles } from '../../utils/luUtil';
 import { INavTreeItem } from '../../components/NavTree';
@@ -20,7 +21,7 @@ import {
   SettingDiagnostic,
   SkillSettingDiagnostic,
   SchemaDiagnostic,
-} from '../../pages/diagnostics/types';
+} from '../../pages/design/DebugPanel/TabExtensions/DiagnosticsTab/DiagnosticType';
 import {
   botDiagnosticsState,
   botProjectFileState,
@@ -84,6 +85,7 @@ export const botDiagnosticsSelectorFamily = selectorFamily({
 
     const rootProjectId = get(rootBotProjectIdSelector) ?? projectId;
     const diagnostics = get(botDiagnosticsState(projectId));
+
     const diagnosticList: DiagnosticInfo[] = [];
 
     diagnostics.forEach((d) => {
@@ -164,17 +166,20 @@ export const dialogsDiagnosticsSelectorFamily = selectorFamily({
   key: 'dialogsDiagnosticsSelectorFamily',
   get: (projectId: string) => ({ get }) => {
     const botAssets = get(botAssetsSelectFamily(projectId));
+
     if (botAssets === null) return [];
+    const { dialogs } = botAssets;
 
     const rootProjectId = get(rootBotProjectIdSelector) ?? projectId;
     const dialogIds = get(dialogIdsState(projectId));
+
     const diagnosticList: DiagnosticInfo[] = [];
 
     dialogIds.forEach((dialogId: string) => {
       const diagnostics = get(dialogDiagnosticsSelectorFamily({ projectId, dialogId })) || [];
       diagnostics.forEach((diagnostic) => {
         const location = `${dialogId}.dialog`;
-        diagnosticList.push(new DialogDiagnostic(rootProjectId, projectId, dialogId, location, diagnostic));
+        diagnosticList.push(new DialogDiagnostic(rootProjectId, projectId, dialogId, location, diagnostic, dialogs));
       });
     });
 
@@ -187,6 +192,7 @@ export const schemaDiagnosticsSelectorFamily = selectorFamily({
   get: (projectId: string) => ({ get }) => {
     const botAssets = get(botAssetsSelectFamily(projectId));
     if (botAssets === null) return [];
+    const { dialogs } = botAssets;
 
     const rootProjectId = get(rootBotProjectIdSelector) ?? projectId;
 
@@ -216,7 +222,7 @@ export const schemaDiagnosticsSelectorFamily = selectorFamily({
               }),
             ].join('>');
           }
-          return new SchemaDiagnostic(rootProjectId, projectId, dialog.id, location, d);
+          return new SchemaDiagnostic(rootProjectId, projectId, dialog.id, location, d, dialogs);
         })
       );
     });
@@ -228,6 +234,7 @@ export const luDiagnosticsSelectorFamily = selectorFamily({
   key: 'luDiagnosticsSelectorFamily',
   get: (projectId: string) => ({ get }) => {
     const botAssets = get(botAssetsSelectFamily(projectId));
+
     if (botAssets === null) return [];
 
     const rootProjectId = get(rootBotProjectIdSelector) ?? projectId;
@@ -307,12 +314,12 @@ export const diagnosticsSelectorFamily = selectorFamily({
 
 export const allDiagnosticsSelectorFamily = selectorFamily({
   key: 'allDiagnosticsSelector',
-  get: (type: 'Error' | 'Warning' | 'All') => ({ get }) => {
+  get: (severitiesToFilter: DiagnosticSeverity[]) => ({ get }) => {
     const ids = get(botProjectIdsState);
     const result = ids.reduce((result: DiagnosticInfo[], id: string) => {
       return [
         ...result,
-        ...get(diagnosticsSelectorFamily(id)).filter((diagnostic) => type === 'All' || diagnostic.severity === type),
+        ...get(diagnosticsSelectorFamily(id)).filter((diagnostic) => severitiesToFilter.includes(diagnostic.severity)),
       ];
     }, []);
     return result;

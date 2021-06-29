@@ -82,6 +82,7 @@ export const PublishProfileDialog: React.FC<PublishProfileDialogProps> = (props)
           setStyles(pvaPublishSurface);
           break;
         case 'azurePublish':
+        case 'azure-publish-new':
           setStyles(azurePublishSurface);
           break;
         default:

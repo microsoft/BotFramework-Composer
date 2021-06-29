@@ -6,14 +6,16 @@ import { selectorFamily } from 'recoil';
 
 import { dialogIdsState, dialogState } from '../atoms';
 
+import { dialogsWithLuProviderSelectorFamily } from './validatedDialogs';
+
 export const dialogsSelectorFamily = selectorFamily<DialogInfo[], string>({
   key: 'dialogs',
   get: (projectId: string) => ({ get }) => {
     const dialogIds = get(dialogIdsState(projectId));
-
     return dialogIds
       .map((dialogId) => {
-        return get(dialogState({ projectId, dialogId }));
+        const result = get(dialogState({ projectId, dialogId }));
+        return result;
       })
       .filter((d) => !d.isTopic);
   },
@@ -60,5 +62,14 @@ export const currentDialogState = selectorFamily<DialogInfo | undefined, { proje
     }
 
     return get(dialogsSelectorFamily(projectId))?.[0];
+  },
+});
+
+export const rootDialogSelector = selectorFamily<DialogInfo | undefined, string>({
+  key: 'luFiles',
+  get: (projectId: string) => ({ get }) => {
+    const dialogs = get(dialogsWithLuProviderSelectorFamily(projectId));
+
+    return dialogs.find((d) => d.isRoot);
   },
 });

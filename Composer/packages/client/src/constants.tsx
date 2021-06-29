@@ -208,12 +208,6 @@ export const DialogCreationCopy = {
   },
   get CREATE_NEW_BOT() {
     return {
-      title: formatMessage('Create bot from template or scratch?'),
-      subText: formatMessage('You can create a new bot from scratch with Composer, or start with a template.'),
-    };
-  },
-  get CREATE_NEW_BOT_V2() {
-    return {
       title: formatMessage('Select a template'),
       subText: formatMessage("Microsoft's templates offer best practices for developing conversational bots."),
     };
@@ -235,7 +229,7 @@ export const DialogCreationCopy = {
   get DEFINE_BOT_PROJECT() {
     return {
       title: formatMessage('Create a bot project'),
-      subText: formatMessage(`Specify a name, description, and location for your new bot project.`),
+      subText: formatMessage(`Specify a name, runtime type, and location for your new bot project.`),
     };
   },
   get DEFINE_DIALOG() {
@@ -273,7 +267,7 @@ export const DialogCreationCopy = {
   get IMPORT_BOT_PROJECT() {
     return {
       title: formatMessage('Import your bot to new project'),
-      subText: formatMessage(`Specify a name, description, and location for your new bot project.`),
+      subText: formatMessage(`Specify a name, runtime type, and location for your new bot project.`),
     };
   },
 };
@@ -439,10 +433,9 @@ export const EmptyBotTemplateId = 'EmptyBot';
 
 export const nameRegex = /^[a-zA-Z0-9-_]+$/;
 
-export const nameRegexV2 = /^[a-zA-Z0-9_]+$/;
+export const botNameRegex = /^[a-zA-Z0-9_]+$/;
 
 export const invalidNameCharRegex = /[^a-zA-Z0-9-_]/g;
-export const invalidNameCharRegexV2 = /[^a-zA-Z0-9_]/g;
 
 export const authConfig = {
   // for web login

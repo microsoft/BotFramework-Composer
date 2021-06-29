@@ -5,7 +5,7 @@
 import { jsx } from '@emotion/core';
 import { act } from 'react-test-renderer';
 import { useRecoilValue, useSetRecoilState, useRecoilState } from 'recoil';
-import { HookResult } from '@botframework-composer/test-utils/lib/hooks';
+import { RenderResult } from '@botframework-composer/test-utils/lib/hooks';
 
 import { UndoRoot, undoFunctionState, undoHistoryState } from '../history';
 import {
@@ -55,7 +55,7 @@ describe('<UndoRoot/>', () => {
     };
   };
 
-  let renderedComponent: HookResult<ReturnType<typeof useRecoilTestHook>>;
+  let renderedComponent: RenderResult<ReturnType<typeof useRecoilTestHook>>;
 
   beforeEach(() => {
     const { result } = renderRecoilHook(useRecoilTestHook, {

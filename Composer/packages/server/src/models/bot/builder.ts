@@ -19,7 +19,7 @@ import { setEnvDefault } from '../../utility/setEnvDefault';
 import { useElectronContext } from '../../utility/electronContext';
 import { TelemetryService } from '../../services/telemetry';
 
-import { IOrchestratorNLRList, IOrchestratorProgress, IOrchestratorSettings } from './interface';
+import { CrossTrainingSetting, IOrchestratorNLRList, IOrchestratorProgress, IOrchestratorSettings } from './interface';
 import orchestratorBuilder from './process/orchestratorBuilder';
 
 const crossTrainer = require('@microsoft/bf-lu/lib/parser/cross-train/crossTrainer.js');
@@ -61,6 +61,7 @@ export class Builder {
   public storage: IFileStorage;
   public config: IConfig | null = null;
   public downSamplingConfig: DownSamplingConfig = { maxImbalanceRatio: -1 };
+  public crossTrainingSetting: CrossTrainingSetting = { inter: true, intra: true };
   private _locale: string;
   private orchestratorCachedBuild = false;
   private orchestratorSettings: IOrchestratorSettings = {
@@ -116,7 +117,10 @@ export class Builder {
       await this.downSamplingInterruption((await this.getInterruptionFiles()).interruptionLuFiles);
 
       const { interruptionLuFiles, interruptionQnaFiles } = await this.getInterruptionFiles();
-      const { luBuildFiles, orchestratorBuildFiles } = this.separateLuFiles(interruptionLuFiles, allFiles);
+      const { luBuildFiles, orchestratorBuildFiles } = this.separateFiles(interruptionLuFiles, allFiles, 'lu');
+      const { orchestratorBuildFiles: needReplacedFiles } = this.separateFiles(interruptionQnaFiles, allFiles, 'qna');
+      await this.replaceDeferToForOrchestrator(needReplacedFiles);
+
       await this.runLuBuild(luBuildFiles, directVersionPublish);
       await this.runQnaBuild(interruptionQnaFiles);
       await this.runOrchestratorBuild(orchestratorBuildFiles, emptyFiles);
@@ -134,6 +138,16 @@ export class Builder {
     }
   };
 
+  public replaceDeferToForOrchestrator = async (files: FileInfo[]) => {
+    await Promise.all(
+      files.map((file) => {
+        file.content = file.content.replace('DeferToRecognizer_LUIS', 'DeferToRecognizer_ORCHESTRATOR');
+        this.storage.writeFile(file.path, file.content);
+        return file;
+      })
+    );
+  };
+
   public getQnaEndpointKey = async (subscriptionKey: string, config: IConfig) => {
     try {
       const subscriptionKeyEndpoint = `https://${config?.qnaRegion}.api.cognitive.microsoft.com/qnamaker/v4.0`;
@@ -144,9 +158,16 @@ export class Builder {
     }
   };
 
-  public setBuildConfig(config: IConfig, downSamplingConfig: DownSamplingConfig) {
+  public setBuildConfig(
+    config: IConfig,
+    downSamplingConfig?: DownSamplingConfig,
+    crossTrainingSetting?: { inter?: boolean; intra?: boolean }
+  ) {
     this.config = config;
-    this.downSamplingConfig = downSamplingConfig;
+    if (downSamplingConfig) this.downSamplingConfig = downSamplingConfig;
+    if (!crossTrainingSetting) return;
+    if (crossTrainingSetting.inter !== undefined) this.crossTrainingSetting.inter = crossTrainingSetting.inter;
+    if (crossTrainingSetting.intra !== undefined) this.crossTrainingSetting.intra = crossTrainingSetting.intra;
   }
 
   public get locale(): string {
@@ -279,21 +300,17 @@ export class Builder {
 
   /**
    * Orchestrator: Copy language models into bot project (in preparation for publishing)
-   *
-   * Models are placed as a sibling to ComposerDialogs by default
    */
-  public async copyModelPathToBot(isUsingAdaptiveRuntime: boolean) {
+  public async copyModelPathToBot() {
     for (const lang in this.orchestratorSettings.orchestrator.models) {
       const modelName = Path.basename(this.orchestratorSettings.orchestrator.models[lang], '.onnx');
 
-      const destDir = isUsingAdaptiveRuntime
-        ? Path.resolve(this.botDir, MODEL, modelName)
-        : Path.resolve(this.botDir, '..', MODEL, modelName);
+      const destDir = Path.resolve(this.botDir, MODEL, modelName);
 
       await copy(this.orchestratorSettings.orchestrator.models[lang], destDir);
     }
 
-    await this.updateOrchestratorSetting(isUsingAdaptiveRuntime);
+    await this.updateOrchestratorSetting();
   }
 
   /**
@@ -301,9 +318,8 @@ export class Builder {
    *
    * Models are located in <project root>/model
    * In the Adaptive Runtime, Orchestrator snapshot files are located in <project root>/generated.
-   * In the Legacy Runtime, Orchestrator snapshot files are located in <project root>/ComposerDialogs/generated.
    */
-  private async updateOrchestratorSetting(isUsingAdaptiveRuntime: boolean) {
+  private async updateOrchestratorSetting() {
     const settingPath = Path.join(this.botDir, GENERATEDFOLDER, 'orchestrator.settings.json');
     const content = cloneDeep(this.orchestratorSettings);
 
@@ -315,9 +331,7 @@ export class Builder {
     keys(content.orchestrator.snapshots).forEach((key) => {
       const snapshotName = Path.basename(content.orchestrator.snapshots[key]);
 
-      content.orchestrator.snapshots[key] = isUsingAdaptiveRuntime
-        ? Path.join(GENERATEDFOLDER, snapshotName)
-        : Path.join('ComposerDialogs', GENERATEDFOLDER, snapshotName);
+      content.orchestrator.snapshots[key] = Path.join(GENERATEDFOLDER, snapshotName);
     });
 
     if (this.orchestratorSettings.orchestrator.models.en || this.orchestratorSettings.orchestrator.models.multilang) {
@@ -370,7 +384,11 @@ export class Builder {
     });
 
     const importResolver = luImportResolverGenerator([...getLUFiles(allFiles), ...getQnAFiles(allFiles)]);
-    const result = await crossTrainer.crossTrain(luContents, qnaContents, crossTrainConfig, { importResolver });
+    const { inter, intra } = this.crossTrainingSetting;
+    const result = await crossTrainer.crossTrain(luContents, qnaContents, crossTrainConfig, {
+      importResolver,
+      trainingOpt: { inner: inter, intra },
+    });
 
     await this.writeFiles(result.luResult, 'lu');
     await this.writeFiles(result.qnaResult, 'qna');
@@ -380,7 +398,6 @@ export class Builder {
     const files = await this.storage.readDir(this.interruptionFolderPath);
     const interruptionLuFiles: FileInfo[] = [];
     const interruptionQnaFiles: FileInfo[] = [];
-
     for (const file of files) {
       const content = await this.storage.readFile(Path.join(this.interruptionFolderPath, file));
       const path = Path.join(this.interruptionFolderPath, file);
@@ -603,13 +620,12 @@ export class Builder {
     };
   };
 
-  private separateLuFiles = (luFiles: FileInfo[], allFiles: FileInfo[]) => {
-    const luRecoginzers = allFiles.filter((item) => item.name.endsWith('.lu.dialog'));
+  private separateFiles = (files: FileInfo[], allFiles: FileInfo[], type: 'qna' | 'lu') => {
+    const luRecoginzers = allFiles.filter((item) => item.name.endsWith(`.lu.dialog`));
     const luBuildFiles: FileInfo[] = [];
     const orchestratorBuildFiles: FileInfo[] = [];
-
-    luFiles.forEach((file) => {
-      const recognizer = luRecoginzers.find((item) => item.name.replace('.dialog', '') === file.name);
+    files.forEach((file) => {
+      const recognizer = luRecoginzers.find((item) => item.name.replace('lu.dialog', type) === file.name);
       if (recognizer && JSON.parse(recognizer.content).$kind === SDKKinds.OrchestratorRecognizer) {
         orchestratorBuildFiles.push(file);
       } else {

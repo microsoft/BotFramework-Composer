@@ -18,6 +18,10 @@ import {
   debugPanelActiveTabState,
   userHasNodeInstalledState,
   applicationErrorState,
+  showGetStartedTeachingBubbleState,
+  showErrorDiagnosticsState,
+  showWarningDiagnosticsState,
+  projectsForDiagnosticsFilterState,
 } from '../atoms/appState';
 import { AppUpdaterStatus, CreationFlowStatus, CreationFlowType } from '../../constants';
 import OnboardingState from '../../utils/onboardingStorage';
@@ -153,6 +157,22 @@ export const applicationDispatcher = () => {
     await flushExistingTasks(callbackHelpers);
   });
 
+  const setShowGetStartedTeachingBubble = useRecoilCallback((callbackHelpers: CallbackInterface) => (show: boolean) => {
+    callbackHelpers.set(showGetStartedTeachingBubbleState, show);
+  });
+
+  const setErrorDiagnosticsFilter = useRecoilCallback(({ set }: CallbackInterface) => (value: boolean) => {
+    set(showErrorDiagnosticsState, value);
+  });
+
+  const setWarningDiagnosticsFilter = useRecoilCallback(({ set }: CallbackInterface) => (value: boolean) => {
+    set(showWarningDiagnosticsState, value);
+  });
+
+  const setProjectsForDiagnosticsFilter = useRecoilCallback(({ set }: CallbackInterface) => (projectIds: string[]) => {
+    set(projectsForDiagnosticsFilterState, projectIds);
+  });
+
   return {
     checkNodeVersion,
     setAppUpdateStatus,
@@ -169,5 +189,9 @@ export const applicationDispatcher = () => {
     setPageElementState,
     setDebugPanelExpansion,
     setActiveTabInDebugPanel,
+    setShowGetStartedTeachingBubble,
+    setErrorDiagnosticsFilter,
+    setWarningDiagnosticsFilter,
+    setProjectsForDiagnosticsFilter,
   };
 };

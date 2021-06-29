@@ -22,6 +22,8 @@ import {
   dispatcherState,
   luFilesSelectorFamily,
   publishTypesState,
+  botProjectFileState,
+  rootDialogSelector,
 } from '../../recoilModel';
 import { addSkillDialog } from '../../constants';
 import httpClient from '../../utils/httpUtil';
@@ -53,7 +55,7 @@ export interface CreateSkillModalProps {
   onDismiss: () => void;
 }
 
-export const validateManifestUrl = async ({ formData, formDataErrors, setFormDataErrors }) => {
+export const validateManifestUrl = ({ formData, formDataErrors, setFormDataErrors }, skills: string[] = []) => {
   const { manifestUrl } = formData;
   const { manifestUrl: _, ...errors } = formDataErrors;
 
@@ -61,10 +63,16 @@ export const validateManifestUrl = async ({ formData, formDataErrors, setFormDat
     setFormDataErrors({ ...errors, manifestUrl: formatMessage('Please input a manifest URL') });
   } else if (!urlRegex.test(manifestUrl)) {
     setFormDataErrors({ ...errors, manifestUrl: formatMessage('URL should start with http:// or https://') });
+  } else if (skills.includes(manifestUrl)) {
+    setFormDataErrors({
+      ...errors,
+      manifestUrl: formatMessage('The bot is already part of the Bot Project'),
+    });
   } else {
     setFormDataErrors({});
   }
 };
+
 export const getSkillManifest = async (projectId: string, manifestUrl: string, setSkillManifest, setFormDataErrors) => {
   try {
     const { data } = await httpClient.get(`/projects/${projectId}/skill/retrieveSkillManifest`, {
@@ -134,8 +142,11 @@ export const CreateSkillModal: React.FC<CreateSkillModalProps> = (props) => {
     settingsState(projectId)
   );
   const { dialogId } = useRecoilValue(designPageLocationState(projectId));
+  const rootDialog = useRecoilValue(rootDialogSelector(projectId));
   const luFiles = useRecoilValue(luFilesSelectorFamily(projectId));
   const { updateRecognizer, setMicrosoftAppProperties, setPublishTargets } = useRecoilValue(dispatcherState);
+  const { content: botProjectFile } = useRecoilValue(botProjectFileState(projectId));
+  const skillUrls = Object.keys(botProjectFile.skills).map((key) => botProjectFile.skills[key].manifest as string);
 
   const debouncedValidateManifestURl = useRef(debounce(validateManifestUrl, 500)).current;
 
@@ -157,10 +168,13 @@ export const CreateSkillModal: React.FC<CreateSkillModalProps> = (props) => {
   const handleManifestUrlChange = (_, currentManifestUrl = '') => {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { manifestUrl, ...rest } = formData;
-    debouncedValidateManifestURl({
-      formData: { manifestUrl: currentManifestUrl },
-      ...validationHelpers,
-    });
+    debouncedValidateManifestURl(
+      {
+        formData: { manifestUrl: currentManifestUrl },
+        ...validationHelpers,
+      },
+      skillUrls
+    );
     setFormData({
       ...rest,
       manifestUrl: currentManifestUrl,
@@ -184,16 +198,22 @@ export const CreateSkillModal: React.FC<CreateSkillModalProps> = (props) => {
     TelemetryClient.track('AddNewSkillCompleted');
     // if added remote skill fail, just not addTrigger to root.
     const skillId = location.href.match(/skill\/([^/]*)/)?.[1];
+
+    //if the root dialog is orchestrator recoginzer type or user chooses orchestrator type before connecting,
+    //add the trigger to the root dialog.
+    const boundId =
+      rootDialog && (rootDialog.luProvider === SDKKinds.OrchestratorRecognizer || enable) ? rootDialog.id : dialogId;
+
     if (skillId) {
       // add trigger with connect to skill action to root bot
       const triggerFormData = getTriggerFormData(skillManifest.name, content);
-      await addTriggerToRoot(dialogId, triggerFormData, skillId);
+      await addTriggerToRoot(boundId, triggerFormData, skillId);
       TelemetryClient.track('AddNewTriggerCompleted', { kind: 'Microsoft.OnIntent' });
     }
 
     if (enable) {
       // update recognizor type to orchestrator
-      await updateRecognizer(projectId, dialogId, SDKKinds.OrchestratorRecognizer);
+      await updateRecognizer(projectId, boundId, SDKKinds.OrchestratorRecognizer);
     }
   };
 
@@ -269,6 +289,7 @@ export const CreateSkillModal: React.FC<CreateSkillModalProps> = (props) => {
             manifest={skillManifest}
             projectId={projectId}
             rootLuFiles={luFiles}
+            runtime={runtime}
             onBack={() => {
               setTitle({
                 subText: '',
