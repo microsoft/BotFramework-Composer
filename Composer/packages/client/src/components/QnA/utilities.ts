@@ -6,6 +6,10 @@ import localeToQnALanguageMap from '@microsoft/bf-lu/lib/parser/utils/enums/loca
 
 const languageToLocales = invertBy(localeToQnALanguageMap);
 
+export const localeToLanguage = (locale: string): string => {
+  return localeToQnALanguageMap[locale];
+};
+
 export const isLocalesOnSameLanguage = (locale: string, language: string): boolean => {
   const langLocales = languageToLocales[language];
   return langLocales?.includes(locale) ?? false;

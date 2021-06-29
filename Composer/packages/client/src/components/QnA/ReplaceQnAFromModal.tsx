@@ -34,7 +34,9 @@ import { AuthClient } from '../../utils/authClient';
 import { AuthDialog } from '../Auth/AuthDialog';
 import { getTokenFromCache, isShowAuthDialog, userShouldProvideTokens } from '../../utils/auth';
 import { dispatcherState } from '../../recoilModel';
+import { getKBName, getFileLocale } from '../../utils/qnaUtil';
 
+import { localeToLanguage, isLocalesOnSameLanguage } from './utilities';
 import { ReplaceQnAModalFormData, ReplaceQnAModalProps } from './constants';
 import {
   styles,
@@ -72,7 +74,7 @@ const serviceName = 'QnA Maker';
 const serviceKeyType = 'QnAMaker';
 
 export const ReplaceQnAFromModal: React.FC<ReplaceQnAModalProps> = (props) => {
-  const { onDismiss, onSubmit, hidden, qnaFile, projectId } = props;
+  const { onDismiss, onSubmit, hidden, qnaFile, projectId, containerId } = props;
   const actions = useRecoilValue(dispatcherState);
   const [formData, setFormData] = useState<ReplaceQnAModalFormData>();
   const [disabled, setDisabled] = useState(true);
@@ -295,17 +297,19 @@ export const ReplaceQnAFromModal: React.FC<ReplaceQnAModalProps> = (props) => {
       setKbLoading(formatMessage('Loading knowledge base...'));
       const cognitiveServicesCredentials = new CognitiveServicesCredentials(key.key);
       const resourceClient = new QnAMakerClient(cognitiveServicesCredentials, key.endpoint);
-
+      const locale = getFileLocale(containerId);
       const result = await resourceClient.knowledgebase.listAll();
       if (result.knowledgebases) {
-        const kblist: KBRec[] = result.knowledgebases.map((item: any) => {
-          return {
-            id: item.id || '',
-            name: item.name || '',
-            language: item.language || '',
-            lastChangedTimestamp: item.lastChangedTimestamp || '',
-          };
-        });
+        const kblist: KBRec[] = result.knowledgebases
+          .map((item: any) => {
+            return {
+              id: item.id || '',
+              name: item.name || '',
+              language: item.language || '',
+              lastChangedTimestamp: item.lastChangedTimestamp || '',
+            };
+          })
+          .filter((kbl) => isLocalesOnSameLanguage(locale, kbl.language));
         if (kblist?.length) {
           setKbs(kblist);
         }
@@ -528,10 +532,14 @@ export const ReplaceQnAFromModal: React.FC<ReplaceQnAModalProps> = (props) => {
       },
     ];
 
+    const kbName = getKBName(containerId);
+    const language = localeToLanguage(getFileLocale(containerId));
     return (
       <div>
         <div css={dialogBodyStyles}>
-          <p css={{ marginTop: 0 }}>{formatMessage('Select one or more KB to import into your bot project')}</p>
+          <p css={{ marginTop: 0 }}>
+            {`Select a KB to to replace content for ${kbName} (${language}). This will replace all current content in your knowledge base.`}
+          </p>
           <div css={mainElementStyle}>
             <DetailsList
               enterModalSelectionOnTouch
