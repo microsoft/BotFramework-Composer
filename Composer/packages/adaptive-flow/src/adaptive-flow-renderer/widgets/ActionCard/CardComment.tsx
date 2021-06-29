@@ -17,6 +17,7 @@ const styles = {
     padding: 8px;
     padding-bottom: 10px;
     border-radius: 2px;
+    margin-bottom: 4px;
     position: relative;
   `,
   fold: css`
