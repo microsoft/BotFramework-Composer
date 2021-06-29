@@ -15,7 +15,6 @@ import { getDefaultFontSettings } from '../../../../recoilModel/utils/fontUtil';
 import { currentProjectIdState, dispatcherState, watchedVariablesState } from '../../../../recoilModel';
 
 import { PropertyItem } from './utils/components/PropertyTreeItem';
-import { useNoSearchResultMenuItem } from './utils/hooks/useNoSearchResultMenuItem';
 import { computePropertyItemTree, getAllNodes, WatchDataPayload } from './utils/helpers';
 import { getPickerContextualMenuItem } from './utils/components/PickerContextualMenuItem';
 import { getMemoryVariablesForProject } from './utils/helpers';
@@ -73,8 +72,6 @@ export const WatchVariablePicker = React.memo((props: WatchVariablePickerProps) 
   const [items, setItems] = useState<IContextualMenuItem[]>([]);
   const [propertyTreeExpanded, setPropertyTreeExpanded] = React.useState<Record<string, boolean>>({});
   const uiStrings = useMemo(() => getStrings(), []);
-
-  const noSearchResultMenuItem = useNoSearchResultMenuItem(uiStrings.emptyMessage);
 
   useEffect(() => {
     if (showContextualMenu) {
@@ -177,9 +174,9 @@ export const WatchVariablePicker = React.memo((props: WatchVariablePickerProps) 
 
           const filteredItems = flatPropertyListItems.filter(predicate);
 
-          if (!filteredItems || !filteredItems.length) {
-            filteredItems.push(noSearchResultMenuItem);
-          }
+          // if (!filteredItems || !filteredItems.length) {
+          //   filteredItems.push(noSearchResultMenuItem);
+          // }
 
           setItems(filteredItems);
         } else {
