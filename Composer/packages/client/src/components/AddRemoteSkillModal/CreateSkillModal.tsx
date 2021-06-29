@@ -91,7 +91,6 @@ export const validateLocalZip = async (files: Record<string, JSZipObject>) => {
     for (const fPath in files) {
       zipContent[fPath] = await files[fPath].async('string');
       // eslint-disable-next-line no-useless-escape
-      console.log(isManifestJson(zipContent[fPath]));
       if (fPath.match(/\.([^\.]+)$/)?.[1] === 'json' && isManifestJson(zipContent[fPath])) {
         manifestFiles.push(files[fPath]);
         result['path'] = fPath.substr(0, fPath.lastIndexOf('/') + 1);
