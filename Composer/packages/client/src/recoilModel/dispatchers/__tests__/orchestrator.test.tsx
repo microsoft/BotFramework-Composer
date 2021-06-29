@@ -2,10 +2,15 @@
 // Licensed under the MIT License.
 
 import { RecognizerFile, SDKKinds } from '@bfc/shared';
+import httpClient from '../../../utils/httpUtil';
 
 import { availableLanguageModels } from '../orchestrator';
 
 describe('Orchestrator model picking logic', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
   it('no language returned if empty or invalid id, or non-orchestrator recognizer', async () => {
     const recognizerFiles: RecognizerFile[] = [
       { id: 'test.en-us.dialog', content: { $kind: SDKKinds.LuisRecognizer } },
@@ -99,6 +104,30 @@ describe('Orchestrator model picking logic', () => {
     expect(await availableLanguageModels(recognizerFiles)).toEqual([
       { kind: 'en_intent', name: 'default' },
       { kind: 'multilingual_intent', name: 'default' },
+    ]);
+  });
+
+  it('return proper model names instead of default after checking against Orchestrator model list', async () => {
+    const recognizerFiles: RecognizerFile[] = [
+      { id: 'test.en-us.', content: { $kind: SDKKinds.OrchestratorRecognizer } },
+      { id: 'test.en.dialog', content: { $kind: SDKKinds.OrchestratorRecognizer } },
+      { id: 'test.fr-be.', content: { $kind: SDKKinds.OrchestratorRecognizer } },
+      { id: 'test.ja-jp.', content: { $kind: SDKKinds.OrchestratorRecognizer } },
+      { id: 'test.zh.dialog', content: { $kind: SDKKinds.OrchestratorRecognizer } },
+    ];
+
+    (httpClient.get as jest.Mock).mockResolvedValueOnce({
+      data: {
+        defaults: {
+          en_intent: 'fake_english_model_name',
+          multilingual_intent: 'fake_multilingual_model_name',
+        },
+      },
+    });
+
+    expect(await availableLanguageModels(recognizerFiles)).toEqual([
+      { kind: 'en_intent', name: 'fake_english_model_name' },
+      { kind: 'multilingual_intent', name: 'fake_multilingual_model_name' },
     ]);
   });
 });
