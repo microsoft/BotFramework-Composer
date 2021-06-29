@@ -41,6 +41,7 @@ import {
   creationFlowStatusState,
   orchestratorForSkillsDialogState,
   selectedTemplateVersionState,
+  watchedVariablesState,
 } from '../atoms';
 import { botRuntimeOperationsSelector, rootBotProjectIdSelector } from '../selectors';
 import { mergePropertiesManagedByRootBot, postRootBotCreation } from '../../recoilModel/dispatchers/utils/project';
@@ -227,7 +228,7 @@ export const projectDispatcher = () => {
       absData?: any,
       callback?: (projectId: string) => void
     ) => {
-      const { set, snapshot } = callbackHelpers;
+      const { reset, set, snapshot } = callbackHelpers;
       try {
         set(botOpeningState, true);
 
@@ -237,6 +238,7 @@ export const projectDispatcher = () => {
           path,
           storageId
         );
+        reset(watchedVariablesState(projectId));
 
         if (requiresMigrate) {
           await forceMigrate(projectId, hasOldCustomRuntime);

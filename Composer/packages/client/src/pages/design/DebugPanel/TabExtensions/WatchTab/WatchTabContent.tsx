@@ -7,7 +7,6 @@ import React, { useMemo, useCallback, useState, useEffect, useRef } from 'react'
 import { useRecoilValue } from 'recoil';
 import { v4 as uuidv4 } from 'uuid';
 import { ConversationActivityTrafficItem, Activity } from '@botframework-composer/types';
-import { IIconProps } from 'office-ui-fabric-react/lib/Icon';
 import { Stack } from 'office-ui-fabric-react/lib/Stack';
 import { CommandBar, ICommandBarStyles } from 'office-ui-fabric-react/lib/CommandBar';
 import {
@@ -32,8 +31,8 @@ import { CommunicationColors, FluentTheme } from '@uifabric/fluent-theme';
 
 import { DebugPanelTabHeaderProps } from '../types';
 import {
+  currentProjectIdState,
   dispatcherState,
-  rootBotProjectIdSelector,
   watchedVariablesState,
   webChatTrafficState,
 } from '../../../../../recoilModel';
@@ -116,9 +115,9 @@ export const getValueFromBotTraceMemory = (
 };
 
 export const WatchTabContent: React.FC<DebugPanelTabHeaderProps> = ({ isActive }) => {
-  const currentProjectId = useRecoilValue(rootBotProjectIdSelector);
-  const rawWebChatTraffic = useRecoilValue(webChatTrafficState(currentProjectId ?? ''));
-  const watchedVariables = useRecoilValue(watchedVariablesState(currentProjectId ?? ''));
+  const currentProjectId = useRecoilValue(currentProjectIdState);
+  const rawWebChatTraffic = useRecoilValue(webChatTrafficState(currentProjectId));
+  const watchedVariables = useRecoilValue(watchedVariablesState(currentProjectId));
   const { setWatchedVariables } = useRecoilValue(dispatcherState);
   const [uncommittedWatchedVariables, setUncommittedWatchedVariables] = useState<Record<string, string>>({});
   const [selectedVariables, setSelectedVariables] = useState<IObjectWithKey[]>();
@@ -136,27 +135,30 @@ export const WatchTabContent: React.FC<DebugPanelTabHeaderProps> = ({ isActive }
     })
   );
 
+  // reset state when switching to a new project
+  useEffect(() => {
+    setUncommittedWatchedVariables([]);
+  }, [currentProjectId]);
+
   // get memory scope variables for the bot
   useEffect(() => {
-    if (currentProjectId) {
-      const abortController = new AbortController();
-      (async () => {
-        try {
-          const watched = Object.values(watchedVariables);
-          let variables = await getMemoryVariables(currentProjectId, { signal: abortController.signal });
-          // we don't want to show variables that are already being watched
-          variables = variables.filter((v) => !watched.find((watchedV) => watchedV === v));
+    const abortController = new AbortController();
+    (async () => {
+      try {
+        const watched = Object.values(watchedVariables);
+        let variables = await getMemoryVariables(currentProjectId, { signal: abortController.signal });
+        // we don't want to show variables that are already being watched
+        variables = variables.filter((v) => !watched.find((watchedV) => watchedV === v));
 
-          setMemoryVariablesPayload({ kind: 'property', data: { properties: variables } });
-        } catch (e) {
-          // error can be due to abort
-        }
-      })();
+        setMemoryVariablesPayload({ kind: 'property', data: { properties: variables } });
+      } catch (e) {
+        // error can be due to abort
+      }
+    })();
 
-      return () => {
-        abortController.abort();
-      };
-    }
+    return () => {
+      abortController.abort();
+    };
   }, [currentProjectId, watchedVariables]);
 
   const mostRecentBotState = useMemo(() => {
@@ -202,8 +204,10 @@ export const WatchTabContent: React.FC<DebugPanelTabHeaderProps> = ({ isActive }
           return <span css={unavailbleValue}>{formatMessage('not available')}</span>;
         }
       } else {
-        // no bot trace available
-        return <span css={unavailbleValue}>{formatMessage('not available')}</span>;
+        // no bot trace available - render "not available" for committed variables, and nothing for uncommitted variables
+        return watchedVariables[item.key] !== undefined ? (
+          <span css={unavailbleValue}>{formatMessage('not available')}</span>
+        ) : null;
       }
     },
     [mostRecentBotState, watchedVariables]
@@ -259,18 +263,16 @@ export const WatchTabContent: React.FC<DebugPanelTabHeaderProps> = ({ isActive }
   }, [uncommittedWatchedVariables]);
 
   const onClickRemove = useCallback(() => {
-    if (currentProjectId) {
-      const updatedUncommitted = { ...uncommittedWatchedVariables };
-      const updatedCommitted = { ...watchedVariables };
-      if (selectedVariables?.length) {
-        selectedVariables.map((item: IObjectWithKey) => {
-          delete updatedUncommitted[item.key as string];
-          delete updatedCommitted[item.key as string];
-        });
-      }
-      setWatchedVariables(currentProjectId, updatedCommitted);
-      setUncommittedWatchedVariables(updatedUncommitted);
+    const updatedUncommitted = { ...uncommittedWatchedVariables };
+    const updatedCommitted = { ...watchedVariables };
+    if (selectedVariables?.length) {
+      selectedVariables.map((item: IObjectWithKey) => {
+        delete updatedUncommitted[item.key as string];
+        delete updatedCommitted[item.key as string];
+      });
     }
+    setWatchedVariables(currentProjectId, updatedCommitted);
+    setUncommittedWatchedVariables(updatedUncommitted);
   }, [currentProjectId, selectedVariables, setWatchedVariables, setUncommittedWatchedVariables]);
 
   const removeIsDisabled = useMemo(() => {
