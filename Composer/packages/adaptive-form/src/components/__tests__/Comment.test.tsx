@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import React from 'react';
-import { render, fireEvent, act, faker, userEvent, within } from '@botframework-composer/test-utils';
+import { render, fireEvent, act, faker, userEvent } from '@botframework-composer/test-utils';
 
 import { Comment, MAX_CHARS_FOR_SINGLE_LINE } from '../Comment';
 
@@ -14,14 +14,13 @@ describe('<Comment />', () => {
   });
 
   it('renders a text field if no comment present', async () => {
-    const { findByPlaceholderText, findByTestId } = render(<Comment onChange={onChange} />);
+    const { findByPlaceholderText, queryByTestId } = render(<Comment onChange={onChange} />);
 
     const textfield = await findByPlaceholderText('Add a note');
 
     expect(textfield).toBeVisible();
 
-    const card = await findByTestId('CommentCard');
-    expect(card).not.toBeVisible();
+    expect(queryByTestId('CommentCard')).not.toBeInTheDocument();
   });
 
   it('renders a textarea if the comment is more than 65 characters', async () => {
@@ -47,11 +46,11 @@ describe('<Comment />', () => {
 
   it('can edit an existing comment', async () => {
     const comment = faker.lorem.paragraph();
-    const { findByLabelText, findByPlaceholderText, findByText, findByTestId } = render(
+    const { findByLabelText, findByPlaceholderText, findByText, queryByTestId } = render(
       <Comment comment={comment} onChange={onChange} />
     );
 
-    expect(await findByTestId('CommentCard')).toBeVisible();
+    expect(queryByTestId('CommentCard')).toBeVisible();
     const textfield = await findByPlaceholderText('Add a note');
     expect(textfield).not.toBeVisible();
 
@@ -66,7 +65,7 @@ describe('<Comment />', () => {
     });
     expect(textfield).toBeVisible();
     expect(textfield).toHaveValue(comment);
-    expect(await findByTestId('CommentCard')).not.toBeVisible();
+    expect(queryByTestId('CommentCard')).not.toBeInTheDocument();
 
     act(() => {
       userEvent.type(textfield, 'a');
@@ -77,11 +76,11 @@ describe('<Comment />', () => {
 
   it('can delete a comment', async () => {
     const comment = faker.lorem.paragraph();
-    const { findByLabelText, findByPlaceholderText, findByText, findByTestId } = render(
+    const { findByLabelText, findByPlaceholderText, findByText, queryByTestId } = render(
       <Comment comment={comment} onChange={onChange} />
     );
 
-    expect(await findByTestId('CommentCard')).toBeVisible();
+    expect(queryByTestId('CommentCard')).toBeInTheDocument();
     let textfield = await findByPlaceholderText('Add a note');
     expect(textfield).not.toBeVisible();
 
@@ -97,6 +96,6 @@ describe('<Comment />', () => {
     textfield = await findByPlaceholderText('Add a note');
     expect(textfield).toBeVisible();
     expect(onChange).toHaveBeenCalledWith('');
-    expect(await findByTestId('CommentCard')).not.toBeVisible();
+    expect(queryByTestId('CommentCard')).not.toBeInTheDocument();
   });
 });

@@ -9,38 +9,26 @@ import { IconMenu } from '@bfc/ui-shared';
 import { TextField, ITextField } from 'office-ui-fabric-react/lib/TextField';
 import { IContextualMenuItem } from 'office-ui-fabric-react/lib/ContextualMenu';
 
-import { Link } from './Link';
+import { ExpandableText } from './ExpandableText';
 
 export const MAX_CHARS_FOR_SINGLE_LINE = 65;
 
 const styles = {
-  note: (isEditing = false) => css`
+  note: css`
     background-color: #fff4ce;
     padding: 14px 10px 10px 10px;
     position: relative;
     border-radius: 3px;
-
-    display: ${isEditing ? 'none' : 'block'};
   `,
   menu: css`
     position: absolute;
     right: 4px;
     top: 8px;
   `,
-  noteBody: (truncate = true) => css`
+  noteBody: css`
     font-size: 12px;
     margin: 0;
     padding-right: 18px;
-    // https://css-tricks.com/line-clampin/#weird-webkit-flexbox-way
-    ${truncate
-      ? `
-      overflow: hidden;
-      max-height: 80px;
-      display: -webkit-box;
-      -webkit-line-clamp: 5;
-      -webkit-box-orient: vertical;
-      `
-      : undefined}
   `,
   showMore: css`
     display: flex;
@@ -57,24 +45,13 @@ type CommentProps = {
 const Comment: React.FC<CommentProps> = ({ comment, onChange }) => {
   const [isEditing, setIsEditing] = useState(!comment);
   const [isMultiline, setIsMultiline] = useState((comment ?? '').length >= MAX_CHARS_FOR_SINGLE_LINE);
-  const [showMore, setShowMore] = useState(false);
-  const [needsTruncation, setNeedsTruncation] = useState(false);
-  const noteRef = useRef<HTMLParagraphElement | null>(null);
   const textfieldRef = useRef<ITextField>(null);
   const editingStateRef = useRef<boolean>(isEditing);
-
-  useEffect(() => {
-    const el = noteRef.current;
-    setNeedsTruncation(Boolean(el && el.scrollHeight > el.clientHeight));
-  }, []);
 
   useEffect(() => {
     // send focus to the text field if toggling from view mode to edit mode
     if (!editingStateRef.current && isEditing) {
       textfieldRef.current?.focus();
-    } else if (!isEditing) {
-      const el = noteRef.current;
-      setNeedsTruncation(Boolean(el && el.scrollHeight > el.clientHeight));
     }
     editingStateRef.current = isEditing;
   }, [isEditing]);
@@ -138,27 +115,20 @@ const Comment: React.FC<CommentProps> = ({ comment, onChange }) => {
         onBlur={handleBlur}
         onChange={handleChange}
       />
-      <div css={styles.note(isEditing)} data-testid="CommentCard">
-        <div css={styles.menu}>
-          <IconMenu
-            iconName="MoreVertical"
-            iconSize={12}
-            label={formatMessage('Comment menu')}
-            menuItems={menuItems}
-            menuWidth={120}
-          />
-        </div>
-        <p ref={noteRef} css={styles.noteBody(!showMore)}>
-          {comment}
-        </p>
-        {needsTruncation && (
-          <div css={styles.showMore}>
-            <Link styles={{ root: { fontSize: '12px' } }} onClick={() => setShowMore((current) => !current)}>
-              {showMore ? formatMessage('Show Less') : formatMessage('Show More')}
-            </Link>
+      {!isEditing && (
+        <div css={styles.note} data-testid="CommentCard">
+          <div css={styles.menu}>
+            <IconMenu
+              iconName="MoreVertical"
+              iconSize={12}
+              label={formatMessage('Comment menu')}
+              menuItems={menuItems}
+              menuWidth={120}
+            />
           </div>
-        )}
-      </div>
+          <ExpandableText css={styles.noteBody}>{comment}</ExpandableText>
+        </div>
+      )}
     </React.Fragment>
   );
 };
