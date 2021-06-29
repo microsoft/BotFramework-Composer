@@ -83,6 +83,21 @@ export class PublishStatusPollingUpdater {
     );
   }
 
+  waitUntilStopped(): Promise<boolean> {
+    return new Promise((resolve, reject) => {
+      try {
+        const timer = setInterval(() => {
+          if (this.status === PollingStateEnum.Stopped) {
+            clearInterval(timer);
+            resolve(true);
+          }
+        }, this.pollingInterval);
+      } catch (err) {
+        reject(err);
+      }
+    });
+  }
+
   stop() {
     if (this.timerId) {
       window.clearInterval(this.timerId);
