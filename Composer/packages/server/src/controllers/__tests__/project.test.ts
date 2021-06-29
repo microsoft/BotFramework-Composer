@@ -374,6 +374,28 @@ describe('skill operation', () => {
       method: 'GET',
     });
   }, 10000);
+
+  it('should create skill files', async () => {
+    const url = 'https://yuesuemailskill0207-gjvga67.azurewebsites.net/manifest/manifest-1.0.json';
+
+    const mockReq = {
+      params: { projectId },
+      body: {
+        url,
+        skillName: 'manifest',
+        zipContent: {},
+      },
+    } as Request;
+    await ProjectController.createSkillFiles(mockReq, mockRes);
+    expect(mockRes.status).toHaveBeenCalledWith(200);
+  });
+  it('should remove skill files', async () => {
+    const mockReq = {
+      params: { projectId, name: 'manifest' },
+    } as Request;
+    await ProjectController.removeSkillFiles(mockReq, mockRes);
+    expect(mockRes.status).toHaveBeenCalledWith(200);
+  });
 });
 
 // TODO: add a success publish test.
