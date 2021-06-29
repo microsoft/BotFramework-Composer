@@ -104,6 +104,13 @@ export const getValueFromBotTraceMemory = (
   botTrace: Activity
 ): { value: any; propertyIsAvailable: boolean } => {
   const pathSegments = valuePath.split('.');
+  if (pathSegments.length === 1) {
+    // this is the root level of a memory scope
+    return {
+      propertyIsAvailable: true,
+      value: get(botTrace?.value, valuePath, undefined),
+    };
+  }
   pathSegments.pop();
   const parentValuePath = pathSegments.join('.');
   const parentPropertyValue = get(botTrace?.value, parentValuePath, undefined);

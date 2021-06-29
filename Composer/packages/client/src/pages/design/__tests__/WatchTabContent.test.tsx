@@ -11,26 +11,28 @@ import { getValueFromBotTraceMemory, WatchTabContent } from '../DebugPanel/TabEx
 describe('<WatchTabContent />', () => {
   describe('rendering', () => {
     it('should add a row to the table', async () => {
-      const { findByText } = renderWithRecoil(<WatchTabContent isActive />, () => {});
+      const { findByPlaceholderText, findByText } = renderWithRecoil(<WatchTabContent isActive />, () => {});
       const addButton = await findByText('Add property');
 
       act(() => {
         fireEvent.click(addButton);
       });
 
-      // value for unset watched variable
-      await findByText('unavailable');
+      await findByPlaceholderText('Add property path to watch');
     });
 
     it('should remove a row from the table', async () => {
       const rootBotId = '123-adc';
-      const { findByText, queryByText } = renderWithRecoil(<WatchTabContent isActive />, ({ set }) => {
-        set(botProjectIdsState, [rootBotId]);
-        set(projectMetaDataState(rootBotId), {
-          isRootBot: true,
-          isRemote: false,
-        });
-      });
+      const { findByPlaceholderText, findByText, queryByPlaceholderText } = renderWithRecoil(
+        <WatchTabContent isActive />,
+        ({ set }) => {
+          set(botProjectIdsState, [rootBotId]);
+          set(projectMetaDataState(rootBotId), {
+            isRootBot: true,
+            isRemote: false,
+          });
+        }
+      );
       const addButton = await findByText('Add property');
       const removeButton = await findByText('Remove from list');
 
@@ -41,8 +43,8 @@ describe('<WatchTabContent />', () => {
 
       // select the row
       await act(async () => {
-        const newRow = await findByText('unavailable');
-        fireEvent.click(newRow);
+        const newRow = await findByPlaceholderText('Add property path to watch');
+        newRow.parentElement && fireEvent.click(newRow.parentElement);
       });
 
       // remove the row
@@ -50,7 +52,7 @@ describe('<WatchTabContent />', () => {
         fireEvent.click(removeButton);
       });
 
-      const nonexistentRow = queryByText('unavailable');
+      const nonexistentRow = queryByPlaceholderText('Add property path to watch');
       expect(nonexistentRow).toBeNull();
     });
   });
@@ -88,6 +90,13 @@ describe('<WatchTabContent />', () => {
 
       expect(result.propertyIsAvailable).toBe(true);
       expect(result.value).toBe(undefined);
+    });
+
+    it('should get the root of a memory scope', () => {
+      const result = getValueFromBotTraceMemory('user', botTrace);
+
+      expect(result.propertyIsAvailable).toBe(true);
+      expect(result.value).toEqual(botTrace.value.user);
     });
   });
 });
