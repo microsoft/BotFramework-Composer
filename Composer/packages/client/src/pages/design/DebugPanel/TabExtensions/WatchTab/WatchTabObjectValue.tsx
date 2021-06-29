@@ -13,7 +13,7 @@ const editorStyles = css`
   border: none;
 `;
 
-const maxJsonHeight = 80;
+const maxJsonHeight = 100;
 
 const objectCellStyle = (numLinesOfJson: number) => css`
   height: ${Math.min(numLinesOfJson * 18, maxJsonHeight)}px;
