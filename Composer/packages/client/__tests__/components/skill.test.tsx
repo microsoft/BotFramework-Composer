@@ -3,11 +3,15 @@
 
 import * as React from 'react';
 import { act, fireEvent } from '@botframework-composer/test-utils';
+import * as JSZip from 'jszip';
+import { readFile } from 'fs-extra';
+import { resolve } from 'path';
 
 import httpClient from '../../src/utils/httpUtil';
 import { renderWithRecoil } from '../testUtils';
 import CreateSkillModal, {
   validateManifestUrl,
+  validateLocalZip,
   getSkillManifest,
 } from '../../src/components/AddRemoteSkillModal/CreateSkillModal';
 import { botProjectFileState, currentProjectIdState, settingsState } from '../../src/recoilModel';
@@ -223,6 +227,18 @@ describe('<SkillForm />', () => {
         },
       });
       expect(setSkillManifest).toBeCalledWith(JSON.parse(mockManifest));
+    });
+
+    it('should try and retrieve manifest with zip manifest', async () => {
+      // create zip instance
+      const filep = resolve(__dirname, '../../__mocks__/mockManifest.zip');
+      const zipFile = await readFile(filep);
+      const { files } = await JSZip.loadAsync(zipFile);
+      const result = await validateLocalZip(files);
+      expect(result.manifestContent).not.toBeNull();
+      expect(result.error).toStrictEqual({});
+      expect(result.path).toBe('relativeUris/');
+      expect(result.zipContent).not.toBeNull();
     });
 
     it('should show error when it could not retrieve skill manifest', async () => {
