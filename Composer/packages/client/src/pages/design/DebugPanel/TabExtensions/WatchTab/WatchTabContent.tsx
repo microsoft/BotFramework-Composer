@@ -137,7 +137,7 @@ export const WatchTabContent: React.FC<DebugPanelTabHeaderProps> = ({ isActive }
 
   // reset state when switching to a new project
   useEffect(() => {
-    setUncommittedWatchedVariables([]);
+    setUncommittedWatchedVariables({});
   }, [currentProjectId]);
 
   // get memory scope variables for the bot
