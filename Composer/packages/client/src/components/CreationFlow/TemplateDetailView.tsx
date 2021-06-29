@@ -104,16 +104,25 @@ export const TemplateDetailView: React.FC<TemplateDetailViewProps> = (props) => 
     return props.readMe.replace(/^(#|##) (.*)/, '').trim();
   };
 
-  const validatePath = async (path): Promise<string> => {
-    const response = await httpClient.get(`/storages/validate/${encodeURI(path)}`);
+  const validatePath = async (path) => {
+    if (path === '') {
+      onValidateLocalTemplatePath(false);
+      return '';
+    }
+    const response = await httpClient.get(`/storages/validate/${encodeURIComponent(path)}`);
     const validateMessage = response.data.errorMsg;
     if (typeof validateMessage === 'string' && validateMessage.includes('path')) {
+      // Result is not a valid path
       onValidateLocalTemplatePath(false);
       return formatMessage('This path does not exist');
     } else if (validateMessage) {
+      // Result is a non dir path
       onValidateLocalTemplatePath(true);
+      return '';
     }
-    return '';
+    // result is a dir path
+    onValidateLocalTemplatePath(false);
+    return formatMessage('Directory path not accepted. Enter path to generators index.js file.');
   };
 
   const renderLocalTemplateForm = () => (
