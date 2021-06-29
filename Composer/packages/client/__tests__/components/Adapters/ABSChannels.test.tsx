@@ -6,7 +6,7 @@ import { act, fireEvent } from '@botframework-composer/test-utils';
 
 import { renderWithRecoil } from '../../testUtils/renderWithRecoil';
 import ABSChannels from '../../../src/pages/botProject/adapters/ABSChannels';
-import { botDisplayNameState, dispatcherState, settingsState } from '../../../src/recoilModel';
+import { botDisplayNameState, settingsState } from '../../../src/recoilModel';
 import * as authUtils from '../../../src/utils/auth';
 import httpClient from '../../../src/utils/httpUtil';
 
