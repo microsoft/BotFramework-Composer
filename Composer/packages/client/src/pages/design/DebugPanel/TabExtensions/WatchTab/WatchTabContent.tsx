@@ -28,6 +28,7 @@ import { ScrollablePane } from 'office-ui-fabric-react/lib/ScrollablePane';
 import { Sticky, StickyPositionType } from 'office-ui-fabric-react/lib/Sticky';
 import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
 import { CommunicationColors, FluentTheme } from '@uifabric/fluent-theme';
+import { Link } from 'office-ui-fabric-react/lib/Link';
 
 import { DebugPanelTabHeaderProps } from '../types';
 import {
@@ -56,6 +57,13 @@ const primitiveValue = css`
   color: ${CommunicationColors.shade10};
   height: 16px;
   line-height: 16px;
+`;
+
+const emptyState = css`
+  font-family: ${FluentTheme.fonts.small.fontFamily};
+  font-size: ${FluentTheme.fonts.small.fontSize};
+  line-height: ${FluentTheme.fonts.small.lineHeight};
+  padding-left: 16px;
 `;
 
 const watchTableStyles: Partial<IDetailsListStyles> = {
@@ -305,16 +313,31 @@ export const WatchTabContent: React.FC<DebugPanelTabHeaderProps> = ({ isActive }
         }}
       >
         <ScrollablePane>
-          <DetailsList
-            columns={watchTableColumns}
-            items={refreshedWatchedVariables}
-            layoutMode={watchTableLayout}
-            selection={watchedVariablesSelection.current}
-            selectionMode={SelectionMode.multiple}
-            styles={watchTableStyles}
-            onRenderDetailsHeader={onRenderDetailsHeader}
-            onRenderRow={renderRow}
-          />
+          {refreshedWatchedVariables.length ? (
+            <DetailsList
+              columns={watchTableColumns}
+              items={refreshedWatchedVariables}
+              layoutMode={watchTableLayout}
+              selection={watchedVariablesSelection.current}
+              selectionMode={SelectionMode.multiple}
+              styles={watchTableStyles}
+              onRenderDetailsHeader={onRenderDetailsHeader}
+              onRenderRow={renderRow}
+            />
+          ) : (
+            <span css={emptyState}>
+              {formatMessage.rich(
+                'Add properties to watch while testing your bot in the Web Chat pane. <a>Learn more.</a>',
+                {
+                  a: ({ children }) => (
+                    <Link key="watch-table-empty-state-link" href="https://aka.ms/bfcomposer-2-watch">
+                      {children}
+                    </Link>
+                  ),
+                }
+              )}
+            </span>
+          )}
         </ScrollablePane>
       </Stack.Item>
     </Stack>
