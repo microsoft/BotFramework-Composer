@@ -6,6 +6,8 @@ import { jsx } from '@emotion/core';
 import { useState, Fragment, useEffect } from 'react';
 import formatMessage from 'format-message';
 import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button';
+import { Stack } from 'office-ui-fabric-react/lib/Stack';
+import { Link } from 'office-ui-fabric-react/lib/Link';
 import { ChoiceGroup, IChoiceGroupOption } from 'office-ui-fabric-react/lib/ChoiceGroup';
 import { DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
 import { FontWeights } from 'office-ui-fabric-react/lib/Styling';
@@ -37,7 +39,7 @@ type CreateOptionsProps = {
 } & RouteComponentProps<{}>;
 
 export function CreateOptions(props: CreateOptionsProps) {
-  const [isOpenOptionsModal, setIsOpenOptionsModal] = useState(false);
+  const [isOpenOptionsModal, setIsOpenOptionsModal] = useState(true);
   const [option, setOption] = useState('Create');
   const [isOpenCreateModal, setIsOpenCreateModal] = useState(false);
   const {
@@ -106,8 +108,8 @@ export function CreateOptions(props: CreateOptionsProps) {
   };
 
   const options: IChoiceGroupOption[] = [
-    { key: 'Create', text: formatMessage('Use Azure Bot to create a new conversation') },
-    { key: 'Connect', text: formatMessage('Apply my Azure Bot resources for an existing bot') },
+    { key: 'Create', text: formatMessage('Create a new bot project') },
+    { key: 'Connect', text: formatMessage('Use an existing bot project') },
   ];
 
   const handleChange = (e, option) => {
@@ -143,8 +145,19 @@ export function CreateOptions(props: CreateOptionsProps) {
       >
         <ChoiceGroup required defaultSelectedKey="Create" options={options} onChange={handleChange} />
         <DialogFooter>
-          <PrimaryButton data-testid="NextStepButton" text={formatMessage('Next')} onClick={handleJumpToNext} />
-          <DefaultButton text={formatMessage('Cancel')} onClick={onDismiss} />
+          <Stack>
+            <Stack.Item>
+              <Link href="http://aka.ms/composer-abs-quickstart" target="_blank">
+                {formatMessage('Learn more')}
+              </Link>
+            </Stack.Item>
+            <Stack.Item>
+              <Stack horizontal>
+                <PrimaryButton data-testid="NextStepButton" text={formatMessage('Next')} onClick={handleJumpToNext} />
+                <DefaultButton text={formatMessage('Cancel')} onClick={onDismiss} />
+              </Stack>
+            </Stack.Item>
+          </Stack>
         </DialogFooter>
       </DialogWrapper>
       <CreateBot

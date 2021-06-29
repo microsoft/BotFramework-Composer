@@ -119,7 +119,21 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
       formData.path,
       'default',
       true,
-      { profile: formData.profile, source: formData.source, alias: formData.alias },
+      {
+        profile: {
+          botId: 'beyackle_test',
+          botName: 'beyackle_test',
+          appId: '799f76fa-e63c-4d1c-b0ae-7b700dd3ffe2',
+          appPasswordHint:
+            '/subscriptions/51fbc48d-04f1-449a-b50c-b40618411b9f/resourceGroups/beyackle_rg/providers/Microsoft.KeyVault/vaults/bot-secrets-d3e2pq/secrets/bot-beyackle-test-pwd-z4dtad',
+          resourceId:
+            '/subscriptions/51fbc48d-04f1-449a-b50c-b40618411b9f/resourceGroups/beyackle_rg/providers/Microsoft.BotService/botServices/beyackle_test',
+          armEndpoint: 'https://management.azure.com',
+          tenantId: '72f988bf-86f1-41af-91ab-2d7cd011db47',
+        },
+        source: 'abs',
+        alias: formData.alias,
+      },
       (projectId) => {
         TelemetryClient.track('BotProjectOpened', { method: 'toolbar', projectId });
       }
