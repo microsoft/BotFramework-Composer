@@ -22,6 +22,7 @@ import { getPickerContextualMenuItem } from './utils/components/PickerContextual
 const DEFAULT_FONT_SETTINGS = getDefaultFontSettings();
 
 type WatchVariablePickerProps = {
+  path: string;
   payload: WatchDataPayload;
   disabled?: boolean;
   variableId: string;
@@ -62,9 +63,9 @@ export const WatchVariablePicker = React.memo((props: WatchVariablePickerProps) 
   const currentProjectId = useRecoilValue(rootBotProjectIdSelector);
   const watchedVariables = useRecoilValue(watchedVariablesState(currentProjectId ?? ''));
   const { setWatchedVariables } = useRecoilValue(dispatcherState);
-  const { payload, variableId } = props;
+  const { path, payload, variableId } = props;
   const [errorMessage, setErrorMessage] = useState('');
-  const [query, setQuery] = useState('');
+  const [query, setQuery] = useState<string>(null);
   const inputBoxElementRef = useRef<ITextField | null>(null);
   const pickerContainerElementRef = useRef<null | HTMLDivElement>(null);
   const [showContextualMenu, setShowContextualMenu] = React.useState(false);
@@ -229,7 +230,7 @@ export const WatchVariablePicker = React.memo((props: WatchVariablePickerProps) 
         id={variableId}
         placeholder={uiStrings.searchPlaceholder}
         styles={textFieldStyles(errorMessage)}
-        value={query}
+        value={query ?? path}
         onChange={onInputChange}
         onFocus={onTextBoxFocus}
         onKeyDown={onTextBoxKeyDown}

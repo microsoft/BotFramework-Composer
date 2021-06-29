@@ -170,7 +170,9 @@ export const WatchTabContent: React.FC<DebugPanelTabHeaderProps> = ({ isActive }
 
   const onRenderVariableName = useCallback(
     (item: { key: string; value: string }, index: number | undefined, column: IColumn | undefined) => {
-      return <WatchVariablePicker key={item.key} payload={memoryVariablesPayload} variableId={item.key} />;
+      return (
+        <WatchVariablePicker key={item.key} path={item.value} payload={memoryVariablesPayload} variableId={item.key} />
+      );
     },
     [memoryVariablesPayload]
   );
@@ -235,10 +237,14 @@ export const WatchTabContent: React.FC<DebugPanelTabHeaderProps> = ({ isActive }
 
   // we need to refresh the details list when we get a new bot state, add a new row, or submit a variable to watch
   const refreshedWatchedVariables = useMemo(() => {
-    return Object.entries(uncommittedWatchedVariables).map(([key, value]) => ({
-      key,
-      value,
-    }));
+    // merge any committed variables into the uncommitted list so that state
+    // is saved when the user collapses the panel or switches to another tab
+    return Object.entries(uncommittedWatchedVariables).map(([key, value]) => {
+      return {
+        key,
+        value: watchedVariables[key] ?? value,
+      };
+    });
   }, [mostRecentBotState, uncommittedWatchedVariables, watchedVariables]);
 
   const renderRow = useCallback((props?: IDetailsRowProps) => {
