@@ -1,8 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-/*eslint camelcase: ["error", {properties: "never"}]*/
-
 import { RecognizerFile, SDKKinds } from '@bfc/shared';
 
 import httpClient from '../../../utils/httpUtil';
