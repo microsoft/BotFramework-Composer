@@ -93,11 +93,7 @@ describe('<ABSChannels />', () => {
     jest.spyOn(authUtils, 'getTenantIdFromCache').mockReturnValue(mockTenantId);
   });
 
-  const setApplicationLevelErrorMock = jest.fn();
   const recoilInitState = ({ set }) => {
-    set(dispatcherState, {
-      setApplicationLevelError: setApplicationLevelErrorMock,
-    });
     set(botDisplayNameState(mockProjId), mockDisplayName);
     set(settingsState(mockProjId), mockSettingsState);
   };
@@ -108,13 +104,15 @@ describe('<ABSChannels />', () => {
 
   async function renderComponentOnInitView() {
     const component = renderComponent();
-    const dropdown = component.getByTestId('publishTargetDropDown');
+    const dropdown = await component.getByTestId('publishTargetDropDown');
 
     await act(async () => {
       await fireEvent.click(dropdown);
     });
+    const publishTarget = await component.getByText(mockPublishTargetName);
+
     await act(async () => {
-      await fireEvent.click(component.getByText(mockPublishTargetName));
+      await fireEvent.click(publishTarget);
     });
     return component;
   }
@@ -122,9 +120,9 @@ describe('<ABSChannels />', () => {
   it('should render the component with all connections', async () => {
     const component = await renderComponentOnInitView();
 
-    expect(component.findByText('MS Teams')).toBeTruthy();
-    expect(component.findByText('Web Chat')).toBeTruthy();
-    expect(component.findByText('Speech')).toBeTruthy();
+    expect(await component.findByText('MS Teams')).toBeTruthy();
+    expect(await component.findByText('Web Chat')).toBeTruthy();
+    expect(await component.findByText('Speech')).toBeTruthy();
     expect(
       httpClient.get
     ).toBeCalledWith(
@@ -153,7 +151,7 @@ describe('<ABSChannels />', () => {
     expect(component.container).toHaveTextContent('Learn more');
     expect(component.container).toHaveTextContent('Open manifest');
 
-    const teamsToggle = component.getByTestId(`${CHANNELS.TEAMS}_toggle`);
+    const teamsToggle = await component.getByTestId(`${CHANNELS.TEAMS}_toggle`);
     await act(async () => {
       await fireEvent.click(teamsToggle);
     });
