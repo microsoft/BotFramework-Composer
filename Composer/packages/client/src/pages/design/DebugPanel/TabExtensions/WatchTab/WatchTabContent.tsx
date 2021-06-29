@@ -37,8 +37,6 @@ import {
   webChatTrafficState,
 } from '../../../../../recoilModel';
 import { WatchVariablePicker } from '../../WatchVariablePicker/WatchVariablePicker';
-import { getMemoryVariables } from '../../../../../recoilModel/dispatchers/utils/project';
-import { WatchDataPayload } from '../../WatchVariablePicker/utils/helpers';
 
 import { WatchTabObjectValue } from './WatchTabObjectValue';
 
@@ -128,10 +126,6 @@ export const WatchTabContent: React.FC<DebugPanelTabHeaderProps> = ({ isActive }
   const { setWatchedVariables } = useRecoilValue(dispatcherState);
   const [uncommittedWatchedVariables, setUncommittedWatchedVariables] = useState<Record<string, string>>({});
   const [selectedVariables, setSelectedVariables] = useState<IObjectWithKey[]>();
-  const [memoryVariablesPayload, setMemoryVariablesPayload] = useState<WatchDataPayload>({
-    kind: 'property',
-    data: { properties: [] },
-  });
 
   const watchedVariablesSelection = useRef(
     new Selection({
@@ -147,27 +141,6 @@ export const WatchTabContent: React.FC<DebugPanelTabHeaderProps> = ({ isActive }
     setUncommittedWatchedVariables({});
   }, [currentProjectId]);
 
-  // get memory scope variables for the bot
-  useEffect(() => {
-    const abortController = new AbortController();
-    (async () => {
-      try {
-        const watched = Object.values(watchedVariables);
-        let variables = await getMemoryVariables(currentProjectId, { signal: abortController.signal });
-        // we don't want to show variables that are already being watched
-        variables = variables.filter((v) => !watched.find((watchedV) => watchedV === v));
-
-        setMemoryVariablesPayload({ kind: 'property', data: { properties: variables } });
-      } catch (e) {
-        // error can be due to abort
-      }
-    })();
-
-    return () => {
-      abortController.abort();
-    };
-  }, [currentProjectId, watchedVariables]);
-
   const mostRecentBotState = useMemo(() => {
     const botStateTraffic = rawWebChatTraffic.filter(
       (t) => t.trafficType === 'activity' && t.activity.type === 'trace' && t.activity.name === 'BotState'
@@ -179,11 +152,9 @@ export const WatchTabContent: React.FC<DebugPanelTabHeaderProps> = ({ isActive }
 
   const onRenderVariableName = useCallback(
     (item: { key: string; value: string }, index: number | undefined, column: IColumn | undefined) => {
-      return (
-        <WatchVariablePicker key={item.key} path={item.value} payload={memoryVariablesPayload} variableId={item.key} />
-      );
+      return <WatchVariablePicker key={item.key} path={item.value} variableId={item.key} />;
     },
-    [memoryVariablesPayload]
+    []
   );
 
   const onRenderVariableValue = useCallback(

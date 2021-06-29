@@ -18,12 +18,12 @@ import { PropertyItem } from './utils/components/PropertyTreeItem';
 import { useNoSearchResultMenuItem } from './utils/hooks/useNoSearchResultMenuItem';
 import { computePropertyItemTree, getAllNodes, WatchDataPayload } from './utils/helpers';
 import { getPickerContextualMenuItem } from './utils/components/PickerContextualMenuItem';
+import { getMemoryVariablesForProject } from './utils/helpers';
 
 const DEFAULT_FONT_SETTINGS = getDefaultFontSettings();
 
 type WatchVariablePickerProps = {
   path: string;
-  payload: WatchDataPayload;
   disabled?: boolean;
   variableId: string;
 };
@@ -63,8 +63,9 @@ export const WatchVariablePicker = React.memo((props: WatchVariablePickerProps) 
   const currentProjectId = useRecoilValue(currentProjectIdState);
   const watchedVariables = useRecoilValue(watchedVariablesState(currentProjectId));
   const { setWatchedVariables } = useRecoilValue(dispatcherState);
-  const { path, payload, variableId } = props;
+  const { path, variableId } = props;
   const [errorMessage, setErrorMessage] = useState('');
+  const [payload, setPayload] = useState<WatchDataPayload>({ kind: 'property', data: { properties: [] } });
   const [query, setQuery] = useState<string | null>(null);
   const inputBoxElementRef = useRef<ITextField | null>(null);
   const pickerContainerElementRef = useRef<null | HTMLDivElement>(null);
@@ -74,6 +75,16 @@ export const WatchVariablePicker = React.memo((props: WatchVariablePickerProps) 
   const uiStrings = useMemo(() => getStrings(), []);
 
   const noSearchResultMenuItem = useNoSearchResultMenuItem(uiStrings.emptyMessage);
+
+  useEffect(() => {
+    if (showContextualMenu) {
+      // fetch the bot's available memory variables when the picker is opened
+      (async () => {
+        const memoryVariables = await getMemoryVariablesForProject(currentProjectId, watchedVariables);
+        setPayload(memoryVariables);
+      })();
+    }
+  }, [currentProjectId, showContextualMenu, watchedVariables]);
 
   const propertyTreeConfig = useMemo(() => {
     const { properties } = payload.data;

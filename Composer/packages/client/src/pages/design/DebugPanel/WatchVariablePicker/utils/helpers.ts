@@ -3,6 +3,8 @@
 
 import uniq from 'lodash/uniq';
 
+import { getMemoryVariables } from '../../../../../recoilModel/dispatchers/utils/project';
+
 export type PropertyItem = {
   id: string;
   name: string;
@@ -108,4 +110,19 @@ export const getAllNodes = <T extends { id: string; name: string; children?: T[]
   addNode(root, null);
 
   return { nodes, levels, paths };
+};
+
+export const getMemoryVariablesForProject = async (projectId: string, watchedVariables: Record<string, string>) => {
+  const abortController = new AbortController();
+  try {
+    const watched = Object.values(watchedVariables);
+    let variables = await getMemoryVariables(projectId, { signal: abortController.signal });
+    // we don't want to show variables that are already being watched
+    variables = variables.filter((v) => !watched.find((watchedV) => watchedV === v));
+
+    return { kind: 'property', data: { properties: variables } };
+  } catch (e) {
+    // error can be due to abort
+    return { kind: 'property', data: { properties: [] } };
+  }
 };
