@@ -227,7 +227,6 @@ const BotController: React.FC<BotControllerProps> = ({ onHideController, isContr
           <DefaultButton
             primary
             aria-roledescription={formatMessage('Bot Controller')}
-            ariaDescription={startPanelButtonText}
             data-testid={'startBotButton'}
             disabled={disableStartBots || areBotsProcessing}
             iconProps={{
@@ -263,7 +262,6 @@ const BotController: React.FC<BotControllerProps> = ({ onHideController, isContr
                 font: '62px',
               },
             }}
-            title={startPanelButtonText}
             onClick={handleClick}
           >
             {areBotsProcessing && (
@@ -303,7 +301,6 @@ const BotController: React.FC<BotControllerProps> = ({ onHideController, isContr
                 },
                 rootHovered: { background: transparentBackground, color: NeutralColors.white },
               }}
-              title={startStopLabel}
               onClick={onSplitButtonClick}
             />
           </TooltipHost>
