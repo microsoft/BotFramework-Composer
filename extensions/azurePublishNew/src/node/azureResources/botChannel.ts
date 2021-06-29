@@ -45,12 +45,16 @@ const botChannelProvisionMethod = (provisionConfig: ProvisionConfig): ProvisionM
     const hostname = workingSet.webApp?.hostname;
     const endpoint = `https://${hostname ?? config.hostname + '.azurewebsites.net'}/api/messages`;
 
+    if (!appId || !hostname || !endpoint) {
+      createCustomizeError(ProvisionErrors.BOT_REGISTRATION_ERROR, 'App Id, Hostname, and Endpoint are required.');
+    }
+
     try {
       await azureBotService.bots.create(config.resourceGroupName, config.displayName, {
         properties: {
           displayName: config.displayName,
-          endpoint: endpoint ?? '',
-          msaAppId: appId ?? '',
+          endpoint: endpoint,
+          msaAppId: appId,
           openWithHint: 'bfcomposer://',
         },
         sku: {
