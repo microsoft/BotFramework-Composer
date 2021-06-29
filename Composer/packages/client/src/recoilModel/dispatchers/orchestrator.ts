@@ -93,7 +93,7 @@ export const availableLanguageModels = async (
     if (languageModels.some((r) => r.name === 'default')) {
       const resp = await httpClient.get<IOrchestratorNLRList>('/orchestrator/getModelList');
       if (resp.data) {
-        let modelList = resp.data;
+        const modelList = resp.data;
         if (modelList?.defaults) {
           languageModels = languageModels.map((r) =>
             r.name === 'default' ? { ...r, name: modelList.defaults[r.kind] } : r

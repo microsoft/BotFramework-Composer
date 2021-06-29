@@ -1,9 +1,11 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { RecognizerFile, SDKKinds } from '@bfc/shared';
-import httpClient from '../../../utils/httpUtil';
+/*eslint camelcase: ["error", {properties: "never"}]*/
 
+import { RecognizerFile, SDKKinds } from '@bfc/shared';
+
+import httpClient from '../../../utils/httpUtil';
 import { availableLanguageModels } from '../orchestrator';
 
 describe('Orchestrator model picking logic', () => {
@@ -119,8 +121,8 @@ describe('Orchestrator model picking logic', () => {
     (httpClient.get as jest.Mock).mockResolvedValueOnce({
       data: {
         defaults: {
-          en_intent: 'fake_english_model_name',
-          multilingual_intent: 'fake_multilingual_model_name',
+          en_intent: 'fake_english_model_name', // eslint-disable-line @typescript-eslint/camelcase
+          multilingual_intent: 'fake_multilingual_model_name', // eslint-disable-line @typescript-eslint/camelcase
         },
       },
     });

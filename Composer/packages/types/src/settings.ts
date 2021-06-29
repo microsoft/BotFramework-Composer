@@ -1,8 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 import { JSONSchema7Type } from 'json-schema';
-import { ModelTypes } from './orchestrator';
 
+import { ModelTypes } from './orchestrator';
 import type { PublishTarget } from './publish';
 
 export interface LibraryRef {
