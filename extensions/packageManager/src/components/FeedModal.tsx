@@ -187,7 +187,7 @@ export const FeedModal: React.FC<WorkingModalProps> = (props) => {
           <Toggle
             ariaLabel={formatMessage('Include prerelease versions')}
             checked={item ? item.defaultQuery?.prerelease : false}
-            disabled={!selectedItem || selectedItem.readonly}
+            disabled={!selectedItem || item.key !== selectedItem.key || selectedItem.readonly}
             onChange={updateSelectedDefaultQuery('prerelease')}
           />
         );
