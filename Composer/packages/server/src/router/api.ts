@@ -140,9 +140,9 @@ router.post('/settings', SettingsController.updateUserSettings);
 router.post('/telemetry/events', TelemetryController.track);
 
 // Orchestrator Specific API
-router.post('/orchestrator/getModelList', OrchestratorController.getModelList);
 router.post('/orchestrator/download', OrchestratorController.downloadLanguageModel);
 router.get('/orchestrator/status', OrchestratorController.status);
+router.get('/orchestrator/getModelList', OrchestratorController.getModelList);
 
 const errorHandler = (handler: RequestHandler) => (req: Request, res: Response, next: NextFunction) => {
   Promise.resolve(handler(req, res, next)).catch(next);

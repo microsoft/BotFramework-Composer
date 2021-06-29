@@ -41,7 +41,7 @@ class OrchestratorController {
     res.send(this.state);
   };
 
-  public getModelList = async (): Promise<IOrchestratorNLRList> => await Orchestrator.baseModelGetVersionsAsync();
+  public getModelList = async (req: Request, res: Response) => res.send(await Orchestrator.baseModelGetVersionsAsync());
 
   public downloadLanguageModel = async (req: Request, res: Response) => {
     const modelData = req.body?.modelData;
@@ -51,7 +51,7 @@ class OrchestratorController {
       return res.sendStatus(400);
     }
 
-    const modelList = await this.getModelList();
+    const modelList: IOrchestratorNLRList = await Orchestrator.baseModelGetVersionsAsync();
     let modelName: string;
 
     if (modelData?.name === 'default') {
