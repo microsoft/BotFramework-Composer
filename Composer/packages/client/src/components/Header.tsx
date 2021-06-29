@@ -302,7 +302,6 @@ export const Header = () => {
                 iconName: 'OfficeChat',
               }}
               styles={buttonStyles}
-              title={labels().test}
               onClick={() => {
                 const currentWebChatVisibility = !isWebChatPanelVisible;
                 setWebChatPanelVisibility(currentWebChatVisibility);
