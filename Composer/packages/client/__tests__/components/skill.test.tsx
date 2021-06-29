@@ -1,11 +1,12 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { resolve } from 'path';
+
 import * as React from 'react';
 import { act, fireEvent } from '@botframework-composer/test-utils';
 import * as JSZip from 'jszip';
 import { readFile } from 'fs-extra';
-import { resolve } from 'path';
 
 import httpClient from '../../src/utils/httpUtil';
 import { renderWithRecoil } from '../testUtils';

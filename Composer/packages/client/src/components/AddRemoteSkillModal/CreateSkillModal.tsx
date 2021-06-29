@@ -247,7 +247,9 @@ export const CreateSkillModal: React.FC<CreateSkillModalProps> = (props) => {
     event.preventDefault();
     // add a remote skill, add skill identifier into botProj file
     await addRemoteSkill(formData.manifestUrl, formData.endpointName, zipContent);
-    TelemetryClient.track('AddNewSkillCompleted');
+    TelemetryClient.track('AddNewSkillCompleted', {
+      from: Object.keys(zipContent).length > 0 ? 'zip' : 'url',
+    });
     // if added remote skill fail, just not addTrigger to root.
     const skillId = location.href.match(/skill\/([^/]*)/)?.[1];
 
