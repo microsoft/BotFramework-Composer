@@ -4,9 +4,8 @@
 import { Orchestrator } from '@microsoft/bf-orchestrator';
 import { Request, Response } from 'express';
 import { pathExists } from 'fs-extra';
-import { OrchestratorModelRequest, DownloadState } from '@bfc/shared';
+import { OrchestratorModelRequest, DownloadState, IOrchestratorNLRList } from '@bfc/shared';
 
-import { IOrchestratorNLRList } from '../models/bot/interface';
 import { TelemetryService } from '../services/telemetry';
 import { Path } from '../utility/path';
 

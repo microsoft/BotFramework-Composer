@@ -2,7 +2,14 @@
 // Licensed under the MIT License.
 /* eslint-disable react-hooks/rules-of-hooks */
 
-import { DialogSetting, RecognizerFile, SDKKinds, OrchestratorModelRequest, DownloadState } from '@bfc/shared';
+import {
+  DialogSetting,
+  RecognizerFile,
+  SDKKinds,
+  OrchestratorModelRequest,
+  DownloadState,
+  IOrchestratorNLRList,
+} from '@bfc/shared';
 import { CallbackInterface, useRecoilCallback } from 'recoil';
 import partition from 'lodash/partition';
 
@@ -84,7 +91,7 @@ export const availableLanguageModels = async (
     }
 
     if (languageModels.some((r) => r.name === 'default')) {
-      const resp = await httpClient.get('/orchestrator/getModelList');
+      const resp = await httpClient.get<IOrchestratorNLRList>('/orchestrator/getModelList');
       if (resp.data) {
         let modelList = resp.data;
         languageModels = languageModels.map((r) => {
@@ -123,17 +130,15 @@ export const orchestratorDispatcher = () => {
             });
 
             if (!botSettings.orchestrator?.model?.[languageModel.kind]) {
-              set(settingsState(projectId), (prevSettings) => {
-                return {
-                  ...prevSettings,
-                  orchestrator: {
-                    model: {
-                      ...prevSettings?.orchestrator?.model,
-                      [languageModel.kind]: languageModel.name,
-                    },
+              set(settingsState(projectId), (prevSettings) => ({
+                ...prevSettings,
+                orchestrator: {
+                  model: {
+                    ...prevSettings?.orchestrator?.model,
+                    [languageModel.kind]: languageModel.name,
                   },
-                };
-              });
+                },
+              }));
             }
           }
           filePersistence.flush();

@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 import { JSONSchema7Type } from 'json-schema';
+import { ModelTypes } from './orchestrator';
 
 import type { PublishTarget } from './publish';
 
@@ -146,7 +147,7 @@ export type IQnAConfig = {
 };
 
 export type IOrchestratorConfig = {
-  model?: Record<'en_intent' | 'multilingual_intent', string>;
+  model?: Partial<Record<ModelTypes, string>>;
 };
 
 export type IConfig = ILuisConfig &

@@ -101,7 +101,6 @@ export class DefaultSettingManager extends FileSettingManager {
         hostname: '',
         qnaRegion: 'westus',
       },
-      orchestrator: {},
       telemetry: {
         logPersonalInformation: false,
         logActivities: true,
