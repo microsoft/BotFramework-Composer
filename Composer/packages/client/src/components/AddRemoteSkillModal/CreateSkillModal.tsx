@@ -99,7 +99,7 @@ export const validateLocalZip = async (files: Record<string, JSZipObject>) => {
 
     // update content for detail panel and show it
     if (manifestFiles.length > 1) {
-      result.error = { manifestUrl: formatMessage('zip folder has multiply manifest json') };
+      result.error = { manifestUrl: formatMessage('zip folder has multiple manifest json') };
     } else if (manifestFiles.length === 1) {
       const content = await manifestFiles[0].async('string');
       result.manifestContent = JSON.parse(content);
