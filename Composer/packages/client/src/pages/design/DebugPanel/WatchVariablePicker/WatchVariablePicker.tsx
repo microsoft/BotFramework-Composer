@@ -7,19 +7,27 @@ import formatMessage from 'format-message';
 import React, { useMemo, useCallback, useEffect, useRef, FocusEvent, KeyboardEvent, useState, FormEvent } from 'react';
 import { TextField, ITextField, ITextFieldStyles } from 'office-ui-fabric-react/lib/TextField';
 import debounce from 'lodash/debounce';
-import { IContextualMenuItem, ContextualMenu, DirectionalHint } from 'office-ui-fabric-react/lib/ContextualMenu';
-import { FontSizes, SharedColors } from '@uifabric/fluent-theme';
+import {
+  IContextualMenuItem,
+  ContextualMenu,
+  DirectionalHint,
+  IContextualMenuStyles,
+} from 'office-ui-fabric-react/lib/ContextualMenu';
+import { SharedColors } from '@uifabric/fluent-theme';
 import { useRecoilValue } from 'recoil';
+import { UserSettings } from '@botframework-composer/types';
 
-import { getDefaultFontSettings } from '../../../../recoilModel/utils/fontUtil';
-import { currentProjectIdState, dispatcherState, watchedVariablesState } from '../../../../recoilModel';
+import {
+  currentProjectIdState,
+  dispatcherState,
+  userSettingsState,
+  watchedVariablesState,
+} from '../../../../recoilModel';
 
 import { PropertyItem } from './utils/components/PropertyTreeItem';
 import { computePropertyItemTree, getAllNodes, WatchDataPayload } from './utils/helpers';
 import { getPickerContextualMenuItem } from './utils/components/PickerContextualMenuItem';
 import { getMemoryVariablesForProject } from './utils/helpers';
-
-const DEFAULT_FONT_SETTINGS = getDefaultFontSettings();
 
 type WatchVariablePickerProps = {
   path: string;
@@ -34,16 +42,18 @@ const getStrings = () => {
   };
 };
 
-const textFieldStyles = (errorMessage?: string): Partial<ITextFieldStyles> => ({
+const textFieldStyles = (userSettings: UserSettings, errorMessage?: string): Partial<ITextFieldStyles> => ({
   field: {
-    fontFamily: DEFAULT_FONT_SETTINGS.fontFamily,
-    fontSize: FontSizes.size12,
+    fontFamily: userSettings.codeEditor.fontSettings.fontFamily,
+    fontSize: userSettings.codeEditor.fontSettings.fontSize,
+    fontWeight: userSettings.codeEditor.fontSettings.fontWeight as any,
   },
   fieldGroup: {
     backgroundColor: 'transparent',
-    height: 16,
+    height: 28, // row is 32px high with 2px padding on top and bottom
   },
   root: {
+    padding: '2px 0',
     selectors: {
       '.ms-TextField-fieldGroup': {
         border: 'none',
@@ -52,6 +62,14 @@ const textFieldStyles = (errorMessage?: string): Partial<ITextFieldStyles> => ({
     },
   },
 });
+
+const contextualMenuStyles: Partial<IContextualMenuStyles> = {
+  root: {
+    maxHeight: '200px',
+    overflowY: 'auto',
+    width: '240px',
+  },
+};
 
 const pickerContainer = css`
   margin: '0';
@@ -72,6 +90,7 @@ export const WatchVariablePicker = React.memo((props: WatchVariablePickerProps) 
   const [items, setItems] = useState<IContextualMenuItem[]>([]);
   const [propertyTreeExpanded, setPropertyTreeExpanded] = React.useState<Record<string, boolean>>({});
   const uiStrings = useMemo(() => getStrings(), []);
+  const userSettings = useRecoilValue(userSettingsState);
 
   useEffect(() => {
     if (showContextualMenu) {
@@ -171,12 +190,7 @@ export const WatchVariablePicker = React.memo((props: WatchVariablePickerProps) 
       debounce((passedQuery?: string) => {
         if (passedQuery) {
           const predicate = getFilterPredicate(passedQuery);
-
           const filteredItems = flatPropertyListItems.filter(predicate);
-
-          // if (!filteredItems || !filteredItems.length) {
-          //   filteredItems.push(noSearchResultMenuItem);
-          // }
 
           setItems(filteredItems);
         } else {
@@ -233,7 +247,7 @@ export const WatchVariablePicker = React.memo((props: WatchVariablePickerProps) 
         errorMessage={errorMessage}
         id={variableId}
         placeholder={uiStrings.searchPlaceholder}
-        styles={textFieldStyles(errorMessage)}
+        styles={textFieldStyles(userSettings, errorMessage)}
         value={query ?? path}
         onChange={onInputChange}
         onFocus={onTextBoxFocus}
@@ -248,13 +262,7 @@ export const WatchVariablePicker = React.memo((props: WatchVariablePickerProps) 
         hidden={!showContextualMenu}
         items={items}
         shouldFocusOnMount={false}
-        styles={{
-          root: {
-            maxHeight: '200px',
-            overflowY: 'auto',
-            width: '240px',
-          },
-        }}
+        styles={contextualMenuStyles}
         target={pickerContainerElementRef.current}
         onDismiss={onDismiss}
         onItemClick={onHideContextualMenu}

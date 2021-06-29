@@ -6,7 +6,7 @@ import { css, jsx } from '@emotion/core';
 import React, { useMemo, useCallback, useState, useEffect, useRef } from 'react';
 import { useRecoilValue } from 'recoil';
 import { v4 as uuidv4 } from 'uuid';
-import { ConversationActivityTrafficItem, Activity } from '@botframework-composer/types';
+import { ConversationActivityTrafficItem, Activity, UserSettings } from '@botframework-composer/types';
 import { Stack } from 'office-ui-fabric-react/lib/Stack';
 import { CommandBar, ICommandBarStyles } from 'office-ui-fabric-react/lib/CommandBar';
 import {
@@ -34,6 +34,7 @@ import { DebugPanelTabHeaderProps } from '../types';
 import {
   currentProjectIdState,
   dispatcherState,
+  userSettingsState,
   watchedVariablesState,
   webChatTrafficState,
 } from '../../../../../recoilModel';
@@ -49,14 +50,18 @@ const unavailbleValue = css`
   font-style: italic;
   height: 16px;
   line-height: 16px;
+  display: inline-block;
+  padding: 8px 0;
 `;
 
-const primitiveValue = css`
-  font-family: ${FluentTheme.fonts.small.fontFamily};
-  font-size: ${FluentTheme.fonts.small.fontSize};
+const primitiveValue = (userSettings: UserSettings) => css`
+  font-family: ${userSettings.codeEditor.fontSettings.fontFamily};
+  font-size: ${userSettings.codeEditor.fontSettings.fontSize};
   color: ${CommunicationColors.shade10};
   height: 16px;
   line-height: 16px;
+  display: inline-block;
+  padding: 8px 0;
 `;
 
 const emptyState = css`
@@ -77,8 +82,8 @@ const watchTableStyles: Partial<IDetailsListStyles> = {
   },
 };
 
-const rowStyles: Partial<IDetailsRowStyles> = {
-  cell: { minHeight: 32, padding: '8px 6px' },
+const rowStyles = (): Partial<IDetailsRowStyles> => ({
+  cell: { minHeight: 32, padding: '0 6px' },
   checkCell: {
     height: 32,
     minHeight: 32,
@@ -89,7 +94,7 @@ const rowStyles: Partial<IDetailsRowStyles> = {
     },
   },
   root: { minHeight: 32 },
-};
+});
 
 const commandBarStyles: Partial<ICommandBarStyles> = { root: { height: toolbarHeight, padding: 0 } };
 const detailsHeaderStyles: Partial<IDetailsHeaderStyles> = {
@@ -134,6 +139,7 @@ export const WatchTabContent: React.FC<DebugPanelTabHeaderProps> = ({ isActive }
   const { setWatchedVariables } = useRecoilValue(dispatcherState);
   const [uncommittedWatchedVariables, setUncommittedWatchedVariables] = useState<Record<string, string>>({});
   const [selectedVariables, setSelectedVariables] = useState<IObjectWithKey[]>();
+  const userSettings = useRecoilValue(userSettingsState);
 
   const watchedVariablesSelection = useRef(
     new Selection({
@@ -180,10 +186,12 @@ export const WatchTabContent: React.FC<DebugPanelTabHeaderProps> = ({ isActive }
             // render monaco view
             return <WatchTabObjectValue value={value} />;
           } else if (value === undefined) {
-            return <span css={primitiveValue}>{formatMessage('undefined')}</span>;
+            return <span css={primitiveValue(userSettings)}>{formatMessage('undefined')}</span>;
           } else {
             // render primitive view
-            return <span css={primitiveValue}>{typeof value === 'string' ? `"${value}"` : String(value)}</span>;
+            return (
+              <span css={primitiveValue(userSettings)}>{typeof value === 'string' ? `"${value}"` : String(value)}</span>
+            );
           }
         } else {
           // the value is not available
@@ -196,7 +204,7 @@ export const WatchTabContent: React.FC<DebugPanelTabHeaderProps> = ({ isActive }
         ) : null;
       }
     },
-    [mostRecentBotState, watchedVariables]
+    [mostRecentBotState, userSettings, watchedVariables]
   );
 
   // TODO: update to office-ui-fabric-react@7.170.x to gain access to "flexGrow" column property to distribute proprotional column widths
@@ -238,7 +246,7 @@ export const WatchTabContent: React.FC<DebugPanelTabHeaderProps> = ({ isActive }
   }, [mostRecentBotState, uncommittedWatchedVariables, watchedVariables]);
 
   const renderRow = useCallback((props?: IDetailsRowProps) => {
-    return props ? <DetailsRow {...props} styles={rowStyles} /> : null;
+    return props ? <DetailsRow {...props} styles={rowStyles()} /> : null;
   }, []);
 
   const onClickAdd = useCallback(() => {
