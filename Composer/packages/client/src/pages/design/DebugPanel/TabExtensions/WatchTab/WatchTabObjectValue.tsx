@@ -17,7 +17,7 @@ const maxJsonHeight = 100;
 
 const objectCellStyle = (numLinesOfJson: number) => css`
   height: ${Math.min(numLinesOfJson * 18, maxJsonHeight)}px;
-  width: 360px;
+  width: 100%;
 `;
 
 type WatchTabObjectValueProps = {
