@@ -40,14 +40,21 @@ const botChannelProvisionMethod = (provisionConfig: ProvisionConfig): ProvisionM
   const tokenCredentials = new TokenCredentials(provisionConfig.accessToken);
   const azureBotService = new AzureBotService(tokenCredentials, provisionConfig.subscriptionId);
 
-  return async (config: BotServiceConfig, workingSet: ProvisionWorkingSet): Promise<ProvisionWorkingSet> => {
-    const appId = workingSet.appRegistration?.appId;
-    const hostname = workingSet.webApp?.hostname;
-    const endpoint = `https://${hostname ?? config.hostname + '.azurewebsites.net'}/api/messages`;
-
-    if (!appId || !hostname || !endpoint) {
-      createCustomizeError(ProvisionErrors.BOT_REGISTRATION_ERROR, 'App Id, Hostname, and Endpoint are required.');
+  const checkRequiredField = (field: string, errorMsg: string) => {
+    if (!field) {
+      createCustomizeError(ProvisionErrors.BOT_REGISTRATION_ERROR, errorMsg);
     }
+  };
+
+  return async (config: BotServiceConfig, workingSet: ProvisionWorkingSet): Promise<ProvisionWorkingSet> => {
+    checkRequiredField(config.resourceGroupName, 'resourceGroupName is required.');
+    checkRequiredField(config.displayName, 'displayName is required.');
+    checkRequiredField(workingSet.appRegistration?.appId, 'appRegistration.appId is required.');
+    checkRequiredField(workingSet.webApp?.hostname, 'webApp.hostname is required.');
+
+    const appId = workingSet.appRegistration.appId;
+    const hostname = workingSet.webApp.hostname;
+    const endpoint = `https://${hostname ?? config.hostname + '.azurewebsites.net'}/api/messages`;
 
     try {
       await azureBotService.bots.create(config.resourceGroupName, config.displayName, {
