@@ -71,6 +71,9 @@ function getLgResource(lgFile: LgFile, importResolver?: ImportResolverDelegate) 
 }
 
 export function convertTemplatesToLgFile(id = '', content: string, parseResult: Templates): LgFile {
+  parseResult.diagnostics = parseResult.diagnostics.filter(
+    (diag) => !diag.message.includes('LG file must have at least one template definition.')
+  );
   const diagnostics = parseResult.diagnostics.map((d: LGDiagnostic) => {
     return convertLGDiagnostic(d, id);
   });
