@@ -56,7 +56,6 @@ describe('<BotProjectInfo />', () => {
       initRecoilState
     );
 
-    // Create new caller
     const readMeBtn = component.getByTestId('settingsReadMeBtn');
     await act(async () => {
       await fireEvent.click(readMeBtn);
