@@ -113,10 +113,9 @@ export const getAllNodes = <T extends { id: string; name: string; children?: T[]
 };
 
 export const getMemoryVariablesForProject = async (projectId: string, watchedVariables: Record<string, string>) => {
-  const abortController = new AbortController();
   try {
     const watched = Object.values(watchedVariables);
-    let variables = await getMemoryVariables(projectId, { signal: abortController.signal });
+    let variables = await getMemoryVariables(projectId);
     // we don't want to show variables that are already being watched
     variables = variables.filter((v) => !watched.find((watchedV) => watchedV === v));
 
