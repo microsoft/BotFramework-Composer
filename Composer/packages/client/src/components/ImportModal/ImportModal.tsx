@@ -267,6 +267,7 @@ export const ImportModal: React.FC<RouteComponentProps> = (props) => {
         // block but don't show anything other than the login window
         return (
           <Dialog
+            data-testid="loginPlaceHolder"
             dialogContentProps={{ type: DialogType.normal }}
             hidden={false}
             modalProps={{ isBlocking: true }}

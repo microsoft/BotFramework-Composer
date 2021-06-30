@@ -3,11 +3,10 @@
 
 import React from 'react';
 import { RecoilRoot } from 'recoil';
-import { render } from '@botframework-composer/test-utils';
+import { render, waitFor } from '@botframework-composer/test-utils';
 
 import { ImportModal } from '../../../src/components/ImportModal/ImportModal';
 import { dispatcherState } from '../../../src/recoilModel';
-
 describe('<ImportModal />', () => {
   let locationMock;
   const initRecoilState = ({ set }) => {
@@ -24,8 +23,14 @@ describe('<ImportModal />', () => {
       </RecoilRoot>
     );
 
+    // connecting state
     const connecting = await findByTestId('importModalConnecting');
     expect(connecting).not.toBeNull();
     expect(connecting).toHaveTextContent('Connecting to external service to import bot content...');
+
+    // signin state
+    await waitFor(async () => {
+      expect(findByTestId('loginPlaceHolder')).not.toBeNull();
+    });
   });
 });

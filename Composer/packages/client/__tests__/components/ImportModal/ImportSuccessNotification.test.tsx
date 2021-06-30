@@ -4,7 +4,7 @@ import { ImportSuccessNotificationWrapper } from '../../../src/components/Import
 
 describe('<ImportSuccessNotificationWrapper />', () => {
   it('should render the component', async () => {
-    let locationMock = './existBot';
+    const locationMock = './existBot';
     const mockImportedToExisting = true;
     const Notification = ImportSuccessNotificationWrapper({
       location: locationMock,
