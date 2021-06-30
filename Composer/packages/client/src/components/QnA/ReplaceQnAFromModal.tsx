@@ -15,6 +15,8 @@ import {
   DetailsListLayoutMode,
   IColumn,
   Selection,
+  IDetailsRowProps,
+  DetailsRow,
 } from 'office-ui-fabric-react/lib/DetailsList';
 import { Spinner } from 'office-ui-fabric-react/lib/Spinner';
 import { Dropdown } from 'office-ui-fabric-react/lib/Dropdown';
@@ -28,6 +30,7 @@ import sortBy from 'lodash/sortBy';
 import { NeutralColors } from '@uifabric/fluent-theme';
 import { AzureTenant } from '@botframework-composer/types';
 import jwtDecode from 'jwt-decode';
+import { IRenderFunction } from '@uifabric/utilities';
 
 import TelemetryClient from '../../telemetry/TelemetryClient';
 import { AuthClient } from '../../utils/authClient';
@@ -36,7 +39,7 @@ import { getTokenFromCache, isShowAuthDialog, userShouldProvideTokens } from '..
 import { dispatcherState } from '../../recoilModel';
 import { getKBName, getFileLocale } from '../../utils/qnaUtil';
 
-import { localeToLanguage, isLocalesOnSameLanguage } from './utilities';
+import { localeToLanguage } from './utilities';
 import { ReplaceQnAModalFormData, ReplaceQnAModalProps } from './constants';
 import {
   styles,
@@ -103,6 +106,9 @@ export const ReplaceQnAFromModal: React.FC<ReplaceQnAModalProps> = (props) => {
 
   const [userProvidedTokens, setUserProvidedTokens] = useState<boolean>(false);
   const [currentStep, setCurrentStep] = useState<Step>('intro');
+
+  const currentLocale = getFileLocale(containerId);
+  const currentAuthoringLanuage = localeToLanguage(currentLocale);
 
   const actionOptions: IChoiceGroupOption[] = [
     { key: 'url', text: formatMessage('Replace KB from URL or file ') },
@@ -297,19 +303,17 @@ export const ReplaceQnAFromModal: React.FC<ReplaceQnAModalProps> = (props) => {
       setKbLoading(formatMessage('Loading knowledge base...'));
       const cognitiveServicesCredentials = new CognitiveServicesCredentials(key.key);
       const resourceClient = new QnAMakerClient(cognitiveServicesCredentials, key.endpoint);
-      const locale = getFileLocale(containerId);
       const result = await resourceClient.knowledgebase.listAll();
       if (result.knowledgebases) {
-        const kblist: KBRec[] = result.knowledgebases
-          .map((item: any) => {
-            return {
-              id: item.id || '',
-              name: item.name || '',
-              language: item.language || '',
-              lastChangedTimestamp: item.lastChangedTimestamp || '',
-            };
-          })
-          .filter((kbl) => isLocalesOnSameLanguage(locale, kbl.language));
+        const kblist: KBRec[] = result.knowledgebases.map((item: any) => {
+          return {
+            id: item.id || '',
+            name: item.name || '',
+            language: item.language || '',
+            lastChangedTimestamp: item.lastChangedTimestamp || '',
+          };
+        });
+
         if (kblist?.length) {
           setKbs(kblist);
         }
@@ -530,7 +534,44 @@ export const ReplaceQnAFromModal: React.FC<ReplaceQnAModalProps> = (props) => {
           );
         },
       },
+      {
+        key: 'column3',
+        name: 'Language',
+        fieldName: 'language',
+        minWidth: 100,
+        maxWidth: 200,
+        isResizable: true,
+        isCollapsible: true,
+        data: 'string',
+        isPadded: true,
+      },
     ];
+
+    const currentLanguageKbs: KBRec[] = [];
+    const disabledLanguageKbs: KBRec[] = [];
+
+    kbs.forEach((item) => {
+      if (item.language === currentAuthoringLanuage) {
+        currentLanguageKbs.push(item);
+      } else {
+        disabledLanguageKbs.push(item);
+      }
+    });
+
+    const sortedKbs = [...currentLanguageKbs, ...disabledLanguageKbs];
+
+    const onRenderRow: IRenderFunction<IDetailsRowProps> = (props) => {
+      if (!props) return null;
+      if (props.item.language === currentAuthoringLanuage) {
+        return <DetailsRow {...props} />;
+      } else {
+        return (
+          <span data-selection-disabled style={{ cursor: 'not-allowed' }}>
+            <DetailsRow {...props} />
+          </span>
+        );
+      }
+    };
 
     const kbName = getKBName(containerId);
     const language = localeToLanguage(getFileLocale(containerId));
@@ -550,10 +591,11 @@ export const ReplaceQnAFromModal: React.FC<ReplaceQnAModalProps> = (props) => {
               checkButtonAriaLabel="select row"
               columns={columns}
               getKey={(item) => item.name}
-              items={kbs}
+              items={sortedKbs}
               layoutMode={DetailsListLayoutMode.justified}
               selection={selectedKB}
               selectionMode={SelectionMode.single}
+              onRenderRow={onRenderRow}
             />
             {kbLoading && <Spinner label={kbLoading} labelPosition="bottom" />}
             {kbs.length === 0 && !kbLoading && (

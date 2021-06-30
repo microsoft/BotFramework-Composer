@@ -99,15 +99,15 @@ const Modals: React.FC<ModalsProps> = ({ projectId = '' }) => {
     if (!projectId || !dialogId) return;
     await createQnATrigger(projectId, dialogId);
 
-    const { name, urls = [], locales, multiTurn, endpoint, kbId, locale, subscriptionKey } = data;
+    const { name, urls = [], locales, multiTurn, endpoint, kbId, subscriptionKey } = data;
     if (urls.length !== 0) {
       await createQnAKBsFromUrls({ id: dialogId, name, projectId, locales, urls, multiTurn });
-    } else if (kbId && endpoint && locale) {
+    } else if (kbId && endpoint && locales.length) {
       await createQnAKBFromQnAMaker({
         id: dialogId,
         name,
         projectId,
-        locale,
+        locales,
         endpoint,
         kbId,
         subscriptionKey,

@@ -20,7 +20,6 @@ export type CreateQnAFromUrlFormData = {
 
 export type CreateQnAFromQnAMakerFormData = {
   name: string;
-  locale: string;
 };
 
 export type CreateQnAFromUrlFormDataErrors = {
@@ -36,7 +35,6 @@ export type CreateQnAFormData = {
   endpoint?: string;
   kbId?: string;
   subscriptionKey?: string;
-  locale?: string;
 };
 
 export type CreateQnAModalProps = {

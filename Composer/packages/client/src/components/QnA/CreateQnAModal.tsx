@@ -16,6 +16,8 @@ import {
   DetailsListLayoutMode,
   IColumn,
   Selection,
+  DetailsRow,
+  IDetailsRowProps,
 } from 'office-ui-fabric-react/lib/DetailsList';
 import { Spinner } from 'office-ui-fabric-react/lib/Spinner';
 import { Dropdown } from 'office-ui-fabric-react/lib/Dropdown';
@@ -26,9 +28,11 @@ import { CognitiveServicesManagementClient } from '@azure/arm-cognitiveservices'
 import { CognitiveServicesCredentials } from '@azure/ms-rest-azure-js';
 import { QnAMakerClient } from '@azure/cognitiveservices-qnamaker';
 import sortBy from 'lodash/sortBy';
+import uniq from 'lodash/uniq';
 import { NeutralColors } from '@uifabric/fluent-theme';
 import { AzureTenant } from '@botframework-composer/types';
 import jwtDecode from 'jwt-decode';
+import { IRenderFunction } from '@uifabric/utilities';
 
 import TelemetryClient from '../../telemetry/TelemetryClient';
 import { AuthClient } from '../../utils/authClient';
@@ -47,7 +51,7 @@ import { subText, styles, contentBox, formContainer, choiceContainer } from './s
 import { CreateQnAFromUrl } from './CreateQnAFromUrl';
 import { CreateQnAFromScratch } from './CreateQnAFromScratch';
 import { CreateQnAFromQnAMaker } from './CreateQnAFromQnAMaker';
-import { isLocalesOnSameLanguage } from './utilities';
+import { localeToLanguage } from './utilities';
 
 type KeyRec = {
   name: string;
@@ -108,6 +112,10 @@ export const CreateQnAModal: React.FC<CreateQnAModalProps> = (props) => {
 
   const [userProvidedTokens, setUserProvidedTokens] = useState<boolean>(false);
   const [currentStep, setCurrentStep] = useState<Step>('intro');
+
+  const currentAuthoringLanuage = localeToLanguage(currentLocale);
+  const defaultLanuage = localeToLanguage(defaultLocale);
+  const avaliableLanguages = uniq(locales.map((item) => localeToLanguage(item)));
 
   const actionOptions: IChoiceGroupOption[] = [
     { key: 'url', text: formatMessage('Create new KB from URL or file ') },
@@ -536,8 +544,8 @@ export const CreateQnAModal: React.FC<CreateQnAModalProps> = (props) => {
       },
       {
         key: 'column4',
-        name: 'Locale',
-        fieldName: 'locale',
+        name: 'Language',
+        fieldName: 'language',
         minWidth: 100,
         maxWidth: 200,
         isResizable: true,
@@ -547,9 +555,37 @@ export const CreateQnAModal: React.FC<CreateQnAModalProps> = (props) => {
       },
     ];
 
-    const filteredKbs = kbs.filter((item) =>
-      formData?.locale ? isLocalesOnSameLanguage(formData.locale, item.language) : true
-    );
+    const currentLanguageKbs: KBRec[] = [];
+    const defaultLanuageKbs: KBRec[] = [];
+    const avaliableLanguageKbs: KBRec[] = [];
+    const disabledLanguageKbs: KBRec[] = [];
+
+    kbs.forEach((item) => {
+      if (item.language === currentAuthoringLanuage) {
+        currentLanguageKbs.push(item);
+      } else if (item.language === defaultLanuage) {
+        defaultLanuageKbs.push(item);
+      } else if (avaliableLanguages.includes(item.language)) {
+        avaliableLanguageKbs.push(item);
+      } else {
+        disabledLanguageKbs.push(item);
+      }
+    });
+
+    const sortedKbs = [...currentLanguageKbs, ...defaultLanuageKbs, ...avaliableLanguageKbs, ...disabledLanguageKbs];
+
+    const onRenderRow: IRenderFunction<IDetailsRowProps> = (props) => {
+      if (!props) return null;
+      if (avaliableLanguages.includes(props.item.language)) {
+        return <DetailsRow {...props} />;
+      } else {
+        return (
+          <span data-selection-disabled style={{ cursor: 'not-allowed' }}>
+            <DetailsRow {...props} />
+          </span>
+        );
+      }
+    };
 
     return (
       <div>
@@ -565,13 +601,14 @@ export const CreateQnAModal: React.FC<CreateQnAModalProps> = (props) => {
               checkButtonAriaLabel="select row"
               columns={columns}
               getKey={(item) => item.name}
-              items={filteredKbs}
+              items={sortedKbs}
               layoutMode={DetailsListLayoutMode.justified}
               selection={selectedKB}
               selectionMode={SelectionMode.single}
+              onRenderRow={onRenderRow}
             />
             {kbLoading && <Spinner label={kbLoading} labelPosition="bottom" />}
-            {filteredKbs.length === 0 && !kbLoading && (
+            {sortedKbs.length === 0 && !kbLoading && (
               <p style={{ textAlign: 'center' }}> {formatMessage('No avaliable knowledge base')} </p>
             )}
           </div>
@@ -647,7 +684,15 @@ export const CreateQnAModal: React.FC<CreateQnAModalProps> = (props) => {
 
   const onSubmitImportKB = async () => {
     if (key && token && selectedKb && formData) {
-      onSubmit({ ...formData, endpoint: key.endpoint, kbId: selectedKb.id, subscriptionKey: key.key });
+      // TODO: add to all matched language or ask user for specific locale.
+      const createdOnLocales = locales.filter((item) => localeToLanguage(item) === selectedKb.language);
+      onSubmit({
+        ...formData,
+        locales: createdOnLocales,
+        endpoint: key.endpoint,
+        kbId: selectedKb.id,
+        subscriptionKey: key.key,
+      });
       setInitialName('');
       TelemetryClient.track('AddNewKnowledgeBaseCompleted', { source: 'kb' });
     }

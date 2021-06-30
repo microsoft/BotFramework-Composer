@@ -8,36 +8,25 @@ import formatMessage from 'format-message';
 import { Stack } from 'office-ui-fabric-react/lib/Stack';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { Text } from 'office-ui-fabric-react/lib/Text';
-import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 
 import { FieldConfig, useForm } from '../../hooks/useForm';
-import { Locales } from '../../locales';
 
 import { validateName, CreateQnAFromFormProps, CreateQnAFromQnAMakerFormData } from './constants';
-import { knowledgeBaseStyle, subText, textFieldKBNameFromScratch, dropdownStyles } from './styles';
+import { knowledgeBaseStyle, subText, textFieldKBNameFromScratch } from './styles';
 
 const formConfig: FieldConfig<CreateQnAFromQnAMakerFormData> = {
   name: {
     required: true,
     defaultValue: '',
   },
-  locale: {
-    required: true,
-    defaultValue: '',
-  },
 };
 
 export const CreateQnAFromQnAMaker: React.FC<CreateQnAFromFormProps> = (props) => {
-  const { onChange, qnaFiles, locales, currentLocale, initialName, onUpdateInitialName } = props;
+  const { onChange, qnaFiles, initialName, onUpdateInitialName } = props;
 
   formConfig.name.validate = validateName(qnaFiles);
   formConfig.name.defaultValue = initialName || '';
-  formConfig.locale.defaultValue = currentLocale;
   const { formData, updateField, hasErrors, formErrors } = useForm(formConfig);
-
-  const options: IDropdownOption[] = locales.map((item) => {
-    return { key: item, text: Locales.find(({ locale }) => locale === item)?.language || item };
-  });
 
   useEffect(() => {
     const disabled = hasErrors || !formData.name;
@@ -70,18 +59,6 @@ export const CreateQnAFromQnAMaker: React.FC<CreateQnAFromFormProps> = (props) =
           onChange={(e, name = '') => {
             updateField('name', name);
             onUpdateInitialName?.(name);
-          }}
-        />
-      </Stack>
-      <Stack>
-        <Dropdown
-          data-testid={`knowledgeLocationTextField-locale`}
-          defaultSelectedKey={formData.locale}
-          label={formatMessage('Knowledge base locale')}
-          options={options}
-          styles={dropdownStyles}
-          onChange={(e, opt) => {
-            updateField('locale', opt?.key as string);
           }}
         />
       </Stack>

@@ -16,7 +16,7 @@ import {
 } from '../atoms/botState';
 import { createQnAOnState } from '../atoms/appState';
 import qnaFileStatusStorage from '../../utils/qnaFileStatusStorage';
-import { getBaseName, getKBLocale } from '../../utils/fileUtil';
+import { getBaseName, getExtension, getKBLocale } from '../../utils/fileUtil';
 import { navigateTo } from '../../utils/navigation';
 import {
   getQnaFailedNotification,
@@ -185,7 +185,8 @@ export const createKBFileByLocaleState = async (
   }: { id: string; name: string; content: string; locale: string; projectId: string }
 ) => {
   const { snapshot } = callbackHelpers;
-  const qnaFiles = await snapshot.getPromise(qnaFilesSelectorFamily(projectId));
+  const allQnAFiles: QnAFile[] = await snapshot.getPromise(qnaFilesSelectorFamily(projectId));
+  const qnaFiles: QnAFile[] = allQnAFiles.filter((item) => getExtension(item.id) === locale);
   const createdSourceQnAId = `${name}.source.${locale}`;
 
   if (qnaFiles.find((qna) => qna.id === createdSourceQnAId)) {
@@ -600,7 +601,7 @@ ${response.data}
       id,
       name,
       endpoint,
-      locale,
+      locales,
       kbId,
       subscriptionKey,
       projectId,
@@ -608,7 +609,7 @@ ${response.data}
       id: string; // dialogId.locale
       name: string;
       endpoint: string;
-      locale: string;
+      locales: string[];
       kbId: string;
       subscriptionKey: string;
       projectId: string;
@@ -654,13 +655,15 @@ ${response.data}
 ${response.data}
 `;
 
-      await createKBFileByLocaleState(callbackHelpers, {
-        id,
-        name,
-        content: contentForSourceQnA,
-        locale,
-        projectId,
-      });
+      for (const locale of locales) {
+        await createKBFileByLocaleState(callbackHelpers, {
+          id,
+          name,
+          content: contentForSourceQnA,
+          locale,
+          projectId,
+        });
+      }
 
       await createQnADialogSuccess({ projectId });
     }
