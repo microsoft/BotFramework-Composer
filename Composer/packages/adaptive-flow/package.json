@@ -35,7 +35,7 @@
     "dagre": "^0.8.4",
     "dagre-d3": "^0.6.3",
     "lodash": "^4.17.19",
-    "office-ui-fabric-react": "^7.88.1",
+    "office-ui-fabric-react": "7.71.0",
     "prop-types": "^15.7.2",
     "react-measure": "^2.3.0",
     "source-map-loader": "^0.2.4"

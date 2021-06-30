@@ -64,19 +64,24 @@ export type DisabledMenuActions = {
   reason: string;
 };
 
+export type NotificationLink = { label: string; onClick: () => void };
+
 export type Notification = {
-  type: 'info' | 'warning' | 'error' | 'pending' | 'success';
+  type: 'info' | 'warning' | 'error' | 'pending' | 'success' | 'question' | 'congratulation' | 'custom';
   title: string;
   description?: string;
   retentionTime?: number;
-  link?: {
-    label: string;
-    onClick: () => void;
-  };
+  link?: NotificationLink;
+  links?: NotificationLink[];
+  leftLinks?: NotificationLink[];
+  rightLinks?: NotificationLink[];
+  icon?: string;
+  color?: string;
   read?: boolean;
   hidden?: boolean;
   onRenderCardContent?: ((props: Notification) => JSX.Element) | React.FC<any>;
   data?: Record<string, any>;
+  onDismiss?: (id: string) => void;
 };
 
 export type ApplicationContextApi = {
@@ -88,6 +93,7 @@ export type ApplicationContextApi = {
   setApplicationLevelError: (err: any) => void;
   confirm: (title: string, subTitle: string, settings?: any) => Promise<boolean>;
   updateFlowZoomRate: (currentRate: number) => void;
+  toggleFlowComments: () => void;
   telemetryClient: TelemetryClient;
   addNotification: (notification: Notification) => string;
   deleteNotification: (id: string) => void;
@@ -104,6 +110,7 @@ export type ApplicationContext = {
   // TODO: remove
   schemas: BotSchemas;
   flowZoomRate: ZoomInfo;
+  flowCommentsVisible: boolean;
 
   httpClient: HttpClient;
 };

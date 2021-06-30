@@ -28,10 +28,11 @@ const getQnAProvisionMethod = (): ProvisionMethod => {
 
 export const getQnAProvisionService = (): ResourceProvisionService => {
   return {
-    getDependencies: () => ['appRegistration', 'webApp'],
+    getDependencies: () => ['webApp'],
     getRecommendationForProject: (project) => {
       return project.isQnARequired; // tbd
     },
     provision: getQnAProvisionMethod(),
+    canPollStatus: false,
   };
 };
