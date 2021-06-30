@@ -127,6 +127,11 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
         // Portfinder is the stablest amongst npm libraries for finding ports. https://github.com/http-party/node-portfinder/issues/61. It does not support supplying an array of ports to pick from as we can have a race conidtion when starting multiple bots at the same time. As a result, getting the max port number out of the range and starting the range from the max.
         const maxPort = max(map(LocalPublisher.runningBots, 'port')) ?? 3979;
         port = await portfinder.getPortPromise({ port: maxPort + 1, stopPort: 6000 });
+        const updatedBotData: RunningBot = {
+          ...LocalPublisher.runningBots[botId],
+          port,
+        };
+        LocalPublisher.runningBots[botId] = updatedBotData;
       }
 
       const runtime = this.composer.getRuntimeByProject(project);
