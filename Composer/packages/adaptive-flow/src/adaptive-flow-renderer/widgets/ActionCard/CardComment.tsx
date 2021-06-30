@@ -36,7 +36,7 @@ const styles = {
 const CardComment: React.FC<CardCommentProps> = ({ comment }) => {
   return (
     <div css={styles.container}>
-      <TruncatedText lines={2}>{comment}</TruncatedText>
+      <TruncatedText lines={5}>{comment}</TruncatedText>
       <div css={styles.fold} />
     </div>
   );

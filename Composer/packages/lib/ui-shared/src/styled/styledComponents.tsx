@@ -78,6 +78,7 @@ export const TruncatedText = styled.div<{ lines?: number }>(
     display: -webkit-box;
     -webkit-line-clamp: ${lines || 3};
     -webkit-box-orient: vertical;
+    white-space: pre-line;
   `
 );
 
