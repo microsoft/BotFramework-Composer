@@ -24,11 +24,12 @@ import {
 } from 'office-ui-fabric-react/lib/DetailsList';
 import formatMessage from 'format-message';
 import get from 'lodash/get';
-import { ScrollablePane } from 'office-ui-fabric-react/lib/ScrollablePane';
+import { IScrollablePaneStyles, ScrollablePane } from 'office-ui-fabric-react/lib/ScrollablePane';
 import { Sticky, StickyPositionType } from 'office-ui-fabric-react/lib/Sticky';
 import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
 import { CommunicationColors, FluentTheme } from '@uifabric/fluent-theme';
 import { Link } from 'office-ui-fabric-react/lib/Link';
+import { IButtonStyles } from 'office-ui-fabric-react/lib/Button';
 
 import { DebugPanelTabHeaderProps } from '../types';
 import {
@@ -100,6 +101,21 @@ const commandBarStyles: Partial<ICommandBarStyles> = { root: { height: toolbarHe
 const detailsHeaderStyles: Partial<IDetailsHeaderStyles> = {
   root: {
     paddingTop: 0,
+  },
+};
+
+const scrollingContainerStyles: Partial<IScrollablePaneStyles> = {
+  contentContainer: {
+    padding: '0 16px',
+  },
+};
+
+const addButtonStyles: Partial<IButtonStyles> = {
+  root: {
+    paddingLeft: 0,
+  },
+  icon: {
+    marginLeft: 0,
   },
 };
 
@@ -303,6 +319,7 @@ export const WatchTabContent: React.FC<DebugPanelTabHeaderProps> = ({ isActive }
             text: formatMessage('Add property'),
             iconProps: { iconName: 'Add' },
             onClick: onClickAdd,
+            buttonStyles: addButtonStyles,
           },
           {
             disabled: removeIsDisabled,
@@ -320,7 +337,7 @@ export const WatchTabContent: React.FC<DebugPanelTabHeaderProps> = ({ isActive }
           position: 'relative',
         }}
       >
-        <ScrollablePane>
+        <ScrollablePane styles={scrollingContainerStyles}>
           {refreshedWatchedVariables.length ? (
             <DetailsList
               columns={watchTableColumns}
