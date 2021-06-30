@@ -1,10 +1,17 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { IBotProject, IExtensionRegistration, ProcessStatus, PublishPlugin } from '@botframework-composer/types';
+import { PublishConfig } from '@bfc/extension-client';
+import {
+  IBotProject,
+  IExtensionRegistration,
+  ProcessStatus,
+  PublishPlugin,
+  PublishResponse,
+} from '@botframework-composer/types';
 
 import { availableResources, setUpProvisionService } from './availableResources';
-import { BackgroundProcessManager } from './backgroundProcessManager';
+import { createProcessStatusTracker } from './processStatusTracker';
 import { GetResourcesResult, ProvisionConfig, ResourceDefinition, ResourceProvisionService } from './types';
 
 /**
@@ -12,6 +19,8 @@ import { GetResourcesResult, ProvisionConfig, ResourceDefinition, ResourceProvis
  * @returns The plug-in with properties and methods.
  */
 const createAzurePublishPlugin = (): PublishPlugin<ProvisionConfig> => {
+  const processTracker = createProcessStatusTracker();
+
   const getResources = (project: IBotProject): Promise<GetResourcesResult[]> => {
     const provisionServices: Record<string, ResourceProvisionService> = {};
 
@@ -29,21 +38,64 @@ const createAzurePublishPlugin = (): PublishPlugin<ProvisionConfig> => {
     );
   };
 
-  const getStatus = async () => {
+  const toPublishResponse = (processStatus: ProcessStatus): PublishResponse => {
+    const { id, status, message, log, comment, time } = processStatus;
+
     return {
-      status: 200,
+      status,
       result: {
-        time: new Date().toString(),
-        message: 'Publish successful.',
-        log: '',
+        comment,
+        id,
+        log: log.map((item) => `---\n${JSON.stringify(item, null, 2)}\n---\n`).join('\n'),
+        message,
+        status,
+        time: time.toString(),
       },
     };
   };
 
+  const getStatus = async (config: PublishConfig, project: IBotProject) => {
+    let status = processTracker.get(config.jobId);
+    if (!status) {
+      status = processTracker.getByProjectId(config.projectId);
+    }
+    if (!status) {
+      status = processTracker.getByProcessName(config.profileName);
+    }
+    if (!status) {
+      status = processTracker.getByProjectId(project.id);
+    }
+    if (status) {
+      return toPublishResponse(status);
+    }
+  };
+
   const provision = async (config: ProvisionConfig, project: IBotProject): Promise<ProcessStatus> => {
-    const jobId = BackgroundProcessManager.startProcess(202, project.id, config.key, 'Creating Azure resources...');
+    const { id: processId } = processTracker.start({
+      projectId: project.id,
+      processName: config.key,
+      status: 202,
+      message: 'Creating Azure resources...',
+    });
     setUpProvisionService(config);
-    return BackgroundProcessManager.getStatus(jobId);
+    return processTracker.get(processId);
+  };
+
+  const getProvisionStatus = async (
+    processName: string,
+    project: IBotProject,
+    _user,
+    jobId = ''
+  ): Promise<ProcessStatus> => {
+    let status = processTracker.get(jobId);
+    if (!status) {
+      status = processTracker.getByProjectId(project.id);
+    }
+    if (!status) {
+      status = processTracker.getByProcessName(processName);
+    }
+
+    return status;
   };
 
   const publish = async (_config, _project, metadata) => {
@@ -64,6 +116,7 @@ const createAzurePublishPlugin = (): PublishPlugin<ProvisionConfig> => {
     name: 'azurePublishNew',
     description: 'Publish bot to Azure - new',
     getResources,
+    getProvisionStatus,
     getStatus,
     provision,
     publish,

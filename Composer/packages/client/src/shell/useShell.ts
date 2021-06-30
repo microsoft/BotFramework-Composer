@@ -36,6 +36,7 @@ import {
   dialogSchemasState,
   luFilesSelectorFamily,
   rateInfoState,
+  flowCommentsVisibilityState,
   rootBotProjectIdSelector,
   featureFlagsState,
 } from '../recoilModel';
@@ -102,6 +103,7 @@ export function useShell(source: EventSource, projectId: string): Shell {
   const botName = useRecoilValue(botDisplayNameState(projectId));
   const settings = useRecoilValue(settingsState(projectId));
   const flowZoomRate = useRecoilValue(rateInfoState);
+  const flowCommentsVisible = useRecoilValue(flowCommentsVisibilityState);
   const rootBotProjectId = useRecoilValue(rootBotProjectIdSelector);
   const isRootBot = rootBotProjectId === projectId;
   const projectCollection = useRecoilValue<BotInProject[]>(botProjectSpaceSelector).map((bot) => ({
@@ -127,6 +129,7 @@ export function useShell(source: EventSource, projectId: string): Shell {
     displayManifestModal,
     updateSkillsDataInBotProjectFile: updateEndpointInBotProjectFile,
     updateZoomRate,
+    toggleFlowComments,
     reloadProject,
     setApplicationLevelError,
     updateRecognizer,
@@ -271,6 +274,7 @@ export function useShell(source: EventSource, projectId: string): Shell {
       updateEndpointInBotProjectFile(skillId, skillsData.skill, skillsData.selectedEndpointIndex);
     },
     updateFlowZoomRate,
+    toggleFlowComments,
     reloadProject: () => reloadProject(projectId),
     stopBot: (targetProjectId: string) => {
       stopSingleBot(targetProjectId);
@@ -342,6 +346,7 @@ export function useShell(source: EventSource, projectId: string): Shell {
     skills,
     skillsSettings: settings.skill || {},
     flowZoomRate,
+    flowCommentsVisible,
     forceDisabledActions: isRootBot
       ? []
       : [

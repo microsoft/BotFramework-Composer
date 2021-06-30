@@ -33,5 +33,6 @@ export const getAzureFunctionsProvisionService = (): ResourceProvisionService =>
       return runtimeType === 'functions' ? 'required' : 'notAllowed';
     },
     provision: getAzureFunctionsProvisionMethod(),
+    canPollStatus: false,
   };
 };

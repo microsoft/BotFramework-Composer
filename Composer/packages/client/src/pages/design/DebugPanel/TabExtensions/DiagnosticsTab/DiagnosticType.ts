@@ -38,6 +38,22 @@ export interface IDiagnosticInfo {
   friendlyLocationBreadcrumbItems?: string[];
 }
 
+type ResourceType = 'language-generation' | 'language-understanding' | 'knowledge-base';
+function generateResourcePageUrl(
+  rootProjectId: string,
+  skillId: string | null,
+  resourceType: ResourceType,
+  resourceId: string,
+  line = 0
+) {
+  let uri = `/bot/${rootProjectId}`;
+  if (skillId !== null && skillId !== rootProjectId) {
+    uri += `/skill/${skillId}`;
+  }
+
+  return `${uri}/${resourceType}/${resourceId}/edit#L=${line}`;
+}
+
 const getFriendlyPath = (dialogPath: string | undefined, dialogs: DialogInfo[]) => {
   const breadcrumb: string[] = [];
   try {
@@ -241,12 +257,17 @@ export class LgDiagnostic extends DiagnosticInfo {
 
   getUrl = () => {
     const { rootProjectId, projectId, resourceId, diagnostic, dialogPath } = this;
-    let uri = `/bot/${rootProjectId}/language-generation/${resourceId}/edit#L=${diagnostic.range?.start.line || 0}`;
+    let uri = generateResourcePageUrl(
+      rootProjectId,
+      projectId,
+      'language-generation',
+      resourceId,
+      diagnostic.range?.start.line
+    );
     //the format of item.id is lgFile#inlineTemplateId
     if (dialogPath) {
       uri = convertPathToUrl(rootProjectId, rootProjectId === projectId ? null : projectId, resourceId, dialogPath);
     }
-
     return uri;
   };
 }
@@ -285,7 +306,13 @@ export class LuDiagnostic extends DiagnosticInfo {
 
   getUrl = () => {
     const { rootProjectId, projectId, resourceId, diagnostic, dialogPath } = this;
-    let uri = `/bot/${projectId}/language-understanding/${resourceId}/edit#L=${diagnostic.range?.start.line || 0}`;
+    let uri = generateResourcePageUrl(
+      rootProjectId,
+      projectId,
+      'language-understanding',
+      resourceId,
+      diagnostic.range?.start.line
+    );
     if (dialogPath) {
       uri = convertPathToUrl(rootProjectId, rootProjectId === projectId ? null : projectId, resourceId, dialogPath);
     }
@@ -302,7 +329,13 @@ export class QnADiagnostic extends DiagnosticInfo {
   }
 
   getUrl = () => {
-    const { rootProjectId, resourceId, diagnostic } = this;
-    return `/bot/${rootProjectId}/knowledge-base/${resourceId}/edit#L=${diagnostic.range?.start.line || 0}`;
+    const { rootProjectId, resourceId, projectId, diagnostic } = this;
+    return generateResourcePageUrl(
+      rootProjectId,
+      projectId,
+      'knowledge-base',
+      resourceId,
+      diagnostic.range?.start.line
+    );
   };
 }

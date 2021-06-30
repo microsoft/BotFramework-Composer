@@ -14,6 +14,7 @@ import debounce from 'lodash/debounce';
 
 import { EditableField } from './fields/EditableField';
 import { Link } from './Link';
+import { Comment } from './Comment';
 
 export const styles = {
   container: css`
@@ -36,6 +37,10 @@ export const styles = {
     margin-bottom: 10px;
     white-space: pre-line;
     font-size: ${FontSizes.size12};
+  `,
+
+  comment: css`
+    margin: 18px 0;
   `,
 };
 
@@ -88,6 +93,15 @@ const FormTitle: React.FC<FormTitleProps> = (props) => {
       $designer: {
         ...formData.$designer,
         name: newTitle,
+      },
+    });
+  };
+
+  const handleCommentChange = (newComment?: string) => {
+    props.onChange({
+      $designer: {
+        ...formData.$designer,
+        comment: newComment,
       },
     });
   };
@@ -164,6 +178,9 @@ const FormTitle: React.FC<FormTitleProps> = (props) => {
             </React.Fragment>
           )}
         </p>
+        <div css={styles.comment}>
+          <Comment key={formData.$designer.id} comment={formData?.$designer?.comment} onChange={handleCommentChange} />
+        </div>
       </div>
       {props.children}
     </div>

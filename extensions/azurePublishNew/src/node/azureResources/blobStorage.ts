@@ -31,5 +31,6 @@ export const getBlogStorageProvisionService = (): ResourceProvisionService => {
     getDependencies: () => [],
     getRecommendationForProject: (project) => 'optional',
     provision: getBlobStorageProvisionMethod(),
+    canPollStatus: false,
   };
 };

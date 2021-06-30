@@ -26,8 +26,9 @@ const getAppInsightsProvisionMethod = (): ProvisionMethod => {
 
 export const getAppInsightsProvisionService = (): ResourceProvisionService => {
   return {
-    getDependencies: () => ['appRegistration', 'botRegistration'],
+    getDependencies: () => ['botRegistration'],
     getRecommendationForProject: (project) => 'optional',
     provision: getAppInsightsProvisionMethod(),
+    canPollStatus: false,
   };
 };

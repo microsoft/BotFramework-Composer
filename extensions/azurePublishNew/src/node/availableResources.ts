@@ -32,31 +32,28 @@ export const getProvisionServices = (config: ProvisionConfig): Record<string, Re
   return {
     appRegistration: getAppRegistrationProvisionService(config),
     webApp: getWebAppProvisionService(config),
+    servicePlan: getAppServiceProvisionService(config),
     botRegistration: getBotChannelProvisionService(),
     azureFunctionApp: getAzureFunctionsProvisionService(),
-    cosmosDB: getCosmosDbProvisionService(),
+    cosmosDB: getCosmosDbProvisionService(config),
     appInsights: getAppInsightsProvisionService(),
     luisAuthoring: getLuisAuthoringProvisionService(),
     luisPrediction: getLuisPredictionProvisionService(),
     blobStorage: getBlogStorageProvisionService(),
     qna: getQnAProvisionService(),
-    servicePlan: getAppServiceProvisionService(),
   };
 };
 
 export const setUpProvisionService = (config: ProvisionConfig) => {
   const provisionServices = getProvisionServices(config);
 
-  const provision = (): void => {
-    const selectedResources: ResourceConfig[] = [];
+  const provision = (selectedResources: ResourceConfig[]): void => {
+    let workingSet: Record<string, object> = {};
 
-    const provisionServices = getProvisionServices(config);
-
-    const workingSet: Record<string, object> = {};
-    selectedResources.forEach((resourceConfig) => {
-      const service = provisionServices[resourceConfig.key];
+    selectedResources.forEach(async (resourceConfig) => {
+      const service: ResourceProvisionService = provisionServices[resourceConfig.key];
       if (service) {
-        service.provision(resourceConfig, workingSet);
+        workingSet = await service.provision(resourceConfig, workingSet);
       }
     });
   };
