@@ -197,6 +197,11 @@ type WebChatEvents = {
   SaveTranscriptClicked: undefined;
 };
 
+type DebuggingEvents = {
+  StateWatchPropertyAdded: { property: string };
+  StateWatchPropertyRemoved: { property: string };
+};
+
 type ABSChannelsEvents = {
   ConnectionsAddNewProfile: undefined;
   ConnectionsChannelStatusDisplayed: { teams: boolean; speech: boolean; webchat: boolean };
@@ -260,7 +265,8 @@ export type TelemetryEvents = ApplicationEvents &
   OrchestratorEvents &
   PropertyEditorEvents &
   CreationEvents &
-  SurveyEvents;
+  SurveyEvents &
+  DebuggingEvents;
 
 export type TelemetryEventName = keyof TelemetryEvents;
 

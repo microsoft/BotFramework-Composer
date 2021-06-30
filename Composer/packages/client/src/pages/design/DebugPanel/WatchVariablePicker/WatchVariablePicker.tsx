@@ -23,6 +23,7 @@ import {
   userSettingsState,
   watchedVariablesState,
 } from '../../../../recoilModel';
+import TelemetryClient from '../../../../telemetry/TelemetryClient';
 
 import { PropertyItem } from './utils/components/PropertyTreeItem';
 import { computePropertyItemTree, getAllNodes, WatchDataPayload } from './utils/helpers';
@@ -135,6 +136,7 @@ export const WatchVariablePicker = React.memo((props: WatchVariablePickerProps) 
           setQuery(path);
           event?.preventDefault();
           setErrorMessage('');
+          TelemetryClient.track('StateWatchPropertyAdded', { property: path });
           setWatchedVariables(currentProjectId, { ...watchedVariables, [variableId]: path });
           onHideContextualMenu();
         }
@@ -165,6 +167,7 @@ export const WatchVariablePicker = React.memo((props: WatchVariablePickerProps) 
         event?.preventDefault();
         const path = paths[node.id];
         setErrorMessage('');
+        TelemetryClient.track('StateWatchPropertyAdded', { property: path });
         setWatchedVariables(currentProjectId, { ...watchedVariables, [variableId]: path });
         onHideContextualMenu();
       },
@@ -222,6 +225,7 @@ export const WatchVariablePicker = React.memo((props: WatchVariablePickerProps) 
         } else {
           // watch the variable
           setErrorMessage('');
+          TelemetryClient.track('StateWatchPropertyAdded', { property: query });
           setWatchedVariables(currentProjectId, { ...watchedVariables, [variableId]: query });
           onHideContextualMenu();
           inputBoxElementRef.current?.blur();
