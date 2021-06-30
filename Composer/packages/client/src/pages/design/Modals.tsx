@@ -40,8 +40,9 @@ const TriggerCreationModal = React.lazy(() => import('../../components/TriggerCr
 
 type ModalsProps = {
   projectId: string;
+  rootBotId: string;
 };
-const Modals: React.FC<ModalsProps> = ({ projectId = '' }) => {
+const Modals: React.FC<ModalsProps> = ({ projectId = '', rootBotId = '' }) => {
   const qnaFiles = useRecoilValue(qnaFilesSelectorFamily(projectId));
   const schemas = useRecoilValue(schemasState(projectId));
 
@@ -135,7 +136,7 @@ const Modals: React.FC<ModalsProps> = ({ projectId = '' }) => {
             await createTriggerForRemoteSkill(projectId, dialogId, formData, skillId);
             commitChanges();
           }}
-          projectId={projectId}
+          projectId={rootBotId}
           onDismiss={() => {
             setAddSkillDialogModalVisibility(false);
           }}
