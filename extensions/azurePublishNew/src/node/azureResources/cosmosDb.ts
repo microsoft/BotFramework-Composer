@@ -118,11 +118,7 @@ const cosmosDbProvisionMethod = (provisionConfig: ProvisionConfig): ProvisionMet
   };
 
   const getAuthKey = async (config: CosmosDbConfig) => {
-    const authKeyResult = await cosmosDBManagementClient.databaseAccounts.listKeys(
-      config.resourceGroupName,
-      config.displayName
-    );
-    return authKeyResult.primaryMasterKey;
+    return await cosmosDBManagementClient.databaseAccounts.listKeys(config.resourceGroupName, config.displayName);
   };
 
   const provision = () => async (
@@ -133,10 +129,10 @@ const cosmosDbProvisionMethod = (provisionConfig: ProvisionConfig): ProvisionMet
       const { documentEndpoint } = await createDbAccount(config);
       await createDb(config);
       await createContainer(config);
-      const authKey = await getAuthKey(config);
+      const { primaryMasterKey } = await getAuthKey(config);
 
       const provisionResult: CosmosDbProvisionResult = {
-        authKey,
+        authKey: primaryMasterKey,
         cosmosDbEndpoint: documentEndpoint,
         databaseId: config.databaseName,
         containerId: config.containerName,
