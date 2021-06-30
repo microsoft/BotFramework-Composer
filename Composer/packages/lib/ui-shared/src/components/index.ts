@@ -10,3 +10,4 @@ export * from './Toolbar';
 export * from './ProvisionHandoff/ProvisionHandoff';
 export * from './DisplayMarkdownDialog/DisplayMarkdownDialog';
 export * from './tags/TagInput';
+export * from './IconMenu';

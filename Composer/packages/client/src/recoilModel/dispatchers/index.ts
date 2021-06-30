@@ -25,7 +25,7 @@ import { notificationDispatcher } from './notification';
 import { extensionsDispatcher } from './extensions';
 import { formDialogsDispatcher } from './formDialogs';
 import { botProjectFileDispatcher } from './botProjectFile';
-import { zoomDispatcher } from './zoom';
+import { flowDispatcher } from './flow';
 import { recognizerDispatcher } from './recognizers';
 import { orchestratorDispatcher } from './orchestrator';
 import { webChatLogDispatcher } from './webchat';
@@ -58,7 +58,7 @@ const createDispatchers = () => {
     ...extensionsDispatcher(),
     ...formDialogsDispatcher(),
     ...botProjectFileDispatcher(),
-    ...zoomDispatcher(),
+    ...flowDispatcher(),
     ...recognizerDispatcher(),
     ...orchestratorDispatcher(),
     ...webChatLogDispatcher(),

@@ -173,6 +173,9 @@
   "add_a_new_value_24ca14ac": {
     "message": "Add a new value"
   },
+  "add_a_note_c0caaac": {
+    "message": "Add a note"
+  },
   "add_a_skill_46d2b71c": {
     "message": "Add a skill"
   },
@@ -755,12 +758,6 @@
   "close_webchat_b26d03e1": {
     "message": "Close WebChat"
   },
-  "cognitive_service_region_87c668be": {
-    "message": "Cognitive Service Region"
-  },
-  "cognitive_services_key_fcfd093f": {
-    "message": "Cognitive services key"
-  },
   "collapse_34080b4d": {
     "message": "Collapse"
   },
@@ -775,6 +772,9 @@
   },
   "comment_7ef1428e": {
     "message": "Comment"
+  },
+  "comment_menu_96448038": {
+    "message": "Comment menu"
   },
   "comments_e07bcbe3": {
     "message": "Comments"
@@ -886,9 +886,6 @@
   },
   "connect_to_qna_knowledgebase_4b324132": {
     "message": "Connect to QnA Knowledgebase"
-  },
-  "connect_to_speech_service_9d877e37": {
-    "message": "Connect to Speech Service"
   },
   "connect_with_the_community_to_ask_and_answer_quest_aeec8c4f": {
     "message": "Connect with the community to ask and answer questions about Composer"
@@ -1424,9 +1421,6 @@
   "enable_orchestrator_cdbbd2c5": {
     "message": "Enable Orchestrator"
   },
-  "enable_speech_e30d6a2a": {
-    "message": "Enable Speech"
-  },
   "enable_speech_e4a16f1c": {
     "message": "Enable speech"
   },
@@ -1471,12 +1465,6 @@
   },
   "enter_a_value_d91fdd00": {
     "message": "Enter a value"
-  },
-  "enter_cognitive_service_region_a0f684a4": {
-    "message": "Enter cognitive service region"
-  },
-  "enter_cognitive_services_key_b78e4b55": {
-    "message": "Enter cognitive services key"
   },
   "enter_name_for_new_resource_group_96fe8ea8": {
     "message": "Enter name for new resource group"
@@ -1790,8 +1778,8 @@
   "generating_your_dialog_using_schemaid_schema_pleas_c2e1165": {
     "message": "Generating your dialog using \"{ schemaId }\" schema, please wait..."
   },
-  "get_a_key_bb364e3": {
-    "message": "Get a key"
+  "generator_not_found_please_enter_the_full_path_to__7d6c7105": {
+    "message": "Generator not found. Please enter the full path to the generator''s index.js file including the filename"
   },
   "get_activity_members_11339605": {
     "message": "Get activity members"
@@ -1864,6 +1852,9 @@
   },
   "hide_code_5dcffa94": {
     "message": "Hide code"
+  },
+  "hide_notes_on_canvas_cb566092": {
+    "message": "Hide notes on canvas"
   },
   "home_351838cd": {
     "message": "Home"
@@ -2573,6 +2564,9 @@
   "no_templates_found_d8dca69b": {
     "message": "No templates found"
   },
+  "no_thanks_20701267": {
+    "message": "No thanks"
+  },
   "no_updates_available_cecd904d": {
     "message": "No updates available"
   },
@@ -2864,9 +2858,6 @@
   "property_type_e38cf7e4": {
     "message": "Property Type"
   },
-  "provide_a_key_in_order_to_connect_your_bot_to_the__9fa1f065": {
-    "message": "Provide a key in order to connect your bot to the Azure Speech service. "
-  },
   "provide_access_tokens_8ead7563": {
     "message": "Provide access tokens"
   },
@@ -3052,6 +3043,9 @@
   },
   "reloading_49d2f661": {
     "message": "Reloading"
+  },
+  "remind_me_later_6ac70c3": {
+    "message": "Remind me later"
   },
   "remote_skill_ed36a7e6": {
     "message": "Remote skill"
@@ -3443,6 +3437,15 @@
   "show_keys_3072a5b8": {
     "message": "Show keys"
   },
+  "show_less_f778dab5": {
+    "message": "Show Less"
+  },
+  "show_more_af9cbc16": {
+    "message": "Show More"
+  },
+  "show_notes_on_canvas_f0baaa43": {
+    "message": "Show notes on canvas"
+  },
   "show_response_editor_90bd8b49": {
     "message": "Show response editor"
   },
@@ -3454,6 +3457,12 @@
   },
   "sign_in_failed_message_56296e3e": {
     "message": "Sign in failed: { message }"
+  },
+  "sign_in_to_your_azure_account_205fe006": {
+    "message": "Sign in to your Azure account"
+  },
+  "sign_out_335cf09e": {
+    "message": "Sign out"
   },
   "sign_out_user_6845d640": {
     "message": "Sign out user"
@@ -3638,6 +3647,9 @@
   "take_a_product_tour_a2892d17": {
     "message": "Take a product tour"
   },
+  "take_survey_a0cc4547": {
+    "message": "Take survey"
+  },
   "target_da92f4e6": {
     "message": "Target"
   },
@@ -3655,6 +3667,9 @@
   },
   "template_name_c37cf8d9": {
     "message": "Template name: "
+  },
+  "template_undefined_2750e546": {
+    "message": "Template undefined"
   },
   "templatename_is_missing_or_empty_23e6b06e": {
     "message": "templateName is missing or empty"
@@ -4220,6 +4235,9 @@
   "we_need_to_define_the_endpoints_for_the_skill_to_a_5dc98d90": {
     "message": "We need to define the endpoints for the skill to allow other bots to interact with it."
   },
+  "we_read_every_response_and_will_use_your_feedback__64e44821": {
+    "message": "We read every response and will use your feedback to improve Composer."
+  },
   "web_chat_c5ca7ab6": {
     "message": "Web Chat"
   },
@@ -4303,6 +4321,9 @@
   },
   "working_with_packages_dbdddbe9": {
     "message": "Working with packages"
+  },
+  "would_you_mind_taking_a_quick_survey_5cf722ac": {
+    "message": "Would you mind taking a quick survey?"
   },
   "write_an_expression_8773ea5c": {
     "message": "Write an expression"

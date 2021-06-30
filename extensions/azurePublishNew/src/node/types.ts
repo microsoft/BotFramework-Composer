@@ -9,6 +9,7 @@ export type ResourceProvisionService = {
   getDependencies: () => string[];
   getRecommendationForProject: (project: IBotProject) => 'required' | 'optional' | 'notAllowed';
   provision: ProvisionMethod;
+  canPollStatus: boolean;
 };
 
 type ResourceDefinitionGroup = 'App Services' | 'Cognitive Services';
@@ -20,22 +21,16 @@ export type ResourceDefinition = {
   tier: string;
   group: ResourceDefinitionGroup;
 };
+
 export type GetResourcesResult = ResourceDefinition & {
   required: boolean;
 };
+
 export type ProvisionConfig = {
   key: string;
-  credentials: ProvisionCredentials;
+  accessToken: string;
   subscriptionId: string;
-  resourceGroupName: string;
-  location: string;
-  webAppName: string;
-  serverFarm: string;
-};
-
-export type ProvisionCredentials = {
-  token: string;
-  graphToken?: string;
+  graphToken: string;
 };
 
 export type ResourceConfig = {

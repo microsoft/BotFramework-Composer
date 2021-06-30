@@ -49,7 +49,7 @@ export const TextDiv = styled.div`
   ${MultilineCSS};
   white-space: pre-wrap;
   line-height: 16px;
-  display: inline-block;
+  min-height: 16px;
 `;
 
 export const Text = styled.span(
@@ -68,6 +68,18 @@ export const MultilineTextWithEllipsis = styled.div`
   overflow: hidden;
   text-overflow: ellipsis;
 `;
+
+// https://css-tricks.com/line-clampin/#weird-webkit-flexbox-way
+export const TruncatedText = styled.div<{ lines?: number }>(
+  ({ lines }) => css`
+    margin: 0;
+    overflow: hidden;
+    max-height: ${(lines || 3) * 16}px;
+    display: -webkit-box;
+    -webkit-line-clamp: ${lines || 3};
+    -webkit-box-orient: vertical;
+  `
+);
 
 export const FixedInfo = styled.span`
   ${StandardFontCSS};

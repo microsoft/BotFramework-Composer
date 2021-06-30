@@ -7,9 +7,10 @@ import { Link } from 'office-ui-fabric-react/lib/Link';
 import { IContextualMenuItem } from 'office-ui-fabric-react/lib/ContextualMenu';
 import { OverflowSet } from 'office-ui-fabric-react/lib/OverflowSet';
 import { IRenderFunction } from 'office-ui-fabric-react/lib/Utilities';
+import { ICalloutProps } from 'office-ui-fabric-react/lib/Callout';
 
 interface IconMenuProps {
-  nodeSelected?: boolean;
+  autoFocus?: boolean;
   dataTestId?: string;
   iconName: string;
   iconSize?: number;
@@ -19,13 +20,14 @@ interface IconMenuProps {
     selectors?: { [key: string]: any };
   };
   label?: string;
-  menuItems: any[];
+  menuItems: IContextualMenuItem[];
   menuWidth?: number;
+  calloutProps?: ICalloutProps;
   handleMenuShow?: (menuShowed: boolean) => void;
 }
 
 export const IconMenu: React.FC<IconMenuProps> = ({
-  nodeSelected,
+  autoFocus,
   iconName,
   iconSize,
   iconStyles,
@@ -33,6 +35,7 @@ export const IconMenu: React.FC<IconMenuProps> = ({
   menuItems,
   menuWidth,
   handleMenuShow,
+  calloutProps,
   ...rest
 }): JSX.Element => {
   const onRenderItem = (item): React.ReactNode => {
@@ -45,11 +48,12 @@ export const IconMenu: React.FC<IconMenuProps> = ({
 
   const buttonRef = useRef<IButton | null>(null);
 
-  useEffect((): void => {
-    if (nodeSelected) {
+  useEffect(() => {
+    if (autoFocus) {
       buttonRef.current && buttonRef.current.focus();
     }
-  }, [nodeSelected]);
+  }, [autoFocus]);
+
   const onRenderOverflowButton: IRenderFunction<IContextualMenuItem[]> = (overflowItems) => {
     if (!overflowItems) {
       return null;
@@ -92,7 +96,7 @@ export const IconMenu: React.FC<IconMenuProps> = ({
         componentRef={buttonRef}
         data-testid="iconMenu"
         menuIconProps={{ iconName, style: { fontSize: iconSize, fontWeight: 'bold', color } }}
-        menuProps={{ items: overflowItems, calloutProps: { calloutMaxWidth: menuWidth } }}
+        menuProps={{ items: overflowItems, calloutProps: { ...calloutProps, calloutMaxWidth: menuWidth } }}
         styles={buttonStyles}
         onAfterMenuDismiss={onAfterMenuDismiss}
         onMenuClick={onMenuClick}
@@ -118,5 +122,5 @@ IconMenu.defaultProps = {
   iconStyles: {},
   menuItems: [],
   menuWidth: 0,
-  nodeSelected: false,
+  autoFocus: false,
 };

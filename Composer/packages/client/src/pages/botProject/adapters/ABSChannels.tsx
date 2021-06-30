@@ -243,6 +243,7 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
               location: 'global',
             },
           };
+          break;
       }
       await httpClient.put(url, data, { headers: { Authorization: `Bearer ${currentUser.token}` } });
       if (channelId === CHANNELS.TEAMS) {
@@ -516,6 +517,7 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
         <Toggle
           inlineLabel
           checked={channelStatus?.[key].enabled}
+          data-testid={`${key}_toggle`}
           disabled={channelStatus?.[key].loading}
           styles={{ root: { paddingTop: '8px' } }}
           onChange={toggleService(key)}
@@ -555,7 +557,6 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
       </div>
     </div>
   );
-
   return (
     <React.Fragment>
       <ManageSpeech
@@ -592,6 +593,7 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
       )}
       <div>
         <Dropdown
+          data-testid="publishTargetDropDown"
           options={publishTargetOptions}
           placeholder={formatMessage('Select publishing profile')}
           styles={{
