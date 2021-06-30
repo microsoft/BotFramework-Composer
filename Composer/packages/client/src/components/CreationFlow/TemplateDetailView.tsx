@@ -73,7 +73,7 @@ export const TemplateDetailView: React.FC<TemplateDetailViewProps> = (props) => 
     props.template?.package?.packageVersion && setSelectedTemplateVersion(props.template.package.packageVersion);
   }, [props.template]);
 
-  const renderVersionButton = useMemo(() => {
+  const renderVersionButton = () => {
     if (!advancedTemplateOptionsEnabled) {
       return <span css={templateVersion}>{props.template?.package?.packageVersion}</span>;
     }
@@ -94,7 +94,7 @@ export const TemplateDetailView: React.FC<TemplateDetailViewProps> = (props) => 
         text={selectedTemplateVersion}
       />
     );
-  }, [props.template, advancedTemplateOptionsEnabled]);
+  };
 
   const { localTemplatePath, onUpdateLocalTemplatePath, onValidateLocalTemplatePath, template } = props;
   const isLocalTemplate = template?.id === localTemplateId;
@@ -177,7 +177,7 @@ export const TemplateDetailView: React.FC<TemplateDetailViewProps> = (props) => 
             <span css={templateTitle(isLocalTemplate)}>
               {props.template?.name ? props.template.name : formatMessage('Template undefined')}
             </span>
-            {!isLocalTemplate && renderVersionButton}
+            {!isLocalTemplate && renderVersionButton()}
           </Stack.Item>
         </Stack>
       </div>
