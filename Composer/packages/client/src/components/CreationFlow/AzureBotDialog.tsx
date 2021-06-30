@@ -6,7 +6,6 @@ import formatMessage from 'format-message';
 import { FontWeights } from 'office-ui-fabric-react/lib/Styling';
 import { FontSizes } from '@uifabric/fluent-theme';
 import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button';
-import { Stack } from 'office-ui-fabric-react/lib/Stack';
 import { Link } from 'office-ui-fabric-react/lib/Link';
 import { ChoiceGroup, IChoiceGroupOption } from 'office-ui-fabric-react/lib/ChoiceGroup';
 import { DialogFooter, IDialogContentStyles } from 'office-ui-fabric-react/lib/Dialog';
