@@ -7,7 +7,7 @@ import { act, fireEvent } from '@botframework-composer/test-utils';
 import { renderWithRecoil } from '../../testUtils/renderWithRecoil';
 import ABSChannels from '../../../src/pages/botProject/adapters/ABSChannels';
 import { botDisplayNameState, settingsState } from '../../../src/recoilModel';
-import * as authUtils from '../../../src/utils/auth';
+// import * as authUtils from '../../../src/utils/auth';
 import httpClient from '../../../src/utils/httpUtil';
 
 jest.mock('../../../src/utils/httpUtil');
@@ -15,6 +15,42 @@ jest.mock('../../../src/utils/httpUtil');
 const mockNavigationTo = jest.fn();
 jest.mock('../../../src/utils/navigation', () => ({
   navigateTo: (...args) => mockNavigationTo(...args),
+}));
+
+jest.mock('../../../src/utils/auth', () => ({
+  decodeToken: () => {
+    return {
+      upn: 'mockUser@mockDomain.com',
+      name: 'mockUser',
+      exp: new Date().getTime(),
+      tenant: 'mockTenant',
+    };
+  },
+  userShouldProvideTokens: jest.fn(),
+  isShowAuthDialog: jest.fn(),
+  getTokenFromCache: jest.fn(),
+  setTenantId: jest.fn(),
+  getTenantIdFromCache: jest.fn(),
+  prepareAxios: jest.fn(),
+}));
+
+jest.mock('../../../src/components/Auth/AuthDialog', () => ({
+  AuthDialog: ({ children, onClick }) => <div />,
+}));
+
+jest.mock('../../../src/utils/authClient', () => ({
+  AuthClient: {
+    getTenants: async () => {
+      return [
+        {
+          displayName: 'mockTenant',
+          tenantId: 'mockTenant',
+        },
+      ];
+    },
+    getARMTokenForTenant: async () => 'mockToken',
+    getAccessToken: async () => 'mockToken',
+  },
 }));
 
 const CHANNELS = {
@@ -32,7 +68,7 @@ const mockAppId = '123';
 const mockSubscriptionId = '456';
 const mockTenantId = '123';
 const mockResourceGroup = 'mockResourceGroup';
-const mockTokenValue = '123';
+const mockTokenValue = 'mockToken';
 
 const mockTargetConfig = {
   name: mockConfigName,
@@ -86,11 +122,6 @@ describe('<ABSChannels />', () => {
       .mockResolvedValue({ data: { properties: { properties: { acceptedTerms: true } } } });
     (httpClient.put as jest.Mock) = jest.fn().mockResolvedValue({});
     (httpClient.delete as jest.Mock) = jest.fn().mockResolvedValue({});
-
-    jest.spyOn(authUtils, 'isShowAuthDialog').mockReturnValue(false);
-    jest.spyOn(authUtils, 'getTokenFromCache').mockReturnValue(mockTokenValue);
-    jest.spyOn(authUtils, 'userShouldProvideTokens').mockReturnValue(true);
-    jest.spyOn(authUtils, 'getTenantIdFromCache').mockReturnValue(mockTenantId);
   });
 
   const recoilInitState = ({ set }) => {
