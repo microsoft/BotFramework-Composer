@@ -20,5 +20,5 @@ export const rateInfoState = atom<ZoomInfo>({
 
 export const flowCommentsVisibilityState = atom<boolean>({
   key: getFullyQualifiedKey('flowCommentsVisibility'),
-  default: true,
+  default: false,
 });
