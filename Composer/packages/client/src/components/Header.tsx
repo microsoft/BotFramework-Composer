@@ -245,16 +245,14 @@ export const Header = () => {
     }
   };
 
-  const labels = () => ({
-    logo: formatMessage('Composer Logo'),
-    test: formatMessage('Test your bot'),
-    rocket: formatMessage('Recommended actions'),
-    update: formatMessage('Update available'),
-  });
+  const logoLabel = formatMessage('Composer Logo');
+  const testLabel = formatMessage('Test your bot');
+  const rocketLabel = formatMessage('Recommended actions');
+  const updateLabel = formatMessage('Update available');
 
   return (
     <div css={headerContainer} role="banner">
-      <img alt={labels().logo} aria-label={labels().logo} src={composerIcon} style={{ marginLeft: '9px' }} />
+      <img alt={logoLabel} aria-label={logoLabel} src={composerIcon} style={{ marginLeft: '9px' }} />
       <div css={headerTextContainer}>
         {projectName && (
           <Fragment>
@@ -274,7 +272,6 @@ export const Header = () => {
           </Fragment>
         )}
       </div>
-
       <div css={rightSection}>
         {isShow && (
           <div
@@ -294,9 +291,9 @@ export const Header = () => {
           </div>
         )}
         {isShow && (
-          <TooltipHost content={labels().test} directionalHint={DirectionalHint.bottomCenter}>
+          <TooltipHost content={testLabel} directionalHint={DirectionalHint.bottomCenter}>
             <IconButton
-              ariaDescription={labels().test}
+              ariaDescription={testLabel}
               disabled={!webchatEssentials?.botUrl}
               iconProps={{
                 iconName: 'OfficeChat',
@@ -316,9 +313,9 @@ export const Header = () => {
         )}
         <NotificationButton buttonStyles={buttonStyles} />
         {isShow && (
-          <TooltipHost content={labels().rocket} directionalHint={DirectionalHint.bottomCenter}>
+          <TooltipHost content={rocketLabel} directionalHint={DirectionalHint.bottomCenter}>
             <IconButton
-              ariaLabel={labels().rocket}
+              ariaLabel={rocketLabel}
               iconProps={{ iconName: 'Rocket' }}
               id="rocketButton"
               styles={buttonStyles}
@@ -341,11 +338,11 @@ export const Header = () => {
           </TeachingBubble>
         )}
         {showUpdateAvailableIcon && (
-          <TooltipHost content={labels().update} directionalHint={DirectionalHint.bottomCenter}>
+          <TooltipHost content={updateLabel} directionalHint={DirectionalHint.bottomCenter}>
             <IconButton
               iconProps={{ iconName: 'History' }}
               styles={buttonStyles}
-              title={labels().update}
+              title={updateLabel}
               onClick={onUpdateAvailableClick}
             />
           </TooltipHost>
