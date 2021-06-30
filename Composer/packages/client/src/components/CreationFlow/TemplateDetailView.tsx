@@ -122,7 +122,9 @@ export const TemplateDetailView: React.FC<TemplateDetailViewProps> = (props) => 
     }
     // result is a dir path
     onValidateLocalTemplatePath(false);
-    return formatMessage('Directory path not accepted. Enter path to generators index.js file.');
+    return formatMessage(
+      "Generator not found. Please enter the full path to the generator's index.js file including the filename"
+    );
   };
 
   const renderLocalTemplateForm = () => (
