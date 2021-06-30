@@ -284,8 +284,8 @@
   "all_4321c3a1": {
     "message": "All"
   },
-  "all_bots_649ccbd0": {
-    "message": "All bots"
+  "all_projects_5482873e": {
+    "message": "All projects"
   },
   "allowed_callers_31b26262": {
     "message": "Allowed Callers"
@@ -965,6 +965,12 @@
   "count_plural_0_no_items_selected_1_one_item_is_sel_13d3b2de": {
     "message": "{ count, plural,\n     =0 {No items selected}\n     =1 {One item is selected}\n  other {# items are selected}\n}"
   },
+  "count_plural_1_error_other_errors_c2dc01f8": {
+    "message": "{ count, plural,\n     =1 {Error}\n  other {Errors}\n}"
+  },
+  "count_plural_1_warning_other_warnings_a7258fed": {
+    "message": "{ count, plural,\n     =1 {Warning}\n  other {Warnings}\n}"
+  },
   "create_132b3be1": {
     "message": "Create"
   },
@@ -1544,14 +1550,8 @@
   "error_provisioning_25835400": {
     "message": "Error provisioning."
   },
-  "errors_a0ac8807": {
-    "message": "Errors"
-  },
   "errorscount_plural_0_no_errors_1_one_error_other_e_a8c998bb": {
     "message": "{ errorsCount, plural,\n     =0 {No errors}\n     =1 {One error}\n  other {# errors}\n}"
-  },
-  "errorsmsg_8f5d3d85": {
-    "message": "{ errorsMsg }"
   },
   "event_activity_2067a94b": {
     "message": "Event activity"
@@ -2582,6 +2582,9 @@
   "no_templates_found_d8dca69b": {
     "message": "No templates found"
   },
+  "no_thanks_20701267": {
+    "message": "No thanks"
+  },
   "no_updates_available_cecd904d": {
     "message": "No updates available"
   },
@@ -3064,6 +3067,9 @@
   },
   "reloading_49d2f661": {
     "message": "Reloading"
+  },
+  "remind_me_later_6ac70c3": {
+    "message": "Remind me later"
   },
   "remote_skill_ed36a7e6": {
     "message": "Remote skill"
@@ -3647,6 +3653,9 @@
   "take_a_product_tour_a2892d17": {
     "message": "Take a product tour"
   },
+  "take_survey_a0cc4547": {
+    "message": "Take survey"
+  },
   "target_da92f4e6": {
     "message": "Target"
   },
@@ -4223,20 +4232,17 @@
   "warning_aacb8c24": {
     "message": "Warning"
   },
-  "warnings_d6acbbdb": {
-    "message": "Warnings"
-  },
   "warningscount_plural_0_no_warnings_1_one_warning_o_347cc928": {
     "message": "{ warningsCount, plural,\n     =0 {No warnings}\n     =1 {One warning}\n  other {# warnings}\n}"
-  },
-  "warningsmsg_e2c04bfe": {
-    "message": "{ warningsMsg }"
   },
   "we_detected_length_custom_obj_that_are_not_support_becd85f0": {
     "message": "We detected { length } custom { obj } that are not support for Composer 2.0."
   },
   "we_need_to_define_the_endpoints_for_the_skill_to_a_5dc98d90": {
     "message": "We need to define the endpoints for the skill to allow other bots to interact with it."
+  },
+  "we_read_every_response_and_will_use_your_feedback__64e44821": {
+    "message": "We read every response and will use your feedback to improve Composer."
   },
   "web_chat_c5ca7ab6": {
     "message": "Web Chat"
@@ -4321,6 +4327,9 @@
   },
   "working_with_packages_dbdddbe9": {
     "message": "Working with packages"
+  },
+  "would_you_mind_taking_a_quick_survey_5cf722ac": {
+    "message": "Would you mind taking a quick survey?"
   },
   "write_an_expression_8773ea5c": {
     "message": "Write an expression"

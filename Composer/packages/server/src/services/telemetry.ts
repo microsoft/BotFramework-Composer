@@ -52,7 +52,7 @@ if (instrumentationKey) {
     envelope.tags[AppInsights.defaultClient.context.keys.sessionId] = sessionId;
 
     // Add truncated user id
-    envelope.tags[AppInsights.defaultClient.context.keys.userId] = userId?.slice(0, Math.floor(userId.length * 0.8));
+    envelope.tags[AppInsights.defaultClient.context.keys.userId] = userId;
 
     // Remove PII from url
     if (envelope.data.baseType === 'RequestData' && data.baseData.url.match(/\/\d+.\d+/i)) {

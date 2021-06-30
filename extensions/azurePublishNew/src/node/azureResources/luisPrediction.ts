@@ -28,5 +28,6 @@ export const getLuisPredictionProvisionService = (): ResourceProvisionService =>
       return project.requiresLuisPrediction; // tbd
     },
     provision: getLuisPredictionProvisionMethod(),
+    canPollStatus: false,
   };
 };
