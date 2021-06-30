@@ -1,5 +1,9 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import { render } from '@botframework-composer/test-utils';
 import React from 'react';
+
 import { ImportSuccessNotificationWrapper } from '../../../src/components/ImportModal/ImportSuccessNotification';
 
 describe('<ImportSuccessNotificationWrapper />', () => {
@@ -10,7 +14,7 @@ describe('<ImportSuccessNotificationWrapper />', () => {
       location: locationMock,
       importedToExisting: mockImportedToExisting,
     });
-    const { findByText } = render(<Notification type="success" title="test" />);
+    const { findByText } = render(<Notification title="test" type="success" />);
 
     expect(findByText('./existBot')).not.toBeUndefined();
   });
