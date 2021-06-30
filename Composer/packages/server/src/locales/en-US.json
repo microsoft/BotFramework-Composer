@@ -59,9 +59,6 @@
   "a_publishing_profile_provides_the_secure_connectiv_860d7d48": {
     "message": "A publishing profile provides the secure connectivity required to publish your bot."
   },
-  "a_runtime_type_must_be_selected_5274c266": {
-    "message": "A runtime type must be selected."
-  },
   "a_schema_or_form_is_the_list_of_properties_your_bo_8e107996": {
     "message": "A schema, or form, is the list of properties your bot will collect."
   },
@@ -172,6 +169,9 @@
   },
   "add_a_new_value_24ca14ac": {
     "message": "Add a new value"
+  },
+  "add_a_note_c0caaac": {
+    "message": "Add a note"
   },
   "add_a_skill_46d2b71c": {
     "message": "Add a skill"
@@ -524,8 +524,8 @@
   "azure_language_understanding_5fc42020": {
     "message": "Azure Language Understanding"
   },
-  "azure_offers_a_number_of_ways_to_host_your_applica_b3e2da97": {
-    "message": "Azure offers a number of ways to host your application code. The runtime type refers to the hosting model for the computing resources that your application runs on. Learn more"
+  "azure_offers_a_number_of_ways_to_host_your_applica_202b7871": {
+    "message": "Azure offers a number of ways to host your application code. The runtime type refers to the hosting model for the computing resources that your application runs on."
   },
   "azure_qna_maker_fd153eb7": {
     "message": "Azure QnA Maker"
@@ -772,6 +772,9 @@
   },
   "comment_7ef1428e": {
     "message": "Comment"
+  },
+  "comment_menu_96448038": {
+    "message": "Comment menu"
   },
   "comments_e07bcbe3": {
     "message": "Comments"
@@ -1864,6 +1867,9 @@
   },
   "hide_code_5dcffa94": {
     "message": "Hide code"
+  },
+  "hide_notes_on_canvas_cb566092": {
+    "message": "Hide notes on canvas"
   },
   "home_351838cd": {
     "message": "Home"
@@ -3464,6 +3470,15 @@
   "show_keys_3072a5b8": {
     "message": "Show keys"
   },
+  "show_less_f778dab5": {
+    "message": "Show Less"
+  },
+  "show_more_af9cbc16": {
+    "message": "Show More"
+  },
+  "show_notes_on_canvas_f0baaa43": {
+    "message": "Show notes on canvas"
+  },
   "show_response_editor_90bd8b49": {
     "message": "Show response editor"
   },
@@ -3673,6 +3688,9 @@
   },
   "template_name_c37cf8d9": {
     "message": "Template name: "
+  },
+  "template_undefined_2750e546": {
+    "message": "Template undefined"
   },
   "templatename_is_missing_or_empty_23e6b06e": {
     "message": "templateName is missing or empty"
