@@ -35,7 +35,7 @@ export const getProvisionServices = (config: ProvisionConfig): Record<string, Re
     servicePlan: getAppServiceProvisionService(config),
     botRegistration: getBotChannelProvisionService(),
     azureFunctionApp: getAzureFunctionsProvisionService(),
-    cosmosDB: getCosmosDbProvisionService(),
+    cosmosDB: getCosmosDbProvisionService(config),
     appInsights: getAppInsightsProvisionService(),
     luisAuthoring: getLuisAuthoringProvisionService(),
     luisPrediction: getLuisPredictionProvisionService(),
