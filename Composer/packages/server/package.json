@@ -81,7 +81,7 @@
     "@microsoft/bf-dispatcher": "^4.11.0-beta.20201016.393c6b2",
     "@microsoft/bf-generate-library": "^4.14.0-preview.20210623.f03627c",
     "@microsoft/bf-lu": "4.14.0-dev.20210602.be805a8",
-    "@microsoft/bf-orchestrator": "4.13.0-rc0",
+    "@microsoft/bf-orchestrator": "4.14.0-rc0",
     "applicationinsights": "^1.8.7",
     "archiver": "^5.0.2",
     "axios": "^0.21.1",
