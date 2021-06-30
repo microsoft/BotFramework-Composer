@@ -735,7 +735,7 @@ export class BotProject implements IBotProject {
     const manifestContent = await getSkillManifest(url);
     const manifestName = Path.basename(url, '.json');
     const luUrls: string[] = [];
-    const languages = manifestContent.dispatchModels.languages;
+    const languages = manifestContent.dispatchModels?.languages || {};
     Object.keys(languages).map((key) =>
       languages[key].map((lu) => {
         luUrls.push(lu.url);
