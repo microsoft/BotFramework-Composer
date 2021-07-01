@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 import { JSONSchema7Type } from 'json-schema';
 
-import { ModelTypes } from './orchestrator';
+import { ModelType } from './orchestrator';
 import type { PublishTarget } from './publish';
 
 export interface LibraryRef {
@@ -147,7 +147,7 @@ export type IQnAConfig = {
 };
 
 export type IOrchestratorConfig = {
-  model?: Partial<Record<ModelTypes, string>>;
+  model?: Partial<Record<ModelType, string>>;
 };
 
 export type IConfig = ILuisConfig &

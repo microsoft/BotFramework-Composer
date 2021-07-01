@@ -1,10 +1,10 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-export type ModelTypes = 'en_intent' | 'multilingual_intent';
+export type ModelType = 'en_intent' | 'multilingual_intent';
 
 export type OrchestratorModelRequest = {
-  kind: ModelTypes;
+  kind: ModelType;
   name: string;
 };
 
@@ -14,9 +14,9 @@ export enum DownloadState {
   DOWNLOADING = 'DOWNLOADING',
 }
 
-export interface IOrchestratorNLRList {
+export type IOrchestratorNLRList = {
   version: string;
-  defaults: Record<ModelTypes, string>;
+  defaults: Record<ModelType, string>;
   readonly models: Record<
     string,
     {
@@ -26,4 +26,4 @@ export interface IOrchestratorNLRList {
       minSDKVersion: string;
     }
   >;
-}
+};
