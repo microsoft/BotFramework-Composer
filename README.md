@@ -35,15 +35,21 @@ The Bot Framework Composer is an open source tool based on the Bot Framework SDK
 
 To build and run the Composer project locally as a web application, clone the source code from Github and build the application using the instructions below.
 
-Please see [supported NodeJS versions][205] before building.
+### Prerequisites
+- [Git](https://git-scm.com/downloads).
+- [Node.js](https://nodejs.org/) LTS 14.x.
+- [Yarn](https://yarnpkg.com/en/docs/install).
+- [.NET Core SDK 3.1](https://dotnet.microsoft.com/download/dotnet-core) or later.
+- On Windows, install the latest [Visual C++ Redistributable for Visual Studio 2015, 2017 and 2019](https://support.microsoft.com/topic/the-latest-supported-visual-c-downloads-2647da03-1eea-4433-9aff-95f26a218cc0).
+- [List of recommended OS versions][205].
 
-```
-$ git clone https://github.com/microsoft/BotFramework-Composer.git
-$ cd BotFramework-Composer
-$ cd Composer // switch to Composer folder
-$ yarn install // install dependencies
-$ yarn build // build extensions and libs
-$ yarn startall // start client and server at the same time
+```bash
+git clone https://github.com/microsoft/BotFramework-Composer.git
+cd BotFramework-Composer
+cd Composer # switch to Composer folder
+yarn install # install dependencies
+yarn build # build extensions and libs
+yarn startall # start client and server at the same time
 ```
 
 ## Extend Composer with Extensions
