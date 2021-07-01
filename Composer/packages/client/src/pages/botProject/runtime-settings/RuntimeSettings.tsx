@@ -70,7 +70,7 @@ export const RuntimeSettings: React.FC<RouteComponentProps<{ projectId: string }
   const errorElement = (errorText: string) => {
     if (!errorText) return '';
     return (
-      <span css={errorContainer}>
+      <span css={errorContainer} data-testid="runtimeErrorText">
         <Icon iconName="ErrorBadge" styles={errorIcon} />
         <span css={errorTextStyle}>{errorText}</span>
       </span>

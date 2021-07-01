@@ -4,7 +4,15 @@
 import { IBotProject } from '@botframework-composer/types';
 
 export type ProvisionWorkingSet = Record<string, object>;
-export type ProvisionMethod = (config: ResourceConfig, workingSet: ProvisionWorkingSet) => Promise<ProvisionWorkingSet>;
+
+export type OnProvisionProgress = (status: number, message: string) => void;
+
+export type ProvisionMethod = (
+  config: ResourceConfig,
+  workingSet: ProvisionWorkingSet,
+  onProgress?: OnProvisionProgress
+) => Promise<ProvisionWorkingSet>;
+
 export type ResourceProvisionService = {
   getDependencies: () => string[];
   getRecommendationForProject: (project: IBotProject) => 'required' | 'optional' | 'notAllowed';

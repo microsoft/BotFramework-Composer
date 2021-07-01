@@ -29,6 +29,7 @@ const styles = {
     font-size: 12px;
     margin: 0;
     padding-right: 18px;
+    white-space: pre-line;
   `,
   showMore: css`
     display: flex;

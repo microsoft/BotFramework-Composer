@@ -150,7 +150,7 @@ export const SkillBotExternalService: React.FC<SkillBotExternalServiceProps> = (
               </Link>
             ),
             a2: ({ children }) => (
-              <Link key="luis-skill-settings-page" href={'https://aka.ms/composer-luis-learnmore'} target="_blank">
+              <Link key="luis-skill-settings-page-2" href={'https://aka.ms/composer-luis-learnmore'} target="_blank">
                 {children}
               </Link>
             ),
@@ -172,8 +172,10 @@ export const SkillBotExternalService: React.FC<SkillBotExternalServiceProps> = (
         <div ref={luisKeyFieldRef}>
           <FieldWithCustomButton
             ariaLabel={formatMessage('Language Understanding authoring key')}
+            buttonDataTestId="skillLUISAuthoringKeyBtn"
             buttonText={formatMessage('Use custom LUIS authoring key')}
             errorMessage={!rootLuisKey ? formatMessage('Root Bot LUIS authoring key is empty') : ''}
+            fieldDataTestId="skillLUISAuthoringKeyField"
             id={'luisAuthoringKey'}
             label={formatMessage('Language Understanding authoring key')}
             placeholder={formatMessage('Type Language Understanding authoring key')}
@@ -186,8 +188,10 @@ export const SkillBotExternalService: React.FC<SkillBotExternalServiceProps> = (
         <div ref={luisRegionFieldRef}>
           <FieldWithCustomButton
             ariaLabel={formatMessage('Language Understanding region')}
+            buttonDataTestId="skillLUISAuthoringRegionBtn"
             buttonText={formatMessage('Use custom LUIS region')}
             errorMessage={!rootLuisRegion ? formatMessage('Root Bot LUIS region is empty') : ''}
+            fieldDataTestId="skillLUISAuthoringRegionDropdown"
             label={formatMessage('Language Understanding region')}
             options={LUIS_REGIONS}
             placeholder={formatMessage('Select region')}
@@ -209,7 +213,7 @@ export const SkillBotExternalService: React.FC<SkillBotExternalServiceProps> = (
               ),
               a2: ({ children }) => (
                 <Link
-                  key="qna-skill-settings-page"
+                  key="qna-skill-settings-page-2"
                   href={'https://aka.ms/composer-addqnamaker-learnmore'}
                   target="_blank"
                 >
@@ -222,8 +226,10 @@ export const SkillBotExternalService: React.FC<SkillBotExternalServiceProps> = (
         <div ref={qnaKeyFieldRef}>
           <FieldWithCustomButton
             ariaLabel={formatMessage('QnA Maker Subscription key')}
+            buttonDataTestId="skillQnaAuthoringBtn"
             buttonText={formatMessage('Use custom QnA Maker Subscription key')}
             errorMessage={!rootQnAKey ? formatMessage('Root Bot QnA Maker Subscription key is empty') : ''}
+            fieldDataTestId="skillQnaAuthoringField"
             id={'qnaKey'}
             label={formatMessage('QnA Maker Subscription key')}
             placeholder={formatMessage('Enter QnA Maker Subscription key')}

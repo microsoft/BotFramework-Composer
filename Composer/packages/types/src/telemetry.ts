@@ -193,8 +193,13 @@ type WebChatEvents = {
   WebChatConversationRestarted: { restartType: 'SameUserId' | 'NewUserId' };
   DrawerPaneOpened: undefined;
   DrawerPaneClosed: undefined;
-  DrawerPaneTabOpened: { tabType: 'Diagnostics' | 'WebChatInspector' | 'RuntimeLog' };
+  DrawerPaneTabOpened: { tabType: 'Diagnostics' | 'WebChatInspector' | 'RuntimeLog' | 'Watch' };
   SaveTranscriptClicked: undefined;
+};
+
+type DebuggingEvents = {
+  StateWatchPropertyAdded: { property: string };
+  StateWatchPropertyRemoved: { property: string };
 };
 
 type ABSChannelsEvents = {
@@ -260,7 +265,8 @@ export type TelemetryEvents = ApplicationEvents &
   OrchestratorEvents &
   PropertyEditorEvents &
   CreationEvents &
-  SurveyEvents;
+  SurveyEvents &
+  DebuggingEvents;
 
 export type TelemetryEventName = keyof TelemetryEvents;
 

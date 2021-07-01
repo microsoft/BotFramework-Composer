@@ -5,24 +5,18 @@
 import { jsx } from '@emotion/core';
 import { useState, Fragment, useEffect } from 'react';
 import formatMessage from 'format-message';
-import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button';
-import { ChoiceGroup, IChoiceGroupOption } from 'office-ui-fabric-react/lib/ChoiceGroup';
-import { DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
-import { FontWeights } from 'office-ui-fabric-react/lib/Styling';
-import { FontSizes } from '@uifabric/fluent-theme';
 import { BotTemplate } from '@bfc/shared';
-import { DialogWrapper, DialogTypes } from '@bfc/ui-shared';
 import { navigate, RouteComponentProps } from '@reach/router';
 import querystring from 'query-string';
 import axios from 'axios';
 import { useRecoilValue } from 'recoil';
 
-import { DialogCreationCopy } from '../../constants';
 import { getAliasFromPayload, isElectron } from '../../utils/electronUtil';
 import { creationFlowTypeState, userHasNodeInstalledState } from '../../recoilModel';
 import { InstallDepModal } from '../InstallDepModal';
 import TelemetryClient from '../../telemetry/TelemetryClient';
 
+import { AzureBotDialog } from './AzureBotDialog';
 import { CreateBot } from './CreateBot';
 
 // -------------------- CreateOptions -------------------- //
@@ -37,8 +31,7 @@ type CreateOptionsProps = {
 } & RouteComponentProps<{}>;
 
 export function CreateOptions(props: CreateOptionsProps) {
-  const [isOpenOptionsModal, setIsOpenOptionsModal] = useState(false);
-  const [option, setOption] = useState('Create');
+  const [isOpenOptionsModal, setIsOpenOptionsModal] = useState(true);
   const [isOpenCreateModal, setIsOpenCreateModal] = useState(false);
   const {
     templates,
@@ -83,48 +76,6 @@ export function CreateOptions(props: CreateOptionsProps) {
     });
     setIsOpenCreateModal(true);
   }, [props.location?.search]);
-  const dialogWrapperProps = DialogCreationCopy.CREATE_OPTIONS;
-
-  const customerStyle = {
-    dialog: {
-      title: {
-        fontWeight: FontWeights.bold,
-        fontSize: FontSizes.size20,
-        paddingTop: '14px',
-        paddingBottom: '11px',
-      },
-      subText: {
-        fontSize: FontSizes.size14,
-      },
-    },
-    modal: {
-      main: {
-        maxWidth: '80% !important',
-        width: '480px !important',
-      },
-    },
-  };
-
-  const options: IChoiceGroupOption[] = [
-    { key: 'Create', text: formatMessage('Use Azure Bot to create a new conversation') },
-    { key: 'Connect', text: formatMessage('Apply my Azure Bot resources for an existing bot') },
-  ];
-
-  const handleChange = (e, option) => {
-    setOption(option.key);
-  };
-
-  const handleJumpToNext = () => {
-    if (option === 'Create') {
-      TelemetryClient.track('NewBotDialogOpened', {
-        isSkillBot: false,
-        fromAbsHandoff: true,
-      });
-      setIsOpenCreateModal(true);
-    } else {
-      onJumpToOpenModal(props.location?.search);
-    }
-  };
 
   useEffect(() => {
     if (!userHasNode) {
@@ -134,19 +85,12 @@ export function CreateOptions(props: CreateOptionsProps) {
 
   return (
     <Fragment>
-      <DialogWrapper
+      <AzureBotDialog
         isOpen={isOpenOptionsModal}
-        {...dialogWrapperProps}
-        customerStyle={customerStyle}
-        dialogType={DialogTypes.Customer}
         onDismiss={onDismiss}
-      >
-        <ChoiceGroup required defaultSelectedKey="Create" options={options} onChange={handleChange} />
-        <DialogFooter>
-          <PrimaryButton data-testid="NextStepButton" text={formatMessage('Next')} onClick={handleJumpToNext} />
-          <DefaultButton text={formatMessage('Cancel')} onClick={onDismiss} />
-        </DialogFooter>
-      </DialogWrapper>
+        onJumpToOpenModal={onJumpToOpenModal}
+        onToggleCreateModal={setIsOpenCreateModal}
+      />
       <CreateBot
         fetchReadMe={fetchReadMe}
         isOpen={isOpenCreateModal}

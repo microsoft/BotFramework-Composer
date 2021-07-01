@@ -96,6 +96,7 @@ const BotProjectSettings: React.FC<RouteComponentProps<{ projectId: string; skil
         inlineLabel
         checked={isAdvancedSettingsEnabled}
         className={'advancedSettingsView'}
+        data-testid="advancedSettingsToggle"
         defaultChecked={false}
         label={formatMessage('Advanced Settings View (json)')}
         styles={{ label: { fontSize: '12px', marginLeft: '8px' } }}
@@ -138,13 +139,15 @@ const BotProjectSettings: React.FC<RouteComponentProps<{ projectId: string; skil
       <Suspense fallback={<LoadingSpinner />}>
         <div css={container}>
           {isAdvancedSettingsEnabled ? (
-            <JsonEditor
-              key={'settingsjson'}
-              editorSettings={userSettings.codeEditor}
-              id={currentProjectId}
-              value={mergedSettings}
-              onChange={handleChange}
-            />
+            <div data-testid="jsonEditor">
+              <JsonEditor
+                key={'settingsjson'}
+                editorSettings={userSettings.codeEditor}
+                id={currentProjectId}
+                value={mergedSettings}
+                onChange={handleChange}
+              />
+            </div>
           ) : (
             <BotProjectSettingsTabView projectId={currentProjectId} scrollToSectionId={props.location?.hash} />
           )}

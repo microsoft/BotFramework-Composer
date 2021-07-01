@@ -447,6 +447,11 @@ export const projectIndexingState = atomFamily<boolean, string>({
   default: false,
 });
 
+export const watchedVariablesState = atomFamily<Record<string, string>, string>({
+  key: getFullyQualifiedKey('watchedVariables'),
+  default: {},
+});
+
 export const runtimeStandardOutputDataState = atomFamily<RuntimeOutputData, string>({
   key: getFullyQualifiedKey('runtimeStandardOutputData'),
   default: {
