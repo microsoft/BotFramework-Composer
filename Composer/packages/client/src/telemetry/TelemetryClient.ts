@@ -3,7 +3,7 @@
 
 import { LogData, TelemetryEventName, TelemetryEvents, TelemetrySettings } from '@bfc/shared';
 
-import { AggregateClient } from './AggregateClient';
+import { aggregateClient } from './AggregateClient';
 import AppInsightsClient from './AppInsightsClient';
 import ConsoleClient from './ConsoleClient';
 
@@ -47,7 +47,7 @@ export default class TelemetryClient {
     if (process.env.NODE_ENV !== 'development') {
       return AppInsightsClient;
     } else {
-      return AggregateClient(AppInsightsClient, ConsoleClient);
+      return aggregateClient(AppInsightsClient, ConsoleClient);
     }
   }
 

@@ -268,13 +268,6 @@ export type TelemetryEvents = ApplicationEvents &
   SurveyEvents &
   DebuggingEvents;
 
-/**
- * persistedEvents is an array of telemetry events that occur before the user has
- * had a chance to opt in to data collection. These events are added to the event queue;
- * however, they are only logged to Application Insights after the user opts in to data collection.
- */
-export const persistedEvents = ['SessionStarted', 'HandoffToComposerCompleted'];
-
 export type TelemetryEventName = keyof TelemetryEvents;
 
 export type TelemetryClient = {
@@ -289,3 +282,10 @@ export type TelemetryClient = {
     properties?: TelemetryEvents[TN] extends undefined ? never : TelemetryEvents[TN]
   ) => void;
 };
+
+/**
+ * persistedEvents is an array of telemetry events that occur before the user has
+ * had a chance to opt in to data collection. These events are added to the event queue;
+ * however, they are only logged to Application Insights after the user opts in to data collection.
+ */
+export const persistedEvents: TelemetryEventName[] = ['SessionStarted', 'HandoffToComposerCompleted'];
