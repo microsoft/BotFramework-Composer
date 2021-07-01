@@ -119,6 +119,7 @@ export const OutputsTabContent: React.FC<DebugPanelTabHeaderProps> = ({ isActive
         splitterSize="5px"
       >
         <BotProjectsFilter currentProjectId={currentProjectId} onChangeProject={setProjectId} />
+
         <RuntimeOutputLog projectId={currentProjectId} />
       </Split>
     </div>

@@ -6,8 +6,13 @@ import { FC } from 'react';
 export const DiagnosticsTabKey = 'Diagnostics';
 export const WebChatInspectorTabKey = 'WebChatInspector';
 export const RuntimeLogTabKey = 'RuntimeLog';
+export const WatchTabKey = 'Watch';
 
-export type DebugDrawerKeys = typeof DiagnosticsTabKey | typeof WebChatInspectorTabKey | typeof RuntimeLogTabKey;
+export type DebugDrawerKeys =
+  | typeof DiagnosticsTabKey
+  | typeof WebChatInspectorTabKey
+  | typeof RuntimeLogTabKey
+  | typeof WatchTabKey;
 
 export type DebugPanelTabHeaderProps = {
   isActive: boolean;
