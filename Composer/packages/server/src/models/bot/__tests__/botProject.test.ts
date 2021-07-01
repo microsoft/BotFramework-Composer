@@ -291,22 +291,22 @@ describe('skill operations', () => {
   it('should create skill files', async () => {
     await proj.init();
 
-    const url = 'https://yuesuemailskill0207-gjvga67.azurewebsites.net/manifest/manifest-1.0.json';
+    const url = 'https://luhantest0625.azurewebsites.net/manifests/Empty_45-2-1-manifest.json';
     const skillName = 'manifest';
     const file = await proj.createSkillFiles(url, skillName, {});
 
     expect(file).not.toBeUndefined();
-  });
+  }, 10000);
 
   it('should delete skill files', async () => {
-    const url = 'https://yuesuemailskill0207-gjvga67.azurewebsites.net/manifest/manifest-1.0.json';
+    const url = 'https://luhantest0625.azurewebsites.net/manifests/Empty_45-2-1-manifest.json';
     const skillName = 'manifest';
     await proj.createSkillFiles(url, skillName, {});
     const fileLength = proj.luFiles.length;
 
     await proj.deleteSkillFiles(skillName);
     expect(proj.luFiles.length).toBeLessThanOrEqual(fileLength);
-  });
+  }, 10000);
 });
 
 describe('buildFiles', () => {
