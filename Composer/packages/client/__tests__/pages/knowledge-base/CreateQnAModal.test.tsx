@@ -96,7 +96,7 @@ const initRecoilState = ({ set }) => {
   set(showCreateQnADialogState(state.projectId), true);
 };
 
-describe('QnA page all up view', () => {
+describe('QnA creation flow', () => {
   it('should create qna from url', () => {
     const { getByTestId, getByText, getAllByText } = renderWithRecoil(
       <CreateQnAModal
@@ -108,10 +108,14 @@ describe('QnA page all up view', () => {
       initRecoilState
     );
 
-    const option = getAllByText('Create new KB from URL or file');
-    fireEvent.click(option[0]);
     const nameField = getByTestId('knowledgeLocationTextField-name');
     fireEvent.change(nameField, { target: { value: 'name' } });
+    const next1 = getByText('Next');
+    fireEvent.click(next1);
+
+    const option = getAllByText('Create new KB from URL or file');
+    fireEvent.click(option[0]);
+
     const urlField = getByTestId('adden-usInCreateQnAFromUrlModal');
     fireEvent.change(urlField, { target: { value: 'http://newUrl.pdf' } });
     const next = getByText('Next');
@@ -130,16 +134,20 @@ describe('QnA page all up view', () => {
       initRecoilState
     );
 
-    const option = getByText('Import existing KB from QnA maker portal');
-    fireEvent.click(option);
     const nameField = getByTestId('knowledgeLocationTextField-name');
     fireEvent.change(nameField, { target: { value: 'name' } });
+    const next1 = getByText('Next');
+    fireEvent.click(next1);
+
+    const option = getByText('Import existing KB from QnA maker portal');
+    fireEvent.click(option);
+
     const next = getByText('Next');
     fireEvent.click(next);
     getByText('Select source knowledge base location');
   });
 
-  it('should create qna from portal', () => {
+  it('should create qna from scratch', () => {
     const { getByTestId, getByText } = renderWithRecoil(
       <CreateQnAModal
         dialogId={state.dialogs[0].id}
@@ -150,11 +158,12 @@ describe('QnA page all up view', () => {
       initRecoilState
     );
 
-    const option = getByText('Create an empty KB');
-    fireEvent.click(option);
     const nameField = getByTestId('knowledgeLocationTextField-name');
     fireEvent.change(nameField, { target: { value: 'name' } });
-    const next = getByText('Next');
+    const next1 = getByText('Next');
+    fireEvent.click(next1);
+
+    const next = getByText('Skip & Create blank KB');
     fireEvent.click(next);
     expect(handleSubmit).toBeCalled();
   });

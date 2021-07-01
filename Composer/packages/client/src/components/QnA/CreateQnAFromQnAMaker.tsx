@@ -6,13 +6,13 @@ import { jsx } from '@emotion/core';
 import React, { Fragment, useEffect } from 'react';
 import formatMessage from 'format-message';
 import { Stack } from 'office-ui-fabric-react/lib/Stack';
-import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { Text } from 'office-ui-fabric-react/lib/Text';
+import { Link } from 'office-ui-fabric-react/lib/Link';
 
 import { FieldConfig, useForm } from '../../hooks/useForm';
 
 import { validateName, CreateQnAFromFormProps, CreateQnAFromQnAMakerFormData } from './constants';
-import { knowledgeBaseStyle, subText, textFieldKBNameFromScratch } from './styles';
+import { knowledgeBaseStyle, subText } from './styles';
 
 const formConfig: FieldConfig<CreateQnAFromQnAMakerFormData> = {
   name: {
@@ -22,11 +22,11 @@ const formConfig: FieldConfig<CreateQnAFromQnAMakerFormData> = {
 };
 
 export const CreateQnAFromQnAMaker: React.FC<CreateQnAFromFormProps> = (props) => {
-  const { onChange, qnaFiles, initialName, onUpdateInitialName } = props;
+  const { onChange, qnaFiles, initialName } = props;
 
   formConfig.name.validate = validateName(qnaFiles);
   formConfig.name.defaultValue = initialName || '';
-  const { formData, updateField, hasErrors, formErrors } = useForm(formConfig);
+  const { formData, hasErrors } = useForm(formConfig);
 
   useEffect(() => {
     const disabled = hasErrors || !formData.name;
@@ -42,25 +42,13 @@ export const CreateQnAFromQnAMaker: React.FC<CreateQnAFromFormProps> = (props) =
         <p>
           <span css={subText}>
             {formatMessage(
-              'Select this option when you want to import content from an existing KB on the QnA maker portal. The imported content will be mapped to the target locale you select'
+              'Import content from an existing KB on the QnA maker portal. Your KB will downloaded locally and source KB will remain as-is.'
             )}
           </span>
         </p>
       </Stack>
       <Stack>
-        <TextField
-          required
-          data-testid={`knowledgeLocationTextField-name`}
-          errorMessage={formErrors.name}
-          label={formatMessage('Knowledge base name')}
-          placeholder={formatMessage('Type a name for this knowledge base')}
-          styles={textFieldKBNameFromScratch}
-          value={formData.name}
-          onChange={(e, name = '') => {
-            updateField('name', name);
-            onUpdateInitialName?.(name);
-          }}
-        />
+        <Link>{formatMessage('Login to Azure to continue')}</Link>
       </Stack>
     </Fragment>
   );

@@ -68,7 +68,7 @@ type KBRec = {
   lastChangedTimestamp: string;
 };
 
-type Step = 'intro' | 'resource' | 'knowledge-base' | 'outcome';
+type Step = 'name' | 'intro' | 'resource' | 'knowledge-base' | 'outcome';
 
 const dropdownStyles = { dropdown: { width: '100%', marginBottom: 10 } };
 const mainElementStyle = { marginBottom: 20 };
@@ -111,7 +111,7 @@ export const CreateQnAModal: React.FC<CreateQnAModalProps> = (props) => {
   const [dialogTitle, setDialogTitle] = useState<string>('');
 
   const [userProvidedTokens, setUserProvidedTokens] = useState<boolean>(false);
-  const [currentStep, setCurrentStep] = useState<Step>('intro');
+  const [currentStep, setCurrentStep] = useState<Step>('name');
 
   const currentAuthoringLanuage = localeToLanguage(currentLocale);
   const defaultLanuage = localeToLanguage(defaultLocale);
@@ -123,7 +123,6 @@ export const CreateQnAModal: React.FC<CreateQnAModalProps> = (props) => {
       key: 'portal',
       text: formatMessage('Import existing KB from QnA maker portal'),
     },
-    { key: 'scratch', text: formatMessage('Create an empty KB') },
   ];
 
   /* Copied from Azure Publishing extension */
@@ -255,7 +254,7 @@ export const CreateQnAModal: React.FC<CreateQnAModalProps> = (props) => {
     // reset the ui
     setSubscription('');
     setKeys([]);
-    setCurrentStep('intro');
+    setCurrentStep('name');
     setSelectedKb(undefined);
     setKbs([]);
   }, [showCreateQnAFrom]);
@@ -360,14 +359,14 @@ export const CreateQnAModal: React.FC<CreateQnAModalProps> = (props) => {
   };
 
   const performNextAction = () => {
-    if (nextAction !== 'portal') {
-      onSubmitFormData();
+    if (nextAction === 'url') {
+      onSubmitFormData(nextAction);
     } else {
       hasAuth();
     }
   };
 
-  const renderIntroStep = () => {
+  const renderNameStep = () => {
     return (
       <div>
         <p>
@@ -378,6 +377,38 @@ export const CreateQnAModal: React.FC<CreateQnAModalProps> = (props) => {
             </Link>
           </span>
         </p>
+        <CreateQnAFromScratch
+          {...props}
+          currentLocale={currentLocale}
+          defaultLocale={defaultLocale}
+          initialName={initialName}
+          locales={locales}
+          onChange={onFormDataChange}
+          onUpdateInitialName={setInitialName}
+        />
+
+        <DialogFooter>
+          <PrimaryButton
+            disabled={!!loading || disabled}
+            text={formatMessage('Next')}
+            onClick={() => setCurrentStep('intro')}
+          />
+          <DefaultButton
+            disabled={!!loading || showAuthDialog}
+            text={formatMessage('Cancel')}
+            onClick={props.onDismiss}
+          />
+        </DialogFooter>
+      </div>
+    );
+  };
+
+  const renderIntroStep = () => {
+    return (
+      <div>
+        <p>
+          <span css={subText}>{formatMessage('Create a KB from a URL or import content from an existing KB')}</span>
+        </p>
         <div css={contentBox}>
           <div css={choiceContainer}>
             <ChoiceGroup options={actionOptions} selectedKey={nextAction} onChange={onChangeAction} />
@@ -385,16 +416,6 @@ export const CreateQnAModal: React.FC<CreateQnAModalProps> = (props) => {
           <div css={formContainer}>
             {nextAction === 'url' ? (
               <CreateQnAFromUrl
-                {...props}
-                currentLocale={currentLocale}
-                defaultLocale={defaultLocale}
-                initialName={initialName}
-                locales={locales}
-                onChange={onFormDataChange}
-                onUpdateInitialName={setInitialName}
-              />
-            ) : nextAction === 'scratch' ? (
-              <CreateQnAFromScratch
                 {...props}
                 currentLocale={currentLocale}
                 defaultLocale={defaultLocale}
@@ -417,6 +438,13 @@ export const CreateQnAModal: React.FC<CreateQnAModalProps> = (props) => {
           </div>
         </div>
         <DialogFooter>
+          <DefaultButton
+            disabled={!!loading}
+            style={{ float: 'left' }}
+            text={formatMessage('Skip & Create blank KB')}
+            onClick={() => onSubmitFormData('scratch')}
+          />
+          <DefaultButton disabled={!!loading} text={formatMessage('Back')} onClick={() => setCurrentStep('name')} />
           <PrimaryButton disabled={!!loading || disabled} text={formatMessage('Next')} onClick={performNextAction} />
           <DefaultButton
             disabled={!!loading || showAuthDialog}
@@ -629,6 +657,8 @@ export const CreateQnAModal: React.FC<CreateQnAModalProps> = (props) => {
 
   const renderCurrentStep = () => {
     switch (currentStep) {
+      case 'name':
+        return renderNameStep();
       case 'intro':
         return renderIntroStep();
       case 'resource': {
@@ -646,8 +676,11 @@ export const CreateQnAModal: React.FC<CreateQnAModalProps> = (props) => {
 
   useEffect(() => {
     switch (currentStep) {
-      case 'intro':
+      case 'name':
         setDialogTitle(formatMessage('Add QnA Maker knowledge base'));
+        break;
+      case 'intro':
+        setDialogTitle(formatMessage(`Select a source for your knowledge base's content`));
         break;
       case 'resource':
         if (nextAction === 'portal') {
@@ -673,10 +706,10 @@ export const CreateQnAModal: React.FC<CreateQnAModalProps> = (props) => {
     setDisabled(disabled);
   };
 
-  const onSubmitFormData = () => {
-    if (disabled || !formData) {
-      return;
-    }
+  const onSubmitFormData = (createFrom: string) => {
+    if (!formData) return;
+    if (createFrom === 'url' && disabled) return;
+
     onSubmit(formData);
     setInitialName('');
     TelemetryClient.track('AddNewKnowledgeBaseCompleted', { source: formData.urls?.length ? 'url' : 'none' });

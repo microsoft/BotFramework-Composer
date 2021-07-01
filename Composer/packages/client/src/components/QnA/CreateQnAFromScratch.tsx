@@ -7,12 +7,11 @@ import React, { Fragment, useEffect } from 'react';
 import formatMessage from 'format-message';
 import { Stack } from 'office-ui-fabric-react/lib/Stack';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
-import { Text } from 'office-ui-fabric-react/lib/Text';
 
 import { FieldConfig, useForm } from '../../hooks/useForm';
 
 import { validateName, CreateQnAFromFormProps, CreateQnAFromScratchFormData } from './constants';
-import { knowledgeBaseStyle, subText, textFieldKBNameFromScratch } from './styles';
+import { textFieldKBNameFromScratch } from './styles';
 
 const formConfig: FieldConfig<CreateQnAFromScratchFormData> = {
   name: {
@@ -35,16 +34,6 @@ export const CreateQnAFromScratch: React.FC<CreateQnAFromFormProps> = (props) =>
 
   return (
     <Fragment>
-      <Stack>
-        <div>
-          <Text styles={knowledgeBaseStyle}>{formatMessage('Create an emplty KB')}</Text>
-          <p>
-            <span css={subText}>
-              {formatMessage('Select this option to author question and answer pairs manually')}
-            </span>
-          </p>
-        </div>
-      </Stack>
       <Stack>
         <TextField
           required

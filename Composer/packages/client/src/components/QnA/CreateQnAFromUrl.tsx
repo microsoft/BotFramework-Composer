@@ -15,27 +15,18 @@ import { Locales } from '../../locales';
 import { initializeLocales } from './utilities';
 import {
   validateUrl,
-  validateName,
   CreateQnAFromFormProps,
   CreateQnAFromUrlFormData,
   CreateQnAFromUrlFormDataErrors,
 } from './constants';
-import {
-  textFieldUrl,
-  textFieldKBNameFromUrl,
-  warning,
-  urlPairStyle,
-  knowledgeBaseStyle,
-  urlStackStyle,
-  subText,
-} from './styles';
+import { textFieldUrl, warning, urlPairStyle, knowledgeBaseStyle, urlStackStyle, subText } from './styles';
 
 const hasErrors = (errors: CreateQnAFromUrlFormDataErrors) => {
   return !!errors.name || errors.urls.some((e) => !!e);
 };
 
 export const CreateQnAFromUrl: React.FC<CreateQnAFromFormProps> = (props) => {
-  const { onChange, dialogId, qnaFiles, locales, defaultLocale, initialName, onUpdateInitialName } = props;
+  const { onChange, dialogId, locales, defaultLocale, initialName } = props;
 
   const [formData, setFormData] = useState<CreateQnAFromUrlFormData>({
     urls: [],
@@ -59,13 +50,6 @@ export const CreateQnAFromUrl: React.FC<CreateQnAFromFormProps> = (props) => {
   }, [formData.locales]);
 
   const isQnAFileselected = !(dialogId === 'all');
-  const validFormDataName = validateName(qnaFiles);
-
-  const onChangeNameField = (value: string | undefined) => {
-    updateNameField(value);
-    onUpdateInitialName?.(value ?? '');
-    updateNameError(value);
-  };
 
   const onChangeUrlsField = (value: string | undefined, index: number) => {
     const urls = [...formData.urls];
@@ -79,18 +63,6 @@ export const CreateQnAFromUrl: React.FC<CreateQnAFromFormProps> = (props) => {
       ...formData,
       multiTurn: value ?? false,
     });
-  };
-
-  const updateNameField = (value: string | undefined) => {
-    setFormData({
-      ...formData,
-      name: value ?? '',
-    });
-  };
-
-  const updateNameError = (value: string | undefined) => {
-    const error = validFormDataName(value) as string;
-    setFormDataErrors({ ...formDataErrors, name: error ?? '' });
   };
 
   const updateUrlsField = (urls: string[]) => {
@@ -125,16 +97,6 @@ export const CreateQnAFromUrl: React.FC<CreateQnAFromFormProps> = (props) => {
         </p>
       </Stack>
       <Stack maxHeight={400} styles={urlStackStyle}>
-        <TextField
-          required
-          data-testid={`knowledgeLocationTextField-name`}
-          errorMessage={formDataErrors.name}
-          label={formatMessage('Knowledge base name')}
-          placeholder={formatMessage('Type a name for this knowledge base')}
-          styles={textFieldKBNameFromUrl}
-          value={formData.name}
-          onChange={(e, name) => onChangeNameField(name)}
-        />
         <Text styles={knowledgeBaseStyle}>{formatMessage('FAQ website (source)')}</Text>
         {formData.locales.map((locale, i) => {
           return (
