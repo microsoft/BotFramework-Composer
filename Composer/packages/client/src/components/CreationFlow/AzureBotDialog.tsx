@@ -97,8 +97,8 @@ export const AzureBotDialog = (props: Props) => {
         onChange={handleChange}
       />
       <DialogFooter>
-        <PrimaryButton data-testid="NextStepButton" text={formatMessage('Next')} onClick={handleJumpToNext} />
-        <DefaultButton text={formatMessage('Cancel')} onClick={onDismiss} />
+        <PrimaryButton data-testid="ABSNextStepButton" text={formatMessage('Next')} onClick={handleJumpToNext} />
+        <DefaultButton data-testid="ABSCancelButton" text={formatMessage('Cancel')} onClick={onDismiss} />
       </DialogFooter>
     </DialogWrapper>
   );

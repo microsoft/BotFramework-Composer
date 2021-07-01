@@ -11,8 +11,8 @@ context('Home Page ', () => {
   it('can open buttons in home page', () => {
     cy.findByTestId('LeftNav-CommandBarButtonHome').click();
     cy.findByTestId('homePage-Toolbar-New').click();
-    cy.findByText('Cancel').should('exist');
-    cy.findByText('Cancel').click();
+    cy.findByTestId('CreateBotCancelButton').should('exist');
+    cy.findByTestId('CreateBotCancelButton').click();
     cy.findByTestId('homePage-Toolbar-Open').click();
     cy.findByText('Select a Bot').should('exist');
     cy.findByText('Cancel').should('exist');
