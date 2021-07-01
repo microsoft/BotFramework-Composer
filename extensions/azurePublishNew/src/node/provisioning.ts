@@ -4,17 +4,13 @@
 import toposort from 'toposort';
 import { ResourceConfig } from './types';
 
-// --------------------------------------------------------------------------------
-// In this section are things that need to be moved and have overlaps resolved.
-// --------------------------------------------------------------------------------
-
-// This is what we have to remain compatible with
+// TODO: This is what we have to remain compatible with
 export type ProvisionConfig2 = {
   accessToken: string;
   graphToken: string;
   tenantId?: string;
   hostname: string; // for previous bot, it's ${name}-${environment}
-  externalResources: { key: string }[];
+  externalResources: { key: string; [key: string]: any }[];
   location: string;
   luisLocation: string;
   appServiceOperatingSystem?: string;
@@ -31,6 +27,8 @@ export type ProvisionConfig2 = {
   choice?: string;
   [key: string]: any;
 };
+
+// TODO: These types should be moved into their respective resource modules
 
 export type AppInsightsResourceConfig2 = ResourceConfig & {
   key: 'applicationInsights';
@@ -60,7 +58,6 @@ export type BlobStorageResourceConfig2 = ResourceConfig & {
 
 export type BotRegistrationResourceConfig2 = ResourceConfig & {
   key: 'botRegistration';
-  displayName: string;
   hostname: string;
   location?: string;
 };
@@ -110,19 +107,20 @@ export type WebAppResourceConfig2 = ResourceConfig & {
   operatingSystem: string;
 };
 
-// TODO: These need to be put in the resource definitions rather than the services
-const getResourceDependencies = (key: string) => {
+// TODO: Maybe these need to be put in the resource definitions rather than the services?
+// I think for now this should also go in availableResource.ts
+const getResourceDependencies = (key: string, isWebApp: boolean) => {
   switch (key) {
     case 'applicationInsights':
-      return ['botRegistration'];
+      return ['resourceGroup', 'botRegistration'];
     case 'appRegistration':
       return ['resourceGroup'];
     case 'azureFunctions':
-      return ['appRegistration', 'resourceGroup'];
+      return ['resourceGroup', 'appRegistration'];
     case 'blobStorage':
       return ['resourceGroup'];
     case 'botRegistration':
-      return ['appRegistration', 'resourceGroup', 'webApp'];
+      return ['resourceGroup', 'appRegistration', isWebApp ? 'webApp' : 'azureFunctions'];
     case 'cosmosDb':
       return ['resourceGroup'];
     case 'luisAuthoring':
@@ -141,9 +139,101 @@ const getResourceDependencies = (key: string) => {
   }
 };
 
-// --------------------------------------------------------------------------------
-// End of section
-// --------------------------------------------------------------------------------
+// TODO: I think this should be moved to the central place resources are registered (availableResources.ts)
+// It could be part of the provisioning service, but then each resource module ends up knowing about ProvisionConfig2
+const provisionConfigToResourceConfigMap = {
+  applicationInsights: (config: ProvisionConfig2): AppInsightsResourceConfig2 => {
+    return {
+      key: 'applicationInsights',
+      location: config.location,
+      hostname: config.hostname,
+    };
+  },
+  appRegistration: (config: ProvisionConfig2): AppRegistrationResourceConfig2 => {
+    return {
+      key: 'appRegistration',
+      hostname: config.hostname,
+    };
+  },
+  azureFunctions: (config: ProvisionConfig2): AzureFunctionResourceConfig2 => {
+    return {
+      key: 'azureFunctions',
+      location: config.location,
+      name: config.hostname,
+      workerRuntime: config.workerRuntime,
+      operatingSystem: config.appServiceOperatingSystem,
+    };
+  },
+  blobStorage: (config: ProvisionConfig2): BlobStorageResourceConfig2 => {
+    return {
+      key: 'blobStorage',
+      containerName: 'transcripts',
+      hostname: config.hostname,
+      location: config.location,
+    };
+  },
+  botRegistration: (config: ProvisionConfig2): BotRegistrationResourceConfig2 => {
+    return {
+      key: 'botRegistration',
+      hostname: config.hostname,
+      location: config.location,
+    };
+  },
+  cosmosDb: (config: ProvisionConfig2): CosmosDbResourceConfig2 => {
+    return {
+      key: 'cosmosDb',
+      containerName: 'botstate-container',
+      databaseName: 'botstate-db',
+      hostname: config.hostname,
+      location: config.location,
+    };
+  },
+  luisAuthoring: (config: ProvisionConfig2): LuisAuthoringResourceConfig2 => {
+    return {
+      key: 'luisAuthoring',
+      hostname: config.hostname,
+      location: config.location,
+    };
+  },
+  luisPrediction: (config: ProvisionConfig2): LuisPredictionResourceConfig2 => {
+    return {
+      key: 'luisPrediction',
+      hostname: config.hostname,
+      location: config.location,
+    };
+  },
+  qna: (config: ProvisionConfig2): QnAResourceConfig2 => {
+    return {
+      key: 'qna',
+      hostname: config.hostname,
+      location: config.location,
+    };
+  },
+  resourceGroup: (config: ProvisionConfig2): ResourceGroupResourceConfig2 => {
+    return {
+      key: 'resourceGroup',
+      name: config.resourceGroup || config.hostname,
+    };
+  },
+  servicePlan: (config: ProvisionConfig2): ServicePlanResourceConfig2 => {
+    return {
+      key: 'servicePlan',
+      name: config.hostname,
+      location: config.location,
+      operatingSystem: config.appServiceOperatingSystem,
+    };
+  },
+  webApp: (config: ProvisionConfig2): WebAppResourceConfig2 => {
+    return {
+      key: 'webApp',
+      hostname: config.hostname,
+      location: config.location,
+      operatingSystem: config.appServiceOperatingSystem,
+    };
+  },
+};
+
+// getResourceConfigs should remain in provisioning.ts
 
 /**
  * Given a provisioning config this returns an ordered list of resource configurations.
@@ -153,113 +243,42 @@ export const getResourceConfigs = (config: ProvisionConfig2): ResourceConfig[] =
 
   const resourceKeys = config.externalResources.map((r) => r.key).concat('resourceGroup');
 
-  console.log(resourceKeys);
+  const hasWebAppResource = config.externalResources.some((r) => r.key === 'webApp');
+  const hasAzureFunctionResource = config.externalResources.some((r) => r.key === 'azureFunctions');
 
-  var dependencies: ReadonlyArray<[string, string | undefined]> = resourceKeys.reduce((result, key) => {
-    const deps = getResourceDependencies(key);
-    deps.length > 0 ? deps.forEach((d) => result.push([key, d])) : result.push([key, undefined]);
-    return result;
-  }, []);
+  if (hasWebAppResource && hasAzureFunctionResource) {
+    throw new Error('The App Service cannot be both a web application and an azure function.');
+  }
 
-  console.log(dependencies);
+  const isWebApp = hasWebAppResource || !hasAzureFunctionResource;
 
-  const order = toposort(dependencies).filter(Boolean);
+  const dependencies: Array<[string, string | undefined]> = [];
 
-  console.log(order);
+  const discoverDependencies = (key: string) => {
+    // if a key was already handled, return
+    if (dependencies.some((d) => d[0] === key)) {
+      return;
+    }
 
+    const deps = getResourceDependencies(key, isWebApp);
+    if (deps.length === 0) {
+      dependencies.push([key, undefined]);
+    } else {
+      deps.forEach((d) => {
+        dependencies.push([key, d]);
+        discoverDependencies(d);
+      });
+    }
+  };
+
+  resourceKeys.forEach(discoverDependencies);
+  const order = toposort(dependencies).reverse().filter(Boolean);
   order.forEach((key) => {
-    switch (key) {
-      case 'applicationInsights':
-        resources.push({
-          key,
-          location: config.location,
-          hostname: config.hostname,
-        } as AppInsightsResourceConfig2);
-        break;
-      case 'appRegistration':
-        resources.push({
-          key,
-          hostname: config.hostname,
-        } as AppRegistrationResourceConfig2);
-        break;
-      case 'azureFunctions':
-        resources.push({
-          location: config.location,
-          name: config.hostname,
-          workerRuntime: config.workerRuntime,
-          operatingSystem: config.appServiceOperatingSystem,
-        } as AzureFunctionResourceConfig2);
-        break;
-      case 'blobStorage':
-        resources.push({
-          key,
-          containerName: 'transcripts',
-          hostname: config.hostname,
-          location: config.location,
-        } as BlobStorageResourceConfig2);
-        break;
-      case 'botRegistration':
-        resources.push({
-          key,
-          location: config.location,
-          hostname: config.hostname,
-          displayName: config.hostname,
-        } as BotRegistrationResourceConfig2);
-        break;
-      case 'cosmosDb':
-        resources.push({
-          key,
-          containerName: 'botstate-container',
-          databaseName: 'botstate-db',
-          hostname: config.hostname,
-          location: config.location,
-        } as CosmosDbResourceConfig2);
-        break;
-      case 'luisAuthoring':
-        resources.push({
-          key,
-          hostname: config.hostname,
-          location: config.location,
-        } as LuisAuthoringResourceConfig2);
-        break;
-      case 'luisPrediction':
-        resources.push({
-          key,
-          hostname: config.hostname,
-          location: config.location,
-        } as LuisPredictionResourceConfig2);
-        break;
-      case 'qna':
-        resources.push({
-          key,
-          hostname: config.hostname,
-          location: config.location,
-        } as QnAResourceConfig2);
-        break;
-      case 'resourceGroup':
-        resources.push({
-          key: 'resourceGroup',
-          name: config.resourceGroup ?? config.hostname,
-        } as ResourceGroupResourceConfig2);
-        break;
-      case 'servicePlan':
-        resources.push({
-          key,
-          name: config.hostname,
-          location: config.location,
-          operatingSystem: config.appServiceOperatingSystem,
-        } as ServicePlanResourceConfig2);
-        break;
-      case 'webApp':
-        resources.push({
-          key,
-          hostname: config.hostname,
-          location: config.location,
-          operatingSystem: config.appServiceOperatingSystem,
-        } as WebAppResourceConfig2);
-        break;
-      default:
-        break;
+    const mapper = provisionConfigToResourceConfigMap[key];
+    if (mapper) {
+      resources.push(mapper(config));
+    } else {
+      throw new Error(`Could not create resource configuration for provisioning for unexpected key ${key}`);
     }
   });
 
