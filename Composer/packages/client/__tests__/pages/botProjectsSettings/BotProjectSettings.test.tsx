@@ -17,7 +17,6 @@ import {
 } from '../../../src/recoilModel';
 import { currentProjectIdState } from '../../../src/recoilModel';
 import { SAMPLE_DIALOG } from '../../mocks/sampleDialog';
-import BotProjectInfo from '../../../src/pages/botProject/BotProjectInfo';
 import BotProjectSettings from '../../../src/pages/botProject/BotProjectSettings';
 
 const projectId = '12345.6789';
