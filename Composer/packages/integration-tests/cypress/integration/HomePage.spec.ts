@@ -60,8 +60,6 @@ context('Home Page ', () => {
     cy.wait(3000);
     cy.findByTestId('@microsoft/generator-bot-empty').click();
     cy.findByTestId('CreateBotNextStepButton').click();
-    cy.findByTestId('NewDialogRuntimeType').click();
-    cy.findByText('Azure Web App').click();
     cy.enterTextAndSubmit('NewDialogName', 'TestNewProject3', 'SubmitNewBotBtn');
     cy.wait(100000);
     cy.findByTestId('ProjectTree').within(() => {
