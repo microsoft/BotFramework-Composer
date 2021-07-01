@@ -29,9 +29,16 @@ export const VisualEditorEdgeMenu: EdgeMenuComponent = ({ arrayId, arrayPosition
   );
 };
 
-export const VisualEditorNodeWrapper: NodeWrapperComponent = ({ nodeId, nodeData, nodeTab, onEvent, children }) => {
+export const VisualEditorNodeWrapper: NodeWrapperComponent = ({
+  nodeId,
+  nodeData,
+  nodeTab,
+  onEvent,
+  children,
+  ...rest
+}) => {
   return (
-    <ActionNodeWrapper data={nodeData} id={nodeId} tab={nodeTab as any} onEvent={onEvent}>
+    <ActionNodeWrapper data={nodeData} id={nodeId} tab={nodeTab as any} onEvent={onEvent} {...rest}>
       {children}
     </ActionNodeWrapper>
   );

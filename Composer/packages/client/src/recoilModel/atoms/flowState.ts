@@ -17,3 +17,8 @@ export const rateInfoState = atom<ZoomInfo>({
     currentRate: 1,
   },
 });
+
+export const flowCommentsVisibilityState = atom<boolean>({
+  key: getFullyQualifiedKey('flowCommentsVisibility'),
+  default: false,
+});

@@ -8,6 +8,7 @@ import formatMessage from 'format-message';
 import { DefinitionSummary } from '@bfc/shared';
 import { TooltipHost, DirectionalHint } from 'office-ui-fabric-react/lib/Tooltip';
 import { useMenuConfig } from '@bfc/extension-client';
+import { IconMenu } from '@bfc/ui-shared';
 
 // TODO: leak of visual-sdk domain (EdgeAddButtonSize)
 import { EdgeAddButtonSize } from '../../../adaptive-flow-renderer/constants/ElementSizes';
@@ -17,7 +18,6 @@ import { SelfHostContext } from '../../contexts/SelfHostContext';
 import { AttrNames } from '../../constants/ElementAttributes';
 import { MenuTypes } from '../../constants/MenuTypes';
 import { ObiColors } from '../../../adaptive-flow-renderer/constants/ElementColors';
-import { IconMenu } from '../../components/IconMenu';
 
 import { createActionMenu } from './createSchemaMenu';
 
@@ -84,6 +84,8 @@ export const EdgeMenu: React.FC<EdgeMenuProps> = ({ id, onClick }) => {
     >
       <TooltipHost content={moreLabel} directionalHint={DirectionalHint.rightCenter}>
         <IconMenu
+          // eslint-disable-next-line jsx-a11y/no-autofocus
+          autoFocus={nodeSelected}
           handleMenuShow={handleMenuShow}
           iconName="Add"
           iconSize={7}
@@ -102,7 +104,6 @@ export const EdgeMenu: React.FC<EdgeMenuProps> = ({ id, onClick }) => {
           }}
           label={moreLabel}
           menuItems={menuItems}
-          nodeSelected={nodeSelected}
         />
       </TooltipHost>
     </div>

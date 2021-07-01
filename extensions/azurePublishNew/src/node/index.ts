@@ -77,7 +77,12 @@ const createAzurePublishPlugin = (): PublishPlugin<ProvisionConfig> => {
       status: 202,
       message: 'Creating Azure resources...',
     });
-    setUpProvisionService(config);
+
+    const onProgress = (status: number, message: string) => {
+      processTracker.update(processId, { status: status, message: message });
+    };
+
+    setUpProvisionService(config, onProgress);
     return processTracker.get(processId);
   };
 

@@ -167,6 +167,7 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
           if (isShowAuthDialog(false)) {
             setShowAuthDialog(true);
           }
+
           newtoken = getTokenFromCache('accessToken');
         } else {
           newtoken = await getTokenInteractively(config.tenantId);
@@ -284,6 +285,7 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
               location: 'global',
             },
           };
+          break;
       }
       await httpClient.put(url, data, { headers: { Authorization: `Bearer ${token}` } });
       if (channelId === CHANNELS.TEAMS) {
@@ -567,6 +569,7 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
         <Toggle
           inlineLabel
           checked={channelStatus?.[key].enabled}
+          data-testid={`${key}_toggle`}
           disabled={channelStatus?.[key].loading}
           styles={{ root: { paddingTop: '8px' } }}
           onChange={toggleService(key)}
@@ -606,7 +609,6 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
       </div>
     </div>
   );
-
   return (
     <React.Fragment>
       {showAuthDialog && (
@@ -652,6 +654,7 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
       )}
       <div>
         <Dropdown
+          data-testid="publishTargetDropDown"
           options={publishTargetOptions}
           placeholder={formatMessage('Select publishing profile')}
           styles={{

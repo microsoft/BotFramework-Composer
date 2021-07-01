@@ -93,6 +93,7 @@ export type ApplicationContextApi = {
   setApplicationLevelError: (err: any) => void;
   confirm: (title: string, subTitle: string, settings?: any) => Promise<boolean>;
   updateFlowZoomRate: (currentRate: number) => void;
+  toggleFlowComments: () => void;
   telemetryClient: TelemetryClient;
   addNotification: (notification: Notification) => string;
   deleteNotification: (id: string) => void;
@@ -109,6 +110,7 @@ export type ApplicationContext = {
   // TODO: remove
   schemas: BotSchemas;
   flowZoomRate: ZoomInfo;
+  flowCommentsVisible: boolean;
 
   httpClient: HttpClient;
 };

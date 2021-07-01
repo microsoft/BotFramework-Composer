@@ -6,6 +6,7 @@ import { ListOverview } from '@bfc/ui-shared';
 
 import {
   ActionCard,
+  ActionCardBody,
   DialogRef,
   PromptWidget,
   IfConditionWidget,
@@ -18,6 +19,7 @@ import {
 
 const builtinActionWidgets: FlowEditorWidgetMap = {
   ActionCard,
+  ActionCardBody,
   DialogRef,
   PromptWidget,
   IfConditionWidget,

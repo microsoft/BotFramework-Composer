@@ -133,6 +133,7 @@ const ExternalAdapterSettings = (props: Props) => {
           a: ({ children }) => (
             <Link
               key="link"
+              data-testid="packageManagerDeepLink"
               onClick={() => {
                 navigateTo(`/bot/${projectId}/plugin/package-manager/package-manager`);
               }}
