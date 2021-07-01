@@ -3,7 +3,7 @@
 
 import { LogData, TelemetryEventName, TelemetryEvents, TelemetrySettings } from '@bfc/shared';
 
-import { aggregateClient } from './AggregateClient';
+import { aggregateClient } from './aggregateClient';
 import AppInsightsClient from './AppInsightsClient';
 import ConsoleClient from './ConsoleClient';
 
