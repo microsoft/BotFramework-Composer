@@ -114,6 +114,16 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
     );
   };
 
+  private isPortUsed = (port: number) => {
+    for (const key in LocalPublisher.runningBots) {
+      const bot = LocalPublisher.runningBots[key];
+      if (bot?.port === port) {
+        return true;
+      }
+    }
+    return false;
+  };
+
   private publishAsync = async (botId: string, version: string, fullSettings: DialogSetting, project: any, user) => {
     try {
       let port;
@@ -126,7 +136,10 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
       if (!port) {
         // Portfinder is the stablest amongst npm libraries for finding ports. https://github.com/http-party/node-portfinder/issues/61. It does not support supplying an array of ports to pick from as we can have a race conidtion when starting multiple bots at the same time. As a result, getting the max port number out of the range and starting the range from the max.
         const maxPort = max(map(LocalPublisher.runningBots, 'port')) ?? 3979;
-        port = await portfinder.getPortPromise({ port: maxPort + 1, stopPort: 6000 });
+        do {
+          port = await portfinder.getPortPromise({ port: maxPort + 1, stopPort: 6000 });
+        } while (this.isPortUsed(port));
+
         const updatedBotData: RunningBot = {
           ...LocalPublisher.runningBots[botId],
           port,
