@@ -26,12 +26,7 @@ export type BotServiceConfig = ResourceConfig & {
 export type BotChannelResult = {
   botName: string;
 };
-export type CosmosDbConfig = ResourceConfig & {
-  key: 'cosmosDb';
-  name: string;
-  location: string;
-  resourceGroupName: string;
-};
+
 export type BlobStorageConfigNew = ResourceConfig & {
   key: 'blobStorage';
 };

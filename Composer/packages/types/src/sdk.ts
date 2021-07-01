@@ -5,6 +5,7 @@ export type DesignerData = {
   name?: string;
   description?: string;
   id: string;
+  comment?: string;
 
   /** PVA link */
   link?: string;

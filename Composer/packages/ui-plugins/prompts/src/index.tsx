@@ -95,6 +95,7 @@ const generateInputSchema = (inputBody?, inputFooter?): FlowWidget => ({
     },
     body: inputBody,
     footer: inputFooter,
+    hideComment: true,
   },
 });
 

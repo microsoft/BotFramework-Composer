@@ -28,6 +28,7 @@ const APPLICATION_KEYS = [
   'api.setApplicationLevelError',
   'api.confirm',
   'api.updateFlowZoomRate',
+  'api.toggleComments',
   'api.telemetryClient',
   'api.addNotification',
   'api.deleteNotification',

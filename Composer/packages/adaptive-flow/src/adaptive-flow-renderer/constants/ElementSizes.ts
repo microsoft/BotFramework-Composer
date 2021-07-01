@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 export const StandardNodeWidth = 300;
-export const StandardSectionHeight = 30;
+export const StandardSectionHeight = 32;
 export const HeaderHeight = StandardSectionHeight;
 
 export const InitNodeSize = {

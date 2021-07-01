@@ -1,7 +1,13 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { ProvisionConfig, ResourceConfig, ResourceDefinition, ResourceProvisionService } from './types';
+import {
+  ProvisionConfig,
+  OnProvisionProgress,
+  ResourceConfig,
+  ResourceDefinition,
+  ResourceProvisionService,
+} from './types';
 import { appInsightsDefinition, getAppInsightsProvisionService } from './azureResources/appInsights';
 import { appRegistrationDefinition, getAppRegistrationProvisionService } from './azureResources/appRegistration';
 import { azureFunctionDefinition, getAzureFunctionsProvisionService } from './azureResources/azureFunction';
@@ -32,31 +38,28 @@ export const getProvisionServices = (config: ProvisionConfig): Record<string, Re
   return {
     appRegistration: getAppRegistrationProvisionService(config),
     webApp: getWebAppProvisionService(config),
+    servicePlan: getAppServiceProvisionService(config),
     botRegistration: getBotChannelProvisionService(),
     azureFunctionApp: getAzureFunctionsProvisionService(),
-    cosmosDB: getCosmosDbProvisionService(),
+    cosmosDB: getCosmosDbProvisionService(config),
     appInsights: getAppInsightsProvisionService(),
     luisAuthoring: getLuisAuthoringProvisionService(),
     luisPrediction: getLuisPredictionProvisionService(),
     blobStorage: getBlogStorageProvisionService(),
     qna: getQnAProvisionService(),
-    servicePlan: getAppServiceProvisionService(),
   };
 };
 
-export const setUpProvisionService = (config: ProvisionConfig) => {
+export const setUpProvisionService = (config: ProvisionConfig, onProgress: OnProvisionProgress) => {
   const provisionServices = getProvisionServices(config);
 
-  const provision = (): void => {
-    const selectedResources: ResourceConfig[] = [];
+  const provision = (selectedResources: ResourceConfig[]): void => {
+    let workingSet: Record<string, object> = {};
 
-    const provisionServices = getProvisionServices(config);
-
-    const workingSet: Record<string, object> = {};
-    selectedResources.forEach((resourceConfig) => {
-      const service = provisionServices[resourceConfig.key];
+    selectedResources.forEach(async (resourceConfig) => {
+      const service: ResourceProvisionService = provisionServices[resourceConfig.key];
       if (service) {
-        service.provision(resourceConfig, workingSet);
+        workingSet = await service.provision(resourceConfig, workingSet, onProgress);
       }
     });
   };

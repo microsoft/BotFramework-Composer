@@ -5,10 +5,20 @@ import { AxiosRequestConfig } from 'axios';
 import * as rp from 'request-promise';
 
 import { createCustomizeError, ProvisionErrors } from '../../../../azurePublish/src/node/utils/errorHandler';
-import { ProvisionConfig, ProvisionWorkingSet, ResourceDefinition, ResourceProvisionService } from '../types';
+import {
+  ProvisionConfig,
+  ProvisionWorkingSet,
+  ResourceConfig,
+  ResourceDefinition,
+  ResourceProvisionService,
+} from '../types';
 
-import { FREE_APP_REGISTRATION_TIER, AZURE_HOSTING_GROUP_NAME } from './constants';
-import { AppRegistrationResult } from './types';
+import { AZURE_HOSTING_GROUP_NAME, FREE_APP_REGISTRATION_TIER } from './constants';
+
+type AppRegistrationResourceConfig = ResourceConfig & {
+  key: 'appRegistration';
+  appName: string;
+};
 
 export const appRegistrationDefinition: ResourceDefinition = {
   key: 'appRegistration',
@@ -48,11 +58,8 @@ const postRequestWithRetry = async (requestUri: string, requestOptions: AxiosReq
   return result;
 };
 
-const appRegistrationProvisionMethod = async (
-  config: ProvisionConfig,
-  workingSet: ProvisionWorkingSet
-): Promise<ProvisionWorkingSet> => {
-  const { graphToken } = config.credentials;
+const appRegistrationProvisionMethod = (provisionConfig: ProvisionConfig) => {
+  const { graphToken } = provisionConfig;
   const requestOptions: rp.RequestPromiseOptions = {
     json: true,
     headers: { Authorization: `Bearer ${graphToken}` },
@@ -82,15 +89,18 @@ const appRegistrationProvisionMethod = async (
     return passwordSet.secretText;
   };
 
-  const { webAppName } = config;
-  const { appId, id } = await createApp(webAppName);
-  const appPassword = await addPassword(webAppName, id);
+  return async (
+    resourceConfig: AppRegistrationResourceConfig,
+    workingSet: ProvisionWorkingSet
+  ): Promise<ProvisionWorkingSet> => {
+    const { appName } = resourceConfig;
+    const { appId, id } = await createApp(appName);
+    const appPassword = await addPassword(appName, id);
 
-  const provisionResult: AppRegistrationResult = { key: 'appRegistration', appId, appPassword };
-
-  return {
-    ...workingSet,
-    appRegistration: provisionResult,
+    return {
+      ...workingSet,
+      appRegistration: { appId, appPassword },
+    };
   };
 };
 
@@ -99,6 +109,7 @@ export const getAppRegistrationProvisionService = (config: ProvisionConfig): Res
     getDependencies: () => [],
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     getRecommendationForProject: (project) => 'required',
-    provision: appRegistrationProvisionMethod,
+    provision: appRegistrationProvisionMethod(config),
+    canPollStatus: false,
   };
 };

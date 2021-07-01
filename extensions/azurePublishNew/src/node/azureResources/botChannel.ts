@@ -38,5 +38,6 @@ export const getBotChannelProvisionService = (): ResourceProvisionService => {
     getDependencies: () => ['appRegistration', 'webApp'],
     getRecommendationForProject: (project) => 'required',
     provision: getBotChannelProvisionMethod(),
+    canPollStatus: false,
   };
 };

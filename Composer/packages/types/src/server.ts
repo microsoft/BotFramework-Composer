@@ -95,3 +95,5 @@ export type ConversationNetworkErrorItem = {
   timestamp: number;
   trafficType: 'networkError';
 };
+
+export { Activity };
