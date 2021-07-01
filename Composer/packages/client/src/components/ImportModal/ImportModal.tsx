@@ -50,6 +50,51 @@ type ImportModalState =
 
 const CONNECTING_STATUS_DISPLAY_TIME = 2000;
 
+export const signIn = async (
+  importSource: ExternalContentProviderType | undefined,
+  importPayload: ImportPayload,
+  setModalState
+) => {
+  try {
+    await axios.post(
+      `/api/import/${importSource}/authenticate?payload=${encodeURIComponent(JSON.stringify(importPayload))}`
+    );
+    setModalState('downloadingContent');
+  } catch (e) {
+    // something went wrong, abort and navigate to the home page
+    console.error(`Something went wrong during authenticating import: ${e}`);
+    navigate('/home');
+  }
+};
+
+export const importAsNewProject = (info: ImportedProjectInfo) => {
+  // navigate to creation flow with template selected
+  const { alias, description, eTag, name, source, templateDir, urlSuffix } = info;
+  const state = {
+    alias,
+    eTag,
+    imported: true,
+    templateDir,
+    urlSuffix,
+  };
+
+  let creationUrl = `/projects/create/${encodeURIComponent(source)}`;
+
+  const searchParams = new URLSearchParams();
+  if (name) {
+    const validName = source === 'pva' ? name.replace(invalidNameCharRegex, '-') : name;
+    searchParams.set('name', encodeURIComponent(validName));
+  }
+  if (description) {
+    searchParams.set('description', encodeURIComponent(description));
+  }
+  if (searchParams.toString()) {
+    creationUrl += `?${searchParams.toString()}`;
+  }
+
+  return { creationUrl, state };
+};
+
 export const ImportModal: React.FC<RouteComponentProps> = (props) => {
   const { location } = props;
   const [importSource, setImportSource] = useState<ExternalContentProviderType | undefined>(undefined);
@@ -60,34 +105,6 @@ export const ImportModal: React.FC<RouteComponentProps> = (props) => {
   const [error, setError] = useState<Error | undefined>(undefined);
   const [backupLocation, setBackupLocation] = useState<string>('');
   const { addNotification } = useRecoilValue(dispatcherState);
-
-  const importAsNewProject = useCallback((info: ImportedProjectInfo) => {
-    // navigate to creation flow with template selected
-    const { alias, description, eTag, name, source, templateDir, urlSuffix } = info;
-    const state = {
-      alias,
-      eTag,
-      imported: true,
-      templateDir,
-      urlSuffix,
-    };
-
-    let creationUrl = `/projects/create/${encodeURIComponent(source)}`;
-
-    const searchParams = new URLSearchParams();
-    if (name) {
-      const validName = source === 'pva' ? name.replace(invalidNameCharRegex, '-') : name;
-      searchParams.set('name', encodeURIComponent(validName));
-    }
-    if (description) {
-      searchParams.set('description', encodeURIComponent(description));
-    }
-    if (searchParams.toString()) {
-      creationUrl += `?${searchParams.toString()}`;
-    }
-
-    navigate(creationUrl, { state });
-  }, []);
 
   const importToExistingProject = useCallback(async () => {
     if (importedProjectInfo && existingProject) {
@@ -170,7 +187,8 @@ export const ImportModal: React.FC<RouteComponentProps> = (props) => {
                 return;
               }
             }
-            importAsNewProject(projectInfo);
+            const { creationUrl, state } = importAsNewProject(projectInfo);
+            navigate(creationUrl, { state });
           } catch (e) {
             // something went wrong, abort and navigate to the home page
             console.error(`Something went wrong during import: ${e}`);
@@ -184,19 +202,7 @@ export const ImportModal: React.FC<RouteComponentProps> = (props) => {
 
   useEffect(() => {
     if (modalState === 'signingIn') {
-      const signIn = async () => {
-        try {
-          await axios.post(
-            `/api/import/${importSource}/authenticate?payload=${encodeURIComponent(JSON.stringify(importPayload))}`
-          );
-          setModalState('downloadingContent');
-        } catch (e) {
-          // something went wrong, abort and navigate to the home page
-          console.error(`Something went wrong during authenticating import: ${e}`);
-          navigate('/home');
-        }
-      };
-      signIn();
+      signIn(importSource, importPayload, setModalState);
     }
   }, [modalState, importSource, importPayload]);
 
@@ -234,9 +240,10 @@ export const ImportModal: React.FC<RouteComponentProps> = (props) => {
 
   const createNewProxy = useCallback(() => {
     if (importedProjectInfo) {
-      importAsNewProject(importedProjectInfo);
+      const { creationUrl, state } = importAsNewProject(importedProjectInfo);
+      navigate(creationUrl, { state });
     }
-  }, [importedProjectInfo, importAsNewProject]);
+  }, [importedProjectInfo]);
 
   const modalContent = useMemo(() => {
     switch (modalState) {

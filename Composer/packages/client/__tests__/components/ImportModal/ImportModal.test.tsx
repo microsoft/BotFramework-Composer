@@ -3,10 +3,11 @@
 
 import React from 'react';
 import { RecoilRoot } from 'recoil';
-import { render, waitFor } from '@botframework-composer/test-utils';
+import { render } from '@botframework-composer/test-utils';
 
-import { ImportModal } from '../../../src/components/ImportModal/ImportModal';
+import { ImportModal, importAsNewProject } from '../../../src/components/ImportModal/ImportModal';
 import { dispatcherState } from '../../../src/recoilModel';
+
 describe('<ImportModal />', () => {
   let locationMock;
   const initRecoilState = ({ set }) => {
@@ -27,10 +28,26 @@ describe('<ImportModal />', () => {
     const connecting = await findByTestId('importModalConnecting');
     expect(connecting).not.toBeNull();
     expect(connecting).toHaveTextContent('Connecting to external service to import bot content...');
+  });
 
-    // signin state
-    await waitFor(async () => {
-      expect(findByTestId('loginPlaceHolder')).not.toBeNull();
+  it('test importAsNewProject', async () => {
+    const mockInfo = {
+      alias: 'test',
+      description: 'test',
+      eTag: 'test',
+      name: 'test',
+      source: 'test',
+      templateDir: 'test',
+      urlSuffix: 'test',
+    };
+    const { creationUrl, state } = importAsNewProject(mockInfo);
+    expect(creationUrl).toBe('/projects/create/test?name=test&description=test');
+    expect(state).toEqual({
+      alias: 'test',
+      eTag: 'test',
+      imported: true,
+      templateDir: 'test',
+      urlSuffix: 'test',
     });
   });
 });
