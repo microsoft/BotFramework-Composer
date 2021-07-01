@@ -17,6 +17,7 @@ OS                | Version            | Architectures
 ------------------|--------------------|---------------
 Mac OS X          | 10.14+             | x64
 
+Note: Composer does **not** run on Apple M1 hardware.
 
 ## Linux
 
