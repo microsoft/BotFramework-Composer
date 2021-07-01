@@ -12,6 +12,9 @@ export default class TelemetryClient {
   private static _telemetrySettings?: TelemetrySettings;
 
   public static setup(telemetrySettings: TelemetrySettings, additionalProperties: LogData | (() => LogData)) {
+    AppInsightsClient.setup(telemetrySettings);
+    ConsoleClient.setup(telemetrySettings);
+
     if (this._telemetrySettings?.allowDataCollection !== telemetrySettings.allowDataCollection) {
       this.client?.drain();
     }
@@ -41,12 +44,10 @@ export default class TelemetryClient {
   }
 
   private static get client() {
-    if (this._telemetrySettings?.allowDataCollection) {
-      if (process.env.NODE_ENV !== 'development') {
-        return AppInsightsClient;
-      } else {
-        return AggregateClient(AppInsightsClient, ConsoleClient);
-      }
+    if (process.env.NODE_ENV !== 'development') {
+      return AppInsightsClient;
+    } else {
+      return AggregateClient(AppInsightsClient, ConsoleClient);
     }
   }
 

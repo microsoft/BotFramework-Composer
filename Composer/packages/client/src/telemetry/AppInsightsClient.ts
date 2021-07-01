@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { LogData, TelemetryEvent, TelemetryEventTypes } from '@bfc/shared';
+import { LogData, TelemetryEvent, TelemetryEventTypes, TelemetrySettings, persistedEvents } from '@bfc/shared';
 import chunk from 'lodash/chunk';
 
 import httpClient from '../utils/httpUtil';
@@ -10,27 +10,50 @@ const BATCH_SIZE = 20;
 export default class AppInsightsClient {
   private static _eventPool: TelemetryEvent[] = [];
   private static _intervalId: NodeJS.Timeout | null = null;
+  private static _telemetrySettings?: TelemetrySettings;
+
+  public static setup(telemetrySettings: TelemetrySettings) {
+    this._telemetrySettings = telemetrySettings;
+
+    // If data collection is enabled, log persisted events to app insights
+    if (telemetrySettings.allowDataCollection) {
+      this.drain();
+    }
+  }
 
   public static trackEvent(name: string, properties: LogData) {
-    this.startInterval();
-    this._eventPool.push({ type: TelemetryEventTypes.TrackEvent, name, properties });
-    if (this._eventPool.length >= BATCH_SIZE) {
-      this.drain();
+    if (this._telemetrySettings?.allowDataCollection) {
+      this.startInterval();
+      this._eventPool.push({ type: TelemetryEventTypes.TrackEvent, name, properties });
+      if (this._eventPool.length >= BATCH_SIZE) {
+        this.drain();
+      }
+    } else if (persistedEvents.includes(name)) {
+      /**
+       * persistedEvents is an array of telemetry events that occur before the user has
+       * had a chance to opt in to data collection. These events are added to the event queue;
+       * however, they are only logged to Application Insights after the user opts in to data collection.
+       */
+      this._eventPool.push({ type: TelemetryEventTypes.TrackEvent, name, properties });
     }
   }
 
   public static logPageView(name: string, url: string, properties: LogData) {
-    this.startInterval();
-    this._eventPool.push({ type: TelemetryEventTypes.PageView, name, properties, url });
-    if (this._eventPool.length >= BATCH_SIZE) {
-      this.drain();
+    if (this._telemetrySettings?.allowDataCollection) {
+      this.startInterval();
+      this._eventPool.push({ type: TelemetryEventTypes.PageView, name, properties, url });
+      if (this._eventPool.length >= BATCH_SIZE) {
+        this.drain();
+      }
     }
   }
 
   public static drain() {
-    const events = this._eventPool.splice(0, this._eventPool.length);
-    const batches = chunk(events, BATCH_SIZE);
-    return Promise.all(batches.map(this.postEvents));
+    if (this._telemetrySettings?.allowDataCollection) {
+      const events = this._eventPool.splice(0, this._eventPool.length);
+      const batches = chunk(events, BATCH_SIZE);
+      return Promise.all(batches.map(this.postEvents));
+    }
   }
 
   private static async postEvents(events: TelemetryEvent[]) {

@@ -40,7 +40,7 @@ export enum PageNames {
 
 type ApplicationEvents = {
   NotificationPanelOpened: undefined;
-  HandoffToComposerCompleted: { source: string };
+  HandoffToComposerCompleted: { appId?: string | null; source?: string | null };
 };
 
 type GettingStartedEvents = {
@@ -267,6 +267,13 @@ export type TelemetryEvents = ApplicationEvents &
   CreationEvents &
   SurveyEvents &
   DebuggingEvents;
+
+/**
+ * persistedEvents is an array of telemetry events that occur before the user has
+ * had a chance to opt in to data collection. These events are added to the event queue;
+ * however, they are only logged to Application Insights after the user opts in to data collection.
+ */
+export const persistedEvents = ['SessionStarted', 'HandoffToComposerCompleted'];
 
 export type TelemetryEventName = keyof TelemetryEvents;
 
