@@ -56,7 +56,7 @@ export const downloadModel = async (
   return await pollUntilDone(async () => (await httpClient.get(resp.data)).data !== DownloadState.DOWNLOADING, 5000);
 };
 
-export const availableLanguageModels = async (
+export const getAvailableLanguageModels = async (
   recognizerFiles: RecognizerFile[],
   botSettings?: DialogSetting
 ): Promise<OrchestratorModelRequest[]> => {
@@ -122,7 +122,7 @@ export const orchestratorDispatcher = () => {
         const downloadNotification = createNotification(orchestratorDownloadNotificationProps());
         const botSettings: DialogSetting = await snapshot.getPromise(settingsState(projectId));
         try {
-          const languageModels = await availableLanguageModels(recognizers, botSettings);
+          const languageModels = await getAvailableLanguageModels(recognizers, botSettings);
           for (const languageModel of languageModels) {
             await downloadModel('/orchestrator/download', languageModel, () => {
               updateNotificationInternal(callbackHelpers, downloadNotification.id, downloadNotification);

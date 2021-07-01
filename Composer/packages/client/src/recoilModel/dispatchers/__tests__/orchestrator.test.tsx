@@ -4,7 +4,7 @@
 import { RecognizerFile, SDKKinds } from '@bfc/shared';
 
 import httpClient from '../../../utils/httpUtil';
-import { availableLanguageModels } from '../orchestrator';
+import { getAvailableLanguageModels } from '../orchestrator';
 
 describe('Orchestrator model picking logic', () => {
   beforeEach(() => {
@@ -23,8 +23,8 @@ describe('Orchestrator model picking logic', () => {
       { id: 'en-us', content: { $kind: SDKKinds.OrchestratorRecognizer } },
       { id: 'test.nonsense-locale.dialog', content: { $kind: SDKKinds.OrchestratorRecognizer } },
     ];
-    expect(await availableLanguageModels(recognizerFiles)).toHaveLength(0);
-    expect(await availableLanguageModels([])).toHaveLength(0);
+    expect(await getAvailableLanguageModels(recognizerFiles)).toHaveLength(0);
+    expect(await getAvailableLanguageModels([])).toHaveLength(0);
   });
 
   it('return en model only once', async () => {
@@ -35,26 +35,32 @@ describe('Orchestrator model picking logic', () => {
       { id: 'test.en-us.dialog', content: { $kind: SDKKinds.OrchestratorRecognizer } },
       { id: 'test.en-sg.dialog', content: { $kind: SDKKinds.OrchestratorRecognizer } },
     ];
-    expect(await availableLanguageModels(recognizerFiles)).toHaveLength(1);
-    expect(await availableLanguageModels(recognizerFiles)).toEqual([{ kind: 'en_intent', name: 'default' }]);
+    expect(await getAvailableLanguageModels(recognizerFiles)).toHaveLength(1);
+    expect(await getAvailableLanguageModels(recognizerFiles)).toEqual([{ kind: 'en_intent', name: 'default' }]);
   });
 
   it('return en model under correct circumstances', async () => {
     const enModel = { kind: 'en_intent', name: 'default' };
     expect(
-      await availableLanguageModels([{ id: 'test.en-us.dialog', content: { $kind: SDKKinds.OrchestratorRecognizer } }])
+      await getAvailableLanguageModels([
+        { id: 'test.en-us.dialog', content: { $kind: SDKKinds.OrchestratorRecognizer } },
+      ])
     ).toEqual([enModel]);
     expect(
-      await availableLanguageModels([{ id: 'test.EN-us.dialog', content: { $kind: SDKKinds.OrchestratorRecognizer } }])
+      await getAvailableLanguageModels([
+        { id: 'test.EN-us.dialog', content: { $kind: SDKKinds.OrchestratorRecognizer } },
+      ])
     ).toEqual([enModel]);
     expect(
-      await availableLanguageModels([{ id: 'test.en-US.dialog', content: { $kind: SDKKinds.OrchestratorRecognizer } }])
+      await getAvailableLanguageModels([
+        { id: 'test.en-US.dialog', content: { $kind: SDKKinds.OrchestratorRecognizer } },
+      ])
     ).toEqual([enModel]);
     expect(
-      await availableLanguageModels([{ id: 'test.en.dialog', content: { $kind: SDKKinds.OrchestratorRecognizer } }])
+      await getAvailableLanguageModels([{ id: 'test.en.dialog', content: { $kind: SDKKinds.OrchestratorRecognizer } }])
     ).toEqual([enModel]);
     expect(
-      await availableLanguageModels([
+      await getAvailableLanguageModels([
         { id: 'test.en-anything.dialog', content: { $kind: SDKKinds.OrchestratorRecognizer } },
       ])
     ).toEqual([enModel]);
@@ -63,32 +69,38 @@ describe('Orchestrator model picking logic', () => {
   it('return multilang model under correct circumstances', async () => {
     const multilingualModel = { kind: 'multilingual_intent', name: 'default' };
     expect(
-      await availableLanguageModels([{ id: 'test.it.dialog', content: { $kind: SDKKinds.OrchestratorRecognizer } }])
+      await getAvailableLanguageModels([{ id: 'test.it.dialog', content: { $kind: SDKKinds.OrchestratorRecognizer } }])
     ).toEqual([multilingualModel]);
     expect(
-      await availableLanguageModels([{ id: 'test.jp.dialog', content: { $kind: SDKKinds.OrchestratorRecognizer } }])
+      await getAvailableLanguageModels([{ id: 'test.jp.dialog', content: { $kind: SDKKinds.OrchestratorRecognizer } }])
     ).toHaveLength(0);
     expect(
-      await availableLanguageModels([{ id: 'test.ja.dialog', content: { $kind: SDKKinds.OrchestratorRecognizer } }])
+      await getAvailableLanguageModels([{ id: 'test.ja.dialog', content: { $kind: SDKKinds.OrchestratorRecognizer } }])
     ).toHaveLength(1);
 
     expect(
-      await availableLanguageModels([{ id: 'test.zh-cn.dialog', content: { $kind: SDKKinds.OrchestratorRecognizer } }])
+      await getAvailableLanguageModels([
+        { id: 'test.zh-cn.dialog', content: { $kind: SDKKinds.OrchestratorRecognizer } },
+      ])
     ).toEqual([multilingualModel]);
     expect(
-      await availableLanguageModels([{ id: 'test.zh-CN.dialog', content: { $kind: SDKKinds.OrchestratorRecognizer } }])
+      await getAvailableLanguageModels([
+        { id: 'test.zh-CN.dialog', content: { $kind: SDKKinds.OrchestratorRecognizer } },
+      ])
     ).toEqual([multilingualModel]);
     expect(
-      await availableLanguageModels([{ id: 'test.rwk-tz.dialog', content: { $kind: SDKKinds.OrchestratorRecognizer } }])
+      await getAvailableLanguageModels([
+        { id: 'test.rwk-tz.dialog', content: { $kind: SDKKinds.OrchestratorRecognizer } },
+      ])
     ).toEqual([multilingualModel]);
     expect(
-      await availableLanguageModels([{ id: 'test.pap', content: { $kind: SDKKinds.OrchestratorRecognizer } }])
+      await getAvailableLanguageModels([{ id: 'test.pap', content: { $kind: SDKKinds.OrchestratorRecognizer } }])
     ).toEqual([multilingualModel]);
     expect(
-      await availableLanguageModels([{ id: 'test.tr-cy', content: { $kind: SDKKinds.OrchestratorRecognizer } }])
+      await getAvailableLanguageModels([{ id: 'test.tr-cy', content: { $kind: SDKKinds.OrchestratorRecognizer } }])
     ).toEqual([multilingualModel]);
     expect(
-      await availableLanguageModels([{ id: 'test.nope', content: { $kind: SDKKinds.OrchestratorRecognizer } }])
+      await getAvailableLanguageModels([{ id: 'test.nope', content: { $kind: SDKKinds.OrchestratorRecognizer } }])
     ).toHaveLength(0);
   });
 
@@ -100,8 +112,8 @@ describe('Orchestrator model picking logic', () => {
       { id: 'test.ja-jp.', content: { $kind: SDKKinds.OrchestratorRecognizer } },
       { id: 'test.zh.dialog', content: { $kind: SDKKinds.OrchestratorRecognizer } },
     ];
-    expect(await availableLanguageModels(recognizerFiles)).toHaveLength(2);
-    expect(await availableLanguageModels(recognizerFiles)).toEqual([
+    expect(await getAvailableLanguageModels(recognizerFiles)).toHaveLength(2);
+    expect(await getAvailableLanguageModels(recognizerFiles)).toEqual([
       { kind: 'en_intent', name: 'default' },
       { kind: 'multilingual_intent', name: 'default' },
     ]);
@@ -125,7 +137,7 @@ describe('Orchestrator model picking logic', () => {
       },
     });
 
-    expect(await availableLanguageModels(recognizerFiles)).toEqual([
+    expect(await getAvailableLanguageModels(recognizerFiles)).toEqual([
       { kind: 'en_intent', name: 'fake_english_model_name' },
       { kind: 'multilingual_intent', name: 'fake_multilingual_model_name' },
     ]);
