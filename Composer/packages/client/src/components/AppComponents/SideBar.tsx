@@ -104,7 +104,7 @@ export const SideBar: React.FC<RouteComponentProps> = () => {
                 iconName={link.iconName}
                 labelName={link.labelName}
                 match={link.match}
-                showTooltip={!link.disabled && !sideBarExpand}
+                showTooltip={!sideBarExpand}
                 to={mapNavItemTo(link.to)}
               />
             );
@@ -125,7 +125,7 @@ export const SideBar: React.FC<RouteComponentProps> = () => {
               disabled={link.disabled}
               iconName={link.iconName}
               labelName={link.labelName}
-              showTooltip={!link.disabled && !sideBarExpand}
+              showTooltip={!sideBarExpand}
               to={mapNavItemTo(link.to)}
             />
           );

@@ -38,7 +38,7 @@ const link = (active: boolean, disabled: boolean) => css`
     `}
 
   ${disabled
-    ? `pointer-events: none;`
+    ? ``
     : `&:hover {
       background-color: ${NeutralColors.gray50};
     }
