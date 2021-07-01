@@ -26,7 +26,7 @@ const countStyle: any = {
 const getOptionAll = () => {
   return {
     key: 'All',
-    text: formatMessage('All projects'),
+    text: formatMessage('All bots'),
   };
 };
 
@@ -145,7 +145,7 @@ export const DiagnosticsFilters: React.FC<DiagnosticsFiltersProps> = (props) => 
         <DropdownWithAllOption
           optionAll={getOptionAll()}
           options={projectSelectorOptions}
-          placeholder={formatMessage('Select a project')}
+          placeholder={formatMessage('Select bots')}
           selectedKeys={projectsToFilter}
           onChange={(_, items: string[]) => {
             onProjectFilterChange(items);
