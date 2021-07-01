@@ -40,6 +40,7 @@ import {
   webChatTrafficState,
 } from '../../../../../recoilModel';
 import { WatchVariablePicker } from '../../WatchVariablePicker/WatchVariablePicker';
+import TelemetryClient from '../../../../../telemetry/TelemetryClient';
 
 import { WatchTabObjectValue } from './WatchTabObjectValue';
 
@@ -278,6 +279,10 @@ export const WatchTabContent: React.FC<DebugPanelTabHeaderProps> = ({ isActive }
     if (selectedVariables?.length) {
       selectedVariables.map((item: IObjectWithKey) => {
         delete updatedUncommitted[item.key as string];
+        if (updatedCommitted[item.key as string]) {
+          // track only when we remove a property that is actually being watched
+          TelemetryClient.track('StateWatchPropertyRemoved', { property: updatedCommitted[item.key as string] });
+        }
         delete updatedCommitted[item.key as string];
       });
     }
