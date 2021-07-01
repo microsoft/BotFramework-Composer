@@ -87,9 +87,9 @@ export function CreateOptions(props: CreateOptionsProps) {
     <Fragment>
       <AzureBotDialog
         isOpen={isOpenOptionsModal}
-        setIsOpenCreateModal={setIsOpenCreateModal}
         onDismiss={onDismiss}
         onJumpToOpenModal={onJumpToOpenModal}
+        onToggleCreateModal={setIsOpenCreateModal}
       />
       <CreateBot
         fetchReadMe={fetchReadMe}

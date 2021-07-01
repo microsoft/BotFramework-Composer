@@ -202,7 +202,7 @@ export const DialogCreationCopy = {
     return {
       title: formatMessage('Choose a bot project for your Azure Bot'),
       subText: formatMessage(
-        'Use your Azure Bot resource with a new or existing bot project. You can publish your bot project directly to Azure, using the publishing profile created for you.'
+        'Use your Azure Bot resource with a new or existing bot project. You can publish your bot project directly to Azure using the publishing profile created for you.'
       ),
     };
   },

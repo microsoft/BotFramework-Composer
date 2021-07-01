@@ -19,13 +19,8 @@ type Props = {
   isOpen: boolean;
   onDismiss: () => void;
   onJumpToOpenModal: (search?: string) => void;
-  setIsOpenCreateModal: (boolean) => void;
+  onToggleCreateModal: (boolean) => void;
 } & RouteComponentProps<{}>;
-
-const options: IChoiceGroupOption[] = [
-  { key: 'Create', text: formatMessage('Create a new bot project') },
-  { key: 'Connect', text: formatMessage('Use an existing bot project') },
-];
 
 const dialogWrapperProps = DialogCreationCopy.CREATE_OPTIONS;
 
@@ -54,9 +49,14 @@ const dialogStyle: { dialog: Partial<IDialogContentStyles>; modal: {} } = {
 };
 
 export const AzureBotDialog = (props: Props) => {
-  const [option, setOption] = useState('Create');
+  const [option, setOption] = useState<'Create' | 'Connect'>('Create');
 
-  const { isOpen, onDismiss, onJumpToOpenModal, setIsOpenCreateModal } = props;
+  const { isOpen, onDismiss, onJumpToOpenModal, onToggleCreateModal: setIsOpenCreateModal } = props;
+
+  const options: IChoiceGroupOption[] = [
+    { key: 'Create', text: formatMessage('Create a new bot project') },
+    { key: 'Connect', text: formatMessage('Use an existing bot project') },
+  ];
 
   const handleChange = (e, option) => {
     setOption(option.key);
