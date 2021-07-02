@@ -37,7 +37,7 @@ jest.mock('@bfc/server-workers', () => {
   };
 });
 
-const mockFeedResponse = {
+const mockFeedResponse1 = {
   objects: [
     {
       package: {
@@ -50,8 +50,25 @@ const mockFeedResponse = {
   ],
 };
 
-jest.mock('../../../utility/fetch', () => () => {
-  return Promise.resolve({ json: () => mockFeedResponse });
+const mockFeedResponse2 = {
+  versions: {
+    '0.0.0': {
+      name: '@microsoft/generator-bot-core-language',
+      version: '0.0.0',
+    },
+    '1.0.0': {
+      name: '@microsoft/generator-bot-core-language',
+      version: '1.0.0',
+    },
+  },
+};
+
+jest.mock('../../../utility/fetch', () => (url: string) => {
+  if (url.includes('conversationalcore')) {
+    return Promise.resolve({ json: () => mockFeedResponse1 });
+  } else {
+    return Promise.resolve({ json: () => mockFeedResponse2 });
+  }
 });
 
 const mockSampleBotPath = Path.join(__dirname, '../../../__mocks__/asset/projects/SampleBot');
@@ -164,21 +181,6 @@ describe('assetManager', () => {
   });
 
   describe('getNpmPackageVersions', () => {
-    const mockFeedResponse = {
-      versions: {
-        '0.0.0': {
-          name: '@microsoft/generator-bot-core-language',
-          version: '0.0.0',
-        },
-        '1.0.0': {
-          name: '@microsoft/generator-bot-core-language',
-          version: '1.0.0',
-        },
-      },
-    };
-
-    enableFetchMocks();
-    fetchMock.mockResponseOnce(JSON.stringify(mockFeedResponse));
     it('Get available versions for a given npm package', async () => {
       const assetManager = new AssetManager();
 
