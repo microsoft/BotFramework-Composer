@@ -11,12 +11,12 @@ context('Home Page ', () => {
   it('can open buttons in home page', () => {
     cy.findByTestId('LeftNav-CommandBarButtonHome').click();
     cy.findByTestId('homePage-Toolbar-New').click();
-    cy.findByText('Cancel').should('exist');
-    cy.findByText('Cancel').click();
+    cy.findByTestId('CreateBotCancelButton').should('exist');
+    cy.findByTestId('CreateBotCancelButton').click();
     cy.findByTestId('homePage-Toolbar-Open').click();
     cy.findByText('Select a Bot').should('exist');
-    cy.findByText('Cancel').should('exist');
-    cy.findByText('Cancel').click();
+    cy.findByTestId('OpenBotCancelButton').should('exist');
+    cy.findByTestId('OpenBotCancelButton').click();
     cy.findByTestId('homePage-Toolbar-New').click();
   });
 
@@ -59,7 +59,7 @@ context('Home Page ', () => {
     });
     cy.wait(3000);
     cy.findByTestId('@microsoft/generator-bot-empty').click();
-    cy.findByTestId('NextStepButton').click();
+    cy.findByTestId('CreateBotNextStepButton').click();
     cy.enterTextAndSubmit('NewDialogName', 'TestNewProject3', 'SubmitNewBotBtn');
     cy.wait(100000);
     cy.findByTestId('ProjectTree').within(() => {

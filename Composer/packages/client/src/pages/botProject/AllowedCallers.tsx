@@ -77,12 +77,18 @@ const Item = React.memo(({ value, onBlur, onChange, onRemove }: ItemProps) => {
     <Stack horizontal verticalAlign={'center'}>
       <Input
         componentRef={(ref) => (itemRef.current = ref)}
+        data-testid="addCallerInputField"
         styles={textFieldStyles}
         value={value}
         onBlur={onBlur}
         onChange={onChange}
       />
-      <ActionButton aria-label={formatMessage('Remove item')} styles={actionButton} onClick={onRemove}>
+      <ActionButton
+        aria-label={formatMessage('Remove item')}
+        data-testid="addCallerRemoveBtn"
+        styles={actionButton}
+        onClick={onRemove}
+      >
         {formatMessage('Remove')}
       </ActionButton>
     </Stack>

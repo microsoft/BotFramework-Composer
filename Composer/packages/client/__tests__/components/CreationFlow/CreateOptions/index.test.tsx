@@ -26,6 +26,7 @@ describe('<CreateOptions/>', () => {
         packageName: 'generator-conversational-core',
         packageSource: 'npm',
         packageVersion: '1.0.9',
+        availableVersions: [''],
       },
     },
   ];
@@ -49,7 +50,7 @@ describe('<CreateOptions/>', () => {
     const component = renderComponent();
     const conversationalCoreBot = await component.findByTestId('generator-conversational-core');
     fireEvent.click(conversationalCoreBot);
-    const nextButton = await component.findByText('Next');
+    const nextButton = await component.findByTestId('CreateBotNextStepButton');
     fireEvent.click(nextButton);
     expect(handleCreateNextMock).toBeCalledWith('generator-conversational-core', 'dotnet');
   });

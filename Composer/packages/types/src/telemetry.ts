@@ -97,7 +97,7 @@ type DesignerEvents = {
   AddNewDialogStarted: undefined;
   AddNewDialogCompleted: undefined;
   AddNewSkillStarted: { method: string };
-  AddNewSkillCompleted: undefined;
+  AddNewSkillCompleted: { from: string };
   NewTemplateAdded: undefined;
   FormDialogGenerated: { durationMilliseconds: number };
 };
@@ -198,8 +198,13 @@ type WebChatEvents = {
   WebChatConversationRestarted: { restartType: 'SameUserId' | 'NewUserId' };
   DrawerPaneOpened: undefined;
   DrawerPaneClosed: undefined;
-  DrawerPaneTabOpened: { tabType: 'Diagnostics' | 'WebChatInspector' | 'RuntimeLog' };
+  DrawerPaneTabOpened: { tabType: 'Diagnostics' | 'WebChatInspector' | 'RuntimeLog' | 'Watch' };
   SaveTranscriptClicked: undefined;
+};
+
+type DebuggingEvents = {
+  StateWatchPropertyAdded: { property: string };
+  StateWatchPropertyRemoved: { property: string };
 };
 
 type ABSChannelsEvents = {
@@ -239,6 +244,13 @@ type PageView = {
   [PageNames.PackageManger]: undefined;
 };
 
+type SurveyEvents = {
+  HATSSurveyOffered: undefined;
+  HATSSurveyDismissed: undefined;
+  HATSSurveyAccepted: undefined;
+  HATSSurveyRejected: undefined;
+};
+
 export type TelemetryEvents = ApplicationEvents &
   GettingStartedEvents &
   BotProjectEvents &
@@ -257,7 +269,9 @@ export type TelemetryEvents = ApplicationEvents &
   LuEditorEvents &
   OrchestratorEvents &
   PropertyEditorEvents &
-  CreationEvents;
+  CreationEvents &
+  SurveyEvents &
+  DebuggingEvents;
 
 export type TelemetryEventName = keyof TelemetryEvents;
 

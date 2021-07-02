@@ -5,6 +5,7 @@
 import { jsx } from '@emotion/core';
 import { FC, ReactNode } from 'react';
 import { TextDiv } from '@bfc/ui-shared';
+import { WidgetContainerProps } from '@bfc/extension-client';
 
 import { StandardNodeWidth } from '../../constants/ElementSizes';
 import { ObiColors } from '../../constants/ElementColors';
@@ -18,8 +19,9 @@ import {
   CardContainerCSS,
   DisabledCardContainerCSS,
 } from './CardTemplateStyle';
+// import { CardComment } from './CardComment';
 
-export interface CardTemplateProps {
+export interface CardTemplateProps extends WidgetContainerProps {
   header: ReactNode;
   body?: ReactNode;
   footer?: ReactNode;

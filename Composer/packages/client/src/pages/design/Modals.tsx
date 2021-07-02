@@ -40,8 +40,9 @@ const TriggerCreationModal = React.lazy(() => import('../../components/TriggerCr
 
 type ModalsProps = {
   projectId: string;
+  rootBotId: string;
 };
-const Modals: React.FC<ModalsProps> = ({ projectId = '' }) => {
+const Modals: React.FC<ModalsProps> = ({ projectId = '', rootBotId = '' }) => {
   const qnaFiles = useRecoilValue(qnaFilesSelectorFamily(projectId));
   const schemas = useRecoilValue(schemasState(projectId));
 
@@ -140,15 +141,15 @@ const Modals: React.FC<ModalsProps> = ({ projectId = '' }) => {
       )}
       {showAddSkillDialogModal && (
         <CreateSkillModal
-          addRemoteSkill={async (manifestUrl, endpointName) => {
+          addRemoteSkill={async (manifestUrl, endpointName, zipContent) => {
             setAddSkillDialogModalVisibility(false);
-            await addRemoteSkillToBotProject(manifestUrl, endpointName);
+            await addRemoteSkillToBotProject(manifestUrl, endpointName, zipContent);
           }}
           addTriggerToRoot={async (dialogId, formData, skillId) => {
             await createTriggerForRemoteSkill(projectId, dialogId, formData, skillId);
             commitChanges();
           }}
-          projectId={projectId}
+          projectId={rootBotId}
           onDismiss={() => {
             setAddSkillDialogModalVisibility(false);
           }}

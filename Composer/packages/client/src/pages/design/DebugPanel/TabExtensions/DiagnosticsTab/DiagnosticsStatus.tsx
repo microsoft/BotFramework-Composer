@@ -4,12 +4,12 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import { DefaultButton } from 'office-ui-fabric-react/lib/Button';
-import { useSetRecoilState } from 'recoil';
-import { FontSizes, SharedColors } from '@uifabric/fluent-theme';
+import { useSetRecoilState, useRecoilValue } from 'recoil';
+import { FontSizes, SharedColors, FluentTheme } from '@uifabric/fluent-theme';
 import { FontIcon } from 'office-ui-fabric-react/lib/Icon';
 import formatMessage from 'format-message';
 
-import { debugPanelExpansionState, debugPanelActiveTabState } from '../../../../../recoilModel';
+import { debugPanelExpansionState, debugPanelActiveTabState, dispatcherState } from '../../../../../recoilModel';
 import { DiagnosticsTabKey } from '../types';
 
 import { useDiagnosticsStatistics } from './useDiagnostics';
@@ -21,6 +21,7 @@ export const DiagnosticsStatus = () => {
   const setExpansion = useSetRecoilState(debugPanelExpansionState);
   const setActiveTab = useSetRecoilState(debugPanelActiveTabState);
   const { errorsCount, warningsCount } = useDiagnosticsStatistics();
+  const { setWarningDiagnosticsFilter, setErrorDiagnosticsFilter } = useRecoilValue(dispatcherState);
 
   if (!errorsCount && !warningsCount) return null;
 
@@ -46,45 +47,72 @@ export const DiagnosticsStatus = () => {
 
   return (
     <div
-      css={{ height: '100%', display: 'flex', alignItems: 'center', paddingLeft: '8px' }}
+      css={{ height: '100%', display: 'flex', alignItems: 'center' }}
       data-testid="diagnostics-tab-header--collapsed"
     >
-      <DefaultButton
-        ariaLabel={`${errorLabel} ${warningLabel}`}
-        styles={{
-          root: {
-            height: '36px',
-            padding: '0 5px',
-            minWidth: '20px',
-            border: 'none',
-            marginRight: '8px',
-          },
-          label: { fontSize: FontSizes.size18, fontFamily: 'Segoe UI', lineHeight: '20px' },
-        }}
-        onClick={() => {
-          setExpansion(true);
-          setActiveTab(DiagnosticsTabKey);
-        }}
-      >
-        {errorsCount > 0 && (
-          <span css={{ marginRight: '10px', display: 'flex', alignItems: 'center' }}>
+      {errorsCount > 0 && (
+        <DefaultButton
+          ariaLabel={`${errorLabel}`}
+          styles={{
+            root: {
+              height: '36px',
+              border: 'none',
+              minWidth: '40px',
+              margin: 0,
+              padding: '0px 3px',
+            },
+            label: { fontSize: FontSizes.size18, fontFamily: 'Segoe UI' },
+          }}
+          onClick={() => {
+            setErrorDiagnosticsFilter(true);
+            setWarningDiagnosticsFilter(false);
+            setExpansion(true);
+            setActiveTab(DiagnosticsTabKey);
+          }}
+        >
+          <span css={{ marginRight: '10px', display: 'flex', alignItems: 'center', width: '30px' }}>
             <FontIcon
-              css={{ color: SharedColors.red10, fontSize: FontSizes.size18, lineHeight: '18px', marginRight: '5px' }}
+              css={{ color: SharedColors.red10, fontSize: FontSizes.size18, marginRight: '5px' }}
               iconName="StatusErrorFull"
             />
             {errorsCount}
           </span>
-        )}
-        {warningsCount > 0 && (
+        </DefaultButton>
+      )}
+
+      {warningsCount > 0 && (
+        <DefaultButton
+          ariaLabel={`${warningLabel}`}
+          styles={{
+            root: {
+              height: '36px',
+              border: 'none',
+              margin: 0,
+              minWidth: '40px',
+              padding: 0,
+            },
+            label: { fontSize: FontSizes.size18, fontFamily: 'Segoe UI' },
+          }}
+          onClick={() => {
+            setWarningDiagnosticsFilter(true);
+            setErrorDiagnosticsFilter(false);
+            setExpansion(true);
+            setActiveTab(DiagnosticsTabKey);
+          }}
+        >
           <span css={{ display: 'flex', alignItems: 'center' }}>
             <FontIcon
-              css={{ color: SharedColors.yellow10, fontSize: FontSizes.size18, lineHeight: '18px', marginRight: '5px' }}
+              css={{
+                color: FluentTheme.palette.yellow,
+                fontSize: FontSizes.size18,
+                marginRight: '5px',
+              }}
               iconName="WarningSolid"
             />
             {warningsCount}
           </span>
-        )}
-      </DefaultButton>
+        </DefaultButton>
+      )}
     </div>
   );
 };

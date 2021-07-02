@@ -27,7 +27,7 @@ const AdapterSection = ({ projectId, scrollToSectionId }: Props) => {
   }, [scrollToSectionId]);
 
   return (
-    <div ref={containerRef}>
+    <div ref={containerRef} data-testid={'adapterSectionContainer'}>
       <div css={headerText}>
         {formatMessage.rich(
           'Add connections to make your bot available in Webchat, Direct Line Speech, Microsoft Teams and more. <a>Learn more.</a>',

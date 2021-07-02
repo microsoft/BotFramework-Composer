@@ -5,7 +5,8 @@ import React from 'react';
 import { initializeIcons } from 'office-ui-fabric-react/lib/Icons';
 import { registerIcons } from 'office-ui-fabric-react/lib/Styling';
 
-import { SystemTopicIcon } from './components/SystemTopicIcon';
+import { SystemTopicIcon } from './icons/SystemTopicIcon';
+import { HideCommentIcon } from './icons/HideCommentIcon';
 
 export function setupIcons() {
   initializeIcons(undefined, { disableWarnings: true });
@@ -13,6 +14,7 @@ export function setupIcons() {
   registerIcons({
     icons: {
       SystemTopic: <SystemTopicIcon />,
+      HideComment: <HideCommentIcon />,
     },
   });
 }

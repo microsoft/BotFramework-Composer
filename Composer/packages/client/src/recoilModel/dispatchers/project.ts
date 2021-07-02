@@ -40,12 +40,15 @@ import {
   settingsState,
   creationFlowStatusState,
   orchestratorForSkillsDialogState,
+  selectedTemplateVersionState,
+  watchedVariablesState,
 } from '../atoms';
 import { botRuntimeOperationsSelector, rootBotProjectIdSelector } from '../selectors';
 import { mergePropertiesManagedByRootBot, postRootBotCreation } from '../../recoilModel/dispatchers/utils/project';
 import { projectDialogsMapSelector, botDisplayNameState } from '../../recoilModel';
 import { deleteTrigger as DialogdeleteTrigger } from '../../utils/dialogUtil';
 import { BotConvertConfirmDialog } from '../../components/BotConvertDialog';
+import { getManifestJsonFromZip } from '../utils/skill';
 
 import { announcementState, boilerplateVersionState, recentProjectsState, templateIdState } from './../atoms';
 import { logMessage, setError } from './../dispatchers/shared';
@@ -178,14 +181,23 @@ export const projectDispatcher = () => {
   );
 
   const addRemoteSkillToBotProject = useRecoilCallback(
-    (callbackHelpers: CallbackInterface) => async (manifestUrl: string, endpointName: string) => {
+    (callbackHelpers: CallbackInterface) => async (
+      manifestUrl: string,
+      endpointName: string,
+      zipContent: Record<string, any>
+    ) => {
       const { set, snapshot } = callbackHelpers;
       try {
         const dispatcher = await snapshot.getPromise(dispatcherState);
         const rootBotProjectId = await snapshot.getPromise(rootBotProjectIdSelector);
         if (!rootBotProjectId) return;
 
-        const botExists = await checkIfBotExistsInBotProjectFile(callbackHelpers, manifestUrl, true);
+        const manifestFromZip = getManifestJsonFromZip(zipContent);
+        const botExists = await checkIfBotExistsInBotProjectFile(
+          callbackHelpers,
+          manifestFromZip.name ? manifestFromZip.name : manifestUrl,
+          true
+        );
         if (botExists) {
           throw new Error(
             formatMessage('This operation cannot be completed. The skill is already part of the Bot Project')
@@ -193,9 +205,14 @@ export const projectDispatcher = () => {
         }
 
         set(botOpeningState, true);
-        const { projectId } = await openRemoteSkill(callbackHelpers, manifestUrl);
+
+        const { projectId } = await openRemoteSkill(callbackHelpers, {
+          manifestUrl,
+          manifestFromZip,
+          rootBotProjectId,
+        });
         set(botProjectIdsState, (current) => [...current, projectId]);
-        await dispatcher.addRemoteSkillToBotProjectFile(projectId, manifestUrl, endpointName);
+        await dispatcher.addRemoteSkillToBotProjectFile(projectId, manifestUrl, zipContent, endpointName);
         // update appsetting
         await dispatcher.setSkillAndAllowCaller(rootBotProjectId, projectId, endpointName);
         navigateToSkillBot(rootBotProjectId, projectId);
@@ -226,7 +243,7 @@ export const projectDispatcher = () => {
       absData?: any,
       callback?: (projectId: string) => void
     ) => {
-      const { set, snapshot } = callbackHelpers;
+      const { reset, set, snapshot } = callbackHelpers;
       try {
         set(botOpeningState, true);
 
@@ -236,6 +253,7 @@ export const projectDispatcher = () => {
           path,
           storageId
         );
+        reset(watchedVariablesState(projectId));
 
         if (requiresMigrate) {
           await forceMigrate(projectId, hasOldCustomRuntime);
@@ -650,6 +668,12 @@ export const projectDispatcher = () => {
     callbackHelpers.set(warnAboutFunctionsState, warn);
   });
 
+  const setSelectedTemplateVersion = useRecoilCallback(
+    (callbackHelpers: CallbackInterface) => (selectedVersion: string) => {
+      callbackHelpers.set(selectedTemplateVersionState, selectedVersion);
+    }
+  );
+
   return {
     openProject,
     createNewBot,
@@ -675,5 +699,6 @@ export const projectDispatcher = () => {
     setWarnAboutDotNet,
     setWarnAboutFunctions,
     fetchReadMe,
+    setSelectedTemplateVersion,
   };
 };

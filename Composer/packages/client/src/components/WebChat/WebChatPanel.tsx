@@ -20,7 +20,7 @@ import { dispatcherState } from '../../recoilModel';
 import { ConversationService } from './utils/conversationService';
 import { WebChatHeader } from './WebChatHeader';
 import { WebChatComposer } from './WebChatComposer';
-import { BotSecrets, ChatData, RestartOption } from './types';
+import { BotSecret, ChatData, RestartOption } from './types';
 
 const BASEPATH = process.env.PUBLIC_URL || 'http://localhost:3000/';
 // TODO: Refactor to include Webchat header component as a part of WebchatComposer to avoid this variable.
@@ -30,7 +30,7 @@ export interface WebChatPanelProps {
   botData: {
     projectId: string;
     botUrl: string;
-    secrets: BotSecrets;
+    secret: BotSecret;
     botName: string;
     activeLocale: string;
     botStatus: BotStatus;
@@ -53,7 +53,7 @@ export const WebChatPanel: React.FC<WebChatPanelProps> = ({
     setActiveTabInDebugPanel,
     setWebChatPanelVisibility,
   } = useRecoilValue(dispatcherState);
-  const { projectId, botUrl, secrets, botName, activeLocale, botStatus } = botData;
+  const { projectId, botUrl, secret, botName, activeLocale, botStatus } = botData;
   const [chats, setChatData] = useState<Record<string, ChatData>>({});
   const [currentConversation, setCurrentConversation] = useState<string>('');
   const [currentRestartOption, onSetRestartOption] = useState<RestartOption>(RestartOption.NewUserID);
@@ -134,7 +134,7 @@ export const WebChatPanel: React.FC<WebChatPanelProps> = ({
     if (botUrl) {
       setCurrentConversation('');
     }
-  }, [botUrl]);
+  }, [botUrl, secret]);
 
   useEffect(() => {
     setIsRestartButtonDisabled(botStatus !== BotStatus.connected);
@@ -161,7 +161,7 @@ export const WebChatPanel: React.FC<WebChatPanelProps> = ({
       const startConversation = async () => {
         const chatData: ChatData = await conversationService.startNewConversation(
           botUrl,
-          secrets,
+          secret,
           projectId,
           activeLocale
         );
@@ -191,7 +191,7 @@ export const WebChatPanel: React.FC<WebChatPanelProps> = ({
             oldChatData,
             requireNewUserId,
             activeLocale,
-            secrets
+            secret
           );
 
           TelemetryClient.track('WebChatConversationRestarted', {
