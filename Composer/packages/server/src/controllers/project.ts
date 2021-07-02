@@ -333,8 +333,8 @@ async function getSkill(req: Request, res: Response) {
   const projectId = req.params.projectId;
   const user = await ExtensionContext.getUserFromRequest(req);
   const ignoreProjectValidation: boolean = req.query.ignoreProjectValidation;
+  const currentProject = await BotProjectService.getProjectById(projectId, user);
   if (!ignoreProjectValidation) {
-    const currentProject = await BotProjectService.getProjectById(projectId, user);
     if (currentProject === undefined) {
       res.status(404).json({
         message: 'No such bot project found',
@@ -342,12 +342,42 @@ async function getSkill(req: Request, res: Response) {
     }
   }
   try {
-    const content = await getSkillManifest(req.query.url);
+    const rootDir = currentProject.dir;
+    const content = await getSkillManifest(req.query.url, rootDir);
     res.status(200).json(content);
   } catch (err) {
     res.status(404).json({
       message: err.message,
     });
+  }
+}
+
+async function createSkillFiles(req: Request, res: Response) {
+  const projectId = req.params.projectId;
+  const user = await ExtensionContext.getUserFromRequest(req);
+
+  const currentProject = await BotProjectService.getProjectById(projectId, user);
+  if (currentProject !== undefined) {
+    const { url, skillName, zipContent } = req.body;
+    const file = await currentProject.createSkillFiles(url, skillName, zipContent);
+    res.status(200).json(file);
+  } else {
+    res.status(404).json({
+      message: 'No such bot project found',
+    });
+  }
+}
+
+async function removeSkillFiles(req: Request, res: Response) {
+  const projectId = req.params.projectId;
+  const user = await ExtensionContext.getUserFromRequest(req);
+
+  const currentProject = await BotProjectService.getProjectById(projectId, user);
+  if (currentProject !== undefined) {
+    const isDelete = await currentProject.deleteSkillFiles(req.params.name);
+    res.status(200).json(isDelete);
+  } else {
+    res.status(404).json({ error: 'No bot project found' });
   }
 }
 
@@ -599,6 +629,8 @@ export const ProjectController = {
   createManifestFile,
   updateManifestFile,
   removeManifestFile,
+  createSkillFiles,
+  removeSkillFiles,
   getSkill,
   build,
   setQnASettings,

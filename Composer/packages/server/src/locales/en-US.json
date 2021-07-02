@@ -170,6 +170,9 @@
   "add_a_new_value_24ca14ac": {
     "message": "Add a new value"
   },
+  "add_a_note_c0caaac": {
+    "message": "Add a note"
+  },
   "add_a_skill_46d2b71c": {
     "message": "Add a skill"
   },
@@ -280,6 +283,9 @@
   },
   "all_4321c3a1": {
     "message": "All"
+  },
+  "all_projects_5482873e": {
+    "message": "All projects"
   },
   "allowed_callers_31b26262": {
     "message": "Allowed Callers"
@@ -506,6 +512,9 @@
   "azure_functions_5e23be5c": {
     "message": "Azure Functions"
   },
+  "azure_functions_is_a_solution_for_easily_running_s_6dacf7d9": {
+    "message": "Azure Functions is a solution for easily running small pieces of code, or \"functions,\" in the cloud. "
+  },
   "azure_functions_required_2a035b48": {
     "message": "Azure Functions required"
   },
@@ -514,6 +523,9 @@
   },
   "azure_language_understanding_5fc42020": {
     "message": "Azure Language Understanding"
+  },
+  "azure_offers_a_number_of_ways_to_host_your_applica_202b7871": {
+    "message": "Azure offers a number of ways to host your application code. The runtime type refers to the hosting model for the computing resources that your application runs on."
   },
   "azure_qna_maker_fd153eb7": {
     "message": "Azure QnA Maker"
@@ -656,6 +668,9 @@
   "break_out_of_loop_ab30157c": {
     "message": "Break out of loop"
   },
+  "browse_e0204125": {
+    "message": "Browse"
+  },
   "build_a_continuous_integration_and_deployment_ci_c_79188c70": {
     "message": "Build a continuous integration and deployment (CI/CD) pipeline with Azure Resource Manager templates."
   },
@@ -760,6 +775,9 @@
   },
   "comment_7ef1428e": {
     "message": "Comment"
+  },
+  "comment_menu_96448038": {
+    "message": "Comment menu"
   },
   "comments_e07bcbe3": {
     "message": "Comments"
@@ -952,6 +970,12 @@
   },
   "count_plural_0_no_items_selected_1_one_item_is_sel_13d3b2de": {
     "message": "{ count, plural,\n     =0 {No items selected}\n     =1 {One item is selected}\n  other {# items are selected}\n}"
+  },
+  "count_plural_1_error_other_errors_c2dc01f8": {
+    "message": "{ count, plural,\n     =1 {Error}\n  other {Errors}\n}"
+  },
+  "count_plural_1_warning_other_warnings_a7258fed": {
+    "message": "{ count, plural,\n     =1 {Warning}\n  other {Warnings}\n}"
   },
   "create_132b3be1": {
     "message": "Create"
@@ -1186,21 +1210,6 @@
   },
   "diagnostic_links_228dc6fe": {
     "message": "diagnostic links"
-  },
-  "diagnostic_list_89b39c2e": {
-    "message": "Diagnostic List"
-  },
-  "diagnostic_message_msg_5387e951": {
-    "message": "Diagnostic Message { msg }"
-  },
-  "diagnostic_type_e1979c21": {
-    "message": "Diagnostic type"
-  },
-  "diagnostics_a11880f6": {
-    "message": "Diagnostics"
-  },
-  "diagnostics_pane_2d77c390": {
-    "message": "Diagnostics Pane"
   },
   "diagnostics_tab_which_shows_errors_and_warnings_410e8f6": {
     "message": "Diagnostics tab which shows errors and warnings."
@@ -1550,9 +1559,6 @@
   "errorscount_plural_0_no_errors_1_one_error_other_e_a8c998bb": {
     "message": "{ errorsCount, plural,\n     =0 {No errors}\n     =1 {One error}\n  other {# errors}\n}"
   },
-  "errorsmsg_8f5d3d85": {
-    "message": "{ errorsMsg }"
-  },
   "event_activity_2067a94b": {
     "message": "Event activity"
   },
@@ -1763,6 +1769,9 @@
   "full_description_for_fd03dbf8": {
     "message": "full description for"
   },
+  "fully_managed_compute_platform_that_is_optimized_f_3f50ab37": {
+    "message": "Fully managed compute platform that is optimized for hosting websites and web applications."
+  },
   "gb_7570760e": {
     "message": "GB"
   },
@@ -1861,6 +1870,9 @@
   },
   "hide_code_5dcffa94": {
     "message": "Hide code"
+  },
+  "hide_notes_on_canvas_cb566092": {
+    "message": "Hide notes on canvas"
   },
   "home_351838cd": {
     "message": "Home"
@@ -2579,6 +2591,9 @@
   "no_templates_found_d8dca69b": {
     "message": "No templates found"
   },
+  "no_thanks_20701267": {
+    "message": "No thanks"
+  },
   "no_updates_available_cecd904d": {
     "message": "No updates available"
   },
@@ -3062,6 +3077,9 @@
   "reloading_49d2f661": {
     "message": "Reloading"
   },
+  "remind_me_later_6ac70c3": {
+    "message": "Remind me later"
+  },
   "remote_skill_ed36a7e6": {
     "message": "Remote skill"
   },
@@ -3284,6 +3302,9 @@
   "select_a_dialog_or_topic_4df93d0f": {
     "message": "Select a dialog or topic"
   },
+  "select_a_project_356cbc95": {
+    "message": "Select a project"
+  },
   "select_a_publish_target_d4530c94": {
     "message": "Select a publish target"
   },
@@ -3446,17 +3467,20 @@
   "short_description_for_6abb9a1b": {
     "message": "short description for"
   },
-  "show_all_diagnostics_c11f4e09": {
-    "message": "Show All Diagnostics"
-  },
   "show_code_f3e9d1cc": {
     "message": "Show code"
   },
-  "show_item_diagnostics_f6e902c7": {
-    "message": "Show { item } Diagnostics"
-  },
   "show_keys_3072a5b8": {
     "message": "Show keys"
+  },
+  "show_less_f778dab5": {
+    "message": "Show Less"
+  },
+  "show_more_af9cbc16": {
+    "message": "Show More"
+  },
+  "show_notes_on_canvas_f0baaa43": {
+    "message": "Show notes on canvas"
   },
   "show_response_editor_90bd8b49": {
     "message": "Show response editor"
@@ -3487,6 +3511,9 @@
   },
   "skill_host_endpoint_url_e68b65f6": {
     "message": "Skill host endpoint url"
+  },
+  "skill_manifest_d7db2e25": {
+    "message": "Skill Manifest"
   },
   "skill_manifest_url_1094fcba": {
     "message": "Skill Manifest URL"
@@ -3644,6 +3671,9 @@
   "take_a_product_tour_a2892d17": {
     "message": "Take a product tour"
   },
+  "take_survey_a0cc4547": {
+    "message": "Take survey"
+  },
   "target_da92f4e6": {
     "message": "Target"
   },
@@ -3661,6 +3691,9 @@
   },
   "template_name_c37cf8d9": {
     "message": "Template name: "
+  },
+  "template_undefined_2750e546": {
+    "message": "Template undefined"
   },
   "templatename_is_missing_or_empty_23e6b06e": {
     "message": "templateName is missing or empty"
@@ -3824,9 +3857,6 @@
   "this_is_a_required_field_acb9837e": {
     "message": "This is a required field."
   },
-  "this_is_a_severity_diagnostic_58312674": {
-    "message": "This is a { severity } diagnostic"
-  },
   "this_is_the_bot_language_you_are_currently_authori_4a26541": {
     "message": "This is the bot language you are currently authoring. Change the active language in the dropdown below."
   },
@@ -3977,6 +4007,9 @@
   "total_plural_1_starting_bot_other_starting_bots_ru_3d173401": {
     "message": "{ total, plural,\n     =1 {Starting bot..}\n  other {Starting bots.. ({ running }/{ total } running)}\n}"
   },
+  "total_plural_1_starting_your_bot_other_starting_yo_6087bb1e": {
+    "message": "{ total, plural,\n     =1 {Starting your bot...}\n  other {Starting your bots...}\n}"
+  },
   "total_plural_1_stopping_bot_other_stopping_bots_ru_f6afe9bd": {
     "message": "{ total, plural,\n     =1 {Stopping bot..}\n  other {Stopping bots.. ({ running }/{ total } running)}\n}"
   },
@@ -4115,8 +4148,8 @@
   "url_22a5f3b8": {
     "message": "URL"
   },
-  "url_should_start_with_http_or_https_c34632bb": {
-    "message": "URL should start with http:// or https://"
+  "url_should_start_with_http_or_https_or_file_path_o_2b060341": {
+    "message": "URL should start with http:// or https:// or file path of your system"
   },
   "use_azure_bot_to_create_a_new_conversation_1a116a65": {
     "message": "Use Azure Bot to create a new conversation"
@@ -4223,14 +4256,14 @@
   "warningscount_plural_0_no_warnings_1_one_warning_o_347cc928": {
     "message": "{ warningsCount, plural,\n     =0 {No warnings}\n     =1 {One warning}\n  other {# warnings}\n}"
   },
-  "warningsmsg_e2c04bfe": {
-    "message": "{ warningsMsg }"
-  },
   "we_detected_length_custom_obj_that_are_not_support_becd85f0": {
     "message": "We detected { length } custom { obj } that are not support for Composer 2.0."
   },
   "we_need_to_define_the_endpoints_for_the_skill_to_a_5dc98d90": {
     "message": "We need to define the endpoints for the skill to allow other bots to interact with it."
+  },
+  "we_read_every_response_and_will_use_your_feedback__64e44821": {
+    "message": "We read every response and will use your feedback to improve Composer."
   },
   "web_chat_c5ca7ab6": {
     "message": "Web Chat"
@@ -4316,6 +4349,9 @@
   "working_with_packages_dbdddbe9": {
     "message": "Working with packages"
   },
+  "would_you_mind_taking_a_quick_survey_5cf722ac": {
+    "message": "Would you mind taking a quick survey?"
+  },
   "write_an_expression_8773ea5c": {
     "message": "Write an expression"
   },
@@ -4367,8 +4403,8 @@
   "your_bot_is_using_luis_and_qna_for_natural_languag_53830684": {
     "message": "Your bot is using LUIS and QNA for natural language understanding."
   },
-  "your_bot_project_is_not_running_actionbutton_start_9dfc86d5": {
-    "message": "Your bot project is not running. <actionButton>Start your bot</actionButton>"
+  "your_bot_project_is_not_running_actionbutton_total_bc1c8e8c": {
+    "message": "Your bot project is not running. <actionButton>{ total, plural,\n     =1 {Start bot}\n  other {Start all bots}\n}</actionButton>"
   },
   "your_bot_project_is_running_actionbutton_test_in_w_22d5f2de": {
     "message": "Your bot project is running. <actionButton>Test in Web Chat</actionButton>"
@@ -4402,6 +4438,9 @@
   },
   "your_teams_adapter_is_configured_for_your_publishe_e84e9275": {
     "message": "Your Teams adapter is configured for your published bot. Copy the manifest, open App Studio in Teams and add the manifest so you can test your bot in Teams"
+  },
+  "zip_folder_has_multiply_manifest_json_a7170462": {
+    "message": "zip folder has multiply manifest json"
   },
   "zoom_in_3205e865": {
     "message": "Zoom in"

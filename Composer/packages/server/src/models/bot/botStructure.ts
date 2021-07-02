@@ -41,6 +41,11 @@ const BotStructureTemplate = {
     lu: 'topics/${DIALOGNAME}/language-understanding/${LOCALE}/${DIALOGNAME}.${LOCALE}.lu',
     dialogSchema: 'topics/${DIALOGNAME}/${DIALOGNAME}.dialog.schema',
   },
+  // Skill
+  skills: {
+    json: 'skills/${SKILLNAME}/${FILENAME}.json',
+    lu: 'skills/${SKILLNAME}/${FILENAME}.lu',
+  },
 };
 
 const templateInterpolate = (str: string, obj: { [key: string]: string }) =>
@@ -127,6 +132,13 @@ export const isSchema = (fileName: string) =>
 export const defaultManifestFilePath = (botName: string, fileName: string): string => {
   return templateInterpolate(BotStructureTemplate.manifestLu, {
     BOTNAME: botName,
+    FILENAME: fileName,
+  });
+};
+
+export const defaultSkillFilePath = (skillName: string, fileName: string, type: string): string => {
+  return templateInterpolate(BotStructureTemplate.skills[type], {
+    SKILLNAME: skillName,
     FILENAME: fileName,
   });
 };

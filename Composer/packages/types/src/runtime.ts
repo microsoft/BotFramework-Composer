@@ -48,6 +48,7 @@ export type BotTemplate = {
     packageName: string;
     packageSource: string;
     packageVersion: string;
+    availableVersions: string[];
   };
   index?: number;
 };

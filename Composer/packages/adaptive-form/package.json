@@ -22,20 +22,22 @@
     "@uifabric/icons": "^7.3.0",
     "@uifabric/styling": "^7.7.4",
     "format-message": "^6.2.3",
-    "office-ui-fabric-react": "^7.71.0",
+    "office-ui-fabric-react": "7.71.0",
     "react": "16.13.1",
     "react-dom": "16.13.1"
   },
   "devDependencies": {
     "@botframework-composer/test-utils": "*",
     "@types/lodash": "^4.14.149",
-    "@types/react": "16.9.23"
+    "@types/react": "16.9.23",
+    "office-ui-fabric-react": "7.71.0"
   },
   "dependencies": {
     "@bfc/built-in-functions": "*",
     "@bfc/code-editor": "*",
     "@bfc/extension-client": "*",
     "@bfc/intellisense": "*",
+    "@bfc/ui-shared": "*",
     "@emotion/core": "^10.0.27",
     "lodash": "^4.17.19",
     "react-error-boundary": "^1.2.5"

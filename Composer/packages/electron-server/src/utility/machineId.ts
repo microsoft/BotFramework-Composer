@@ -13,16 +13,22 @@ import { readTextFileSync, writeJsonFileSync } from './fs';
 
 export const persistedFilePath = path.join(app.getPath('userData'), 'persisted.json');
 
+function truncate(str: string): string {
+  // We generate machine IDs using a hash of the MAC address, so
+  // we truncate the hash to make it that much harder to reverse
+  return str.slice(0, str.length * 0.8);
+}
+
 export async function getMachineId(): Promise<string> {
   if (!existsSync(persistedFilePath)) {
     const machineId = (await getMacMachineId()) || uuid();
     const telemetrySettings = { machineId };
 
     writeJsonFileSync(persistedFilePath, telemetrySettings);
-    return machineId;
+    return truncate(machineId);
   } else {
     const raw = readTextFileSync(persistedFilePath);
-    return JSON.parse(raw).machineId;
+    return truncate(JSON.parse(raw).machineId);
   }
 }
 

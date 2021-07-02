@@ -7,7 +7,7 @@ export type User = {
   role: string;
 };
 
-export type BotSecrets = { msAppId: string; msPassword: string };
+export type BotSecret = { msAppId: string; msPassword: string };
 export type ChannelService = 'public' | 'usgov';
 
 export type WebChatMode = 'livechat' | 'transcript';

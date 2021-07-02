@@ -10,7 +10,7 @@ import { ChatData, ActivityType } from './types';
 import { ActivityHighlightWrapper } from './ActivityHighlightWrapper';
 import { WebChatHooksContainer } from './hooks/WebChatHooksContainer';
 
-const { BasicWebChat, Composer } = Components;
+const { Composer, BasicWebChat } = Components;
 
 export type WebChatComposerProps = {
   currentConversation: string;

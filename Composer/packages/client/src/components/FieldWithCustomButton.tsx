@@ -99,6 +99,8 @@ type Props = {
   required?: boolean;
   id?: string;
   options?: IDropdownOption[];
+  fieldDataTestId?: string;
+  buttonDataTestId?: string;
 };
 
 const errorElement = (errorText: string) => {
@@ -136,6 +138,8 @@ export const FieldWithCustomButton: React.FC<Props> = (props) => {
     errorMessage,
     id = '',
     options,
+    fieldDataTestId = '',
+    buttonDataTestId = '',
   } = props;
   const [isDisabled, setDisabled] = useState<boolean>(!value);
   const fieldComponentRef = useRef<any>(null);
@@ -178,11 +182,17 @@ export const FieldWithCustomButton: React.FC<Props> = (props) => {
 
   const disabledField =
     options == null ? (
-      <TextField {...commonProps} {...commonDisabledProps} errorMessage={required ? errorElement(errorMessage) : ''} />
+      <TextField
+        {...commonProps}
+        {...commonDisabledProps}
+        data-testid={fieldDataTestId}
+        errorMessage={required ? errorElement(errorMessage) : ''}
+      />
     ) : (
       <Dropdown
         {...commonProps}
         {...commonDisabledProps}
+        data-testid={fieldDataTestId}
         errorMessage={required ? errorMessage : ''}
         options={options}
       />
@@ -193,6 +203,7 @@ export const FieldWithCustomButton: React.FC<Props> = (props) => {
       <TextField
         {...commonProps}
         {...commonEnabledProps}
+        data-testid={fieldDataTestId}
         value={localValue}
         onChange={(e, value) => {
           setLocalValue(value ?? '');
@@ -203,6 +214,7 @@ export const FieldWithCustomButton: React.FC<Props> = (props) => {
       <Dropdown
         {...commonProps}
         {...commonEnabledProps}
+        data-testid={fieldDataTestId}
         options={options}
         selectedKey={localValue}
         onChange={(e, option: IDropdownOption | undefined) => {
@@ -216,6 +228,7 @@ export const FieldWithCustomButton: React.FC<Props> = (props) => {
     <Fragment>
       {isDisabled ? disabledField : enabledField}
       <ActionButton
+        data-testid={buttonDataTestId}
         styles={actionButtonStyle}
         onClick={() => {
           setDisabled(false);

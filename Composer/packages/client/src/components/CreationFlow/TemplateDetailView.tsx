@@ -6,16 +6,21 @@
 import { BotTemplate, localTemplateId } from '@bfc/shared';
 import { css, jsx } from '@emotion/core';
 import formatMessage from 'format-message';
-import React, { Fragment } from 'react';
+import { CommandButton } from 'office-ui-fabric-react/lib/components/Button';
+import { Stack } from 'office-ui-fabric-react/lib/Stack';
+import React, { useEffect, Fragment } from 'react';
 import ReactMarkdown from 'react-markdown';
 import { Text } from 'office-ui-fabric-react/lib/Text';
 import { Link } from 'office-ui-fabric-react/lib/Link';
 import { TextField } from 'office-ui-fabric-react/lib/components/TextField';
 import { FontIcon } from 'office-ui-fabric-react/lib/Icon';
 import { SharedColors } from '@uifabric/fluent-theme/lib/fluent/FluentColors';
+import { useRecoilValue } from 'recoil';
 
 import composerIcon from '../../images/composerIcon.svg';
 import httpClient from '../../utils/httpUtil';
+import { dispatcherState, selectedTemplateVersionState } from '../../recoilModel';
+import { useFeatureFlag } from '../../utils/hooks';
 
 const templateTitleContainer = (isLocalTemplate: boolean) => css`
   width: 100%;
@@ -27,14 +32,15 @@ const templateTitleContainer = (isLocalTemplate: boolean) => css`
   word-break: break-all;
   padding-top: ${isLocalTemplate ? '15px' : '0px'};
   padding-bottom: ${isLocalTemplate ? '15px' : '0px'};
+  margin-bottom: 10px;
 `;
 
 const templateTitle = (isLocalTemplate: boolean) => css`
   position: relative;
-  bottom: ${isLocalTemplate ? '4px' : '18px'};
+  bottom: ${isLocalTemplate ? '4px' : '0px'};
   font-size: 19px;
   font-weight: 550;
-  margin-left: 10px;
+  margin-left: 7px;
 `;
 
 const templateVersion = css`
@@ -42,9 +48,10 @@ const templateVersion = css`
   font-size: 12px;
   font-weight: 100;
   display: block;
-  left: 55px;
   width: fit-content;
-  bottom: 18px;
+  height: 10px;
+  padding: 0px;
+  margin-left: 6px;
 `;
 
 type TemplateDetailViewProps = {
@@ -58,6 +65,37 @@ type TemplateDetailViewProps = {
 const templateDocUrl = 'https://aka.ms/localComposerTemplateDoc';
 
 export const TemplateDetailView: React.FC<TemplateDetailViewProps> = (props) => {
+  const { setSelectedTemplateVersion } = useRecoilValue(dispatcherState);
+  const selectedTemplateVersion = useRecoilValue(selectedTemplateVersionState);
+  const advancedTemplateOptionsEnabled = useFeatureFlag('ADVANCED_TEMPLATE_OPTIONS');
+
+  useEffect(() => {
+    props.template?.package?.packageVersion && setSelectedTemplateVersion(props.template.package.packageVersion);
+  }, [props.template]);
+
+  const renderVersionButton = () => {
+    if (!advancedTemplateOptionsEnabled) {
+      return <span css={templateVersion}>{props.template?.package?.packageVersion}</span>;
+    }
+    const availableVersions = props.template?.package?.availableVersions || ([] as string[]);
+    const versionOptions = {
+      items: availableVersions.map((version: string) => {
+        return { key: version, text: version };
+      }),
+      onItemClick: (ev, item) => setSelectedTemplateVersion(item.key),
+      calloutProps: {
+        calloutMaxHeight: 300,
+      },
+    };
+    return (
+      <CommandButton
+        menuProps={versionOptions}
+        styles={{ root: templateVersion, menuIcon: { fontSize: '8px' } }}
+        text={selectedTemplateVersion}
+      />
+    );
+  };
+
   const { localTemplatePath, onUpdateLocalTemplatePath, onValidateLocalTemplatePath, template } = props;
   const isLocalTemplate = template?.id === localTemplateId;
 
@@ -66,16 +104,27 @@ export const TemplateDetailView: React.FC<TemplateDetailViewProps> = (props) => 
     return props.readMe.replace(/^(#|##) (.*)/, '').trim();
   };
 
-  const validatePath = async (path): Promise<string> => {
-    const response = await httpClient.get(`/storages/validate/${encodeURI(path)}`);
+  const validatePath = async (path) => {
+    if (path === '') {
+      onValidateLocalTemplatePath(false);
+      return '';
+    }
+    const response = await httpClient.get(`/storages/validate/${encodeURIComponent(path)}`);
     const validateMessage = response.data.errorMsg;
     if (typeof validateMessage === 'string' && validateMessage.includes('path')) {
+      // Result is not a valid path
       onValidateLocalTemplatePath(false);
       return formatMessage('This path does not exist');
     } else if (validateMessage) {
+      // Result is a non dir path
       onValidateLocalTemplatePath(true);
+      return '';
     }
-    return '';
+    // result is a dir path
+    onValidateLocalTemplatePath(false);
+    return formatMessage(
+      "Generator not found. Please enter the full path to the generator's index.js file including the filename"
+    );
   };
 
   const renderLocalTemplateForm = () => (
@@ -122,9 +171,15 @@ export const TemplateDetailView: React.FC<TemplateDetailViewProps> = (props) => 
   return (
     <div>
       <div css={templateTitleContainer(isLocalTemplate)}>
-        {renderTemplateIcon()}
-        <span css={templateTitle(isLocalTemplate)}>{props.template?.name}</span>
-        {!isLocalTemplate && <span css={templateVersion}>{props.template?.package?.packageVersion}</span>}
+        <Stack horizontal>
+          <Stack.Item>{renderTemplateIcon()}</Stack.Item>
+          <Stack.Item>
+            <span css={templateTitle(isLocalTemplate)}>
+              {props.template?.name ? props.template.name : formatMessage('Template undefined')}
+            </span>
+            {!isLocalTemplate && renderVersionButton()}
+          </Stack.Item>
+        </Stack>
       </div>
       {isLocalTemplate ? (
         renderLocalTemplateForm()

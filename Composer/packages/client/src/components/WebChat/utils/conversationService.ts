@@ -8,7 +8,7 @@ import { createDirectLine } from 'botframework-webchat';
 import moment from 'moment';
 import formatMessage from 'format-message';
 
-import { BotSecrets, WebChatMode, User, ChatData, StartConversationPayload } from '../types';
+import { BotSecret, WebChatMode, User, ChatData, StartConversationPayload } from '../types';
 
 export const getDateTimeFormatted = (): string => {
   return moment().local().format('YYYY-MM-DD HH:mm:ss');
@@ -36,7 +36,7 @@ export class ConversationService {
     newConversationId: string,
     userId: string,
     activeLocale: string,
-    secrets: BotSecrets
+    secret: BotSecret
   ) {
     const url = `${this.directlineHostUrl}/conversations/${oldConversationId}/updateConversation`;
     return axios.put(
@@ -45,8 +45,8 @@ export class ConversationService {
         conversationId: newConversationId,
         userId,
         locale: activeLocale,
-        msaAppId: secrets.msAppId,
-        msaPassword: secrets.msPassword,
+        msaAppId: secret.msAppId,
+        msaPassword: secret.msPassword,
       },
       {
         headers: {
@@ -105,7 +105,7 @@ export class ConversationService {
 
   public async startNewConversation(
     botUrl: string,
-    secrets: BotSecrets,
+    secret: BotSecret,
     projectId: string,
     activeLocale: string
   ): Promise<ChatData> {
@@ -117,8 +117,8 @@ export class ConversationService {
       channelServiceType: 'public',
       members: [user],
       mode: webChatMode,
-      msaAppId: secrets.msAppId,
-      msaPassword: secrets.msPassword,
+      msaAppId: secret.msAppId,
+      msaPassword: secret.msPassword,
       locale: activeLocale,
     });
 
@@ -134,7 +134,7 @@ export class ConversationService {
     const webChatStore: unknown = createWebChatStore({});
     return {
       directline,
-      webChatMode: webChatMode,
+      webChatMode,
       projectId,
       user,
       conversationId,
@@ -146,7 +146,7 @@ export class ConversationService {
     oldChatData: ChatData,
     requireNewUserID: boolean,
     activeLocale: string,
-    secrets: BotSecrets
+    secret: BotSecret
   ) {
     if (oldChatData.directline) {
       oldChatData.directline.end();
@@ -164,7 +164,7 @@ export class ConversationService {
       conversationId,
       user.id,
       activeLocale,
-      secrets
+      secret
     );
     const { endpointId } = resp.data;
     const directline = await this.fetchDirectLineObject(conversationId, {

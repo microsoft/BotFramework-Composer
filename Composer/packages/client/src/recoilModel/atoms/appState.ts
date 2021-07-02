@@ -12,6 +12,7 @@ import {
   AppUpdateState,
   BoilerplateVersion,
   Notification,
+  MachineInfo,
 } from '../../recoilModel/types';
 import { getUserSettings } from '../utils';
 import onboardingStorage from '../../utils/onboardingStorage';
@@ -365,7 +366,36 @@ export const warnAboutFunctionsState = atom<boolean>({
   default: false,
 });
 
+export const surveyEligibilityState = atom<boolean>({
+  key: getFullyQualifiedKey('surveyEligibilityState'),
+  default: false,
+});
+
+export const machineInfoState = atom<MachineInfo>({
+  key: getFullyQualifiedKey('machineInfoState'),
+  default: null,
+});
+
 export const showGetStartedTeachingBubbleState = atom<boolean>({
   key: getFullyQualifiedKey('showGetStartedTeachingBubbleState'),
   default: false,
+});
+export const showErrorDiagnosticsState = atom<boolean>({
+  key: getFullyQualifiedKey('showErrorDiagnostics'),
+  default: true,
+});
+
+export const showWarningDiagnosticsState = atom<boolean>({
+  key: getFullyQualifiedKey('showWarningDiagnostics'),
+  default: false,
+});
+
+export const projectsForDiagnosticsFilterState = atom<string[]>({
+  key: getFullyQualifiedKey('projectsForDiagnosticsFilter'),
+  default: [],
+});
+
+export const selectedTemplateVersionState = atom<string>({
+  key: getFullyQualifiedKey('selectedTemplateVersion'),
+  default: '',
 });

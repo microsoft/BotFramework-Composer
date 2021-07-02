@@ -76,6 +76,12 @@ const getBaseUrl = () => {
       return url;
     }
 
+    case 'gcc': {
+      const url = 'https://gcc.api.powerva.microsoft.us/api/botmanagement/v1';
+      log('GCC env detected, grabbing PVA content from %s', url);
+      return url;
+    }
+
     default: {
       const url = 'https://bots.int.customercareintelligence.net/api/botmanagement/v1';
       log('No env flag detected, grabbing PVA content from %s', url);
