@@ -392,7 +392,7 @@ export const CreateSkillModal: React.FC<CreateSkillModalProps> = (props) => {
                     value={formData.manifestUrl || ''}
                     onChange={handleManifestUrlChange}
                   />
-                  <BrowserModal onUpdate={handleBrowseButtonUpdate} onError={setFormDataErrors} />
+                  <BrowserModal onError={setFormDataErrors} onUpdate={handleBrowseButtonUpdate} />
                 </div>
                 {skillManifest?.endpoints?.length > 1 && (
                   <Dropdown
