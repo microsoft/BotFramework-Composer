@@ -59,9 +59,6 @@
   "a_publishing_profile_provides_the_secure_connectiv_860d7d48": {
     "message": "A publishing profile provides the secure connectivity required to publish your bot."
   },
-  "a_runtime_type_must_be_selected_5274c266": {
-    "message": "A runtime type must be selected."
-  },
   "a_schema_or_form_is_the_list_of_properties_your_bo_8e107996": {
     "message": "A schema, or form, is the list of properties your bot will collect."
   },
@@ -172,6 +169,9 @@
   },
   "add_a_new_value_24ca14ac": {
     "message": "Add a new value"
+  },
+  "add_a_note_c0caaac": {
+    "message": "Add a note"
   },
   "add_a_skill_46d2b71c": {
     "message": "Add a skill"
@@ -524,8 +524,8 @@
   "azure_language_understanding_5fc42020": {
     "message": "Azure Language Understanding"
   },
-  "azure_offers_a_number_of_ways_to_host_your_applica_b3e2da97": {
-    "message": "Azure offers a number of ways to host your application code. The runtime type refers to the hosting model for the computing resources that your application runs on. Learn more"
+  "azure_offers_a_number_of_ways_to_host_your_applica_202b7871": {
+    "message": "Azure offers a number of ways to host your application code. The runtime type refers to the hosting model for the computing resources that your application runs on."
   },
   "azure_qna_maker_fd153eb7": {
     "message": "Azure QnA Maker"
@@ -775,6 +775,9 @@
   },
   "comment_7ef1428e": {
     "message": "Comment"
+  },
+  "comment_menu_96448038": {
+    "message": "Comment menu"
   },
   "comments_e07bcbe3": {
     "message": "Comments"
@@ -1868,6 +1871,9 @@
   "hide_code_5dcffa94": {
     "message": "Hide code"
   },
+  "hide_notes_on_canvas_cb566092": {
+    "message": "Hide notes on canvas"
+  },
   "home_351838cd": {
     "message": "Home"
   },
@@ -2585,6 +2591,9 @@
   "no_templates_found_d8dca69b": {
     "message": "No templates found"
   },
+  "no_thanks_20701267": {
+    "message": "No thanks"
+  },
   "no_updates_available_cecd904d": {
     "message": "No updates available"
   },
@@ -3068,6 +3077,9 @@
   "reloading_49d2f661": {
     "message": "Reloading"
   },
+  "remind_me_later_6ac70c3": {
+    "message": "Remind me later"
+  },
   "remote_skill_ed36a7e6": {
     "message": "Remote skill"
   },
@@ -3461,6 +3473,15 @@
   "show_keys_3072a5b8": {
     "message": "Show keys"
   },
+  "show_less_f778dab5": {
+    "message": "Show Less"
+  },
+  "show_more_af9cbc16": {
+    "message": "Show More"
+  },
+  "show_notes_on_canvas_f0baaa43": {
+    "message": "Show notes on canvas"
+  },
   "show_response_editor_90bd8b49": {
     "message": "Show response editor"
   },
@@ -3649,6 +3670,9 @@
   },
   "take_a_product_tour_a2892d17": {
     "message": "Take a product tour"
+  },
+  "take_survey_a0cc4547": {
+    "message": "Take survey"
   },
   "target_da92f4e6": {
     "message": "Target"
@@ -4238,6 +4262,9 @@
   "we_need_to_define_the_endpoints_for_the_skill_to_a_5dc98d90": {
     "message": "We need to define the endpoints for the skill to allow other bots to interact with it."
   },
+  "we_read_every_response_and_will_use_your_feedback__64e44821": {
+    "message": "We read every response and will use your feedback to improve Composer."
+  },
   "web_chat_c5ca7ab6": {
     "message": "Web Chat"
   },
@@ -4321,6 +4348,9 @@
   },
   "working_with_packages_dbdddbe9": {
     "message": "Working with packages"
+  },
+  "would_you_mind_taking_a_quick_survey_5cf722ac": {
+    "message": "Would you mind taking a quick survey?"
   },
   "write_an_expression_8773ea5c": {
     "message": "Write an expression"

@@ -1,9 +1,19 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { ProvisionMethod, ProvisionWorkingSet, ResourceProvisionService } from '../types';
+import { ProvisionMethod, ProvisionWorkingSet, ResourceDefinition, ResourceProvisionService } from '../types';
 
+import { FREE_COGNITIVE_SERVICES_TIER, AZURE_HOSTING_GROUP_NAME } from './constants';
 import { AppRegistrationResult, BotChannelResult, BotServiceConfig, WebAppResult } from './types';
+
+export const botRegistrationDefinition: ResourceDefinition = {
+  key: 'botRegistration',
+  text: 'Microsoft Bot Channels Registration',
+  description:
+    'When registered with the Azure Bot Service, you can host your bot in any environment and enable customers from a variety of channels, such as your app or website, Direct Line Speech, Microsoft Teams and more.',
+  tier: FREE_COGNITIVE_SERVICES_TIER,
+  group: AZURE_HOSTING_GROUP_NAME,
+};
 
 const getBotChannelProvisionMethod = (): ProvisionMethod => (
   config: BotServiceConfig,
@@ -28,5 +38,6 @@ export const getBotChannelProvisionService = (): ResourceProvisionService => {
     getDependencies: () => ['appRegistration', 'webApp'],
     getRecommendationForProject: (project) => 'required',
     provision: getBotChannelProvisionMethod(),
+    canPollStatus: false,
   };
 };

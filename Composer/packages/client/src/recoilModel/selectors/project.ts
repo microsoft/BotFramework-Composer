@@ -74,7 +74,7 @@ export type TreeDataPerProject = {
 type WebChatEssentials = {
   projectId: string;
   botName: string;
-  secrets: { msAppId: string; msPassword: string };
+  secret: { msAppId: string; msPassword: string };
   botUrl: string;
   activeLocale: string;
   botStatus: BotStatus;
@@ -371,7 +371,7 @@ export const webChatEssentialsSelector = selectorFamily<WebChatEssentials, strin
   key: 'webChatEssentialsSelector',
   get: (projectId: string) => ({ get }) => {
     const settings = get(settingsState(projectId));
-    const secrets = {
+    const secret = {
       msAppId: settings.MicrosoftAppId || '',
       msPassword: settings.MicrosoftAppPassword || '',
     };
@@ -384,7 +384,7 @@ export const webChatEssentialsSelector = selectorFamily<WebChatEssentials, strin
     return {
       projectId,
       botName,
-      secrets,
+      secret: secret,
       botUrl,
       activeLocale,
       botStatus,

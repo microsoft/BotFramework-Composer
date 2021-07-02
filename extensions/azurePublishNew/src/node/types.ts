@@ -4,11 +4,20 @@
 import { IBotProject } from '@botframework-composer/types';
 
 export type ProvisionWorkingSet = Record<string, object>;
-export type ProvisionMethod = (config: ResourceConfig, workingSet: ProvisionWorkingSet) => Promise<ProvisionWorkingSet>;
+
+export type OnProvisionProgress = (status: number, message: string) => void;
+
+export type ProvisionMethod = (
+  config: ResourceConfig,
+  workingSet: ProvisionWorkingSet,
+  onProgress?: OnProvisionProgress
+) => Promise<ProvisionWorkingSet>;
+
 export type ResourceProvisionService = {
   getDependencies: () => string[];
   getRecommendationForProject: (project: IBotProject) => 'required' | 'optional' | 'notAllowed';
   provision: ProvisionMethod;
+  canPollStatus: boolean;
 };
 
 type ResourceDefinitionGroup = 'App Services' | 'Cognitive Services';
@@ -20,22 +29,16 @@ export type ResourceDefinition = {
   tier: string;
   group: ResourceDefinitionGroup;
 };
+
 export type GetResourcesResult = ResourceDefinition & {
   required: boolean;
 };
+
 export type ProvisionConfig = {
   key: string;
-  credentials: ProvisionCredentials;
+  accessToken: string;
   subscriptionId: string;
-  resourceGroupName: string;
-  location: string;
-  webAppName: string;
-  serverFarm: string;
-};
-
-export type ProvisionCredentials = {
-  token: string;
-  graphToken?: string;
+  graphToken: string;
 };
 
 export type ResourceConfig = {

@@ -34,6 +34,7 @@ export interface NodeWrapperProps extends EventBasedElement, StyledElement {
   nodeId: string;
   nodeData: any;
   onEvent: EditorEventHandler;
+  hideComment?: boolean;
 
   /** Additional child id for multipart nodes such as 'BotAsks/UserInputs' in TextInput
    * to fit complicated view features like double-selection.
