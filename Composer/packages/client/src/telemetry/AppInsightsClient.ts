@@ -1,7 +1,14 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { LogData, TelemetryEvent, TelemetryEventTypes, TelemetrySettings, persistedEvents } from '@bfc/shared';
+import {
+  LogData,
+  TelemetryEvent,
+  TelemetryEventTypes,
+  TelemetrySettings,
+  persistedEvents,
+  TelemetryEventName,
+} from '@bfc/shared';
 import chunk from 'lodash/chunk';
 
 import httpClient from '../utils/httpUtil';
@@ -28,7 +35,7 @@ export default class AppInsightsClient {
       if (this._eventPool.length >= BATCH_SIZE) {
         this.drain();
       }
-    } else if (persistedEvents.includes(name)) {
+    } else if (persistedEvents.includes(name as TelemetryEventName)) {
       /**
        * persistedEvents is an array of telemetry events that occur before the user has
        * had a chance to opt in to data collection. These events are added to the event queue;

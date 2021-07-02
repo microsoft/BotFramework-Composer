@@ -6,6 +6,7 @@ import {
   LogData,
   persistedEvents,
   TelemetryEvent,
+  TelemetryEventName,
   TelemetryEventTypes,
   TelemetrySettings,
 } from '@botframework-composer/types';
@@ -26,7 +27,7 @@ export default class ConsoleClient {
   public static trackEvent(name: string, properties: LogData) {
     if (this._telemetrySettings?.allowDataCollection) {
       console.log('bfc-telemetry', { type: TelemetryEventTypes.TrackEvent, name, properties });
-    } else if (persistedEvents.includes(name)) {
+    } else if (persistedEvents.includes(name as TelemetryEventName)) {
       /**
        * persistedEvents is an array of telemetry events that occur before the user has
        * had a chance to opt in to data collection. These events are added to the event queue;
