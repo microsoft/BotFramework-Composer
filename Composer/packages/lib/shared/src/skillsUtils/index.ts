@@ -146,3 +146,15 @@ export const parseRuntimeKey = (
     runtimeType: 'webapp',
   };
 };
+
+export const isManifestJson = (content) => {
+  try {
+    const urls = [
+      'https://schemas.botframework.com/schemas/skills/v2.1/skill-manifest.json',
+      'https://schemas.botframework.com/schemas/skills/v2.2/skill-manifest.json',
+    ];
+    return urls.includes(JSON.parse(content).$schema);
+  } catch (e) {
+    return false;
+  }
+};

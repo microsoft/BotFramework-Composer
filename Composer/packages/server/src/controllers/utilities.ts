@@ -26,8 +26,7 @@ async function getRemoteFile(req: Request, res: Response) {
     const url: string = req.query.url;
     const content = await getFile(url);
     const start = decodeURI(url).lastIndexOf('/');
-    const end = decodeURI(url).lastIndexOf('.');
-    const id = url.substring(start + 1, end);
+    const id = url.substring(start + 1);
 
     res.status(200).json({
       content,

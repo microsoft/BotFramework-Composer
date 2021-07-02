@@ -1,5 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
+import { readFile } from 'fs';
+import { promisify } from 'util';
+
 import axios from 'axios';
 
 export const getDialogNameFromFile = (file: string) => {
@@ -20,7 +23,17 @@ export const getDialogNameFromFile = (file: string) => {
   return dialogName;
 };
 
+const urlRegex = /^http[s]?:\/\/\w+/;
+const filePathRegex = /([^<>/\\:""]+\.\w+$)/;
+
 export const getRemoteFile = async (url): Promise<string> => {
-  const response = await axios.get(url);
-  return response.data;
+  if (urlRegex.test(url)) {
+    const response = await axios.get(url);
+    return response.data as string;
+  } else if (filePathRegex.test(url)) {
+    // get local manifest
+    const content = await promisify(readFile)(url, { encoding: 'UTF-8' });
+    return content as string;
+  }
+  return '';
 };

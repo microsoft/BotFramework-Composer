@@ -73,7 +73,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
           </Conversation>
         </div>
       </Split>
-      <Modals projectId={activeBot} />
+      <Modals projectId={activeBot} rootBotId={projectId} />
     </div>
   );
 };

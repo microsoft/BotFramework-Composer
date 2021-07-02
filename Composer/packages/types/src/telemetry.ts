@@ -97,7 +97,7 @@ type DesignerEvents = {
   AddNewDialogStarted: undefined;
   AddNewDialogCompleted: undefined;
   AddNewSkillStarted: { method: string };
-  AddNewSkillCompleted: undefined;
+  AddNewSkillCompleted: { from: string };
   NewTemplateAdded: undefined;
   FormDialogGenerated: { durationMilliseconds: number };
 };
