@@ -374,7 +374,6 @@ async function removeSkillFiles(req: Request, res: Response) {
 
   const currentProject = await BotProjectService.getProjectById(projectId, user);
   if (currentProject !== undefined) {
-    console.log(req.params.name);
     const isDelete = await currentProject.deleteSkillFiles(req.params.name);
     res.status(200).json(isDelete);
   } else {

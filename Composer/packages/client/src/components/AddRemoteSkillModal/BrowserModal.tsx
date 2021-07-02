@@ -24,7 +24,7 @@ export const BrowserModal = (props) => {
           props.onUpdate(zipFile.name, zip.files);
         })
         .catch((error) => {
-          console.log(error);
+          props.onError({ manifestUrl: error.toString() });
         });
     }
   };

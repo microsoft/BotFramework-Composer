@@ -127,7 +127,6 @@ export const getSkillManifest = async (
     });
     setSkillManifest(data);
   } catch (error) {
-    console.log(error);
     const httpMessage = error?.response?.data?.message;
     const message = httpMessage?.match('Unexpected string in JSON')
       ? formatMessage('Error attempting to parse Skill manifest. There could be an error in its format.')
@@ -393,7 +392,7 @@ export const CreateSkillModal: React.FC<CreateSkillModalProps> = (props) => {
                     value={formData.manifestUrl || ''}
                     onChange={handleManifestUrlChange}
                   />
-                  <BrowserModal onUpdate={handleBrowseButtonUpdate} />
+                  <BrowserModal onUpdate={handleBrowseButtonUpdate} onError={setFormDataErrors} />
                 </div>
                 {skillManifest?.endpoints?.length > 1 && (
                   <Dropdown
