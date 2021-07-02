@@ -22,6 +22,7 @@ import {
   getQnaFailedNotification,
   getQnaSuccessNotification,
   getQnaPendingNotification,
+  getQnaImportPendingNotification,
 } from '../../utils/notifications';
 import httpClient from '../../utils/httpUtil';
 import { qnaFilesSelectorFamily, rootBotProjectIdSelector } from '../selectors';
@@ -603,6 +604,7 @@ ${response.data}
       endpoint,
       locales,
       kbId,
+      kbName,
       subscriptionKey,
       projectId,
     }: {
@@ -611,12 +613,13 @@ ${response.data}
       endpoint: string;
       locales: string[];
       kbId: string;
+      kbName: string;
       subscriptionKey: string;
       projectId: string;
     }) => {
-      const { snapshot } = callbackHelpers;
+      const { snapshot, set } = callbackHelpers;
       await dismissCreateQnAModal({ projectId });
-      const notification = createNotification(getQnaPendingNotification(endpoint));
+      const notification = createNotification(getQnaImportPendingNotification(kbName));
       addNotificationInternal(callbackHelpers, notification);
 
       let response;
@@ -627,8 +630,14 @@ ${response.data}
           subscriptionKey,
         });
         const rootBotProjectId = await snapshot.getPromise(rootBotProjectIdSelector);
+        const currentLocale = await snapshot.getPromise(localeState(projectId));
         const notification = createNotification(
           getQnaSuccessNotification(() => {
+            // if created locale is not current authoring locale, switch to target locale.
+            if (currentLocale !== locales[0]) {
+              set(localeState(projectId), locales[0]);
+            }
+
             navigateTo(
               rootBotProjectId === projectId
                 ? `/bot/${projectId}/knowledge-base/${getBaseName(id)}`
@@ -677,6 +686,7 @@ ${response.data}
       endpoint,
       subscriptionKey,
       kbId,
+      kbName,
     }: {
       containerId: string; // qna container file id: {name}.source.{locale}
       dialogId: string;
@@ -684,9 +694,10 @@ ${response.data}
       endpoint: string;
       subscriptionKey: string;
       kbId: string;
+      kbName: string;
     }) => {
       const { snapshot } = callbackHelpers;
-      const notification = createNotification(getQnaPendingNotification(endpoint));
+      const notification = createNotification(getQnaImportPendingNotification(kbName));
       addNotificationInternal(callbackHelpers, notification);
       let response;
       try {

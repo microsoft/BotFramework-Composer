@@ -18,6 +18,7 @@ import {
   Selection,
   DetailsRow,
   IDetailsRowProps,
+  CheckboxVisibility,
 } from 'office-ui-fabric-react/lib/DetailsList';
 import { Spinner } from 'office-ui-fabric-react/lib/Spinner';
 import { Dropdown } from 'office-ui-fabric-react/lib/Dropdown';
@@ -98,7 +99,6 @@ export const CreateQnAModal: React.FC<CreateQnAModalProps> = (props) => {
   const [allTenants, setAllTenants] = useState<AzureTenant[]>([]);
   const [tenantsErrorMessage, setTenantsErrorMessage] = useState<string | undefined>(undefined);
   const [loading, setLoading] = useState<string | undefined>(undefined);
-  const [kbLoading, setKbLoading] = useState<string | undefined>(undefined);
   const [noKeys, setNoKeys] = useState<boolean>(false);
   const [nextAction, setNextAction] = useState<string>('url');
   const [key, setKey] = useState<KeyRec>();
@@ -106,7 +106,7 @@ export const CreateQnAModal: React.FC<CreateQnAModalProps> = (props) => {
   const [availableSubscriptions, setAvailableSubscriptions] = useState<Subscription[]>([]);
   const [subscriptionsErrorMessage, setSubscriptionsErrorMessage] = useState<string>();
   const [keys, setKeys] = useState<KeyRec[]>([]);
-  const [kbs, setKbs] = useState<KBRec[]>([]);
+  const [kbs, setKbs] = useState<{ [key: string]: KBRec[] }>({});
   const [selectedKb, setSelectedKb] = useState<KBRec>();
   const [dialogTitle, setDialogTitle] = useState<string>('');
 
@@ -256,7 +256,7 @@ export const CreateQnAModal: React.FC<CreateQnAModalProps> = (props) => {
     setKeys([]);
     setCurrentStep('name');
     setSelectedKb(undefined);
-    setKbs([]);
+    setKbs({});
   }, [showCreateQnAFrom]);
 
   const fetchKeys = async (cognitiveServicesManagementClient, accounts) => {
@@ -296,26 +296,37 @@ export const CreateQnAModal: React.FC<CreateQnAModalProps> = (props) => {
         cognitiveServicesManagementClient,
         accounts.filter((a) => a.kind === serviceKeyType)
       );
+
+      const kbsMap = {};
+      const avaliableKeys: KeyRec[] = [];
+      for (const keyItem of keylist) {
+        const kbGroups = await fetchKBGroups(keyItem);
+        kbsMap[keyItem.name] = kbGroups;
+        if (kbGroups.length) {
+          avaliableKeys.push(keyItem);
+        }
+      }
+      setKbs(kbsMap);
       setLoading(undefined);
-      if (keylist.length == 0) {
+      if (avaliableKeys.length == 0) {
         setNoKeys(true);
       } else {
         setNoKeys(false);
-        setKeys(keylist);
+        setKeys(avaliableKeys);
       }
     }
   };
 
-  const fetchKBGroups = async () => {
+  const fetchKBGroups = async (key: KeyRec) => {
+    let kblist: KBRec[] = [];
     if (token && key) {
-      setKbLoading(formatMessage('Loading knowledge base...'));
       const cognitiveServicesCredentials = new CognitiveServicesCredentials(key.key);
       const resourceClient = new QnAMakerClient(cognitiveServicesCredentials, key.endpoint);
 
       const result = await resourceClient.knowledgebase.listAll();
 
       if (result.knowledgebases) {
-        const kblist: KBRec[] = result.knowledgebases.map((item: any) => {
+        kblist = result.knowledgebases.map((item: any) => {
           return {
             id: item.id || '',
             name: item.name || '',
@@ -323,14 +334,10 @@ export const CreateQnAModal: React.FC<CreateQnAModalProps> = (props) => {
             lastChangedTimestamp: item.lastChangedTimestamp || '',
           };
         });
-        if (kblist?.length) {
-          setKbs(kblist);
-        }
       }
-      setKbLoading(undefined);
     }
+    return kblist;
   };
-
   // allow a user to provide a subscription id if one is missing
   const onChangeSubscription = async (_, opt) => {
     // get list of keys for this subscription
@@ -354,7 +361,6 @@ export const CreateQnAModal: React.FC<CreateQnAModalProps> = (props) => {
       subscriptionId,
       resourceType: serviceName,
     });
-    fetchKBGroups();
     setCurrentStep('knowledge-base');
   };
 
@@ -588,7 +594,8 @@ export const CreateQnAModal: React.FC<CreateQnAModalProps> = (props) => {
     const avaliableLanguageKbs: KBRec[] = [];
     const disabledLanguageKbs: KBRec[] = [];
 
-    kbs.forEach((item) => {
+    const currentKbs = key ? kbs[key.name] : [];
+    currentKbs.forEach((item) => {
       if (item.language === currentAuthoringLanuage) {
         currentLanguageKbs.push(item);
       } else if (item.language === defaultLanuage) {
@@ -626,6 +633,7 @@ export const CreateQnAModal: React.FC<CreateQnAModalProps> = (props) => {
               selectionPreservedOnEmptyClick
               ariaLabelForSelectAllCheckbox="Toggle selection for all items"
               ariaLabelForSelectionColumn="Toggle selection"
+              checkboxVisibility={CheckboxVisibility.hidden}
               checkButtonAriaLabel="select row"
               columns={columns}
               getKey={(item) => item.name}
@@ -635,10 +643,6 @@ export const CreateQnAModal: React.FC<CreateQnAModalProps> = (props) => {
               selectionMode={SelectionMode.single}
               onRenderRow={onRenderRow}
             />
-            {kbLoading && <Spinner label={kbLoading} labelPosition="bottom" />}
-            {sortedKbs.length === 0 && !kbLoading && (
-              <p style={{ textAlign: 'center' }}> {formatMessage('No avaliable knowledge base')} </p>
-            )}
           </div>
         </div>
         <DialogFooter>
@@ -724,6 +728,7 @@ export const CreateQnAModal: React.FC<CreateQnAModalProps> = (props) => {
         locales: createdOnLocales,
         endpoint: key.endpoint,
         kbId: selectedKb.id,
+        kbName: selectedKb.name,
         subscriptionKey: key.key,
       });
       setInitialName('');

@@ -17,6 +17,7 @@ import {
   Selection,
   IDetailsRowProps,
   DetailsRow,
+  CheckboxVisibility,
 } from 'office-ui-fabric-react/lib/DetailsList';
 import { Spinner } from 'office-ui-fabric-react/lib/Spinner';
 import { Dropdown } from 'office-ui-fabric-react/lib/Dropdown';
@@ -99,8 +100,8 @@ export const ReplaceQnAFromModal: React.FC<ReplaceQnAModalProps> = (props) => {
   const [availableSubscriptions, setAvailableSubscriptions] = useState<Subscription[]>([]);
   const [subscriptionsErrorMessage, setSubscriptionsErrorMessage] = useState<string>();
   const [keys, setKeys] = useState<KeyRec[]>([]);
-  const [kbs, setKbs] = useState<KBRec[]>([]);
-  const [kbLoading, setKbLoading] = useState<string | undefined>(undefined);
+  const [kbs, setKbs] = useState<{ [key: string]: KBRec[] }>({});
+
   const [selectedKb, setSelectedKb] = useState<KBRec>();
   const [dialogTitle, setDialogTitle] = useState<string>('');
 
@@ -288,24 +289,35 @@ export const ReplaceQnAFromModal: React.FC<ReplaceQnAModalProps> = (props) => {
         cognitiveServicesManagementClient,
         accounts.filter((a) => a.kind === serviceKeyType)
       );
+
+      const kbsMap = {};
+      const avaliableKeys: KeyRec[] = [];
+      for (const keyItem of keylist) {
+        const kbGroups = await fetchKBGroups(keyItem);
+        kbsMap[keyItem.name] = kbGroups;
+        if (kbGroups.length) {
+          avaliableKeys.push(keyItem);
+        }
+      }
+      setKbs(kbsMap);
       setLoading(undefined);
-      if (keylist.length == 0) {
+      if (avaliableKeys.length == 0) {
         setNoKeys(true);
       } else {
         setNoKeys(false);
-        setKeys(keylist);
+        setKeys(avaliableKeys);
       }
     }
   };
 
-  const fetchKBGroups = async () => {
+  const fetchKBGroups = async (key: KeyRec) => {
+    let kblist: KBRec[] = [];
     if (token && key) {
-      setKbLoading(formatMessage('Loading knowledge base...'));
       const cognitiveServicesCredentials = new CognitiveServicesCredentials(key.key);
       const resourceClient = new QnAMakerClient(cognitiveServicesCredentials, key.endpoint);
       const result = await resourceClient.knowledgebase.listAll();
       if (result.knowledgebases) {
-        const kblist: KBRec[] = result.knowledgebases.map((item: any) => {
+        kblist = result.knowledgebases.map((item: any) => {
           return {
             id: item.id || '',
             name: item.name || '',
@@ -313,13 +325,9 @@ export const ReplaceQnAFromModal: React.FC<ReplaceQnAModalProps> = (props) => {
             lastChangedTimestamp: item.lastChangedTimestamp || '',
           };
         });
-
-        if (kblist?.length) {
-          setKbs(kblist);
-        }
       }
-      setKbLoading(undefined);
     }
+    return kblist;
   };
 
   // allow a user to provide a subscription id if one is missing
@@ -350,7 +358,6 @@ export const ReplaceQnAFromModal: React.FC<ReplaceQnAModalProps> = (props) => {
       subscriptionId,
       resourceType: serviceName,
     });
-    fetchKBGroups();
     setCurrentStep('knowledge-base');
   };
 
@@ -550,7 +557,8 @@ export const ReplaceQnAFromModal: React.FC<ReplaceQnAModalProps> = (props) => {
     const currentLanguageKbs: KBRec[] = [];
     const disabledLanguageKbs: KBRec[] = [];
 
-    kbs.forEach((item) => {
+    const currentKbs = key ? kbs[key.name] : [];
+    currentKbs.forEach((item) => {
       if (item.language === currentAuthoringLanuage) {
         currentLanguageKbs.push(item);
       } else {
@@ -588,6 +596,7 @@ export const ReplaceQnAFromModal: React.FC<ReplaceQnAModalProps> = (props) => {
               selectionPreservedOnEmptyClick
               ariaLabelForSelectAllCheckbox="Toggle selection for all items"
               ariaLabelForSelectionColumn="Toggle selection"
+              checkboxVisibility={CheckboxVisibility.hidden}
               checkButtonAriaLabel="select row"
               columns={columns}
               getKey={(item) => item.name}
@@ -597,10 +606,6 @@ export const ReplaceQnAFromModal: React.FC<ReplaceQnAModalProps> = (props) => {
               selectionMode={SelectionMode.single}
               onRenderRow={onRenderRow}
             />
-            {kbLoading && <Spinner label={kbLoading} labelPosition="bottom" />}
-            {kbs.length === 0 && !kbLoading && (
-              <p style={{ textAlign: 'center' }}> {formatMessage('No avaliable knowledge base')} </p>
-            )}
           </div>
         </div>
         <DialogFooter>
@@ -671,7 +676,13 @@ export const ReplaceQnAFromModal: React.FC<ReplaceQnAModalProps> = (props) => {
 
   const onSubmitImportKB = async () => {
     if (key && token && selectedKb && formData) {
-      onSubmit({ ...formData, endpoint: key.endpoint, kbId: selectedKb.id, subscriptionKey: key.key });
+      onSubmit({
+        ...formData,
+        endpoint: key.endpoint,
+        kbId: selectedKb.id,
+        kbName: selectedKb.name,
+        subscriptionKey: key.key,
+      });
       TelemetryClient.track('UpdateKnowledgeBaseCompleted', { source: 'kb' });
     }
   };

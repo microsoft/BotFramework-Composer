@@ -34,6 +34,7 @@ export type CreateQnAFormData = {
   multiTurn?: boolean;
   endpoint?: string;
   kbId?: string;
+  kbName?: string;
   subscriptionKey?: string;
 };
 
