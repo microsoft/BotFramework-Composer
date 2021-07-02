@@ -80,6 +80,7 @@ export type ReplaceQnAModalFormData = {
   endpoint?: string;
   subscriptionKey?: string;
   kbId?: string;
+  kbName?: string;
 };
 
 export const validateUrl: FieldValidator = (url: string): string => {
