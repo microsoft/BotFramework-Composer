@@ -4128,10 +4128,10 @@
     semver "^7.3.4"
     tar "^6.1.0"
 
-"@microsoft/bf-cli-command@4.13.1":
-  version "4.13.1"
-  resolved "https://registry.yarnpkg.com/@microsoft/bf-cli-command/-/bf-cli-command-4.13.1.tgz#2aa1bc60cd4ed51919c5ff01e58e0efcd15d917a"
-  integrity sha512-xRP9uDnojhZMEpYFSGH6ybgtADR4N6byZo38JwxYBCVBAmpqSAHFWldU3L3cAxet8SUX0NqypQzg8aUPN1ufKQ==
+"@microsoft/bf-cli-command@4.14.0-dev.20210415.161c029":
+  version "4.14.0-dev.20210415.161c029"
+  resolved "https://registry.yarnpkg.com/@microsoft/bf-cli-command/-/bf-cli-command-4.14.0-dev.20210415.161c029.tgz#9f79d634d99900cba80116a63257136d3d9762b6"
+  integrity sha512-a5vsEajCmGZBxP0XeUUVhxMEzQi1qZQJhO9SkBWgEh/XElr9z1Qsd8Ik6QZh4esMWaKyMMkfPGqKnYveax6Htw==
   dependencies:
     "@oclif/command" "~1.5.19"
     "@oclif/config" "~1.13.3"
@@ -19367,14 +19367,6 @@ promise-inflight@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/promise-inflight/-/promise-inflight-1.0.1.tgz#98472870bf228132fcbdd868129bad12c3c029e3"
   integrity sha1-mEcocL8igTL8vdhoEputEsPAKeM=
-
-promise-retry@^2.0.1:
-  version "2.0.1"
-  resolved "https://registry.yarnpkg.com/promise-retry/-/promise-retry-2.0.1.tgz#ff747a13620ab57ba688f5fc67855410c370da22"
-  integrity sha512-y+WKFlBR8BGXnsNlIHFGPZmyDf3DFMoLhaflAnyZgV6rG6xu+JwesTo2Q9R6XwYmtmwAFCkAk3e35jEdoeh/3g==
-  dependencies:
-    err-code "^2.0.2"
-    retry "^0.12.0"
 
 promise-retry@^2.0.1:
   version "2.0.1"
