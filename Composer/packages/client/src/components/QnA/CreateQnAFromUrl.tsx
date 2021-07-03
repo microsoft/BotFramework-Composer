@@ -9,6 +9,7 @@ import { Stack } from 'office-ui-fabric-react/lib/Stack';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { Text } from 'office-ui-fabric-react/lib/Text';
 import { Checkbox } from 'office-ui-fabric-react/lib/Checkbox';
+import { Dropdown } from 'office-ui-fabric-react/lib/Dropdown';
 
 import { Locales } from '../../locales';
 
@@ -28,9 +29,12 @@ const hasErrors = (errors: CreateQnAFromUrlFormDataErrors) => {
 export const CreateQnAFromUrl: React.FC<CreateQnAFromFormProps> = (props) => {
   const { onChange, dialogId, locales, defaultLocale, initialName } = props;
 
+  const index = Locales.findIndex((l) => l.locale === locales[0]);
+  const initialLanguage = index > -1 ? Locales[index].language : locales[0];
   const [formData, setFormData] = useState<CreateQnAFromUrlFormData>({
     urls: [],
     locales: initializeLocales(locales, defaultLocale),
+    language: initialLanguage,
     name: initialName || '',
     multiTurn: false,
   });
@@ -41,19 +45,21 @@ export const CreateQnAFromUrl: React.FC<CreateQnAFromFormProps> = (props) => {
   });
 
   const usedLocales = useMemo(() => {
-    return formData.locales.map((fl) => {
+    return locales.map((fl) => {
       const index = Locales.findIndex((l) => l.locale === fl);
       if (index > -1) {
-        return Locales[index].language;
+        return { text: Locales[index].language, locale: fl, key: fl };
+      } else {
+        return { text: fl, locale: fl, key: fl };
       }
     });
-  }, [formData.locales]);
+  }, [locales]);
 
   const isQnAFileselected = !(dialogId === 'all');
 
-  const onChangeUrlsField = (value: string | undefined, index: number) => {
+  const onChangeUrlsField = (value: string | undefined) => {
     const urls = [...formData.urls];
-    urls[index] = value ?? '';
+    urls[0] = value ?? '';
     updateUrlsField(urls);
     updateUrlsError(urls);
   };
@@ -79,6 +85,14 @@ export const CreateQnAFromUrl: React.FC<CreateQnAFromFormProps> = (props) => {
     setFormDataErrors({ ...formDataErrors, urls: urlErrors });
   };
 
+  const onChangeLanguageField = (option) => {
+    setFormData({
+      ...formData,
+      language: option.text,
+      locales: [option.key],
+    });
+  };
+
   useEffect(() => {
     const disabled = hasErrors(formDataErrors) || !formData.urls[0] || !formData.name;
     onChange(formData, disabled);
@@ -97,23 +111,26 @@ export const CreateQnAFromUrl: React.FC<CreateQnAFromFormProps> = (props) => {
         </p>
       </Stack>
       <Stack maxHeight={400} styles={urlStackStyle}>
-        <Text styles={knowledgeBaseStyle}>{formatMessage('FAQ website (source)')}</Text>
-        {formData.locales.map((locale, i) => {
-          return (
-            <div key={`add${locale}InCreateQnAFromUrlModal`} css={urlPairStyle}>
-              <TextField
-                data-testid={`add${locale}InCreateQnAFromUrlModal`}
-                errorMessage={formDataErrors.urls[i]}
-                placeholder={formatMessage('Type or paste URL')}
-                prefix={usedLocales[i]}
-                required={i === 0}
-                styles={textFieldUrl}
-                value={formData.urls[i]}
-                onChange={(e, url = '') => onChangeUrlsField(url, i)}
-              />
-            </div>
-          );
-        })}
+        <Text styles={knowledgeBaseStyle}>{formatMessage('Source URL')}</Text>
+        <div key={`add${formData.locales[0]}InCreateQnAFromUrlModal`} css={urlPairStyle}>
+          <TextField
+            data-testid={`add${formData.locales[0]}InCreateQnAFromUrlModal`}
+            errorMessage={formDataErrors.urls[0]}
+            placeholder={formatMessage('Enter a URL')}
+            styles={textFieldUrl}
+            value={formData.urls[0]}
+            onChange={(e, url = '') => onChangeUrlsField(url)}
+          />
+        </div>
+        <Dropdown
+          label={formatMessage('What language is this content in?')}
+          options={usedLocales}
+          selectedKey={formData.locales[0]}
+          styles={textFieldUrl}
+          onChange={(_e, o) => {
+            onChangeLanguageField(o);
+          }}
+        />
 
         {!isQnAFileselected && (
           <div css={warning}> {formatMessage('Please select a specific qna file to import QnA')}</div>

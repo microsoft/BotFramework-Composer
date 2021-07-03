@@ -48,7 +48,16 @@ import {
 } from '../../recoilModel';
 
 import { CreateQnAFormData, CreateQnAModalProps, QnAMakerLearnMoreUrl } from './constants';
-import { subText, styles, contentBox, formContainer, choiceContainer } from './styles';
+import {
+  subText,
+  styles,
+  contentBox,
+  formContainer,
+  choiceContainer,
+  nameStepContainer,
+  resourceDropdown,
+  dialogBodyStyles,
+} from './styles';
 import { CreateQnAFromUrl } from './CreateQnAFromUrl';
 import { CreateQnAFromScratch } from './CreateQnAFromScratch';
 import { CreateQnAFromQnAMaker } from './CreateQnAFromQnAMaker';
@@ -71,9 +80,7 @@ type KBRec = {
 
 type Step = 'name' | 'intro' | 'resource' | 'knowledge-base' | 'outcome';
 
-const dropdownStyles = { dropdown: { width: '100%', marginBottom: 10 } };
 const mainElementStyle = { marginBottom: 20 };
-const dialogBodyStyles = { height: 400 };
 const serviceName = 'QnA Maker';
 const serviceKeyType = 'QnAMaker';
 
@@ -375,24 +382,25 @@ export const CreateQnAModal: React.FC<CreateQnAModalProps> = (props) => {
   const renderNameStep = () => {
     return (
       <div>
-        <p>
-          <span css={subText}>
-            {formatMessage('Use Azure QnA Maker to extract question-and-answer pairs from an online FAQ. ')}
-            <Link href={QnAMakerLearnMoreUrl} target={'_blank'}>
-              {formatMessage('Learn more')}
-            </Link>
-          </span>
-        </p>
-        <CreateQnAFromScratch
-          {...props}
-          currentLocale={currentLocale}
-          defaultLocale={defaultLocale}
-          initialName={initialName}
-          locales={locales}
-          onChange={onFormDataChange}
-          onUpdateInitialName={setInitialName}
-        />
-
+        <div style={nameStepContainer}>
+          <div style={{ marginBottom: 14 }}>
+            <span css={subText}>
+              {formatMessage('Use Azure QnA Maker to extract question-and-answer pairs from an online FAQ. ')}
+              <Link href={QnAMakerLearnMoreUrl} target={'_blank'}>
+                {formatMessage('Learn more')}
+              </Link>
+            </span>
+          </div>
+          <CreateQnAFromScratch
+            {...props}
+            currentLocale={currentLocale}
+            defaultLocale={defaultLocale}
+            initialName={initialName}
+            locales={locales}
+            onChange={onFormDataChange}
+            onUpdateInitialName={setInitialName}
+          />
+        </div>
         <DialogFooter>
           <PrimaryButton
             disabled={!!loading || disabled}
@@ -412,9 +420,9 @@ export const CreateQnAModal: React.FC<CreateQnAModalProps> = (props) => {
   const renderIntroStep = () => {
     return (
       <div>
-        <p>
+        <div style={{ marginBottom: 14 }}>
           <span css={subText}>{formatMessage('Create a KB from a URL or import content from an existing KB')}</span>
-        </p>
+        </div>
         <div css={contentBox}>
           <div css={choiceContainer}>
             <ChoiceGroup options={actionOptions} selectedKey={nextAction} onChange={onChangeAction} />
@@ -466,9 +474,9 @@ export const CreateQnAModal: React.FC<CreateQnAModalProps> = (props) => {
     return (
       <div>
         <div css={dialogBodyStyles}>
-          <p css={{ marginTop: 0 }}>
+          <div style={{ marginBottom: 14 }}>
             {formatMessage('Select the Azure directory and resource you want to choose a knowledge base from')}
-          </p>
+          </div>
           <div css={mainElementStyle}>
             <Dropdown
               required
@@ -477,7 +485,7 @@ export const CreateQnAModal: React.FC<CreateQnAModalProps> = (props) => {
               label={formatMessage('Azure directory')}
               options={allTenants.map((t) => ({ key: t.tenantId, text: t.displayName }))}
               selectedKey={tenantId}
-              styles={dropdownStyles}
+              styles={resourceDropdown}
               onChange={(_e, o) => {
                 setTenantId(o?.key as string);
               }}
@@ -496,7 +504,7 @@ export const CreateQnAModal: React.FC<CreateQnAModalProps> = (props) => {
               }
               placeholder={formatMessage('Select a subscription')}
               selectedKey={subscriptionId}
-              styles={dropdownStyles}
+              styles={resourceDropdown}
               onChange={onChangeSubscription}
             />
           </div>
@@ -519,7 +527,7 @@ export const CreateQnAModal: React.FC<CreateQnAModalProps> = (props) => {
                     }) ?? []
                   }
                   placeholder={formatMessage('Select resource')}
-                  styles={dropdownStyles}
+                  styles={resourceDropdown}
                   onChange={onChangeKey}
                 />
               </div>
@@ -624,8 +632,10 @@ export const CreateQnAModal: React.FC<CreateQnAModalProps> = (props) => {
 
     return (
       <div>
-        <div css={{ ...dialogBodyStyles, width: 800 }}>
-          <p css={{ marginTop: 0 }}>{formatMessage('Select one or more KB to import into your bot project')}</p>
+        <div css={dialogBodyStyles}>
+          <div style={{ marginBottom: 14 }}>
+            {formatMessage('Select one or more KB to import into your bot project')}
+          </div>
           <div css={mainElementStyle}>
             <DetailsList
               enterModalSelectionOnTouch

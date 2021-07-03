@@ -14,6 +14,7 @@ export type CreateQnAFromScratchFormData = {
 export type CreateQnAFromUrlFormData = {
   urls: string[];
   locales: string[];
+  language: string;
   name: string;
   multiTurn: boolean;
 };

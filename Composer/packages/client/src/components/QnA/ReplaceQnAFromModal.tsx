@@ -44,6 +44,7 @@ import { localeToLanguage } from './utilities';
 import { ReplaceQnAModalFormData, ReplaceQnAModalProps } from './constants';
 import {
   styles,
+  subText,
   contentBox,
   formContainer,
   choiceContainer,
@@ -51,6 +52,8 @@ import {
   descriptionStyle,
   signInButton,
   accountInfo,
+  resourceDropdown,
+  dialogBodyStyles,
 } from './styles';
 import { ImportQnAFromUrl } from './ImportQnAFromUrl';
 
@@ -71,9 +74,7 @@ type KBRec = {
 
 type Step = 'intro' | 'resource' | 'knowledge-base' | 'outcome';
 
-const dropdownStyles = { dropdown: { width: 245, marginBottom: 10 } };
 const mainElementStyle = { marginBottom: 20 };
-const dialogBodyStyles = { height: 464, width: 920 };
 const serviceName = 'QnA Maker';
 const serviceKeyType = 'QnAMaker';
 
@@ -378,6 +379,9 @@ export const ReplaceQnAFromModal: React.FC<ReplaceQnAModalProps> = (props) => {
     }
     return (
       <div>
+        <div style={{ marginBottom: 14 }}>
+          <span css={subText}>{formatMessage('Create a KB from a URL or import content from an existing KB')}</span>
+        </div>
         <div css={contentBox}>
           <div css={choiceContainer}>
             <ChoiceGroup options={actionOptions} selectedKey={nextAction} onChange={onChangeAction} />
@@ -431,9 +435,9 @@ export const ReplaceQnAFromModal: React.FC<ReplaceQnAModalProps> = (props) => {
     return (
       <div>
         <div css={dialogBodyStyles}>
-          <p css={{ marginTop: 0 }}>
+          <div style={{ marginBottom: 14 }}>
             {formatMessage('Select the Azure directory and resource you want to choose a knowledge base from')}
-          </p>
+          </div>
           <div css={mainElementStyle}>
             <Dropdown
               required
@@ -442,7 +446,7 @@ export const ReplaceQnAFromModal: React.FC<ReplaceQnAModalProps> = (props) => {
               label={formatMessage('Azure directory')}
               options={allTenants.map((t) => ({ key: t.tenantId, text: t.displayName }))}
               selectedKey={tenantId}
-              styles={dropdownStyles}
+              styles={resourceDropdown}
               onChange={(_e, o) => {
                 setTenantId(o?.key as string);
               }}
@@ -461,7 +465,7 @@ export const ReplaceQnAFromModal: React.FC<ReplaceQnAModalProps> = (props) => {
               }
               placeholder={formatMessage('Select a subscription')}
               selectedKey={subscriptionId}
-              styles={dropdownStyles}
+              styles={resourceDropdown}
               onChange={onChangeSubscription}
             />
           </div>
@@ -484,7 +488,7 @@ export const ReplaceQnAFromModal: React.FC<ReplaceQnAModalProps> = (props) => {
                     }) ?? []
                   }
                   placeholder={formatMessage('Select resource')}
-                  styles={dropdownStyles}
+                  styles={resourceDropdown}
                   onChange={onChangeKey}
                 />
               </div>

@@ -13,6 +13,7 @@ import { QnAFile } from '@bfc/shared';
 import { FieldConfig, useForm } from '../../hooks/useForm';
 import { getQnAFileUrlOption, getQnAFileMultiTurnOption } from '../../utils/qnaUtil';
 import { getExtension } from '../../utils/fileUtil';
+import { Locales } from '../../locales';
 
 import { validateUrl } from './constants';
 import { header, titleStyle, descriptionStyle, dialogWindow, textFieldKBNameFromScratch } from './styles';
@@ -55,6 +56,13 @@ export const ImportQnAFromUrl: React.FC<ImportQnAFromUrlModalProps> = (props) =>
   formConfig.multiTurn.defaultValue = getQnAFileMultiTurnOption(qnaFile);
   const { formData, updateField, formErrors, hasErrors } = useForm(formConfig);
 
+  const getLanguage = (locale) => {
+    const index = Locales.findIndex((l) => l.locale === locale);
+    if (index > -1) {
+      return Locales[index].language;
+    }
+  };
+
   const updateUrl = (url = '') => {
     updateField('url', url);
   };
@@ -80,7 +88,7 @@ export const ImportQnAFromUrl: React.FC<ImportQnAFromUrlModalProps> = (props) =>
           errorMessage={formErrors.url}
           label={formatMessage('Source URL or file')}
           placeholder={formatMessage('Enter a URL to Import QnA resource')}
-          prefix={locale}
+          prefix={getLanguage(locale)}
           styles={textFieldKBNameFromScratch}
           value={formData.url}
           onChange={(e, url) => updateUrl(url)}

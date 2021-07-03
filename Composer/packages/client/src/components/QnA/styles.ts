@@ -34,7 +34,7 @@ export const contentBox = css`
   display: flex;
   min-height: 320px;
   border: 1px solid #f3f2f1;
-  height: 462px;
+  height: 429px;
 `;
 
 export const formContainer = css`
@@ -50,6 +50,7 @@ export const choiceContainer = css`
   display: flex;
   flex-direction: column;
   padding: 10px 30px 10px 10px;
+  width: 329px;
 `;
 
 export const dialogWindow = css`
@@ -165,3 +166,14 @@ export const titleStyle = {
   fontWeight: 600,
   marginBottom: 10,
 };
+
+export const nameStepContainer = {
+  height: 464,
+  width: 921,
+};
+
+export const resourceDropdown = {
+  dropdown: { width: '100%', marginBottom: 10 },
+};
+
+export const dialogBodyStyles = { height: 464, width: 910, paddingRight: 10 };

@@ -30,7 +30,7 @@ export const CreateQnAFromScratch: React.FC<CreateQnAFromFormProps> = (props) =>
   useEffect(() => {
     const disabled = hasErrors || !formData.name;
     onChange(formData, disabled);
-  }, [formData]);
+  }, [formData, hasErrors]);
 
   return (
     <Fragment>
