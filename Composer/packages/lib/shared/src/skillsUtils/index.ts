@@ -149,13 +149,9 @@ export const parseRuntimeKey = (
 
 export const isManifestJson = (content) => {
   try {
-    const versions = [
-      '/v2.0/',
-      '/v2.1/',
-      '/v2.2/',
-    ];
+    const versions = ['/v2.0/', '/v2.1/', '/v2.2/'];
     const schema = JSON.parse(content).$schema;
-    return versions.some(v => schema.includes(v));
+    return versions.some((v) => schema.includes(v));
   } catch (e) {
     return false;
   }
