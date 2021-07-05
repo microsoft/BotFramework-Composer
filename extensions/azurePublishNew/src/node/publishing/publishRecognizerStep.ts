@@ -1,0 +1,168 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
+import * as path from 'path';
+
+import axios from 'axios';
+import * as fs from 'fs-extra';
+import { ILuisConfig, RuntimeTemplate } from '@botframework-composer/types';
+
+import { PublishStep, OnDeploymentProgress, PublishingWorkingSet } from './types';
+
+const getFiles = async (dir: string): Promise<string[]> => {
+  const files = [];
+
+  // eslint-disable-next-line security/detect-non-literal-fs-filename
+  const dirents = await fs.readdir(dir, { withFileTypes: true });
+
+  for (const dirent of dirents) {
+    const res = path.resolve(dir, dirent.name);
+
+    if (dirent.isDirectory()) {
+      files.push(...(await getFiles(res)));
+    } else {
+      files.push(res);
+    }
+  }
+
+  return files;
+};
+
+const getAccountList = async (accessToken: string, authoringEndpoint: string, luisAuthoringKey: string) => {
+  // Retry twice here
+  let retryCount = 0;
+  while (retryCount < 2) {
+    try {
+      // Make a call to the azureaccounts api
+      // DOCS HERE: https://westus.dev.cognitive.microsoft.com/docs/services/5890b47c39e2bb17b84a55ff/operations/5be313cec181ae720aa2b26c
+      // This returns a list of azure account information objects with AzureSubscriptionID, ResourceGroup, AccountName for each.
+      const getAccountUri = `${authoringEndpoint}/luis/api/v2.0/azureaccounts`;
+      const options = {
+        headers: { Authorization: `Bearer ${accessToken}`, 'Ocp-Apim-Subscription-Key': luisAuthoringKey },
+      };
+      const response = await axios.get(getAccountUri, options);
+
+      // this should include an array of account info objects
+      return JSON.parse(response.data);
+      break;
+    } catch (err) {
+      if (retryCount < 1) {
+        //TODO: We should have some kind of sleep between retries and properly check error types
+        retryCount++;
+      } else {
+        // handle the token invalid
+        const error = JSON.parse(err.error);
+        if (error?.error?.message && error?.error?.message.indexOf('access token expiry') > 0) {
+          throw new Error(
+            `Type: ${error?.error?.code}, Message: ${error?.error?.message}, run az account get-access-token, then replace the accessToken in your configuration`
+          );
+        } else {
+          throw err;
+        }
+      }
+    }
+  }
+};
+
+// DOCS HERE: https://westus.dev.cognitive.microsoft.com/docs/services/5890b47c39e2bb17b84a55ff/operations/5be32228e8473de116325515
+const updateLuisAccount = async (
+  accessToken: string,
+  luisAppId: string,
+  authoringEndpoint: string,
+  luisAuthoringKey: string,
+  account: any
+) => {
+  // Retry at most twice for each api call
+  let retryCount = 0;
+  while (retryCount < 2) {
+    try {
+      const luisAssignEndpoint = `${authoringEndpoint}/luis/api/v2.0/apps/${luisAppId}/azureaccounts`;
+      const options = {
+        body: account,
+        json: true,
+        headers: { Authorization: `Bearer ${accessToken}`, 'Ocp-Apim-Subscription-Key': luisAuthoringKey },
+      };
+      await axios.post(luisAssignEndpoint, {}, options);
+
+      break;
+    } catch (err) {
+      if (retryCount < 1) {
+        //TODO: We should have some kind of sleep between retries and properly check error types
+        retryCount++;
+      } else {
+        // handle the token invalid
+        // handle the token invalid
+        if (typeof err.error === 'string') {
+          const error = JSON.parse(err.error);
+          if (error?.error?.message && error?.error?.message.indexOf('access token expiry') > 0) {
+            throw new Error(
+              `Type: ${error?.error?.code}, Message: ${error?.error?.message}, run az account get-access-token, then replace the accessToken in your configuration`
+            );
+          }
+        }
+        throw Error(
+          'Failed to bind luis prediction resource to luis applications. Please check if your luisResource is set to luis prediction service name in your publish profile.'
+        );
+      }
+    }
+  }
+};
+
+type StepConfig = {
+  accessToken: string;
+  environment: string;
+  name: string;
+  luisResource: string;
+  luisSettings: ILuisConfig;
+  projectPath: string;
+};
+
+export const createPublishRecognizerStep = (config: StepConfig): PublishStep => {
+  const execute = async (workingSet: PublishingWorkingSet, onProgress: OnDeploymentProgress): Promise<void> => {
+    const {
+      accessToken,
+      environment,
+      name,
+      luisResource = `${name}-${environment}-luis`,
+      luisSettings,
+      projectPath,
+    } = config;
+
+    const {
+      //TODO: Move the defaults up the stack
+      authoringKey: luisAuthoringKey,
+      authoringEndpoint: authoringEndpoint = `https://${luisAuthoringRegion}.api.cognitive.microsoft.com`,
+      authoringRegion: luisAuthoringRegion = luisSettings.region || 'westus',
+    } = luisSettings;
+
+    // Find any files that contain the name 'luis.settings' in them
+    // These are generated by the LuBuild process and placed in the generated folder
+    // Read each dialog-to-luis app id mapping
+    const luisConfigFiles = (await getFiles(projectPath)).filter((filename) => filename.includes('luis.settings'));
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const luisAppIds: any = {};
+    for (const luisConfigFile of luisConfigFiles) {
+      const luisSettings = await fs.readJson(luisConfigFile);
+      Object.assign(luisAppIds, luisSettings.luis);
+    }
+
+    // In order for the bot to use the LUIS models, we need to assign a LUIS key to the endpoint of each app.
+    // Filter to the LUIS resources (as it would appear in the azure portal) associated with the luis endpoint key.
+    const account = (await getAccountList(accessToken, authoringEndpoint, luisAuthoringKey)).find(
+      (a) => a === luisResource
+    );
+
+    // Assign the appropriate account to each of the applicable LUIS apps for this bot.
+    for (const dialogKey in luisAppIds) {
+      const luisAppId = luisAppIds[dialogKey].appId;
+      onProgress(202, `Assigning to LUIS app id: ${luisAppId}`);
+      await updateLuisAccount(accessToken, luisAppId, authoringEndpoint, luisAuthoringKey, account);
+    }
+
+    onProgress(202, 'Published recognizer!');
+
+    workingSet.luisAppIds = luisAppIds;
+  };
+
+  return { execute };
+};
