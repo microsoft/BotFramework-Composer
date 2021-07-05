@@ -234,7 +234,7 @@ export const CreateSkillModal: React.FC<CreateSkillModalProps> = (props) => {
   };
 
   const validateUrl = useCallback(
-    async (event) => {
+    (event) => {
       event.preventDefault();
       setShowDetail(true);
       const localManifestPath = formData.manifestUrl.replace(/\\/g, '/');
