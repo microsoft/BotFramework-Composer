@@ -149,11 +149,13 @@ export const parseRuntimeKey = (
 
 export const isManifestJson = (content) => {
   try {
-    const urls = [
-      'https://schemas.botframework.com/schemas/skills/v2.1/skill-manifest.json',
-      'https://schemas.botframework.com/schemas/skills/v2.2/skill-manifest.json',
+    const versions = [
+      '/v2.0/',
+      '/v2.1/',
+      '/v2.2/',
     ];
-    return urls.includes(JSON.parse(content).$schema);
+    const schema = JSON.parse(content).$schema;
+    return versions.some(v => schema.includes(v));
   } catch (e) {
     return false;
   }

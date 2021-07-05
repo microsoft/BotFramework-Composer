@@ -104,6 +104,8 @@ export const validateLocalZip = async (files: Record<string, JSZipObject>) => {
       const content = await manifestFiles[0].async('string');
       result.manifestContent = JSON.parse(content);
       result.zipContent = zipContent;
+    } else {
+      result.error = { manifestUrl: formatMessage('could not locate manifest.json in zip') };
     }
   } catch (err) {
     // eslint-disable-next-line format-message/literal-pattern
@@ -232,7 +234,7 @@ export const CreateSkillModal: React.FC<CreateSkillModalProps> = (props) => {
   };
 
   const validateUrl = useCallback(
-    (event) => {
+    async (event) => {
       event.preventDefault();
       setShowDetail(true);
       const localManifestPath = formData.manifestUrl.replace(/\\/g, '/');
