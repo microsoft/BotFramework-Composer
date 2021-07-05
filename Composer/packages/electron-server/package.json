@@ -70,6 +70,7 @@
     "format-message-generate-id": "^6.2.3",
     "fs-extra": "^9.0.0",
     "lodash": "^4.17.19",
+    "node-fetch": "2.6.1",
     "semver": "7.3.2",
     "uuid": "^8.3.1"
   },

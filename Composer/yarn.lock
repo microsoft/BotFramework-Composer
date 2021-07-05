@@ -4128,10 +4128,10 @@
     semver "^7.3.4"
     tar "^6.1.0"
 
-"@microsoft/bf-cli-command@4.13.1":
-  version "4.13.1"
-  resolved "https://registry.yarnpkg.com/@microsoft/bf-cli-command/-/bf-cli-command-4.13.1.tgz#2aa1bc60cd4ed51919c5ff01e58e0efcd15d917a"
-  integrity sha512-xRP9uDnojhZMEpYFSGH6ybgtADR4N6byZo38JwxYBCVBAmpqSAHFWldU3L3cAxet8SUX0NqypQzg8aUPN1ufKQ==
+"@microsoft/bf-cli-command@4.14.0-dev.20210415.161c029":
+  version "4.14.0-dev.20210415.161c029"
+  resolved "https://registry.yarnpkg.com/@microsoft/bf-cli-command/-/bf-cli-command-4.14.0-dev.20210415.161c029.tgz#9f79d634d99900cba80116a63257136d3d9762b6"
+  integrity sha512-a5vsEajCmGZBxP0XeUUVhxMEzQi1qZQJhO9SkBWgEh/XElr9z1Qsd8Ik6QZh4esMWaKyMMkfPGqKnYveax6Htw==
   dependencies:
     "@oclif/command" "~1.5.19"
     "@oclif/config" "~1.13.3"
@@ -4143,10 +4143,10 @@
     fs-extra "^7.0.1"
     tslib "^2.0.3"
 
-"@microsoft/bf-cli-command@^4.11.1":
-  version "4.11.1"
-  resolved "https://registry.yarnpkg.com/@microsoft/bf-cli-command/-/bf-cli-command-4.11.1.tgz#003a1e993b68f4c4ae041cb403c83933605bdc44"
-  integrity sha512-fd74ePVUGECy+uFo1Hxb67Gnf0GgtShJpdFu1kJCWab9/uu0B7iY/OM+tjcJodHOl5Y6TDT7FEkvVL5M+kITXw==
+"@microsoft/bf-cli-command@4.14.0-dev.20210604.3f9ee15":
+  version "4.14.0-dev.20210604.3f9ee15"
+  resolved "https://registry.yarnpkg.com/@microsoft/bf-cli-command/-/bf-cli-command-4.14.0-dev.20210604.3f9ee15.tgz#2801f1a27ba3cb4d34a8a3eac6255e76d59af5d8"
+  integrity sha512-4ILTv27uJLByr3McoFMta60LglENr7yi8wkPlnRCIYUB4vBdViwcEunBZDH8Xfhdmp78flLMcABrYH9Q/EJH0A==
   dependencies:
     "@oclif/command" "~1.5.19"
     "@oclif/config" "~1.13.3"
@@ -4158,13 +4158,13 @@
     fs-extra "^7.0.1"
     tslib "^2.0.3"
 
-"@microsoft/bf-dialog@4.13.1":
-  version "4.13.1"
-  resolved "https://registry.yarnpkg.com/@microsoft/bf-dialog/-/bf-dialog-4.13.1.tgz#311510356a935fce282e05356c6c4a384c823b5c"
-  integrity sha512-kI1d7gI+1Xtrx1aFTHxldMKmicNNDrlscBcJFrMZxIQNmj8ZOx/gyZmJ/eXhXV+jIAgAmjgce0O1txz7OTKnIQ==
+"@microsoft/bf-dialog@4.14.0-dev.20210415.161c029":
+  version "4.14.0-dev.20210415.161c029"
+  resolved "https://registry.yarnpkg.com/@microsoft/bf-dialog/-/bf-dialog-4.14.0-dev.20210415.161c029.tgz#19e07da92cfcd5f23ed3d753968263103cd0b151"
+  integrity sha512-TkiysvgdxuSiNiOsgqgFG2xFF5tz35/81Qo4wTfE7gEts8jKJQxPeU73QTbGirkhs6l2m+55prw6Pj4QfmddMg==
   dependencies:
     "@apidevtools/json-schema-ref-parser" "^9.0.1"
-    "@microsoft/bf-cli-command" "4.13.1"
+    "@microsoft/bf-cli-command" "4.14.0-dev.20210415.161c029"
     "@oclif/command" "~1.5.19"
     "@oclif/config" "~1.13.3"
     "@oclif/errors" "~1.2.2"
@@ -5358,14 +5358,6 @@
   version "2.5.7"
   resolved "https://registry.yarnpkg.com/@types/node-fetch/-/node-fetch-2.5.7.tgz#20a2afffa882ab04d44ca786449a276f9f6bbf3c"
   integrity sha512-o2WVNf5UhWRkxlf6eq+jMZDu7kjgpgJfl4xVNlvryc95O/6F2ld8ztKX+qu+Rjyet93WAWm5LjeX9H5FGkODvw==
-  dependencies:
-    "@types/node" "*"
-    form-data "^3.0.0"
-
-"@types/node-fetch@^2.5.7":
-  version "2.5.8"
-  resolved "https://registry.yarnpkg.com/@types/node-fetch/-/node-fetch-2.5.8.tgz#e199c835d234c7eb0846f6618012e558544ee2fb"
-  integrity sha512-fbjI6ja0N5ZA8TV53RUqzsKNkl9fv8Oj3T7zxW7FGv1GSH7gwJaNF8dzCjrqKaxKeUpTz4yT1DaJFq/omNpGfw==
   dependencies:
     "@types/node" "*"
     form-data "^3.0.0"
@@ -9390,13 +9382,6 @@ cross-fetch@3.0.4:
   dependencies:
     node-fetch "2.6.0"
     whatwg-fetch "3.0.0"
-
-cross-fetch@^3.0.4:
-  version "3.0.6"
-  resolved "https://registry.yarnpkg.com/cross-fetch/-/cross-fetch-3.0.6.tgz#3a4040bc8941e653e0e9cf17f29ebcd177d3365c"
-  integrity sha512-KBPUbqgFjzWlVcURG+Svp9TlhA5uliYtiNx/0r8nv0pdypeQCRJ9IaSIc3q/x3q8t3F75cHuwxVql1HFGHCNJQ==
-  dependencies:
-    node-fetch "2.6.1"
 
 cross-spawn@6.0.5, cross-spawn@^6.0.0, cross-spawn@^6.0.5:
   version "6.0.5"
@@ -15136,14 +15121,6 @@ jest-environment-node@^27.0.3:
     jest-mock "^27.0.3"
     jest-util "^27.0.2"
 
-jest-fetch-mock@^3.0.3:
-  version "3.0.3"
-  resolved "https://registry.yarnpkg.com/jest-fetch-mock/-/jest-fetch-mock-3.0.3.tgz#31749c456ae27b8919d69824f1c2bd85fe0a1f3b"
-  integrity sha512-Ux1nWprtLrdrH4XwE7O7InRY6psIi3GOsqNESJgMJ+M5cv4A8Lh7SN9d2V2kKRZ8ebAfcd1LNyZguAOb6JiDqw==
-  dependencies:
-    cross-fetch "^3.0.4"
-    promise-polyfill "^8.1.3"
-
 jest-get-type@^25.2.6:
   version "25.2.6"
   resolved "https://registry.yarnpkg.com/jest-get-type/-/jest-get-type-25.2.6.tgz#0b0a32fab8908b44d508be81681487dbabb8d877"
@@ -19390,11 +19367,6 @@ promise-inflight@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/promise-inflight/-/promise-inflight-1.0.1.tgz#98472870bf228132fcbdd868129bad12c3c029e3"
   integrity sha1-mEcocL8igTL8vdhoEputEsPAKeM=
-
-promise-polyfill@^8.1.3:
-  version "8.2.0"
-  resolved "https://registry.yarnpkg.com/promise-polyfill/-/promise-polyfill-8.2.0.tgz#367394726da7561457aba2133c9ceefbd6267da0"
-  integrity sha512-k/TC0mIcPVF6yHhUvwAp7cvL6I2fFV7TzF1DuGPI8mBh4QQazf36xCKEHKTZKRysEoTQoQdKyP25J8MPJp7j5g==
 
 promise-retry@^2.0.1:
   version "2.0.1"
