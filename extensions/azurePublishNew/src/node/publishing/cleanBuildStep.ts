@@ -3,21 +3,18 @@
 
 import * as fs from 'fs-extra';
 
-import { PublishStep, OnDeploymentProgress, PublishingWorkingSet } from './types';
+import { OnPublishProgress } from './types';
 
 type StepConfig = {
   zipPath: string;
 };
 
-export const createCleanBuildStep = (config: StepConfig): PublishStep => {
-  const execute = async (workingSet: PublishingWorkingSet, onProgress: OnDeploymentProgress): Promise<void> => {
-    const { zipPath } = config;
+export const cleanBuildStep = async (config: StepConfig, onProgress: OnPublishProgress): Promise<void> => {
+  const { zipPath } = config;
 
-    onProgress(202, 'Cleaning build...');
+  onProgress(202, 'Cleaning build...');
 
-    if (await fs.pathExists(zipPath)) {
-      await fs.remove(zipPath);
-    }
-  };
-  return { execute };
+  if (await fs.pathExists(zipPath)) {
+    await fs.remove(zipPath);
+  }
 };

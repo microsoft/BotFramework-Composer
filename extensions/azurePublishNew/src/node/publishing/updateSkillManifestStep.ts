@@ -6,7 +6,7 @@ import * as path from 'path';
 import * as fs from 'fs-extra';
 import { IBotProject } from '@botframework-composer/types';
 
-import { PublishStep, OnDeploymentProgress, PublishingWorkingSet } from './types';
+import { OnPublishProgress } from './types';
 
 // ---------------------------------------- File copying helpers ----------------------------------------//
 
@@ -88,7 +88,7 @@ const updateSkillSettings = async (
   hostname: string,
   msAppId: string,
   skillSettingsPath: string,
-  onProgress: OnDeploymentProgress
+  onProgress: OnPublishProgress
 ) => {
   /* eslint-disable-next-line security/detect-non-literal-fs-filename -- Safe as no value holds user input */
   const manifestFiles = (await fs.readdir(skillSettingsPath)).filter((x) => x.endsWith('.json'));
@@ -122,39 +122,34 @@ const updateSkillSettings = async (
 type StepConfig = {
   appId: string;
   hostname: string;
+  pathToArtifacts: string;
   profileName: string;
   project: IBotProject;
-  projectPath: string;
 };
 
-export const createUpdateSkillManifestStep = (config: StepConfig): PublishStep => {
-  const execute = async (workingSet: PublishingWorkingSet, onProgress: OnDeploymentProgress): Promise<void> => {
-    const { appId, hostname, profileName, project } = config;
+export const updateSkillManifestStep = async (config: StepConfig, onProgress: OnPublishProgress): Promise<void> => {
+  const { appId, hostname, pathToArtifacts, profileName, project } = config;
 
-    onProgress(202, 'Updating skill manifests...');
+  onProgress(202, 'Updating skill manifests...');
 
-    const pathToArtifacts = (workingSet.pathToArtifacts as unknown) as string;
+  // COPY MANIFESTS TO wwwroot/manifests
+  // eslint-disable-next-line security/detect-non-literal-fs-filename
+  if (await project.fileStorage.exists(path.join(pathToArtifacts, 'manifests'))) {
+    await copyDir(
+      path.join(pathToArtifacts, 'manifests'),
+      project.fileStorage,
+      path.join(pathToArtifacts, 'wwwroot', 'manifests'),
+      project.fileStorage
+    );
+    // Update skill endpoint url in skill manifest.
+    await updateSkillSettings(
+      profileName,
+      hostname,
+      appId,
+      path.join(pathToArtifacts, 'wwwroot', 'manifests'),
+      onProgress
+    );
+  }
 
-    // COPY MANIFESTS TO wwwroot/manifests
-    // eslint-disable-next-line security/detect-non-literal-fs-filename
-    if (await project.fileStorage.exists(path.join(pathToArtifacts, 'manifests'))) {
-      await copyDir(
-        path.join(pathToArtifacts, 'manifests'),
-        project.fileStorage,
-        path.join(pathToArtifacts, 'wwwroot', 'manifests'),
-        project.fileStorage
-      );
-      // Update skill endpoint url in skill manifest.
-      await updateSkillSettings(
-        profileName,
-        hostname,
-        appId,
-        path.join(pathToArtifacts, 'wwwroot', 'manifests'),
-        onProgress
-      );
-    }
-
-    onProgress(202, 'Skill manifests updated!');
-  };
-  return { execute };
+  onProgress(202, 'Skill manifests updated!');
 };

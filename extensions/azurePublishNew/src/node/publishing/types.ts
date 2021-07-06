@@ -10,10 +10,24 @@ export type PublishConfig = {
   [key: string]: any;
 };
 
-export type OnDeploymentProgress = (status: number, message: string) => void;
+/**
+ * A callback for publishing steps to use to report progress.
+ */
+export type OnPublishProgress = (status: number, message: string) => void;
 
-export type PublishingWorkingSet = Record<string, object>;
-
-export type PublishStep = {
-  execute: (workingSet: PublishingWorkingSet, onProgress: OnDeploymentProgress) => Promise<void>;
+/**
+ * The configuration input to a publishing step.
+ */
+export type PublishStepConfig = {
+  kind: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  [key: string]: any;
 };
+
+/**
+ * A method signature for a step in the publishing process
+ */
+export type PublishStepMethod = <TConfig, TResult = void>(
+  config: TConfig,
+  onProgress?: OnPublishProgress
+) => Promise<TResult>;

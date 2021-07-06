@@ -6,38 +6,18 @@ import * as path from 'path';
 import md5 from 'md5';
 import { AuthParameters, IBotProject, RuntimeTemplate, UserIdentity } from '@botframework-composer/types';
 
-import { PublishConfig } from './types';
-import { authConfig } from './constants';
-import { applyPublishingProfileToSettings, mergeDeep } from './utils';
-import { createLinkBotToAppStep } from './linkBotToAppStep';
-import { createBindToKeyVaultStep } from './bindKeyVaultStep';
-import { createCleanBuildStep } from './cleanBuildStep';
-import { createBuildRecognizerStep } from './buildRecognizerStep';
-import { createPublishRecognizerStep } from './publishRecognizerStep';
-import { createUpdateSkillManifestStep } from './updateSkillManifestStep';
-
-export type PublishConfig2 = {
-  accessToken: string;
-  name: string;
-  environment: string;
-  hostname?: string;
-  luisResource?: string;
-  profileName: string;
-  project: IBotProject;
-  subscriptionID: string;
-
-  // These are defined as any from the PublishPlugin interface
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  absSettings?: any;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  metdata: any;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  runtime: any;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  settings: any;
-
-  [key: string]: any;
-};
+import { OnPublishProgress, PublishConfig, PublishingWorkingSet } from './types';
+import { authConfig } from './utils/authUtils';
+import { applyPublishingProfileToSettings, mergeDeep } from './utils/settingsUtils';
+import { bindToKeyVaultStep } from './bindKeyVaultStep';
+import { buildRecognizerStep } from './buildRecognizerStep';
+import { cleanBuildStep } from './cleanBuildStep';
+import { createZipStep } from './createZipStep';
+import { deployZipStep } from './deployZipStep';
+import { linkBotToAppStep } from './linkBotToAppStep';
+import { updateSkillManifestStep } from './updateSkillManifestStep';
+import { buildRuntimeStep } from './buildRuntimeStep';
+import { createPublishRecognizerStep, publishRecognizerStep } from './publishRecognizerStep';
 
 type GetAccessToken = (params: AuthParameters) => Promise<string>;
 
@@ -47,7 +27,8 @@ export const publish = async (
   runtimeTemplate: RuntimeTemplate,
   metadata: any,
   user?: UserIdentity,
-  getAccessToken?: GetAccessToken
+  getAccessToken?: GetAccessToken,
+  onProgress?: OnPublishProgress
 ) => {
   const {
     // from Composer
@@ -103,55 +84,30 @@ export const publish = async (
     qnaResources,
   });
 
-  const steps = [
-    createLinkBotToAppStep({ accessToken, botName, hostname, resourceGroupName, subscriptionId }),
-    createBindToKeyVaultStep({
+  await linkBotToAppStep({ accessToken, botName, hostname, resourceGroupName, subscriptionId }, onProgress);
+  await bindToKeyVaultStep(
+    {
       accessToken,
       appPasswordHint,
       email,
       hostname,
-    }),
-    createCleanBuildStep({ zipPath }),
-    createBuildRecognizerStep({ luResources, project, luisConfig, projectPath, qnaConfig, qnaResources, runtime }),
-    createPublishRecognizerStep({ accessToken, environment, luisResource, luisConfig, name, projectPath }),
-    createUpdateSkillManifestStep({ appId, hostname, profileName, project, projectPath }),
-  ];
-
-  //link bot to app
-  //bind to key vaule
-  //update skill host endpoint
-  //clean build
-  //build luis
-  //publish luis
-  //update settings
-  //build runtime
-  //copy manifests
-  //create zip
-  //deploy zip
-
-  steps.push(createLinkBotToAppStep());
+    },
+    onProgress
+  );
+  await cleanBuildStep({ zipPath }, onProgress);
+  await buildRecognizerStep(
+    { luResources, project, luisConfig, projectPath, qnaConfig, qnaResources, runtime },
+    onProgress
+  );
+  const { luisAppIds } = await publishRecognizerStep(
+    { accessToken, environment, luisConfig, luisResource, name, projectPath },
+    onProgress
+  );
+  const { pathToArtifacts } = await buildRuntimeStep(
+    { luisAppIds, project, projectPath, profileName, runtime, settings },
+    onProgress
+  );
+  await updateSkillManifestStep({ appId, hostname, pathToArtifacts, profileName, project }, onProgress);
+  await createZipStep({ appSettings: mergedSettings, sourcePath: pathToArtifacts, zipPath });
+  await deployZipStep({ accessToken, environment, hostname, name, zipPath }, onProgress);
 };
-
-// if (absSettings.resourceId) {
-//   try {
-//     if (!subscriptionId) {
-//       subscriptionId = absSettings.resourceId.match(/subscriptions\/([\w-]*)\//)[1];
-//     }
-//     if (!resourceGroupName) {
-//       resourceGroupName = absSettings.resourceId.match(/resourceGroups\/([^/]*)/)[1];
-//     }
-//     if (!botName) {
-//       botName = absSettings.resourceId.match(/botServices\/([^/]*)/)[1];
-//     }
-//   } catch (error) {
-//     this.logger({
-//       status: BotProjectDeployLoggerType.DEPLOY_INFO,
-//       message: 'Abs settings resourceId is incomplete, skip linking bot with webapp ...',
-//     });
-//     return;
-//   }
-// } else {
-//   subscriptionId = settings.subscriptionId;
-//   resourceGroupName = settings.resourceGroup;
-//   botName = settings.botName;
-// }

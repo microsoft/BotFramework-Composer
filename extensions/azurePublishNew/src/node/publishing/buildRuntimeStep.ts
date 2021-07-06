@@ -3,9 +3,10 @@
 
 import { IBotProject } from '@botframework-composer/types';
 
-import { PublishStep, OnDeploymentProgress, PublishingWorkingSet } from './types';
+import { OnPublishProgress } from './types';
 
 type StepConfig = {
+  luisAppIds: string[];
   profileName: string;
   project: IBotProject;
   projectPath: string;
@@ -15,33 +16,31 @@ type StepConfig = {
   settings: any;
 };
 
-export const buildRuntimeStep = (config: StepConfig): PublishStep => {
-  const execute = async (workingSet: PublishingWorkingSet, onProgress: OnDeploymentProgress): Promise<void> => {
-    const { profileName, project, projectPath, runtime, settings } = config;
+type StepResult = {
+  pathToArtifacts: string;
+};
 
-    onProgress(202, 'Building runtime...');
+export const buildRuntimeStep = async (config: StepConfig, onProgress: OnPublishProgress): Promise<StepResult> => {
+  const { luisAppIds, profileName, project, projectPath, runtime, settings } = config;
 
-    const luisAppIds = workingSet.luisAppIds;
-    const qnaConfig = await project.builder.getQnaConfig();
+  onProgress(202, 'Building runtime...');
 
-    //TODO: Consider if the entire settings should go in the working set.
-    const updatedSettings = {
-      ...settings,
-      luis: {
-        ...settings.luis,
-        ...luisAppIds,
-      },
-      qna: {
-        ...settings.qna,
-        ...qnaConfig,
-      },
-    };
+  const qnaConfig = await project.builder.getQnaConfig();
 
-    const pathToArtifacts = await runtime.buildDeploy(projectPath, project, updatedSettings, profileName);
-
-    workingSet.pathToArtifacts = pathToArtifacts;
-
-    onProgress(202, 'Runtime built!');
+  //TODO: Consider if the entire settings should go in the working set.
+  const updatedSettings = {
+    ...settings,
+    luis: {
+      ...settings.luis,
+      ...luisAppIds,
+    },
+    qna: {
+      ...settings.qna,
+      ...qnaConfig,
+    },
   };
-  return { execute };
+
+  const pathToArtifacts = await runtime.buildDeploy(projectPath, project, updatedSettings, profileName);
+  onProgress(202, 'Runtime built!');
+  return pathToArtifacts;
 };

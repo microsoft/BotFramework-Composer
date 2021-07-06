@@ -3,7 +3,7 @@
 
 import { DialogSetting, PublishProfile } from '@botframework-composer/types';
 
-export function isObject(item) {
+function isObject(item) {
   return item && typeof item === 'object' && !Array.isArray(item);
 }
 
