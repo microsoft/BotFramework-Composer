@@ -15,13 +15,13 @@ const DataCollectionDialog: React.FC = () => {
   const { updateUserSettings } = useRecoilValue(dispatcherState);
 
   const handleDataCollectionChange = (allowDataCollection: boolean) => () => {
+    TelemetryService.track('TelemetryOptInOut', { enabled: allowDataCollection });
+
     updateUserSettings({
       telemetry: {
         allowDataCollection,
       },
     });
-
-    TelemetryService.track('TelemetryOptInOut', { enabled: allowDataCollection });
   };
 
   return (

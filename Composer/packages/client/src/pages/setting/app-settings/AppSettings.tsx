@@ -56,12 +56,12 @@ const AppSettings: React.FC<RouteComponentProps> = () => {
   };
 
   const handleDataCollectionChange = (allowDataCollection: boolean) => {
+    TelemetryService.track('TelemetryOptInOut', { enabled: allowDataCollection });
     updateUserSettings({
       telemetry: {
         allowDataCollection,
       },
     });
-    TelemetryService.track('TelemetryOptInOut', { enabled: allowDataCollection });
   };
 
   const renderElectronSettings = isElectron();
