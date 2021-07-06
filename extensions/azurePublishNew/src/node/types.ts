@@ -28,6 +28,7 @@ export type ResourceDefinition = {
   description: string;
   tier: string;
   group: ResourceDefinitionGroup;
+  dependencies: string[];
 };
 
 export type GetResourcesResult = ResourceDefinition & {

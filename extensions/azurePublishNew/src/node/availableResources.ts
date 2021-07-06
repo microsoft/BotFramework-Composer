@@ -2,8 +2,8 @@
 // Licensed under the MIT License.
 
 import {
-  ProvisionConfig,
   OnProvisionProgress,
+  ProvisionConfig,
   ResourceConfig,
   ResourceDefinition,
   ResourceProvisionService,
@@ -19,6 +19,22 @@ import { getLuisPredictionProvisionService, luisPredictionDefinition } from './a
 import { getQnAProvisionService, qnaDefinition } from './azureResources/qna';
 import { getAppServiceProvisionService, servicePlanDefinition } from './azureResources/servicePlan';
 import { getWebAppProvisionService, webAppResourceDefinition } from './azureResources/webApp';
+import { ProvisionConfig2 } from './provisioning';
+import { AzureResourceTypes } from './constants';
+
+export type AppRegistrationResourceConfig = ResourceConfig & {
+  key: 'appRegistration';
+  appName: string;
+};
+
+type ApplicationType = 'web' | 'other';
+
+export type AppInsightsResourceConfig = ResourceConfig & {
+  resourceGroupName: string;
+  location: string;
+  name: string;
+  applicationType?: ApplicationType;
+};
 
 export const availableResources: ResourceDefinition[] = [
   appRegistrationDefinition,
@@ -42,12 +58,38 @@ export const getProvisionServices = (config: ProvisionConfig): Record<string, Re
     botRegistration: getBotChannelProvisionService(),
     azureFunctionApp: getAzureFunctionsProvisionService(),
     cosmosDB: getCosmosDbProvisionService(config),
-    appInsights: getAppInsightsProvisionService(),
+    appInsights: getAppInsightsProvisionService(config),
     luisAuthoring: getLuisAuthoringProvisionService(),
     luisPrediction: getLuisPredictionProvisionService(),
     blobStorage: getBlogStorageProvisionService(),
     qna: getQnAProvisionService(),
   };
+};
+
+export const getResourceDependencies = (key: string) => {
+  switch (key) {
+    case AzureResourceTypes.APP_REGISTRATION:
+      return appRegistrationDefinition.dependencies;
+    default:
+      return [];
+  }
+};
+
+export const provisionConfigToResourceConfigMap = {
+  appRegistration: (config: ProvisionConfig2): AppRegistrationResourceConfig => {
+    return {
+      key: 'appRegistration',
+      appName: config.hostname,
+    };
+  },
+  appInsights: (config: ProvisionConfig2): AppInsightsResourceConfig => {
+    return {
+      key: 'appInsights',
+      resourceGroupName: config.resourceGroup,
+      location: config.location,
+      name: config.hostname,
+    };
+  },
 };
 
 export const setUpProvisionService = (config: ProvisionConfig, onProgress: OnProvisionProgress) => {
