@@ -6,7 +6,7 @@ import { AzureTenant, ElectronAuthParameters } from '@botframework-composer/type
 import logger from '../utility/logger';
 
 import { OneAuthBase } from './oneAuthBase';
-
+import { OneAuth } from './oneauth';
 const log = logger.extend('one-auth-shim');
 
 export class OneAuthShim extends OneAuthBase {
@@ -26,5 +26,8 @@ export class OneAuthShim extends OneAuthBase {
   }
   public async getTenants(): Promise<AzureTenant[]> {
     return [];
+  }
+  public getAccount(): OneAuth.Account | undefined {
+    return undefined;
   }
 }

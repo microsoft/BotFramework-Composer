@@ -34,7 +34,7 @@ import {
   filePersistenceState,
   projectMetaDataState,
   selectedTemplateReadMeState,
-  showCreateQnAFromUrlDialogState,
+  showCreateQnADialogState,
   warnAboutDotNetState,
   warnAboutFunctionsState,
   settingsState,
@@ -165,7 +165,7 @@ export const projectDispatcher = () => {
 
         if (templateId === QnABotTemplateId) {
           callbackHelpers.set(createQnAOnState, { projectId, dialogId: mainDialog });
-          callbackHelpers.set(showCreateQnAFromUrlDialogState(projectId), true);
+          callbackHelpers.set(showCreateQnADialogState(projectId), true);
         }
 
         set(botProjectIdsState, (current) => [...current, projectId]);
