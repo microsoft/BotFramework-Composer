@@ -173,6 +173,7 @@ type BotSettingsEvents = {
     region: string;
   };
   SettingsGetKeysResourceRequestSelected: { subscriptionId?: string; resourceType: string };
+  TelemetryOptInOut: { enabled: boolean };
 };
 
 type LgEditorEvents = {
