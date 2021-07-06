@@ -288,7 +288,7 @@ describe('skill operations', () => {
     cleanup(Path.join(botDir, '/skills'));
   });
 
-  it('should create skill files', async () => {
+  xit('should create skill files', async () => {
     await proj.init();
 
     const url = 'https://luhantest0625.azurewebsites.net/manifests/Empty_45-2-1-manifest.json';
@@ -298,7 +298,7 @@ describe('skill operations', () => {
     expect(file).not.toBeUndefined();
   }, 10000);
 
-  it('should delete skill files', async () => {
+  xit('should delete skill files', async () => {
     const url = 'https://luhantest0625.azurewebsites.net/manifests/Empty_45-2-1-manifest.json';
     const skillName = 'manifest';
     await proj.createSkillFiles(url, skillName, {});
