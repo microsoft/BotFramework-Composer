@@ -3,10 +3,9 @@
 
 import * as path from 'path';
 
-import md5 from 'md5';
 import { AuthParameters, IBotProject, RuntimeTemplate, UserIdentity } from '@botframework-composer/types';
 
-import { OnPublishProgress, PublishConfig, PublishingWorkingSet } from './types';
+import { OnPublishProgress, PublishConfig } from './types';
 import { authConfig } from './utils/authUtils';
 import { applyPublishingProfileToSettings, mergeDeep } from './utils/settingsUtils';
 import { bindToKeyVaultStep } from './bindKeyVaultStep';
@@ -15,9 +14,10 @@ import { cleanBuildStep } from './cleanBuildStep';
 import { createZipStep } from './createZipStep';
 import { deployZipStep } from './deployZipStep';
 import { linkBotToAppStep } from './linkBotToAppStep';
-import { updateSkillManifestStep } from './updateSkillManifestStep';
+import { updateSkillManifestsStep } from './updateSkillManifestsStep';
 import { buildRuntimeStep } from './buildRuntimeStep';
-import { createPublishRecognizerStep, publishRecognizerStep } from './publishRecognizerStep';
+import { publishRecognizerStep } from './publishRecognizerStep';
+import { verifyProvisionedStep } from './verifyProvisionedStep';
 
 type GetAccessToken = (params: AuthParameters) => Promise<string>;
 
@@ -50,30 +50,20 @@ export const publish = async (
 
   const accessToken = config.accessToken || (await getAccessToken(authConfig.arm));
   const appId = settings.MicrosoftAppId;
-  const botId = project.id;
   const botName = config.botName ?? resourceId.match(/botServices\/([^/]*)/)[1];
   const luisConfig = settings.luis;
   const projectPath = project.getRuntimePath();
   const qnaConfig = settings.qna;
-  const resourcekey = md5([project.name, name, environment].join());
   const runtime = settings.runtime;
   const subscriptionId = config.subscriptionId ?? resourceId.match(/subscriptions\/([\w-]*)\//)[1];
   const resourceGroupName = config.resourceGroup ?? resourceId.match(/resourceGroups\/([^/]*)/)[1];
   const zipPath = config.zipPath ?? path.join(projectPath, 'code.zip');
 
-  const absSettings = {
-    appPasswordHint,
-    subscriptionId,
-    resourceGroup: resourceGroupName,
-    resourceId,
-    botName,
-  };
-
   if (!accessToken) {
     throw new Error('The access token for authentication could not be acquired.');
   }
   if (!settings) {
-    throw new Error('Settings field is missing from the pbulishing profile');
+    throw new Error('The settings are missing from the publishing profile.');
   }
 
   // Merge all the settings
@@ -84,6 +74,12 @@ export const publish = async (
     qnaResources,
   });
 
+  // Update skill host endpoint
+  if (mergedSettings?.skill && Object.keys(mergedSettings?.skill).length > 0) {
+    mergedSettings.skillHostEndpoint = `https://${hostname}.azurewebsites.net/api/skills`;
+  }
+
+  await verifyProvisionedStep({ publishConfig: mergedSettings, project }, onProgress);
   await linkBotToAppStep({ accessToken, botName, hostname, resourceGroupName, subscriptionId }, onProgress);
   await bindToKeyVaultStep(
     {
@@ -107,7 +103,7 @@ export const publish = async (
     { luisAppIds, project, projectPath, profileName, runtime, settings },
     onProgress
   );
-  await updateSkillManifestStep({ appId, hostname, pathToArtifacts, profileName, project }, onProgress);
-  await createZipStep({ appSettings: mergedSettings, sourcePath: pathToArtifacts, zipPath });
+  await updateSkillManifestsStep({ appId, hostname, pathToArtifacts, profileName, project }, onProgress);
+  await createZipStep({ appSettings: mergedSettings, sourcePath: pathToArtifacts, zipPath }, onProgress);
   await deployZipStep({ accessToken, environment, hostname, name, zipPath }, onProgress);
 };

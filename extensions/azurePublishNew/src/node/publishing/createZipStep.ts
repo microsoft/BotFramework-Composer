@@ -4,6 +4,8 @@
 import * as fs from 'fs-extra';
 import archiver from 'archiver';
 
+import { OnPublishProgress } from './types';
+
 type StepConfig = {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   appSettings: any;
@@ -11,7 +13,8 @@ type StepConfig = {
   zipPath: string;
 };
 
-export const createZipStep = (config: StepConfig): Promise<void> => {
+export const createZipStep = (config: StepConfig, onProgress: OnPublishProgress): Promise<void> => {
+  onProgress('Creating zip of bot project...');
   const { appSettings, sourcePath, zipPath } = config;
 
   const archive = archiver('zip', { zlib: { level: 9 } });

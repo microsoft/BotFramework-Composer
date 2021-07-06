@@ -123,6 +123,8 @@ type StepResult = {
 };
 
 export const publishRecognizerStep = async (config: StepConfig, onProgress: OnPublishProgress): Promise<StepResult> => {
+  onProgress('Publising recognizer model (LUIS/QnA)...');
+
   const {
     accessToken,
     environment,
@@ -161,11 +163,9 @@ export const publishRecognizerStep = async (config: StepConfig, onProgress: OnPu
   // Assign the appropriate account to each of the applicable LUIS apps for this bot.
   for (const dialogKey in luisAppIds) {
     const luisAppId = luisAppIds[dialogKey].appId;
-    onProgress(202, `Assigning to LUIS app id: ${luisAppId}`);
+    onProgress(`  Updating account for ${luisAppId}`);
     await updateLuisAccount(accessToken, luisAppId, authoringEndpoint, luisAuthoringKey, account);
   }
-
-  onProgress(202, 'Published recognizer!');
 
   return luisAppIds;
 };

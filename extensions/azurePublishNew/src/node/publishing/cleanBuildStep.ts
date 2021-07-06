@@ -12,7 +12,7 @@ type StepConfig = {
 export const cleanBuildStep = async (config: StepConfig, onProgress: OnPublishProgress): Promise<void> => {
   const { zipPath } = config;
 
-  onProgress(202, 'Cleaning build...');
+  onProgress('Cleaning build...');
 
   if (await fs.pathExists(zipPath)) {
     await fs.remove(zipPath);

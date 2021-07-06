@@ -52,7 +52,6 @@ export const buildRecognizerStep = async (config: StepConfig, onProgress: OnPubl
     await builder.copyModelPathToBot();
   };
 
-  onProgress(202, 'Building...');
+  onProgress('Building recognizer (LUIS/QnA)...');
   await build();
-  onProgress(202, 'Build succeeded!');
 };

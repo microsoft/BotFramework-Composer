@@ -23,7 +23,7 @@ type StepResult = {
 export const buildRuntimeStep = async (config: StepConfig, onProgress: OnPublishProgress): Promise<StepResult> => {
   const { luisAppIds, profileName, project, projectPath, runtime, settings } = config;
 
-  onProgress(202, 'Building runtime...');
+  onProgress('Building runtime...');
 
   const qnaConfig = await project.builder.getQnaConfig();
 
@@ -41,6 +41,5 @@ export const buildRuntimeStep = async (config: StepConfig, onProgress: OnPublish
   };
 
   const pathToArtifacts = await runtime.buildDeploy(projectPath, project, updatedSettings, profileName);
-  onProgress(202, 'Runtime built!');
   return pathToArtifacts;
 };

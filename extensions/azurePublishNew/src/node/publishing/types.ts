@@ -13,7 +13,7 @@ export type PublishConfig = {
 /**
  * A callback for publishing steps to use to report progress.
  */
-export type OnPublishProgress = (status: number, message: string) => void;
+export type OnPublishProgress = (message: string, status?: number) => void;
 
 /**
  * The configuration input to a publishing step.

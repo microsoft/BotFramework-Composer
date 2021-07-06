@@ -18,9 +18,11 @@ export const bindToKeyVaultStep = async (config: StepConfig, onProgress: OnPubli
   const { accessToken, appPasswordHint, email, hostname } = config;
 
   if (!appPasswordHint || !hostname) {
-    onProgress(400, 'Skipped binding to key vault. Missing settings.');
+    onProgress('Skipped binding to key vault. Missing settings.');
     return;
   }
+
+  onProgress(`Binding to key vault...`);
 
   const webAppName = hostname;
   const resourceGroupName = appPasswordHint.match(/resourceGroups\/([^/]*)/)[1];
@@ -29,8 +31,7 @@ export const bindToKeyVaultStep = async (config: StepConfig, onProgress: OnPubli
   const vaultName = appPasswordHint.match(/vaults\/([^/]*)/)[1];
 
   onProgress(
-    202,
-    `Binding to key vault. Subscription: ${subscriptionId}, Resource Group: ${resourceGroupName} App Service:${webAppName} Vault Name: ${vaultName} Secret Name: ${secretName} Email: ${email}`
+    `  Subscription: ${subscriptionId}, Resource Group: ${resourceGroupName} App Service:${webAppName} Vault Name: ${vaultName} Secret Name: ${secretName} Email: ${email}`
   );
 
   const creds = new TokenCredentials(accessToken);
@@ -40,18 +41,18 @@ export const bindToKeyVaultStep = async (config: StepConfig, onProgress: OnPubli
   await keyVault.updateWebAppIdentity(resourceGroupName, webAppName);
 
   const principalId = await keyVault.getWebAppIdentity(resourceGroupName, webAppName);
-  onProgress(202, `Found web app. Principal ID: ${principalId}`);
+  onProgress(`  Found web app. Principal ID: ${principalId}`);
 
   const tenantId = await getTenantId(accessToken, subscriptionId);
   await keyVault.setKeyVaultPolicy(resourceGroupName, vaultName, email, principalId, tenantId);
 
-  onProgress(202, `Getting secret...`);
+  onProgress(`  Getting secret...`);
 
   const secretUri = await keyVault.getWebAppSecretUri(resourceGroupName, vaultName, secretName);
 
   // const secret = await keyVaultApi.KeyVaultGetSecretValue(resourceGroupName, vaultName, secretName);
 
-  onProgress(202, `Found secret. Uri: ${secretUri}`);
+  onProgress(`  Found secret. Uri: ${secretUri}`);
   await keyVault.updateWebAppSecretUri(resourceGroupName, webAppName, secretUri);
 
   // await keyVaultApi.UpdateKeyVaultValueAppSettings(resourceGroupName, webAppName, secret);

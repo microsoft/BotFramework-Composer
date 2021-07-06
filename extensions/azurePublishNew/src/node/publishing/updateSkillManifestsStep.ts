@@ -93,7 +93,7 @@ const updateSkillSettings = async (
   /* eslint-disable-next-line security/detect-non-literal-fs-filename -- Safe as no value holds user input */
   const manifestFiles = (await fs.readdir(skillSettingsPath)).filter((x) => x.endsWith('.json'));
   if (manifestFiles.length === 0) {
-    onProgress(202, `The manifest does not exist on path: ${skillSettingsPath}`);
+    onProgress(`The manifest does not exist on path: ${skillSettingsPath}`);
     return;
   }
 
@@ -127,10 +127,10 @@ type StepConfig = {
   project: IBotProject;
 };
 
-export const updateSkillManifestStep = async (config: StepConfig, onProgress: OnPublishProgress): Promise<void> => {
+export const updateSkillManifestsStep = async (config: StepConfig, onProgress: OnPublishProgress): Promise<void> => {
   const { appId, hostname, pathToArtifacts, profileName, project } = config;
 
-  onProgress(202, 'Updating skill manifests...');
+  onProgress('Updating skill manifests...');
 
   // COPY MANIFESTS TO wwwroot/manifests
   // eslint-disable-next-line security/detect-non-literal-fs-filename
@@ -150,6 +150,4 @@ export const updateSkillManifestStep = async (config: StepConfig, onProgress: On
       onProgress
     );
   }
-
-  onProgress(202, 'Skill manifests updated!');
 };

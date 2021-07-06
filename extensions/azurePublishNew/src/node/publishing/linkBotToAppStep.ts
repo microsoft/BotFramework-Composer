@@ -17,11 +17,11 @@ export const linkBotToAppStep = async (config: StepConfig, onProgress: OnPublish
   const { accessToken, botName, hostname, resourceGroupName, subscriptionId } = config;
 
   if (!subscriptionId || !hostname || !resourceGroupName || !botName) {
-    onProgress(400, 'Skipped linking bot with app service. Settings Missing.');
+    onProgress('Skipped linking bot with app service. Missing settings.');
     return;
   }
 
-  onProgress(202, 'Linking bot with app service...');
+  onProgress('Linking bot with app service...');
 
   const creds = new TokenCredentials(accessToken);
   const azureBotSerivce = new AzureBotService(creds, subscriptionId);
@@ -49,6 +49,4 @@ export const linkBotToAppStep = async (config: StepConfig, onProgress: OnPublish
   if (botUpdateResult?._response?.status >= 300) {
     throw new Error(`Failed to link bot to app service. ${getBotResponse?.bodyAsText}`);
   }
-
-  onProgress(202, 'Linked bot with app service');
 };

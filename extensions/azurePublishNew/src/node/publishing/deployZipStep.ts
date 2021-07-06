@@ -11,7 +11,7 @@ const waitForZipDeploy = async (
   statusUrl: string,
   onProgress: OnPublishProgress
 ): Promise<void> => {
-  onProgress(202, 'Waiting for zip upload processing.');
+  onProgress('Waiting for zip upload processing.');
 
   return new Promise((resolve, reject) => {
     const timerId = setInterval(async () => {
@@ -19,14 +19,14 @@ const waitForZipDeploy = async (
         const statusResponse = await axios.get(statusUrl, { headers: { Authorization: `Bearer ${accessToken}` } });
 
         if (statusResponse.data.provisioningState === 'Succeeded') {
-          onProgress(202, 'Zip upload processed successfully.');
+          onProgress('Zip upload processed successfully.');
           clearInterval(timerId);
           resolve();
         } else if (statusResponse.data.provisioningState === 'Failed') {
           clearInterval(timerId);
           reject(`Zip upload processing failed. ${statusResponse.data.status_text}`);
         } else {
-          onProgress(202, `Waiting for zip upload processing. ${statusResponse.data.status_text}`);
+          onProgress(`Waiting for zip upload processing. ${statusResponse.data.status_text}`);
         }
       } catch (err) {
         const errorMessage = JSON.stringify(err, Object.getOwnPropertyNames(err));
@@ -49,7 +49,7 @@ export const deployZipStep = async (config: StepConfig, onProgress: OnPublishPro
   const { accessToken, name, environment, zipPath } = config;
 
   const hostname = config.hostname ?? `${name}${environment ? '-' + environment : ''}`;
-  onProgress(202, `Uploading zip file... to ${hostname}`);
+  onProgress(`Uploading zip file... to ${hostname}`);
 
   const publishEndpoint = `https://${hostname}.scm.azurewebsites.net/zipdeploy/?isAsync=true`;
 
