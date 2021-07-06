@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 import path from 'path';
 
+import uniq from 'lodash/uniq';
 import URI from 'vscode-uri';
 import { FoldingRangeParams, IConnection, TextDocuments } from 'vscode-languageserver';
 import {
@@ -273,7 +274,7 @@ export class LUServer {
       }
     }
 
-    return Promise.resolve(Array.from(new Set(result)));
+    return Promise.resolve(uniq(result));
   }
 
   protected getLUDocument(document: TextDocument): LUDocument | undefined {
@@ -556,8 +557,8 @@ export class LUServer {
       luisJson = await this.extractLUISContent(textExceptCurLine);
     }
 
-    const suggestionEntityList = Array.from(
-      new Set(util.getSuggestionEntities(luisJson, util.suggestionAllEntityTypes).concat(this._importedEntitties))
+    const suggestionEntityList = uniq(
+      util.getSuggestionEntities(luisJson, util.suggestionAllEntityTypes).concat(this._importedEntitties)
     );
     const regexEntityList = util.getRegexEntities(luisJson);
 
