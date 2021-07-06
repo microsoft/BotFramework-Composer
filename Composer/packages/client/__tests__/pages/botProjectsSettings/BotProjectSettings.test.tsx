@@ -63,8 +63,8 @@ describe('<BotProjectSettings />', () => {
     await act(async () => {
       await fireEvent.click(jsonToggleNode);
     });
-    const jsonEditorNode = await component.findByTestId('jsonEditor');
-    expect(jsonEditorNode).toBeTruthy();
+    const editorNode = await component.findByTestId('BaseEditor');
+    expect(editorNode).toBeTruthy();
 
     await act(async () => {
       await fireEvent.click(jsonToggleNode);
