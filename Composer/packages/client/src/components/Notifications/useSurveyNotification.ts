@@ -31,9 +31,11 @@ const buildUrl = (info: MachineInfo) => {
 };
 
 export const useSurveyNotification = () => {
-  const { addNotification, deleteNotification } = useRecoilValue(dispatcherState);
+  const { addNotification, deleteNotification, setSurveyEligibility } = useRecoilValue(dispatcherState);
   const surveyEligible = useRecoilValue(surveyEligibilityState);
   const machineInfo = useRecoilValue(machineInfoState);
+
+  setSurveyEligibility();
 
   useEffect(() => {
     const url = buildUrl(machineInfo);
@@ -55,6 +57,7 @@ export const useSurveyNotification = () => {
               // This is safe; we control the URL that gets built
               // eslint-disable-next-line security/detect-non-literal-fs-filename
               window.open(url, '_blank');
+              surveyStorage.set('epochLastTaken', Date.now());
               TelemetryClient.track('HATSSurveyAccepted');
               deleteNotification('survey');
             },
