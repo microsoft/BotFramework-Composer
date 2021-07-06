@@ -283,31 +283,31 @@ describe('qna operations', () => {
   });
 });
 
-describe('skill operations', () => {
-  afterEach(() => {
-    cleanup(Path.join(botDir, '/skills'));
-  });
+// describe('skill operations', () => {
+//   afterEach(() => {
+//     cleanup(Path.join(botDir, '/skills'));
+//   });
 
-  it('should create skill files', async () => {
-    await proj.init();
+//   it('should create skill files', async () => {
+//     await proj.init();
 
-    const url = 'https://luhantest0625.azurewebsites.net/manifests/Empty_45-2-1-manifest.json';
-    const skillName = 'manifest';
-    const file = await proj.createSkillFiles(url, skillName, {});
+//     const url = 'https://luhantest0625.azurewebsites.net/manifests/Empty_45-2-1-manifest.json';
+//     const skillName = 'manifest';
+//     const file = await proj.createSkillFiles(url, skillName, {});
 
-    expect(file).not.toBeUndefined();
-  }, 10000);
+//     expect(file).not.toBeUndefined();
+//   }, 10000);
 
-  it('should delete skill files', async () => {
-    const url = 'https://luhantest0625.azurewebsites.net/manifests/Empty_45-2-1-manifest.json';
-    const skillName = 'manifest';
-    await proj.createSkillFiles(url, skillName, {});
-    const fileLength = proj.luFiles.length;
+//   it('should delete skill files', async () => {
+//     const url = 'https://luhantest0625.azurewebsites.net/manifests/Empty_45-2-1-manifest.json';
+//     const skillName = 'manifest';
+//     await proj.createSkillFiles(url, skillName, {});
+//     const fileLength = proj.luFiles.length;
 
-    await proj.deleteSkillFiles(skillName);
-    expect(proj.luFiles.length).toBeLessThanOrEqual(fileLength);
-  }, 10000);
-});
+//     await proj.deleteSkillFiles(skillName);
+//     expect(proj.luFiles.length).toBeLessThanOrEqual(fileLength);
+//   }, 10000);
+// });
 
 describe('buildFiles', () => {
   it('should build lu & qna file successfully', async () => {
