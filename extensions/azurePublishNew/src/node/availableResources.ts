@@ -3,7 +3,7 @@
 
 import {
   OnProvisionProgress,
-  ProvisionConfig,
+  ProvisionServiceConfig,
   ResourceConfig,
   ResourceDefinition,
   ResourceProvisionService,
@@ -41,7 +41,7 @@ export const availableResources: ResourceDefinition[] = [
   servicePlanDefinition,
 ];
 
-export const getProvisionServices = (config: ProvisionConfig): Record<string, ResourceProvisionService> => {
+export const getProvisionServices = (config: ProvisionServiceConfig): Record<string, ResourceProvisionService> => {
   return {
     appRegistration: getAppRegistrationProvisionService(config),
     webApp: getWebAppProvisionService(config),
@@ -75,7 +75,7 @@ export const provisionConfigToResourceConfigMap = {
   },
 };
 
-export const setUpProvisionService = (config: ProvisionConfig, onProgress: OnProvisionProgress) => {
+export const setUpProvisionService = (config: ProvisionServiceConfig, onProgress: OnProvisionProgress) => {
   const provisionServices = getProvisionServices(config);
 
   const provision = (selectedResources: ResourceConfig[]): void => {
