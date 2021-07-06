@@ -70,6 +70,8 @@ export const getResourceDependencies = (key: string) => {
   switch (key) {
     case AzureResourceTypes.APP_REGISTRATION:
       return appRegistrationDefinition.dependencies;
+    case AzureResourceTypes.APPINSIGHTS:
+      return appInsightsDefinition.dependencies;
     default:
       return [];
   }
