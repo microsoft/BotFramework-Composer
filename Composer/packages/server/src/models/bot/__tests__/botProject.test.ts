@@ -283,6 +283,7 @@ describe('qna operations', () => {
   });
 });
 
+//TODO: Rework unit tests https://github.com/microsoft/BotFramework-Composer/pull/8267
 // describe('skill operations', () => {
 //   afterEach(() => {
 //     cleanup(Path.join(botDir, '/skills'));
