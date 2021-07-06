@@ -39,6 +39,7 @@ export class LUServer {
   private luParser = new LuParser();
   private _curFileId = '';
   private _curProjectId = '';
+  private _importedEntitties: string[] = [];
 
   constructor(
     protected readonly connection: IConnection,
@@ -228,8 +229,8 @@ export class LUServer {
       const id = fileId || uri;
       this._curFileId = id;
       this._curProjectId = projectId || '';
-      const { intents: sections, diagnostics } = await this.luParser.parse(content, id, luFeatures);
-
+      const { intents: sections, diagnostics, imports } = await this.luParser.parse(content, id, luFeatures);
+      this._importedEntitties = await this.findAllImportedEntities(imports, importResolver, luFeatures);
       return { sections, diagnostics, content };
     };
     const luDocument: LUDocument = {
@@ -241,6 +242,38 @@ export class LUServer {
       index,
     };
     this.LUDocuments.push(luDocument);
+  }
+
+  protected async findAllImportedEntities(
+    imports: { id: string; path: string; description: string }[],
+    importResolver: (source: string, id: string) => Promise<{ id: string; content: any }>,
+    luFeatures: any
+  ): Promise<string[]> {
+    let content = '';
+    const result: string[] = [];
+    for (const importFile of imports) {
+      try {
+        content = (await importResolver('.', importFile.id)).content;
+      } catch (error) {
+        // ignore if file not exist
+      }
+
+      const { resource } = await this.luParser.parse(content, importFile.id, luFeatures);
+      const sections = resource.Sections;
+      for (const section of sections) {
+        if (section.SectionType === 'newEntitySection') {
+          result.push(section.Name);
+        } else if (section.SectionType === 'simpleIntentSection') {
+          for (const entity of section.Entities) {
+            if (entity.SectionType === 'newEntitySection') {
+              result.push(entity.Name);
+            }
+          }
+        }
+      }
+    }
+
+    return Promise.resolve(Array.from(new Set(result)));
   }
 
   protected getLUDocument(document: TextDocument): LUDocument | undefined {
@@ -523,7 +556,9 @@ export class LUServer {
       luisJson = await this.extractLUISContent(textExceptCurLine);
     }
 
-    const suggestionEntityList = util.getSuggestionEntities(luisJson, util.suggestionAllEntityTypes);
+    const suggestionEntityList = Array.from(
+      new Set(util.getSuggestionEntities(luisJson, util.suggestionAllEntityTypes).concat(this._importedEntitties))
+    );
     const regexEntityList = util.getRegexEntities(luisJson);
 
     //suggest a regex pattern for seperated line definition
