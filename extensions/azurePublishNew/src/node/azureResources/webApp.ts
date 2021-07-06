@@ -5,18 +5,14 @@ import { WebSiteManagementClient } from '@azure/arm-appservice';
 import { TokenCredentials } from '@azure/ms-rest-js';
 import { parseRuntimeKey } from '@bfc/shared';
 
-import {
-  ProvisionConfig,
-  ProvisionWorkingSet,
-  ResourceConfig,
-  ResourceDefinition,
-  ResourceProvisionService,
-} from '../types';
+import { ProvisionConfig, ProvisionWorkingSet, ResourceDefinition, ResourceProvisionService } from '../types';
 import {
   createCustomizeError,
   ProvisionErrors,
   stringifyError,
 } from '../../../../azurePublish/src/node/utils/errorHandler';
+import { WebAppResourceConfig } from '../availableResources';
+import { AzureResourceTypes } from '../constants';
 
 import { AZURE_HOSTING_GROUP_NAME, S1_STANDARD_TIER } from './constants';
 
@@ -27,15 +23,7 @@ export const webAppResourceDefinition: ResourceDefinition = {
   text: 'App Services',
   tier: S1_STANDARD_TIER,
   group: AZURE_HOSTING_GROUP_NAME,
-};
-
-type WebAppResourceConfig = ResourceConfig & {
-  key: 'webApp';
-  resourceGroupName: string;
-  location: string;
-  webAppName: string;
-  appServicePlanName: string;
-  operatingSystem: string;
+  dependencies: [AzureResourceTypes.RESOURCE_GROUP, AzureResourceTypes.SERVICE_PLAN],
 };
 
 const webAppProvisionMethod = (provisionConfig: ProvisionConfig) => {

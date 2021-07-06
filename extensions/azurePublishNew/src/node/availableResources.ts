@@ -2,8 +2,8 @@
 // Licensed under the MIT License.
 
 import {
-  ProvisionConfig,
   OnProvisionProgress,
+  ProvisionConfig,
   ResourceConfig,
   ResourceDefinition,
   ResourceProvisionService,
@@ -19,6 +19,29 @@ import { getLuisPredictionProvisionService, luisPredictionDefinition } from './a
 import { getQnAProvisionService, qnaDefinition } from './azureResources/qna';
 import { getAppServiceProvisionService, servicePlanDefinition } from './azureResources/servicePlan';
 import { getWebAppProvisionService, webAppResourceDefinition } from './azureResources/webApp';
+import { ProvisionConfig2 } from './provisioning';
+import { AzureResourceTypes } from './constants';
+
+export type AppRegistrationResourceConfig = ResourceConfig & {
+  key: 'appRegistration';
+  appName: string;
+};
+
+export type WebAppResourceConfig = ResourceConfig & {
+  key: 'webApp';
+  resourceGroupName: string;
+  location: string;
+  webAppName: string;
+  operatingSystem: string;
+};
+
+export type ServicePlanResourceConfig = ResourceConfig & {
+  key: 'servicePlan';
+  resourceGroupName: string;
+  appServicePlanName: string;
+  location: string;
+  operatingSystem: string;
+};
 
 export const availableResources: ResourceDefinition[] = [
   appRegistrationDefinition,
@@ -48,6 +71,46 @@ export const getProvisionServices = (config: ProvisionConfig): Record<string, Re
     blobStorage: getBlogStorageProvisionService(),
     qna: getQnAProvisionService(),
   };
+};
+
+export const getResourceDependencies = (key: string) => {
+  switch (key) {
+    case AzureResourceTypes.APP_REGISTRATION:
+      return appRegistrationDefinition.dependencies;
+    case AzureResourceTypes.WEBAPP:
+      return webAppResourceDefinition.dependencies;
+    case AzureResourceTypes.SERVICE_PLAN:
+      return servicePlanDefinition.dependencies;
+    default:
+      return [];
+  }
+};
+
+export const provisionConfigToResourceConfigMap = {
+  appRegistration: (config: ProvisionConfig2): AppRegistrationResourceConfig => {
+    return {
+      key: 'appRegistration',
+      appName: config.hostname,
+    };
+  },
+  webApp: (config: ProvisionConfig2): WebAppResourceConfig => {
+    return {
+      key: 'webApp',
+      webAppName: config.hostname,
+      location: config.location,
+      operatingSystem: config.appServiceOperatingSystem,
+      resourceGroupName: config.resourceGroup,
+    };
+  },
+  servicePlan: (config: ProvisionConfig2): ServicePlanResourceConfig => {
+    return {
+      key: 'servicePlan',
+      appServicePlanName: config.hostname,
+      location: config.location,
+      operatingSystem: config.appServiceOperatingSystem,
+      resourceGroupName: config.resourceGroup,
+    };
+  },
 };
 
 export const setUpProvisionService = (config: ProvisionConfig, onProgress: OnProvisionProgress) => {
