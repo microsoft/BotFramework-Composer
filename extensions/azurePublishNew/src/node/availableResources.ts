@@ -19,8 +19,8 @@ import { getLuisPredictionProvisionService, luisPredictionDefinition } from './a
 import { getQnAProvisionService, qnaDefinition } from './azureResources/qna';
 import { getAppServiceProvisionService, servicePlanDefinition } from './azureResources/servicePlan';
 import { getWebAppProvisionService, webAppResourceDefinition } from './azureResources/webApp';
-import { ProvisioningConfig } from './provisioning';
 import { AzureResourceTypes } from './constants';
+import { ProvisioningConfig } from './provisioning';
 
 export type AppRegistrationResourceConfig = ResourceConfig & {
   key: 'appRegistration';
