@@ -3,7 +3,7 @@
 
 /* eslint-disable @typescript-eslint/no-var-requires */
 import { pathExists, writeFile, copy, existsSync, mkdirSync } from 'fs-extra';
-import { FileInfo, IConfig, SDKKinds } from '@bfc/shared';
+import { FileInfo, IConfig, SDKKinds, IOrchestratorNLRList } from '@bfc/shared';
 import { ComposerReservoirSampler } from '@microsoft/bf-dispatcher/lib/mathematics/sampler/ComposerReservoirSampler';
 import { luImportResolverGenerator, getLUFiles, getQnAFiles } from '@bfc/shared/lib/luBuildResolver';
 import { Orchestrator } from '@microsoft/bf-orchestrator';
@@ -19,7 +19,7 @@ import { setEnvDefault } from '../../utility/setEnvDefault';
 import { useElectronContext } from '../../utility/electronContext';
 import { TelemetryService } from '../../services/telemetry';
 
-import { CrossTrainingSetting, IOrchestratorNLRList, IOrchestratorProgress, IOrchestratorSettings } from './interface';
+import { CrossTrainingSetting, IOrchestratorProgress, IOrchestratorSettings } from './interface';
 import orchestratorBuilder from './process/orchestratorBuilder';
 
 const crossTrainer = require('@microsoft/bf-lu/lib/parser/cross-train/crossTrainer.js');
