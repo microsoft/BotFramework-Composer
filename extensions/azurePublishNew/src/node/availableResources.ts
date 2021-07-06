@@ -46,7 +46,7 @@ export const getProvisionServices = (config: ProvisionConfig): Record<string, Re
     luisAuthoring: getLuisAuthoringProvisionService(),
     luisPrediction: getLuisPredictionProvisionService(),
     blobStorage: getBlogStorageProvisionService(),
-    qna: getQnAProvisionService(),
+    qna: getQnAProvisionService(config),
   };
 };
 
