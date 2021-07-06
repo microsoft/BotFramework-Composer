@@ -152,7 +152,7 @@ describe('Bot Project File dispatcher', () => {
     });
 
     await act(async () => {
-      dispatcher.addRemoteSkillToBotProjectFile(testSkillId, manifestUrl, 'remote');
+      dispatcher.addRemoteSkillToBotProjectFile(testSkillId, manifestUrl, {}, 'remote');
     });
 
     expect(renderedComponent.current.botProjectFile.content.skills.oneNoteSkill.manifest).toBe(manifestUrl);
@@ -170,7 +170,7 @@ describe('Bot Project File dispatcher', () => {
     });
 
     await act(async () => {
-      dispatcher.addRemoteSkillToBotProjectFile(testSkillId, manifestUrl, 'remote');
+      dispatcher.addRemoteSkillToBotProjectFile(testSkillId, manifestUrl, {}, 'remote');
     });
     expect(renderedComponent.current.botProjectFile.content.skills.oneNoteSkill.manifest).toBe(manifestUrl);
 

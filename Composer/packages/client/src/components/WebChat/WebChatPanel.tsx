@@ -134,7 +134,7 @@ export const WebChatPanel: React.FC<WebChatPanelProps> = ({
     if (botUrl) {
       setCurrentConversation('');
     }
-  }, [botUrl, secret]);
+  }, [botUrl]);
 
   useEffect(() => {
     setIsRestartButtonDisabled(botStatus !== BotStatus.connected);
@@ -210,7 +210,7 @@ export const WebChatPanel: React.FC<WebChatPanelProps> = ({
       1000,
       { leading: true }
     ),
-    []
+    [secret, activeLocale]
   );
 
   const onSaveTranscriptClick = async (conversationId: string) => {

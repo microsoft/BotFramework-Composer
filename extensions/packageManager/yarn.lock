@@ -253,10 +253,10 @@
   resolved "https://registry.yarnpkg.com/@jsdevtools/ono/-/ono-7.1.3.tgz#9df03bbd7c696a5c58885c34aa06da41c8543796"
   integrity sha512-4JQNk+3mVzK3xh2rqd6RB4J46qUR19azEHBneZyTZM+c456qOrbbM/5xcR8huNCCcbVt7+UmizG6GuUvPvKUYg==
 
-"@microsoft/bf-cli-command@4.13.1":
-  version "4.13.1"
-  resolved "https://registry.yarnpkg.com/@microsoft/bf-cli-command/-/bf-cli-command-4.13.1.tgz#2aa1bc60cd4ed51919c5ff01e58e0efcd15d917a"
-  integrity sha512-xRP9uDnojhZMEpYFSGH6ybgtADR4N6byZo38JwxYBCVBAmpqSAHFWldU3L3cAxet8SUX0NqypQzg8aUPN1ufKQ==
+"@microsoft/bf-cli-command@4.14.0-dev.20210604.3f9ee15":
+  version "4.14.0-dev.20210604.3f9ee15"
+  resolved "https://registry.yarnpkg.com/@microsoft/bf-cli-command/-/bf-cli-command-4.14.0-dev.20210604.3f9ee15.tgz#2801f1a27ba3cb4d34a8a3eac6255e76d59af5d8"
+  integrity sha512-4ILTv27uJLByr3McoFMta60LglENr7yi8wkPlnRCIYUB4vBdViwcEunBZDH8Xfhdmp78flLMcABrYH9Q/EJH0A==
   dependencies:
     "@oclif/command" "~1.5.19"
     "@oclif/config" "~1.13.3"
@@ -268,13 +268,13 @@
     fs-extra "^7.0.1"
     tslib "^2.0.3"
 
-"@microsoft/bf-dialog@4.13.1":
-  version "4.13.1"
-  resolved "https://registry.yarnpkg.com/@microsoft/bf-dialog/-/bf-dialog-4.13.1.tgz#311510356a935fce282e05356c6c4a384c823b5c"
-  integrity sha512-kI1d7gI+1Xtrx1aFTHxldMKmicNNDrlscBcJFrMZxIQNmj8ZOx/gyZmJ/eXhXV+jIAgAmjgce0O1txz7OTKnIQ==
+"@microsoft/bf-dialog@4.14.0-dev.20210604.3f9ee15":
+  version "4.14.0-dev.20210604.3f9ee15"
+  resolved "https://registry.yarnpkg.com/@microsoft/bf-dialog/-/bf-dialog-4.14.0-dev.20210604.3f9ee15.tgz#fd9ef16a4ffb5a867276c76014fd4a00c2d68147"
+  integrity sha512-xrsoMD1hB/n8Ifm9qisqVIsmU3LEeM6YZylzlqhdVp5HWUXFxlK3kn1gxGfqp7IcLl3+ye0mBkm75SEIAiTcGA==
   dependencies:
     "@apidevtools/json-schema-ref-parser" "^9.0.1"
-    "@microsoft/bf-cli-command" "4.13.1"
+    "@microsoft/bf-cli-command" "4.14.0-dev.20210604.3f9ee15"
     "@oclif/command" "~1.5.19"
     "@oclif/config" "~1.13.3"
     "@oclif/errors" "~1.2.2"
@@ -288,7 +288,7 @@
     fs-extra "^8.1.0"
     globby "^11.0.0"
     https-proxy-agent "^5.0.0"
-    json-ptr "~1.3.0"
+    json-ptr "~2.1.0"
     json-schema-merge-allof "~0.7.0"
     os "~0.1.1"
     path "^0.12.7"
@@ -836,6 +836,13 @@ agent-base@6:
   dependencies:
     debug "4"
 
+agent-base@^4.3.0:
+  version "4.3.0"
+  resolved "https://registry.yarnpkg.com/agent-base/-/agent-base-4.3.0.tgz#8165f01c436009bccad0b1d122f05ed770efc6ee"
+  integrity sha512-salcGninV0nPrwpGNn4VTXBb1SOuXQBiqbrNXoeizJsHrsL6ERFM2Ne3JUSBWRE6aeNJI2ROP/WEEIDUiDe3cg==
+  dependencies:
+    es6-promisify "^5.0.0"
+
 ajv-errors@^1.0.0:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/ajv-errors/-/ajv-errors-1.0.1.tgz#f35986aceb91afadec4102fbd85014950cefa64d"
@@ -1011,6 +1018,13 @@ atob@^2.1.2:
   resolved "https://registry.yarnpkg.com/atob/-/atob-2.1.2.tgz#6d9517eb9e030d2436666651e86bd9f6f13533c9"
   integrity sha512-Wm6ukoaOGJi/73p/cl2GvLjTI5JM1k/O14isD73YML8StrH/7/lRFgmg8nICZgD3bZZvjwCGxtMOD3wWNAu8cg==
 
+axios-https-proxy@^0.1.1:
+  version "0.1.1"
+  resolved "https://registry.yarnpkg.com/axios-https-proxy/-/axios-https-proxy-0.1.1.tgz#929ce6bbd669c940b025e0c7258318a63d66d5c4"
+  integrity sha512-slFaor1FTRhO6V6r2ewuWLBRIF33Lkg+wRmUVJPWRe0JRgBKevBSlgjDInp+AeKGKZjyT7k3l44l67CvEme1Cg==
+  dependencies:
+    https-proxy-agent "^2.2.1"
+
 axios@^0.21.1, axios@~0.21.1:
   version "0.21.1"
   resolved "https://registry.yarnpkg.com/axios/-/axios-0.21.1.tgz#22563481962f4d6bde9a76d516ef0e5d3c09b2b8"
@@ -1113,17 +1127,17 @@ bn.js@^5.0.0, bn.js@^5.1.1:
   resolved "https://registry.yarnpkg.com/bn.js/-/bn.js-5.2.0.tgz#358860674396c6997771a9d051fcc1b57d4ae002"
   integrity sha512-D7iWRBvnZE8ecXiLj/9wbxH7Tk79fAh8IHaTNq1RWRixsS02W+5qS+iE9yq6RYl0asXx5tw0bLhmT5pIfbSquw==
 
-botbuilder-stdlib@4.13.0-internal:
-  version "4.13.0-internal"
-  resolved "https://registry.yarnpkg.com/botbuilder-stdlib/-/botbuilder-stdlib-4.13.0-internal.tgz#d3a0009e0f7a2812162dec3d04c00bbdcf5e8277"
-  integrity sha512-T2IKUhZ9k09Zoj6s4/3ROk2GNrKgUcaOHuQcPzVmjEGFsv9lDK/aAizBYO5hfgJV+BUJwahxgeXat9uDFwVp1w==
+botbuilder-stdlib@4.12.0-internal:
+  version "4.12.0-internal"
+  resolved "https://registry.yarnpkg.com/botbuilder-stdlib/-/botbuilder-stdlib-4.12.0-internal.tgz#21540a6bef6e571dfd4ef16033083314df9871f0"
+  integrity sha512-AwtWOZlgTaQte+uBeDOAy83veksMOzKHR62k3UYgUeqgsUamtqi6+OGV633hLi49ZmF/Gs8dP4iid2jCLDEQBg==
 
 botframework-schema@^4.11.1:
-  version "4.13.0"
-  resolved "https://registry.yarnpkg.com/botframework-schema/-/botframework-schema-4.13.0.tgz#e2cc23671079dcc821ad28d677c195c35293ff4d"
-  integrity sha512-EYKVl3JbjG6TYCiTiMU7E/nxkMC+HtRIQMPRIUZD+8IaVmmHdnO8HKSo+IULwlr8KQKASXE2gkZM/eJu/fXAdA==
+  version "4.12.0"
+  resolved "https://registry.yarnpkg.com/botframework-schema/-/botframework-schema-4.12.0.tgz#42431b5949fb666087399fd555c21c0322099397"
+  integrity sha512-W0/0xvrxafRrusWfGsGiwK2X4FOoIL7obvitkS+3XZfwhr6XeDKLClkQMbaU0GCawVF6DtbiPKErHpPUhd2Oig==
   dependencies:
-    botbuilder-stdlib "4.13.0-internal"
+    botbuilder-stdlib "4.12.0-internal"
 
 brace-expansion@^1.1.7:
   version "1.1.11"
@@ -1712,6 +1726,13 @@ debug@^2.2.0, debug@^2.3.3:
   dependencies:
     ms "2.0.0"
 
+debug@^3.1.0:
+  version "3.2.7"
+  resolved "https://registry.yarnpkg.com/debug/-/debug-3.2.7.tgz#72580b7e9145fb39b6676f9c5e5fb100b934179a"
+  integrity sha512-CFjzYYAi4ThfiQvizrFQevTTXHtnCqWfe7x1AhgEscTz6ZbLbfoLRLPugTQyBth6f8ZERVUSyWHFD/7Wu4t1XQ==
+  dependencies:
+    ms "^2.1.1"
+
 decamelize@^1.2.0:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/decamelize/-/decamelize-1.2.0.tgz#f6534d15148269b20352e7bee26f501f9a191290"
@@ -1906,6 +1927,18 @@ error-ex@^1.3.1:
   integrity sha512-7dFHNmqeFSEt2ZBsCriorKnn3Z2pj+fd9kmI6QoWw4//DL+icEBfc0U7qJCisqrTsKTjw4fNFy2pW9OqStD84g==
   dependencies:
     is-arrayish "^0.2.1"
+
+es6-promise@^4.0.3:
+  version "4.2.8"
+  resolved "https://registry.yarnpkg.com/es6-promise/-/es6-promise-4.2.8.tgz#4eb21594c972bc40553d276e510539143db53e0a"
+  integrity sha512-HJDGx5daxeIvxdBxvG2cb9g4tEvwIk3i8+nhX0yGrYmZUzbkdg8QbDevheDB8gd0//uPj4c1EQua8Q+MViT0/w==
+
+es6-promisify@^5.0.0:
+  version "5.0.0"
+  resolved "https://registry.yarnpkg.com/es6-promisify/-/es6-promisify-5.0.0.tgz#5109d62f3e56ea967c4b63505aef08291c8a5203"
+  integrity sha1-UQnWLz5W6pZ8S2NQWu8IKRyKUgM=
+  dependencies:
+    es6-promise "^4.0.3"
 
 escape-string-regexp@4.0.0:
   version "4.0.0"
@@ -2441,6 +2474,14 @@ https-browserify@^1.0.0:
   resolved "https://registry.yarnpkg.com/https-browserify/-/https-browserify-1.0.0.tgz#ec06c10e0a34c0f2faf199f7fd7fc78fffd03c73"
   integrity sha1-7AbBDgo0wPL68Zn3/X/Hj//QPHM=
 
+https-proxy-agent@^2.2.1:
+  version "2.2.4"
+  resolved "https://registry.yarnpkg.com/https-proxy-agent/-/https-proxy-agent-2.2.4.tgz#4ee7a737abd92678a293d9b34a1af4d0d08c787b"
+  integrity sha512-OmvfoQ53WLjtA9HeYP9RNrWMJzzAz1JGaSFr1nijg0PVR1JaD/xbJq1mdEIIlxGpXp9eSe/O2LgU9DJmTPd0Eg==
+  dependencies:
+    agent-base "^4.3.0"
+    debug "^3.1.0"
+
 https-proxy-agent@^5.0.0:
   version "5.0.0"
   resolved "https://registry.yarnpkg.com/https-proxy-agent/-/https-proxy-agent-5.0.0.tgz#e2a90542abb68a762e0a0850f6c9edadfd8506b2"
@@ -2775,7 +2816,7 @@ json-parse-even-better-errors@^2.3.0:
   resolved "https://registry.yarnpkg.com/json-parse-even-better-errors/-/json-parse-even-better-errors-2.3.1.tgz#7c47805a94319928e05777405dc12e1f7a4ee02d"
   integrity sha512-xyFwyhro/JEof6Ghe2iz2NcXoj2sloNsWr/XsERDK/oiPCfaNhl5ONfp+jQdAZRQQ0IJWNzH9zIZF7li91kh2w==
 
-json-ptr@^2.1, json-ptr@~1.3.0:
+json-ptr@^2.1, json-ptr@~2.1.0:
   version "2.2.0"
   resolved "https://registry.yarnpkg.com/json-ptr/-/json-ptr-2.2.0.tgz#a4de4ed638cb23ae4cd4b51f8bf972a1c2293f1e"
   integrity sha512-w9f6/zhz4kykltXMG7MLJWMajxiPj0q+uzQPR1cggNAE/sXoq/C5vjUb/7QNcC3rJsVIIKy37ALTXy1O+3c8QQ==
@@ -3164,6 +3205,11 @@ ms@2.1.2:
   version "2.1.2"
   resolved "https://registry.yarnpkg.com/ms/-/ms-2.1.2.tgz#d09d1f357b443f493382a8eb3ccd183872ae6009"
   integrity sha512-sGkPx+VjMtmA6MX27oA4FBFELFCZZ4S4XqeGOXCv68tT+jb3vk/RyaKWP0PTKyWtmLSM0b+adUTEvbs1PEaH2w==
+
+ms@^2.1.1:
+  version "2.1.3"
+  resolved "https://registry.yarnpkg.com/ms/-/ms-2.1.3.tgz#574c8138ce1d2b5861f0b44579dbadd60c6615b2"
+  integrity sha512-6FlzubTLZG3J2a/NVCAleEhjzq5oxgHyaCU9yYXvcLsvoVaHJq/s5xXI6/XXP6tz7R9xAOtHnSO/tXtF3WRTlA==
 
 nan@^2.12.1:
   version "2.14.2"
