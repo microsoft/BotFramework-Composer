@@ -165,24 +165,11 @@ type StepConfig = {
   appPasswordHint: string;
   email: string;
   hostname: string;
-  resourceGroupName: string;
-  secretName: string;
-  subscriptionId: string;
-  vaultName: string;
 };
 
 export const createBindToKeyVaultStep = (config: StepConfig): PublishStep => {
   const execute = async (workingSet: PublishingWorkingSet, onProgress: OnDeploymentProgress): Promise<void> => {
-    const {
-      accessToken,
-      appPasswordHint,
-      email,
-      hostname,
-      resourceGroupName,
-      secretName,
-      subscriptionId,
-      vaultName,
-    } = config;
+    const { accessToken, appPasswordHint, email, hostname } = config;
 
     if (!appPasswordHint || !hostname) {
       onProgress(400, 'Skipped binding to key vault. Missing settings.');
@@ -190,6 +177,10 @@ export const createBindToKeyVaultStep = (config: StepConfig): PublishStep => {
     }
 
     const webAppName = hostname;
+    const resourceGroupName = appPasswordHint.match(/resourceGroups\/([^/]*)/)[1];
+    const secretName = appPasswordHint.match(/secrets\/([^/]*)/)[1];
+    const subscriptionId = appPasswordHint.match(/subscriptions\/([\w-]*)\//)[1];
+    const vaultName = appPasswordHint.match(/vaults\/([^/]*)/)[1];
 
     onProgress(
       202,

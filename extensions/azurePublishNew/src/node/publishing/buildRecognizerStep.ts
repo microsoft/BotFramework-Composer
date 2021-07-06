@@ -11,11 +11,11 @@ type QnaConfigType = {
 };
 
 type StepConfig = {
-  projectPath: string;
-  project: IBotProject;
   luisConfig: ILuisConfig;
-  qnaConfig: QnaConfigType;
   luResources: Resource[];
+  project: IBotProject;
+  projectPath: string;
+  qnaConfig: QnaConfigType;
   qnaResources: Resource[];
   runtime?: DialogSetting['runtime'];
 };
