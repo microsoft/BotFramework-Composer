@@ -34,7 +34,7 @@ jest.mock('../../services/auth/auth', () => ({
 }));
 
 const mockFetch = jest.fn();
-jest.mock('node-fetch', () => async (...args) => await mockFetch(...args));
+jest.mock('../../utility/fetch', () => async (...args) => await mockFetch(...args));
 
 describe('Power Virtual Agents provider', () => {
   const envBackup = { ...process.env };

@@ -12,6 +12,12 @@ import { DOC_EXTENSIONS, QNA_SUBSCRIPTION_KEY, COGNITIVE_SERVICES_ENDPOINTS } fr
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const qnaBuild = require('@microsoft/bf-lu/lib/parser/qnabuild/builder.js');
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const KB = require('@microsoft/bf-lu/lib/parser/qna/qnamaker/kb.js');
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const { CognitiveServicesCredentials } = require('@azure/ms-rest-azure-js');
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const { QnAMakerClient } = require('@azure/cognitiveservices-qnamaker');
 
 const debug = log.extend('helper-parser');
 
@@ -63,4 +69,19 @@ export async function parseQnAContent(url: string, multiTurn: boolean) {
   }
 
   return await importQnAFromUrl(builder, url, subscriptionKey, multiTurn);
+}
+
+// subscriptionKey from selection.
+export async function importQnAContentFromQnAMakerPortal(endpoint: string, kbId: string, subscriptionKey: string) {
+  const cognitiveServicesCredentials = new CognitiveServicesCredentials(subscriptionKey);
+  const resourceClient = new QnAMakerClient(cognitiveServicesCredentials, endpoint);
+
+  // 'Test' or 'Prod'
+  const result = await resourceClient.knowledgebase.download(kbId, 'Test');
+  let kbToLuContent = '';
+  if (result) {
+    const kb = new KB(result);
+    kbToLuContent = kb.parseToLuContent();
+  }
+  return kbToLuContent;
 }

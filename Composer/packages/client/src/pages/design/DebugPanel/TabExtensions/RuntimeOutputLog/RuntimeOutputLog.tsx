@@ -3,7 +3,7 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { NeutralColors } from '@uifabric/fluent-theme';
+import { NeutralColors, FontSizes } from '@uifabric/fluent-theme';
 import { useRecoilValue } from 'recoil';
 import { default as AnsiUp } from 'ansi_up';
 import { useEffect, useRef } from 'react';
@@ -55,7 +55,7 @@ export const RuntimeOutputLog: React.FC<{ projectId: string }> = ({ projectId })
             margin: 0,
             wordBreak: 'break-all',
             whiteSpace: 'pre-wrap',
-            lineHeight: '20px',
+            fontSize: FontSizes.size12,
           }}
           // eslint-disable-next-line react/no-danger
           dangerouslySetInnerHTML={createMarkup(runtimeData.standardOutput)}

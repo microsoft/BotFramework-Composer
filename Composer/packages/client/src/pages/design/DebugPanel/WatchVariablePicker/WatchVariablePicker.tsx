@@ -132,9 +132,9 @@ export const WatchVariablePicker = React.memo((props: WatchVariablePickerProps) 
           event?.preventDefault();
           onToggleExpand(node.id, !propertyTreeExpanded[node.id]);
         } else {
+          event?.preventDefault();
           const path = paths[node.id];
           setQuery(path);
-          event?.preventDefault();
           setErrorMessage('');
           TelemetryClient.track('StateWatchPropertyAdded', { property: path });
           setWatchedVariables(currentProjectId, { ...watchedVariables, [variableId]: path });
@@ -166,6 +166,7 @@ export const WatchVariablePicker = React.memo((props: WatchVariablePickerProps) 
       onClick: (event) => {
         event?.preventDefault();
         const path = paths[node.id];
+        setQuery(path);
         setErrorMessage('');
         TelemetryClient.track('StateWatchPropertyAdded', { property: path });
         setWatchedVariables(currentProjectId, { ...watchedVariables, [variableId]: path });

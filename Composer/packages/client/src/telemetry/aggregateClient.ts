@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-export const AggregateClient = (...loggers) => {
+export const aggregateClient = (...loggers) => {
   const drain = () => {
     loggers.forEach((logger) => logger?.drain());
   };

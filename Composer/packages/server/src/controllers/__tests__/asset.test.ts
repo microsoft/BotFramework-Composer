@@ -2,7 +2,6 @@
 // Licensed under the MIT License.
 
 import { Request, Response } from 'express';
-import { enableFetchMocks } from 'jest-fetch-mock';
 
 import { AssetController } from '../asset';
 
@@ -28,6 +27,17 @@ describe('get bot project templates', () => {
   });
 });
 
+const mockFetchResponse = {
+  id: 'generator-conversational-core',
+  _rev: '9-82a6c228b16649a143a49974b0adc022',
+  name: 'generator-conversational-core',
+  readme: '# Mock readme markdown',
+};
+
+jest.mock('../../utility/fetch', () => () => {
+  return Promise.resolve({ json: () => mockFetchResponse });
+});
+
 describe('getTemplateReadMe', () => {
   let mockRes: any;
 
@@ -51,16 +61,7 @@ describe('getTemplateReadMe', () => {
     body: {},
   } as Request;
 
-  const mockFetchResponse = {
-    id: 'generator-conversational-core',
-    _rev: '9-82a6c228b16649a143a49974b0adc022',
-    name: 'generator-conversational-core',
-    readme: '# Mock readme markdown',
-  };
-
   it('should return a readMe', async () => {
-    enableFetchMocks();
-    fetchMock.mockResponseOnce(JSON.stringify(mockFetchResponse));
     await AssetController.getTemplateReadMe(mockReq, mockRes);
     expect(mockRes.status).toHaveBeenCalledWith(200);
     expect(mockRes.json).toHaveBeenCalledWith('# Mock readme markdown');
