@@ -29,17 +29,7 @@ const getTelemetryContext = () => {
 };
 
 let client;
-if (instrumentationKey) {
-  log('Setting up App Insights');
-  AppInsights.setup(instrumentationKey)
-    // turn off extra instrumentation
-    .setAutoCollectConsole(false)
-    .setAutoCollectDependencies(false)
-    .setAutoCollectExceptions(false)
-    .setAutoCollectPerformance(false)
-    .setAutoCollectRequests(true);
-  // do not collect the user's machine name
-  AppInsights.defaultClient.context.tags[AppInsights.defaultClient.context.keys.cloudRoleInstance] = '';
+const initializeClient = () => {
   AppInsights.defaultClient.addTelemetryProcessor((envelope: AppInsights.Contracts.Envelope): boolean => {
     const { sessionId, telemetry, composerVersion, userId, architecture, cpus, memory } = getTelemetryContext();
 
@@ -96,6 +86,21 @@ if (instrumentationKey) {
 
     return true;
   });
+};
+
+if (instrumentationKey) {
+  log('Setting up App Insights');
+  AppInsights.setup(instrumentationKey)
+    // turn off extra instrumentation
+    .setAutoCollectConsole(false)
+    .setAutoCollectDependencies(false)
+    .setAutoCollectExceptions(false)
+    .setAutoCollectPerformance(false)
+    .setAutoCollectRequests(true);
+  // do not collect the user's machine name
+  AppInsights.defaultClient.context.tags[AppInsights.defaultClient.context.keys.cloudRoleInstance] = '';
+  initializeClient();
+
   log('Starting Application Insights');
   AppInsights.start();
   log('Started Application Insights');
@@ -108,6 +113,14 @@ const track = (events: TelemetryEvent[]) => {
       try {
         switch (type) {
           case TelemetryEventTypes.TrackEvent:
+            if (name === 'TelemetryOptInOut') {
+              const { enabled } = properties;
+              if (enabled) {
+                initializeClient();
+              } else {
+                AppInsights.defaultClient.clearTelemetryProcessors();
+              }
+            }
             client?.trackEvent({ name, properties });
             break;
           case TelemetryEventTypes.PageView:
