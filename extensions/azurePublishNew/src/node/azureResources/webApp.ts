@@ -6,7 +6,7 @@ import { TokenCredentials } from '@azure/ms-rest-js';
 import { parseRuntimeKey } from '@bfc/shared';
 
 import {
-  ProvisionConfig,
+  ProvisionServiceConfig,
   ProvisionWorkingSet,
   ResourceConfig,
   ResourceDefinition,
@@ -38,7 +38,7 @@ type WebAppResourceConfig = ResourceConfig & {
   operatingSystem: string;
 };
 
-const webAppProvisionMethod = (provisionConfig: ProvisionConfig) => {
+const webAppProvisionMethod = (provisionConfig: ProvisionServiceConfig) => {
   const tokenCredentials = new TokenCredentials(provisionConfig.accessToken);
   const webSiteManagementClient = new WebSiteManagementClient(tokenCredentials, provisionConfig.subscriptionId);
 
@@ -74,7 +74,7 @@ const webAppProvisionMethod = (provisionConfig: ProvisionConfig) => {
   };
 };
 
-export const getWebAppProvisionService = (config: ProvisionConfig): ResourceProvisionService => {
+export const getWebAppProvisionService = (config: ProvisionServiceConfig): ResourceProvisionService => {
   return {
     getDependencies: () => ['servicePlan'],
     getRecommendationForProject: (project) => {

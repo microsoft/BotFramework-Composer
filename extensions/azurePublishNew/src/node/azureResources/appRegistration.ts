@@ -5,7 +5,7 @@ import { AxiosRequestConfig } from 'axios';
 import * as rp from 'request-promise';
 
 import { createCustomizeError, ProvisionErrors } from '../../../../azurePublish/src/node/utils/errorHandler';
-import { ProvisionConfig, ProvisionWorkingSet, ResourceDefinition, ResourceProvisionService } from '../types';
+import { ProvisionServiceConfig, ProvisionWorkingSet, ResourceDefinition, ResourceProvisionService } from '../types';
 import { AppRegistrationResourceConfig } from '../availableResources';
 import { AzureResourceTypes } from '../constants';
 
@@ -50,7 +50,7 @@ const postRequestWithRetry = async (requestUri: string, requestOptions: AxiosReq
   return result;
 };
 
-const appRegistrationProvisionMethod = (provisionConfig: ProvisionConfig) => {
+const appRegistrationProvisionMethod = (provisionConfig: ProvisionServiceConfig) => {
   const { graphToken } = provisionConfig;
   const requestOptions: rp.RequestPromiseOptions = {
     json: true,
@@ -96,7 +96,7 @@ const appRegistrationProvisionMethod = (provisionConfig: ProvisionConfig) => {
   };
 };
 
-export const getAppRegistrationProvisionService = (config: ProvisionConfig): ResourceProvisionService => {
+export const getAppRegistrationProvisionService = (config: ProvisionServiceConfig): ResourceProvisionService => {
   return {
     getDependencies: () => [],
     // eslint-disable-next-line @typescript-eslint/no-unused-vars

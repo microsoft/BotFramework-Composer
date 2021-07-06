@@ -7,7 +7,7 @@ import { getResourceDependencies, provisionConfigToResourceConfigMap } from './a
 import { AzureResourceTypes } from './constants';
 
 // TODO: This is what we have to remain compatible with
-export type ProvisionConfig2 = {
+export type ProvisioningConfig = {
   accessToken: string;
   graphToken: string;
   tenantId?: string;
@@ -33,7 +33,7 @@ export type ProvisionConfig2 = {
 /**
  * Given a provisioning config this returns an ordered list of resource configurations.
  */
-export const getResourceConfigs = (config: ProvisionConfig2): ResourceConfig[] => {
+export const getResourceConfigs = (config: ProvisioningConfig): ResourceConfig[] => {
   const resources: ResourceConfig[] = [];
 
   const resourceKeys = config.externalResources.map((r) => r.key).concat(AzureResourceTypes.RESOURCE_GROUP);

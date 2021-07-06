@@ -5,7 +5,7 @@ import { TokenCredentials } from '@azure/ms-rest-js';
 import { ApplicationInsightsManagementClient } from '@azure/arm-appinsights';
 import { AzureBotService } from '@azure/arm-botservice';
 
-import { ProvisionConfig, ProvisionWorkingSet, ResourceDefinition, ResourceProvisionService } from '../types';
+import { ProvisionServiceConfig, ProvisionWorkingSet, ResourceDefinition, ResourceProvisionService } from '../types';
 import { AzureResourceTypes } from '../constants';
 import { AppInsightsResourceConfig } from '../availableResources';
 import {
@@ -25,7 +25,7 @@ export const appInsightsDefinition: ResourceDefinition = {
   dependencies: [AzureResourceTypes.RESOURCE_GROUP, AzureResourceTypes.BOT_REGISTRATION],
 };
 
-const appInsightsProvisionMethod = (provisionConfig: ProvisionConfig) => {
+const appInsightsProvisionMethod = (provisionConfig: ProvisionServiceConfig) => {
   const tokenCredentials = new TokenCredentials(provisionConfig.accessToken);
 
   const applicationInsightsManagementClient = new ApplicationInsightsManagementClient(
@@ -128,7 +128,7 @@ const appInsightsProvisionMethod = (provisionConfig: ProvisionConfig) => {
   };
 };
 
-export const getAppInsightsProvisionService = (config: ProvisionConfig): ResourceProvisionService => {
+export const getAppInsightsProvisionService = (config: ProvisionServiceConfig): ResourceProvisionService => {
   return {
     getDependencies: () => ['botRegistration'],
     getRecommendationForProject: (project) => 'optional',

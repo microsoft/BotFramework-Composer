@@ -5,7 +5,7 @@ import { TokenCredentials } from '@azure/ms-rest-js';
 import { CosmosDBManagementClient } from '@azure/arm-cosmosdb';
 
 import {
-  ProvisionConfig,
+  ProvisionServiceConfig,
   ProvisionMethod,
   ProvisionWorkingSet,
   ResourceConfig,
@@ -46,7 +46,7 @@ type CosmosDbConfig = ResourceConfig & {
   containerName: string;
 };
 
-const cosmosDbProvisionMethod = (provisionConfig: ProvisionConfig): ProvisionMethod => {
+const cosmosDbProvisionMethod = (provisionConfig: ProvisionServiceConfig): ProvisionMethod => {
   const tokenCredentials = new TokenCredentials(provisionConfig.accessToken);
   const cosmosDBManagementClient = new CosmosDBManagementClient(tokenCredentials, provisionConfig.subscriptionId);
 
@@ -151,7 +151,7 @@ const cosmosDbProvisionMethod = (provisionConfig: ProvisionConfig): ProvisionMet
   return provision();
 };
 
-export const getCosmosDbProvisionService = (config: ProvisionConfig): ResourceProvisionService => {
+export const getCosmosDbProvisionService = (config: ProvisionServiceConfig): ResourceProvisionService => {
   return {
     getDependencies: () => [],
     getRecommendationForProject: (project) => 'optional',
