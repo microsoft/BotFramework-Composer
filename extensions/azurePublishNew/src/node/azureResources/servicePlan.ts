@@ -6,7 +6,7 @@ import { WebSiteManagementClient } from '@azure/arm-appservice';
 
 import { parseRuntimeKey } from '../../../../../Composer/packages/lib/shared';
 import {
-  ProvisionConfig,
+  ProvisionServiceConfig,
   ProvisionWorkingSet,
   ResourceConfig,
   ResourceDefinition,
@@ -34,7 +34,7 @@ export const servicePlanDefinition: ResourceDefinition = {
   group: AZURE_HOSTING_GROUP_NAME,
 };
 
-const appServiceProvisionMethod = (provisionConfig: ProvisionConfig) => {
+const appServiceProvisionMethod = (provisionConfig: ProvisionServiceConfig) => {
   const tokenCredentials = new TokenCredentials(provisionConfig.accessToken);
   const webSiteManagementClient = new WebSiteManagementClient(tokenCredentials, provisionConfig.subscriptionId);
 
@@ -67,7 +67,7 @@ const appServiceProvisionMethod = (provisionConfig: ProvisionConfig) => {
   };
 };
 
-export const getAppServiceProvisionService = (config: ProvisionConfig): ResourceProvisionService => {
+export const getAppServiceProvisionService = (config: ProvisionServiceConfig): ResourceProvisionService => {
   return {
     getDependencies: () => [],
     getRecommendationForProject: (project) => {
