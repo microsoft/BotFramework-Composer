@@ -1,9 +1,9 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { getResourceConfigs, ProvisionConfig2 } from './provisioning';
+import { getResourceConfigs, ProvisioningConfig } from './provisioning';
 
-const testConfig: ProvisionConfig2 = {
+const testConfig: ProvisioningConfig = {
   accessToken: 'test-accessToken',
   graphToken: 'test-graphToken',
   externalResources: [],
@@ -37,7 +37,7 @@ describe('provisioning', () => {
         expected: [expectedTestResources.resourceGroup, expectedTestResources.appRegistration],
       },
     ])('returns correct resources %#', ({ externalResources, expected }) => {
-      const config: ProvisionConfig2 = {
+      const config: ProvisioningConfig = {
         ...testConfig,
         externalResources,
       };
@@ -51,7 +51,7 @@ describe('provisioning', () => {
   });
 
   it('throw if both web app and azure function requested', () => {
-    const config: ProvisionConfig2 = {
+    const config: ProvisioningConfig = {
       ...testConfig,
       externalResources: [{ key: 'webApp' }, { key: 'azureFunctions' }],
     };
@@ -60,7 +60,7 @@ describe('provisioning', () => {
   });
 
   it('throw if unknown resource key requested', () => {
-    const config: ProvisionConfig2 = {
+    const config: ProvisioningConfig = {
       ...testConfig,
       externalResources: [{ key: 'invalidResource' }],
     };

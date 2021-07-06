@@ -19,7 +19,7 @@ import { getLuisPredictionProvisionService, luisPredictionDefinition } from './a
 import { getQnAProvisionService, qnaDefinition } from './azureResources/qna';
 import { getAppServiceProvisionService, servicePlanDefinition } from './azureResources/servicePlan';
 import { getWebAppProvisionService, webAppResourceDefinition } from './azureResources/webApp';
-import { ProvisionConfig2 } from './provisioning';
+import { ProvisioningConfig } from './provisioning';
 import { AzureResourceTypes } from './constants';
 
 export type AppRegistrationResourceConfig = ResourceConfig & {
@@ -67,7 +67,7 @@ export const getResourceDependencies = (key: string) => {
 };
 
 export const provisionConfigToResourceConfigMap = {
-  appRegistration: (config: ProvisionConfig2): AppRegistrationResourceConfig => {
+  appRegistration: (config: ProvisioningConfig): AppRegistrationResourceConfig => {
     return {
       key: 'appRegistration',
       appName: config.hostname,
