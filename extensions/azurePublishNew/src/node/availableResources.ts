@@ -27,6 +27,14 @@ export type AppRegistrationResourceConfig = ResourceConfig & {
   appName: string;
 };
 
+export type QnAResourceConfig = ResourceConfig & {
+  key: 'qna';
+  resourceGroupName: string;
+  location: string;
+  name: string;
+  sku?: string;
+};
+
 export const availableResources: ResourceDefinition[] = [
   appRegistrationDefinition,
   webAppResourceDefinition,
@@ -61,6 +69,8 @@ export const getResourceDependencies = (key: string) => {
   switch (key) {
     case AzureResourceTypes.APP_REGISTRATION:
       return appRegistrationDefinition.dependencies;
+    case AzureResourceTypes.QNA:
+      return qnaDefinition.dependencies;
     default:
       return [];
   }
@@ -71,6 +81,15 @@ export const provisionConfigToResourceConfigMap = {
     return {
       key: 'appRegistration',
       appName: config.hostname,
+    };
+  },
+  qna: (config: ProvisioningConfig): QnAResourceConfig => {
+    return {
+      key: 'qna',
+      resourceGroupName: config.resourceGroup,
+      location: config.location,
+      name: `${config.hostname}-qna`,
+      sku: config.sku,
     };
   },
 };

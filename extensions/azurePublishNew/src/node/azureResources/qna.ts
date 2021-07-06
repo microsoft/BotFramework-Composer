@@ -8,8 +8,8 @@ import { ApplicationInsightsManagementClient } from '@azure/arm-appinsights';
 import { CognitiveServicesManagementClient } from '@azure/arm-cognitiveservices';
 
 import {
-  ProvisionConfig,
   ProvisionMethod,
+  ProvisionServiceConfig,
   ProvisionWorkingSet,
   ResourceConfig,
   ResourceDefinition,
@@ -20,6 +20,8 @@ import {
   ProvisionErrors,
   stringifyError,
 } from '../../../../azurePublish/src/node/utils/errorHandler';
+import { AzureResourceTypes } from '../constants';
+import { QnAResourceConfig } from '../availableResources';
 
 import { COGNITIVE_SERVICES_GROUP_NAME, SO_STANDARD_TIER } from './constants';
 
@@ -30,20 +32,14 @@ export const qnaDefinition: ResourceDefinition = {
   text: 'Microsoft QnA Maker',
   tier: SO_STANDARD_TIER,
   group: COGNITIVE_SERVICES_GROUP_NAME,
+  dependencies: [AzureResourceTypes.RESOURCE_GROUP, AzureResourceTypes.WEBAPP],
 };
 
 type ServiceCredentials = {
   signRequest: <T>(webResource) => Promise<T>;
 };
 
-type QnAResourceConfig = ResourceConfig & {
-  key: 'qna';
-  location: string;
-  sku: string;
-  name: string;
-};
-
-const qnAProvisionMethod = (provisionConfig: ProvisionConfig): ProvisionMethod => {
+const qnAProvisionMethod = (provisionConfig: ProvisionServiceConfig): ProvisionMethod => {
   const getServiceCredentials = (): ServiceCredentials => {
     return {
       signRequest: (webResource) => {
@@ -257,7 +253,7 @@ const qnAProvisionMethod = (provisionConfig: ProvisionConfig): ProvisionMethod =
   };
 };
 
-export const getQnAProvisionService = (config: ProvisionConfig): ResourceProvisionService => {
+export const getQnAProvisionService = (config: ProvisionServiceConfig): ResourceProvisionService => {
   return {
     getDependencies: () => ['webApp'],
     getRecommendationForProject: (project) => {
