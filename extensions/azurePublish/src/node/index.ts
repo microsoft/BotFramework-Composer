@@ -579,25 +579,6 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
         required: false,
       });
 
-      // TODO: determine if QNA or LUIS is REQUIRED or OPTIONAL
-      const requireLUIS = false;
-      const requireQNA = false;
-
-      recommendedResources.push({
-        ...AzureResourceDefinitions[AzureResourceTypes.LUIS_AUTHORING],
-        required: requireLUIS,
-      });
-
-      recommendedResources.push({
-        ...AzureResourceDefinitions[AzureResourceTypes.LUIS_PREDICTION],
-        required: requireLUIS,
-      });
-
-      recommendedResources.push({
-        ...AzureResourceDefinitions[AzureResourceTypes.QNA],
-        required: requireQNA,
-      });
-
       return recommendedResources;
     };
 

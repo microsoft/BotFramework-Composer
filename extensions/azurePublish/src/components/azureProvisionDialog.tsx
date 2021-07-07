@@ -14,13 +14,12 @@ import {
   getARMTokenForTenant,
   useLocalStorage,
   useTelemetryClient,
-  TelemetryClient,
   useApplicationApi,
 } from '@bfc/extension-client';
 import { Subscription } from '@azure/arm-subscriptions/esm/models';
 import { DeployLocation, AzureTenant, Notification } from '@botframework-composer/types';
 import { FluentTheme, NeutralColors } from '@uifabric/fluent-theme';
-import { dialogStyle, LoadingSpinner, OpenConfirmModal, ProvisionHandoff } from '@bfc/ui-shared';
+import { LoadingSpinner, OpenConfirmModal, ProvisionHandoff } from '@bfc/ui-shared';
 import {
   ScrollablePane,
   ScrollbarVisibility,
@@ -321,11 +320,14 @@ export const AzureProvisionDialog: React.FC = () => {
     userShouldProvideTokens,
     getTenantIdFromCache,
     setTenantId,
+    getRequiredRecognizers,
   } = usePublishApi();
 
   const { projectCollection } = useProjectApi();
 
   const currentProjectId = getCurrentProjectId();
+
+  const requiredRecognizers = getRequiredRecognizers();
 
   const telemetryClient = useTelemetryClient();
 
@@ -601,7 +603,9 @@ export const AzureProvisionDialog: React.FC = () => {
 
   const getResources = async () => {
     try {
-      const resources = await getResourceList(currentProjectId, publishType);
+      const requireLUIS = requiredRecognizers.some((p) => p.requiresLUIS);
+      const requireQNA = requiredRecognizers.some((p) => p.requiresQNA);
+      const resources = await getResourceList(currentProjectId, publishType, requireQNA, requireLUIS);
       setExtensionResourceOptions(resources);
     } catch (err) {
       // todo: how do we handle API errors in this component

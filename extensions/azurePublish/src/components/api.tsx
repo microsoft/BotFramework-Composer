@@ -24,6 +24,7 @@ import {
   LuisAuthoringSupportLocation,
   LuisPublishSupportLocation,
 } from '../types';
+import { AzureResourceDefinitions } from '../node/resourceTypes';
 
 import * as Images from './images';
 
@@ -390,10 +391,30 @@ export const CheckCognitiveResourceSku = async (
  * @param projectId
  * @param type
  */
-export const getResourceList = async (projectId: string, type: string): Promise<ResourcesItem[]> => {
+export const getResourceList = async (
+  projectId: string,
+  type: string,
+  requireQNA: boolean,
+  requireLUIS: boolean
+): Promise<ResourcesItem[]> => {
   try {
     const result = await axios.get(`/api/provision/${projectId}/${type}/resources`);
-    return result.data as ResourcesItem[];
+    const resourceList = result.data as ResourcesItem[];
+    resourceList.push({
+      ...AzureResourceDefinitions[AzureResourceTypes.LUIS_AUTHORING],
+      required: requireLUIS,
+    });
+
+    resourceList.push({
+      ...AzureResourceDefinitions[AzureResourceTypes.LUIS_PREDICTION],
+      required: requireLUIS,
+    });
+
+    resourceList.push({
+      ...AzureResourceDefinitions[AzureResourceTypes.QNA],
+      required: requireQNA,
+    });
+    return resourceList;
   } catch (error) {
     logger({
       status: AzureAPIStatus.ERROR,
