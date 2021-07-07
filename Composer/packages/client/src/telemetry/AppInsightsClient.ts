@@ -7,6 +7,7 @@ import {
   TelemetryEventTypes,
   TelemetrySettings,
   persistedEvents,
+  alwaysTrackEvents,
   TelemetryEventName,
 } from '@bfc/shared';
 import chunk from 'lodash/chunk';
@@ -29,7 +30,7 @@ export default class AppInsightsClient {
   }
 
   public static trackEvent(name: string, properties: LogData) {
-    if (this._telemetrySettings?.allowDataCollection) {
+    if (alwaysTrackEvents.includes(name as TelemetryEventName) || this._telemetrySettings?.allowDataCollection) {
       this.startInterval();
       this._eventPool.push({ type: TelemetryEventTypes.TrackEvent, name, properties });
       if (this._eventPool.length >= BATCH_SIZE) {

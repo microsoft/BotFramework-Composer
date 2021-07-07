@@ -2,7 +2,13 @@
 // Licensed under the MIT License.
 
 import * as AppInsights from 'applicationinsights';
-import { TelemetryEventName, TelemetryEvents, TelemetryEventTypes, TelemetryEvent } from '@bfc/shared';
+import {
+  TelemetryEventName,
+  TelemetryEvents,
+  TelemetryEventTypes,
+  TelemetryEvent,
+  alwaysTrackEvents,
+} from '@bfc/shared';
 
 import logger from '../logger';
 import { APPINSIGHTS_INSTRUMENTATIONKEY, piiProperties } from '../constants';
@@ -13,6 +19,14 @@ import { SettingsService } from './settings';
 const log = logger.extend('telemetry');
 
 const instrumentationKey = APPINSIGHTS_INSTRUMENTATIONKEY || getBuildEnvironment()?.APPINSIGHTS_INSTRUMENTATIONKEY;
+
+const stripPII = (data: AppInsights.Contracts.Data<AppInsights.Contracts.RequestData>) => {
+  for (const property of piiProperties) {
+    if (data.baseData.properties[property] !== undefined) {
+      delete data.baseData.properties[property];
+    }
+  }
+};
 
 const getTelemetryContext = () => {
   const electronContext = useElectronContext();
@@ -29,14 +43,30 @@ const getTelemetryContext = () => {
 };
 
 let client;
-const initializeClient = () => {
+if (instrumentationKey) {
+  log('Setting up App Insights');
+  AppInsights.setup(instrumentationKey)
+    // turn off extra instrumentation
+    .setAutoCollectConsole(false)
+    .setAutoCollectDependencies(false)
+    .setAutoCollectExceptions(false)
+    .setAutoCollectPerformance(false)
+    .setAutoCollectRequests(true);
+  // do not collect the user's machine name
+  AppInsights.defaultClient.context.tags[AppInsights.defaultClient.context.keys.cloudRoleInstance] = '';
   AppInsights.defaultClient.addTelemetryProcessor((envelope: AppInsights.Contracts.Envelope): boolean => {
     const { sessionId, telemetry, composerVersion, userId, architecture, cpus, memory } = getTelemetryContext();
+
+    const data = envelope.data as AppInsights.Contracts.Data<AppInsights.Contracts.RequestData>;
+
+    if (alwaysTrackEvents.includes(data.baseData.name as TelemetryEventName) && !telemetry?.allowDataCollection) {
+      stripPII(data);
+      return true;
+    }
 
     if (!telemetry?.allowDataCollection) {
       return false;
     }
-    const data = envelope.data as AppInsights.Contracts.Data<AppInsights.Contracts.RequestData>;
 
     // Add session id
     envelope.tags[AppInsights.defaultClient.context.keys.sessionId] = sessionId;
@@ -77,30 +107,11 @@ const initializeClient = () => {
       }
 
       // remove PII
-      for (const property of piiProperties) {
-        if (data.baseData.properties[property] !== undefined) {
-          delete data.baseData.properties[property];
-        }
-      }
+      stripPII(data);
     }
 
     return true;
   });
-};
-
-if (instrumentationKey) {
-  log('Setting up App Insights');
-  AppInsights.setup(instrumentationKey)
-    // turn off extra instrumentation
-    .setAutoCollectConsole(false)
-    .setAutoCollectDependencies(false)
-    .setAutoCollectExceptions(false)
-    .setAutoCollectPerformance(false)
-    .setAutoCollectRequests(true);
-  // do not collect the user's machine name
-  AppInsights.defaultClient.context.tags[AppInsights.defaultClient.context.keys.cloudRoleInstance] = '';
-  initializeClient();
-
   log('Starting Application Insights');
   AppInsights.start();
   log('Started Application Insights');
@@ -113,14 +124,6 @@ const track = (events: TelemetryEvent[]) => {
       try {
         switch (type) {
           case TelemetryEventTypes.TrackEvent:
-            if (name === 'TelemetryOptInOut') {
-              const { enabled } = properties;
-              if (enabled) {
-                initializeClient();
-              } else {
-                AppInsights.defaultClient.clearTelemetryProcessors();
-              }
-            }
             client?.trackEvent({ name, properties });
             break;
           case TelemetryEventTypes.PageView:
