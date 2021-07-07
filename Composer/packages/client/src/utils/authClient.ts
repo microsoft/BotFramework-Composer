@@ -35,7 +35,6 @@ async function getAccessToken(options: AuthParameters): Promise<string> {
         params.append('targetResource', targetResource);
       }
       url += params.toString();
-
       const result = await fetch(url, { method: 'GET', headers: { 'X-CSRF-Token': __csrf__ } });
       const { accessToken = '' } = await result.json();
       return accessToken;
@@ -163,9 +162,20 @@ async function getTenants(): Promise<AzureTenant[]> {
   return tenants;
 }
 
+async function getAccount() {
+  if (isElectron()) {
+    const { __csrf__ = '' } = window;
+    const result = await fetch('/api/auth/getAccount', { method: 'GET', headers: { 'X-CSRF-Token': __csrf__ } });
+    const { account = {} } = await result.json();
+    return account;
+  }
+  return {};
+}
+
 export const AuthClient = {
   getAccessToken,
   getARMTokenForTenant,
   getTenants,
   logOut,
+  getAccount,
 };

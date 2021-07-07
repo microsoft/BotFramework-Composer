@@ -179,7 +179,11 @@ const FormTitle: React.FC<FormTitleProps> = (props) => {
           )}
         </p>
         <div css={styles.comment}>
-          <Comment key={formData.$designer.id} comment={formData?.$designer?.comment} onChange={handleCommentChange} />
+          <Comment
+            key={formData?.$designer?.id}
+            comment={formData?.$designer?.comment}
+            onChange={handleCommentChange}
+          />
         </div>
       </div>
       {props.children}

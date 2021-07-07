@@ -57,7 +57,7 @@ export const validateExpressions: ValidateFunc = (
     }
 
     if (errorMessage) diagnostics.push(new Diagnostic(errorMessage, '', DiagnosticSeverity.Error, path));
-    if (warningMessage) diagnostics.push(new Diagnostic(errorMessage, '', DiagnosticSeverity.Warning, path));
+    if (warningMessage) diagnostics.push(new Diagnostic(warningMessage, '', DiagnosticSeverity.Warning, path));
 
     return diagnostics;
   }, []);

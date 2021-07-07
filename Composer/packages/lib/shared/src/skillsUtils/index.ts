@@ -146,3 +146,13 @@ export const parseRuntimeKey = (
     runtimeType: 'webapp',
   };
 };
+
+export const isManifestJson = (content) => {
+  try {
+    const versions = ['/v2.1/skill-manifest.json', '/v2.2/skill-manifest.json'];
+    const schema = JSON.parse(content).$schema;
+    return versions.some((v) => schema.endsWith(v));
+  } catch (e) {
+    return false;
+  }
+};

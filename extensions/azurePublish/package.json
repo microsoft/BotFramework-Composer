@@ -76,6 +76,7 @@
     "md5": "2.2.1",
     "minimist": "1.2.5",
     "office-ui-fabric-react": "^7.145.0",
+    "proxy-from-env": "^1.1.0",
     "react": "^16.13.0",
     "react-dom": "^16.13.0",
     "request": "2.88.2",

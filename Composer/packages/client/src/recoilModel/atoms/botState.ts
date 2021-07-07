@@ -349,21 +349,13 @@ export const designPageLocationState = atomFamily<DesignPageLocation, string>({
   },
 });
 
-export const showCreateQnAFromUrlDialogState = atomFamily<boolean, string>({
-  key: getFullyQualifiedKey('showCreateQnAFromUrlDialog'),
+export const showCreateQnADialogState = atomFamily<boolean, string>({
+  key: getFullyQualifiedKey('showCreateQnADialog'),
   default: false,
 });
 
-export const showCreateQnAFromScratchDialogState = atomFamily<boolean, string>({
-  key: getFullyQualifiedKey('showCreateQnAFromScratchDialog'),
-  default: false,
-});
-export const onCreateQnAFromUrlDialogCompleteState = atomFamily<{ func: undefined | (() => void) }, string>({
-  key: getFullyQualifiedKey('onCreateQnAFromUrlDialogCompleteState'),
-  default: { func: undefined },
-});
-export const onCreateQnAFromScratchDialogCompleteState = atomFamily<{ func: undefined | (() => void) }, string>({
-  key: getFullyQualifiedKey('onCreateQnAFromScratchDialogCompleteState'),
+export const onCreateQnADialogCompleteState = atomFamily<{ func: undefined | (() => void) }, string>({
+  key: getFullyQualifiedKey('onCreateQnADialogCompleteState'),
   default: { func: undefined },
 });
 
@@ -445,6 +437,11 @@ export const webChatInspectionDataState = atomFamily<WebChatInspectionData | und
 export const projectIndexingState = atomFamily<boolean, string>({
   key: getFullyQualifiedKey('projectIndexing'),
   default: false,
+});
+
+export const watchedVariablesState = atomFamily<Record<string, string>, string>({
+  key: getFullyQualifiedKey('watchedVariables'),
+  default: {},
 });
 
 export const runtimeStandardOutputDataState = atomFamily<RuntimeOutputData, string>({

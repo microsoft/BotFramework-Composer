@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 import { AzureTenant, ElectronAuthParameters } from '@botframework-composer/types';
+import { OneAuth } from '@bfc/electron-server/src/auth/oneauth';
 
 export type ElectronContext = {
   getAccessToken: (
@@ -10,6 +11,7 @@ export type ElectronContext = {
   getARMTokenForTenant: (tenantId: string) => Promise<string>;
   getTenants: () => Promise<AzureTenant[]>;
   logOut: () => void;
+  getAccount: () => OneAuth.Account | undefined;
   telemetryData: {
     composerVersion: string;
     machineId: string;

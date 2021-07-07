@@ -6,6 +6,7 @@ declare module 'botframework-webchat' {
   export const renderWebChat: any;
   export const createDirectLine: (options: any) => any;
   export const hooks: any;
+  export const createStyleSet: any;
   export const Components: {
     AdaptiveCardContent: any;
     AudioCardContent: any;

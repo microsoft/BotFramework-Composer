@@ -14,6 +14,7 @@ describe('Application Insights Logger', () => {
   it('should log event to the server', async () => {
     (httpClient.post as jest.Mock).mockResolvedValue({});
 
+    AppInsightsClient.setup({ allowDataCollection: true });
     AppInsightsClient.trackEvent('TestEvent', { value: '1' });
     AppInsightsClient.drain();
 
@@ -33,9 +34,20 @@ describe('Application Insights Logger', () => {
     );
   });
 
+  it('should not log event to the server', async () => {
+    (httpClient.post as jest.Mock).mockResolvedValue({});
+
+    AppInsightsClient.setup({ allowDataCollection: false });
+    AppInsightsClient.trackEvent('TestEvent', { value: '1' });
+    AppInsightsClient.drain();
+
+    expect(httpClient.post).not.toHaveBeenCalled();
+  });
+
   it('should log page views to the server', async () => {
     (httpClient.post as jest.Mock).mockResolvedValue({});
 
+    AppInsightsClient.setup({ allowDataCollection: true });
     AppInsightsClient.logPageView('TestEvent', 'https://composer', { value: '1' });
     AppInsightsClient.drain();
 
@@ -56,8 +68,19 @@ describe('Application Insights Logger', () => {
     );
   });
 
+  it('should not log page views to the server', async () => {
+    (httpClient.post as jest.Mock).mockResolvedValue({});
+
+    AppInsightsClient.setup({ allowDataCollection: false });
+    AppInsightsClient.logPageView('TestEvent', 'https://composer', { value: '1' });
+    AppInsightsClient.drain();
+
+    expect(httpClient.post).not.toHaveBeenCalled();
+  });
+
   it('should drain event pool in batches', async () => {
     (httpClient.post as jest.Mock).mockResolvedValue({});
+    AppInsightsClient.setup({ allowDataCollection: true });
 
     for (let i = 0; i < 42; i++) {
       AppInsightsClient.logPageView('TestEvent', 'https://composer', { value: '1' });

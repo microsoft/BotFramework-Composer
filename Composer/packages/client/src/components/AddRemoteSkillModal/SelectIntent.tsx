@@ -1,6 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 /** @jsx jsx */
+import { join, isAbsolute } from 'path';
+
 import { jsx, css } from '@emotion/core';
 import React, { Fragment, useState, useMemo, useEffect, useCallback } from 'react';
 import formatMessage from 'format-message';
@@ -46,6 +48,8 @@ type SelectIntentProps = {
   luFeatures: ILUFeaturesConfig;
   rootLuFiles: LuFile[];
   dialogId: string;
+  zipContent: Record<string, string>;
+  manifestDirPath: string;
   runtime: DialogSetting['runtime'];
   onSubmit: (event: Event, content: string, enable: boolean) => Promise<void>;
   onDismiss: () => void;
@@ -65,35 +69,52 @@ const columns = [
   },
 ];
 
-const getRemoteLuFiles = async (skillLanguages: object, composerLangeages: string[], setWarningMsg) => {
-  const luFilePromise: Promise<any>[] = [];
+const getRemoteLuFiles = async (
+  skillLanguages: object,
+  composerLangeages: string[],
+  setWarningMsg,
+  zipContent: Record<string, string>,
+  manifestDirPath: string
+) => {
+  const luFiles: Record<string, { id: string; content: string }[]> = {};
   try {
     for (const [key, value] of Object.entries(skillLanguages)) {
-      if (composerLangeages.includes(key)) {
-        value.map((item) => {
-          // get lu file
-          luFilePromise.push(
-            httpClient
-              .get(`/utilities/retrieveRemoteFile`, {
+      if (composerLangeages.includes(key) && Array.isArray(value)) {
+        luFiles[key] = [];
+        for (const item of value) {
+          if (/^http[s]?:\/\/\w+/.test(item.url) || isAbsolute(item.url)) {
+            // get lu file from remote
+            const { data } = await httpClient.get(`/utilities/retrieveRemoteFile`, {
+              params: {
+                url: item.url,
+              },
+            });
+            luFiles[key].push(data);
+          } else {
+            // get luFile from local zip folder
+            const fileKey = join(manifestDirPath, item.url);
+            if (zipContent[fileKey]) {
+              luFiles[key].push({
+                id: fileKey.substr(fileKey.lastIndexOf('/') + 1),
+                content: zipContent[fileKey],
+              });
+            } else {
+              // get lu file from remote
+              const { data } = await httpClient.get(`/utilities/retrieveRemoteFile`, {
                 params: {
-                  url: item.url,
+                  url: fileKey,
                 },
-              })
-              .catch((err) => {
-                console.error(err);
-                setWarningMsg('get remote file fail');
-              })
-          );
-        });
+              });
+              luFiles[key].push(data);
+            }
+          }
+        }
       }
     }
-    const responses = await Promise.all(luFilePromise);
-    const files: { id: string; content: string }[] = responses.map((response) => {
-      return response.data;
-    });
-    return files;
+    return luFiles;
   } catch (e) {
     console.log(e);
+    setWarningMsg('get remote file fail');
   }
 };
 
@@ -126,6 +147,8 @@ export const SelectIntent: React.FC<SelectIntentProps> = (props) => {
     runtime,
     onUpdateTitle,
     onBack,
+    zipContent,
+    manifestDirPath,
   } = props;
   const [pageIndex, setPage] = useState(0);
   const [selectedIntents, setSelectedIntents] = useState<Array<string>>([]);
@@ -192,24 +215,25 @@ export const SelectIntent: React.FC<SelectIntentProps> = (props) => {
   useEffect(() => {
     if (locale) {
       const skillLanguages = manifest.dispatchModels?.languages;
-      getRemoteLuFiles(skillLanguages, languages, setWarningMsg)
+      getRemoteLuFiles(skillLanguages, languages, setWarningMsg, zipContent, manifestDirPath)
         .then((items) => {
-          items &&
-            getParsedLuFiles(items, luFeatures, []).then((files) => {
+          for (const key in items) {
+            getParsedLuFiles(items[key], luFeatures, []).then((files) => {
               setLufiles(files);
               files.map((file) => {
-                if (file.id.includes(locale)) {
+                if (key === locale && file.id.endsWith('.lu')) {
                   setCurrentLuFile(file);
                 }
               });
             });
+          }
         })
         .catch((e) => {
           console.log(e);
           setWarningMsg(formatMessage('get remote file fail'));
         });
     }
-  }, [manifest.dispatchModels?.languages, languages, locale, luFeatures]);
+  }, [manifest.dispatchModels?.languages, locale, manifestDirPath]);
 
   useEffect(() => {
     if (selectedIntents.length > 0) {

@@ -42,6 +42,8 @@ router.put('/projects/:projectId/manifest/files/:name', ProjectController.update
 router.delete('/projects/:projectId/manifest/files/:name', ProjectController.removeManifestFile);
 router.post('/projects/:projectId/manifest/files', ProjectController.createManifestFile);
 router.get('/projects/:projectId/skill/retrieveSkillManifest', ProjectController.getSkill);
+router.delete('/projects/:projectId/skillFiles/:name', ProjectController.removeSkillFiles);
+router.post('/projects/:projectId/skillFiles', ProjectController.createSkillFiles);
 router.post('/projects/:projectId/build', ProjectController.build);
 router.post('/projects/:projectId/qnaSettings/set', ProjectController.setQnASettings);
 router.post('/projects/:projectId/project/saveAs', ProjectController.saveProjectAs);
@@ -97,6 +99,7 @@ router.use('/assets/locales/', express.static(path.join(__dirname, '..', '..', '
 
 //help api
 router.get('/utilities/qna/parse', UtilitiesController.getQnaContent);
+router.post('/utilities/qna/import', UtilitiesController.importQnAContent);
 router.get('/utilities/retrieveRemoteFile', UtilitiesController.getRemoteFile);
 router.get('/utilities/checkNode', UtilitiesController.checkNodeVersion);
 
@@ -117,6 +120,7 @@ router.post('/extensions/proxy/:url', ExtensionsController.performExtensionFetch
 router.get('/auth/getAccessToken', csrfProtection, AuthController.getAccessToken);
 router.get('/auth/logOut', AuthController.logOut);
 router.get('/auth/getTenants', csrfProtection, AuthController.getTenants);
+router.get('/auth/getAccount', csrfProtection, AuthController.getAccount);
 router.get('/auth/getARMTokenForTenant', csrfProtection, AuthController.getARMTokenForTenant);
 
 // FeatureFlags
@@ -142,6 +146,7 @@ router.post('/telemetry/events', TelemetryController.track);
 // Orchestrator Specific API
 router.post('/orchestrator/download', OrchestratorController.downloadLanguageModel);
 router.get('/orchestrator/status', OrchestratorController.status);
+router.get('/orchestrator/getModelList', OrchestratorController.getModelList);
 
 const errorHandler = (handler: RequestHandler) => (req: Request, res: Response, next: NextFunction) => {
   Promise.resolve(handler(req, res, next)).catch(next);

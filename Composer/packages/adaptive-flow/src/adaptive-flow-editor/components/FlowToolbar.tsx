@@ -105,7 +105,7 @@ export const FlowToolbar: React.FC<FlowToolbarProps> = ({
   const buttonRender = () => {
     const buttonBoxStyle = css({ position: 'absolute', left: '25px', bottom: '25px', width: '35px' });
     const iconStyle = (iconName: string): IIconProps => {
-      return { iconName, styles: { root: { color: NeutralColors.white } } };
+      return { iconName, styles: { root: { color: NeutralColors.white, width: '16px' } } };
     };
     const buttonStyle = (overrides: { top?: string; bottom?: string; margin?: string }): IButtonStyles => ({
       root: {
@@ -145,7 +145,7 @@ export const FlowToolbar: React.FC<FlowToolbarProps> = ({
         <TooltipWrapper tooltip={commentsLabel}>
           <IconButton
             ariaLabel={commentsLabel}
-            iconProps={iconStyle('QuickNote')}
+            iconProps={flowCommentsVisible ? iconStyle('HideComment') : iconStyle('QuickNote')}
             styles={buttonStyle({ top: '2px', bottom: '2px', margin: '8px 0' })}
             onClick={() => toggleFlowComments()}
           />

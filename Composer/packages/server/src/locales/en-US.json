@@ -59,9 +59,6 @@
   "a_publishing_profile_provides_the_secure_connectiv_860d7d48": {
     "message": "A publishing profile provides the secure connectivity required to publish your bot."
   },
-  "a_runtime_type_must_be_selected_5274c266": {
-    "message": "A runtime type must be selected."
-  },
   "a_schema_or_form_is_the_list_of_properties_your_bo_8e107996": {
     "message": "A schema, or form, is the list of properties your bot will collect."
   },
@@ -521,8 +518,8 @@
   "azure_language_understanding_5fc42020": {
     "message": "Azure Language Understanding"
   },
-  "azure_offers_a_number_of_ways_to_host_your_applica_b3e2da97": {
-    "message": "Azure offers a number of ways to host your application code. The runtime type refers to the hosting model for the computing resources that your application runs on. Learn more"
+  "azure_offers_a_number_of_ways_to_host_your_applica_202b7871": {
+    "message": "Azure offers a number of ways to host your application code. The runtime type refers to the hosting model for the computing resources that your application runs on."
   },
   "azure_qna_maker_fd153eb7": {
     "message": "Azure QnA Maker"
@@ -667,6 +664,9 @@
   },
   "break_out_of_loop_ab30157c": {
     "message": "Break out of loop"
+  },
+  "browse_e0204125": {
+    "message": "Browse"
   },
   "build_a_continuous_integration_and_deployment_ci_c_79188c70": {
     "message": "Build a continuous integration and deployment (CI/CD) pipeline with Azure Resource Manager templates."
@@ -4118,8 +4118,8 @@
   "url_22a5f3b8": {
     "message": "URL"
   },
-  "url_should_start_with_http_or_https_c34632bb": {
-    "message": "URL should start with http:// or https://"
+  "url_should_start_with_http_or_https_or_file_path_o_2b060341": {
+    "message": "URL should start with http:// or https:// or file path of your system"
   },
   "use_azure_bot_to_create_a_new_conversation_1a116a65": {
     "message": "Use Azure Bot to create a new conversation"
@@ -4414,6 +4414,9 @@
   },
   "your_teams_adapter_is_configured_for_your_publishe_e84e9275": {
     "message": "Your Teams adapter is configured for your published bot. Copy the manifest, open App Studio in Teams and add the manifest so you can test your bot in Teams"
+  },
+  "zip_folder_has_multiply_manifest_json_a7170462": {
+    "message": "zip folder has multiply manifest json"
   },
   "zoom_in_3205e865": {
     "message": "Zoom in"

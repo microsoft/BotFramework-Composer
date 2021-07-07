@@ -4,7 +4,7 @@
   "description": "BotFramework Adaptive Form",
   "main": "lib/index.js",
   "engines": {
-    "node": ">=12"
+    "node": "14.x"
   },
   "files": [
     "css",
