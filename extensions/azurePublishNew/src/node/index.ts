@@ -1,24 +1,49 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { PublishConfig } from '@bfc/extension-client';
+import { PublishConfig, getAccessToken } from '@bfc/extension-client';
 import {
   IBotProject,
   IExtensionRegistration,
   ProcessStatus,
   PublishPlugin,
   PublishResponse,
+  PublishResult,
+  UserIdentity,
 } from '@botframework-composer/types';
 
 import { availableResources, setUpProvisionService } from './availableResources';
 import { createProcessStatusTracker } from './processStatusTracker';
-import { GetResourcesResult, ProvisionConfig, ResourceDefinition, ResourceProvisionService } from './types';
+import {
+  GetResourcesResult,
+  ProvisionConfig,
+  ResourceDefinition,
+  ResourceProvisionService,
+  GetAccessToken,
+} from './types';
+import { publish as internalPublish } from './publishing';
+
+const toPublishResponse = (processStatus: ProcessStatus): PublishResponse => {
+  const { id, status, message, log, comment, time } = processStatus;
+
+  return {
+    status,
+    result: {
+      comment,
+      id,
+      log: log.map((item) => `---\n${JSON.stringify(item, null, 2)}\n---\n`).join('\n'),
+      message,
+      status,
+      time: time.toString(),
+    },
+  };
+};
 
 /**
  * Creates the azure publishing plug-in for this extension.
  * @returns The plug-in with properties and methods.
  */
-const createAzurePublishPlugin = (): PublishPlugin<ProvisionConfig> => {
+const createAzurePublishPlugin = (registration: IExtensionRegistration): PublishPlugin<PublishConfig> => {
   const processTracker = createProcessStatusTracker();
 
   const getResources = (project: IBotProject): Promise<GetResourcesResult[]> => {
@@ -38,22 +63,6 @@ const createAzurePublishPlugin = (): PublishPlugin<ProvisionConfig> => {
     );
   };
 
-  const toPublishResponse = (processStatus: ProcessStatus): PublishResponse => {
-    const { id, status, message, log, comment, time } = processStatus;
-
-    return {
-      status,
-      result: {
-        comment,
-        id,
-        log: log.map((item) => `---\n${JSON.stringify(item, null, 2)}\n---\n`).join('\n'),
-        message,
-        status,
-        time: time.toString(),
-      },
-    };
-  };
-
   const getStatus = async (config: PublishConfig, project: IBotProject) => {
     let status = processTracker.get(config.jobId);
     if (!status) {
@@ -65,8 +74,16 @@ const createAzurePublishPlugin = (): PublishPlugin<ProvisionConfig> => {
     if (!status) {
       status = processTracker.getByProjectId(project.id);
     }
+
     if (status) {
       return toPublishResponse(status);
+    } else {
+      return {
+        status: 404,
+        result: {
+          message: 'bot not published',
+        },
+      };
     }
   };
 
@@ -103,17 +120,38 @@ const createAzurePublishPlugin = (): PublishPlugin<ProvisionConfig> => {
     return status;
   };
 
-  const publish = async (_config, _project, metadata) => {
-    const response = {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const publish = async (
+    config: PublishConfig,
+    project: IBotProject,
+    metadata: any,
+    user?: UserIdentity,
+    getAccessToken?: GetAccessToken
+  ): Promise<PublishResponse> => {
+    const { id: processId } = processTracker.start({
+      projectId: project.id,
+      processName: config.key,
       status: 202,
-      result: {
-        time: new Date().toString(),
-        message: 'Publish accepted.',
-        log: '',
-        comment: metadata.comment,
-      },
-    };
-    return response;
+      message: 'Starting publish...',
+    });
+
+    try {
+      const runtimeTemplate = registration.getRuntimeByProject(project);
+
+      const onProgress = (message: string, status?: number) => {
+        processTracker.update(processId, { status, message });
+      };
+
+      await internalPublish(config, project, runtimeTemplate, metadata, user, getAccessToken, onProgress);
+
+      processTracker.update(processId, { status: 200, message: 'Publishing completed successfully' });
+    } catch (err) {
+      processTracker.update(processId, { status: 500, message: `${err}` });
+    }
+
+    const publishResponse = toPublishResponse(processTracker.get(processId));
+    processTracker.stop(processId);
+    return publishResponse;
   };
 
   return {
@@ -130,7 +168,7 @@ const createAzurePublishPlugin = (): PublishPlugin<ProvisionConfig> => {
 
 //----- Register the plug in -----//
 const initialize = (registration: IExtensionRegistration) => {
-  registration.addPublishMethod(createAzurePublishPlugin());
+  registration.addPublishMethod(createAzurePublishPlugin(registration));
 
   // test reading and writing data
   registration.log('Reading from store:\n%O', registration.store.readAll());

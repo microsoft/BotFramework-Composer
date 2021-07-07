@@ -2,10 +2,11 @@
 // Licensed under the MIT License.
 
 import { IBotProject } from '@bfc/shared';
+import { PublishConfig } from '@bfc/extension-client';
 
 import { ResourcesItem } from '../../types';
 
-import { OnPublishProgress, PublishConfig } from './types';
+import { OnPublishProgress } from './types';
 
 const isProfileProvisioned = (profile: PublishConfig): boolean => {
   //TODO: Post-migration we can check for profile?.tenantId
@@ -82,7 +83,7 @@ export const verifyProvisionedStep = async (config: StepConfig, onProgress: OnPu
   }
 
   // verify the publish profile has the required resources configured
-  const resources = await this.getResources(project);
+  const resources = await getResources(/*project*/);
 
   const missingResourceNames = resources.reduce((result, resource) => {
     if (resource.required && !isResourceProvisionedInProfile(resource, publishConfig)) {

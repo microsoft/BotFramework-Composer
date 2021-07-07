@@ -1,7 +1,14 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { IBotProject } from '@botframework-composer/types';
+import { IBotProject, AuthParameters } from '@botframework-composer/types';
+
+/**
+ * Defined within the PublishPlugin, but not exported so redefined here
+ */
+export type GetAccessToken = (params: AuthParameters) => Promise<string>;
+
+// ----- Resource Provisioning Types ----- //
 
 export type ProvisionWorkingSet = Record<string, object>;
 

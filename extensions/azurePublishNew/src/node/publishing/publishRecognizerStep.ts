@@ -154,6 +154,8 @@ export const publishRecognizerStep = async (config: StepConfig, onProgress: OnPu
     Object.assign(luisAppIds, luisSettings.luis);
   }
 
+  if (!Object.keys(luisAppIds).length) return luisAppIds;
+
   // In order for the bot to use the LUIS models, we need to assign a LUIS key to the endpoint of each app.
   // Filter to the LUIS resources (as it would appear in the azure portal) associated with the luis endpoint key.
   const account = (await getAccountList(accessToken, authoringEndpoint, luisAuthoringKey)).find(

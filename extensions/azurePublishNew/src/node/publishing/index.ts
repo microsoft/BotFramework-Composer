@@ -3,9 +3,12 @@
 
 import * as path from 'path';
 
-import { AuthParameters, IBotProject, RuntimeTemplate, UserIdentity } from '@botframework-composer/types';
+import { IBotProject, RuntimeTemplate, UserIdentity } from '@botframework-composer/types';
+import { PublishConfig } from '@bfc/extension-client';
 
-import { OnPublishProgress, PublishConfig } from './types';
+import { GetAccessToken } from '../types';
+
+import { OnPublishProgress } from './types';
 import { authConfig } from './utils/authUtils';
 import { applyPublishingProfileToSettings, mergeDeep } from './utils/settingsUtils';
 import { bindToKeyVaultStep } from './bindKeyVaultStep';
@@ -19,16 +22,14 @@ import { buildRuntimeStep } from './buildRuntimeStep';
 import { publishRecognizerStep } from './publishRecognizerStep';
 import { verifyProvisionedStep } from './verifyProvisionedStep';
 
-type GetAccessToken = (params: AuthParameters) => Promise<string>;
-
 export const publish = async (
   config: PublishConfig,
   project: IBotProject,
   runtimeTemplate: RuntimeTemplate,
   metadata: any,
-  user?: UserIdentity,
-  getAccessToken?: GetAccessToken,
-  onProgress?: OnPublishProgress
+  user: UserIdentity,
+  getAccessToken: GetAccessToken,
+  onProgress: OnPublishProgress
 ) => {
   const {
     // from Composer
@@ -66,6 +67,9 @@ export const publish = async (
     throw new Error('The settings are missing from the publishing profile.');
   }
 
+  //TODO: Re-enable this step.
+  //await verifyProvisionedStep({ publishConfig: config, project }, onProgress);
+
   // Merge all the settings
   // this combines the bot-wide settings, the environment specific settings, and 2 new fields needed for deployed bots
   // these will be written to the appropriate settings file inside the appropriate runtime plugin.
@@ -79,7 +83,6 @@ export const publish = async (
     mergedSettings.skillHostEndpoint = `https://${hostname}.azurewebsites.net/api/skills`;
   }
 
-  await verifyProvisionedStep({ publishConfig: mergedSettings, project }, onProgress);
   await linkBotToAppStep({ accessToken, botName, hostname, resourceGroupName, subscriptionId }, onProgress);
   await bindToKeyVaultStep(
     {
@@ -99,11 +102,11 @@ export const publish = async (
     { accessToken, environment, luisConfig, luisResource, name, projectPath },
     onProgress
   );
-  const { pathToArtifacts } = await buildRuntimeStep(
-    { luisAppIds, project, projectPath, profileName, runtime, settings },
+  const { pathToArtifacts, settings: postBuildSettings } = await buildRuntimeStep(
+    { luisAppIds, project, projectPath, profileName, runtimeTemplate, settings: mergedSettings },
     onProgress
   );
   await updateSkillManifestsStep({ appId, hostname, pathToArtifacts, profileName, project }, onProgress);
-  await createZipStep({ appSettings: mergedSettings, sourcePath: pathToArtifacts, zipPath }, onProgress);
+  await createZipStep({ appSettings: postBuildSettings, sourcePath: pathToArtifacts, zipPath }, onProgress);
   await deployZipStep({ accessToken, environment, hostname, name, zipPath }, onProgress);
 };
