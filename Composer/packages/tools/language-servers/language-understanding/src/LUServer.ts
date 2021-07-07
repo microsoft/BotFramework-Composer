@@ -31,6 +31,8 @@ import { LUOption, LUDocument, generateDiagnostic, convertDiagnostics, createFol
 // define init methods call from client
 const LABELEXPERIENCEREQUEST = 'labelingExperienceRequest';
 const InitializeDocumentsMethodName = 'initializeDocuments';
+const SIMPLEINTENTSECTION = 'simpleIntentSection';
+const NEWENTITYSECTION = 'newEntitySection';
 
 export class LUServer {
   protected workspaceRoot: URI | undefined;
@@ -40,7 +42,7 @@ export class LUServer {
   private luParser = new LuParser();
   private _curFileId = '';
   private _curProjectId = '';
-  private _importedEntitties: string[] = [];
+  private _importedEntities: string[] = [];
 
   constructor(
     protected readonly connection: IConnection,
@@ -231,7 +233,7 @@ export class LUServer {
       this._curFileId = id;
       this._curProjectId = projectId || '';
       const { intents: sections, diagnostics, imports } = await this.luParser.parse(content, id, luFeatures);
-      this._importedEntitties = await this.findAllImportedEntities(imports, importResolver, luFeatures);
+      this._importedEntities = await this.findAllImportedEntities(imports, importResolver, luFeatures);
       return { sections, diagnostics, content };
     };
     const luDocument: LUDocument = {
@@ -259,22 +261,31 @@ export class LUServer {
         // ignore if file not exist
       }
 
-      const { resource } = await this.luParser.parse(content, importFile.id, luFeatures);
-      const sections = resource.Sections;
-      for (const section of sections) {
-        if (section.SectionType === 'newEntitySection') {
-          result.push(section.Name);
-        } else if (section.SectionType === 'simpleIntentSection') {
-          for (const entity of section.Entities) {
-            if (entity.SectionType === 'newEntitySection') {
-              result.push(entity.Name);
+      let parsed: any;
+      try {
+        const { resource } = await this.luParser.parse(content, importFile.id, luFeatures);
+        parsed = resource;
+      } catch (error) {
+        // ignore if file not exist
+      }
+
+      if (parsed) {
+        const sections = parsed.Sections;
+        for (const section of sections) {
+          if (section.SectionType === 'newEntitySection') {
+            result.push(section.Name);
+          } else if (section.SectionType === SIMPLEINTENTSECTION) {
+            for (const entity of section.Entities) {
+              if (entity.SectionType === NEWENTITYSECTION) {
+                result.push(entity.Name);
+              }
             }
           }
         }
       }
     }
 
-    return Promise.resolve(uniq(result));
+    return uniq(result);
   }
 
   protected getLUDocument(document: TextDocument): LUDocument | undefined {
@@ -558,7 +569,7 @@ export class LUServer {
     }
 
     const suggestionEntityList = uniq(
-      util.getSuggestionEntities(luisJson, util.suggestionAllEntityTypes).concat(this._importedEntitties)
+      util.getSuggestionEntities(luisJson, util.suggestionAllEntityTypes).concat(this._importedEntities)
     );
     const regexEntityList = util.getRegexEntities(luisJson);
 
