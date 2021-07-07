@@ -4,9 +4,9 @@
 import * as path from 'path';
 
 import * as fs from 'fs-extra';
-import * as rp from 'request-promise';
 import { isUsingAdaptiveRuntime } from '@bfc/shared';
 import { ILuisConfig, FileInfo, IBotProject, RuntimeTemplate, DialogSetting } from '@botframework-composer/types';
+import axios, { AxiosRequestConfig } from 'axios';
 
 import { AzurePublishErrors } from './utils/errorHandler';
 import { BotProjectDeployLoggerType } from './types';
@@ -120,13 +120,13 @@ export async function publishLuisToPrediction(
       // DOCS HERE: https://westus.dev.cognitive.microsoft.com/docs/services/5890b47c39e2bb17b84a55ff/operations/5be313cec181ae720aa2b26c
       // This returns a list of azure account information objects with AzureSubscriptionID, ResourceGroup, AccountName for each.
       const getAccountUri = `${authoringEndpoint}/luis/api/v2.0/azureaccounts`;
-      const options = {
+      const options: AxiosRequestConfig = {
         headers: { Authorization: `Bearer ${accessToken}`, 'Ocp-Apim-Subscription-Key': luisAuthoringKey },
-      } as rp.RequestPromiseOptions;
-      const response = await rp.get(getAccountUri, options);
+      };
+      const response = await axios.get(getAccountUri, options);
 
       // this should include an array of account info objects
-      accountList = JSON.parse(response);
+      accountList = response?.data;
       break;
     } catch (err) {
       if (retryCount < 1) {
@@ -167,12 +167,10 @@ export async function publishLuisToPrediction(
     while (retryCount < 2) {
       try {
         const luisAssignEndpoint = `${authoringEndpoint}/luis/api/v2.0/apps/${luisAppId}/azureaccounts`;
-        const options = {
-          body: account,
-          json: true,
+        const options: AxiosRequestConfig = {
           headers: { Authorization: `Bearer ${accessToken}`, 'Ocp-Apim-Subscription-Key': luisAuthoringKey },
-        } as rp.RequestPromiseOptions;
-        await rp.post(luisAssignEndpoint, options);
+        };
+        await axios.post(luisAssignEndpoint, account, options);
 
         break;
       } catch (err) {

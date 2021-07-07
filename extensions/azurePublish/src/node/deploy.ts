@@ -5,9 +5,8 @@
 import * as path from 'path';
 
 import * as fs from 'fs-extra';
-import * as rp from 'request-promise';
 import archiver from 'archiver';
-import axios from 'axios';
+import axios, { AxiosRequestConfig } from 'axios';
 import { AzureBotService } from '@azure/arm-botservice';
 import { TokenCredentials } from '@azure/ms-rest-js';
 import { DialogSetting } from '@botframework-composer/types';
@@ -473,11 +472,11 @@ export class BotProjectDeploy {
     }
     try {
       const tenantUrl = `https://management.azure.com/subscriptions/${subId}?api-version=2020-01-01`;
-      const options = {
+      const options: AxiosRequestConfig = {
         headers: { Authorization: `Bearer ${accessToken}` },
       };
-      const response = await rp.get(tenantUrl, options);
-      const jsonRes = JSON.parse(response);
+      const response = await axios.get(tenantUrl, options);
+      const jsonRes = JSON.parse(response?.data);
       if (jsonRes.tenantId === undefined) {
         throw new Error(`No tenants found in the account.`);
       }
