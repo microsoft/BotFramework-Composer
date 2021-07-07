@@ -3,7 +3,7 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { DialogWrapper, DialogTypes, PropertyAssignment } from '@bfc/ui-shared';
+import { DialogWrapper, DialogTypes } from '@bfc/ui-shared';
 import { FontSizes } from '@uifabric/fluent-theme';
 import { FontWeights } from 'office-ui-fabric-react/lib/Styling';
 import formatMessage from 'format-message';
