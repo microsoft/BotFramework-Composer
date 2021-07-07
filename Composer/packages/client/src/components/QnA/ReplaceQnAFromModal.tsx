@@ -113,7 +113,7 @@ export const ReplaceQnAFromModal: React.FC<ReplaceQnAModalProps> = (props) => {
   const currentAuthoringLanuage = localeToLanguage(currentLocale);
 
   const actionOptions: IChoiceGroupOption[] = [
-    { key: 'url', text: formatMessage('Replace KB from URL or file ') },
+    { key: 'url', text: formatMessage('Replace Knowledge Base from URL') },
     {
       key: 'portal',
       text: formatMessage('Replace with an existing KB from QnA maker portal'),
