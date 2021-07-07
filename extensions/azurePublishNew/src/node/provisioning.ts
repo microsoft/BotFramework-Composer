@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 import toposort from 'toposort';
+
 import { ResourceConfig } from './types';
 import { getResourceDependencies, provisionConfigToResourceConfigMap } from './availableResources';
 import { AzureResourceTypes } from './constants';
