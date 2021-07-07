@@ -25,7 +25,13 @@ import {
   showWarningDiagnosticsState,
   projectsForDiagnosticsFilterState,
 } from '../atoms/appState';
-import { AppUpdaterStatus, CreationFlowStatus, CreationFlowType, SURVEY_PARAMETERS } from '../../constants';
+import {
+  AppUpdaterStatus,
+  CreationFlowStatus,
+  CreationFlowType,
+  SURVEY_EPOCH_KEY,
+  SURVEY_PARAMETERS,
+} from '../../constants';
 import OnboardingState from '../../utils/onboardingStorage';
 import { StateError, AppUpdateState, MachineInfo } from '../../recoilModel/types';
 import { DebugDrawerKeys } from '../../pages/design/DebugPanel/TabExtensions/types';
@@ -171,7 +177,7 @@ export const applicationDispatcher = () => {
 
     let days = surveyStorage.get('days', 0);
     const lastUsed = surveyStorage.get('dateLastUsed', null);
-    const lastTaken = surveyStorage.get('epochLastTaken', null);
+    const lastTaken = surveyStorage.get(SURVEY_EPOCH_KEY, null);
     const today = new Date().toDateString();
     if (lastUsed !== today) {
       days += 1;

@@ -9,7 +9,7 @@ import querystring from 'query-string';
 import { ClientStorage } from '../../utils/storage';
 import { surveyEligibilityState, dispatcherState, machineInfoState } from '../../recoilModel/atoms/appState';
 import { MachineInfo } from '../../recoilModel/types';
-import { SURVEY_URL_BASE } from '../../constants';
+import { SURVEY_EPOCH_KEY, SURVEY_URL_BASE } from '../../constants';
 import TelemetryClient from '../../telemetry/TelemetryClient';
 
 const buildUrl = (info: MachineInfo) => {
@@ -57,7 +57,7 @@ export const useSurveyNotification = () => {
               // This is safe; we control the URL that gets built
               // eslint-disable-next-line security/detect-non-literal-fs-filename
               window.open(url, '_blank');
-              surveyStorage.set('epochLastTaken', Date.now());
+              surveyStorage.set(SURVEY_EPOCH_KEY, Date.now());
               TelemetryClient.track('HATSSurveyAccepted');
               deleteNotification('survey');
             },
