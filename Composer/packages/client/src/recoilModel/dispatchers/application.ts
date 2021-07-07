@@ -18,25 +18,17 @@ import {
   debugPanelActiveTabState,
   userHasNodeInstalledState,
   applicationErrorState,
-  surveyEligibilityState,
   machineInfoState,
   showGetStartedTeachingBubbleState,
   showErrorDiagnosticsState,
   showWarningDiagnosticsState,
   projectsForDiagnosticsFilterState,
 } from '../atoms/appState';
-import {
-  AppUpdaterStatus,
-  CreationFlowStatus,
-  CreationFlowType,
-  LAST_SURVEY_KEY,
-  SURVEY_PARAMETERS,
-} from '../../constants';
+import { AppUpdaterStatus, CreationFlowStatus, CreationFlowType } from '../../constants';
 import OnboardingState from '../../utils/onboardingStorage';
 import { StateError, AppUpdateState, MachineInfo } from '../../recoilModel/types';
 import { DebugDrawerKeys } from '../../pages/design/DebugPanel/TabExtensions/types';
 import httpClient from '../../utils/httpUtil';
-import { ClientStorage } from '../../utils/storage';
 
 import { setError } from './shared';
 import { flushExistingTasks } from './utils/project';
