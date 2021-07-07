@@ -7,9 +7,9 @@ import formatMessage from 'format-message';
 import querystring from 'query-string';
 
 import { ClientStorage } from '../../utils/storage';
-import { surveyEligibilityState, dispatcherState, machineInfoState } from '../../recoilModel/atoms/appState';
+import { dispatcherState, machineInfoState } from '../../recoilModel/atoms/appState';
 import { MachineInfo } from '../../recoilModel/types';
-import { LAST_SURVEY_KEY, SURVEY_URL_BASE } from '../../constants';
+import { LAST_SURVEY_KEY, SURVEY_URL_BASE, SURVEY_PARAMETERS } from '../../constants';
 import TelemetryClient from '../../telemetry/TelemetryClient';
 
 const buildUrl = (info: MachineInfo) => {
@@ -30,12 +30,41 @@ const buildUrl = (info: MachineInfo) => {
   return `${SURVEY_URL_BASE}?${querystring.stringify(parameters)}`;
 };
 
-export const useSurveyNotification = () => {
-  const { addNotification, deleteNotification, setSurveyEligibility } = useRecoilValue(dispatcherState);
-  const surveyEligible = useRecoilValue(surveyEligibilityState);
-  const machineInfo = useRecoilValue(machineInfoState);
+const getSurveyEligibility = () => {
+  const surveyStorage = new ClientStorage(window.localStorage, 'survey');
 
-  setSurveyEligibility();
+  const optedOut = surveyStorage.get('optedOut', false);
+  if (optedOut) {
+    return false;
+  }
+
+  let days = surveyStorage.get('days', 0);
+  const lastUsed = surveyStorage.get('dateLastUsed', null);
+  const lastTaken = surveyStorage.get(LAST_SURVEY_KEY, null);
+  const today = new Date().toDateString();
+  if (lastUsed !== today) {
+    days += 1;
+    surveyStorage.set('days', days);
+  }
+  surveyStorage.set('dateLastUsed', today);
+
+  if (
+    // To be eligible for the survey, the user needs to have used Composer
+    // some minimum number of days.
+    days >= SURVEY_PARAMETERS.daysUntilEligible &&
+    // Also, either the user must have never taken the survey before or
+    // the last time they took it must be long enough in the past.
+    (lastTaken == null || Date.now() - lastTaken > SURVEY_PARAMETERS.timeUntilNextSurvey)
+  ) {
+    // If the above conditions are true, there's a fixed chance the card will appear.
+    return Math.random() < SURVEY_PARAMETERS.chanceToAppear;
+  }
+};
+
+export const useSurveyNotification = () => {
+  const { addNotification, deleteNotification } = useRecoilValue(dispatcherState);
+  const surveyEligible = getSurveyEligibility();
+  const machineInfo = useRecoilValue(machineInfoState);
 
   useEffect(() => {
     const url = buildUrl(machineInfo);

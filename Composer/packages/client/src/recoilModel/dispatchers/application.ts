@@ -166,37 +166,6 @@ export const applicationDispatcher = () => {
     await flushExistingTasks(callbackHelpers);
   });
 
-  const setSurveyEligibility = useRecoilCallback(({ set }: CallbackInterface) => () => {
-    const surveyStorage = new ClientStorage(window.localStorage, 'survey');
-
-    const optedOut = surveyStorage.get('optedOut', false);
-    if (optedOut) {
-      set(surveyEligibilityState, false);
-      return;
-    }
-
-    let days = surveyStorage.get('days', 0);
-    const lastUsed = surveyStorage.get('dateLastUsed', null);
-    const lastTaken = surveyStorage.get(LAST_SURVEY_KEY, null);
-    const today = new Date().toDateString();
-    if (lastUsed !== today) {
-      days += 1;
-      surveyStorage.set('days', days);
-    }
-    if (
-      // To be eligible for the survey, the user needs to have used Composer
-      // some minimum number of days.
-      days >= SURVEY_PARAMETERS.daysUntilEligible &&
-      // Also, either the user must have never taken the survey before or
-      // the last time they took it must be long enough in the past.
-      (lastTaken == null || Date.now() - lastTaken > SURVEY_PARAMETERS.timeUntilNextSurvey)
-    ) {
-      // If the above conditions are true, there's a fixed chance the card will appear.
-      set(surveyEligibilityState, Math.random() < SURVEY_PARAMETERS.chanceToAppear);
-    }
-    surveyStorage.set('dateLastUsed', today);
-  });
-
   const setMachineInfo = useRecoilCallback((callbackHelpers: CallbackInterface) => (info: MachineInfo) => {
     callbackHelpers.set(machineInfoState, info);
   });
@@ -233,7 +202,6 @@ export const applicationDispatcher = () => {
     setPageElementState,
     setDebugPanelExpansion,
     setActiveTabInDebugPanel,
-    setSurveyEligibility,
     setMachineInfo,
     setShowGetStartedTeachingBubble,
     setErrorDiagnosticsFilter,
