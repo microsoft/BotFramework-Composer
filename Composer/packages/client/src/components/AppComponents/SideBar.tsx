@@ -16,7 +16,6 @@ import { resolveToBasePath } from '../../utils/fileUtil';
 import { BASEPATH } from '../../constants';
 import { NavItem } from '../NavItem';
 import TelemetryClient from '../../telemetry/TelemetryClient';
-import { PageLink } from '../../utils/pageLinks';
 import { DisableFeatureToolTip } from '../DisableFeatureToolTip';
 import { currentProjectIdState } from '../../recoilModel';
 import { usePVACheck } from '../../hooks/usePVACheck';
@@ -77,7 +76,7 @@ export const SideBar: React.FC<RouteComponentProps> = () => {
 
   const mapNavItemTo = (relPath: string) => resolveToBasePath(BASEPATH, relPath);
   const globalNavButtonText = sideBarExpand ? formatMessage('Collapse Navigation') : formatMessage('Expand Navigation');
-  const showTooltips = (link: PageLink) => !sideBarExpand && !link.disabled;
+
   return (
     <nav css={sideBar(sideBarExpand)}>
       <div>
@@ -105,7 +104,7 @@ export const SideBar: React.FC<RouteComponentProps> = () => {
                 iconName={link.iconName}
                 labelName={link.labelName}
                 match={link.match}
-                showTooltip={showTooltips(link)}
+                showTooltip={!sideBarExpand}
                 to={mapNavItemTo(link.to)}
               />
             );
@@ -126,7 +125,7 @@ export const SideBar: React.FC<RouteComponentProps> = () => {
               disabled={link.disabled}
               iconName={link.iconName}
               labelName={link.labelName}
-              showTooltip={showTooltips(link)}
+              showTooltip={!sideBarExpand}
               to={mapNavItemTo(link.to)}
             />
           );
