@@ -155,6 +155,7 @@ const schema: JSONSchema7 = {
     subscriptionId: '<id of your subscription>',
     region: '<region of your resource group>',
     appServiceOperatingSystem: 'windows',
+    luisResource: '<name of your luis resource>',
     settings: {
       applicationInsights: {
         InstrumentationKey: '<Instrumentation Key>',
