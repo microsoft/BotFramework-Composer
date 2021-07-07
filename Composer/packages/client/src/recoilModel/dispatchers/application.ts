@@ -29,7 +29,7 @@ import {
   AppUpdaterStatus,
   CreationFlowStatus,
   CreationFlowType,
-  SURVEY_EPOCH_KEY,
+  LAST_SURVEY_KEY,
   SURVEY_PARAMETERS,
 } from '../../constants';
 import OnboardingState from '../../utils/onboardingStorage';
@@ -177,7 +177,7 @@ export const applicationDispatcher = () => {
 
     let days = surveyStorage.get('days', 0);
     const lastUsed = surveyStorage.get('dateLastUsed', null);
-    const lastTaken = surveyStorage.get(SURVEY_EPOCH_KEY, null);
+    const lastTaken = surveyStorage.get(LAST_SURVEY_KEY, null);
     const today = new Date().toDateString();
     if (lastUsed !== today) {
       days += 1;
