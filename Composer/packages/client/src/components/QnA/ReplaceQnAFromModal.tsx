@@ -231,6 +231,7 @@ export const ReplaceQnAFromModal: React.FC<ReplaceQnAModalProps> = (props) => {
         if (decoded) {
           setToken(newtoken);
           setUserProvidedTokens(true);
+          setSignedInAccount(decoded.email);
         } else {
           setTenantsErrorMessage(
             formatMessage(
@@ -395,20 +396,19 @@ export const ReplaceQnAFromModal: React.FC<ReplaceQnAModalProps> = (props) => {
                 <div style={descriptionStyle}>
                   {formatMessage('Select this option when you want to import existing KB from QnA maker portal. ')}
                 </div>
-                {!shouldProvideTokens &&
-                  (signedInAccount ? (
-                    <div style={accountInfo}>
-                      <span>{`Signed in as ${signedInAccount}. Click `}</span>
-                      <span style={signInButton} onClick={performNextAction}>
-                        {'next '}
-                      </span>
-                      <span>{'to select KBs'}</span>
-                    </div>
-                  ) : (
-                    <div style={signInButton} onClick={performNextAction}>
-                      {formatMessage('Sign in to Azure to continue')}
-                    </div>
-                  ))}
+                {signedInAccount ? (
+                  <div style={accountInfo}>
+                    <span>{`Signed in as ${signedInAccount}. Click `}</span>
+                    <span style={signInButton} onClick={performNextAction}>
+                      {'next '}
+                    </span>
+                    <span>{'to select KBs'}</span>
+                  </div>
+                ) : (
+                  <div style={signInButton} onClick={performNextAction}>
+                    {formatMessage('Sign in to Azure to continue')}
+                  </div>
+                )}
               </div>
             )}
           </div>
