@@ -9,7 +9,11 @@ import {
   ResourceProvisionService,
 } from './types';
 import { appInsightsDefinition, getAppInsightsProvisionService } from './azureResources/appInsights';
-import { appRegistrationDefinition, getAppRegistrationProvisionService } from './azureResources/appRegistration';
+import {
+  appRegistrationDefinition,
+  AppRegistrationResourceConfig,
+  getAppRegistrationProvisionService,
+} from './azureResources/appRegistration';
 import { azureFunctionDefinition, getAzureFunctionsProvisionService } from './azureResources/azureFunction';
 import { blobStorageDefinition, getBlogStorageProvisionService } from './azureResources/blobStorage';
 import { botRegistrationDefinition, getBotChannelProvisionService } from './azureResources/botChannel';
@@ -21,11 +25,6 @@ import { getAppServiceProvisionService, servicePlanDefinition } from './azureRes
 import { getWebAppProvisionService, webAppResourceDefinition } from './azureResources/webApp';
 import { AzureResourceTypes } from './constants';
 import { ProvisioningConfig } from './provisioning';
-
-export type AppRegistrationResourceConfig = ResourceConfig & {
-  key: 'appRegistration';
-  appName: string;
-};
 
 type ApplicationType = 'web' | 'other';
 

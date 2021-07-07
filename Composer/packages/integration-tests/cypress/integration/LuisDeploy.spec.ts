@@ -36,7 +36,7 @@ context('Luis Deploy', () => {
       response: 'fixture:luPublish/success',
     });
     cy.findByTestId('startBotButton').click();
-    cy.findByTitle(/^Starting bot../);
+    cy.findByText(/^Starting bot../);
     cy.route('GET', '/api/publish/*/status/default', { endpointURL: 'anything', status: 200 });
     cy.route('PUT', '/api/projects/*/files/appsettings.json', { status: 200 });
   });
