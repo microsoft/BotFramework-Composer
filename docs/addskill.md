@@ -16,7 +16,15 @@ Examples:
   https://github.com/microsoft/botframework-sdk/blob/main/schemas/skills/v2.1/samples/complex-skillmanifest.json
 ```
 
-2. A .zip file (Download all the folders and files under relativeUris and zip it)
+2. A .zip file usually contains  
+- (required) a manifest json. (User will get an error if no manifest or multiple manifests found in the zip)
+- (optional) dispatch models. (.lu or .qna files)
+- (optional) privacy file. 
+- (optional) icon file. 
+
+If the manifest.json is v2.2, dispatch models, privacy file and icon file can all be a relative path in the manifest.json
+
+See more details in the following example. 
 ```
   https://github.com/microsoft/botframework-sdk/tree/main/schemas/skills/v2.2/samples/relativeUris
 ```
