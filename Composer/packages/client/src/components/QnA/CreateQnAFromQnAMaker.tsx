@@ -3,16 +3,17 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import React, { Fragment, useEffect } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import formatMessage from 'format-message';
 import { Stack } from 'office-ui-fabric-react/lib/Stack';
 import { Text } from 'office-ui-fabric-react/lib/Text';
-import { Link } from 'office-ui-fabric-react/lib/Link';
 
 import { FieldConfig, useForm } from '../../hooks/useForm';
+import { userShouldProvideTokens } from '../../utils/auth';
+import { AuthClient } from '../../utils/authClient';
 
 import { validateName, CreateQnAFromFormProps, CreateQnAFromQnAMakerFormData } from './constants';
-import { knowledgeBaseStyle, subText } from './styles';
+import { knowledgeBaseStyle, subText, accountInfo, signInButton } from './styles';
 
 const formConfig: FieldConfig<CreateQnAFromQnAMakerFormData> = {
   name: {
@@ -22,7 +23,8 @@ const formConfig: FieldConfig<CreateQnAFromQnAMakerFormData> = {
 };
 
 export const CreateQnAFromQnAMaker: React.FC<CreateQnAFromFormProps> = (props) => {
-  const { onChange, qnaFiles, initialName } = props;
+  const { onChange, qnaFiles, initialName, onNext } = props;
+  const [signedInAccount, setSignedInAccount] = useState('');
 
   formConfig.name.validate = validateName(qnaFiles);
   formConfig.name.defaultValue = initialName || '';
@@ -32,6 +34,13 @@ export const CreateQnAFromQnAMaker: React.FC<CreateQnAFromFormProps> = (props) =
     const disabled = hasErrors || !formData.name;
     onChange(formData, disabled);
   }, [formData]);
+
+  const shouldProvideTokens = userShouldProvideTokens();
+  if (!shouldProvideTokens) {
+    AuthClient.getAccount().then((account) => {
+      setSignedInAccount(account.loginName);
+    });
+  }
 
   return (
     <Fragment>
@@ -47,9 +56,21 @@ export const CreateQnAFromQnAMaker: React.FC<CreateQnAFromFormProps> = (props) =
           </span>
         </p>
       </Stack>
-      <Stack>
-        <Link>{formatMessage('Login to Azure to continue')}</Link>
-      </Stack>
+
+      {!shouldProvideTokens &&
+        (signedInAccount ? (
+          <div style={accountInfo}>
+            <span>{`Signed in as ${signedInAccount}. Click `}</span>
+            <span style={signInButton} onClick={onNext}>
+              {'next '}
+            </span>
+            <span>{'to select KBs'}</span>
+          </div>
+        ) : (
+          <div style={signInButton} onClick={onNext}>
+            {formatMessage('Sign in to Azure to continue')}
+          </div>
+        ))}
     </Fragment>
   );
 };

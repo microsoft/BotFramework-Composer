@@ -61,6 +61,7 @@ export type CreateQnAFromFormProps = {
   subscriptionKey?: string;
   onUpdateInitialName?: (initialName: string) => void;
   onDismiss?: () => void;
+  onNext?: () => void;
   onChange: (formData: CreateQnAFormData, disabled: boolean) => void;
 };
 

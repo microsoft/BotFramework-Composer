@@ -125,7 +125,7 @@ export const CreateQnAModal: React.FC<CreateQnAModalProps> = (props) => {
   const avaliableLanguages = uniq(locales.map((item) => localeToLanguage(item)));
 
   const actionOptions: IChoiceGroupOption[] = [
-    { key: 'url', text: formatMessage('Create new KB from URL or file ') },
+    { key: 'url', text: formatMessage('Create a new Knowledge Base from URL') },
     {
       key: 'portal',
       text: formatMessage('Import existing KB from QnA maker portal'),
@@ -361,6 +361,11 @@ export const CreateQnAModal: React.FC<CreateQnAModalProps> = (props) => {
 
   const onChangeAction = async (_, opt) => {
     setNextAction(opt.key);
+    if (opt.key === 'url') {
+      setDisabled(true);
+    } else {
+      setDisabled(false);
+    }
   };
 
   const chooseExistingKey = () => {
@@ -446,6 +451,7 @@ export const CreateQnAModal: React.FC<CreateQnAModalProps> = (props) => {
                 initialName={initialName}
                 locales={locales}
                 onChange={onFormDataChange}
+                onNext={performNextAction}
                 onUpdateInitialName={setInitialName}
               />
             )}
