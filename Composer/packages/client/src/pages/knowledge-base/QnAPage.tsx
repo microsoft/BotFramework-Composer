@@ -161,13 +161,33 @@ const QnAPage: React.FC<RouteComponentProps<{
           projectId={createQnAOnInfo.projectId}
           qnaFiles={qnaFiles}
           onDismiss={() => {
-            actions.createQnAFromUrlDialogCancel({ projectId: createQnAOnInfo.projectId });
+            actions.createQnADialogCancel({ projectId: createQnAOnInfo.projectId });
           }}
-          onSubmit={async ({ name, urls = [], locales = [], multiTurn = false }) => {
+          onSubmit={async ({
+            name,
+            urls = [],
+            locales = [],
+            multiTurn = false,
+            endpoint,
+            kbId,
+            kbName,
+            subscriptionKey,
+          }) => {
             await actions.createQnATrigger(projectId, createQnAOnInfo.dialogId, false);
 
             if (urls.length !== 0) {
               actions.createQnAKBsFromUrls({ id: createQnAOnInfo.dialogId, name, projectId, locales, urls, multiTurn });
+            } else if (kbId && kbName && endpoint && locales.length && subscriptionKey) {
+              await actions.createQnAKBFromQnAMaker({
+                id: createQnAOnInfo.dialogId,
+                name,
+                projectId: createQnAOnInfo.projectId,
+                locales,
+                endpoint,
+                subscriptionKey,
+                kbId,
+                kbName,
+              });
             } else {
               await actions.createQnAKBFromScratch({
                 id: createQnAOnInfo.dialogId,

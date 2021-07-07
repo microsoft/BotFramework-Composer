@@ -7,6 +7,7 @@ import formatMessage from 'format-message';
 import { IconButton, IButtonStyles } from 'office-ui-fabric-react/lib/Button';
 import { Callout, DirectionalHint } from 'office-ui-fabric-react/lib/Callout';
 import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
+import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
 import { FocusTrapZone } from 'office-ui-fabric-react/lib/FocusTrapZone';
 import { useCallback, useState, Fragment, useMemo, useEffect } from 'react';
 import { NeutralColors, SharedColors, FontSizes, CommunicationColors } from '@uifabric/fluent-theme';
@@ -244,14 +245,14 @@ export const Header = () => {
     }
   };
 
+  const logoLabel = formatMessage('Composer Logo');
+  const testLabel = formatMessage('Test your bot');
+  const rocketLabel = formatMessage('Recommended actions');
+  const updateLabel = formatMessage('Update available');
+
   return (
     <div css={headerContainer} role="banner">
-      <img
-        alt={formatMessage('Composer Logo')}
-        aria-label={formatMessage('Composer Logo')}
-        src={composerIcon}
-        style={{ marginLeft: '9px' }}
-      />
+      <img alt={logoLabel} aria-label={logoLabel} src={composerIcon} style={{ marginLeft: '9px' }} />
       <div css={headerTextContainer}>
         {projectName && (
           <Fragment>
@@ -271,7 +272,6 @@ export const Header = () => {
           </Fragment>
         )}
       </div>
-
       <div css={rightSection}>
         {isShow && (
           <div
@@ -291,34 +291,37 @@ export const Header = () => {
           </div>
         )}
         {isShow && (
-          <IconButton
-            ariaDescription={formatMessage('Test your bot')}
-            disabled={!webchatEssentials?.botUrl}
-            iconProps={{
-              iconName: 'OfficeChat',
-            }}
-            styles={buttonStyles}
-            title={formatMessage('Test your bot')}
-            onClick={() => {
-              const currentWebChatVisibility = !isWebChatPanelVisible;
-              setWebChatPanelVisibility(currentWebChatVisibility);
-              if (currentWebChatVisibility) {
-                TelemetryClient.track('WebChatPaneOpened');
-              } else {
-                TelemetryClient.track('WebChatPaneClosed');
-              }
-            }}
-          />
+          <TooltipHost content={testLabel} directionalHint={DirectionalHint.bottomCenter}>
+            <IconButton
+              ariaDescription={testLabel}
+              disabled={!webchatEssentials?.botUrl}
+              iconProps={{
+                iconName: 'OfficeChat',
+              }}
+              styles={buttonStyles}
+              onClick={() => {
+                const currentWebChatVisibility = !isWebChatPanelVisible;
+                setWebChatPanelVisibility(currentWebChatVisibility);
+                if (currentWebChatVisibility) {
+                  TelemetryClient.track('WebChatPaneOpened');
+                } else {
+                  TelemetryClient.track('WebChatPaneClosed');
+                }
+              }}
+            />
+          </TooltipHost>
         )}
         <NotificationButton buttonStyles={buttonStyles} />
         {isShow && (
-          <IconButton
-            iconProps={{ iconName: 'Rocket' }}
-            id="rocketButton"
-            styles={buttonStyles}
-            title={formatMessage('Recommended actions')}
-            onClick={() => toggleGetStarted(!showGetStarted)}
-          />
+          <TooltipHost content={rocketLabel} directionalHint={DirectionalHint.bottomCenter}>
+            <IconButton
+              ariaLabel={rocketLabel}
+              iconProps={{ iconName: 'Rocket' }}
+              id="rocketButton"
+              styles={buttonStyles}
+              onClick={() => toggleGetStarted(!showGetStarted)}
+            />
+          </TooltipHost>
         )}
         {isShow && showStartBotTeachingBubble && (
           <TeachingBubble
@@ -335,12 +338,14 @@ export const Header = () => {
           </TeachingBubble>
         )}
         {showUpdateAvailableIcon && (
-          <IconButton
-            iconProps={{ iconName: 'History' }}
-            styles={buttonStyles}
-            title={formatMessage('Update available')}
-            onClick={onUpdateAvailableClick}
-          />
+          <TooltipHost content={updateLabel} directionalHint={DirectionalHint.bottomCenter}>
+            <IconButton
+              iconProps={{ iconName: 'History' }}
+              styles={buttonStyles}
+              title={updateLabel}
+              onClick={onUpdateAvailableClick}
+            />
+          </TooltipHost>
         )}
       </div>
       {teachingBubbleVisibility && (

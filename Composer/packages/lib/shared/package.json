@@ -38,6 +38,7 @@
   "dependencies": {
     "@botframework-composer/types": "*",
     "format-message": "6.2.3",
+    "https-proxy-agent": "^5.0.0",
     "json-schema": "^0.2.5",
     "multimatch": "^5.0.0",
     "nanoid": "^3.1.3",

@@ -4,8 +4,8 @@ import path from 'path';
 
 import { AzureTenant, ElectronAuthParameters } from '@botframework-composer/types';
 import { app } from 'electron';
-import fetch from 'node-fetch';
 
+import fetch from '../utility/fetch';
 import ElectronWindow from '../electronWindow';
 import { isLinux, isMac } from '../utility/platform';
 import logger from '../utility/logger';
@@ -369,6 +369,10 @@ export class OneAuthInstance extends OneAuthBase {
     } else {
       return path.resolve(__dirname, '../../oneauth-temp');
     }
+  }
+
+  public getAccount() {
+    return this.signedInARMAccount;
   }
 }
 

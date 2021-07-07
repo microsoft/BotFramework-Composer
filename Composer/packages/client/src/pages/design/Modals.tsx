@@ -61,14 +61,16 @@ const Modals: React.FC<ModalsProps> = ({ projectId = '', rootBotId = '' }) => {
     removeSkillFromBotProject,
     createQnAKBsFromUrls,
     createQnAKBFromScratch,
+    createQnAKBFromQnAMaker,
     createTrigger,
     createTriggerForRemoteSkill,
     createQnATrigger,
     createDialogCancel,
+    createQnADialogCancel,
   } = useRecoilValue(dispatcherState);
 
   const [triggerModalInfo, setTriggerModalInfo] = useRecoilState(triggerModalInfoState);
-  const creatQnAOnInfo = useRecoilValue(createQnAOnState);
+  const createQnAOnInfo = useRecoilValue(createQnAOnState);
   const [dialogModalInfo, setDialogModalInfo] = useRecoilState(dialogModalInfoState);
   const [exportSkillModalInfo, setExportSkillModalInfo] = useRecoilState(exportSkillModalInfoState);
   const [brokenSkillInfo, setBrokenSkillInfo] = useRecoilState(brokenSkillInfoState);
@@ -94,13 +96,24 @@ const Modals: React.FC<ModalsProps> = ({ projectId = '', rootBotId = '' }) => {
   }
 
   const handleCreateQnA = async (data) => {
-    const { projectId, dialogId } = creatQnAOnInfo;
+    const { projectId, dialogId } = createQnAOnInfo;
     if (!projectId || !dialogId) return;
     await createQnATrigger(projectId, dialogId);
 
-    const { name, urls = [], locales, multiTurn } = data;
+    const { name, urls = [], locales, multiTurn, endpoint, kbId, kbName, subscriptionKey } = data;
     if (urls.length !== 0) {
       await createQnAKBsFromUrls({ id: dialogId, name, projectId, locales, urls, multiTurn });
+    } else if (kbId && kbName && endpoint && locales.length) {
+      await createQnAKBFromQnAMaker({
+        id: dialogId,
+        name,
+        projectId,
+        locales,
+        endpoint,
+        kbId,
+        kbName,
+        subscriptionKey,
+      });
     } else {
       await createQnAKBFromScratch({ id: dialogId, name, projectId });
     }
@@ -166,9 +179,12 @@ const Modals: React.FC<ModalsProps> = ({ projectId = '', rootBotId = '' }) => {
       )}
 
       <CreateQnAModal
-        dialogId={creatQnAOnInfo.dialogId}
-        projectId={creatQnAOnInfo.projectId}
+        dialogId={createQnAOnInfo.dialogId}
+        projectId={createQnAOnInfo.projectId}
         qnaFiles={qnaFiles}
+        onDismiss={() => {
+          createQnADialogCancel({ projectId: createQnAOnInfo.projectId });
+        }}
         onSubmit={handleCreateQnA}
       />
 
