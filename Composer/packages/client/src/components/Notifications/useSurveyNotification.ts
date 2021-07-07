@@ -63,14 +63,13 @@ const getSurveyEligibility = () => {
 
 export const useSurveyNotification = () => {
   const { addNotification, deleteNotification } = useRecoilValue(dispatcherState);
-  const surveyEligible = getSurveyEligibility();
   const machineInfo = useRecoilValue(machineInfoState);
 
   useEffect(() => {
     const url = buildUrl(machineInfo);
     deleteNotification('survey');
 
-    if (surveyEligible) {
+    if (getSurveyEligibility()) {
       const surveyStorage = new ClientStorage(window.localStorage, 'survey');
       TelemetryClient.track('HATSSurveyOffered');
 
