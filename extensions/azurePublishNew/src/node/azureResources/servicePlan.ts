@@ -5,10 +5,15 @@ import { TokenCredentials } from '@azure/ms-rest-js';
 import { WebSiteManagementClient } from '@azure/arm-appservice';
 
 import { parseRuntimeKey } from '../../../../../Composer/packages/lib/shared';
-import { ProvisionServiceConfig, ProvisionWorkingSet, ResourceDefinition, ResourceProvisionService } from '../types';
+import {
+  ProvisionServiceConfig,
+  ProvisionWorkingSet,
+  ResourceConfig,
+  ResourceDefinition,
+  ResourceProvisionService,
+} from '../types';
 import { createCustomizeError, ProvisionErrors } from '../../../../azurePublish/src/node/utils/errorHandler';
 import { AzureResourceTypes } from '../constants';
-import { ServicePlanResourceConfig } from '../availableResources';
 
 import { AZURE_HOSTING_GROUP_NAME, S1_STANDARD_TIER } from './constants';
 
@@ -20,6 +25,14 @@ export const servicePlanDefinition: ResourceDefinition = {
   tier: S1_STANDARD_TIER,
   group: AZURE_HOSTING_GROUP_NAME,
   dependencies: [AzureResourceTypes.RESOURCE_GROUP],
+};
+
+export type ServicePlanResourceConfig = ResourceConfig & {
+  key: 'servicePlan';
+  resourceGroupName: string;
+  appServicePlanName: string;
+  location: string;
+  operatingSystem: string;
 };
 
 const appServiceProvisionMethod = (provisionConfig: ProvisionServiceConfig) => {

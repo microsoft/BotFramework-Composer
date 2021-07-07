@@ -21,26 +21,14 @@ import { cosmosDbDefinition, getCosmosDbProvisionService } from './azureResource
 import { getLuisAuthoringProvisionService, luisAuthoringDefinition } from './azureResources/luisAuthoring';
 import { getLuisPredictionProvisionService, luisPredictionDefinition } from './azureResources/luisPrediction';
 import { getQnAProvisionService, qnaDefinition } from './azureResources/qna';
-import { getAppServiceProvisionService, servicePlanDefinition } from './azureResources/servicePlan';
-import { getWebAppProvisionService, webAppResourceDefinition } from './azureResources/webApp';
+import {
+  getAppServiceProvisionService,
+  servicePlanDefinition,
+  ServicePlanResourceConfig,
+} from './azureResources/servicePlan';
+import { getWebAppProvisionService, WebAppResourceConfig, webAppResourceDefinition } from './azureResources/webApp';
 import { AzureResourceTypes } from './constants';
 import { ProvisioningConfig } from './provisioning';
-
-export type WebAppResourceConfig = ResourceConfig & {
-  key: 'webApp';
-  resourceGroupName: string;
-  location: string;
-  webAppName: string;
-  operatingSystem: string;
-};
-
-export type ServicePlanResourceConfig = ResourceConfig & {
-  key: 'servicePlan';
-  resourceGroupName: string;
-  appServicePlanName: string;
-  location: string;
-  operatingSystem: string;
-};
 
 export const availableResources: ResourceDefinition[] = [
   appRegistrationDefinition,
