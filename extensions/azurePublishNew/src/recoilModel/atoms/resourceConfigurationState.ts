@@ -10,11 +10,6 @@ export const subscriptionState = atom<string>({
   default: '',
 });
 
-export const tenantState = atom<string>({
-  key: 'resourceConfigurationTenant',
-  default: '',
-});
-
 export const luisRegionState = atom<LuisRegion>({
   key: 'resourceConfigurationLuisRegion',
   default: undefined,
@@ -40,8 +35,8 @@ export const userInfoState = atom<UserInfo>({
   default: undefined,
 });
 
-export const operatingSystemState = atom<string>({
-  key: 'resourceConfigurationOperatingSystem',
+export const appServiceOperatingSystemState = atom<string>({
+  key: 'resourceConfigurationAppServiceOperatingSystem',
   default: '',
 });
 
