@@ -31,6 +31,7 @@ import { addNotificationInternal, createNotification } from './notification';
 
 export type UserLoginOptions = {
   requireGraph?: boolean;
+  chooseTenant?: boolean;
 };
 
 export const authDispatcher = () => {
@@ -183,8 +184,7 @@ export const authDispatcher = () => {
           } else if (tenants.length === 1) {
             tenantId = tenants[0].tenantId;
           }
-
-          if (tenantId) {
+          if (tenantId && !options?.chooseTenant) {
             setCurrentTenant(tenantId, false);
           } else {
             setShowTenantDialog(true);

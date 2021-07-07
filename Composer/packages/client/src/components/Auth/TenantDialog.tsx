@@ -3,17 +3,22 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { DialogWrapper, DialogTypes } from '@bfc/ui-shared';
+import { DialogWrapper, DialogTypes, PropertyAssignment } from '@bfc/ui-shared';
 import { FontSizes } from '@uifabric/fluent-theme';
 import { FontWeights } from 'office-ui-fabric-react/lib/Styling';
 import formatMessage from 'format-message';
 import { DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
-import { PrimaryButton } from 'office-ui-fabric-react/lib/Button';
+import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button';
 import { ChoiceGroup } from 'office-ui-fabric-react/lib/ChoiceGroup';
 import { useState } from 'react';
 import { useRecoilValue } from 'recoil';
 
-import { availableTenantsState, dispatcherState, currentTenantIdState } from '../../recoilModel/atoms';
+import {
+  availableTenantsState,
+  dispatcherState,
+  currentTenantIdState,
+  isAuthenticatedState,
+} from '../../recoilModel/atoms';
 
 export interface TenantDialogProps {
   onDismiss: () => void;
@@ -22,6 +27,7 @@ export const TenantDialog: React.FC<TenantDialogProps> = (props) => {
   const availableTenants = useRecoilValue(availableTenantsState);
   const { setCurrentTenant } = useRecoilValue(dispatcherState);
   const currentTenant = useRecoilValue(currentTenantIdState);
+  const isAuthenticated = useRecoilValue(isAuthenticatedState);
   // select current or default to first
   const [tenant, setTenant] = useState<string>(currentTenant || availableTenants[0]?.tenantId);
 
@@ -68,6 +74,14 @@ export const TenantDialog: React.FC<TenantDialogProps> = (props) => {
         />
       </div>
       <DialogFooter>
+        {isAuthenticated && (
+          <DefaultButton
+            text={formatMessage('Cancel')}
+            onClick={() => {
+              props.onDismiss();
+            }}
+          />
+        )}
         <PrimaryButton
           disabled={!tenant}
           text={formatMessage('Select')}

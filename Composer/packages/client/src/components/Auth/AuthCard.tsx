@@ -21,7 +21,6 @@ import {
   showTenantDialogState,
   requiresGraphState,
 } from '../../recoilModel/atoms';
-import { setTenantId } from '../../utils/auth';
 import { zIndices } from '../../utils/zIndices';
 
 import { AuthDialog } from './AuthDialog';
@@ -76,8 +75,7 @@ export const AuthCard: React.FC = () => {
   };
 
   const switchTenants = () => {
-    setTenantId('');
-    requireUserLogin();
+    requireUserLogin('', { chooseTenant: true });
     toggleAuthCardVisibility();
   };
 
