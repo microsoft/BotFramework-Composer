@@ -110,6 +110,14 @@ export class BotProjectProvision {
     // we need the `appId` and `id` fields - appId is part of our configuration, and the `id` is used to set the password.
     let appCreated;
     let retryCount = 3;
+
+    const logErrorMsg = (appCreateStep: string, errorMessage: string) => {
+      this.logger({
+        status: BotProjectDeployLoggerType.PROVISION_ERROR,
+        message: `${appCreateStep} failed after 3 retries. Error: ${errorMessage || ''}`,
+      });
+    };
+
     while (retryCount >= 0) {
       try {
         appCreated = await rp.post(applicationUri, appCreateOptions);
@@ -119,6 +127,7 @@ export class BotProjectProvision {
           message: `App create failed, retrying ...`,
         });
         if (retryCount == 0) {
+          logErrorMsg('App create', err.message);
           throw createCustomizeError(
             ProvisionErrors.CREATE_APP_REGISTRATION,
             'App create failed! Please file an issue on Github.'
@@ -162,6 +171,7 @@ export class BotProjectProvision {
           message: `Add application password failed, retrying ...`,
         });
         if (retryCount == 0) {
+          logErrorMsg('Add application password', err.message);
           throw createCustomizeError(
             ProvisionErrors.CREATE_APP_REGISTRATION,
             'Add application password failed! Please file an issue on Github.'
