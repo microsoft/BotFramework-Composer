@@ -533,4 +533,5 @@ export const SURVEY_PARAMETERS = {
   chanceToAppear: 0.3,
 };
 
+export const SURVEY_EPOCH_KEY = 'lastSurveyTakenOnTimestamp';
 export const SURVEY_URL_BASE = 'https://aka.ms/bfcomposersurvey';
