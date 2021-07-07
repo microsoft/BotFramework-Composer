@@ -5,9 +5,14 @@ import { TokenCredentials } from '@azure/ms-rest-js';
 import { ApplicationInsightsManagementClient } from '@azure/arm-appinsights';
 import { AzureBotService } from '@azure/arm-botservice';
 
-import { ProvisionServiceConfig, ProvisionWorkingSet, ResourceDefinition, ResourceProvisionService } from '../types';
+import {
+  ProvisionServiceConfig,
+  ProvisionWorkingSet,
+  ResourceConfig,
+  ResourceDefinition,
+  ResourceProvisionService,
+} from '../types';
 import { AzureResourceTypes } from '../constants';
-import { AppInsightsResourceConfig } from '../availableResources';
 import {
   createCustomizeError,
   ProvisionErrors,
@@ -23,6 +28,15 @@ export const appInsightsDefinition: ResourceDefinition = {
   tier: PAY_AS_YOU_GO_TIER,
   group: AZURE_HOSTING_GROUP_NAME,
   dependencies: [AzureResourceTypes.RESOURCE_GROUP, AzureResourceTypes.BOT_REGISTRATION],
+};
+
+type ApplicationType = 'web' | 'other';
+
+export type AppInsightsResourceConfig = ResourceConfig & {
+  resourceGroupName: string;
+  location: string;
+  name: string;
+  applicationType?: ApplicationType;
 };
 
 const appInsightsProvisionMethod = (provisionConfig: ProvisionServiceConfig) => {

@@ -8,7 +8,11 @@ import {
   ResourceDefinition,
   ResourceProvisionService,
 } from './types';
-import { appInsightsDefinition, getAppInsightsProvisionService } from './azureResources/appInsights';
+import {
+  appInsightsDefinition,
+  AppInsightsResourceConfig,
+  getAppInsightsProvisionService,
+} from './azureResources/appInsights';
 import {
   appRegistrationDefinition,
   AppRegistrationResourceConfig,
@@ -25,15 +29,6 @@ import { getAppServiceProvisionService, servicePlanDefinition } from './azureRes
 import { getWebAppProvisionService, webAppResourceDefinition } from './azureResources/webApp';
 import { AzureResourceTypes } from './constants';
 import { ProvisioningConfig } from './provisioning';
-
-type ApplicationType = 'web' | 'other';
-
-export type AppInsightsResourceConfig = ResourceConfig & {
-  resourceGroupName: string;
-  location: string;
-  name: string;
-  applicationType?: ApplicationType;
-};
 
 export const availableResources: ResourceDefinition[] = [
   appRegistrationDefinition,
