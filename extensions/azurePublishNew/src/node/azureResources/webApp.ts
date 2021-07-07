@@ -5,7 +5,7 @@ import { WebSiteManagementClient } from '@azure/arm-appservice';
 import { TokenCredentials } from '@azure/ms-rest-js';
 import { parseRuntimeKey } from '@bfc/shared';
 
-import { ProvisionConfig, ProvisionWorkingSet, ResourceDefinition, ResourceProvisionService } from '../types';
+import { ProvisionServiceConfig, ProvisionWorkingSet, ResourceDefinition, ResourceProvisionService } from '../types';
 import {
   createCustomizeError,
   ProvisionErrors,
@@ -26,7 +26,7 @@ export const webAppResourceDefinition: ResourceDefinition = {
   dependencies: [AzureResourceTypes.RESOURCE_GROUP, AzureResourceTypes.SERVICE_PLAN],
 };
 
-const webAppProvisionMethod = (provisionConfig: ProvisionConfig) => {
+const webAppProvisionMethod = (provisionConfig: ProvisionServiceConfig) => {
   const tokenCredentials = new TokenCredentials(provisionConfig.accessToken);
   const webSiteManagementClient = new WebSiteManagementClient(tokenCredentials, provisionConfig.subscriptionId);
 
@@ -62,7 +62,7 @@ const webAppProvisionMethod = (provisionConfig: ProvisionConfig) => {
   };
 };
 
-export const getWebAppProvisionService = (config: ProvisionConfig): ResourceProvisionService => {
+export const getWebAppProvisionService = (config: ProvisionServiceConfig): ResourceProvisionService => {
   return {
     getDependencies: () => ['servicePlan'],
     getRecommendationForProject: (project) => {

@@ -35,7 +35,7 @@ export type GetResourcesResult = ResourceDefinition & {
   required: boolean;
 };
 
-export type ProvisionConfig = {
+export type ProvisionServiceConfig = {
   key: string;
   accessToken: string;
   subscriptionId: string;

@@ -139,15 +139,13 @@ const BotProjectSettings: React.FC<RouteComponentProps<{ projectId: string; skil
       <Suspense fallback={<LoadingSpinner />}>
         <div css={container}>
           {isAdvancedSettingsEnabled ? (
-            <div data-testid="jsonEditor">
-              <JsonEditor
-                key={'settingsjson'}
-                editorSettings={userSettings.codeEditor}
-                id={currentProjectId}
-                value={mergedSettings}
-                onChange={handleChange}
-              />
-            </div>
+            <JsonEditor
+              key={'settingsjson'}
+              editorSettings={userSettings.codeEditor}
+              id={currentProjectId}
+              value={mergedSettings}
+              onChange={handleChange}
+            />
           ) : (
             <BotProjectSettingsTabView projectId={currentProjectId} scrollToSectionId={props.location?.hash} />
           )}

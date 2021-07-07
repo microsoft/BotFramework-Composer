@@ -7,6 +7,7 @@ import React, { useState } from 'react';
 import { FontWeights } from '@uifabric/styling';
 import { IButtonStyles, IconButton } from 'office-ui-fabric-react/lib/Button';
 import { NeutralColors, SharedColors } from '@uifabric/fluent-theme';
+import { TooltipHost, DirectionalHint } from 'office-ui-fabric-react/lib/Tooltip';
 import { useRecoilValue } from 'recoil';
 import formatMessage from 'format-message';
 
@@ -54,20 +55,19 @@ const NotificationButton: React.FC<NotificationButtonProps> = ({ buttonStyles })
     setIsOpen(!isOpen);
   };
 
+  const label = formatMessage('Open notification panel');
+
   return (
     <div>
-      <IconButton
-        aria-label={formatMessage('Open notification panel')}
-        iconProps={{ iconName: 'Ringer' }}
-        styles={buttonStyles}
-        onClick={toggleIsOpen}
-      >
-        <div css={styles.container}>
-          <div aria-hidden css={styles.count(!isOpen && !!unreadNotification.length)}>
-            {unreadNotification.length}
+      <TooltipHost content={label} directionalHint={DirectionalHint.bottomCenter}>
+        <IconButton aria-label={label} iconProps={{ iconName: 'Ringer' }} styles={buttonStyles} onClick={toggleIsOpen}>
+          <div css={styles.container}>
+            <div aria-hidden css={styles.count(!isOpen && !!unreadNotification.length)}>
+              {unreadNotification.length}
+            </div>
           </div>
-        </div>
-      </IconButton>
+        </IconButton>
+      </TooltipHost>
       <NotificationPanel
         isOpen={isOpen}
         notifications={notifications}

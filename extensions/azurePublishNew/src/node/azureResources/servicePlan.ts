@@ -5,7 +5,7 @@ import { TokenCredentials } from '@azure/ms-rest-js';
 import { WebSiteManagementClient } from '@azure/arm-appservice';
 
 import { parseRuntimeKey } from '../../../../../Composer/packages/lib/shared';
-import { ProvisionConfig, ProvisionWorkingSet, ResourceDefinition, ResourceProvisionService } from '../types';
+import { ProvisionServiceConfig, ProvisionWorkingSet, ResourceDefinition, ResourceProvisionService } from '../types';
 import { createCustomizeError, ProvisionErrors } from '../../../../azurePublish/src/node/utils/errorHandler';
 import { AzureResourceTypes } from '../constants';
 import { ServicePlanResourceConfig } from '../availableResources';
@@ -22,7 +22,7 @@ export const servicePlanDefinition: ResourceDefinition = {
   dependencies: [AzureResourceTypes.RESOURCE_GROUP],
 };
 
-const appServiceProvisionMethod = (provisionConfig: ProvisionConfig) => {
+const appServiceProvisionMethod = (provisionConfig: ProvisionServiceConfig) => {
   const tokenCredentials = new TokenCredentials(provisionConfig.accessToken);
   const webSiteManagementClient = new WebSiteManagementClient(tokenCredentials, provisionConfig.subscriptionId);
 
@@ -58,7 +58,7 @@ const appServiceProvisionMethod = (provisionConfig: ProvisionConfig) => {
   };
 };
 
-export const getAppServiceProvisionService = (config: ProvisionConfig): ResourceProvisionService => {
+export const getAppServiceProvisionService = (config: ProvisionServiceConfig): ResourceProvisionService => {
   return {
     getDependencies: () => [],
     getRecommendationForProject: (project) => {

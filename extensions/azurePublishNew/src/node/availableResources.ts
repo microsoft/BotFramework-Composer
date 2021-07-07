@@ -3,7 +3,7 @@
 
 import {
   OnProvisionProgress,
-  ProvisionConfig,
+  ProvisionServiceConfig,
   ResourceConfig,
   ResourceDefinition,
   ResourceProvisionService,
@@ -19,8 +19,8 @@ import { getLuisPredictionProvisionService, luisPredictionDefinition } from './a
 import { getQnAProvisionService, qnaDefinition } from './azureResources/qna';
 import { getAppServiceProvisionService, servicePlanDefinition } from './azureResources/servicePlan';
 import { getWebAppProvisionService, webAppResourceDefinition } from './azureResources/webApp';
-import { ProvisionConfig2 } from './provisioning';
 import { AzureResourceTypes } from './constants';
+import { ProvisioningConfig } from './provisioning';
 
 export type AppRegistrationResourceConfig = ResourceConfig & {
   key: 'appRegistration';
@@ -57,7 +57,7 @@ export const availableResources: ResourceDefinition[] = [
   servicePlanDefinition,
 ];
 
-export const getProvisionServices = (config: ProvisionConfig): Record<string, ResourceProvisionService> => {
+export const getProvisionServices = (config: ProvisionServiceConfig): Record<string, ResourceProvisionService> => {
   return {
     appRegistration: getAppRegistrationProvisionService(config),
     webApp: getWebAppProvisionService(config),
@@ -87,13 +87,13 @@ export const getResourceDependencies = (key: string) => {
 };
 
 export const provisionConfigToResourceConfigMap = {
-  appRegistration: (config: ProvisionConfig2): AppRegistrationResourceConfig => {
+  appRegistration: (config: ProvisioningConfig): AppRegistrationResourceConfig => {
     return {
       key: 'appRegistration',
       appName: config.hostname,
     };
   },
-  webApp: (config: ProvisionConfig2): WebAppResourceConfig => {
+  webApp: (config: ProvisioningConfig): WebAppResourceConfig => {
     return {
       key: 'webApp',
       webAppName: config.hostname,
@@ -102,7 +102,7 @@ export const provisionConfigToResourceConfigMap = {
       resourceGroupName: config.resourceGroup,
     };
   },
-  servicePlan: (config: ProvisionConfig2): ServicePlanResourceConfig => {
+  servicePlan: (config: ProvisioningConfig): ServicePlanResourceConfig => {
     return {
       key: 'servicePlan',
       appServicePlanName: config.hostname,
@@ -113,7 +113,7 @@ export const provisionConfigToResourceConfigMap = {
   },
 };
 
-export const setUpProvisionService = (config: ProvisionConfig, onProgress: OnProvisionProgress) => {
+export const setUpProvisionService = (config: ProvisionServiceConfig, onProgress: OnProvisionProgress) => {
   const provisionServices = getProvisionServices(config);
 
   const provision = (selectedResources: ResourceConfig[]): void => {
