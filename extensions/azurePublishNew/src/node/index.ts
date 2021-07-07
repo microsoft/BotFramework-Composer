@@ -1,14 +1,13 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { PublishConfig, getAccessToken } from '@bfc/extension-client';
+import { PublishConfig } from '@bfc/extension-client';
 import {
   IBotProject,
   IExtensionRegistration,
   ProcessStatus,
   PublishPlugin,
   PublishResponse,
-  PublishResult,
   UserIdentity,
 } from '@botframework-composer/types';
 
