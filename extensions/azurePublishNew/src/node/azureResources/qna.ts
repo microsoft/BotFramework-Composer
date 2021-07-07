@@ -21,7 +21,6 @@ import {
   stringifyError,
 } from '../../../../azurePublish/src/node/utils/errorHandler';
 import { AzureResourceTypes } from '../constants';
-import { QnAResourceConfig } from '../availableResources';
 
 import { COGNITIVE_SERVICES_GROUP_NAME, SO_STANDARD_TIER } from './constants';
 
@@ -37,6 +36,14 @@ export const qnaDefinition: ResourceDefinition = {
 
 type ServiceCredentials = {
   signRequest: <T>(webResource) => Promise<T>;
+};
+
+export type QnAResourceConfig = ResourceConfig & {
+  key: 'qna';
+  resourceGroupName: string;
+  location: string;
+  name: string;
+  sku?: string;
 };
 
 const qnAProvisionMethod = (provisionConfig: ProvisionServiceConfig): ProvisionMethod => {

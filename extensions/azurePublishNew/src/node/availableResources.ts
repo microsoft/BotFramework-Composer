@@ -20,19 +20,11 @@ import { botRegistrationDefinition, getBotChannelProvisionService } from './azur
 import { cosmosDbDefinition, getCosmosDbProvisionService } from './azureResources/cosmosDb';
 import { getLuisAuthoringProvisionService, luisAuthoringDefinition } from './azureResources/luisAuthoring';
 import { getLuisPredictionProvisionService, luisPredictionDefinition } from './azureResources/luisPrediction';
-import { getQnAProvisionService, qnaDefinition } from './azureResources/qna';
+import { getQnAProvisionService, qnaDefinition, QnAResourceConfig } from './azureResources/qna';
 import { getAppServiceProvisionService, servicePlanDefinition } from './azureResources/servicePlan';
 import { getWebAppProvisionService, webAppResourceDefinition } from './azureResources/webApp';
 import { AzureResourceTypes } from './constants';
 import { ProvisioningConfig } from './provisioning';
-
-export type QnAResourceConfig = ResourceConfig & {
-  key: 'qna';
-  resourceGroupName: string;
-  location: string;
-  name: string;
-  sku?: string;
-};
 
 export const availableResources: ResourceDefinition[] = [
   appRegistrationDefinition,
