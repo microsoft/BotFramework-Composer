@@ -58,28 +58,43 @@ export const authDispatcher = () => {
         try {
           const token = await AuthClient.getARMTokenForTenant(tenant);
           const graph = await AuthClient.getAccessToken(graphScopes);
+          const isAlreadyAuthenticated = await callbackHelpers.snapshot.getPromise(isAuthenticatedState);
 
           if (token) {
             setCurrentUser(token, graph);
 
             // fire notification
             if (notify !== false) {
-              // set notification
-              const notification = createNotification({
-                title: formatMessage('Azure sign-in'),
-                description: formatMessage("You've successfully signed in."),
-                type: 'info',
-              });
+              let notification;
+              if (isAlreadyAuthenticated) {
+                // set notification
+                notification = createNotification({
+                  title: formatMessage('Azure sign in'),
+                  description: formatMessage("You've successfully switched directories."),
+                  type: 'success',
+                  retentionTime: 5000,
+                });
+              } else {
+                // set notification
+                notification = createNotification({
+                  title: formatMessage('Azure sign in'),
+                  description: formatMessage("You've successfully signed in."),
+                  type: 'success',
+                  retentionTime: 5000,
+                });
+              }
               addNotificationInternal(callbackHelpers, notification);
             }
           } else {
             throw new Error('Could not get fetch token.');
           }
         } catch (err) {
+          console.error(`Error in auth: ${err.message || err.toString()}`);
           const notification = createNotification({
-            title: formatMessage('Azure sign-in'),
-            description: formatMessage(`Sign in failed: {message}`, { message: err.message || err.toString() }),
+            title: formatMessage('Azure sign in'),
+            description: formatMessage(`Sign in failed. Please try again.`, { message: err.message || err.toString() }),
             type: 'error',
+            retentionTime: 5000,
           });
           addNotificationInternal(callbackHelpers, notification);
           // clear out app state

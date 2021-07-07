@@ -87,9 +87,14 @@ export const AuthCard: React.FC = () => {
       <div ref={personaRef}>
         <Persona
           hidePersonaDetails
-          componentRef={personaRef}
           initialsColor={currentUser ? NeutralColors.gray160 : undefined}
           size={PersonaSize.size32}
+          styles={{
+            root: {
+              marginLeft: 10,
+              cursor: 'pointer',
+            },
+          }}
           text={currentUser?.name}
           onClick={toggleAuthCardVisibility}
         />
