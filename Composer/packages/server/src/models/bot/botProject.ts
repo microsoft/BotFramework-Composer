@@ -32,6 +32,7 @@ import { DefaultSettingManager } from '../settings/defaultSettingManager';
 import log from '../../logger';
 import { BotProjectService } from '../../services/project';
 import AssetService from '../../services/asset';
+import { bundleSchema } from '../utilities/bundleSchema';
 
 import {
   BotStructureFilesPatterns,
@@ -202,6 +203,8 @@ export class BotProject implements IBotProject {
     this.settings = await this.getEnvSettings(false);
     this.files = await this._getFiles();
     this.readme = await this._getReadme();
+
+    await this._bundleSchemas();
   };
 
   public getProject = () => {
@@ -1098,5 +1101,26 @@ export class BotProject implements IBotProject {
         throw new Error('Invalid file content');
       }
     }
+  };
+
+  private _bundleSchemas = async () => {
+    const schemas: FileInfo[] = [];
+    this.files.forEach((file) => {
+      if (file.name.endsWith('.schema')) {
+        schemas.push(file);
+      }
+    });
+
+    debug('Bundling %d schemas.', schemas.length);
+
+    await Promise.all(
+      schemas.map(async (s) => {
+        const bundled = await bundleSchema(s.path);
+
+        if (bundled) {
+          s.content = bundled;
+        }
+      })
+    );
   };
 }

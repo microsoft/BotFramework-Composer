@@ -18,7 +18,7 @@ afterAll(() => {
 describe('<NotificationCard />', () => {
   it('should render the NotificationCard', () => {
     const cardProps: CardProps = {
-      title: 'There was error creating your KB',
+      title: 'There was error creating your knowledge base',
       description: 'error',
       retentionTime: 1,
       type: 'error',
@@ -29,12 +29,12 @@ describe('<NotificationCard />', () => {
       <NotificationCard cardProps={cardProps} id="test" onDismiss={onDismiss} onHide={handleHide} />
     );
 
-    expect(container).toHaveTextContent('There was error creating your KB');
+    expect(container).toHaveTextContent('There was error creating your knowledge base');
   });
 
   it('should render the customized card', () => {
     const cardProps: CardProps = {
-      title: 'There was error creating your KB',
+      title: 'There was error creating your knowledge base',
       description: 'error',
       retentionTime: 5000,
       type: 'error',

@@ -49,11 +49,27 @@ jest.mock('../../../src/utils/authClient', () => ({
         },
       ];
     },
-    getARMTokenForTenant: async () => 'armtoken',
+    getARMTokenForTenant: async () => 'mockToken',
+    getAccessToken: async () => 'mockToken',
   },
 }));
 
-jest.mock('../../../src/utils/auth');
+jest.mock('../../../src/utils/auth', () => ({
+  decodeToken: () => {
+    return {
+      upn: 'mockUser@mockDomain.com',
+      name: 'mockUser',
+      exp: new Date().getTime(),
+      tenant: 'mockTenant',
+    };
+  },
+  userShouldProvideTokens: jest.fn(),
+  isShowAuthDialog: jest.fn(),
+  getTokenFromCache: jest.fn(),
+  setTenantId: jest.fn(),
+  getTenantIdFromCache: jest.fn(),
+  prepareAxios: jest.fn(),
+}));
 
 describe('<ManageLuis />', () => {
   const onDismiss = jest.fn();
@@ -121,17 +137,13 @@ describe('<ManageLuis />', () => {
       await fireEvent.click(nextButton);
     });
 
-    const tenantOption = await findByTestId('service-useexisting-tenant-selection');
-    expect(tenantOption).toBeDefined();
-    expect(tenantOption).toBeEnabled();
-
     const subscriptionOption = await findByTestId('service-useexisting-subscription-selection');
     expect(subscriptionOption).toBeDefined();
     expect(subscriptionOption).toBeEnabled();
 
     expect(baseElement).toHaveTextContent(`Select ${serviceName} resources`);
     expect(baseElement).toHaveTextContent(
-      `Select your Azure directory, then choose the subscription where your existing ${serviceName} resource is located.`
+      `Choose the subscription where your existing ${serviceName} resource is located.`
     );
 
     // ensure that since a subscription hasn't been selected
@@ -216,10 +228,6 @@ describe('<ManageLuis />', () => {
     const nextButton2 = await findByRole('button', { name: 'Next' });
     expect(nextButton2).toBeDefined();
     expect(nextButton2).toBeDisabled();
-
-    const tenantOption = await findByTestId('service-create-tenant-selection');
-    expect(tenantOption).toBeDefined();
-    expect(tenantOption).toBeEnabled();
 
     const subscriptionOption = await findByTestId('service-create-subscription-selection');
     expect(subscriptionOption).toBeDefined();
