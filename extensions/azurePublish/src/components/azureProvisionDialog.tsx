@@ -1,48 +1,48 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 import * as React from 'react';
+import { Fragment, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import formatMessage from 'format-message';
 import styled from '@emotion/styled';
-import { useState, useMemo, useEffect, Fragment, useCallback, useRef } from 'react';
 import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import { DefaultButton, PrimaryButton } from 'office-ui-fabric-react/lib/Button';
 import {
-  logOut,
-  usePublishApi,
-  useProjectApi,
-  getTenants,
   getARMTokenForTenant,
-  useLocalStorage,
-  useTelemetryClient,
+  getTenants,
+  logOut,
   useApplicationApi,
+  useLocalStorage,
+  useProjectApi,
+  usePublishApi,
+  useTelemetryClient,
 } from '@bfc/extension-client';
 import { Subscription } from '@azure/arm-subscriptions/esm/models';
-import { DeployLocation, AzureTenant, Notification } from '@botframework-composer/types';
+import { AzureTenant, DeployLocation, Notification } from '@botframework-composer/types';
 import { FluentTheme, NeutralColors } from '@uifabric/fluent-theme';
 import { LoadingSpinner, OpenConfirmModal, ProvisionHandoff } from '@bfc/ui-shared';
 import {
-  ScrollablePane,
-  ScrollbarVisibility,
+  ChoiceGroup,
   DetailsList,
   DetailsListLayoutMode,
+  FontSizes,
+  FontWeights,
+  IChoiceGroupOption,
   IColumn,
-  TooltipHost,
   Icon,
-  TextField,
-  Persona,
   IPersonaProps,
+  IStackItemStyles,
+  IStackTokens,
+  Label,
+  Link,
+  Persona,
   PersonaSize,
+  ScrollablePane,
+  ScrollbarVisibility,
   SelectionMode,
   Stack,
   Text,
-  FontWeights,
-  FontSizes,
-  Label,
-  IStackTokens,
-  IStackItemStyles,
-  Link,
-  ChoiceGroup,
-  IChoiceGroupOption,
+  TextField,
+  TooltipHost,
 } from 'office-ui-fabric-react';
 import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
 import { JsonEditor } from '@bfc/code-editor';
@@ -52,16 +52,16 @@ import sortBy from 'lodash/sortBy';
 import { AzureResourceTypes, ResourcesItem } from '../types';
 
 import {
+  CheckWebAppNameAvailability,
+  getDeployLocations,
+  getLuisAuthoringRegions,
+  getPreview,
+  getResourceGroups,
   getResourceList,
   getSubscriptions,
-  getDeployLocations,
-  getPreview,
-  getLuisAuthoringRegions,
-  CheckWebAppNameAvailability,
-  getResourceGroups,
 } from './api';
 import { ChooseResourcesList } from './ChooseResourcesList';
-import { getExistResources, removePlaceholder, decodeToken, defaultExtensionState, parseRuntimeKey } from './util';
+import { decodeToken, defaultExtensionState, getExistResources, parseRuntimeKey, removePlaceholder } from './util';
 import { ResourceGroupPicker } from './ResourceGroupPicker';
 import { ChooseProvisionAction } from './ChooseProvisionAction';
 
@@ -601,11 +601,22 @@ export const AzureProvisionDialog: React.FC = () => {
     }
   }, [formData.tenantId, page]);
 
+  const setRequiredForLuisAndQnAResources = (resources: ResourcesItem[], requiredRecognizers: any): void => {
+    const requireLUIS = requiredRecognizers.some((p) => p.requiresLUIS);
+    const requireQNA = requiredRecognizers.some((p) => p.requiresQNA);
+    resources.forEach((res) => {
+      if (res.key === AzureResourceTypes.LUIS_AUTHORING || res.key === AzureResourceTypes.LUIS_PREDICTION) {
+        res.required = requireLUIS;
+      } else if (res.key === AzureResourceTypes.QNA) {
+        res.required = requireQNA;
+      }
+    });
+  };
+
   const getResources = async () => {
     try {
-      const requireLUIS = requiredRecognizers.some((p) => p.requiresLUIS);
-      const requireQNA = requiredRecognizers.some((p) => p.requiresQNA);
-      const resources = await getResourceList(currentProjectId, publishType, requireQNA, requireLUIS);
+      const resources = await getResourceList(currentProjectId, publishType);
+      setRequiredForLuisAndQnAResources(resources, requiredRecognizers);
       setExtensionResourceOptions(resources);
     } catch (err) {
       // todo: how do we handle API errors in this component

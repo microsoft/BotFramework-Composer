@@ -6,7 +6,7 @@ import formatMessage from 'format-message';
 import { SubscriptionClient } from '@azure/arm-subscriptions';
 import { Subscription } from '@azure/arm-subscriptions/esm/models';
 import { ResourceManagementClient } from '@azure/arm-resources';
-import { ResourceGroup, GenericResource } from '@azure/arm-resources/esm/models';
+import { GenericResource, ResourceGroup } from '@azure/arm-resources/esm/models';
 import { AzureBotService } from '@azure/arm-botservice';
 import { WebSiteManagementClient } from '@azure/arm-appservice';
 import { ResourceNameAvailability } from '@azure/arm-appservice/esm/models';
@@ -16,15 +16,14 @@ import { TokenCredentials } from '@azure/ms-rest-js';
 import debug from 'debug';
 import sortBy from 'lodash/sortBy';
 
-import { AzureResourceTypes } from '../types';
 import {
   AzureAPIStatus,
   AzureResourceProviderType,
-  ResourcesItem,
+  AzureResourceTypes,
   LuisAuthoringSupportLocation,
   LuisPublishSupportLocation,
+  ResourcesItem,
 } from '../types';
-import { AzureResourceDefinitions } from '../node/resourceTypes';
 
 import * as Images from './images';
 
@@ -391,30 +390,10 @@ export const CheckCognitiveResourceSku = async (
  * @param projectId
  * @param type
  */
-export const getResourceList = async (
-  projectId: string,
-  type: string,
-  requireQNA: boolean,
-  requireLUIS: boolean
-): Promise<ResourcesItem[]> => {
+export const getResourceList = async (projectId: string, type: string): Promise<ResourcesItem[]> => {
   try {
     const result = await axios.get(`/api/provision/${projectId}/${type}/resources`);
-    const resourceList = result.data as ResourcesItem[];
-    resourceList.push({
-      ...AzureResourceDefinitions[AzureResourceTypes.LUIS_AUTHORING],
-      required: requireLUIS,
-    });
-
-    resourceList.push({
-      ...AzureResourceDefinitions[AzureResourceTypes.LUIS_PREDICTION],
-      required: requireLUIS,
-    });
-
-    resourceList.push({
-      ...AzureResourceDefinitions[AzureResourceTypes.QNA],
-      required: requireQNA,
-    });
-    return resourceList;
+    return result.data as ResourcesItem[];
   } catch (error) {
     logger({
       status: AzureAPIStatus.ERROR,
