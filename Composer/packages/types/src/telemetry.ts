@@ -305,4 +305,4 @@ export const persistedEvents: TelemetryEventName[] = ['SessionStarted', 'Handoff
 export const alwaysTrackEvents: TelemetryEventName[] = ['TelemetryOptInOut'];
 
 /** Names of the properties containing PII Data */
-export const piiProperties = ['userId', 'rootProjectId', 'projectId'];
+export const piiProperties = ['userId'];
