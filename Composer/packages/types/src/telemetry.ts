@@ -299,7 +299,8 @@ export const persistedEvents: TelemetryEventName[] = ['SessionStarted', 'Handoff
 /**
  * These events are ones which are always tracked regardless of whether tracking is opted
  * into or not (i.e. those having to do with turning telemetry itself on or off). If
- * the user opts out, we will strip all PII from the event before sending it.
+ * the user opts out, we will strip all PII from the event before sending it. Every event
+ * whose name is in this array should have "enabled: boolean" in its fields.
  */
 export const alwaysTrackEvents: TelemetryEventName[] = ['TelemetryOptInOut'];
 
