@@ -1,6 +1,5 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-
 import { atom, atomFamily } from 'recoil';
 import { FormDialogSchemaTemplate, FeatureFlagMap, BotTemplate, UserSettings, ExtensionSettings } from '@bfc/shared';
 import { ExtensionMetadata } from '@bfc/extension-client';
@@ -24,14 +23,6 @@ import { DebugDrawerKeys } from '../../pages/design/DebugPanel/TabExtensions/typ
 export type BotProject = {
   readonly id: string;
   readonly endpoints: string[];
-};
-
-export type CurrentUser = {
-  token: string | null; // aad token
-  email?: string;
-  name?: string;
-  expiration?: number;
-  sessionExpired: boolean;
 };
 
 // These values should align with the paths in the app's router
@@ -97,16 +88,6 @@ export const storageFileLoadingStatusState = atom<string>({
 export const applicationErrorState = atom<StateError | undefined>({
   key: getFullyQualifiedKey('error'),
   default: {} as StateError,
-});
-
-export const currentUserState = atom<CurrentUser>({
-  key: getFullyQualifiedKey('currentUser'),
-  default: {} as CurrentUser,
-});
-
-export const grahpTokenState = atom<CurrentUser>({
-  key: getFullyQualifiedKey('grahpToken'),
-  default: {} as CurrentUser,
 });
 
 export const visualEditorSelectionState = atom<string[]>({

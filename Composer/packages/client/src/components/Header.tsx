@@ -33,6 +33,7 @@ import { AppUpdaterStatus } from '../constants';
 import TelemetryClient from '../telemetry/TelemetryClient';
 import { useBotControllerBar } from '../hooks/useControllerBar';
 
+import { AuthCard } from './Auth/AuthCard';
 import { languageListTemplates, languageFullName } from './MultiLanguage';
 import { NotificationButton } from './Notifications/NotificationButton';
 import { BotController } from './BotRuntimeController/BotController';
@@ -347,6 +348,7 @@ export const Header = () => {
             />
           </TooltipHost>
         )}
+        <AuthCard />
       </div>
       {teachingBubbleVisibility && (
         <Callout

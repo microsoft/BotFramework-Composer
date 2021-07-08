@@ -2241,7 +2241,7 @@
     "@types/webpack-sources" "*"
     source-map "^0.6.0"
 
-"@types/xmldom@^0.1.29":
+"@types/xmldom@^0.1.29", "@types/xmldom@^0.1.30":
   version "0.1.30"
   resolved "https://registry.yarnpkg.com/@types/xmldom/-/xmldom-0.1.30.tgz#d36d9a7d64af4693d3b18d5dc02ce432a95be12e"
   integrity sha512-edqgAFXMEtVvaBZ3YnhamvmrHjoYpuxETmnb0lbTZmf/dXpAsO9ZKotUO4K2rn2SIZBDFCMOuA7fOe0H6dRZcA==

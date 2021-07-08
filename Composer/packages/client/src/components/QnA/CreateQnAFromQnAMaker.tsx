@@ -7,7 +7,6 @@ import React, { Fragment, useEffect } from 'react';
 import formatMessage from 'format-message';
 import { Stack } from 'office-ui-fabric-react/lib/Stack';
 import { Text } from 'office-ui-fabric-react/lib/Text';
-import { Link } from 'office-ui-fabric-react/lib/Link';
 
 import { FieldConfig, useForm } from '../../hooks/useForm';
 
@@ -37,18 +36,15 @@ export const CreateQnAFromQnAMaker: React.FC<CreateQnAFromFormProps> = (props) =
     <Fragment>
       <Stack>
         <Text styles={knowledgeBaseStyle}>
-          {formatMessage('Import content from an existing KB on the QnA maker portal')}
+          {formatMessage('Import content from an existing knowledge base on the QnA maker portal')}
         </Text>
         <p>
           <span css={subText}>
             {formatMessage(
-              'Import content from an existing KB on the QnA maker portal. Your KB will downloaded locally and source KB will remain as-is.'
+              'Import content from an existing knowledge base on the QnA maker portal. Your knowledge base will downloaded locally and source knowledge base will remain as-is.'
             )}
           </span>
         </p>
-      </Stack>
-      <Stack>
-        <Link>{formatMessage('Login to Azure to continue')}</Link>
       </Stack>
     </Fragment>
   );
