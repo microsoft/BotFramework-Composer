@@ -399,23 +399,28 @@ export const getResourceList = async (projectId: string, type: string): Promise<
 
     const requireLUIS = requiredRecognizers.some((p) => p.requiresLUIS);
     const requireQNA = requiredRecognizers.some((p) => p.requiresQNA);
-
     const result = await axios.get(`/api/provision/${projectId}/${type}/resources`);
     const resourceList = result.data as ResourcesItem[];
-    resourceList.push({
-      ...AzureResourceDefinitions[AzureResourceTypes.LUIS_AUTHORING],
-      required: requireLUIS,
+
+    // set luis and qna required values based on requiredRecognizers state shared from client workspace
+    const luisAuthoringIndex = resourceList.findIndex((resource) => {
+      return resource.key === AzureResourceTypes.LUIS_AUTHORING;
+    });
+    const luisPredictionIndex = resourceList.findIndex((resource) => {
+      return resource.key === AzureResourceTypes.LUIS_PREDICTION;
+    });
+    const qnaIndex = resourceList.findIndex((resource) => {
+      return resource.key === AzureResourceTypes.QNA;
     });
 
-    resourceList.push({
-      ...AzureResourceDefinitions[AzureResourceTypes.LUIS_PREDICTION],
-      required: requireLUIS,
-    });
+    if (luisAuthoringIndex !== -1) {
+      resourceList[luisAuthoringIndex].required = requireLUIS;
+      resourceList[luisPredictionIndex].required = requireLUIS;
+    }
+    if (qnaIndex !== -1) {
+      resourceList[qnaIndex].required = requireQNA;
+    }
 
-    resourceList.push({
-      ...AzureResourceDefinitions[AzureResourceTypes.QNA],
-      required: requireQNA,
-    });
     return resourceList;
   } catch (error) {
     logger({
