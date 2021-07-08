@@ -21,7 +21,7 @@ import {
 import { azureFunctionDefinition, getAzureFunctionsProvisionService } from './azureResources/azureFunction';
 import { blobStorageDefinition, getBlogStorageProvisionService } from './azureResources/blobStorage';
 import { botRegistrationDefinition, getBotChannelProvisionService } from './azureResources/botChannel';
-import { cosmosDbDefinition, getCosmosDbProvisionService } from './azureResources/cosmosDb';
+import { CosmosDbConfig, cosmosDbDefinition, getCosmosDbProvisionService } from './azureResources/cosmosDb';
 import { getLuisAuthoringProvisionService, luisAuthoringDefinition } from './azureResources/luisAuthoring';
 import { getLuisPredictionProvisionService, luisPredictionDefinition } from './azureResources/luisPrediction';
 import { getQnAProvisionService, qnaDefinition } from './azureResources/qna';
@@ -74,6 +74,8 @@ export const getResourceDependencies = (key: string) => {
       return servicePlanDefinition.dependencies;
     case AzureResourceTypes.APPINSIGHTS:
       return appInsightsDefinition.dependencies;
+    case AzureResourceTypes.COSMOSDB:
+      return cosmosDbDefinition.dependencies;
     default:
       return [];
   }
@@ -110,6 +112,16 @@ export const provisionConfigToResourceConfigMap = {
       resourceGroupName: config.resourceGroup,
       location: config.location,
       name: config.hostname,
+    };
+  },
+  cosmosDB: (config: ProvisioningConfig): CosmosDbConfig => {
+    return {
+      key: 'cosmosDb',
+      containerName: `botstate-container`,
+      databaseName: `botstate-db`,
+      displayName: config.hostname.replace(/_/g, '').substr(0, 31).toLowerCase(),
+      location: config.location,
+      resourceGroupName: config.resourceGroup,
     };
   },
 };
