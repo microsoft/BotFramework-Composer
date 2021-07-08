@@ -15,6 +15,7 @@ import { CognitiveServicesManagementClient } from '@azure/arm-cognitiveservices'
 import { TokenCredentials } from '@azure/ms-rest-js';
 import debug from 'debug';
 import sortBy from 'lodash/sortBy';
+import { usePublishApi } from '@bfc/extension-client';
 
 import { AzureResourceTypes } from '../types';
 import {
@@ -391,13 +392,14 @@ export const CheckCognitiveResourceSku = async (
  * @param projectId
  * @param type
  */
-export const getResourceList = async (
-  projectId: string,
-  type: string,
-  requireQNA: boolean,
-  requireLUIS: boolean
-): Promise<ResourcesItem[]> => {
+export const getResourceList = async (projectId: string, type: string): Promise<ResourcesItem[]> => {
   try {
+    const { getRequiredRecognizers } = usePublishApi();
+    const requiredRecognizers = getRequiredRecognizers();
+
+    const requireLUIS = requiredRecognizers.some((p) => p.requiresLUIS);
+    const requireQNA = requiredRecognizers.some((p) => p.requiresQNA);
+
     const result = await axios.get(`/api/provision/${projectId}/${type}/resources`);
     const resourceList = result.data as ResourcesItem[];
     resourceList.push({

@@ -320,14 +320,11 @@ export const AzureProvisionDialog: React.FC = () => {
     userShouldProvideTokens,
     getTenantIdFromCache,
     setTenantId,
-    getRequiredRecognizers,
   } = usePublishApi();
 
   const { projectCollection } = useProjectApi();
 
   const currentProjectId = getCurrentProjectId();
-
-  const requiredRecognizers = getRequiredRecognizers();
 
   const telemetryClient = useTelemetryClient();
 
@@ -603,9 +600,7 @@ export const AzureProvisionDialog: React.FC = () => {
 
   const getResources = async () => {
     try {
-      const requireLUIS = requiredRecognizers.some((p) => p.requiresLUIS);
-      const requireQNA = requiredRecognizers.some((p) => p.requiresQNA);
-      const resources = await getResourceList(currentProjectId, publishType, requireQNA, requireLUIS);
+      const resources = await getResourceList(currentProjectId, publishType);
       setExtensionResourceOptions(resources);
     } catch (err) {
       // todo: how do we handle API errors in this component
