@@ -59,9 +59,8 @@ describe('Replace QnA from portal Modal', () => {
     const next = getByText('Next');
     fireEvent.click(next);
 
-    expect(getByText('Provide access tokens')).toBeInTheDocument();
     expect(
-      getByText('Select the Azure directory and resource you want to choose a knowledge base from')
+      getByText('Select the subscription and resource you want to choose a knowledge base from')
     ).toBeInTheDocument();
   });
 });
