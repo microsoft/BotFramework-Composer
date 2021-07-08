@@ -15,6 +15,8 @@ import { IFileStorage } from './interface';
 const execAsync = promisify(exec);
 const removeDirAndFiles = promisify(rimraf);
 
+const execTimeout = 5 * 60 * 1000; // timeout after 5 minutes
+
 /**
  * Used to set values for Azure Functions runtime environment variables
  * This is used to set the "sensitive values" when using Azure Functions
@@ -325,7 +327,7 @@ export default async (composer: any): Promise<void> => {
       // install dev dependencies in production, make sure typescript is installed
       const { stderr: installErr } = await execAsync('npm install && npm install --only=dev', {
         cwd: runtimePath,
-        timeout: 300000,
+        timeout: execTimeout,
       });
       if (installErr) {
         // in order to not throw warning, we just log all warning and error message
@@ -398,7 +400,7 @@ export default async (composer: any): Promise<void> => {
       // install dev dependencies in production, make sure typescript is installed
       const { stderr: installErr } = await execAsync('npm install && npm install --only=dev', {
         cwd: runtimePath,
-        timeout: 300000,
+        timeout: execTimeout,
       });
       if (installErr) {
         // in order to not throw warning, we just log all warning and error message
