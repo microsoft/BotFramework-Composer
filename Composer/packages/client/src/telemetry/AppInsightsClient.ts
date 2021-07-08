@@ -29,14 +29,16 @@ export default class AppInsightsClient {
     }
   }
 
-  public static trackEvent(name: string, properties: LogData) {
-    if (alwaysTrackEvents.includes(name as TelemetryEventName) || this._telemetrySettings?.allowDataCollection) {
+  public static trackEvent(name: TelemetryEventName, properties: LogData) {
+    if (alwaysTrackEvents.includes(name)) {
+      this.postEvents([{ type: TelemetryEventTypes.TrackEvent, name, properties }]);
+    } else if (this._telemetrySettings?.allowDataCollection) {
       this.startInterval();
       this._eventPool.push({ type: TelemetryEventTypes.TrackEvent, name, properties });
       if (this._eventPool.length >= BATCH_SIZE) {
         this.drain();
       }
-    } else if (persistedEvents.includes(name as TelemetryEventName)) {
+    } else if (persistedEvents.includes(name)) {
       /**
        * persistedEvents is an array of telemetry events that occur before the user has
        * had a chance to opt in to data collection. These events are added to the event queue;

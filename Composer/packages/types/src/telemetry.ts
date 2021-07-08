@@ -227,7 +227,9 @@ type PropertyEditorEvents = {
   RecognizerChanged: { recognizer: string };
 };
 
-type OtherEvents = {};
+type OtherEvents = {
+  TestEvent: undefined;
+};
 
 type PageView = {
   [PageNames.Design]: undefined;
