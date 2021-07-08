@@ -11,10 +11,12 @@ import { valueTypeDefinitions } from '../schema';
 
 export const ValueRefField: React.FC<FieldProps> = ({ description, id, label, value, required, onChange }) => {
   const options = useMemo<IDropdownOption[]>(() => {
-    return Object.entries(valueTypeDefinitions || {}).map(([key, value]) => ({
-      key: `#/definitions/${key}`,
-      text: value?.title || startCase(key),
-    }));
+    return Object.entries(valueTypeDefinitions || {})
+      .map(([key, value]) => ({
+        key: `#/definitions/${key}`,
+        text: value?.title || startCase(key),
+      }))
+      .filter((o) => !o.key.includes('equalsExpression')); // a value must be a type, not just an expression
   }, []);
 
   const handleChange = (_: React.FormEvent<HTMLDivElement>, option?: IDropdownOption) => {
