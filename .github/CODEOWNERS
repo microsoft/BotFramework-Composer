@@ -4,14 +4,14 @@
 
 /runtime/ @boydc2014 @luhan2017 @carlosscastro @benbrown
 
-/Composer/ @cwhitten @boydc2014 @a-b-r-o-w-n @beyackle @srinaath @tonyanziano @geoffcoxmsft @hatpick @benbrown @pavolum @tdurnford
+/Composer/ @cwhitten @boydc2014 @a-b-r-o-w-n @beyackle @srinaath @tonyanziano @geoffcoxmsft @hatpick @benbrown @pavolum @tdurnford @natalgar @vamsimodem
 
 /Composer/packages/adaptive-flow @yeze322 @cwhitten @boydc2014 @a-b-r-o-w-n
 
 /docs/ @cwhitten @boydc2014 @benbrown @geoffcoxmsft
 
-/extensions/azurePublish @benbrown @geoffcoxmsft @hatpick @tonyanziano
+/extensions/azurePublish @benbrown @geoffcoxmsft @hatpick @tonyanziano @natalgar @vamsimodem
 
 /extensions/pvaPublish @benbrown @geoffcoxmsft @hatpick @tonyanziano
 
-/extensions/azurePublishNew @geoffcoxmsft @hatpick
+/extensions/azurePublishNew @geoffcoxmsft @hatpick @natalgar @vamsimodem

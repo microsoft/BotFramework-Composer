@@ -11,6 +11,14 @@ export const getQnaPendingNotification = (url: string): CardProps => {
   };
 };
 
+export const getQnaImportPendingNotification = (name: string): CardProps => {
+  return {
+    title: formatMessage('Importing knowledge base'),
+    description: formatMessage('Importing {name} from QnA maker portal', { name }),
+    type: 'pending',
+  };
+};
+
 export const getQnaSuccessNotification = (callback: () => void): CardProps => {
   return {
     title: formatMessage('Your knowledge base is ready!'),

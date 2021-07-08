@@ -99,6 +99,7 @@ router.use('/assets/locales/', express.static(path.join(__dirname, '..', '..', '
 
 //help api
 router.get('/utilities/qna/parse', UtilitiesController.getQnaContent);
+router.post('/utilities/qna/import', UtilitiesController.importQnAContent);
 router.get('/utilities/retrieveRemoteFile', UtilitiesController.getRemoteFile);
 router.get('/utilities/checkNode', UtilitiesController.checkNodeVersion);
 
@@ -119,6 +120,7 @@ router.post('/extensions/proxy/:url', ExtensionsController.performExtensionFetch
 router.get('/auth/getAccessToken', csrfProtection, AuthController.getAccessToken);
 router.get('/auth/logOut', AuthController.logOut);
 router.get('/auth/getTenants', csrfProtection, AuthController.getTenants);
+router.get('/auth/getAccount', csrfProtection, AuthController.getAccount);
 router.get('/auth/getARMTokenForTenant', csrfProtection, AuthController.getARMTokenForTenant);
 
 // FeatureFlags
@@ -144,6 +146,7 @@ router.post('/telemetry/events', TelemetryController.track);
 // Orchestrator Specific API
 router.post('/orchestrator/download', OrchestratorController.downloadLanguageModel);
 router.get('/orchestrator/status', OrchestratorController.status);
+router.get('/orchestrator/getModelList', OrchestratorController.getModelList);
 
 const errorHandler = (handler: RequestHandler) => (req: Request, res: Response, next: NextFunction) => {
   Promise.resolve(handler(req, res, next)).catch(next);

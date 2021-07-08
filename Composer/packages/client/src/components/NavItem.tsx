@@ -37,9 +37,8 @@ const link = (active: boolean, disabled: boolean) => css`
      background-color: transparent;
     `}
 
-  ${disabled
-    ? `pointer-events: none;`
-    : `&:hover {
+  ${!disabled
+    ? `&:hover {
       background-color: ${NeutralColors.gray50};
     }
 
@@ -53,8 +52,8 @@ const link = (active: boolean, disabled: boolean) => css`
         border-image: initial;
         outline: rgb(102, 102, 102) solid 1px;
       }
-    }
-  `}
+    }`
+    : ''}
 `;
 
 const icon = (active: boolean, disabled: boolean) =>

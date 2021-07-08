@@ -370,6 +370,10 @@ export class OneAuthInstance extends OneAuthBase {
       return path.resolve(__dirname, '../../oneauth-temp');
     }
   }
+
+  public getAccount() {
+    return this.signedInARMAccount;
+  }
 }
 
 // only use the shim in Linux, or dev environment without flag enabled
