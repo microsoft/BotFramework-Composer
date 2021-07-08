@@ -16,7 +16,7 @@ import { PluginAPI } from '../../../plugins/api';
 import { PluginHost } from '../../../components/PluginHost/PluginHost';
 import { defaultPublishSurface, pvaPublishSurface, azurePublishSurface } from '../../publish/styles';
 import TelemetryClient from '../../../telemetry/TelemetryClient';
-import { dispatcherState } from '../../../recoilModel';
+import { allRequiredRecognizersSelector, dispatcherState } from '../../../recoilModel';
 
 import { ProfileFormDialog } from './ProfileFormDialog';
 
@@ -65,6 +65,7 @@ export const PublishProfileDialog: React.FC<PublishProfileDialogProps> = (props)
   const [selectedType, setSelectType] = useState<PublishType | undefined>();
 
   const [dialogTitle, setTitle] = useState(formatDialogTitle(current));
+  const requiresRecognizers = useRecoilValue(allRequiredRecognizersSelector);
 
   useEffect(() => {
     const ty = types.find((t) => t.name === current?.item.type);
@@ -101,6 +102,12 @@ export const PublishProfileDialog: React.FC<PublishProfileDialogProps> = (props)
     };
     PluginAPI.publish.getTenantIdFromCache = () => {
       return getTenantIdFromCache();
+    };
+    PluginAPI.publish.setTenantId = (value) => {
+      setTenantId(value);
+    };
+    PluginAPI.publish.getRequiredRecognizers = () => {
+      return requiresRecognizers;
     };
   }, []);
 

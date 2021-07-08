@@ -62,6 +62,13 @@ export function usePublishApi() {
     return window[ComposerGlobalName].requireUserLogin(tenantId, options);
   }
 
+  function getRequiredRecognizers(): {
+    projectId: string;
+    requiresLUIS: boolean;
+    requiresQNA: boolean;
+  }[] {
+    return window[ComposerGlobalName].getRequiredRecognizers();
+  }
   /** @deprecated use `userShouldProvideTokens` instead */
   function isGetTokenFromUser(): boolean {
     return window[ComposerGlobalName].userShouldProvideTokens();
@@ -83,5 +90,6 @@ export function usePublishApi() {
     getTenantIdFromCache,
     setTenantId,
     requireUserLogin,
+    getRequiredRecognizers,
   };
 }
