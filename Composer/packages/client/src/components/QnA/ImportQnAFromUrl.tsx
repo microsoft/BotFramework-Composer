@@ -38,12 +38,12 @@ const formConfig: FieldConfig<ImportQnAFromUrlFormData> = {
   },
 };
 
-const title = <div style={titleStyle}>{formatMessage('Replace KB from URL')}</div>;
+const title = <div style={titleStyle}>{formatMessage('Replace knowledge base from URL')}</div>;
 
 const description = (
   <div style={descriptionStyle}>
     {formatMessage(
-      'Select this option when you want to replace current KB from content such as an FAQ available online or in a file .csv, .xls or .doc format '
+      'Select this option when you want to replace current knowledge base from content such as an FAQ available online or in a file .csv, .xls or .doc format '
     )}
   </div>
 );
