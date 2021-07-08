@@ -60,6 +60,7 @@ import { CreateQnAFromUrl } from './CreateQnAFromUrl';
 import { CreateQnAFromScratch } from './CreateQnAFromScratch';
 import { CreateQnAFromQnAMaker } from './CreateQnAFromQnAMaker';
 import { localeToLanguage } from './utilities';
+import { PersonalCard } from './PersonalCard';
 
 type KeyRec = {
   name: string;
@@ -372,6 +373,9 @@ export const CreateQnAModal: React.FC<CreateQnAModalProps> = (props) => {
           </div>
         </div>
         <DialogFooter>
+          <div style={{ float: 'left', paddingRight: '20px' }}>
+            <PersonalCard />
+          </div>
           <DefaultButton
             disabled={!!loading}
             style={{ float: 'left' }}
