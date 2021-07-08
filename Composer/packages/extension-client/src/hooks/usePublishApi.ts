@@ -58,6 +58,13 @@ export function usePublishApi() {
   function userShouldProvideTokens(): boolean {
     return window[ComposerGlobalName].userShouldProvideTokens();
   }
+  function getRequiredRecognizers(): {
+    projectId: string;
+    requiresLUIS: boolean;
+    requiresQNA: boolean;
+  }[] {
+    return window[ComposerGlobalName].getRequiredRecognizers();
+  }
   /** @deprecated use `userShouldProvideTokens` instead */
   function isGetTokenFromUser(): boolean {
     return window[ComposerGlobalName].userShouldProvideTokens();
@@ -78,5 +85,6 @@ export function usePublishApi() {
     userShouldProvideTokens,
     getTenantIdFromCache,
     setTenantId,
+    getRequiredRecognizers,
   };
 }
