@@ -13,8 +13,8 @@ export const BrowserModal = (props) => {
     inputFileRef?.current?.click();
   };
 
-  const onChange = async () => {
-    const zipFile = inputFileRef?.current?.files?.item(0);
+  const onChange = async (event) => {
+    const zipFile = event.target.files?.item(0);
     if (zipFile) {
       // create zip instance
       const jszip = new JSZip();
@@ -26,6 +26,7 @@ export const BrowserModal = (props) => {
         .catch((error) => {
           props.onError({ manifestUrl: error.toString() });
         });
+      event.target.value = '';
     }
   };
 
