@@ -37,3 +37,7 @@ export const getRemoteFile = async (url): Promise<string> => {
   }
   return '';
 };
+
+export const convertFolderName = (path, folder) => {
+  return path.replace(/(\w+)\//, `${folder}/`);
+};

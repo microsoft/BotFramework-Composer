@@ -26,7 +26,7 @@ import { FeedbackType, generate } from '@microsoft/bf-generate-library';
 import { Path } from '../../utility/path';
 import { copyDir } from '../../utility/storage';
 import StorageService from '../../services/storage';
-import { getDialogNameFromFile } from '../utilities/util';
+import { convertFolderName, getDialogNameFromFile } from '../utilities/util';
 import { ISettingManager, OBFUSCATED_VALUE } from '../settings';
 import { DefaultSettingManager } from '../settings/defaultSettingManager';
 import log from '../../logger';
@@ -545,7 +545,7 @@ export class BotProject implements IBotProject {
     if (Object.keys(zipContent).length === 0) {
       return await this.createSkillFilesFromUrl(url, skillName);
     } else {
-      return await this.createSkillFilesFromZip(zipContent);
+      return await this.createSkillFilesFromZip(zipContent, skillName);
     }
   };
 
@@ -747,7 +747,7 @@ export class BotProject implements IBotProject {
     return await this.createManifestJsonFile(manifestName, manifestContent, skillName);
   }
 
-  private async createSkillFilesFromZip(zipContent) {
+  private async createSkillFilesFromZip(zipContent, skillName) {
     const manifestKey = Object.keys(zipContent).find((key) => isManifestJson(zipContent[key]));
     if (!manifestKey) {
       throw new Error('Can not find manifest json');
@@ -755,9 +755,9 @@ export class BotProject implements IBotProject {
 
     const keys = Object.keys(zipContent).filter((key) => zipContent[key] !== '' && !isManifestJson(zipContent[key]));
     for (let i = 0; i < keys.length; i++) {
-      await this._createFile(`skills/${keys[i]}`, zipContent[keys[i]]);
+      await this._createFile(`skills/${convertFolderName(keys[i], skillName)}`, zipContent[keys[i]]);
     }
-    return await this._createFile(`skills/${manifestKey}`, zipContent[manifestKey]);
+    return await this._createFile(`skills/${convertFolderName(manifestKey, skillName)}`, zipContent[manifestKey]);
   }
 
   private async createManifestJsonFile(name, content, skillName) {

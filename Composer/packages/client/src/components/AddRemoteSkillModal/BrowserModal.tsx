@@ -36,7 +36,14 @@ export const BrowserModal = (props) => {
         text={formatMessage('Browse')}
         onClick={onClickOpen}
       />
-      <input ref={inputFileRef} accept=".zip,.rar,.7zip" style={{ display: 'none' }} type="file" onChange={onChange} />
+      <input
+        ref={inputFileRef}
+        accept=".zip,.rar,.7zip"
+        max-file-size="1048576"
+        style={{ display: 'none' }}
+        type="file"
+        onChange={onChange}
+      />
     </>
   );
 };
