@@ -305,7 +305,7 @@ export const CreateSkillModal: React.FC<CreateSkillModalProps> = (props) => {
     });
 
     const result = await validateLocalZip(files);
-    result.error.manifestUrl && setFormDataErrors(result.error);
+    setFormDataErrors(result.error);
     result.path && setManifestDirPath(result.path);
     result.zipContent && setZipContent(result.zipContent);
     if (result.manifestContent) {
