@@ -29,16 +29,11 @@ import { CognitiveServicesCredentials } from '@azure/ms-rest-azure-js';
 import { QnAMakerClient } from '@azure/cognitiveservices-qnamaker';
 import sortBy from 'lodash/sortBy';
 import { NeutralColors } from '@uifabric/fluent-theme';
-import { AzureTenant } from '@botframework-composer/types';
-import jwtDecode from 'jwt-decode';
 import { IRenderFunction } from '@uifabric/utilities';
 
 import TelemetryClient from '../../telemetry/TelemetryClient';
-import { AuthClient } from '../../utils/authClient';
-import { AuthDialog } from '../Auth/AuthDialog';
-import { getTokenFromCache, isShowAuthDialog, userShouldProvideTokens } from '../../utils/auth';
-import { dispatcherState } from '../../recoilModel';
 import { getKBName, getFileLocale } from '../../utils/qnaUtil';
+import { dispatcherState, currentUserState, isAuthenticatedState, showAuthDialogState } from '../../recoilModel';
 
 import { localeToLanguage } from './utilities';
 import { ReplaceQnAModalFormData, ReplaceQnAModalProps } from './constants';
@@ -83,16 +78,12 @@ export const ReplaceQnAFromModal: React.FC<ReplaceQnAModalProps> = (props) => {
   const actions = useRecoilValue(dispatcherState);
   const [formData, setFormData] = useState<ReplaceQnAModalFormData>();
   const [disabled, setDisabled] = useState(true);
+  const { setApplicationLevelError, requireUserLogin } = useRecoilValue(dispatcherState);
+  const currentUser = useRecoilValue(currentUserState);
+  const isAuthenticated = useRecoilValue(isAuthenticatedState);
+  const showAuthDialog = useRecoilValue(showAuthDialogState);
 
-  const [showAuthDialog, setShowAuthDialog] = useState(false);
-  const [token, setToken] = useState<string | undefined>();
-
-  const { setApplicationLevelError } = useRecoilValue(dispatcherState);
   const [subscriptionId, setSubscription] = useState<string>('');
-  const [tenantId, setTenantId] = useState<string>('');
-  const [allTenants, setAllTenants] = useState<AzureTenant[]>([]);
-  const [signedInAccount, setSignedInAccount] = useState('');
-  const [tenantsErrorMessage, setTenantsErrorMessage] = useState<string | undefined>(undefined);
   const [loading, setLoading] = useState<string | undefined>(undefined);
   const [noKeys, setNoKeys] = useState<boolean>(false);
   const [nextAction, setNextAction] = useState<string>('url');
@@ -106,7 +97,6 @@ export const ReplaceQnAFromModal: React.FC<ReplaceQnAModalProps> = (props) => {
   const [selectedKb, setSelectedKb] = useState<KBRec>();
   const [dialogTitle, setDialogTitle] = useState<string>('');
 
-  const [userProvidedTokens, setUserProvidedTokens] = useState<boolean>(false);
   const [currentStep, setCurrentStep] = useState<Step>('intro');
 
   const currentLocale = getFileLocale(containerId);
@@ -133,14 +123,6 @@ export const ReplaceQnAFromModal: React.FC<ReplaceQnAModalProps> = (props) => {
       return [];
     }
   };
-  const decodeToken = (token: string) => {
-    try {
-      return jwtDecode<any>(token);
-    } catch (err) {
-      console.error('decode token error in ', err);
-      return null;
-    }
-  };
 
   const selectedKB = useMemo(() => {
     return new Selection({
@@ -155,54 +137,10 @@ export const ReplaceQnAFromModal: React.FC<ReplaceQnAModalProps> = (props) => {
   }, []);
 
   useEffect(() => {
-    if (currentStep === 'resource' && !userShouldProvideTokens()) {
-      AuthClient.getTenants()
-        .then((tenants) => {
-          setAllTenants(tenants);
-          if (tenants.length === 0) {
-            setTenantsErrorMessage(formatMessage('No Azure Directories were found.'));
-          } else if (tenants.length >= 1) {
-            setTenantId(tenants[0].tenantId);
-          } else {
-            setTenantsErrorMessage(undefined);
-          }
-        })
-        .catch((err) => {
-          setTenantsErrorMessage(
-            formatMessage('There was a problem loading Azure directories. {errMessage}', {
-              errMessage: err.message || err.toString(),
-            })
-          );
-        });
-    }
-  }, [currentStep]);
-
-  useEffect(() => {
-    if (tenantId) {
-      AuthClient.getARMTokenForTenant(tenantId)
-        .then((token) => {
-          setToken(token);
-          setTenantsErrorMessage(undefined);
-        })
-        .catch((err) => {
-          setTenantsErrorMessage(
-            formatMessage(
-              'There was a problem getting the access token for the current Azure directory. {errMessage}',
-              {
-                errMessage: err.message || err.toString(),
-              }
-            )
-          );
-          setTenantsErrorMessage(err.message || err.toString());
-        });
-    }
-  }, [tenantId]);
-
-  useEffect(() => {
-    if (token) {
+    if (isAuthenticated) {
       setAvailableSubscriptions([]);
       setSubscriptionsErrorMessage(undefined);
-      getSubscriptions(token)
+      getSubscriptions(currentUser.token)
         .then((data) => {
           setAvailableSubscriptions(data);
           if (data.length === 0) {
@@ -217,33 +155,7 @@ export const ReplaceQnAFromModal: React.FC<ReplaceQnAModalProps> = (props) => {
           setSubscriptionsErrorMessage(err.message);
         });
     }
-  }, [token]);
-
-  const hasAuth = async () => {
-    let newtoken = '';
-    if (userShouldProvideTokens()) {
-      if (isShowAuthDialog(false)) {
-        setShowAuthDialog(true);
-      }
-      newtoken = getTokenFromCache('accessToken');
-      if (newtoken) {
-        const decoded = decodeToken(newtoken);
-        if (decoded) {
-          setToken(newtoken);
-          setUserProvidedTokens(true);
-        } else {
-          setTenantsErrorMessage(
-            formatMessage(
-              'There was a problem with the authentication access token. Close this dialog and try again. To be prompted to provide the access token again, clear it from application local storage.'
-            )
-          );
-        }
-      }
-    } else {
-      setUserProvidedTokens(false);
-    }
-    setCurrentStep('resource');
-  };
+  }, [currentUser, isAuthenticated]);
 
   useEffect(() => {
     // reset the ui
@@ -280,10 +192,10 @@ export const ReplaceQnAFromModal: React.FC<ReplaceQnAModalProps> = (props) => {
   };
 
   const fetchAccounts = async (subscriptionId) => {
-    if (token) {
+    if (isAuthenticated) {
       setLoading(formatMessage('Loading keys...'));
       setNoKeys(false);
-      const tokenCredentials = new TokenCredentials(token);
+      const tokenCredentials = new TokenCredentials(currentUser.token);
       const cognitiveServicesManagementClient = new CognitiveServicesManagementClient(tokenCredentials, subscriptionId);
       const accounts = await cognitiveServicesManagementClient.accounts.list();
       const keylist: KeyRec[] = await fetchKeys(
@@ -313,7 +225,7 @@ export const ReplaceQnAFromModal: React.FC<ReplaceQnAModalProps> = (props) => {
 
   const fetchKBGroups = async (key: KeyRec) => {
     let kblist: KBRec[] = [];
-    if (token && key) {
+    if (isAuthenticated && key) {
       const cognitiveServicesCredentials = new CognitiveServicesCredentials(key.key);
       const resourceClient = new QnAMakerClient(cognitiveServicesCredentials, key.endpoint);
       const result = await resourceClient.knowledgebase.listAll();
@@ -366,17 +278,12 @@ export const ReplaceQnAFromModal: React.FC<ReplaceQnAModalProps> = (props) => {
     if (nextAction !== 'portal') {
       onSubmitFormData();
     } else {
-      hasAuth();
+      requireUserLogin();
+      setCurrentStep('resource');
     }
   };
 
   const renderIntroStep = () => {
-    const shouldProvideTokens = userShouldProvideTokens();
-    if (!shouldProvideTokens) {
-      AuthClient.getAccount().then((account) => {
-        setSignedInAccount(account.loginName);
-      });
-    }
     return (
       <div>
         <div style={{ marginBottom: 14 }}>
@@ -395,20 +302,6 @@ export const ReplaceQnAFromModal: React.FC<ReplaceQnAModalProps> = (props) => {
                 <div style={descriptionStyle}>
                   {formatMessage('Select this option when you want to import existing KB from QnA maker portal. ')}
                 </div>
-                {!shouldProvideTokens &&
-                  (signedInAccount ? (
-                    <div style={accountInfo}>
-                      <span>{`Signed in as ${signedInAccount}. Click `}</span>
-                      <span style={signInButton} onClick={performNextAction}>
-                        {'next '}
-                      </span>
-                      <span>{'to select KBs'}</span>
-                    </div>
-                  ) : (
-                    <div style={signInButton} onClick={performNextAction}>
-                      {formatMessage('Sign in to Azure to continue')}
-                    </div>
-                  ))}
               </div>
             )}
           </div>
@@ -436,21 +329,9 @@ export const ReplaceQnAFromModal: React.FC<ReplaceQnAModalProps> = (props) => {
       <div>
         <div css={dialogBodyStyles}>
           <div style={{ marginBottom: 14 }}>
-            {formatMessage('Select the Azure directory and resource you want to choose a knowledge base from')}
+            {formatMessage('Select the subscription and resource you want to choose a knowledge base from')}
           </div>
           <div css={mainElementStyle}>
-            <Dropdown
-              required
-              disabled={allTenants.length === 1 || !tenantId || tenantId.trim().length === 0}
-              errorMessage={tenantsErrorMessage}
-              label={formatMessage('Azure directory')}
-              options={allTenants.map((t) => ({ key: t.tenantId, text: t.displayName }))}
-              selectedKey={tenantId}
-              styles={resourceDropdown}
-              onChange={(_e, o) => {
-                setTenantId(o?.key as string);
-              }}
-            />
             <Dropdown
               required
               disabled={!(availableSubscriptions?.length > 0)}
@@ -616,7 +497,7 @@ export const ReplaceQnAFromModal: React.FC<ReplaceQnAModalProps> = (props) => {
           {loading && <Spinner label={loading} labelPosition="right" styles={{ root: { float: 'left' } }} />}
           <DefaultButton disabled={!!loading} text={formatMessage('Back')} onClick={() => setCurrentStep('resource')} />
           <PrimaryButton
-            disabled={!!loading || (!userProvidedTokens && !tenantId) || !subscriptionId}
+            disabled={!!loading || !isAuthenticated || !subscriptionId}
             text={formatMessage('Next')}
             onClick={onSubmitImportKB}
           />
@@ -679,7 +560,7 @@ export const ReplaceQnAFromModal: React.FC<ReplaceQnAModalProps> = (props) => {
   };
 
   const onSubmitImportKB = async () => {
-    if (key && token && selectedKb && formData) {
+    if (key && isAuthenticated && selectedKb && formData) {
       onSubmit({
         ...formData,
         endpoint: key.endpoint,
@@ -693,15 +574,6 @@ export const ReplaceQnAFromModal: React.FC<ReplaceQnAModalProps> = (props) => {
 
   return (
     <Fragment>
-      {showAuthDialog && (
-        <AuthDialog
-          needGraph={false}
-          next={hasAuth}
-          onDismiss={() => {
-            setShowAuthDialog(false);
-          }}
-        />
-      )}
       <Dialog
         dialogContentProps={{
           type: DialogType.normal,

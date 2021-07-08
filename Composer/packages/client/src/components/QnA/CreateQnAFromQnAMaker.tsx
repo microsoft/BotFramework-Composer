@@ -7,7 +7,6 @@ import React, { Fragment, useEffect } from 'react';
 import formatMessage from 'format-message';
 import { Stack } from 'office-ui-fabric-react/lib/Stack';
 import { Text } from 'office-ui-fabric-react/lib/Text';
-import { Link } from 'office-ui-fabric-react/lib/Link';
 
 import { FieldConfig, useForm } from '../../hooks/useForm';
 
@@ -46,9 +45,6 @@ export const CreateQnAFromQnAMaker: React.FC<CreateQnAFromFormProps> = (props) =
             )}
           </span>
         </p>
-      </Stack>
-      <Stack>
-        <Link>{formatMessage('Login to Azure to continue')}</Link>
       </Stack>
     </Fragment>
   );
