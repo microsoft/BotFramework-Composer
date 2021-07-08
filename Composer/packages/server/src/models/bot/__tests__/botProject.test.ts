@@ -6,7 +6,6 @@ import fs from 'fs-extra';
 import { DialogFactory, SDKKinds } from '@bfc/shared';
 import endsWith from 'lodash/endsWith';
 import { nanoid } from 'nanoid';
-import { zip } from 'lodash';
 
 import { Path } from '../../../utility/path';
 import { BotProject } from '../botProject';
