@@ -11,6 +11,7 @@ import { dispatcherState, userSettingsState } from './recoilModel';
 import { loadLocale } from './utils/fileUtil';
 import { useInitializeLogger } from './telemetry/useInitializeLogger';
 import { setupIcons } from './setupIcons';
+import { appCleanupManager } from './utils/appCleanupManager';
 
 setupIcons();
 
@@ -40,9 +41,7 @@ export const App: React.FC = () => {
     checkNodeVersion();
     fetchExtensions();
     fetchFeatureFlags();
-    ipcRenderer?.on('cleanup', (_event) => {
-      performAppCleanupOnQuit();
-    });
+    appCleanupManager.registerTask(performAppCleanupOnQuit);
 
     ipcRenderer?.on('machine-info', (_event, info) => {
       setMachineInfo(info);

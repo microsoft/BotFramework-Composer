@@ -6,12 +6,28 @@ import ReactDOM from 'react-dom';
 import { CacheProvider } from '@emotion/core';
 import createCache from '@emotion/cache';
 import { RecoilRoot } from 'recoil';
+import { IpcEvents } from '@bfc/shared';
 
 import './index.css';
 
 import { App } from './App';
 import { DispatcherWrapper } from './recoilModel';
+import { appCleanupManager } from './utils/appCleanupManager';
 
+// clean up tasks
+const { ipcRenderer } = window;
+const AppCleanupTimeLimit = 1000 * 30; // 30 seconds
+ipcRenderer?.on(IpcEvents.StartAppCleanup, async () => {
+  try {
+    // force shutdown if cleaning up takes too long
+    setTimeout(() => ipcRenderer?.send(IpcEvents.FinishedAppCleanup), AppCleanupTimeLimit);
+    await appCleanupManager.cleanUpTasks();
+  } catch (e) {
+    // ...
+  } finally {
+    ipcRenderer?.send(IpcEvents.FinishedAppCleanup);
+  }
+});
 const appHostElm = document.getElementById('root');
 
 const emotionCache = createCache({

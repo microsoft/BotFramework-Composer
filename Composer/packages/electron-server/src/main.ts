@@ -4,7 +4,7 @@
 import os from 'os';
 import { join, resolve } from 'path';
 
-import { AppUpdaterSettings, UserSettings } from '@bfc/shared';
+import { AppUpdaterSettings, IpcEvents, UserSettings } from '@bfc/shared';
 import { app, ipcMain } from 'electron';
 import { UpdateInfo } from 'electron-updater';
 import fixPath from 'fix-path';
@@ -211,6 +211,29 @@ async function main(show = false) {
     mainWindow.on('closed', () => {
       ElectronWindow.destroy();
     });
+
+    mainWindow.once('close', (ev) => {
+      // applications on Mac stay running even if they have no windows showing
+      if (!isMac()) {
+        // for Windows and Linux we want to start app clean-up here
+        // stop close
+        ev.preventDefault();
+
+        // listen for signal from client
+        ipcMain.once(IpcEvents.FinishedAppCleanup, () => {
+          try {
+            // close the window
+            mainWindow.close();
+          } catch (e) {
+            // don't worry about the error
+          } finally {
+            app.quit(); // might be unnecessary since it just tries to close all the open windows
+          }
+        });
+
+        mainWindow.webContents.send(IpcEvents.StartAppCleanup);
+      }
+    });
     log('Rendered application.');
   }
 }
@@ -316,10 +339,13 @@ async function run() {
     }
   });
 
+  app.on('will-quit', () => {
+    console.log('will quit');
+  });
+
   app.on('before-quit', () => {
     const mainWindow = ElectronWindow.getInstance().browserWindow;
     mainWindow?.webContents.send('session-update', 'session-ended');
-    mainWindow?.webContents.send('cleanup');
   });
 
   app.on('activate', () => {

@@ -510,3 +510,9 @@ export const LgTemplateSamples = {
     };
   },
 };
+
+// TODO: port other events from electron-server/main.ts into this object (app updates, user settings, etc.)
+export const IpcEvents = {
+  StartAppCleanup: 'app-cleanup-start',
+  FinishedAppCleanup: 'app-cleanup-finished',
+};

@@ -9,6 +9,7 @@ import camelCase from 'lodash/camelCase';
 import { currentProjectIdState, dispatcherState, featureFlagsState, userSettingsState } from '../recoilModel';
 import { getPageName } from '../utils/getPageName';
 import { useLocation } from '../utils/hooks';
+import { appCleanupManager } from '../utils/appCleanupManager';
 
 import TelemetryClient from './TelemetryClient';
 
@@ -59,6 +60,10 @@ export const useInitializeLogger = () => {
         default:
           break;
       }
+    });
+    appCleanupManager.registerTask(() => {
+      TelemetryClient.track('SessionEnded');
+      TelemetryClient.drain();
     });
   }, []);
 
