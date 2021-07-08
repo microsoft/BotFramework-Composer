@@ -4,7 +4,6 @@
 import { CallbackInterface, useRecoilCallback } from 'recoil';
 
 import {
-  tenantState,
   subscriptionState,
   resourceGroupState,
   deployLocationState,
@@ -12,15 +11,11 @@ import {
   hostNameState,
   enabledResourcesState,
   requiredResourcesState,
-  operatingSystemState,
+  appServiceOperatingSystemState,
 } from '../atoms/resourceConfigurationState';
 import { LuisRegion, ResourcesItem } from '../../types';
 
 export const resourceConfigurationDispatcher = () => {
-  const setTenantId = useRecoilCallback(({ set }: CallbackInterface) => (tenantId: string) => {
-    set(tenantState, tenantId);
-  });
-
   const setSubscriptionId = useRecoilCallback(({ set }: CallbackInterface) => (subscriptionId: string) => {
     set(subscriptionState, subscriptionId);
   });
@@ -52,11 +47,10 @@ export const resourceConfigurationDispatcher = () => {
   });
 
   const setAppServiceOperatingSystem = useRecoilCallback(({ set }: CallbackInterface) => (operatingSystem: string) => {
-    set(operatingSystemState, operatingSystem);
+    set(appServiceOperatingSystemState, operatingSystem);
   });
 
   return {
-    setTenantId,
     setSubscriptionId,
     setResourceGroup,
     setDeployLocation,

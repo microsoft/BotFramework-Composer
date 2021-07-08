@@ -38,11 +38,4 @@ describe('TelemetryClient', () => {
       })
     );
   });
-
-  it('does not call AppInsightsClient.logEvent when allowDataCollection is false', () => {
-    TelemetryClient.setup({ allowDataCollection: false }, { prop1: 'prop1' });
-    TelemetryClient.track('ToolbarButtonClicked', { name: 'test' });
-
-    expect(AppInsightsClient.trackEvent).not.toHaveBeenCalled();
-  });
 });

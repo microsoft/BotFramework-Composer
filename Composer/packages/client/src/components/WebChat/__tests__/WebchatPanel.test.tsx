@@ -44,7 +44,7 @@ describe('<WebchatPanel />', () => {
       botData: {
         projectId: '123-12',
         botUrl: 'http://localhost:3989/api/messages',
-        secrets: {
+        secret: {
           msAppId: '',
           msPassword: '',
         },

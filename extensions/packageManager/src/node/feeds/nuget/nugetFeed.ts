@@ -2,9 +2,9 @@
 // Licensed under the MIT License.
 
 import { IExtensionRegistration } from '@bfc/extension-client';
-import axios from 'axios';
 import * as semverSort from 'semver-sort';
 
+import axios from '../httpClient';
 import { IFeed, IPackageQuery, IPackageDefinition, IPackageSource } from '../feedInterfaces';
 
 import { INuGetSearchResult, INuGetServiceIndex } from './nugetInterfaces';

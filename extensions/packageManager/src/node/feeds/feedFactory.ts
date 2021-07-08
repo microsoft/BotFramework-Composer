@@ -4,8 +4,8 @@
 import * as fs from 'fs';
 
 import { IExtensionRegistration } from '@bfc/extension-client';
-import axios from 'axios';
 
+import axios from './httpClient';
 import { IFeed, IPackageSource, PackageSourceType } from './feedInterfaces';
 import { NpmFeed } from './npm/npmFeed';
 import { LocalNuGetFeed } from './nuget/localNuGetFeed';

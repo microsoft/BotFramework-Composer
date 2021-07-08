@@ -18,6 +18,7 @@ import {
   debugPanelActiveTabState,
   userHasNodeInstalledState,
   applicationErrorState,
+  machineInfoState,
   showGetStartedTeachingBubbleState,
   showErrorDiagnosticsState,
   showWarningDiagnosticsState,
@@ -25,7 +26,7 @@ import {
 } from '../atoms/appState';
 import { AppUpdaterStatus, CreationFlowStatus, CreationFlowType } from '../../constants';
 import OnboardingState from '../../utils/onboardingStorage';
-import { StateError, AppUpdateState } from '../../recoilModel/types';
+import { StateError, AppUpdateState, MachineInfo } from '../../recoilModel/types';
 import { DebugDrawerKeys } from '../../pages/design/DebugPanel/TabExtensions/types';
 import httpClient from '../../utils/httpUtil';
 
@@ -157,6 +158,10 @@ export const applicationDispatcher = () => {
     await flushExistingTasks(callbackHelpers);
   });
 
+  const setMachineInfo = useRecoilCallback((callbackHelpers: CallbackInterface) => (info: MachineInfo) => {
+    callbackHelpers.set(machineInfoState, info);
+  });
+
   const setShowGetStartedTeachingBubble = useRecoilCallback((callbackHelpers: CallbackInterface) => (show: boolean) => {
     callbackHelpers.set(showGetStartedTeachingBubbleState, show);
   });
@@ -189,6 +194,7 @@ export const applicationDispatcher = () => {
     setPageElementState,
     setDebugPanelExpansion,
     setActiveTabInDebugPanel,
+    setMachineInfo,
     setShowGetStartedTeachingBubble,
     setErrorDiagnosticsFilter,
     setWarningDiagnosticsFilter,

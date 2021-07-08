@@ -22,13 +22,13 @@ export const addReturnType = (currentType: number, newType: number) => {
 
 export const checkStringExpression = (exp: string, isStringType: boolean): number => {
   const origin = exp.trim();
-
+  const containsEqual = origin.startsWith('=');
   //no need to do parse if the string expression doesn't start with '='
-  if (!origin.startsWith('=') && isStringType) {
+  if (!containsEqual && isStringType) {
     return ReturnType.String;
   }
 
-  return Expression.parse(origin.substring(1)).returnType;
+  return Expression.parse(containsEqual ? origin.substring(1) : origin).returnType;
 };
 
 export const checkExpression = (exp: any, required: boolean, types: number[]): number => {

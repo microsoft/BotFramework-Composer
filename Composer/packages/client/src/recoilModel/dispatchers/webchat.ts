@@ -5,7 +5,12 @@
 import { ConversationTrafficItem } from '@botframework-composer/types';
 import { useRecoilCallback, CallbackInterface } from 'recoil';
 
-import { webChatTrafficState, webChatInspectionDataState, isWebChatPanelVisibleState } from '../atoms';
+import {
+  webChatTrafficState,
+  webChatInspectionDataState,
+  isWebChatPanelVisibleState,
+  watchedVariablesState,
+} from '../atoms';
 import { WebChatInspectionData } from '../types';
 
 export const webChatLogDispatcher = () => {
@@ -43,9 +48,17 @@ export const webChatLogDispatcher = () => {
     }
   );
 
+  const setWatchedVariables = useRecoilCallback(
+    (callbackHelpers: CallbackInterface) => (projectId: string, variables: Record<string, string>) => {
+      const { set } = callbackHelpers;
+      set(watchedVariablesState(projectId), variables);
+    }
+  );
+
   return {
     clearWebChatLogs,
     appendWebChatTraffic,
+    setWatchedVariables,
     setWebChatPanelVisibility,
     setWebChatInspectionData,
   };

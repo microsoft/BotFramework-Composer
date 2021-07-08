@@ -44,18 +44,21 @@
   },
   "resolutions": {
     "@botframework-composer/types": "file:../../Composer/packages/types",
-    "json-ptr": "^2.1"
+    "json-ptr": "^2.1",
+    "@microsoft/bf-cli-command": "4.14.0-dev.20210604.3f9ee15"
   },
   "dependencies": {
     "@bfc/extension": "file:../../Composer/packages/extension",
     "@bfc/extension-client": "file:../../Composer/packages/extension-client",
     "@bfc/ui-shared": "file:../../Composer/packages/lib/ui-shared",
     "@emotion/core": "^10.0.35",
-    "@microsoft/bf-dialog": "4.13.1",
+    "@microsoft/bf-dialog": "4.14.0-dev.20210604.3f9ee15",
     "@uifabric/fluent-theme": "^7.1.4",
     "axios": "^0.21.1",
+    "axios-https-proxy": "^0.1.1",
     "date-fns": "^2.16.1",
     "format-message": "^6.2.3",
+    "https-proxy-agent": "^5.0.0",
     "office-ui-fabric-react": "7.71.0",
     "react": "^16.13.0",
     "react-dom": "^16.13.0",

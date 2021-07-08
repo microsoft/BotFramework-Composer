@@ -4,8 +4,8 @@ import path from 'path';
 
 import { AzureTenant, ElectronAuthParameters } from '@botframework-composer/types';
 import { app } from 'electron';
-import fetch from 'node-fetch';
 
+import fetch from '../utility/fetch';
 import ElectronWindow from '../electronWindow';
 import { isLinux, isMac } from '../utility/platform';
 import logger from '../utility/logger';
@@ -248,20 +248,34 @@ export class OneAuthInstance extends OneAuthBase {
         ''
       );
       const result = await this.oneAuth.acquireCredentialSilently(this.signedInARMAccount.id, tokenParams, '');
-      if (result.credential.value && Date.now() <= result.credential.expiresOn) {
+      if (result.credential && result.credential.value && Date.now() <= result.credential.expiresOn) {
         log('Acquired ARM token for tenant: %s', result.credential.value);
         return result.credential.value;
       }
     } catch (e) {
-      if (e.error?.status === Status.InteractionRequired) {
+      if (e.error?.status === Status.InteractionRequired && this.signedInARMAccount) {
         log(
           'There was an error trying to silently get an ARM token for tenant %s: %O. Trying again interactively to get access token.',
           tenantId,
           e
         );
-      } else {
-        throw e;
+
+        // use the signed in account to acquire a token
+        const reqParams = new this.oneAuth.AuthParameters(
+          DEFAULT_AUTH_SCHEME,
+          `https://login.microsoftonline.com/${tenantId}`,
+          ARM_RESOURCE,
+          '',
+          ''
+        );
+        const result = await this.oneAuth.acquireCredentialInteractively(this.signedInARMAccount?.id, reqParams, '');
+        if (result.credential && result.credential.value && Date.now() <= result.credential.expiresOn) {
+          log('Acquired ARM token interactively. %s', result.credential.value);
+          return result.credential.value;
+        }
       }
+      log('Error while trying to get an ARM token: %O', e);
+      throw e;
     }
 
     // get the tenant token interactively
@@ -369,6 +383,10 @@ export class OneAuthInstance extends OneAuthBase {
     } else {
       return path.resolve(__dirname, '../../oneauth-temp');
     }
+  }
+
+  public getAccount() {
+    return this.signedInARMAccount;
   }
 }
 

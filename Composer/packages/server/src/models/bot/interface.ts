@@ -44,20 +44,6 @@ export interface ILuisStatusOperation {
   [key: string]: IOperationLUFile;
 }
 
-export interface IOrchestratorNLRList {
-  version: string;
-  defaults: Record<string, string>;
-  readonly models: Record<
-    string,
-    {
-      releaseDate: string;
-      modelUri: string;
-      description: string;
-      minSDKVersion: string;
-    }
-  >;
-}
-
 export interface IOrchestratorProgress {
   (status: string): void;
 }

@@ -1463,6 +1463,7 @@
   dependencies:
     "@botframework-composer/types" "*"
     format-message "6.2.3"
+    https-proxy-agent "^5.0.0"
     json-schema "^0.2.5"
     multimatch "^5.0.0"
     nanoid "^3.1.3"
@@ -8484,6 +8485,11 @@ to-regex@^3.0.1, to-regex@^3.0.2:
     extend-shallow "^3.0.2"
     regex-not "^1.0.2"
     safe-regex "^1.1.0"
+
+toposort@^2.0.2:
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/toposort/-/toposort-2.0.2.tgz#ae21768175d1559d48bef35420b2f4962f09c330"
+  integrity sha1-riF2gXXRVZ1IvvNUILL0li8JwzA=
 
 tough-cookie@^2.3.3, tough-cookie@^2.4.3, tough-cookie@~2.5.0:
   version "2.5.0"

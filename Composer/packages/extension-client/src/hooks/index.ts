@@ -10,6 +10,7 @@ export * from './useShellApi';
 
 // for use in plugin host
 export * from './useApplicationApi';
+export * from './useAuthApi';
 export * from './useDialogApi';
 export * from './useExtensionSettings';
 export * from './useHttpClient';

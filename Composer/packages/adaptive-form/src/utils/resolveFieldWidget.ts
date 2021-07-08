@@ -92,7 +92,7 @@ export function resolveFieldWidget(params: {
           return { field: DefaultFields.IntellisenseTextField };
         } else if (showIntellisense && !isOneOf) {
           return { field: IntellisenseTextFieldWithIcon };
-        } else if (!showIntellisense && !isOneOf) {
+        } else if (!showIntellisense && !isOneOf && !uiOptions?.multiline) {
           return { field: StringFieldWithIcon };
         }
         return {
