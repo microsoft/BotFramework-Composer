@@ -12,13 +12,13 @@ import {
 
 import { availableResources, setUpProvisionService } from './availableResources';
 import { createProcessStatusTracker } from './processStatusTracker';
-import { GetResourcesResult, ProvisionConfig, ResourceDefinition, ResourceProvisionService } from './types';
+import { GetResourcesResult, ProvisionServiceConfig, ResourceDefinition, ResourceProvisionService } from './types';
 
 /**
  * Creates the azure publishing plug-in for this extension.
  * @returns The plug-in with properties and methods.
  */
-const createAzurePublishPlugin = (): PublishPlugin<ProvisionConfig> => {
+const createAzurePublishPlugin = (): PublishPlugin<ProvisionServiceConfig> => {
   const processTracker = createProcessStatusTracker();
 
   const getResources = (project: IBotProject): Promise<GetResourcesResult[]> => {
@@ -70,7 +70,7 @@ const createAzurePublishPlugin = (): PublishPlugin<ProvisionConfig> => {
     }
   };
 
-  const provision = async (config: ProvisionConfig, project: IBotProject): Promise<ProcessStatus> => {
+  const provision = async (config: ProvisionServiceConfig, project: IBotProject): Promise<ProcessStatus> => {
     const { id: processId } = processTracker.start({
       projectId: project.id,
       processName: config.key,

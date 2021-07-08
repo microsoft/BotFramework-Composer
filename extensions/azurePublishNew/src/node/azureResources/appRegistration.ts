@@ -6,19 +6,15 @@ import * as rp from 'request-promise';
 
 import { createCustomizeError, ProvisionErrors } from '../../../../azurePublish/src/node/utils/errorHandler';
 import {
-  ProvisionConfig,
+  ProvisionServiceConfig,
   ProvisionWorkingSet,
   ResourceConfig,
   ResourceDefinition,
   ResourceProvisionService,
 } from '../types';
+import { AzureResourceTypes } from '../constants';
 
 import { AZURE_HOSTING_GROUP_NAME, FREE_APP_REGISTRATION_TIER } from './constants';
-
-type AppRegistrationResourceConfig = ResourceConfig & {
-  key: 'appRegistration';
-  appName: string;
-};
 
 export const appRegistrationDefinition: ResourceDefinition = {
   key: 'appRegistration',
@@ -26,6 +22,12 @@ export const appRegistrationDefinition: ResourceDefinition = {
   description: 'Required registration allowing your bot to communicate with Azure services.',
   tier: FREE_APP_REGISTRATION_TIER,
   group: AZURE_HOSTING_GROUP_NAME,
+  dependencies: [AzureResourceTypes.RESOURCE_GROUP],
+};
+
+export type AppRegistrationResourceConfig = ResourceConfig & {
+  key: 'appRegistration';
+  appName: string;
 };
 
 const sleep = (waitTimeInMs) => new Promise((resolve) => setTimeout(resolve, waitTimeInMs));
@@ -58,7 +60,7 @@ const postRequestWithRetry = async (requestUri: string, requestOptions: AxiosReq
   return result;
 };
 
-const appRegistrationProvisionMethod = (provisionConfig: ProvisionConfig) => {
+const appRegistrationProvisionMethod = (provisionConfig: ProvisionServiceConfig) => {
   const { graphToken } = provisionConfig;
   const requestOptions: rp.RequestPromiseOptions = {
     json: true,
@@ -104,7 +106,7 @@ const appRegistrationProvisionMethod = (provisionConfig: ProvisionConfig) => {
   };
 };
 
-export const getAppRegistrationProvisionService = (config: ProvisionConfig): ResourceProvisionService => {
+export const getAppRegistrationProvisionService = (config: ProvisionServiceConfig): ResourceProvisionService => {
   return {
     getDependencies: () => [],
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
