@@ -21,8 +21,12 @@ import { cosmosDbDefinition, getCosmosDbProvisionService } from './azureResource
 import { getLuisAuthoringProvisionService, luisAuthoringDefinition } from './azureResources/luisAuthoring';
 import { getLuisPredictionProvisionService, luisPredictionDefinition } from './azureResources/luisPrediction';
 import { getQnAProvisionService, qnaDefinition } from './azureResources/qna';
-import { getAppServiceProvisionService, servicePlanDefinition } from './azureResources/servicePlan';
-import { getWebAppProvisionService, webAppResourceDefinition } from './azureResources/webApp';
+import {
+  getAppServiceProvisionService,
+  servicePlanDefinition,
+  ServicePlanResourceConfig,
+} from './azureResources/servicePlan';
+import { getWebAppProvisionService, WebAppResourceConfig, webAppResourceDefinition } from './azureResources/webApp';
 import { AzureResourceTypes } from './constants';
 import { ProvisioningConfig } from './provisioning';
 
@@ -60,6 +64,10 @@ export const getResourceDependencies = (key: string) => {
   switch (key) {
     case AzureResourceTypes.APP_REGISTRATION:
       return appRegistrationDefinition.dependencies;
+    case AzureResourceTypes.WEBAPP:
+      return webAppResourceDefinition.dependencies;
+    case AzureResourceTypes.SERVICE_PLAN:
+      return servicePlanDefinition.dependencies;
     default:
       return [];
   }
@@ -70,6 +78,24 @@ export const provisionConfigToResourceConfigMap = {
     return {
       key: 'appRegistration',
       appName: config.hostname,
+    };
+  },
+  webApp: (config: ProvisioningConfig): WebAppResourceConfig => {
+    return {
+      key: 'webApp',
+      webAppName: config.hostname,
+      location: config.location,
+      operatingSystem: config.appServiceOperatingSystem,
+      resourceGroupName: config.resourceGroup,
+    };
+  },
+  servicePlan: (config: ProvisioningConfig): ServicePlanResourceConfig => {
+    return {
+      key: 'servicePlan',
+      appServicePlanName: config.hostname,
+      location: config.location,
+      operatingSystem: config.appServiceOperatingSystem,
+      resourceGroupName: config.resourceGroup,
     };
   },
 };
