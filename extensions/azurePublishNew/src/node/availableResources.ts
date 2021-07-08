@@ -8,7 +8,11 @@ import {
   ResourceDefinition,
   ResourceProvisionService,
 } from './types';
-import { appInsightsDefinition, getAppInsightsProvisionService } from './azureResources/appInsights';
+import {
+  appInsightsDefinition,
+  AppInsightsResourceConfig,
+  getAppInsightsProvisionService,
+} from './azureResources/appInsights';
 import {
   appRegistrationDefinition,
   AppRegistrationResourceConfig,
@@ -52,7 +56,7 @@ export const getProvisionServices = (config: ProvisionServiceConfig): Record<str
     botRegistration: getBotChannelProvisionService(),
     azureFunctionApp: getAzureFunctionsProvisionService(),
     cosmosDB: getCosmosDbProvisionService(config),
-    appInsights: getAppInsightsProvisionService(),
+    appInsights: getAppInsightsProvisionService(config),
     luisAuthoring: getLuisAuthoringProvisionService(),
     luisPrediction: getLuisPredictionProvisionService(),
     blobStorage: getBlogStorageProvisionService(),
@@ -68,6 +72,8 @@ export const getResourceDependencies = (key: string) => {
       return webAppResourceDefinition.dependencies;
     case AzureResourceTypes.SERVICE_PLAN:
       return servicePlanDefinition.dependencies;
+    case AzureResourceTypes.APPINSIGHTS:
+      return appInsightsDefinition.dependencies;
     default:
       return [];
   }
@@ -96,6 +102,14 @@ export const provisionConfigToResourceConfigMap = {
       location: config.location,
       operatingSystem: config.appServiceOperatingSystem,
       resourceGroupName: config.resourceGroup,
+    };
+  },
+  appInsights: (config: ProvisioningConfig): AppInsightsResourceConfig => {
+    return {
+      key: 'appInsights',
+      resourceGroupName: config.resourceGroup,
+      location: config.location,
+      name: config.hostname,
     };
   },
 };
