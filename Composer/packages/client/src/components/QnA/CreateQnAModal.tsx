@@ -373,9 +373,6 @@ export const CreateQnAModal: React.FC<CreateQnAModalProps> = (props) => {
           </div>
         </div>
         <DialogFooter>
-          <div style={{ float: 'left', paddingRight: '20px' }}>
-            <PersonalCard />
-          </div>
           <DefaultButton
             disabled={!!loading}
             style={{ float: 'left' }}
@@ -447,6 +444,9 @@ export const CreateQnAModal: React.FC<CreateQnAModalProps> = (props) => {
           </div>
         </div>
         <DialogFooter>
+          <div style={{ float: 'left' }}>
+            <PersonalCard />
+          </div>
           {loading && <Spinner label={loading} labelPosition="right" styles={{ root: { float: 'left' } }} />}
           <DefaultButton disabled={!!loading} text={formatMessage('Back')} onClick={() => setCurrentStep('intro')} />
           <PrimaryButton
