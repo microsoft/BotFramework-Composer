@@ -227,9 +227,7 @@ type PropertyEditorEvents = {
   RecognizerChanged: { recognizer: string };
 };
 
-type OtherEvents = {
-  TestEvent: undefined;
-};
+type OtherEvents = {};
 
 type PageView = {
   [PageNames.Design]: undefined;
@@ -304,3 +302,6 @@ export const persistedEvents: TelemetryEventName[] = ['SessionStarted', 'Handoff
  * the user opts out, we will strip all PII from the event before sending it.
  */
 export const alwaysTrackEvents: TelemetryEventName[] = ['TelemetryOptInOut'];
+
+/** Names of the properties containing PII Data */
+export const piiProperties = ['userId', 'rootProjectId', 'projectId'];

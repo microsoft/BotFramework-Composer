@@ -2,10 +2,10 @@
 // Licensed under the MIT License.
 
 import * as AppInsights from 'applicationinsights';
-import { TelemetryEventName, TelemetryEvents, TelemetryEventTypes, TelemetryEvent } from '@bfc/shared';
+import { TelemetryEventName, TelemetryEvents, TelemetryEventTypes, TelemetryEvent, piiProperties } from '@bfc/shared';
 
 import logger from '../logger';
-import { APPINSIGHTS_INSTRUMENTATIONKEY, piiProperties } from '../constants';
+import { APPINSIGHTS_INSTRUMENTATIONKEY } from '../constants';
 import { useElectronContext } from '../utility/electronContext';
 import { getBuildEnvironment } from '../models/utilities/parser';
 

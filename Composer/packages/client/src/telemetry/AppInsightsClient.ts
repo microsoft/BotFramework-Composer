@@ -6,15 +6,24 @@ import {
   TelemetryEvent,
   TelemetryEventTypes,
   TelemetrySettings,
+  TelemetryEventName,
   persistedEvents,
   alwaysTrackEvents,
-  TelemetryEventName,
+  piiProperties,
 } from '@bfc/shared';
 import chunk from 'lodash/chunk';
+import fromPairs from 'lodash/fromPairs';
 
 import httpClient from '../utils/httpUtil';
 
 const BATCH_SIZE = 20;
+
+const blankPIIObject = fromPairs(piiProperties.map((p) => [p, null]));
+
+function removePII(data: any) {
+  return { ...data, ...blankPIIObject };
+}
+
 export default class AppInsightsClient {
   private static _eventPool: TelemetryEvent[] = [];
   private static _intervalId: NodeJS.Timeout | null = null;
@@ -30,9 +39,7 @@ export default class AppInsightsClient {
   }
 
   public static trackEvent(name: TelemetryEventName, properties: LogData) {
-    if (alwaysTrackEvents.includes(name)) {
-      this.postEvents([{ type: TelemetryEventTypes.TrackEvent, name, properties }]);
-    } else if (this._telemetrySettings?.allowDataCollection) {
+    if (this._telemetrySettings?.allowDataCollection) {
       this.startInterval();
       this._eventPool.push({ type: TelemetryEventTypes.TrackEvent, name, properties });
       if (this._eventPool.length >= BATCH_SIZE) {
@@ -45,6 +52,14 @@ export default class AppInsightsClient {
        * however, they are only logged to Application Insights after the user opts in to data collection.
        */
       this._eventPool.push({ type: TelemetryEventTypes.TrackEvent, name, properties });
+    } else if (alwaysTrackEvents.includes(name)) {
+      this.postEvents([
+        {
+          type: TelemetryEventTypes.TrackEvent,
+          name,
+          properties: properties.enabled ? properties : removePII(properties),
+        },
+      ]);
     }
   }
 
