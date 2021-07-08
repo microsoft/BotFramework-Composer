@@ -49,7 +49,7 @@ import {
   dialogBodyStyles,
 } from './styles';
 import { ImportQnAFromUrl } from './ImportQnAFromUrl';
-import { PersonalCard } from './PersonalCard';
+import { PersonaCard } from './PersonaCard';
 
 type KeyRec = {
   name: string;
@@ -383,7 +383,7 @@ export const ReplaceQnAFromModal: React.FC<ReplaceQnAModalProps> = (props) => {
         </div>
         <DialogFooter>
           <div style={{ float: 'left' }}>
-            <PersonalCard />
+            <PersonaCard />
           </div>
           {loading && <Spinner label={loading} labelPosition="right" styles={{ root: { float: 'left' } }} />}
           <DefaultButton disabled={!!loading} text={formatMessage('Back')} onClick={() => setCurrentStep('intro')} />

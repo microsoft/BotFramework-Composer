@@ -10,7 +10,7 @@ import { IRenderFunction } from '@uifabric/utilities';
 
 import { currentUserState, isAuthenticatedState, dispatcherState } from '../../recoilModel';
 
-export const PersonalCard: React.FC = (props) => {
+export const PersonaCard: React.FC = (props) => {
   const currentUser = useRecoilValue(currentUserState);
   const isAuthenticated = useRecoilValue(isAuthenticatedState);
 
