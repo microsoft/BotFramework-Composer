@@ -67,10 +67,24 @@ type TagInputProps = {
   tags: string[];
   onChange: (tags: string[]) => void;
   onValidate?: (val: string) => boolean;
+  onBlur?: (e: React.FocusEvent<HTMLInputElement>, tags?: string[]) => void;
+  onFocus?: (e: React.FocusEvent<HTMLInputElement>) => void;
 };
 
 export const TagInput = (props: TagInputProps) => {
-  const { className, tags, onValidate, removeOnBackspace, onChange, editable, maxTags, placeholder, readOnly } = props;
+  const {
+    className,
+    tags,
+    onValidate,
+    removeOnBackspace,
+    onChange,
+    editable,
+    maxTags,
+    placeholder,
+    readOnly,
+    onBlur,
+    onFocus,
+  } = props;
 
   const inputRef = React.createRef<HTMLInputElement>();
   const { 0: input, 1: setInput } = React.useState('');
@@ -79,17 +93,22 @@ export const TagInput = (props: TagInputProps) => {
     setInput(e.target.value);
   };
 
-  const addTag = (value: string) => {
-    const clonedTags = [...tags];
+  const extractAndMergeTags = (value: string) => {
+    const mergedTags = [...tags];
     // Extract comma separated tags
     const enteredTags = csvToArray(value).filter((t) => !!t);
 
     // Remove repetitive tags
-    const newTags = enteredTags.filter((et) => !clonedTags.includes(et));
+    const newTags = enteredTags.filter((et) => !mergedTags.includes(et));
 
-    clonedTags.push(...newTags);
-    onChange(clonedTags);
+    mergedTags.push(...newTags);
 
+    return mergedTags;
+  };
+
+  const addTag = (value: string) => {
+    const mergedTags = extractAndMergeTags(value);
+    onChange(mergedTags);
     setInput('');
   };
 
@@ -155,6 +174,25 @@ export const TagInput = (props: TagInputProps) => {
     onChange(clonedTags);
   };
 
+  const blur = (e: React.FocusEvent<HTMLInputElement>) => {
+    // If input is blank, do nothing
+    if (!input) {
+      onBlur?.(e);
+      return;
+    }
+
+    // Check if input is valid
+    const valid = onValidate !== undefined ? onValidate(input) : true;
+    if (!valid) {
+      onBlur?.(e);
+      return;
+    }
+
+    const clonedTags = extractAndMergeTags(input);
+    setInput('');
+    onBlur?.(e, clonedTags);
+  };
+
   const maxTagsReached = maxTags !== undefined ? tags.length >= maxTags : false;
   const isEditable = readOnly ? false : editable || false;
   const showInput = !readOnly && !maxTagsReached;
@@ -181,7 +219,9 @@ export const TagInput = (props: TagInputProps) => {
           data-selection-disabled
           placeholder={placeholder || formatMessage('Type and press enter')}
           value={input}
+          onBlur={blur}
           onChange={onInputChange}
+          onFocus={onFocus}
           onKeyDown={onInputKeyDown}
           onPaste={onPaste}
         />

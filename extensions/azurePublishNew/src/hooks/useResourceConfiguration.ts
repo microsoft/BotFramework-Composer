@@ -3,16 +3,15 @@
 
 import React from 'react';
 import { useRecoilValue } from 'recoil';
-import { usePublishApi, DeployLocation, useLocalStorage } from '@bfc/extension-client';
+import { usePublishApi, DeployLocation, useLocalStorage, useAuthApi } from '@bfc/extension-client';
 
 import {
-  tenantState,
   subscriptionState,
   resourceGroupState,
   deployLocationState,
   luisRegionState,
   hostNameState,
-  operatingSystemState,
+  appServiceOperatingSystemState,
 } from '../recoilModel/atoms/resourceConfigurationState';
 import { LuisAuthoringSupportLocation } from '../constants';
 import { LuisRegion } from '../types';
@@ -20,12 +19,12 @@ import { LuisRegion } from '../types';
 import { useDispatcher } from './useDispatcher';
 
 export const useResourceConfiguration = () => {
-  const { userShouldProvideTokens, getName } = usePublishApi();
+  const { getName, publishConfig } = usePublishApi();
+  const { currentTenant, requireUserLogin, isAuthenticated } = useAuthApi();
   const [deployLocations, setDeployLocations] = React.useState<DeployLocation[]>([]);
   const [isInvalidResourceGroupName, setIsInvalidResourceGroupName] = React.useState<boolean>(false);
   const [isInvalidHostName, setIsInvalidHostName] = React.useState<boolean>(false);
   const {
-    setTenantId,
     setSubscriptionId,
     setResourceGroup,
     setDeployLocation,
@@ -34,16 +33,19 @@ export const useResourceConfiguration = () => {
     setAppServiceOperatingSystem,
   } = useDispatcher();
 
-  const tenantId = useRecoilValue(tenantState);
-
   const subscriptionId = useRecoilValue(subscriptionState);
   const { name: resourceGroupName, isNew } = useRecoilValue(resourceGroupState);
   const deployLocation = useRecoilValue(deployLocationState);
   const luisRegion = useRecoilValue(luisRegionState);
   const hostName = useRecoilValue(hostNameState);
-  const appServiceOperatingSystem = useRecoilValue(operatingSystemState);
+
+  const appServiceOperatingSystem = useRecoilValue(appServiceOperatingSystemState);
 
   const { setItem } = useLocalStorage();
+
+  React.useEffect(() => {
+    requireUserLogin(publishConfig?.tenantId, { requireGraph: true }); //use tenantId from import config if present
+  }, [isAuthenticated]);
 
   const hasErrors = React.useMemo(() => isInvalidResourceGroupName || isInvalidHostName, [
     isInvalidHostName,
@@ -53,7 +55,7 @@ export const useResourceConfiguration = () => {
   const isValidConfiguration = React.useMemo(
     (): boolean =>
       !(
-        !(userShouldProvideTokens() || tenantId) ||
+        !currentTenant ||
         !subscriptionId ||
         !resourceGroupName ||
         hasErrors ||
@@ -61,15 +63,8 @@ export const useResourceConfiguration = () => {
         !luisRegion ||
         !hostName
       ),
-    [tenantId, subscriptionId, resourceGroupName, hasErrors, deployLocation, luisRegion, hostName]
+    [currentTenant, subscriptionId, resourceGroupName, hasErrors, deployLocation, luisRegion, hostName]
   );
-
-  const handleChangeTenant = React.useCallback((tenantId: string) => {
-    setTenantId(tenantId);
-    if (!tenantId) {
-      setSubscriptionId('');
-    }
-  }, []);
 
   const handleChangeSubscription = React.useCallback((subscriptionId: string) => {
     setSubscriptionId(subscriptionId);
@@ -119,7 +114,7 @@ export const useResourceConfiguration = () => {
 
   const stashWizardState = () => {
     setItem(getName(), {
-      tenantId,
+      currentTenant,
       subscriptionId,
       resourceGroup: { name: resourceGroupName, isNew },
       deployLocation,
@@ -131,7 +126,7 @@ export const useResourceConfiguration = () => {
 
   return {
     configuration: {
-      tenantId,
+      tenantId: currentTenant,
       subscriptionId,
       resourceGroupName,
       deployLocation,
@@ -140,7 +135,6 @@ export const useResourceConfiguration = () => {
       hostName,
       appServiceOperatingSystem,
     },
-    handleChangeTenant,
     handleChangeSubscription,
     handleChangeResourceGroup,
     handleFetchDeployLocation: setDeployLocations,

@@ -311,9 +311,6 @@
   "an_authoring_key_is_created_automatically_when_you_21cf77aa": {
     "message": "An authoring key is created automatically when you create a LUIS account."
   },
-  "an_azure_tenant_must_be_set_in_order_to_provision__a223f1b8": {
-    "message": "An Azure tenant must be set in order to provision resources. Try recreating the publish profile and try again."
-  },
   "an_error_occurred_connecting_initializing_the_dire_fc7b50be": {
     "message": "An error occurred connecting initializing the DirectLine server"
   },
@@ -353,11 +350,11 @@
   "answer_is_required_da652c05": {
     "message": "Answer is required"
   },
+  "any_1cca45c8": {
+    "message": "Any"
+  },
   "any_constant_or_expression_to_evaluate_ba2017b1": {
     "message": "Any constant or expression to evaluate."
-  },
-  "any_or_expression_acad7d37": {
-    "message": "Any or expression"
   },
   "application_language_settings_85b1f06": {
     "message": "Application language settings"
@@ -403,9 +400,6 @@
   },
   "array_constant_8829b2ec": {
     "message": "Array constant."
-  },
-  "array_or_expression_c52b2ecc": {
-    "message": "Array or expression"
   },
   "array_or_expression_to_evaluate_87d9328b": {
     "message": "Array or expression to evaluate."
@@ -512,9 +506,6 @@
   "azure_connections_9e63f716": {
     "message": "Azure connections"
   },
-  "azure_directory_d9065529": {
-    "message": "Azure directory"
-  },
   "azure_functions_5e23be5c": {
     "message": "Azure Functions"
   },
@@ -538,6 +529,12 @@
   },
   "azure_resource_group_cee486e6": {
     "message": "Azure resource group"
+  },
+  "azure_sign_in_7ed10f9": {
+    "message": "Azure sign-in"
+  },
+  "azure_sign_in_f3583aa": {
+    "message": "Azure sign in"
   },
   "azure_subscription_4671d043": {
     "message": "Azure subscription"
@@ -569,9 +566,6 @@
   "boolean_6000988a": {
     "message": "Boolean"
   },
-  "boolean_condition_b65450ca": {
-    "message": "Boolean condition"
-  },
   "boolean_constant_7d3fcbf6": {
     "message": "Boolean constant"
   },
@@ -583,12 +577,6 @@
   },
   "boolean_field_602934c9": {
     "message": "boolean field"
-  },
-  "boolean_or_expression_6bd88208": {
-    "message": "Boolean or expression"
-  },
-  "boolean_value_98d39ea1": {
-    "message": "Boolean value."
   },
   "bot_416bf08d": {
     "message": "bot"
@@ -686,6 +674,9 @@
   "building_runtime_22f11a1f": {
     "message": "Building runtime"
   },
+  "by_signing_out_of_azure_your_operation_will_be_can_826e5fdc": {
+    "message": "By signing out of Azure, your operation will be canceled and this dialog will close. Do you want to continue?"
+  },
   "bytes_74acea97": {
     "message": "Bytes"
   },
@@ -751,6 +742,12 @@
   },
   "choose_qna_resources_f2841704": {
     "message": "Choose QnA resources"
+  },
+  "choose_the_subscription_where_you_d_like_your_new__89bd4b60": {
+    "message": "Choose the subscription where you’d like your new { service } resource."
+  },
+  "choose_the_subscription_where_your_existing_servic_40dca34d": {
+    "message": "Choose the subscription where your existing { service } resource is located."
   },
   "clear_all_da755751": {
     "message": "Clear all"
@@ -971,6 +968,9 @@
   "could_not_connect_to_storage_50411de0": {
     "message": "Could not connect to storage."
   },
+  "could_not_locate_manifest_json_in_zip_52c803e0": {
+    "message": "could not locate manifest.json in zip"
+  },
   "couldn_t_complete_the_update_a337a359": {
     "message": "Couldn''t complete the update:"
   },
@@ -998,8 +998,8 @@
   "create_a_dialog_9f6c8618": {
     "message": "Create a dialog"
   },
-  "create_a_kb_from_a_url_or_import_content_from_an_e_2b7c9153": {
-    "message": "Create a KB from a URL or import content from an existing KB"
+  "create_a_knowledge_base_from_a_url_or_import_conte_bf5b99c5": {
+    "message": "Create a knowledge base from a URL or import content from an existing knowledge base"
   },
   "create_a_knowledge_base_from_scratch_or_import_kno_2eb38ac0": {
     "message": "Create a knowledge base from scratch or import knowledge from a URL or PDF files"
@@ -1055,14 +1055,14 @@
   "create_new_folder_19d3faa4": {
     "message": "Create new folder"
   },
-  "create_new_kb_1c4f86a0": {
-    "message": "Create new KB"
+  "create_new_knowledge_base_d15d6873": {
+    "message": "Create new knowledge base"
   },
-  "create_new_kb_from_url_or_file_67bab47c": {
-    "message": "Create new KB from URL or file"
+  "create_new_knowledge_base_from_url_or_file_15e5758a": {
+    "message": "Create new knowledge base from URL or file"
   },
-  "create_new_kb_from_url_or_file_864ad815": {
-    "message": "Create new KB from URL or file "
+  "create_new_knowledge_base_from_url_or_file_47826842": {
+    "message": "Create new knowledge base from URL or file "
   },
   "create_new_publish_profile_e27c0950": {
     "message": "Create new publish profile"
@@ -1385,8 +1385,8 @@
   "edit_in_power_virtual_agents_56ee7ac2": {
     "message": "Edit in Power Virtual Agents"
   },
-  "edit_kb_name_5e2d8c5b": {
-    "message": "Edit KB name"
+  "edit_knowledge_base_name_75037658": {
+    "message": "Edit knowledge base name"
   },
   "edit_property_dd6a1172": {
     "message": "Edit Property"
@@ -1562,9 +1562,6 @@
   "error_processing_schema_2c707cf3": {
     "message": "Error Processing Schema"
   },
-  "error_provisioning_25835400": {
-    "message": "Error provisioning."
-  },
   "errorscount_plural_0_no_errors_1_one_error_other_e_a8c998bb": {
     "message": "{ errorsCount, plural,\n     =0 {No errors}\n     =1 {One error}\n  other {# errors}\n}"
   },
@@ -1624,9 +1621,6 @@
   },
   "expression_starting_with_a750efc8": {
     "message": "Expression starting with =."
-  },
-  "expression_to_evaluate_ce4095b1": {
-    "message": "Expression to evaluate."
   },
   "extend_your_bot_with_reusable_dialogs_bot_response_64f9ca51": {
     "message": "Extend your bot with reusable dialogs, bot response templates and custom actions."
@@ -1934,14 +1928,14 @@
   "import_as_new_35630827": {
     "message": "Import as new"
   },
-  "import_content_from_an_existing_kb_on_the_qna_make_3fc18818": {
-    "message": "Import content from an existing KB on the QnA maker portal. Your KB will downloaded locally and source KB will remain as-is."
+  "import_content_from_an_existing_knowledge_base_on__49bfce52": {
+    "message": "Import content from an existing knowledge base on the QnA maker portal"
   },
-  "import_content_from_an_existing_kb_on_the_qna_make_432e0bf0": {
-    "message": "Import content from an existing KB on the QnA maker portal"
+  "import_content_from_an_existing_knowledge_base_on__b831f6d0": {
+    "message": "Import content from an existing knowledge base on the QnA maker portal. Your knowledge base will downloaded locally and source knowledge base will remain as-is."
   },
-  "import_existing_kb_from_qna_maker_portal_12011085": {
-    "message": "Import existing KB from QnA maker portal"
+  "import_existing_knowledge_base_from_qna_maker_port_578b4a0": {
+    "message": "Import existing knowledge base from QnA maker portal"
   },
   "import_schema_75659c5f": {
     "message": "Import schema"
@@ -2050,9 +2044,6 @@
   },
   "integer_constant_or_expression_to_evaluate_ec4a17da": {
     "message": "Integer constant or expression to evaluate."
-  },
-  "integer_or_expression_107f60fb": {
-    "message": "Integer or expression"
   },
   "integrating_with_power_virtual_agents_14c007cf": {
     "message": "Integrating with Power Virtual Agents"
@@ -2249,9 +2240,6 @@
   "list_view_e33843f0": {
     "message": "List view"
   },
-  "loading_25990131": {
-    "message": "Loading..."
-  },
   "loading_bde52856": {
     "message": "Loading"
   },
@@ -2291,14 +2279,8 @@
   "log_to_console_4fc23e34": {
     "message": "Log to console"
   },
-  "login_6f3d6249": {
-    "message": "Login"
-  },
   "login_to_azure_c0cb057e": {
     "message": "Login to Azure"
-  },
-  "login_to_azure_to_continue_db148dee": {
-    "message": "Login to Azure to continue"
   },
   "loop_for_each_item_e09537ae": {
     "message": "Loop: For each item"
@@ -2561,9 +2543,6 @@
   "next_40e12421": {
     "message": "Next"
   },
-  "no_azure_directories_were_found_6dfe6f6f": {
-    "message": "No Azure Directories were found."
-  },
   "no_editor_for_type_8b5593c5": {
     "message": "No Editor for { type }"
   },
@@ -2669,9 +2648,6 @@
   "number_constant_or_expression_to_evaluate_1098771": {
     "message": "Number constant or expression to evaluate."
   },
-  "number_or_expression_55c7f9f": {
-    "message": "Number or expression"
-  },
   "oauth_activities_are_not_available_for_testing_in__2207dcef": {
     "message": "OAuth activities are not available for testing in Composer yet. Please continue using Bot Framework Emulator for testing OAuth actions."
   },
@@ -2686,9 +2662,6 @@
   },
   "object_constant_77052b91": {
     "message": "Object constant."
-  },
-  "object_or_expression_89903fa1": {
-    "message": "Object or expression"
   },
   "object_or_expression_to_evaluate_699c8827": {
     "message": "Object or expression to evaluate."
@@ -2815,9 +2788,6 @@
   },
   "please_input_regex_pattern_5cd659a2": {
     "message": "Please input regEx pattern"
-  },
-  "please_log_in_before_continuing_b6eace13": {
-    "message": "Please log in before continuing."
   },
   "please_return_to_design_view_to_start_the_onboardi_a561af9d": {
     "message": "Please return to Design View to start the Onboarding tutorial."
@@ -3164,20 +3134,20 @@
   "replace_content_ad37734b": {
     "message": "Replace content"
   },
-  "replace_kb_from_url_a3c859aa": {
-    "message": "Replace KB from URL"
-  },
-  "replace_kb_from_url_or_file_57ccdf6c": {
-    "message": "Replace KB from URL or file "
-  },
   "replace_knowledge_base_content_c96b2ed3": {
     "message": "Replace knowledge base content"
+  },
+  "replace_knowledge_base_from_url_2be66ee3": {
+    "message": "Replace knowledge base from URL"
+  },
+  "replace_knowledge_base_from_url_or_file_47ef7c15": {
+    "message": "Replace knowledge base from URL or file "
   },
   "replace_this_dialog_e304015e": {
     "message": "Replace this dialog"
   },
-  "replace_with_an_existing_kb_from_qna_maker_portal_6d21d563": {
-    "message": "Replace with an existing KB from QnA maker portal"
+  "replace_with_an_existing_knowledge_base_from_qna_m_1e327c7a": {
+    "message": "Replace with an existing knowledge base from QnA maker portal"
   },
   "report_a_bug_or_request_a_feature_36eb52c7": {
     "message": "Report a bug or request a feature"
@@ -3395,8 +3365,14 @@
   "select_bots_8c8a87fe": {
     "message": "Select bots"
   },
+  "select_d70f31da": {
+    "message": "Select"
+  },
   "select_dialogs_f625e607": {
     "message": "Select dialogs"
+  },
+  "select_directory_95ac14c0": {
+    "message": "Select directory"
   },
   "select_input_hint_267a6208": {
     "message": "Select input hint"
@@ -3407,8 +3383,8 @@
   "select_one_b647b384": {
     "message": "Select one"
   },
-  "select_one_or_more_kb_to_import_into_your_bot_proj_9862581e": {
-    "message": "Select one or more KB to import into your bot project"
+  "select_one_or_more_knowledge_base_to_import_into_y_af1d6006": {
+    "message": "Select one or more knowledge base to import into your bot project"
   },
   "select_options_9ee7b227": {
     "message": "Select options"
@@ -3434,32 +3410,26 @@
   "select_subscription_c5678611": {
     "message": "Select subscription"
   },
-  "select_the_azure_directory_and_resource_you_want_t_2a62b793": {
-    "message": "Select the Azure directory and resource you want to choose a knowledge base from"
-  },
   "select_the_language_that_bot_will_be_able_to_under_1f2bcb96": {
     "message": "Select the language that bot will be able to understand (User input) and respond to (Bot responses).\n    To make this bot available in other languages, click “Add’ to create a copy of the default language, and translate the content into the new language."
   },
   "select_the_resource_group_and_region_in_which_your_51f85ff": {
     "message": "Select the resource group and region in which your { service } service will be created."
   },
-  "select_this_option_when_you_want_to_create_a_kb_fr_fb63ed63": {
-    "message": "Select this option when you want to create a KB from  content such as an FAQ available online or in a file .csv, .xls or .doc format "
+  "select_the_subscription_and_resource_you_want_to_c_a3bd2488": {
+    "message": "Select the subscription and resource you want to choose a knowledge base from"
   },
-  "select_this_option_when_you_want_to_import_existin_e3d974dd": {
-    "message": "Select this option when you want to import existing KB from QnA maker portal. "
+  "select_this_option_when_you_want_to_create_a_knowl_21e43487": {
+    "message": "Select this option when you want to create a knowledge base from  content such as an FAQ available online or in a file .csv, .xls or .doc format "
   },
-  "select_this_option_when_you_want_to_replace_curren_a0411c78": {
-    "message": "Select this option when you want to replace current KB from content such as an FAQ available online or in a file .csv, .xls or .doc format "
+  "select_this_option_when_you_want_to_import_existin_818c5aaa": {
+    "message": "Select this option when you want to import existing knowledge base from QnA maker portal. "
+  },
+  "select_this_option_when_you_want_to_replace_curren_a5139e24": {
+    "message": "Select this option when you want to replace current knowledge base from content such as an FAQ available online or in a file .csv, .xls or .doc format "
   },
   "select_triggers_5ff033ae": {
     "message": "Select triggers"
-  },
-  "select_your_azure_directory_then_choose_the_subscr_7034a3c0": {
-    "message": "Select your Azure directory, then choose the subscription where you’d like your new { service } resource."
-  },
-  "select_your_azure_directory_then_choose_the_subscr_d51f6201": {
-    "message": "Select your Azure directory, then choose the subscription where your existing { service } resource is located."
   },
   "selection_field_86d1dc94": {
     "message": "selection field"
@@ -3484,9 +3454,6 @@
   },
   "service_resource_name_56566aab": {
     "message": "{ service } resource name"
-  },
-  "session_expired_12aaf414": {
-    "message": "Session expired"
   },
   "set_a_property_4258d8d7": {
     "message": "Set a property"
@@ -3560,8 +3527,20 @@
   "sign_in_card_aac56fe0": {
     "message": "Sign-in card"
   },
-  "sign_in_to_azure_to_continue_c3efd63d": {
-    "message": "Sign in to Azure to continue"
+  "sign_in_failed_message_56296e3e": {
+    "message": "Sign in failed: { message }"
+  },
+  "sign_in_failed_please_try_again_cc15ea02": {
+    "message": "Sign in failed. Please try again."
+  },
+  "sign_in_to_your_azure_account_205fe006": {
+    "message": "Sign in to your Azure account"
+  },
+  "sign_out_335cf09e": {
+    "message": "Sign out"
+  },
+  "sign_out_of_azure_3bb3288": {
+    "message": "Sign out of Azure"
   },
   "sign_out_user_6845d640": {
     "message": "Sign out user"
@@ -3602,8 +3581,8 @@
   "skip_bcb86160": {
     "message": "Skip"
   },
-  "skip_create_blank_kb_c31d9c1d": {
-    "message": "Skip & Create blank KB"
+  "skip_create_blank_knowledge_base_f6adcea8": {
+    "message": "Skip & Create blank knowledge base"
   },
   "something_happened_while_attempting_to_pull_e_952c7afe": {
     "message": "Something happened while attempting to pull: { e }"
@@ -3716,9 +3695,6 @@
   "string_field_db491570": {
     "message": "string field"
   },
-  "string_or_expression_c441b45c": {
-    "message": "String or expression"
-  },
   "submit_a3cc6859": {
     "message": "Submit"
   },
@@ -3739,6 +3715,9 @@
   },
   "suggestion_for_card_or_activity_type_b257066a": {
     "message": "Suggestion for Card or Activity: { type }"
+  },
+  "switch_directory_30967d20": {
+    "message": "Switch directory"
   },
   "synonyms_31f2e91e": {
     "message": "Synonyms"
@@ -3827,6 +3806,9 @@
   "the_dialog_you_have_tried_to_delete_is_currently_u_a37c7a02": {
     "message": "The dialog you have tried to delete is currently used in the below dialog(s). Removing this dialog will cause your Bot to malfunction without additional action."
   },
+  "the_directory_you_choose_will_impact_subscription__843f8c6d": {
+    "message": "The directory you choose will impact subscription, resource group, and region filters that are available when you select or create Azure resources. You can change this later."
+  },
   "the_endpoint_url_7c04ee13": {
     "message": "The endpoint url"
   },
@@ -3893,15 +3875,6 @@
   "there_is_no_thumbnail_view_908fe5cc": {
     "message": "There is no thumbnail view"
   },
-  "there_was_a_problem_getting_the_access_token_for_t_69f5a5e2": {
-    "message": "There was a problem getting the access token for the current Azure directory. { errMessage }"
-  },
-  "there_was_a_problem_loading_azure_directories_errm_56e6145d": {
-    "message": "There was a problem loading Azure directories. { errMessage }"
-  },
-  "there_was_a_problem_with_the_authentication_access_3ca717f6": {
-    "message": "There was a problem with the authentication access token. Close this dialog and try again. To be prompted to provide the access token again, clear it from application local storage."
-  },
   "there_was_an_error_74ed3c58": {
     "message": "There was an error"
   },
@@ -3914,8 +3887,8 @@
   "there_was_an_unexpected_error_pulling_from_publish_c3fbefa4": {
     "message": "There was an unexpected error pulling from publish profile <b>{ selectedTargetName }</b>"
   },
-  "there_was_error_creating_your_kb_53b31ff3": {
-    "message": "There was error creating your KB"
+  "there_was_error_creating_your_knowledge_base_93e4bc2e": {
+    "message": "There was error creating your knowledge base"
   },
   "this_bot_cannot_be_called_as_a_skill_since_the_all_ffb502b2": {
     "message": "This bot cannot be called as a skill since the allowed caller list is empty"
@@ -4307,14 +4280,17 @@
   "video_card_cda18e03": {
     "message": "Video card"
   },
+  "view_account_on_azure_e2c306": {
+    "message": "View account on Azure"
+  },
   "view_dialog_f5151228": {
     "message": "View dialog"
   },
   "view_documentation_samples_and_extensions_285b9404": {
     "message": "View documentation, samples, and extensions"
   },
-  "view_kb_c382e495": {
-    "message": "View KB"
+  "view_knowledge_base_a1b5931e": {
+    "message": "View knowledge base"
   },
   "view_log_6d51af5e": {
     "message": "View log"
@@ -4460,8 +4436,8 @@
   "yes_delete_d43476ee": {
     "message": "Yes, delete"
   },
-  "you_already_have_a_kb_with_that_name_choose_anothe_b7f7c517": {
-    "message": "You already have a KB with that name. Choose another name and try again."
+  "you_already_have_a_knowledge_base_with_that_name_c_8dc4aa5": {
+    "message": "You already have a knowledge base with that name. Choose another name and try again."
   },
   "you_are_about_to_publish_your_bot_to_the_profile_b_79a6a226": {
     "message": "You are about to publish your bot to the profile below. Do you want to proceed?"
@@ -4492,6 +4468,12 @@
   },
   "you_re_ready_to_go_18ee8dac": {
     "message": "You’re ready to go!"
+  },
+  "you_ve_successfully_signed_in_ad704416": {
+    "message": "You''ve successfully signed in."
+  },
+  "you_ve_successfully_switched_directories_78183a59": {
+    "message": "You''ve successfully switched directories."
   },
   "your_bot_is_configured_with_only_a_luis_authoring__179ab81c": {
     "message": "Your bot is configured with only a LUIS authoring key, which has a limit of 1,000 calls per month. If your bot hits this limit, publish it to Azure using a <a>publishing profile</a> to continue testing.<a2>Learn more</a2>"

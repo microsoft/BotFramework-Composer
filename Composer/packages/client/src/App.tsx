@@ -28,7 +28,6 @@ export const App: React.FC = () => {
     fetchFeatureFlags,
     checkNodeVersion,
     performAppCleanupOnQuit,
-    setSurveyEligibility,
     setMachineInfo,
   } = useRecoilValue(dispatcherState);
 
@@ -46,7 +45,6 @@ export const App: React.FC = () => {
 
     ipcRenderer?.on('machine-info', (_event, info) => {
       setMachineInfo(info);
-      setSurveyEligibility();
     });
   }, []);
 

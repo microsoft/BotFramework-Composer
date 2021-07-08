@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import { TokenCredentials } from '@azure/ms-rest-js';
-import * as rp from 'request-promise';
+import axios, { AxiosRequestConfig } from 'axios';
 
 import { BotProjectDeployLoggerType } from './types';
 import { AzureResourceManangerConfig } from './azureResourceManager/azureResourceManagerConfig';
@@ -97,28 +97,34 @@ export class BotProjectProvision {
       message: '> Creating App Registration ...',
     });
 
-    const appCreateOptions = {
-      body: {
-        displayName: displayName,
-      },
-      json: true,
+    const appCreateOptions: AxiosRequestConfig = {
       headers: { Authorization: `Bearer ${this.graphToken}` },
-    } as rp.RequestPromiseOptions;
+    };
 
     // This call if successful returns an object in the form
     // documented here: https://docs.microsoft.com/en-us/graph/api/resources/application?view=graph-rest-1.0#properties
     // we need the `appId` and `id` fields - appId is part of our configuration, and the `id` is used to set the password.
     let appCreated;
     let retryCount = 3;
+
+    const logErrorMsg = (appCreateStep: string, errorMessage: string) => {
+      this.logger({
+        status: BotProjectDeployLoggerType.PROVISION_ERROR,
+        message: `${appCreateStep} failed after 3 retries. Error: ${errorMessage || ''}`,
+      });
+    };
+
     while (retryCount >= 0) {
       try {
-        appCreated = await rp.post(applicationUri, appCreateOptions);
+        const response = await axios.post(applicationUri, { displayName }, appCreateOptions);
+        appCreated = response?.data;
       } catch (err) {
         this.logger({
           status: BotProjectDeployLoggerType.PROVISION_ERROR,
           message: `App create failed, retrying ...`,
         });
         if (retryCount == 0) {
+          logErrorMsg('App create', err.message);
           throw createCustomizeError(
             ProvisionErrors.CREATE_APP_REGISTRATION,
             'App create failed! Please file an issue on Github.'
@@ -131,37 +137,36 @@ export class BotProjectProvision {
       }
       this.logger({
         status: BotProjectDeployLoggerType.PROVISION_INFO,
-        message: `Start to add password for App, Id : ${appCreated.appId}`,
+        message: `Start to add password for App, Id : ${appCreated?.appId}`,
       });
       break;
     }
 
-    const appId = appCreated.appId;
+    const appId = appCreated?.appId;
 
     // use id to add new password and save the password as configuration
-    const addPasswordUri = `https://graph.microsoft.com/v1.0/applications/${appCreated.id}/addPassword`;
+    const addPasswordUri = `https://graph.microsoft.com/v1.0/applications/${appCreated?.id}/addPassword`;
     const requestBody = {
       passwordCredential: {
         displayName: `${displayName}-pwd`,
       },
     };
-    const setSecretOptions = {
-      body: requestBody,
-      json: true,
+    const setSecretOptions: AxiosRequestConfig = {
       headers: { Authorization: `Bearer ${this.graphToken}` },
-    } as rp.RequestPromiseOptions;
+    };
 
     let passwordSet;
     retryCount = 3;
     while (retryCount >= 0) {
       try {
-        passwordSet = await rp.post(addPasswordUri, setSecretOptions);
+        passwordSet = await axios.post(addPasswordUri, requestBody, setSecretOptions);
       } catch (err) {
         this.logger({
           status: BotProjectDeployLoggerType.PROVISION_ERROR,
           message: `Add application password failed, retrying ...`,
         });
         if (retryCount == 0) {
+          logErrorMsg('Add application password', err.message);
           throw createCustomizeError(
             ProvisionErrors.CREATE_APP_REGISTRATION,
             'Add application password failed! Please file an issue on Github.'
@@ -204,11 +209,11 @@ export class BotProjectProvision {
     }
     try {
       const tenantUrl = `https://management.azure.com/subscriptions/${this.subscriptionId}?api-version=2020-01-01`;
-      const options = {
+      const options: AxiosRequestConfig = {
         headers: { Authorization: `Bearer ${this.accessToken}` },
-      } as rp.RequestPromiseOptions;
-      const response = await rp.get(tenantUrl, options);
-      const jsonRes = JSON.parse(response);
+      };
+      const response = await axios.get(tenantUrl, options);
+      const jsonRes = response?.data;
       if (jsonRes.tenantId === undefined) {
         throw createCustomizeError(ProvisionErrors.GET_TENANTID, `No tenants found in the account.`);
       }
