@@ -45,8 +45,6 @@ import {
   choiceContainer,
   titleStyle,
   descriptionStyle,
-  signInButton,
-  accountInfo,
   resourceDropdown,
   dialogBodyStyles,
 } from './styles';
@@ -103,10 +101,10 @@ export const ReplaceQnAFromModal: React.FC<ReplaceQnAModalProps> = (props) => {
   const currentAuthoringLanuage = localeToLanguage(currentLocale);
 
   const actionOptions: IChoiceGroupOption[] = [
-    { key: 'url', text: formatMessage('Replace KB from URL or file ') },
+    { key: 'url', text: formatMessage('Replace knowledge base from URL or file ') },
     {
       key: 'portal',
-      text: formatMessage('Replace with an existing KB from QnA maker portal'),
+      text: formatMessage('Replace with an existing knowledge base from QnA maker portal'),
     },
   ];
 
@@ -287,7 +285,9 @@ export const ReplaceQnAFromModal: React.FC<ReplaceQnAModalProps> = (props) => {
     return (
       <div>
         <div style={{ marginBottom: 14 }}>
-          <span css={subText}>{formatMessage('Create a KB from a URL or import content from an existing KB')}</span>
+          <span css={subText}>
+            {formatMessage('Create a knowledge base from a URL or import content from an existing knowledge base')}
+          </span>
         </div>
         <div css={contentBox}>
           <div css={choiceContainer}>
@@ -298,9 +298,13 @@ export const ReplaceQnAFromModal: React.FC<ReplaceQnAModalProps> = (props) => {
               qnaFile && <ImportQnAFromUrl qnaFile={qnaFile} onChange={onFormDataChange} />
             ) : (
               <div>
-                <div style={titleStyle}>{formatMessage('Replace with an existing KB from QnA maker portal')}</div>
+                <div style={titleStyle}>
+                  {formatMessage('Replace with an existing knowledge base from QnA maker portal')}
+                </div>
                 <div style={descriptionStyle}>
-                  {formatMessage('Select this option when you want to import existing KB from QnA maker portal. ')}
+                  {formatMessage(
+                    'Select this option when you want to import existing knowledge base from QnA maker portal. '
+                  )}
                 </div>
               </div>
             )}
@@ -472,7 +476,7 @@ export const ReplaceQnAFromModal: React.FC<ReplaceQnAModalProps> = (props) => {
       <div>
         <div css={dialogBodyStyles}>
           <p css={{ marginTop: 0 }}>
-            {`Select a KB to to replace content for ${kbName} (${language}). This will replace all current content in your knowledge base.`}
+            {`Select a knowledge base to to replace content for ${kbName} (${language}). This will replace all current content in your knowledge base.`}
           </p>
           <div css={mainElementStyle}>
             <DetailsList

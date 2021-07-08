@@ -146,16 +146,6 @@ export const header = {
   marginBottom: 30,
 };
 
-export const signInButton = {
-  color: SharedColors.cyanBlue10,
-  cursor: 'pointer',
-};
-
-export const accountInfo = {
-  fontSize: 12,
-  color: '#4f4f4f',
-};
-
 export const descriptionStyle = {
   fontSize: 12,
   marginBottom: 25,

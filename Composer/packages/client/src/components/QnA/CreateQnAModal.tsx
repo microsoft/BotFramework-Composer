@@ -120,10 +120,10 @@ export const CreateQnAModal: React.FC<CreateQnAModalProps> = (props) => {
   const avaliableLanguages = uniq(locales.map((item) => localeToLanguage(item)));
 
   const actionOptions: IChoiceGroupOption[] = [
-    { key: 'url', text: formatMessage('Create new KB from URL or file ') },
+    { key: 'url', text: formatMessage('Create new knowledge base from URL or file ') },
     {
       key: 'portal',
-      text: formatMessage('Import existing KB from QnA maker portal'),
+      text: formatMessage('Import existing knowledge base from QnA maker portal'),
     },
   ];
 
@@ -339,7 +339,9 @@ export const CreateQnAModal: React.FC<CreateQnAModalProps> = (props) => {
     return (
       <div>
         <div style={{ marginBottom: 14 }}>
-          <span css={subText}>{formatMessage('Create a KB from a URL or import content from an existing KB')}</span>
+          <span css={subText}>
+            {formatMessage('Create a knowledge base from a URL or import content from an existing knowledge base')}
+          </span>
         </div>
         <div css={contentBox}>
           <div css={choiceContainer}>
@@ -373,7 +375,7 @@ export const CreateQnAModal: React.FC<CreateQnAModalProps> = (props) => {
           <DefaultButton
             disabled={!!loading}
             style={{ float: 'left' }}
-            text={formatMessage('Skip & Create blank KB')}
+            text={formatMessage('Skip & Create blank knowledge base')}
             onClick={() => onSubmitFormData('scratch')}
           />
           <DefaultButton disabled={!!loading} text={formatMessage('Back')} onClick={() => setCurrentStep('name')} />
@@ -540,7 +542,7 @@ export const CreateQnAModal: React.FC<CreateQnAModalProps> = (props) => {
       <div>
         <div css={dialogBodyStyles}>
           <div style={{ marginBottom: 14 }}>
-            {formatMessage('Select one or more KB to import into your bot project')}
+            {formatMessage('Select one or more knowledge base to import into your bot project')}
           </div>
           <div css={mainElementStyle}>
             <DetailsList

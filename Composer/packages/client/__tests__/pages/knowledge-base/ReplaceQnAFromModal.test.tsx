@@ -54,7 +54,7 @@ describe('Replace QnA from portal Modal', () => {
         onSubmit={handleSubmit}
       />
     );
-    const secondOption = getByText('Replace with an existing KB from QnA maker portal');
+    const secondOption = getByText('Replace with an existing knowledge base from QnA maker portal');
     fireEvent.click(secondOption);
     const next = getByText('Next');
     fireEvent.click(next);
