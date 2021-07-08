@@ -14,13 +14,12 @@ import {
   getARMTokenForTenant,
   useLocalStorage,
   useTelemetryClient,
-  TelemetryClient,
   useApplicationApi,
 } from '@bfc/extension-client';
 import { Subscription } from '@azure/arm-subscriptions/esm/models';
 import { DeployLocation, AzureTenant, Notification } from '@botframework-composer/types';
 import { FluentTheme, NeutralColors } from '@uifabric/fluent-theme';
-import { dialogStyle, LoadingSpinner, OpenConfirmModal, ProvisionHandoff } from '@bfc/ui-shared';
+import { LoadingSpinner, OpenConfirmModal, ProvisionHandoff } from '@bfc/ui-shared';
 import {
   ScrollablePane,
   ScrollbarVisibility,

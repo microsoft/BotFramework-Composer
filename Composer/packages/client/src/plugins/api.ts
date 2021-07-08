@@ -40,6 +40,11 @@ interface PublishAPI {
   userShouldProvideTokens?: () => boolean;
   getTenantIdFromCache?: () => string;
   setTenantId?: (value: string) => void;
+  getRequiredRecognizers?: () => {
+    projectId: string;
+    requiresLUIS: boolean;
+    requiresQNA: boolean;
+  }[];
 }
 
 class API implements IAPI {
@@ -67,6 +72,7 @@ class API implements IAPI {
       userShouldProvideTokens: undefined,
       getTenantIdFromCache: undefined,
       setTenantId: undefined,
+      getRequiredRecognizers: undefined,
     };
   }
 }
