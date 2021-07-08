@@ -128,15 +128,15 @@ export class BotProjectProvision {
       }
       this.logger({
         status: BotProjectDeployLoggerType.PROVISION_INFO,
-        message: `Start to add password for App, Id : ${appCreated.appId}`,
+        message: `Start to add password for App, Id : ${appCreated?.appId}`,
       });
       break;
     }
 
-    const appId = appCreated.appId;
+    const appId = appCreated?.appId;
 
     // use id to add new password and save the password as configuration
-    const addPasswordUri = `https://graph.microsoft.com/v1.0/applications/${appCreated.id}/addPassword`;
+    const addPasswordUri = `https://graph.microsoft.com/v1.0/applications/${appCreated?.id}/addPassword`;
     const requestBody = {
       passwordCredential: {
         displayName: `${displayName}-pwd`,

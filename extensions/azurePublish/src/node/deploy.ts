@@ -476,7 +476,7 @@ export class BotProjectDeploy {
         headers: { Authorization: `Bearer ${accessToken}` },
       };
       const response = await axios.get(tenantUrl, options);
-      const jsonRes = JSON.parse(response?.data);
+      const jsonRes = response?.data;
       if (jsonRes.tenantId === undefined) {
         throw new Error(`No tenants found in the account.`);
       }

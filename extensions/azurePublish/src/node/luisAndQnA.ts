@@ -126,7 +126,7 @@ export async function publishLuisToPrediction(
       const response = await axios.get(getAccountUri, options);
 
       // this should include an array of account info objects
-      accountList = response?.data;
+      accountList = response?.data ?? [];
       break;
     } catch (err) {
       if (retryCount < 1) {
