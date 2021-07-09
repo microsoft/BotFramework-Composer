@@ -253,7 +253,7 @@ export class LUServer {
     luFeatures: any
   ): Promise<string[]> {
     let content = '';
-    const result: string[] = [];
+    let result: string[] = [];
     for (const importFile of imports) {
       try {
         content = (await importResolver('.', importFile.id)).content;
@@ -262,11 +262,17 @@ export class LUServer {
       }
 
       let parsed: any;
+      let imported: any;
       try {
-        const { resource } = await this.luParser.parse(content, importFile.id, luFeatures);
+        const { resource, imports } = await this.luParser.parse(content, importFile.id, luFeatures);
         parsed = resource;
+        imported = imports;
       } catch (error) {
         // ignore if file not exist
+      }
+
+      if (imported && imported.length > 0) {
+        result = await this.findAllImportedEntities(imported, importResolver, luFeatures);
       }
 
       if (parsed) {
