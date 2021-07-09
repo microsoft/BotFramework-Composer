@@ -62,7 +62,6 @@ export const FeedModal: React.FC<WorkingModalProps> = (props) => {
   const [editRow, setEditRow] = useState<boolean>(false);
   const { confirm } = useApplicationApi();
   const telemetryClient: TelemetryClient = useTelemetryClient();
-
   const uitext = {
     title: formatMessage('Edit feeds'),
     subTitle: formatMessage('Manage the package sources'),
@@ -142,13 +141,13 @@ export const FeedModal: React.FC<WorkingModalProps> = (props) => {
       isResizable: false,
       height: 32,
       onRender: (item: PackageSourceFeed) => {
-        if (!selectedItem || item.key !== selectedItem.key || !editRow) return <DisplayField text={item.url} />;
+        if (item.key !== selectedItem?.key || !editRow) return <DisplayField text={item.url} />;
         return (
           <TextField
-            disabled={!selectedItem || selectedItem.readonly}
+            disabled={item.readonly}
             placeholder={formatMessage('URL')}
             styles={{ field: { fontSize: 12 } }}
-            value={selectedItem ? selectedItem.url : ''}
+            value={item.url}
             onChange={updateSelected('url')}
           />
         );
@@ -162,14 +161,13 @@ export const FeedModal: React.FC<WorkingModalProps> = (props) => {
       isResizable: false,
       height: 32,
       onRender: (item: PackageSourceFeed) => {
-        if (!selectedItem || item.key !== selectedItem.key || !editRow)
-          return <DisplayField text={item.defaultQuery?.query} />;
+        if (item.key !== selectedItem?.key || !editRow) return <DisplayField text={item.defaultQuery?.query} />;
         return (
           <TextField
-            disabled={!selectedItem || selectedItem.readonly}
+            disabled={item.readonly}
             placeholder={formatMessage('Default Query')}
             styles={{ field: { fontSize: 12 } }}
-            value={selectedItem ? selectedItem.defaultQuery?.query : ''}
+            value={item.defaultQuery?.query}
             onChange={updateSelectedDefaultQuery('query')}
           />
         );
@@ -186,8 +184,8 @@ export const FeedModal: React.FC<WorkingModalProps> = (props) => {
         return (
           <Toggle
             ariaLabel={formatMessage('Include prerelease versions')}
-            checked={item ? item.defaultQuery?.prerelease : false}
-            disabled={!selectedItem || selectedItem.readonly}
+            checked={item.defaultQuery?.prerelease || false}
+            disabled={item.key !== selectedItem?.key || item.readonly}
             onChange={updateSelectedDefaultQuery('prerelease')}
           />
         );
@@ -200,14 +198,10 @@ export const FeedModal: React.FC<WorkingModalProps> = (props) => {
       isResizable: false,
       name: '',
       onRender: (item: PackageSourceFeed) => {
-        if (selectedItem && item.key === selectedItem.key)
+        if (item.key === selectedItem?.key)
           return (
             <Fragment>
-              <IconButton
-                disabled={!selectedItem || selectedItem.readonly}
-                iconProps={{ iconName: 'Delete' }}
-                onClick={removeSelected}
-              />
+              <IconButton disabled={item.readonly} iconProps={{ iconName: 'Delete' }} onClick={removeSelected} />
             </Fragment>
           );
       },
