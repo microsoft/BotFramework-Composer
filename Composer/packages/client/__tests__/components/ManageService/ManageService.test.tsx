@@ -16,6 +16,23 @@ const serviceKeyType = 'keytype';
 const handoffInstructions = 'handoffInstructions';
 const DOWN_ARROW = { keyCode: 40 };
 
+jest.mock('../../../src/utils/auth', () => ({
+  decodeToken: () => {
+    return {
+      upn: 'mockUser@mockDomain.com',
+      name: 'mockUser',
+      exp: new Date().getTime(),
+      tenant: 'mockTenant',
+    };
+  },
+  userShouldProvideTokens: jest.fn(),
+  isShowAuthDialog: jest.fn(),
+  getTokenFromCache: jest.fn(),
+  setTenantId: jest.fn(),
+  getTenantIdFromCache: jest.fn(),
+  prepareAxios: jest.fn(),
+}));
+
 jest.mock('@azure/arm-cognitiveservices', () => ({
   CognitiveServicesManagementClient: function CognitiveServicesManagementClient() {
     return {
@@ -54,11 +71,10 @@ jest.mock('../../../src/utils/authClient', () => ({
         },
       ];
     },
-    getARMTokenForTenant: async () => 'armtoken',
+    getARMTokenForTenant: async () => 'mockToken',
+    getAccessToken: async () => 'mockToken',
   },
 }));
-
-jest.mock('../../../src/utils/auth');
 
 describe('<ManageService />', () => {
   it('displays correct ui copy', async () => {
@@ -150,13 +166,9 @@ describe('<ManageService />', () => {
     // click the next button, ensure the title changes
     const nextButton = await findByRole('button', { name: 'Next' });
     expect(nextButton).toBeDefined();
-    act(() => {
-      fireEvent.click(nextButton);
+    await act(async () => {
+      await fireEvent.click(nextButton);
     });
-
-    const tenantOption = await findByTestId('service-useexisting-tenant-selection');
-    expect(tenantOption).toBeDefined();
-    expect(tenantOption).toBeEnabled();
 
     const subscriptionOption = await findByTestId('service-useexisting-subscription-selection');
     expect(subscriptionOption).toBeDefined();
@@ -164,7 +176,7 @@ describe('<ManageService />', () => {
 
     expect(baseElement).toHaveTextContent(`Select ${serviceName} resources`);
     expect(baseElement).toHaveTextContent(
-      `Select your Azure directory, then choose the subscription where your existing ${serviceName} resource is located.`
+      `Choose the subscription where your existing ${serviceName} resource is located.`
     );
 
     // ensure that since a subscription hasn't been selected
@@ -174,38 +186,38 @@ describe('<ManageService />', () => {
     expect(nextButton2).toBeDisabled();
 
     // select a subscription
-    act(() => {
-      fireEvent.keyDown(subscriptionOption, DOWN_ARROW);
+    await act(async () => {
+      await fireEvent.keyDown(subscriptionOption, DOWN_ARROW);
     });
 
     const mySub = await findByText('mockSubscription');
     expect(mySub).toBeDefined();
 
-    act(() => {
-      fireEvent.click(mySub);
+    await act(async () => {
+      await fireEvent.click(mySub);
     });
 
     // select a resource group
     const resourceOption = await findByTestId('service-useexisting-key-selection');
     expect(resourceOption).toBeDefined();
     expect(resourceOption).toBeEnabled();
-    act(() => {
-      fireEvent.keyDown(resourceOption, DOWN_ARROW);
+    await act(async () => {
+      await fireEvent.keyDown(resourceOption, DOWN_ARROW);
     });
 
     // select the key
     const myKey = await findByText('mockedAccount');
     expect(myKey).toBeDefined();
-    act(() => {
-      fireEvent.click(myKey);
+    await act(async () => {
+      await fireEvent.click(myKey);
     });
 
     // make sure the next button is appropriately enabled
     expect(nextButton2).toBeEnabled();
 
     // click next
-    act(() => {
-      fireEvent.click(nextButton2);
+    await act(async () => {
+      await fireEvent.click(nextButton2);
     });
 
     // let promises flush
@@ -245,13 +257,15 @@ describe('<ManageService />', () => {
     // test the default option (choose existing)
     // change selection
     const createOption = await findByText('Create and configure new Azure resources');
-    fireEvent.click(createOption);
+    await act(async () => {
+      await fireEvent.click(createOption);
+    });
 
     // click the next button, ensure the title changes
     const nextButton = await findByRole('button', { name: 'Next' });
     expect(nextButton).toBeDefined();
-    act(() => {
-      fireEvent.click(nextButton);
+    await act(async () => {
+      await fireEvent.click(nextButton);
     });
     expect(baseElement).toHaveTextContent(`Create ${serviceName} resources`);
 
@@ -261,31 +275,27 @@ describe('<ManageService />', () => {
     expect(nextButton2).toBeDefined();
     expect(nextButton2).toBeDisabled();
 
-    const tenantOption = await findByTestId('service-create-tenant-selection');
-    expect(tenantOption).toBeDefined();
-    expect(tenantOption).toBeEnabled();
-
     const subscriptionOption = await findByTestId('service-create-subscription-selection');
     expect(subscriptionOption).toBeDefined();
     expect(subscriptionOption).toBeEnabled();
 
     // choose subscription
-    act(() => {
-      fireEvent.keyDown(subscriptionOption, DOWN_ARROW);
+    await act(async () => {
+      await fireEvent.keyDown(subscriptionOption, DOWN_ARROW);
     });
 
     const mySub = await findByText('mockSubscription');
     expect(mySub).toBeDefined();
 
-    act(() => {
-      fireEvent.click(mySub);
+    await act(async () => {
+      await fireEvent.click(mySub);
     });
 
     // next button should now be enabled
     expect(nextButton2).toBeEnabled();
 
-    act(() => {
-      fireEvent.click(nextButton2);
+    await act(async () => {
+      await fireEvent.click(nextButton2);
     });
 
     const nextButton3 = await findByRole('button', { name: 'Next' });
@@ -301,16 +311,16 @@ describe('<ManageService />', () => {
     expect(resourceName).toBeEnabled();
 
     // choose subscription
-    act(() => {
-      fireEvent.click(resourceOption);
+    await act(async () => {
+      await fireEvent.click(resourceOption);
     });
 
     const myGroup = await findByText('mockedGroup');
     expect(myGroup).toBeDefined();
 
-    act(() => {
-      fireEvent.click(myGroup);
-      fireEvent.change(resourceName, { target: { value: 'mockedResource' } });
+    await act(async () => {
+      await fireEvent.click(myGroup);
+      await fireEvent.change(resourceName, { target: { value: 'mockedResource' } });
     });
 
     // select region
@@ -318,20 +328,20 @@ describe('<ManageService />', () => {
     expect(regionOption).toBeDefined();
     expect(regionOption).toBeEnabled();
     // choose subscription
-    act(() => {
-      fireEvent.keyDown(regionOption, DOWN_ARROW);
+    await act(async () => {
+      await fireEvent.keyDown(regionOption, DOWN_ARROW);
     });
 
     const myRegion = await findByText('West US');
     expect(myRegion).toBeDefined();
 
-    act(() => {
-      fireEvent.click(myRegion);
+    await act(async () => {
+      await fireEvent.click(myRegion);
     });
 
     expect(nextButton3).toBeEnabled();
-    act(() => {
-      fireEvent.click(nextButton3);
+    await act(async () => {
+      await fireEvent.click(nextButton3);
     });
 
     // let promises flush
@@ -381,13 +391,15 @@ describe('<ManageService />', () => {
     // test the default option (choose existing)
     // change selection
     const createOption = await findByText('Create and configure new Azure resources');
-    fireEvent.click(createOption);
+    await act(async () => {
+      await fireEvent.click(createOption);
+    });
 
     // click the next button, ensure the title changes
     const nextButton = await findByRole('button', { name: 'Next' });
     expect(nextButton).toBeDefined();
-    act(() => {
-      fireEvent.click(nextButton);
+    await act(async () => {
+      await fireEvent.click(nextButton);
     });
     expect(baseElement).toHaveTextContent(`Create ${serviceName} resources`);
 
@@ -397,31 +409,27 @@ describe('<ManageService />', () => {
     expect(nextButton2).toBeDefined();
     expect(nextButton2).toBeDisabled();
 
-    const tenantOption = await findByTestId('service-create-tenant-selection');
-    expect(tenantOption).toBeDefined();
-    expect(tenantOption).toBeEnabled();
-
     const subscriptionOption = await findByTestId('service-create-subscription-selection');
     expect(subscriptionOption).toBeDefined();
     expect(subscriptionOption).toBeEnabled();
 
     // choose subscription
-    act(() => {
-      fireEvent.keyDown(subscriptionOption, DOWN_ARROW);
+    await act(async () => {
+      await fireEvent.keyDown(subscriptionOption, DOWN_ARROW);
     });
 
     const mySub = await findByText('mockSubscription');
     expect(mySub).toBeDefined();
 
-    act(() => {
-      fireEvent.click(mySub);
+    await act(async () => {
+      await fireEvent.click(mySub);
     });
 
     // next button should now be enabled
     expect(nextButton2).toBeEnabled();
 
-    act(() => {
-      fireEvent.click(nextButton2);
+    await act(async () => {
+      await fireEvent.click(nextButton2);
     });
 
     const nextButton3 = await findByRole('button', { name: 'Next' });
@@ -437,16 +445,16 @@ describe('<ManageService />', () => {
     expect(resourceName).toBeEnabled();
 
     // choose subscription
-    act(() => {
-      fireEvent.click(resourceOption);
+    await act(async () => {
+      await fireEvent.click(resourceOption);
     });
 
     const myGroup = await findByText('mockedGroup');
     expect(myGroup).toBeDefined();
 
-    act(() => {
-      fireEvent.click(myGroup);
-      fireEvent.change(resourceName, { target: { value: 'mockedResource' } });
+    await act(async () => {
+      await fireEvent.click(myGroup);
+      await fireEvent.change(resourceName, { target: { value: 'mockedResource' } });
     });
 
     // select region
@@ -454,15 +462,15 @@ describe('<ManageService />', () => {
     expect(regionOption).toBeDefined();
     expect(regionOption).toBeEnabled();
     // choose subscription
-    act(() => {
-      fireEvent.keyDown(regionOption, DOWN_ARROW);
+    await act(async () => {
+      await fireEvent.keyDown(regionOption, DOWN_ARROW);
     });
 
     const myRegion = await findByText('West US');
     expect(myRegion).toBeDefined();
 
-    act(() => {
-      fireEvent.click(myRegion);
+    await act(async () => {
+      await fireEvent.click(myRegion);
     });
 
     // NEXT BUTTON SHOULD STILL BE DISABLED! need to do tier selection!
@@ -472,22 +480,22 @@ describe('<ManageService />', () => {
     expect(tierOption).toBeDefined();
     expect(tierOption).toBeEnabled();
     // choose subscription
-    act(() => {
-      fireEvent.keyDown(tierOption, DOWN_ARROW);
+    await act(async () => {
+      await fireEvent.keyDown(tierOption, DOWN_ARROW);
     });
 
     const myTier = await findByText('mockedTier');
     expect(myTier).toBeDefined();
 
-    act(() => {
-      fireEvent.click(myTier);
+    await act(async () => {
+      await fireEvent.click(myTier);
     });
 
     // finally the button should now be enabled
     expect(nextButton3).toBeEnabled();
 
-    act(() => {
-      fireEvent.click(nextButton3);
+    await act(async () => {
+      await fireEvent.click(nextButton3);
     });
 
     // let promises flush
@@ -536,13 +544,15 @@ describe('<ManageService />', () => {
     // test the default option (choose existing)
     // change selection
     const createOption = await findByText('Create and configure new Azure resources');
-    fireEvent.click(createOption);
+    await act(async () => {
+      await fireEvent.click(createOption);
+    });
 
     // click the next button, ensure the title changes
     const nextButton = await findByRole('button', { name: 'Next' });
     expect(nextButton).toBeDefined();
-    act(() => {
-      fireEvent.click(nextButton);
+    await act(async () => {
+      await fireEvent.click(nextButton);
     });
     expect(baseElement).toHaveTextContent(`Create ${serviceName} resources`);
 
@@ -552,31 +562,27 @@ describe('<ManageService />', () => {
     expect(nextButton2).toBeDefined();
     expect(nextButton2).toBeDisabled();
 
-    const tenantOption = await findByTestId('service-create-tenant-selection');
-    expect(tenantOption).toBeDefined();
-    expect(tenantOption).toBeEnabled();
-
     const subscriptionOption = await findByTestId('service-create-subscription-selection');
     expect(subscriptionOption).toBeDefined();
     expect(subscriptionOption).toBeEnabled();
 
     // choose subscription
-    act(() => {
-      fireEvent.keyDown(subscriptionOption, DOWN_ARROW);
+    await act(async () => {
+      await fireEvent.keyDown(subscriptionOption, DOWN_ARROW);
     });
 
     const mySub = await findByText('mockSubscription');
     expect(mySub).toBeDefined();
 
-    act(() => {
-      fireEvent.click(mySub);
+    await act(async () => {
+      await fireEvent.click(mySub);
     });
 
     // next button should now be enabled
     expect(nextButton2).toBeEnabled();
 
-    act(() => {
-      fireEvent.click(nextButton2);
+    await act(async () => {
+      await fireEvent.click(nextButton2);
     });
 
     const nextButton3 = await findByRole('button', { name: 'Next' });
@@ -592,16 +598,16 @@ describe('<ManageService />', () => {
     expect(resourceName).toBeEnabled();
 
     // choose subscription
-    act(() => {
-      fireEvent.click(resourceOption);
+    await act(async () => {
+      await fireEvent.click(resourceOption);
     });
 
     const myGroup = await findByText('mockedGroup');
     expect(myGroup).toBeDefined();
 
-    act(() => {
-      fireEvent.click(myGroup);
-      fireEvent.change(resourceName, { target: { value: 'mockedResource' } });
+    await act(async () => {
+      await fireEvent.click(myGroup);
+      await fireEvent.change(resourceName, { target: { value: 'mockedResource' } });
     });
 
     // select region
@@ -609,15 +615,15 @@ describe('<ManageService />', () => {
     expect(regionOption).toBeDefined();
     expect(regionOption).toBeEnabled();
     // choose subscription
-    act(() => {
-      fireEvent.keyDown(regionOption, DOWN_ARROW);
+    await act(async () => {
+      await fireEvent.keyDown(regionOption, DOWN_ARROW);
     });
 
     const myRegion = await findByText('West US');
     expect(myRegion).toBeDefined();
 
-    act(() => {
-      fireEvent.click(myRegion);
+    await act(async () => {
+      await fireEvent.click(myRegion);
     });
 
     // NEXT BUTTON SHOULD STILL BE DISABLED! need to do tier selection!
@@ -627,22 +633,22 @@ describe('<ManageService />', () => {
     expect(tierOption).toBeDefined();
     expect(tierOption).toBeEnabled();
     // choose subscription
-    act(() => {
-      fireEvent.keyDown(tierOption, DOWN_ARROW);
+    await act(async () => {
+      await fireEvent.keyDown(tierOption, DOWN_ARROW);
     });
 
     const myTier = await findByText('mockedTier');
     expect(myTier).toBeDefined();
 
-    act(() => {
-      fireEvent.click(myTier);
+    await act(async () => {
+      await fireEvent.click(myTier);
     });
 
     // finally the button should now be enabled
     expect(nextButton3).toBeEnabled();
 
-    act(() => {
-      fireEvent.click(nextButton3);
+    await act(async () => {
+      await fireEvent.click(nextButton3);
     });
 
     // let promises flush
@@ -691,13 +697,15 @@ describe('<ManageService />', () => {
     // test the default option (choose existing)
     // change selection
     const generateOption = await findByText('Generate instructions for Azure administrator');
-    fireEvent.click(generateOption);
+    await act(async () => {
+      await fireEvent.click(generateOption);
+    });
 
     // click the next button, ensure the title changes
     const nextButton = await findByRole('button', { name: 'Next' });
     expect(nextButton).toBeDefined();
-    act(() => {
-      fireEvent.click(nextButton);
+    await act(async () => {
+      await fireEvent.click(nextButton);
     });
 
     expect(baseElement).toHaveTextContent(

@@ -136,6 +136,15 @@ export const ListEntityCreationDialog = (props: Props) => {
     []
   );
 
+  const blur = React.useCallback(
+    (item: ListEntityItem) => (_: React.FocusEvent<HTMLInputElement>, tags?: string[]) => {
+      if (tags) {
+        changeSynonyms(item)(tags);
+      }
+    },
+    [changeSynonyms]
+  );
+
   const deleteSelectedListEntityItems = React.useCallback(() => {
     setListEntity((currentEntity) => {
       const clonedEntity = { ...currentEntity };
@@ -218,6 +227,7 @@ export const ListEntityCreationDialog = (props: Props) => {
               editable={false}
               placeholder={formatMessage('Enter a synonym and press enter')}
               tags={item.synonyms}
+              onBlur={blur(item)}
               onChange={changeSynonyms(item)}
             />
           );

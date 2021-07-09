@@ -579,7 +579,7 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
         required: false,
       });
 
-      // TODO: determine if QNA or LUIS is REQUIRED or OPTIONAL
+      // luis and qna required values will be properly set by extension front end caller
       const requireLUIS = false;
       const requireQNA = false;
 

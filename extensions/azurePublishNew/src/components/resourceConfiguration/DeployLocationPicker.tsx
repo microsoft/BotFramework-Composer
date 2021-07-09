@@ -48,7 +48,7 @@ export const DeployLocationPicker = React.memo((props: Props) => {
 
   const localTextFieldProps = React.useMemo(
     () => ({
-      placeHolder: formatMessage('Select Region'),
+      placeholder: formatMessage('Select Region'),
       errorMessage,
     }),
     [errorMessage]

@@ -10,12 +10,20 @@ import jwtDecode from 'jwt-decode';
 import formatMessage from 'format-message';
 
 import { USER_TOKEN_STORAGE_KEY, BASEURL } from '../constants';
-import { Dispatcher } from '../recoilModel/dispatchers';
 import { authConfig, authUrl } from '../constants';
 
 import storage from './storage';
 import httpClient from './httpUtil';
 import { isElectron } from './electronUtil';
+
+export function decodeToken(token: string) {
+  try {
+    return jwtDecode<any>(token);
+  } catch (err) {
+    console.error('decode token error in ', err);
+    return null;
+  }
+}
 
 export function isTokenExpired(token: string): boolean {
   try {
@@ -62,7 +70,7 @@ export function getUserTokenFromCache(): string | null {
   }
 }
 
-export function prepareAxios({ setUserSessionExpired }: Dispatcher) {
+export function prepareAxios() {
   if (process.env.COMPOSER_REQUIRE_AUTH) {
     const cancelSource = axios.CancelToken.source();
 
@@ -90,7 +98,6 @@ export function prepareAxios({ setUserSessionExpired }: Dispatcher) {
 
           // remove user token from the cache
           clearUserTokenFromCache();
-          setUserSessionExpired(true);
         }
 
         return Promise.reject(err);
@@ -258,6 +265,10 @@ export async function monitorWindowForQueryParam(
       }
     }, 1);
   });
+}
+
+export function setTokenInCache(key: string, token: string) {
+  storage.set(key, token);
 }
 
 export function getTokenFromCache(key: string) {

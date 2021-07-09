@@ -5,10 +5,10 @@ import * as React from 'react';
 import formatMessage from 'format-message';
 import styled from '@emotion/styled';
 import { DefaultButton, PersonaSize } from 'office-ui-fabric-react';
+import { CurrentUser } from '@bfc/shared';
 
 import { UserPersona } from '../../shared/userPersona/UserPersona';
 import { WizardStep } from '../../shared/wizard';
-import { UserInfo } from '../../../types';
 
 type ProvisonActionsStylingProps = {
   showSignout: boolean;
@@ -30,15 +30,15 @@ const ButtonContainer = styled.div`
   }
 `;
 
-type Props = { userInfo?: UserInfo } & WizardStep;
+type Props = { currentUser?: CurrentUser } & WizardStep;
 
 export const WizardFooter = (props: Props) => {
-  const { userInfo, navigationState: navigation } = props;
+  const { currentUser, navigationState: navigation } = props;
 
   return (
-    <ProvisonActions showSignout={!!userInfo}>
-      {userInfo ? (
-        <UserPersona secondaryText={formatMessage('Sign out')} size={PersonaSize.size40} text={userInfo?.name} />
+    <ProvisonActions showSignout={!!currentUser}>
+      {currentUser ? (
+        <UserPersona secondaryText={formatMessage('Sign out')} size={PersonaSize.size40} text={currentUser?.name} />
       ) : null}
       <ButtonContainer>
         <FooterButton

@@ -30,6 +30,10 @@ import {
   schemasState,
   focusPathState,
   localeState,
+  currentUserState,
+  currentTenantIdState,
+  isAuthenticatedState,
+  showAuthDialogState,
   qnaFilesSelectorFamily,
   designPageLocationState,
   botDisplayNameState,
@@ -106,6 +110,10 @@ export function useShell(source: EventSource, projectId: string): Shell {
   const flowCommentsVisible = useRecoilValue(flowCommentsVisibilityState);
   const rootBotProjectId = useRecoilValue(rootBotProjectIdSelector);
   const isRootBot = rootBotProjectId === projectId;
+  const isAuthenticated = useRecoilValue(isAuthenticatedState);
+  const currentUser = useRecoilValue(currentUserState);
+  const currentTenant = useRecoilValue(currentTenantIdState);
+  const showAuthDialog = useRecoilValue(showAuthDialogState);
   const projectCollection = useRecoilValue<BotInProject[]>(botProjectSpaceSelector).map((bot) => ({
     ...bot,
     hasWarnings: false,
@@ -137,6 +145,7 @@ export function useShell(source: EventSource, projectId: string): Shell {
     deleteNotification,
     hideNotification,
     markNotificationAsRead,
+    requireUserLogin,
   } = useRecoilValue(dispatcherState);
 
   const lgApi = useLgApi(projectId);
@@ -302,6 +311,7 @@ export function useShell(source: EventSource, projectId: string): Shell {
     deleteNotification,
     markNotificationAsRead,
     hideNotification,
+    requireUserLogin,
   };
 
   const currentDialog = useMemo(() => {
@@ -333,6 +343,10 @@ export function useShell(source: EventSource, projectId: string): Shell {
     lgFiles,
     luFiles,
     qnaFiles,
+    currentUser,
+    currentTenant,
+    isAuthenticated,
+    showAuthDialog,
     currentDialog,
     userSettings,
     designerId: editorData?.$designer?.id,

@@ -256,7 +256,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
   const onCreateNewQnAPairsStart = (fileId: string | undefined) => {
     if (!fileId) return;
     const groupStartIndex = qnaSections.findIndex((item) => item.fileId === fileId);
-    // create on empty KB.
+    // create on empty knowledge base.
     let insertPosition = groupStartIndex;
     const newGroups = getGroups(fileId);
     setGroups(newGroups);
@@ -907,7 +907,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
           <p>{formatMessage('Create a knowledge base from scratch or import knowledge from a URL or PDF files')}</p>
           <PrimaryButton
             data-testid={'createKnowledgeBase'}
-            text={formatMessage('Create new KB')}
+            text={formatMessage('Create new knowledge base')}
             onClick={() => {
               actions.createQnADialogBegin({ projectId: actualProjectId, dialogId });
               TelemetryClient.track('AddNewKnowledgeBaseStarted');

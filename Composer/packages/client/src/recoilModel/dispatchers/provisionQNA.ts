@@ -136,7 +136,7 @@ export const provisionQNADispatcher = () => {
         // add web config for websites
         const primaryEndpointKey = `${qnaMakerWebAppName}-PrimaryEndpointKey`;
         const secondaryEndpointKey = `${qnaMakerWebAppName}-SecondaryEndpointKey`;
-        const defaultAnswer = 'No good match found in KB.';
+        const defaultAnswer = 'No good match found in knowledge base.';
         const QNAMAKER_EXTENSION_VERSION = 'latest';
 
         const azureSearchAdminKey = (await searchManagementClient.adminKeys.get(resourceGroupName, qnaMakerSearchName))
