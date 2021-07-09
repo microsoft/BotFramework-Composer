@@ -80,7 +80,6 @@
     "react": "^16.13.0",
     "react-dom": "^16.13.0",
     "request": "2.88.2",
-    "request-promise": "4.2.5",
     "url-loader": "^4.1.1",
     "uuid": "7.0.3"
   },

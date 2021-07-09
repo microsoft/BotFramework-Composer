@@ -3,7 +3,6 @@
 
 import React from 'react';
 import styled from '@emotion/styled';
-import { useRecoilValue } from 'recoil';
 import formatMessage from 'format-message';
 import { FluentTheme, NeutralColors } from '@uifabric/fluent-theme';
 import {
@@ -19,10 +18,8 @@ import {
   IStackItemStyles,
   Link,
 } from 'office-ui-fabric-react';
-import { usePublishApi } from '@bfc/extension-client';
+import { usePublishApi, useAuthApi } from '@bfc/extension-client';
 
-import { useDispatcher } from '../../../hooks/useDispatcher';
-import { TenantPicker } from '../../resourceConfiguration/TenantPicker';
 import { SubscriptionPicker } from '../../resourceConfiguration/SubscriptionPicker';
 import { ResourceGroupPicker } from '../../resourceConfiguration/ResourceGroupPicker';
 import { DeployLocationPicker } from '../../resourceConfiguration/DeployLocationPicker';
@@ -30,7 +27,6 @@ import { useResourceConfiguration } from '../../../hooks/useResourceConfiguratio
 import { ResourceNameTextField } from '../../resourceConfiguration/ResourceNameTextField';
 import { LuisRegionPicker } from '../../resourceConfiguration/LuisRegionPicker';
 import { LuisAuthoringSupportLocation } from '../../../constants';
-import { userInfoState } from '../../../recoilModel/atoms/resourceConfigurationState';
 import { OperatingSystemChoiceGroup } from '../../resourceConfiguration/OperatingSystemChoiceGroup';
 
 type Props = {
@@ -60,6 +56,10 @@ const configureResourcePropertyLabelStackStyles: IStackItemStyles = {
   },
 };
 
+const Root = styled(ScrollablePane)`
+  height: calc(100vh - 65px);
+`;
+
 const ConfigureResourcesPropertyLabel = styled(Label)`
   font-size: ${FluentTheme.fonts.medium.fontSize};
   font-weight: ${FontWeights.regular};
@@ -88,13 +88,11 @@ const urls = {
 };
 
 export const ResourceConfigurationStep = (props: Props) => {
-  const { setUserInfo } = useDispatcher();
   const { publishConfig } = usePublishApi();
-  const userInfo = useRecoilValue(userInfoState);
+  const { currentUser } = useAuthApi();
 
   const {
     configuration: {
-      tenantId,
       deployLocation,
       resourceGroupName,
       subscriptionId,
@@ -108,7 +106,6 @@ export const ResourceConfigurationStep = (props: Props) => {
     handleChangeSubscription,
     handleValidateHostName,
     handleValidateResourceGroupName,
-    handleChangeTenant,
     handleFetchDeployLocation,
     handleChangeLuisRegion,
     handleChangeHostName,
@@ -132,38 +129,14 @@ export const ResourceConfigurationStep = (props: Props) => {
   };
 
   return (
-    <ScrollablePane data-is-scrollable="true" scrollbarVisibility={ScrollbarVisibility.auto}>
+    <Root data-is-scrollable="true" scrollbarVisibility={ScrollbarVisibility.auto}>
       <FullWidthForm>
         <Stack>
           <ConfigureResourcesSectionName>{formatMessage('Azure details')}</ConfigureResourcesSectionName>
           <ConfigureResourcesSectionDescription>
             {formatMessage('Select your Azure directory and subscription, enter resource group name.')}
           </ConfigureResourcesSectionDescription>
-          <Stack horizontal tokens={configureResourcePropertyStackTokens} verticalAlign="start">
-            <Stack horizontal styles={configureResourcePropertyLabelStackStyles} verticalAlign="center">
-              <ConfigureResourcesPropertyLabel required>
-                {formatMessage('Azure Directory')}
-              </ConfigureResourcesPropertyLabel>
-              {renderPropertyInfoIcon(
-                formatMessage(
-                  'Azure Active Directory is Microsoft’s cloud-based identity and access management service.'
-                )
-              )}
-            </Stack>
-            <TenantPicker
-              textFieldProps={{
-                disabled: !!publishConfig?.tenantId,
-                styles: autoCompleteTextFieldStyles,
-                onChange: (e, newValue) => {
-                  if (newValue.length === 0) handleChangeTenant('');
-                },
-              }}
-              value={tenantId}
-              onChangeTenant={handleChangeTenant}
-              onClear={() => handleChangeTenant('')}
-              onUserInfoFetch={setUserInfo}
-            />
-          </Stack>
+
           <Stack horizontal tokens={configureResourcePropertyStackTokens} verticalAlign="start">
             <Stack horizontal styles={configureResourcePropertyLabelStackStyles} verticalAlign="center">
               <ConfigureResourcesPropertyLabel required>
@@ -172,7 +145,7 @@ export const ResourceConfigurationStep = (props: Props) => {
               {renderPropertyInfoIcon('The subscription that will be billed for the resources.')}
             </Stack>
             <SubscriptionPicker
-              accessToken={userInfo?.token}
+              accessToken={currentUser?.token}
               textFieldProps={{
                 disabled: !!publishConfig?.subscriptionId,
                 styles: autoCompleteTextFieldStyles,
@@ -197,11 +170,11 @@ export const ResourceConfigurationStep = (props: Props) => {
               )}
             </Stack>
             <ResourceGroupPicker
-              accessToken={userInfo?.token}
+              accessToken={currentUser?.token}
               isNewResourceGroup={isNewResourceGroup}
               subscriptionId={subscriptionId}
               textFieldProps={{
-                disabled: !!publishConfig?.resourceGroup?.name,
+                disabled: !!publishConfig?.resourceGroup,
                 styles: autoCompleteTextFieldStyles,
                 onChange: (_, newValue) => {
                   if (newValue.length === 0) handleChangeResourceGroup('', false);
@@ -241,8 +214,8 @@ export const ResourceConfigurationStep = (props: Props) => {
               {renderPropertyInfoIcon(formatMessage('A unique name for your resources.'))}
             </Stack>
             <ResourceNameTextField
-              accessToken={userInfo?.token}
-              disabled={!!publishConfig?.hostName}
+              accessToken={currentUser?.token}
+              disabled={!!publishConfig?.hostname}
               styles={autoCompleteTextFieldStyles}
               subscriptionId={subscriptionId}
               value={hostName}
@@ -253,10 +226,10 @@ export const ResourceConfigurationStep = (props: Props) => {
           <Stack horizontal tokens={configureResourcePropertyStackTokens} verticalAlign="start">
             <Stack horizontal styles={configureResourcePropertyLabelStackStyles} verticalAlign="center">
               <ConfigureResourcesPropertyLabel required>{formatMessage('Region')}</ConfigureResourcesPropertyLabel>
-              {renderPropertyInfoIcon('The region where your resources and bot will be used.')}
+              {renderPropertyInfoIcon(formatMessage('The region where your resources and bot will be used.'))}
             </Stack>
             <DeployLocationPicker
-              accessToken={userInfo?.token}
+              accessToken={currentUser?.token}
               subscriptionId={subscriptionId}
               textFieldProps={{
                 disabled: !!publishConfig?.deployLocation,
@@ -301,6 +274,6 @@ export const ResourceConfigurationStep = (props: Props) => {
           </Stack>
         </Stack>
       </FullWidthForm>
-    </ScrollablePane>
+    </Root>
   );
 };

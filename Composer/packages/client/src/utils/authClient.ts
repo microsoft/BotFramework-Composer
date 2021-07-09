@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
@@ -15,6 +16,7 @@ import {
   isTokenExpired,
   cleanTokenFromCache,
   removeTenantFromCache,
+  setTokenInCache,
 } from './auth';
 import { isElectron } from './electronUtil';
 import storage from './storage';
@@ -122,14 +124,20 @@ async function getARMTokenForTenant(tenantId: string): Promise<string> {
     const { __csrf__ = '' } = window;
     options.headers['X-CSRF-Token'] = __csrf__;
   }
-
-  const result = await fetch(`/api/auth/getARMTokenForTenant?tenantId=${tenantId}`, options);
-  if (result.status >= 400) {
-    const data = await result.json();
-    throw Error(data.error?.diagnostics?.description || 'get ARM token failure');
+  // do we have a valid token in the cache for this tenant?
+  if (getTokenFromCache(`token-${tenantId}`)) {
+    return getTokenFromCache(`token-${tenantId}`);
   } else {
-    const { accessToken = '' } = await result.json();
-    return accessToken;
+    const result = await fetch(`/api/auth/getARMTokenForTenant?tenantId=${tenantId}`, options);
+    if (result.status >= 400) {
+      const data = await result.json();
+      throw new Error(data.error?.diagnostics?.description || 'get ARM token failure');
+    } else {
+      const { accessToken = '' } = await result.json();
+      // cache the token so we don't overrequest it.
+      setTokenInCache(`token-${tenantId}`, accessToken);
+      return accessToken;
+    }
   }
 }
 

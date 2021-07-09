@@ -31,20 +31,18 @@ import { QnAMakerClient } from '@azure/cognitiveservices-qnamaker';
 import sortBy from 'lodash/sortBy';
 import uniq from 'lodash/uniq';
 import { NeutralColors } from '@uifabric/fluent-theme';
-import { AzureTenant } from '@botframework-composer/types';
-import jwtDecode from 'jwt-decode';
 import { IRenderFunction } from '@uifabric/utilities';
 
 import TelemetryClient from '../../telemetry/TelemetryClient';
-import { AuthClient } from '../../utils/authClient';
-import { AuthDialog } from '../../components/Auth/AuthDialog';
-import { getTokenFromCache, isShowAuthDialog, userShouldProvideTokens } from '../../utils/auth';
 import {
   createQnAOnState,
   showCreateQnADialogState,
   settingsState,
   dispatcherState,
   localeState,
+  currentUserState,
+  isAuthenticatedState,
+  showAuthDialogState,
 } from '../../recoilModel';
 
 import { CreateQnAFormData, CreateQnAModalProps, QnAMakerLearnMoreUrl } from './constants';
@@ -62,6 +60,7 @@ import { CreateQnAFromUrl } from './CreateQnAFromUrl';
 import { CreateQnAFromScratch } from './CreateQnAFromScratch';
 import { CreateQnAFromQnAMaker } from './CreateQnAFromQnAMaker';
 import { localeToLanguage } from './utilities';
+import { PersonaCard } from './PersonaCard';
 
 type KeyRec = {
   name: string;
@@ -96,15 +95,13 @@ export const CreateQnAModal: React.FC<CreateQnAModalProps> = (props) => {
   const [initialName, setInitialName] = useState<string>('');
   const [formData, setFormData] = useState<CreateQnAFormData>();
   const [disabled, setDisabled] = useState(true);
+  const { setApplicationLevelError, requireUserLogin } = useRecoilValue(dispatcherState);
+  const currentUser = useRecoilValue(currentUserState);
+  const isAuthenticated = useRecoilValue(isAuthenticatedState);
+  const showAuthDialog = useRecoilValue(showAuthDialogState);
 
-  const [showAuthDialog, setShowAuthDialog] = useState(false);
-  const [token, setToken] = useState<string | undefined>();
-
-  const { setApplicationLevelError } = useRecoilValue(dispatcherState);
   const [subscriptionId, setSubscription] = useState<string>('');
-  const [tenantId, setTenantId] = useState<string>('');
-  const [allTenants, setAllTenants] = useState<AzureTenant[]>([]);
-  const [tenantsErrorMessage, setTenantsErrorMessage] = useState<string | undefined>(undefined);
+
   const [loading, setLoading] = useState<string | undefined>(undefined);
   const [noKeys, setNoKeys] = useState<boolean>(false);
   const [nextAction, setNextAction] = useState<string>('url');
@@ -117,7 +114,6 @@ export const CreateQnAModal: React.FC<CreateQnAModalProps> = (props) => {
   const [selectedKb, setSelectedKb] = useState<KBRec>();
   const [dialogTitle, setDialogTitle] = useState<string>('');
 
-  const [userProvidedTokens, setUserProvidedTokens] = useState<boolean>(false);
   const [currentStep, setCurrentStep] = useState<Step>('name');
 
   const currentAuthoringLanuage = localeToLanguage(currentLocale);
@@ -125,10 +121,10 @@ export const CreateQnAModal: React.FC<CreateQnAModalProps> = (props) => {
   const avaliableLanguages = uniq(locales.map((item) => localeToLanguage(item)));
 
   const actionOptions: IChoiceGroupOption[] = [
-    { key: 'url', text: formatMessage('Create new KB from URL or file ') },
+    { key: 'url', text: formatMessage('Create new knowledge base from URL or file ') },
     {
       key: 'portal',
-      text: formatMessage('Import existing KB from QnA maker portal'),
+      text: formatMessage('Import existing knowledge base from QnA maker portal'),
     },
   ];
 
@@ -145,14 +141,6 @@ export const CreateQnAModal: React.FC<CreateQnAModalProps> = (props) => {
       return [];
     }
   };
-  const decodeToken = (token: string) => {
-    try {
-      return jwtDecode<any>(token);
-    } catch (err) {
-      console.error('decode token error in ', err);
-      return null;
-    }
-  };
 
   const selectedKB = useMemo(() => {
     return new Selection({
@@ -167,54 +155,10 @@ export const CreateQnAModal: React.FC<CreateQnAModalProps> = (props) => {
   }, []);
 
   useEffect(() => {
-    if (currentStep === 'resource' && !userShouldProvideTokens()) {
-      AuthClient.getTenants()
-        .then((tenants) => {
-          setAllTenants(tenants);
-          if (tenants.length === 0) {
-            setTenantsErrorMessage(formatMessage('No Azure Directories were found.'));
-          } else if (tenants.length >= 1) {
-            setTenantId(tenants[0].tenantId);
-          } else {
-            setTenantsErrorMessage(undefined);
-          }
-        })
-        .catch((err) => {
-          setTenantsErrorMessage(
-            formatMessage('There was a problem loading Azure directories. {errMessage}', {
-              errMessage: err.message || err.toString(),
-            })
-          );
-        });
-    }
-  }, [currentStep]);
-
-  useEffect(() => {
-    if (tenantId) {
-      AuthClient.getARMTokenForTenant(tenantId)
-        .then((token) => {
-          setToken(token);
-          setTenantsErrorMessage(undefined);
-        })
-        .catch((err) => {
-          setTenantsErrorMessage(
-            formatMessage(
-              'There was a problem getting the access token for the current Azure directory. {errMessage}',
-              {
-                errMessage: err.message || err.toString(),
-              }
-            )
-          );
-          setTenantsErrorMessage(err.message || err.toString());
-        });
-    }
-  }, [tenantId]);
-
-  useEffect(() => {
-    if (token) {
+    if (isAuthenticated) {
       setAvailableSubscriptions([]);
       setSubscriptionsErrorMessage(undefined);
-      getSubscriptions(token)
+      getSubscriptions(currentUser.token)
         .then((data) => {
           setAvailableSubscriptions(data);
           if (data.length === 0) {
@@ -229,33 +173,7 @@ export const CreateQnAModal: React.FC<CreateQnAModalProps> = (props) => {
           setSubscriptionsErrorMessage(err.message);
         });
     }
-  }, [token]);
-
-  const hasAuth = async () => {
-    let newtoken = '';
-    if (userShouldProvideTokens()) {
-      if (isShowAuthDialog(false)) {
-        setShowAuthDialog(true);
-      }
-      newtoken = getTokenFromCache('accessToken');
-      if (newtoken) {
-        const decoded = decodeToken(newtoken);
-        if (decoded) {
-          setToken(newtoken);
-          setUserProvidedTokens(true);
-        } else {
-          setTenantsErrorMessage(
-            formatMessage(
-              'There was a problem with the authentication access token. Close this dialog and try again. To be prompted to provide the access token again, clear it from application local storage.'
-            )
-          );
-        }
-      }
-    } else {
-      setUserProvidedTokens(false);
-    }
-    setCurrentStep('resource');
-  };
+  }, [currentUser, isAuthenticated]);
 
   useEffect(() => {
     // reset the ui
@@ -292,10 +210,10 @@ export const CreateQnAModal: React.FC<CreateQnAModalProps> = (props) => {
   };
 
   const fetchAccounts = async (subscriptionId) => {
-    if (token) {
+    if (isAuthenticated) {
       setLoading(formatMessage('Loading keys...'));
       setNoKeys(false);
-      const tokenCredentials = new TokenCredentials(token);
+      const tokenCredentials = new TokenCredentials(currentUser.token);
       const cognitiveServicesManagementClient = new CognitiveServicesManagementClient(tokenCredentials, subscriptionId);
       const accounts = await cognitiveServicesManagementClient.accounts.list();
 
@@ -326,7 +244,7 @@ export const CreateQnAModal: React.FC<CreateQnAModalProps> = (props) => {
 
   const fetchKBGroups = async (key: KeyRec) => {
     let kblist: KBRec[] = [];
-    if (token && key) {
+    if (isAuthenticated && key) {
       const cognitiveServicesCredentials = new CognitiveServicesCredentials(key.key);
       const resourceClient = new QnAMakerClient(cognitiveServicesCredentials, key.endpoint);
 
@@ -375,7 +293,8 @@ export const CreateQnAModal: React.FC<CreateQnAModalProps> = (props) => {
     if (nextAction === 'url') {
       onSubmitFormData(nextAction);
     } else {
-      hasAuth();
+      requireUserLogin();
+      setCurrentStep('resource');
     }
   };
 
@@ -421,7 +340,9 @@ export const CreateQnAModal: React.FC<CreateQnAModalProps> = (props) => {
     return (
       <div>
         <div style={{ marginBottom: 14 }}>
-          <span css={subText}>{formatMessage('Create a KB from a URL or import content from an existing KB')}</span>
+          <span css={subText}>
+            {formatMessage('Create a knowledge base from a URL or import content from an existing knowledge base')}
+          </span>
         </div>
         <div css={contentBox}>
           <div css={choiceContainer}>
@@ -455,7 +376,7 @@ export const CreateQnAModal: React.FC<CreateQnAModalProps> = (props) => {
           <DefaultButton
             disabled={!!loading}
             style={{ float: 'left' }}
-            text={formatMessage('Skip & Create blank KB')}
+            text={formatMessage('Skip & Create blank knowledge base')}
             onClick={() => onSubmitFormData('scratch')}
           />
           <DefaultButton disabled={!!loading} text={formatMessage('Back')} onClick={() => setCurrentStep('name')} />
@@ -475,21 +396,9 @@ export const CreateQnAModal: React.FC<CreateQnAModalProps> = (props) => {
       <div>
         <div css={dialogBodyStyles}>
           <div style={{ marginBottom: 14 }}>
-            {formatMessage('Select the Azure directory and resource you want to choose a knowledge base from')}
+            {formatMessage('Select the subscription and resource you want to choose a knowledge base from')}
           </div>
           <div css={mainElementStyle}>
-            <Dropdown
-              required
-              disabled={allTenants.length === 1 || !tenantId || tenantId.trim().length === 0}
-              errorMessage={tenantsErrorMessage}
-              label={formatMessage('Azure directory')}
-              options={allTenants.map((t) => ({ key: t.tenantId, text: t.displayName }))}
-              selectedKey={tenantId}
-              styles={resourceDropdown}
-              onChange={(_e, o) => {
-                setTenantId(o?.key as string);
-              }}
-            />
             <Dropdown
               required
               disabled={!(availableSubscriptions?.length > 0)}
@@ -535,6 +444,9 @@ export const CreateQnAModal: React.FC<CreateQnAModalProps> = (props) => {
           </div>
         </div>
         <DialogFooter>
+          <div style={{ float: 'left' }}>
+            <PersonaCard />
+          </div>
           {loading && <Spinner label={loading} labelPosition="right" styles={{ root: { float: 'left' } }} />}
           <DefaultButton disabled={!!loading} text={formatMessage('Back')} onClick={() => setCurrentStep('intro')} />
           <PrimaryButton
@@ -634,7 +546,7 @@ export const CreateQnAModal: React.FC<CreateQnAModalProps> = (props) => {
       <div>
         <div css={dialogBodyStyles}>
           <div style={{ marginBottom: 14 }}>
-            {formatMessage('Select one or more KB to import into your bot project')}
+            {formatMessage('Select one or more knowledge base to import into your bot project')}
           </div>
           <div css={mainElementStyle}>
             <DetailsList
@@ -659,7 +571,7 @@ export const CreateQnAModal: React.FC<CreateQnAModalProps> = (props) => {
           {loading && <Spinner label={loading} labelPosition="right" styles={{ root: { float: 'left' } }} />}
           <DefaultButton disabled={!!loading} text={formatMessage('Back')} onClick={() => setCurrentStep('resource')} />
           <PrimaryButton
-            disabled={!!loading || (!userProvidedTokens && !tenantId) || !subscriptionId || !selectedKb}
+            disabled={!!loading || !isAuthenticated || !subscriptionId || !selectedKb}
             text={formatMessage('Next')}
             onClick={onSubmitImportKB}
           />
@@ -730,7 +642,7 @@ export const CreateQnAModal: React.FC<CreateQnAModalProps> = (props) => {
   };
 
   const onSubmitImportKB = async () => {
-    if (key && token && selectedKb && formData) {
+    if (key && isAuthenticated && selectedKb && formData) {
       // TODO: add to all matched language or ask user for specific locale.
       const createdOnLocales = locales.filter((item) => localeToLanguage(item) === selectedKb.language);
       onSubmit({
@@ -748,15 +660,6 @@ export const CreateQnAModal: React.FC<CreateQnAModalProps> = (props) => {
 
   return (
     <Fragment>
-      {showAuthDialog && (
-        <AuthDialog
-          needGraph={false}
-          next={hasAuth}
-          onDismiss={() => {
-            setShowAuthDialog(false);
-          }}
-        />
-      )}
       <Dialog
         dialogContentProps={{
           type: DialogType.normal,

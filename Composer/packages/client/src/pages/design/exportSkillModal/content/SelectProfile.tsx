@@ -276,7 +276,6 @@ export const SelectProfile: React.FC<ContentProps> = ({
         <PublishProfileWrapperDialog
           projectId={projectId}
           onClose={handleHiddenPublishProfileWrapperDialog}
-          onOpen={handleShowPublishProfileWrapperDialog}
           onUpdateIsCreateProfileFromSkill={onUpdateIsCreateProfileFromSkill}
         />
       )}

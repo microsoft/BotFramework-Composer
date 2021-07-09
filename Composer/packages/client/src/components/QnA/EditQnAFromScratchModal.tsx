@@ -40,7 +40,7 @@ const formConfig: FieldConfig<EditQnAFromScratchFormData> = {
 };
 
 const DialogTitle = () => {
-  return <div>{formatMessage('Edit KB name')}</div>;
+  return <div>{formatMessage('Edit knowledge base name')}</div>;
 };
 
 export const EditQnAFromScratchModal: React.FC<EditQnAFromScratchModalProps> = (props) => {

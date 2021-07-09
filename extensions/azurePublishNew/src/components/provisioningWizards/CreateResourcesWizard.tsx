@@ -4,11 +4,11 @@
 import React, { useState } from 'react';
 import { useRecoilValue } from 'recoil';
 import formatMessage from 'format-message';
-import { usePublishApi } from '@bfc/extension-client';
+import { usePublishApi, useAuthApi } from '@bfc/extension-client';
 
 import { Wizard, WizardStep } from '../shared/wizard/Wizard';
 import { useResourceConfiguration } from '../../hooks/useResourceConfiguration';
-import { userInfoState, enabledResourcesState } from '../../recoilModel/atoms/resourceConfigurationState';
+import { enabledResourcesState } from '../../recoilModel/atoms/resourceConfigurationState';
 import { useDispatcher } from '../../hooks/useDispatcher';
 
 import { WizardFooter } from './footers/WizardFooter';
@@ -28,13 +28,13 @@ const urls = {
 
 export const CreateResourcesWizard = React.memo((props: Props) => {
   const { onStepChange } = props;
-  const userInfo = useRecoilValue(userInfoState);
   const [steps, setSteps] = React.useState<WizardStep[]>([]);
   const [isValidResourceConfiguration, setIsValidResourceConfiguration] = useState<boolean>(false);
   const { onBack, closeDialog: onCancel } = usePublishApi();
   const { stashWizardState } = useResourceConfiguration();
   const enabledResources = useRecoilValue(enabledResourcesState);
   const { setEnabledResources } = useDispatcher();
+  const { currentUser } = useAuthApi();
 
   React.useEffect(() => {
     setSteps([
@@ -85,13 +85,13 @@ export const CreateResourcesWizard = React.memo((props: Props) => {
         onCancel,
       },
     ]);
-  }, [isValidResourceConfiguration, userInfo, enabledResources]);
+  }, [isValidResourceConfiguration, enabledResources]);
 
   return (
     <Wizard
       firstStepId="create-resource-instructions"
       steps={steps}
-      onRenderFooter={(navState) => <WizardFooter userInfo={userInfo} {...navState} />}
+      onRenderFooter={(navState) => <WizardFooter currentUser={currentUser} {...navState} />}
       onRenderHeader={() => <></>}
       onStepChange={(index, step) => onStepChange(index, step)}
     />

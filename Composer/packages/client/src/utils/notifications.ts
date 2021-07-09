@@ -25,7 +25,7 @@ export const getQnaSuccessNotification = (callback: () => void): CardProps => {
     type: 'success',
     retentionTime: 5000,
     link: {
-      label: formatMessage('View KB'),
+      label: formatMessage('View knowledge base'),
       onClick: callback,
     },
   };
@@ -33,7 +33,7 @@ export const getQnaSuccessNotification = (callback: () => void): CardProps => {
 
 export const getQnaFailedNotification = (error: string): CardProps => {
   return {
-    title: formatMessage('There was error creating your KB'),
+    title: formatMessage('There was error creating your knowledge base'),
     description: error,
     type: 'error',
   };
