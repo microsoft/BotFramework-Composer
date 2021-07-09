@@ -9,20 +9,12 @@ import {
   TelemetryEventName,
   persistedEvents,
   alwaysTrackEvents,
-  piiProperties,
 } from '@bfc/shared';
 import chunk from 'lodash/chunk';
-import fromPairs from 'lodash/fromPairs';
 
 import httpClient from '../utils/httpUtil';
 
 const BATCH_SIZE = 20;
-
-const blankPIIObject = fromPairs(piiProperties.map((p) => [p, null]));
-
-function removePII(data: any) {
-  return { ...data, ...blankPIIObject };
-}
 
 export default class AppInsightsClient {
   private static _eventPool: TelemetryEvent[] = [];
@@ -57,7 +49,7 @@ export default class AppInsightsClient {
         {
           type: TelemetryEventTypes.TrackEvent,
           name,
-          properties: properties.enabled ? properties : removePII(properties),
+          properties,
         },
       ]);
     }
