@@ -6,6 +6,7 @@ import formatMessage from 'format-message';
 import JSZip from 'jszip';
 import { DefaultButton } from 'office-ui-fabric-react/lib/Button';
 
+const FILE_SIZE_LIMIT = 1024 * 1024; // file size limit 1MB
 export const BrowserModal = (props) => {
   const inputFileRef = useRef<HTMLInputElement>(null);
 
@@ -16,16 +17,20 @@ export const BrowserModal = (props) => {
   const onChange = async (event) => {
     const zipFile = event.target.files?.item(0);
     if (zipFile) {
-      // create zip instance
-      const jszip = new JSZip();
-      jszip
-        .loadAsync(zipFile)
-        .then((zip) => {
-          props.onUpdate(zipFile.name, zip.files);
-        })
-        .catch((error) => {
-          props.onError({ manifestUrl: error.toString() });
-        });
+      if (zipFile.size > FILE_SIZE_LIMIT) {
+        props.onError({ manifestUrl: '.zip file max size is 1MB' });
+      } else {
+        // create zip instance
+        const jszip = new JSZip();
+        jszip
+          .loadAsync(zipFile)
+          .then((zip) => {
+            props.onUpdate(zipFile.name, zip.files);
+          })
+          .catch((error) => {
+            props.onError({ manifestUrl: error.toString() });
+          });
+      }
       event.target.value = '';
     }
   };
@@ -37,14 +42,7 @@ export const BrowserModal = (props) => {
         text={formatMessage('Browse')}
         onClick={onClickOpen}
       />
-      <input
-        ref={inputFileRef}
-        accept=".zip,.rar,.7zip"
-        max-file-size="1048576"
-        style={{ display: 'none' }}
-        type="file"
-        onChange={onChange}
-      />
+      <input ref={inputFileRef} accept=".zip" style={{ display: 'none' }} type="file" onChange={onChange} />
     </>
   );
 };

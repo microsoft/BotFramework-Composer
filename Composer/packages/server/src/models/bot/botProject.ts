@@ -26,7 +26,7 @@ import { FeedbackType, generate } from '@microsoft/bf-generate-library';
 import { Path } from '../../utility/path';
 import { copyDir } from '../../utility/storage';
 import StorageService from '../../services/storage';
-import { convertFolderName, getDialogNameFromFile } from '../utilities/util';
+import { convertFolderNameToSkillName, getDialogNameFromFile } from '../utilities/util';
 import { ISettingManager, OBFUSCATED_VALUE } from '../settings';
 import { DefaultSettingManager } from '../settings/defaultSettingManager';
 import log from '../../logger';
@@ -758,9 +758,12 @@ export class BotProject implements IBotProject {
 
     const keys = Object.keys(zipContent).filter((key) => zipContent[key] !== '' && !isManifestJson(zipContent[key]));
     for (let i = 0; i < keys.length; i++) {
-      await this._createFile(`skills/${convertFolderName(keys[i], skillName)}`, zipContent[keys[i]]);
+      await this._createFile(`skills/${convertFolderNameToSkillName(keys[i], skillName)}`, zipContent[keys[i]]);
     }
-    return await this._createFile(`skills/${convertFolderName(manifestKey, skillName)}`, zipContent[manifestKey]);
+    return await this._createFile(
+      `skills/${convertFolderNameToSkillName(manifestKey, skillName)}`,
+      zipContent[manifestKey]
+    );
   }
 
   private async createManifestJsonFile(name, content, skillName) {
