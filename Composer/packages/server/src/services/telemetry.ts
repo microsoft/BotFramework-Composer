@@ -2,7 +2,14 @@
 // Licensed under the MIT License.
 
 import * as AppInsights from 'applicationinsights';
-import { TelemetryEventName, TelemetryEvents, TelemetryEventTypes, TelemetryEvent, piiProperties } from '@bfc/shared';
+import {
+  TelemetryEventName,
+  TelemetryEvents,
+  TelemetryEventTypes,
+  TelemetryEvent,
+  piiProperties,
+  alwaysTrackEvents,
+} from '@bfc/shared';
 
 import logger from '../logger';
 import { APPINSIGHTS_INSTRUMENTATIONKEY } from '../constants';
@@ -53,7 +60,7 @@ if (instrumentationKey) {
 
     const data = envelope.data as AppInsights.Contracts.Data<AppInsights.Contracts.RequestData>;
 
-    if (!telemetry?.allowDataCollection) {
+    if (!telemetry?.allowDataCollection && !alwaysTrackEvents.includes(data.baseData.name)) {
       return false;
     }
 
@@ -96,7 +103,9 @@ if (instrumentationKey) {
       }
 
       // remove PII
-      stripPII(data);
+      if (alwaysTrackEvents.includes(data.baseData.name) && data.baseData.properties.enabled) {
+        stripPII(data);
+      }
     }
 
     return true;
