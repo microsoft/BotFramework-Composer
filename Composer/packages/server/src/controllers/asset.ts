@@ -118,7 +118,23 @@ export async function getTemplateReadMe(req: any, res: any) {
       const moduleURL = `https://registry.npmjs.org/${moduleName}`;
       const response = await fetch(moduleURL);
       const data = await response.json();
-      res.status(200).json(data?.readme || '');
+      // check for readme at root of response obj
+      let readMe = data?.readme;
+
+      // if no readme at root then pull readme from latest published version that has one
+      if (!readMe) {
+        const versionsDict = data?.versions;
+        if (versionsDict && Object.keys(versionsDict).length > 0) {
+          for (const versionKey of Object.keys(versionsDict).reverse()) {
+            if (versionsDict[versionKey] && versionsDict[versionKey]?.readme) {
+              readMe = versionsDict[versionKey].readme;
+              break;
+            }
+          }
+        }
+      }
+
+      res.status(200).json(readMe || formatMessage('Read Me cannot be found for this template'));
     }
   } catch (error) {
     log('Failed getting template readMe', error);
