@@ -67,7 +67,7 @@ const blobStorageProvisionMethod = (provisionConfig: ProvisionServiceConfig): Pr
         config.resourceGroupName,
         config.name
       );
-      const connectionString = accountKeysResult?.keys?.[0].value ?? '';
+      const connectionString = accountKeysResult?.keys?.[0]?.value ?? '';
 
       const provisionResult = { name: config.name, connectionString, container: 'transcripts' };
 
