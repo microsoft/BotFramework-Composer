@@ -128,14 +128,12 @@ export async function getTemplateReadMe(req: any, res: any) {
         if (versionsDict && versionTimesObj) {
           // convert versionPublishTimes obj to a 2d array
           // each entry is an array with two fields, version number and dateTime published
-          const items = Object.keys(versionTimesObj).map((key) => {
-            return [key, versionTimesObj[key]];
-          });
+          const items = Object.entries(versionTimesObj);
 
           // sort versionPublishTimes entries based on time published
           items.sort((firstEntry, secondEntry) => {
-            const firstEntryDate = new Date(firstEntry[1]).getTime();
-            const secondEntryDate = new Date(secondEntry[1]).getTime();
+            const firstEntryDate = new Date(firstEntry[1] as string).getTime();
+            const secondEntryDate = new Date(secondEntry[1] as string).getTime();
             return firstEntryDate > secondEntryDate ? 1 : -1;
           });
 
