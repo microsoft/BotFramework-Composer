@@ -126,18 +126,23 @@ export async function getTemplateReadMe(req: any, res: any) {
         const versionsDict = data?.versions;
         const versionTimesObj = data?.time;
         if (versionsDict && versionTimesObj) {
+          // convert versionPublishTimes obj to a 2d array
+          // each entry is an array with two fields, version number and dateTime published
           const items = Object.keys(versionTimesObj).map((key) => {
             return [key, versionTimesObj[key]];
           });
 
+          // sort versionPublishTimes entries based on time published
           items.sort((firstEntry, secondEntry) => {
             const firstEntryDate = new Date(firstEntry[1]).getTime();
             const secondEntryDate = new Date(secondEntry[1]).getTime();
             return firstEntryDate > secondEntryDate ? 1 : -1;
           });
 
+          // iterate, starting on most recently published version, and query versionDict for a readMe for the version in question
           for (let i = items.length - 1; i > -1; i--) {
             if (versionsDict[items[i][0]] && versionsDict[items[i][0]]?.readme) {
+              // if a readMe exists, set it as our result and break out of the loop
               readMe = versionsDict[items[i][0]]?.readme;
               break;
             }
