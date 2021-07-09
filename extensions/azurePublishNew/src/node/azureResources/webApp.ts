@@ -6,7 +6,7 @@ import { TokenCredentials } from '@azure/ms-rest-js';
 import { parseRuntimeKey } from '@bfc/shared';
 
 import {
-  ProvisionConfig,
+  ProvisionServiceConfig,
   ProvisionWorkingSet,
   ResourceConfig,
   ResourceDefinition,
@@ -17,6 +17,7 @@ import {
   ProvisionErrors,
   stringifyError,
 } from '../../../../azurePublish/src/node/utils/errorHandler';
+import { AzureResourceTypes } from '../constants';
 
 import { AZURE_HOSTING_GROUP_NAME, S1_STANDARD_TIER } from './constants';
 
@@ -27,18 +28,18 @@ export const webAppResourceDefinition: ResourceDefinition = {
   text: 'App Services',
   tier: S1_STANDARD_TIER,
   group: AZURE_HOSTING_GROUP_NAME,
+  dependencies: [AzureResourceTypes.RESOURCE_GROUP, AzureResourceTypes.SERVICE_PLAN],
 };
 
-type WebAppResourceConfig = ResourceConfig & {
+export type WebAppResourceConfig = ResourceConfig & {
   key: 'webApp';
   resourceGroupName: string;
   location: string;
   webAppName: string;
-  appServicePlanName: string;
   operatingSystem: string;
 };
 
-const webAppProvisionMethod = (provisionConfig: ProvisionConfig) => {
+const webAppProvisionMethod = (provisionConfig: ProvisionServiceConfig) => {
   const tokenCredentials = new TokenCredentials(provisionConfig.accessToken);
   const webSiteManagementClient = new WebSiteManagementClient(tokenCredentials, provisionConfig.subscriptionId);
 
@@ -74,7 +75,7 @@ const webAppProvisionMethod = (provisionConfig: ProvisionConfig) => {
   };
 };
 
-export const getWebAppProvisionService = (config: ProvisionConfig): ResourceProvisionService => {
+export const getWebAppProvisionService = (config: ProvisionServiceConfig): ResourceProvisionService => {
   return {
     getDependencies: () => ['servicePlan'],
     getRecommendationForProject: (project) => {

@@ -28,13 +28,14 @@ export type ResourceDefinition = {
   description: string;
   tier: string;
   group: ResourceDefinitionGroup;
+  dependencies: string[];
 };
 
 export type GetResourcesResult = ResourceDefinition & {
   required: boolean;
 };
 
-export type ProvisionConfig = {
+export type ProvisionServiceConfig = {
   key: string;
   accessToken: string;
   subscriptionId: string;

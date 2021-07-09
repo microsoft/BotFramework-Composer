@@ -54,14 +54,13 @@ describe('Replace QnA from portal Modal', () => {
         onSubmit={handleSubmit}
       />
     );
-    const secondOption = getByText('Replace with an existing KB from QnA maker portal');
+    const secondOption = getByText('Replace with an existing knowledge base from QnA maker portal');
     fireEvent.click(secondOption);
     const next = getByText('Next');
     fireEvent.click(next);
 
-    expect(getByText('Provide access tokens')).toBeInTheDocument();
     expect(
-      getByText('Select the Azure directory and resource you want to choose a knowledge base from')
+      getByText('Select the subscription and resource you want to choose a knowledge base from')
     ).toBeInTheDocument();
   });
 });

@@ -46,7 +46,7 @@ const formConfig: FieldConfig<EditQnAFromUrlFormData> = {
 };
 
 const DialogTitle = () => {
-  return <div>{formatMessage('Edit KB name')}</div>;
+  return <div>{formatMessage('Edit knowledge base name')}</div>;
 };
 
 export const EditQnAFromUrlModal: React.FC<EditQnAFromUrlModalProps> = (props) => {

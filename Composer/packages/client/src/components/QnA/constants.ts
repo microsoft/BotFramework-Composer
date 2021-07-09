@@ -110,7 +110,9 @@ export const validateName = (sources: QnAFile[]): FieldValidator => {
         (item) => getBaseName(item.id.toLowerCase()) === `${name.toLowerCase()}.source`
       );
       if (duplicatedItemIndex > -1) {
-        currentError = formatMessage('You already have a KB with that name. Choose another name and try again.');
+        currentError = formatMessage(
+          'You already have a knowledge base with that name. Choose another name and try again.'
+        );
       }
     }
     return currentError;
