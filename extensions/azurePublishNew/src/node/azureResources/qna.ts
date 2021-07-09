@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { HttpHeaders, TokenCredentials } from '@azure/ms-rest-js';
+import { HttpHeaders, ServiceClientCredentials, TokenCredentials, WebResourceLike } from '@azure/ms-rest-js';
 import { SearchManagementClient } from '@azure/arm-search';
 import { WebSiteManagementClient } from '@azure/arm-appservice';
 import { ApplicationInsightsManagementClient } from '@azure/arm-appinsights';
@@ -34,10 +34,6 @@ export const qnaDefinition: ResourceDefinition = {
   dependencies: [AzureResourceTypes.RESOURCE_GROUP, AzureResourceTypes.WEBAPP],
 };
 
-type ServiceCredentials = {
-  signRequest: <T>(webResource) => Promise<T>;
-};
-
 export type QnAResourceConfig = ResourceConfig & {
   key: 'qna';
   resourceGroupName: string;
@@ -47,9 +43,9 @@ export type QnAResourceConfig = ResourceConfig & {
 };
 
 const qnAProvisionMethod = (provisionConfig: ProvisionServiceConfig): ProvisionMethod => {
-  const getServiceCredentials = (): ServiceCredentials => {
+  const getServiceCredentials = (): ServiceClientCredentials => {
     return {
-      signRequest: (webResource) => {
+      signRequest: (webResource: WebResourceLike): Promise<WebResourceLike> => {
         if (!webResource.headers) webResource.headers = new HttpHeaders();
         webResource.headers.set('authorization', `Bearer ${provisionConfig.accessToken}`);
         return Promise.resolve(webResource);
@@ -57,7 +53,7 @@ const qnAProvisionMethod = (provisionConfig: ProvisionServiceConfig): ProvisionM
     };
   };
 
-  const searchMgmtCredentials = getServiceCredentials();
+  const searchMgmtCredentials = getServiceCredentials() as any;
   const searchManagementClient = new SearchManagementClient(searchMgmtCredentials, provisionConfig.subscriptionId);
   const tokenCredentials = new TokenCredentials(provisionConfig.accessToken);
   const applicationInsightsManagementClient = new ApplicationInsightsManagementClient(
