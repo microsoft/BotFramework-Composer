@@ -20,7 +20,11 @@ import {
 } from './azureResources/appRegistration';
 import { azureFunctionDefinition, getAzureFunctionsProvisionService } from './azureResources/azureFunction';
 import { blobStorageDefinition, getBlogStorageProvisionService } from './azureResources/blobStorage';
-import { botRegistrationDefinition, getBotChannelProvisionService } from './azureResources/botChannel';
+import {
+  BotRegistrationConfig,
+  botRegistrationDefinition,
+  getBotChannelProvisionService,
+} from './azureResources/botRegistration';
 import { cosmosDbDefinition, getCosmosDbProvisionService } from './azureResources/cosmosDb';
 import { getLuisAuthoringProvisionService, luisAuthoringDefinition } from './azureResources/luisAuthoring';
 import { getLuisPredictionProvisionService, luisPredictionDefinition } from './azureResources/luisPrediction';
@@ -74,6 +78,8 @@ export const getResourceDependencies = (key: string) => {
       return servicePlanDefinition.dependencies;
     case AzureResourceTypes.APPINSIGHTS:
       return appInsightsDefinition.dependencies;
+    case AzureResourceTypes.BOT_REGISTRATION:
+      return botRegistrationDefinition.dependencies;
     default:
       return [];
   }
@@ -110,6 +116,13 @@ export const provisionConfigToResourceConfigMap = {
       resourceGroupName: config.resourceGroup,
       location: config.location,
       name: config.hostname,
+    };
+  },
+  botRegistration: (config: ProvisioningConfig): BotRegistrationConfig => {
+    return {
+      key: 'botRegistration',
+      hostname: config.hostname, // probably should be derived from webapp provisioning result, not here
+      resourceGroupName: config.resourceGroup,
     };
   },
 };

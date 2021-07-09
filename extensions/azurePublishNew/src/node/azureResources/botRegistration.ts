@@ -5,8 +5,8 @@ import { TokenCredentials } from '@azure/ms-rest-js';
 import { AzureBotService } from '@azure/arm-botservice';
 
 import {
-  ProvisionConfig,
   ProvisionMethod,
+  ProvisionServiceConfig,
   ProvisionWorkingSet,
   ResourceConfig,
   ResourceDefinition,
@@ -17,13 +17,13 @@ import {
   ProvisionErrors,
   stringifyError,
 } from '../../../../azurePublish/src/node/utils/errorHandler';
+import { AzureResourceTypes } from '../constants';
 
 import { AZURE_HOSTING_GROUP_NAME, FREE_COGNITIVE_SERVICES_TIER } from './constants';
 
-type BotServiceConfig = ResourceConfig & {
-  key: 'botChannel';
-  displayName: string;
-  hostname: string; // probably should be derived from webapp, not here
+export type BotRegistrationConfig = ResourceConfig & {
+  key: 'botRegistration';
+  hostname: string;
   resourceGroupName: string;
 };
 
@@ -34,9 +34,10 @@ export const botRegistrationDefinition: ResourceDefinition = {
     'When registered with the Azure Bot Service, you can host your bot in any environment and enable customers from a variety of channels, such as your app or website, Direct Line Speech, Microsoft Teams and more.',
   tier: FREE_COGNITIVE_SERVICES_TIER,
   group: AZURE_HOSTING_GROUP_NAME,
+  dependencies: [AzureResourceTypes.RESOURCE_GROUP, AzureResourceTypes.WEBAPP],
 };
 
-const botChannelProvisionMethod = (provisionConfig: ProvisionConfig): ProvisionMethod => {
+const botChannelProvisionMethod = (provisionConfig: ProvisionServiceConfig): ProvisionMethod => {
   const tokenCredentials = new TokenCredentials(provisionConfig.accessToken);
   const azureBotService = new AzureBotService(tokenCredentials, provisionConfig.subscriptionId);
 
@@ -46,20 +47,20 @@ const botChannelProvisionMethod = (provisionConfig: ProvisionConfig): ProvisionM
     }
   };
 
-  return async (config: BotServiceConfig, workingSet: ProvisionWorkingSet): Promise<ProvisionWorkingSet> => {
+  return async (config: BotRegistrationConfig, workingSet: ProvisionWorkingSet): Promise<ProvisionWorkingSet> => {
     checkRequiredField(config.resourceGroupName, 'resourceGroupName is required.');
-    checkRequiredField(config.displayName, 'displayName is required.');
     checkRequiredField(workingSet.appRegistration?.appId, 'appRegistration.appId is required.');
     checkRequiredField(workingSet.webApp?.hostname, 'webApp.hostname is required.');
 
-    const appId = workingSet.appRegistration.appId;
-    const hostname = workingSet.webApp.hostname;
+    const appId = workingSet.appRegistration?.appId;
+    const hostname = workingSet.webApp?.hostname;
     const endpoint = `https://${hostname ?? config.hostname + '.azurewebsites.net'}/api/messages`;
+    const displayName = config.hostname; // how it is in production now - but theres a comment that we might not want to use hostname for displayName
 
     try {
-      await azureBotService.bots.create(config.resourceGroupName, config.displayName, {
+      await azureBotService.bots.create(config.resourceGroupName, displayName, {
         properties: {
-          displayName: config.displayName,
+          displayName: displayName,
           endpoint: endpoint,
           msaAppId: appId,
           openWithHint: 'bfcomposer://',
@@ -67,7 +68,7 @@ const botChannelProvisionMethod = (provisionConfig: ProvisionConfig): ProvisionM
         sku: {
           name: 'F0',
         },
-        name: config.displayName,
+        name: displayName,
         location: 'global',
         kind: 'azurebot',
         tags: {
@@ -77,7 +78,7 @@ const botChannelProvisionMethod = (provisionConfig: ProvisionConfig): ProvisionM
 
       return {
         ...workingSet,
-        botChannelResult: { botName: config.displayName },
+        botChannelResult: { botName: displayName },
       };
     } catch (err) {
       throw createCustomizeError(ProvisionErrors.BOT_REGISTRATION_ERROR, stringifyError(err));
@@ -85,7 +86,7 @@ const botChannelProvisionMethod = (provisionConfig: ProvisionConfig): ProvisionM
   };
 };
 
-export const getBotChannelProvisionService = (config: ProvisionConfig): ResourceProvisionService => {
+export const getBotChannelProvisionService = (config: ProvisionServiceConfig): ResourceProvisionService => {
   return {
     getDependencies: () => ['appRegistration', 'webApp'],
     getRecommendationForProject: (project) => 'required',
