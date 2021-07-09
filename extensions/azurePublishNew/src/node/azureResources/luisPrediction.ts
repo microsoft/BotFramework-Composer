@@ -18,6 +18,7 @@ import {
   ProvisionErrors,
   stringifyError,
 } from '../../../../azurePublish/src/node/utils/errorHandler';
+import { AzureResourceTypes } from '../constants';
 
 import { COGNITIVE_SERVICES_GROUP_NAME, SO_STANDARD_TIER } from './constants';
 
@@ -28,7 +29,7 @@ export const luisPredictionDefinition: ResourceDefinition = {
   text: 'Microsoft Language Understanding Prediction Account',
   tier: SO_STANDARD_TIER,
   group: COGNITIVE_SERVICES_GROUP_NAME,
-  dependencies: [],
+  dependencies: [AzureResourceTypes.RESOURCE_GROUP],
 };
 
 export type LuisPredictionConfig = ResourceConfig & {
