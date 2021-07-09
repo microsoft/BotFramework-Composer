@@ -18,6 +18,7 @@ import {
   ProvisionErrors,
   stringifyError,
 } from '../../../../azurePublish/src/node/utils/errorHandler';
+import { AzureResourceTypes } from '../constants';
 
 import { COGNITIVE_SERVICES_GROUP_NAME, FREE_COGNITIVE_SERVICES_TIER } from './constants';
 
@@ -28,7 +29,7 @@ export const luisAuthoringDefinition: ResourceDefinition = {
   text: 'Microsoft Language Understanding Authoring Account',
   tier: FREE_COGNITIVE_SERVICES_TIER,
   group: COGNITIVE_SERVICES_GROUP_NAME,
-  dependencies: [],
+  dependencies: [AzureResourceTypes.RESOURCE_GROUP],
 };
 
 export type LuisAuthoringConfig = ResourceConfig & {
