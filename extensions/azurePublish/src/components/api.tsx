@@ -395,7 +395,7 @@ export const CheckCognitiveResourceSku = async (
 export const getResourceList = async (projectId: string, type: string): Promise<ResourcesItem[]> => {
   try {
     const { getRequiredRecognizers } = usePublishApi();
-    const requiredRecognizers = getRequiredRecognizers();
+    const requiredRecognizers = getRequiredRecognizers().filter((p) => p.projectId === projectId);
 
     const requireLUIS = requiredRecognizers.some((p) => p.requiresLUIS);
     const requireQNA = requiredRecognizers.some((p) => p.requiresQNA);
