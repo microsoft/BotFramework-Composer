@@ -124,10 +124,21 @@ export async function getTemplateReadMe(req: any, res: any) {
       // if no readme at root then pull readme from latest published version that has one
       if (!readMe) {
         const versionsDict = data?.versions;
-        if (versionsDict && Object.keys(versionsDict).length > 0) {
-          for (const versionKey of Object.keys(versionsDict).reverse()) {
-            if (versionsDict[versionKey] && versionsDict[versionKey]?.readme) {
-              readMe = versionsDict[versionKey].readme;
+        const versionTimesObj = data?.time;
+        if (versionsDict && versionTimesObj) {
+          const items = Object.keys(versionTimesObj).map((key) => {
+            return [key, versionTimesObj[key]];
+          });
+
+          items.sort((firstEntry, secondEntry) => {
+            const firstEntryDate = new Date(firstEntry[1]).getTime();
+            const secondEntryDate = new Date(secondEntry[1]).getTime();
+            return firstEntryDate > secondEntryDate ? 1 : -1;
+          });
+
+          for (let i = items.length - 1; i > -1; i--) {
+            if (versionsDict[items[i][0]] && versionsDict[items[i][0]]?.readme) {
+              readMe = versionsDict[items[i][0]]?.readme;
               break;
             }
           }
