@@ -22,7 +22,11 @@ import { azureFunctionDefinition, getAzureFunctionsProvisionService } from './az
 import { blobStorageDefinition, getBlogStorageProvisionService } from './azureResources/blobStorage';
 import { botRegistrationDefinition, getBotChannelProvisionService } from './azureResources/botChannel';
 import { cosmosDbDefinition, getCosmosDbProvisionService } from './azureResources/cosmosDb';
-import { getLuisAuthoringProvisionService, luisAuthoringDefinition } from './azureResources/luisAuthoring';
+import {
+  getLuisAuthoringProvisionService,
+  LuisAuthoringConfig,
+  luisAuthoringDefinition,
+} from './azureResources/luisAuthoring';
 import { getLuisPredictionProvisionService, luisPredictionDefinition } from './azureResources/luisPrediction';
 import { getQnAProvisionService, qnaDefinition } from './azureResources/qna';
 import {
@@ -57,7 +61,7 @@ export const getProvisionServices = (config: ProvisionServiceConfig): Record<str
     azureFunctionApp: getAzureFunctionsProvisionService(),
     cosmosDB: getCosmosDbProvisionService(config),
     appInsights: getAppInsightsProvisionService(config),
-    luisAuthoring: getLuisAuthoringProvisionService(),
+    luisAuthoring: getLuisAuthoringProvisionService(config),
     luisPrediction: getLuisPredictionProvisionService(),
     blobStorage: getBlogStorageProvisionService(),
     qna: getQnAProvisionService(),
@@ -74,6 +78,8 @@ export const getResourceDependencies = (key: string) => {
       return servicePlanDefinition.dependencies;
     case AzureResourceTypes.APPINSIGHTS:
       return appInsightsDefinition.dependencies;
+    case AzureResourceTypes.LUIS_AUTHORING:
+      return luisAuthoringDefinition.dependencies;
     default:
       return [];
   }
@@ -110,6 +116,14 @@ export const provisionConfigToResourceConfigMap = {
       resourceGroupName: config.resourceGroup,
       location: config.location,
       name: config.hostname,
+    };
+  },
+  luisAuthoring: (config: ProvisioningConfig): LuisAuthoringConfig => {
+    return {
+      key: 'luisAuthoring',
+      resourceGroupName: config.resourceGroup,
+      location: config.luisLocation,
+      name: `${config.hostname}-luis-authoring`,
     };
   },
 };
