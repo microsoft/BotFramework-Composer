@@ -50,14 +50,17 @@ Feature flag state not yet surfaced to extensions.
 Non hidden feature flags are toggleable through the app settings page in Composer. Hidden feature flags can be configured by the end user in a few different ways depending on your environment.
 
 ### Electron app
-To toggle a hidden feature flag in electron you need to set the feature flag value as an enviornemnt variable in a command line and then open Composer through that same command line.
+To toggle a hidden feature flag in electron you need to set the feature flag value as an environment variable in a command line and then open Composer through that same command line.
+  #### Windows
   - Open a command line
   - Navigate to where your electron executable is stored.
     - Default location on Windows machines is `C:\Users\{user}\AppData\Local\Programs\Bot Framework Composer`
+    - Default location on mac is `/Applications/Bot Framework Composer.app/Contents/MacOS`
     - sample command: `cd C:\Users\{user}\AppData\Local\Programs\Bot Framework Composer`
   - In the command line set the value of the hidden feautre flag you would like to enable. 
     - For example, if you want to enable the ADVANCED_TEMPLATE_OPTIONS feature flag you would run the following sample command in the command line
-      - sample command:`set ADVANCED_TEMPLATE_OPTIONS=true`
+      - sample command on widnows:`set ADVANCED_TEMPLATE_OPTIONS=true`
+      - sample command on mac: `ADVANCED_TEMPLATE_OPTIONS=true ./Bot\ Framework\ Composer`
   - Then in the Composer dir run the Composer executable and it should open Composer with that hidden feature flag enabled
     - sample command: `"Bot Framework Composer.exe"`
   
