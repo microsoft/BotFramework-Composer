@@ -304,7 +304,8 @@ describe('skill operations', () => {
     const file = await proj.createSkillFiles(url, skillName, zipContent);
 
     expect(file).not.toBeUndefined();
-  }, 10000);
+    expect(file?.content).toContain(zipContent['manifests/Empty-2-1-manifest.json']);
+  });
 
   it('should delete skill files', async () => {
     await proj.createSkillFiles(url, skillName, zipContent);
@@ -312,7 +313,7 @@ describe('skill operations', () => {
 
     await proj.deleteSkillFiles(skillName);
     expect(proj.luFiles.length).toBeLessThanOrEqual(fileLength);
-  }, 10000);
+  });
 });
 
 describe('buildFiles', () => {
