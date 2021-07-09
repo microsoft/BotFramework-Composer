@@ -17,6 +17,7 @@ import {
   FileExtensions,
   DialogUtils,
   checkForPVASchema,
+  isManifestJson,
 } from '@bfc/shared';
 import merge from 'lodash/merge';
 import { UserIdentity } from '@bfc/extension';
@@ -31,6 +32,7 @@ import { DefaultSettingManager } from '../settings/defaultSettingManager';
 import log from '../../logger';
 import { BotProjectService } from '../../services/project';
 import AssetService from '../../services/asset';
+import { bundleSchema } from '../utilities/bundleSchema';
 
 import {
   BotStructureFilesPatterns,
@@ -41,10 +43,12 @@ import {
   serializeFiles,
   parseFileName,
   isRecognizer,
+  defaultSkillFilePath,
 } from './botStructure';
 import { Builder } from './builder';
 import { IFileStorage } from './../storage/interface';
 import { LocationRef, IBuildConfig } from './interface';
+import { getSkillManifest } from './skillManager';
 
 const debug = log.extend('bot-project');
 const mkDirAsync = promisify(fs.mkdir);
@@ -199,6 +203,8 @@ export class BotProject implements IBotProject {
     this.settings = await this.getEnvSettings(false);
     this.files = await this._getFiles();
     this.readme = await this._getReadme();
+
+    await this._bundleSchemas();
   };
 
   public getProject = () => {
@@ -538,6 +544,18 @@ export class BotProject implements IBotProject {
     await this._cleanUp(file.relativePath);
   };
 
+  public createSkillFiles = async (url: string, skillName: string, zipContent: Record<string, any>) => {
+    if (Object.keys(zipContent).length === 0) {
+      return await this.createSkillFilesFromUrl(url, skillName);
+    } else {
+      return await this.createSkillFilesFromZip(zipContent);
+    }
+  };
+
+  public deleteSkillFiles = async (skillName: string) => {
+    await this.fileStorage.rmrfDir(Path.join(this.dir, `skills/${skillName}`));
+  };
+
   public createFiles = async (files) => {
     const createdFiles: FileInfo[] = [];
     for (const { name, content } of files) {
@@ -715,6 +733,61 @@ export class BotProject implements IBotProject {
     this.eTag = eTag;
     // also update the bot project map
   }
+
+  private async createSkillFilesFromUrl(url, skillName) {
+    const manifestContent = await getSkillManifest(url);
+    const manifestName = Path.basename(url, '.json');
+    const luUrls: string[] = [];
+    const languages = manifestContent.dispatchModels?.languages || {};
+    Object.keys(languages).map((key) =>
+      languages[key].map((lu) => {
+        luUrls.push(lu.url);
+        lu.url = defaultSkillFilePath(skillName, Path.basename(lu.url, '.lu'), 'lu');
+        return lu;
+      })
+    );
+    await this.createSkillLuFiles(luUrls, skillName);
+    return await this.createManifestJsonFile(manifestName, manifestContent, skillName);
+  }
+
+  private async createSkillFilesFromZip(zipContent) {
+    const manifestKey = Object.keys(zipContent).find((key) => isManifestJson(zipContent[key]));
+    if (!manifestKey) {
+      throw new Error('Can not find manifest json');
+    }
+
+    const keys = Object.keys(zipContent).filter((key) => zipContent[key] !== '' && !isManifestJson(zipContent[key]));
+    for (let i = 0; i < keys.length; i++) {
+      await this._createFile(`skills/${keys[i]}`, zipContent[keys[i]]);
+    }
+    return await this._createFile(`skills/${manifestKey}`, zipContent[manifestKey]);
+  }
+
+  private async createManifestJsonFile(name, content, skillName) {
+    return this._createSkillFile(name, JSON.stringify(content), skillName, 'json');
+  }
+
+  private async createSkillLuFiles(urls, skillName) {
+    const file = { name: '', content: '' };
+    for (let i = 0; i < urls.length; i++) {
+      file.name = Path.basename(urls[i], '.lu');
+      file.content = await getSkillManifest(urls[i], '', false);
+      await this._createSkillFile(file.name, file.content, skillName, 'lu');
+    }
+  }
+
+  private _createSkillFile = async (name: string, content = '', skillName: string, fileType: string) => {
+    const filename = name.trim();
+    this.validateFileName(filename);
+    this._validateFileContent(name, content);
+
+    const relativePath = defaultSkillFilePath(skillName, filename, fileType);
+    const file = this.files.get(filename);
+    if (file) {
+      throw new Error(`${filename} ${fileType} already exist`);
+    }
+    return await this._createFile(relativePath, content);
+  };
 
   private _cleanUp = (relativePath: string) => {
     const absolutePath = `${this.dir}/${relativePath}`;
@@ -1028,5 +1101,26 @@ export class BotProject implements IBotProject {
         throw new Error('Invalid file content');
       }
     }
+  };
+
+  private _bundleSchemas = async () => {
+    const schemas: FileInfo[] = [];
+    this.files.forEach((file) => {
+      if (file.name.endsWith('.schema')) {
+        schemas.push(file);
+      }
+    });
+
+    debug('Bundling %d schemas.', schemas.length);
+
+    await Promise.all(
+      schemas.map(async (s) => {
+        const bundled = await bundleSchema(s.path);
+
+        if (bundled) {
+          s.content = bundled;
+        }
+      })
+    );
   };
 }

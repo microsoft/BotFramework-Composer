@@ -13,9 +13,7 @@ import { SharedColors } from '@uifabric/fluent-theme';
 import { OpenConfirmModal } from '@bfc/ui-shared';
 
 import { dispatcherState, settingsState, publishTypesState } from '../../recoilModel';
-import { AuthDialog } from '../../components/Auth/AuthDialog';
 import { useLocation } from '../../utils/hooks';
-import { isShowAuthDialog as shouldShowTokenDialog } from '../../utils/auth';
 
 import { PublishProfileDialog } from './create-publish-profile/PublishProfileDialog';
 import {
@@ -68,7 +66,6 @@ export const PublishTargets: React.FC<PublishTargetsProps> = (props) => {
   const publishTypes = useRecoilValue(publishTypesState(projectId));
 
   const [showPublishDialog, setShowingPublishDialog] = useState(false);
-  const [showAuthDialog, setShowingAuthDialog] = useState(false);
 
   const publishTargetsRef = React.useRef<HTMLDivElement>(null);
   const [current, setCurrent] = useState<{ index: number; item: PublishTarget } | null>(null);
@@ -87,11 +84,6 @@ export const PublishTargets: React.FC<PublishTargetsProps> = (props) => {
         // clear the hash so that the dialog doesn't open again.
         window.location.hash = '';
         setCurrent({ item: publishTargets[0], index: 0 });
-        if (shouldShowTokenDialog(true)) {
-          setShowingAuthDialog(true);
-        } else {
-          setShowingPublishDialog(true);
-        }
       }
     }
   }, [location, publishTargets]);
@@ -124,11 +116,7 @@ export const PublishTargets: React.FC<PublishTargetsProps> = (props) => {
       data-testid={'addNewPublishProfile'}
       styles={actionButton}
       onClick={() => {
-        if (shouldShowTokenDialog(true)) {
-          setShowingAuthDialog(true);
-        } else {
-          setShowingPublishDialog(true);
-        }
+        setShowingPublishDialog(true);
       }}
     >
       {formatMessage('Add new')}
@@ -158,11 +146,7 @@ export const PublishTargets: React.FC<PublishTargetsProps> = (props) => {
                   styles={editPublishProfile}
                   onClick={() => {
                     setCurrent({ item: p, index: index });
-                    if (shouldShowTokenDialog(true)) {
-                      setShowingAuthDialog(true);
-                    } else {
-                      setShowingPublishDialog(true);
-                    }
+                    setShowingPublishDialog(true);
                   }}
                 >
                   {formatMessage('Edit')}
@@ -182,17 +166,6 @@ export const PublishTargets: React.FC<PublishTargetsProps> = (props) => {
         })}
       </div>
       <div css={belowTargetsContainer}>{addNewButton}</div>
-      {showAuthDialog && (
-        <AuthDialog
-          needGraph
-          next={() => {
-            setShowingPublishDialog(true);
-          }}
-          onDismiss={() => {
-            setShowingAuthDialog(false);
-          }}
-        />
-      )}
       {showPublishDialog ? (
         <PublishProfileDialog
           closeDialog={() => {

@@ -80,7 +80,7 @@ describe('QnA page all up view', () => {
     );
     const more = getByTestId('knowledgeBaseMore');
     fireEvent.click(more);
-    getByText('Import new URL and overwrite');
+    getByText('Replace content');
     getByText('Delete knowledge base');
     getByText('Show code');
   });

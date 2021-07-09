@@ -71,7 +71,7 @@ export const OpenProject: React.FC<OpenProjectProps> = (props) => {
           onOpen={handleOpen}
         />
         <DialogFooter>
-          <DefaultButton text={formatMessage('Cancel')} onClick={onDismiss} />
+          <DefaultButton data-testid="OpenBotCancelButton" text={formatMessage('Cancel')} onClick={onDismiss} />
         </DialogFooter>
       </div>
     </DialogWrapper>

@@ -82,7 +82,7 @@ type DefineConversationFormData = {
   description: string;
   schemaUrl: string;
   runtimeLanguage: string;
-  runtimeType?: RuntimeType;
+  runtimeType: RuntimeType;
   location?: string;
   templateVersion?: string;
   profile?: Profile; // abs payload to create bot
@@ -218,12 +218,7 @@ const DefineConversation: React.FC<DefineConversationProps> = (props) => {
       required: false,
     },
     runtimeType: {
-      required: !isImported,
-      validate: (value) => {
-        if (!isImported && !value) {
-          return formatMessage('A runtime type must be selected.');
-        }
-      },
+      required: false,
     },
     schemaUrl: {
       required: false,
@@ -242,6 +237,7 @@ const DefineConversation: React.FC<DefineConversationProps> = (props) => {
     const formData: DefineConversationFormData = {
       name: getDefaultName(),
       runtimeLanguage: runtimeLanguage,
+      runtimeType: webAppRuntimeKey,
       description: '',
       schemaUrl: '',
       location:
@@ -318,7 +314,7 @@ const DefineConversation: React.FC<DefineConversationProps> = (props) => {
         }
       }
       TelemetryClient.track('CreationExecuted', {
-        runtimeChoice: dataToSubmit?.runtimeType || webAppRuntimeKey,
+        runtimeChoice: dataToSubmit?.runtimeType,
         runtimeLanguage: dataToSubmit?.runtimeLanguage as FeedType,
         isPva: isImported,
         isAbs: !!dataToSubmit?.source,
@@ -437,7 +433,6 @@ const DefineConversation: React.FC<DefineConversationProps> = (props) => {
                       data-testid="NewDialogRuntimeType"
                       label={formatMessage('Runtime type')}
                       options={getSupportedRuntimesForTemplate()}
-                      placeholder={formatMessage('Select one')}
                       selectedKey={formData.runtimeType}
                       styles={{
                         root: { width: inBotMigration ? '200px' : '420px' },
@@ -450,7 +445,7 @@ const DefineConversation: React.FC<DefineConversationProps> = (props) => {
                           <Label required>{props?.label}</Label>
                           <TooltipHost
                             content={formatMessage(
-                              'Azure offers a number of ways to host your application code. The runtime type refers to the hosting model for the computing resources that your application runs on. Learn more'
+                              'Azure offers a number of ways to host your application code. The runtime type refers to the hosting model for the computing resources that your application runs on.'
                             )}
                           >
                             <Icon

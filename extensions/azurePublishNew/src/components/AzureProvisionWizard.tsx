@@ -14,13 +14,17 @@ import { CreateResourcesWizard } from './provisioningWizards/CreateResourcesWiza
 import { ImportResourcesWizard } from './provisioningWizards/ImportResourcesWizard';
 import { HandOffToAdminWizard } from './provisioningWizards/HandOffToAdminWizard';
 
-const Root = styled.div`
-  height: 100%;
-  width: 100%;
-  display: grid;
-  grid-template-columns: 30% 1fr;
-  grid-template-rows: 1fr;
-`;
+type RootStyleProps = {
+  activeStepIndex: number;
+};
+
+const Root = styled.div<RootStyleProps>(({ activeStepIndex }) => ({
+  height: '100%',
+  width: '100%',
+  display: 'grid',
+  gridTemplateColumns: activeStepIndex === 0 ? '30% 1fr' : '1fr',
+  gridTemplateRows: '1fr',
+}));
 
 export const AzureProvisionWizard = () => {
   const [provisionAction, setProvisionAction] = useState<ProvisionAction>('create');
@@ -46,7 +50,7 @@ export const AzureProvisionWizard = () => {
 
   return (
     <RecoilRoot initializeState={initialize}>
-      <Root>
+      <Root activeStepIndex={activeStepIndex}>
         {!activeStepIndex && (
           <ChooseProvisionAction
             selectedProvisionAction={provisionAction}

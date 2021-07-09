@@ -2,7 +2,6 @@
 // Licensed under the MIT License.
 
 import rimraf from 'rimraf';
-import { enableFetchMocks } from 'jest-fetch-mock';
 import { BotTemplate } from '@bfc/shared';
 
 import { ExtensionContext } from '../../../models/extension/extensionContext';
@@ -36,6 +35,40 @@ jest.mock('@bfc/server-workers', () => {
       execute: jest.fn(),
     },
   };
+});
+
+const mockFeedResponse1 = {
+  objects: [
+    {
+      package: {
+        name: 'generator-conversational-core',
+        version: '1.0.3',
+        description: 'Preview conversational core package for TESTING ONLY',
+        keywords: ['conversationalcore', 'yeoman-generator'],
+      },
+    },
+  ],
+};
+
+const mockFeedResponse2 = {
+  versions: {
+    '0.0.0': {
+      name: '@microsoft/generator-bot-core-language',
+      version: '0.0.0',
+    },
+    '1.0.0': {
+      name: '@microsoft/generator-bot-core-language',
+      version: '1.0.0',
+    },
+  },
+};
+
+jest.mock('../../../utility/fetch', () => (url: string) => {
+  if (url.includes('conversationalcore')) {
+    return Promise.resolve({ json: () => mockFeedResponse1 });
+  } else {
+    return Promise.resolve({ json: () => mockFeedResponse2 });
+  }
 });
 
 const mockSampleBotPath = Path.join(__dirname, '../../../__mocks__/asset/projects/SampleBot');
@@ -124,21 +157,6 @@ describe('assetManager', () => {
   });
 
   describe('getFeedContents', () => {
-    const mockFeedResponse = {
-      objects: [
-        {
-          package: {
-            name: 'generator-conversational-core',
-            version: '1.0.3',
-            description: 'Preview conversational core package for TESTING ONLY',
-            keywords: ['conversationalcore', 'yeoman-generator'],
-          },
-        },
-      ],
-    };
-
-    enableFetchMocks();
-    fetchMock.mockResponseOnce(JSON.stringify(mockFeedResponse));
     it('Get contents of a feed and return template array', async () => {
       const assetManager = new AssetManager();
 
@@ -163,21 +181,6 @@ describe('assetManager', () => {
   });
 
   describe('getNpmPackageVersions', () => {
-    const mockFeedResponse = {
-      versions: {
-        '0.0.0': {
-          name: '@microsoft/generator-bot-core-language',
-          version: '0.0.0',
-        },
-        '1.0.0': {
-          name: '@microsoft/generator-bot-core-language',
-          version: '1.0.0',
-        },
-      },
-    };
-
-    enableFetchMocks();
-    fetchMock.mockResponseOnce(JSON.stringify(mockFeedResponse));
     it('Get available versions for a given npm package', async () => {
       const assetManager = new AssetManager();
 

@@ -2,8 +2,8 @@
 // Licensed under the MIT License.
 
 import { IExtensionRegistration } from '@bfc/extension-client';
-import axios from 'axios';
 
+import axios from '../httpClient';
 import { IFeed, IPackageDefinition, IPackageQuery, IPackageSource } from '../feedInterfaces';
 
 /**

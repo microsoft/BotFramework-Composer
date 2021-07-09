@@ -17,6 +17,7 @@ describe('Electron auth provider', () => {
     getARMTokenForTenant: jest.fn(),
     getTenants: jest.fn(),
     logOut: jest.fn(),
+    getAccount: jest.fn(),
     telemetryData: {} as any,
   };
 

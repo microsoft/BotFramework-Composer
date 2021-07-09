@@ -9,6 +9,7 @@ import { ZIndexes } from 'office-ui-fabric-react/lib/Styling';
  * Add your z-index value here and use it in the component.
  */
 export const zIndices = {
-  notificationContainer: ZIndexes.Layer + 1,
+  notificationContainer: ZIndexes.Layer + 2,
+  authContainer: ZIndexes.Layer + 1,
   webChatContainer: ZIndexes.Layer,
 };

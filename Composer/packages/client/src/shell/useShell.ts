@@ -30,12 +30,17 @@ import {
   schemasState,
   focusPathState,
   localeState,
+  currentUserState,
+  currentTenantIdState,
+  isAuthenticatedState,
+  showAuthDialogState,
   qnaFilesSelectorFamily,
   designPageLocationState,
   botDisplayNameState,
   dialogSchemasState,
   luFilesSelectorFamily,
   rateInfoState,
+  flowCommentsVisibilityState,
   rootBotProjectIdSelector,
   featureFlagsState,
 } from '../recoilModel';
@@ -102,8 +107,13 @@ export function useShell(source: EventSource, projectId: string): Shell {
   const botName = useRecoilValue(botDisplayNameState(projectId));
   const settings = useRecoilValue(settingsState(projectId));
   const flowZoomRate = useRecoilValue(rateInfoState);
+  const flowCommentsVisible = useRecoilValue(flowCommentsVisibilityState);
   const rootBotProjectId = useRecoilValue(rootBotProjectIdSelector);
   const isRootBot = rootBotProjectId === projectId;
+  const isAuthenticated = useRecoilValue(isAuthenticatedState);
+  const currentUser = useRecoilValue(currentUserState);
+  const currentTenant = useRecoilValue(currentTenantIdState);
+  const showAuthDialog = useRecoilValue(showAuthDialogState);
   const projectCollection = useRecoilValue<BotInProject[]>(botProjectSpaceSelector).map((bot) => ({
     ...bot,
     hasWarnings: false,
@@ -127,6 +137,7 @@ export function useShell(source: EventSource, projectId: string): Shell {
     displayManifestModal,
     updateSkillsDataInBotProjectFile: updateEndpointInBotProjectFile,
     updateZoomRate,
+    toggleFlowComments,
     reloadProject,
     setApplicationLevelError,
     updateRecognizer,
@@ -134,6 +145,7 @@ export function useShell(source: EventSource, projectId: string): Shell {
     deleteNotification,
     hideNotification,
     markNotificationAsRead,
+    requireUserLogin,
   } = useRecoilValue(dispatcherState);
 
   const lgApi = useLgApi(projectId);
@@ -271,6 +283,7 @@ export function useShell(source: EventSource, projectId: string): Shell {
       updateEndpointInBotProjectFile(skillId, skillsData.skill, skillsData.selectedEndpointIndex);
     },
     updateFlowZoomRate,
+    toggleFlowComments,
     reloadProject: () => reloadProject(projectId),
     stopBot: (targetProjectId: string) => {
       stopSingleBot(targetProjectId);
@@ -298,6 +311,7 @@ export function useShell(source: EventSource, projectId: string): Shell {
     deleteNotification,
     markNotificationAsRead,
     hideNotification,
+    requireUserLogin,
   };
 
   const currentDialog = useMemo(() => {
@@ -329,6 +343,10 @@ export function useShell(source: EventSource, projectId: string): Shell {
     lgFiles,
     luFiles,
     qnaFiles,
+    currentUser,
+    currentTenant,
+    isAuthenticated,
+    showAuthDialog,
     currentDialog,
     userSettings,
     designerId: editorData?.$designer?.id,
@@ -342,6 +360,7 @@ export function useShell(source: EventSource, projectId: string): Shell {
     skills,
     skillsSettings: settings.skill || {},
     flowZoomRate,
+    flowCommentsVisible,
     forceDisabledActions: isRootBot
       ? []
       : [

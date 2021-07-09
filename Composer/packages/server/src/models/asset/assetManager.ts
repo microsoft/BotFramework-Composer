@@ -11,6 +11,7 @@ import { BotTemplate, emptyBotNpmTemplateName, FeedName, QnABotTemplateId } from
 import { ServerWorker } from '@bfc/server-workers';
 import isArray from 'lodash/isArray';
 
+import fetch from '../../utility/fetch';
 import { ExtensionContext } from '../extension/extensionContext';
 import log from '../../logger';
 import { LocalDiskStorage } from '../storage/localDiskStorage';
