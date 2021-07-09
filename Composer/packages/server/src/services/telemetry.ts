@@ -59,8 +59,9 @@ if (instrumentationKey) {
     const { sessionId, telemetry, composerVersion, userId, architecture, cpus, memory } = getTelemetryContext();
 
     const data = envelope.data as AppInsights.Contracts.Data<AppInsights.Contracts.RequestData>;
+    const alwaysTrackThisEvent = alwaysTrackEvents.includes(data.baseData.name as TelemetryEventName);
 
-    if (!telemetry?.allowDataCollection && !alwaysTrackEvents.includes(data.baseData.name)) {
+    if (!telemetry?.allowDataCollection && !alwaysTrackThisEvent) {
       return false;
     }
 
@@ -102,8 +103,8 @@ if (instrumentationKey) {
         }
       }
 
-      // remove PII
-      if (alwaysTrackEvents.includes(data.baseData.name) && data.baseData.properties.enabled) {
+      // remove PII from always-tracked events
+      if (alwaysTrackThisEvent && data.baseData.properties.enabled) {
         stripPII(data);
       }
     }
