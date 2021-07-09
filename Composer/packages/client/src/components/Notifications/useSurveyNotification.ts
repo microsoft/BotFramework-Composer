@@ -58,6 +58,8 @@ export const getSurveyEligibility = () => {
   ) {
     // If the above conditions are true, there's a fixed chance the card will appear.
     return Math.random() < SURVEY_PARAMETERS.chanceToAppear;
+  } else {
+    return false;
   }
 };
 
