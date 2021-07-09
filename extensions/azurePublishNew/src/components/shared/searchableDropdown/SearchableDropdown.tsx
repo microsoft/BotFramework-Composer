@@ -438,7 +438,7 @@ export const SearchableDropdown = (props: SearchableDropdownProps) => {
   }
 
   React.useEffect(() => {
-    setQuery(value);
+    setQuery(value ?? '');
   }, [value]);
 
   React.useEffect(() => {
