@@ -12,7 +12,7 @@ import { MachineInfo } from '../../recoilModel/types';
 import { LAST_SURVEY_KEY, SURVEY_URL_BASE, SURVEY_PARAMETERS } from '../../constants';
 import TelemetryClient from '../../telemetry/TelemetryClient';
 
-const buildUrl = (info: MachineInfo) => {
+export const buildUrl = (info: MachineInfo) => {
   // User OS
   // hashed machineId
   // composer version
@@ -30,7 +30,7 @@ const buildUrl = (info: MachineInfo) => {
   return `${SURVEY_URL_BASE}?${querystring.stringify(parameters)}`;
 };
 
-const getSurveyEligibility = () => {
+export const getSurveyEligibility = () => {
   const surveyStorage = new ClientStorage(window.localStorage, 'survey');
 
   const optedOut = surveyStorage.get('optedOut', false);
