@@ -6086,7 +6086,7 @@
             "endpointKey": {
               "$ref": "#/definitions/stringExpression",
               "title": "Endpoint Key",
-              "description": "Endpoint key for the QnA Maker KB.",
+              "description": "Endpoint key for the QnA Maker knowledge base.",
               "default": "=settings.qna.endpointkey"
             },
             "hostname": {
@@ -6099,7 +6099,7 @@
             "noAnswer": {
               "$kind": "Microsoft.IActivityTemplate",
               "title": "Fallback answer",
-              "description": "Default answer to return when none found in KB.",
+              "description": "Default answer to return when none found in knowledge base.",
               "default": "Sorry, I did not find an answer.",
               "$ref": "#/definitions/Microsoft.IActivityTemplate"
             },
@@ -6131,7 +6131,7 @@
             "strictFilters": {
               "$ref": "#/definitions/arrayExpression",
               "title": "Strict Filters",
-              "description": "Metadata filters to use when calling the QnA Maker KB.",
+              "description": "Metadata filters to use when calling the QnA Maker knowledge base.",
               "items": {
                 "type": "object",
                 "title": "Metadata filter",
@@ -6197,7 +6197,7 @@
         "Microsoft.QnAMakerRecognizer": {
           "$role": "implements(Microsoft.IRecognizer)",
           "title": "QnAMaker Recognizer",
-          "description": "Recognizer for generating QnAMatch intents from a KB.",
+          "description": "Recognizer for generating QnAMatch intents from a knowledge base.",
           "type": "object",
           "required": ["knowledgeBaseId", "endpointKey", "hostname", "$kind"],
           "additionalProperties": false,
@@ -6222,7 +6222,7 @@
             "endpointKey": {
               "$ref": "#/definitions/stringExpression",
               "title": "Endpoint Key",
-              "description": "Endpoint key for the QnA Maker KB.",
+              "description": "Endpoint key for the QnA Maker knowledge base.",
               "default": "settings.qna.endpointkey"
             },
             "hostname": {
@@ -6241,11 +6241,11 @@
             "strictFilters": {
               "$ref": "#/definitions/arrayExpression",
               "title": "Strict Filters",
-              "description": "Metadata filters to use when calling the QnA Maker KB.",
+              "description": "Metadata filters to use when calling the QnA Maker knowledge base.",
               "items": {
                 "type": "object",
                 "title": "Metadata filters",
-                "description": "Metadata filters to use when querying QnA Maker KB.",
+                "description": "Metadata filters to use when querying QnA Maker knowledge base.",
                 "properties": {
                   "name": {
                     "type": "string",
@@ -6300,11 +6300,11 @@
             "metadata": {
               "$ref": "#/definitions/arrayExpression",
               "title": "Metadata filters",
-              "description": "Metadata filters to use when calling the QnA Maker KB.",
+              "description": "Metadata filters to use when calling the QnA Maker knowledge base.",
               "items": {
                 "type": "object",
                 "title": "Metadata filter",
-                "description": "Metadata filter to use when calling the QnA Maker KB.",
+                "description": "Metadata filter to use when calling the QnA Maker knowledge base.",
                 "properties": {
                   "name": {
                     "type": "string",

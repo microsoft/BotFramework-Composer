@@ -8,7 +8,11 @@ import {
   ResourceDefinition,
   ResourceProvisionService,
 } from './types';
-import { appInsightsDefinition, getAppInsightsProvisionService } from './azureResources/appInsights';
+import {
+  appInsightsDefinition,
+  AppInsightsResourceConfig,
+  getAppInsightsProvisionService,
+} from './azureResources/appInsights';
 import {
   appRegistrationDefinition,
   AppRegistrationResourceConfig,
@@ -21,8 +25,12 @@ import { cosmosDbDefinition, getCosmosDbProvisionService } from './azureResource
 import { getLuisAuthoringProvisionService, luisAuthoringDefinition } from './azureResources/luisAuthoring';
 import { getLuisPredictionProvisionService, luisPredictionDefinition } from './azureResources/luisPrediction';
 import { getQnAProvisionService, qnaDefinition, QnAResourceConfig } from './azureResources/qna';
-import { getAppServiceProvisionService, servicePlanDefinition } from './azureResources/servicePlan';
-import { getWebAppProvisionService, webAppResourceDefinition } from './azureResources/webApp';
+import {
+  getAppServiceProvisionService,
+  servicePlanDefinition,
+  ServicePlanResourceConfig,
+} from './azureResources/servicePlan';
+import { getWebAppProvisionService, WebAppResourceConfig, webAppResourceDefinition } from './azureResources/webApp';
 import { AzureResourceTypes } from './constants';
 import { ProvisioningConfig } from './provisioning';
 
@@ -48,7 +56,7 @@ export const getProvisionServices = (config: ProvisionServiceConfig): Record<str
     botRegistration: getBotChannelProvisionService(),
     azureFunctionApp: getAzureFunctionsProvisionService(),
     cosmosDB: getCosmosDbProvisionService(config),
-    appInsights: getAppInsightsProvisionService(),
+    appInsights: getAppInsightsProvisionService(config),
     luisAuthoring: getLuisAuthoringProvisionService(),
     luisPrediction: getLuisPredictionProvisionService(),
     blobStorage: getBlogStorageProvisionService(),
@@ -60,6 +68,12 @@ export const getResourceDependencies = (key: string) => {
   switch (key) {
     case AzureResourceTypes.APP_REGISTRATION:
       return appRegistrationDefinition.dependencies;
+    case AzureResourceTypes.WEBAPP:
+      return webAppResourceDefinition.dependencies;
+    case AzureResourceTypes.SERVICE_PLAN:
+      return servicePlanDefinition.dependencies;
+    case AzureResourceTypes.APPINSIGHTS:
+      return appInsightsDefinition.dependencies;
     case AzureResourceTypes.QNA:
       return qnaDefinition.dependencies;
     default:
@@ -72,6 +86,32 @@ export const provisionConfigToResourceConfigMap = {
     return {
       key: 'appRegistration',
       appName: config.hostname,
+    };
+  },
+  webApp: (config: ProvisioningConfig): WebAppResourceConfig => {
+    return {
+      key: 'webApp',
+      webAppName: config.hostname,
+      location: config.location,
+      operatingSystem: config.appServiceOperatingSystem,
+      resourceGroupName: config.resourceGroup,
+    };
+  },
+  servicePlan: (config: ProvisioningConfig): ServicePlanResourceConfig => {
+    return {
+      key: 'servicePlan',
+      appServicePlanName: config.hostname,
+      location: config.location,
+      operatingSystem: config.appServiceOperatingSystem,
+      resourceGroupName: config.resourceGroup,
+    };
+  },
+  appInsights: (config: ProvisioningConfig): AppInsightsResourceConfig => {
+    return {
+      key: 'appInsights',
+      resourceGroupName: config.resourceGroup,
+      location: config.location,
+      name: config.hostname,
     };
   },
   qna: (config: ProvisioningConfig): QnAResourceConfig => {

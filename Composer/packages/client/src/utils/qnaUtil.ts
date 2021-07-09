@@ -42,7 +42,7 @@ export const substringTextByLine = (text: string, start?: number, end?: number):
   return text.split('\n').slice(start, end).join('\n');
 };
 /**
- * Migrate qna pair in <dialog>.qna to container KB <dialog>-munual.source.qna file.
+ * Migrate qna pair in <dialog>.qna to container knowledge base <dialog>-munual.source.qna file.
  * @param qnaFiles
  */
 export const reformQnAToContainerKB = (projectId: string, qnaFiles: QnAFile[], locales: string[]): QnAFile[] => {

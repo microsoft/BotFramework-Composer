@@ -38,5 +38,4 @@ export type AppRegistrationResult = {
   appId: string;
   appPassword: string;
 };
-export type AppInsightsConfigNew = ResourceConfig & {};
 export type AzureFunctionConfig = ResourceConfig & {};

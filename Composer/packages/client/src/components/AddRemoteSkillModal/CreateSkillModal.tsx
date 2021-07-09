@@ -31,8 +31,6 @@ import httpClient from '../../utils/httpUtil';
 import TelemetryClient from '../../telemetry/TelemetryClient';
 import { TriggerFormData } from '../../utils/dialogUtil';
 import { selectIntentDialog } from '../../constants';
-import { isShowAuthDialog } from '../../utils/auth';
-import { AuthDialog } from '../Auth/AuthDialog';
 import { PublishProfileDialog } from '../../pages/botProject/create-publish-profile/PublishProfileDialog';
 
 import { SelectIntent } from './SelectIntent';
@@ -182,7 +180,6 @@ export const CreateSkillModal: React.FC<CreateSkillModalProps> = (props) => {
   const [formDataErrors, setFormDataErrors] = useState<SkillFormDataErrors>({});
   const [skillManifest, setSkillManifest] = useState<any | null>(null);
   const [showDetail, setShowDetail] = useState(false);
-  const [showAuthDialog, setShowAuthDialog] = useState(false);
   const [createSkillDialogHidden, setCreateSkillDialogHidden] = useState(false);
   const [manifestDirPath, setManifestDirPath] = useState('');
   const [zipContent, setZipContent] = useState({});
@@ -294,7 +291,7 @@ export const CreateSkillModal: React.FC<CreateSkillModalProps> = (props) => {
   };
 
   const handleGotoCreateProfile = () => {
-    isShowAuthDialog(true) ? setShowAuthDialog(true) : setCreateSkillDialogHidden(true);
+    setCreateSkillDialogHidden(true);
   };
 
   const handleBrowseButtonUpdate = async (path: string, files: Record<string, JSZipObject>) => {
@@ -461,17 +458,6 @@ export const CreateSkillModal: React.FC<CreateSkillModalProps> = (props) => {
           </Fragment>
         )}
       </DialogWrapper>
-      {showAuthDialog && (
-        <AuthDialog
-          needGraph
-          next={() => {
-            setCreateSkillDialogHidden(true);
-          }}
-          onDismiss={() => {
-            setShowAuthDialog(false);
-          }}
-        />
-      )}
       {createSkillDialogHidden ? (
         <PublishProfileDialog
           closeDialog={() => {

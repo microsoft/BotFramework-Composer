@@ -86,7 +86,8 @@ const InitDispatcher = ({ onLoad }) => {
   //so use the useLayoutEffect here
   useLayoutEffect(() => {
     setDispatcher(dispatcherRef.current);
-    prepareAxiosWithRecoil(currentDispatcherState);
+    prepareAxiosWithRecoil();
+    currentDispatcherState; // ToDo: deprecate this
     onLoad(true);
   }, []);
 

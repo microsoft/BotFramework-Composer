@@ -13,17 +13,9 @@ import {
   ResourceProvisionService,
 } from '../types';
 import { createCustomizeError, ProvisionErrors } from '../../../../azurePublish/src/node/utils/errorHandler';
+import { AzureResourceTypes } from '../constants';
 
 import { AZURE_HOSTING_GROUP_NAME, S1_STANDARD_TIER } from './constants';
-
-type ServicePlanConfig = ResourceConfig & {
-  key: 'servicePlan';
-  resourceGroupName: string;
-  appServicePlanName: string;
-  appServicePlanOptions: {}; // has location, operationsystem
-  location: string;
-  operatingSystem: string;
-};
 
 export const servicePlanDefinition: ResourceDefinition = {
   key: 'servicePlan',
@@ -32,13 +24,25 @@ export const servicePlanDefinition: ResourceDefinition = {
   text: 'Microsoft App Service Plan',
   tier: S1_STANDARD_TIER,
   group: AZURE_HOSTING_GROUP_NAME,
+  dependencies: [AzureResourceTypes.RESOURCE_GROUP],
+};
+
+export type ServicePlanResourceConfig = ResourceConfig & {
+  key: 'servicePlan';
+  resourceGroupName: string;
+  appServicePlanName: string;
+  location: string;
+  operatingSystem: string;
 };
 
 const appServiceProvisionMethod = (provisionConfig: ProvisionServiceConfig) => {
   const tokenCredentials = new TokenCredentials(provisionConfig.accessToken);
   const webSiteManagementClient = new WebSiteManagementClient(tokenCredentials, provisionConfig.subscriptionId);
 
-  return async (resourceConfig: ServicePlanConfig, workingSet: ProvisionWorkingSet): Promise<ProvisionWorkingSet> => {
+  return async (
+    resourceConfig: ServicePlanResourceConfig,
+    workingSet: ProvisionWorkingSet
+  ): Promise<ProvisionWorkingSet> => {
     const operatingSystem = resourceConfig.operatingSystem ? resourceConfig.operatingSystem : 'windows';
     try {
       // Create new Service Plan
