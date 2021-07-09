@@ -19,15 +19,10 @@ export type SearchableDropdownTextFieldProps = ITextFieldProps & {
   'data-automation-id'?: string;
 };
 
-const messages = {
-  typeText: formatMessage('Type text here ...'),
-  textField: formatMessage('Textfield'),
-};
-
 export const SearchableDropdownTextField = React.forwardRef(
   (props: SearchableDropdownTextFieldProps, tagInputFieldRef: React.MutableRefObject<ITextField>) => {
     const { onEnterKeyUp, onKeyDown, componentRef } = props;
-    const { placeholder = messages.typeText, errorMessage } = props;
+    const { errorMessage } = props;
 
     /**
      * Intercepts the key up event to handle the Enter key press.
@@ -54,11 +49,11 @@ export const SearchableDropdownTextField = React.forwardRef(
     return (
       <TextField
         {...props}
-        ariaLabel={props.ariaLabel || props.label || messages.textField}
+        ariaLabel={props.ariaLabel || props.label || formatMessage('Textfield')}
         autoComplete="off"
         componentRef={tagInputFieldRef || componentRef}
         deferredValidationTime={300}
-        placeholder={placeholder}
+        placeholder={formatMessage('Type text here ...')}
         onGetErrorMessage={() => (errorMessage ? errorMessage : '')}
         onKeyDown={interceptKeyDown}
       />
