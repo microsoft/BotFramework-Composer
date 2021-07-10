@@ -17,7 +17,7 @@ const cleanAll = process.argv.indexOf('--all') !== -1;
 
 function cleanup() {
   try {
-    rimraf.sync(path.join(BOTS_DIR, cleanAll ? '**' : 'TestBot_**'));
+    rimraf.sync(path.join(BOTS_DIR, cleanAll ? '**' : 'TestBot_TestSample'));
   } catch {
     // do nothing
   }
