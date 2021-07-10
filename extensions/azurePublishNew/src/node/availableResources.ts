@@ -27,7 +27,11 @@ import {
   LuisAuthoringConfig,
   luisAuthoringDefinition,
 } from './azureResources/luisAuthoring';
-import { getLuisPredictionProvisionService, luisPredictionDefinition } from './azureResources/luisPrediction';
+import {
+  getLuisPredictionProvisionService,
+  LuisPredictionConfig,
+  luisPredictionDefinition,
+} from './azureResources/luisPrediction';
 import { getQnAProvisionService, qnaDefinition } from './azureResources/qna';
 import {
   getAppServiceProvisionService,
@@ -62,7 +66,7 @@ export const getProvisionServices = (config: ProvisionServiceConfig): Record<str
     cosmosDB: getCosmosDbProvisionService(config),
     appInsights: getAppInsightsProvisionService(config),
     luisAuthoring: getLuisAuthoringProvisionService(config),
-    luisPrediction: getLuisPredictionProvisionService(),
+    luisPrediction: getLuisPredictionProvisionService(config),
     blobStorage: getBlogStorageProvisionService(),
     qna: getQnAProvisionService(),
   };
@@ -78,6 +82,8 @@ export const getResourceDependencies = (key: string) => {
       return servicePlanDefinition.dependencies;
     case AzureResourceTypes.APPINSIGHTS:
       return appInsightsDefinition.dependencies;
+    case AzureResourceTypes.LUIS_PREDICTION:
+      return luisPredictionDefinition.dependencies;
     case AzureResourceTypes.LUIS_AUTHORING:
       return luisAuthoringDefinition.dependencies;
     default:
@@ -116,6 +122,14 @@ export const provisionConfigToResourceConfigMap = {
       resourceGroupName: config.resourceGroup,
       location: config.location,
       name: config.hostname,
+    };
+  },
+  luisPrediction: (config: ProvisioningConfig): LuisPredictionConfig => {
+    return {
+      key: 'luisPrediction',
+      location: config.luisLocation,
+      name: `${config.hostname}-luis`,
+      resourceGroupName: config.resourceGroup,
     };
   },
   luisAuthoring: (config: ProvisioningConfig): LuisAuthoringConfig => {
