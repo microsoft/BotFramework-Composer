@@ -24,7 +24,6 @@ import {
   getAzureFunctionsProvisionService,
 } from './azureResources/azureFunction';
 import { BlobStorageConfig, blobStorageDefinition, getBlogStorageProvisionService } from './azureResources/blobStorage';
-import { botRegistrationDefinition, getBotChannelProvisionService } from './azureResources/botChannel';
 import { CosmosDbConfig, cosmosDbDefinition, getCosmosDbProvisionService } from './azureResources/cosmosDb';
 import {
   getLuisAuthoringProvisionService,
@@ -37,6 +36,11 @@ import {
   luisPredictionDefinition,
 } from './azureResources/luisPrediction';
 import { getQnAProvisionService, qnaDefinition, QnAResourceConfig } from './azureResources/qna';
+import {
+  BotRegistrationConfig,
+  botRegistrationDefinition,
+  getBotChannelProvisionService,
+} from './azureResources/botRegistration';
 import {
   getAppServiceProvisionService,
   servicePlanDefinition,
@@ -65,7 +69,7 @@ export const getProvisionServices = (config: ProvisionServiceConfig): Record<str
     appRegistration: getAppRegistrationProvisionService(config),
     webApp: getWebAppProvisionService(config),
     servicePlan: getAppServiceProvisionService(config),
-    botRegistration: getBotChannelProvisionService(),
+    botRegistration: getBotChannelProvisionService(config),
     azureFunctionApp: getAzureFunctionsProvisionService(config),
     cosmosDB: getCosmosDbProvisionService(config),
     appInsights: getAppInsightsProvisionService(config),
@@ -86,6 +90,8 @@ export const getResourceDependencies = (key: string) => {
       return servicePlanDefinition.dependencies;
     case AzureResourceTypes.APPINSIGHTS:
       return appInsightsDefinition.dependencies;
+    case AzureResourceTypes.BOT_REGISTRATION:
+      return botRegistrationDefinition.dependencies;
     case AzureResourceTypes.LUIS_PREDICTION:
       return luisPredictionDefinition.dependencies;
     case AzureResourceTypes.LUIS_AUTHORING:
@@ -188,6 +194,13 @@ export const provisionConfigToResourceConfigMap = {
       location: config.location,
       name: `${config.hostname}-qna`,
       sku: config.sku,
+    };
+  },
+  botRegistration: (config: ProvisioningConfig): BotRegistrationConfig => {
+    return {
+      key: 'botRegistration',
+      hostname: config.hostname, // probably should be derived from webapp provisioning result, not here
+      resourceGroupName: config.resourceGroup,
     };
   },
 };
