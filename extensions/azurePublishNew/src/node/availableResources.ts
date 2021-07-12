@@ -18,7 +18,11 @@ import {
   AppRegistrationResourceConfig,
   getAppRegistrationProvisionService,
 } from './azureResources/appRegistration';
-import { azureFunctionDefinition, getAzureFunctionsProvisionService } from './azureResources/azureFunction';
+import {
+  AzureFunctionConfig,
+  azureFunctionDefinition,
+  getAzureFunctionsProvisionService,
+} from './azureResources/azureFunction';
 import { BlobStorageConfig, blobStorageDefinition, getBlogStorageProvisionService } from './azureResources/blobStorage';
 import { botRegistrationDefinition, getBotChannelProvisionService } from './azureResources/botChannel';
 import { CosmosDbConfig, cosmosDbDefinition, getCosmosDbProvisionService } from './azureResources/cosmosDb';
@@ -62,7 +66,7 @@ export const getProvisionServices = (config: ProvisionServiceConfig): Record<str
     webApp: getWebAppProvisionService(config),
     servicePlan: getAppServiceProvisionService(config),
     botRegistration: getBotChannelProvisionService(),
-    azureFunctionApp: getAzureFunctionsProvisionService(),
+    azureFunctionApp: getAzureFunctionsProvisionService(config),
     cosmosDB: getCosmosDbProvisionService(config),
     appInsights: getAppInsightsProvisionService(config),
     luisAuthoring: getLuisAuthoringProvisionService(config),
@@ -90,6 +94,8 @@ export const getResourceDependencies = (key: string) => {
       return cosmosDbDefinition.dependencies;
     case AzureResourceTypes.BLOBSTORAGE:
       return blobStorageDefinition.dependencies;
+    case AzureResourceTypes.AZUREFUNCTIONS:
+      return azureFunctionDefinition.dependencies;
     default:
       return [];
   }
@@ -160,6 +166,17 @@ export const provisionConfigToResourceConfigMap = {
       location: config.location,
       name: config.hostname.toLowerCase().replace(/-/g, '').replace(/_/g, ''),
       resourceGroupName: config.resourceGroup,
+    };
+  },
+  azureFunction: (config: ProvisioningConfig): AzureFunctionConfig => {
+    return {
+      key: 'azureFunction',
+      location: config.location,
+      name: config.hostname,
+      operatingSystem: config.appServiceOperatingSystem,
+      resourceGroupName: config.resourceGroup,
+      workerRuntime: config.workerRuntime,
+      instrumentationKey: config.instrumentationKey,
     };
   },
 };
