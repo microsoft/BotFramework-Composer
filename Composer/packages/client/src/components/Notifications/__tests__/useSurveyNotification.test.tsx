@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 import React from 'react';
+import { useRecoilValue } from 'recoil';
 
 import { renderWithRecoil } from '../../../../__tests__/testUtils';
 import { useSurveyNotification } from '../useSurveyNotification';
@@ -9,10 +10,7 @@ import { dispatcherState, machineInfoState } from '../../../recoilModel';
 import { ClientStorage } from '../../../utils/storage';
 import * as realConstants from '../../../constants';
 
-const mockSetSettings = jest.fn();
-const mockAddNotification = jest.fn();
-
-jest.mock('../../../constants', () => ({
+jest.doMock('../../../constants', () => ({
   ...realConstants,
   get SURVEY_URL_BASE() {
     return 'urlBase';
@@ -29,13 +27,16 @@ jest.mock('../../../constants', () => ({
 
 let savedVersion: string | undefined = '';
 const MOCK_VERSION = '2.3.4_jest';
+const { LAST_SURVEY_KEY } = realConstants;
 
-const surveyStorage = new ClientStorage(window.localStorage, 'survey');
+let surveyStorage;
 
 beforeAll(() => {
   process.env.NODE_ENV = 'jest';
   savedVersion = process.env.COMPOSER_VERSION;
   process.env.COMPOSER_VERSION = MOCK_VERSION;
+
+  surveyStorage = new ClientStorage(window.localStorage, 'survey');
 });
 
 afterAll(() => {
@@ -108,13 +109,12 @@ afterAll(() => {
 // });
 
 describe('useSurveyNotification', () => {
-  const TestHarness = () => {
-    useSurveyNotification();
-    return null;
-  };
-
   const id = 'machineID12345';
   const os = 'TestOS';
+
+  const mockSetSettings = jest.fn();
+  const mockAddNotification = jest.fn();
+  const mockOpen = jest.fn();
 
   const initRecoilState = ({ set }) => {
     set(dispatcherState, {
@@ -125,13 +125,26 @@ describe('useSurveyNotification', () => {
     set(machineInfoState, { os, id });
   };
 
-  const mockOpen = jest.fn();
   window.open = mockOpen;
+
+  const TestHarness = () => {
+    const dispatcher = useRecoilValue(dispatcherState);
+    const machineInfo = useRecoilValue(machineInfoState);
+
+    console.log('machineInfo', machineInfo);
+    console.log('dispatcher:', dispatcher, dispatcher.addNotification);
+
+    useSurveyNotification();
+    return null;
+  };
 
   it('builds a URL given parameters', () => {
     surveyStorage.set('optedOut', false);
     surveyStorage.set('days', 12345);
-    surveyStorage.set(realConstants.LAST_SURVEY_KEY, null);
+    surveyStorage.set(LAST_SURVEY_KEY, null);
+
+    console.log(surveyStorage.getAll());
+    console.log(window.localStorage);
 
     renderWithRecoil(<TestHarness />, initRecoilState);
     expect(mockAddNotification).toHaveBeenCalled();

@@ -73,6 +73,7 @@ export const useSurveyNotification = () => {
 
     if (getSurveyEligibility()) {
       const surveyStorage = new ClientStorage(window.localStorage, 'survey');
+
       TelemetryClient.track('HATSSurveyOffered');
 
       addNotification({
