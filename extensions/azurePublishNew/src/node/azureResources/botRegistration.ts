@@ -50,10 +50,10 @@ const botChannelProvisionMethod = (provisionConfig: ProvisionServiceConfig): Pro
   return async (config: BotRegistrationConfig, workingSet: ProvisionWorkingSet): Promise<ProvisionWorkingSet> => {
     checkRequiredField(config.resourceGroupName, 'resourceGroupName is required.');
     checkRequiredField(workingSet.appRegistration?.appId, 'appRegistration.appId is required.');
-    checkRequiredField(workingSet.webAppResult?.hostname, 'webApp.hostname is required.');
+    checkRequiredField(workingSet.webApp?.hostname, 'webApp.hostname is required.');
 
     const appId = workingSet.appRegistration?.appId;
-    const webAppHostname = workingSet.webAppResult?.hostname;
+    const webAppHostname = workingSet.webApp?.hostname;
     const endpoint = `https://${webAppHostname ?? config.hostname + '.azurewebsites.net'}/api/messages`;
     const displayName = config.hostname; // how it is in production now - but theres a comment that we might not want to use hostname for displayName
 
