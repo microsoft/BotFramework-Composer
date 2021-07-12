@@ -109,8 +109,6 @@ describe('provisioning', () => {
         externalResources: [{ key: 'appInsights' }],
         expected: [
           expectedTestResources.resourceGroup,
-          expectedTestResources.servicePlan,
-          expectedTestResources.webApp,
           expectedTestResources.appRegistration,
           expectedTestResources.botRegistration,
           expectedTestResources.appInsights,
@@ -136,8 +134,6 @@ describe('provisioning', () => {
         externalResources: [{ key: 'botRegistration' }],
         expected: [
           expectedTestResources.resourceGroup,
-          expectedTestResources.servicePlan,
-          expectedTestResources.webApp,
           expectedTestResources.appRegistration,
           expectedTestResources.botRegistration,
         ],
@@ -185,13 +181,13 @@ describe('provisioning', () => {
         ],
         expected: [
           expectedTestResources.resourceGroup,
+          expectedTestResources.servicePlan,
+          expectedTestResources.webApp,
           expectedTestResources.qna,
           expectedTestResources.luisPrediction,
           expectedTestResources.luisAuthoring,
           expectedTestResources.cosmosDb,
           expectedTestResources.blobStorage,
-          expectedTestResources.servicePlan,
-          expectedTestResources.webApp,
           expectedTestResources.appRegistration,
           expectedTestResources.botRegistration,
           expectedTestResources.appInsights,
