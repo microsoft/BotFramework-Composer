@@ -61,13 +61,13 @@ const expectedTestResources = {
     key: 'luisAuthoring',
     resourceGroupName: testConfig.resourceGroup,
     location: testConfig.luisLocation,
-    name: testConfig.hostname,
+    name: 'test-hostname-luis-authoring',
   },
   luisPrediction: {
     key: 'luisPrediction',
     resourceGroupName: testConfig.resourceGroup,
     location: testConfig.luisLocation,
-    name: testConfig.hostname,
+    name: 'test-hostname-luis',
   },
   qna: {
     key: 'qna',
