@@ -141,7 +141,7 @@ describe('<SkillForm />', () => {
       const nextButton = getByTestId('SetAppIdNext');
       nextButton.click();
 
-      const urlInput = getByLabelText('Skill Manifest URL');
+      const urlInput = getByLabelText('Skill Manifest');
       act(() => {
         fireEvent.change(urlInput, {
           target: {
