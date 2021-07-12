@@ -36,7 +36,7 @@ import {
   LuisPredictionConfig,
   luisPredictionDefinition,
 } from './azureResources/luisPrediction';
-import { getQnAProvisionService, qnaDefinition } from './azureResources/qna';
+import { getQnAProvisionService, qnaDefinition, QnAResourceConfig } from './azureResources/qna';
 import {
   getAppServiceProvisionService,
   servicePlanDefinition,
@@ -72,7 +72,7 @@ export const getProvisionServices = (config: ProvisionServiceConfig): Record<str
     luisAuthoring: getLuisAuthoringProvisionService(config),
     luisPrediction: getLuisPredictionProvisionService(config),
     blobStorage: getBlogStorageProvisionService(config),
-    qna: getQnAProvisionService(),
+    qna: getQnAProvisionService(config),
   };
 };
 
@@ -96,6 +96,8 @@ export const getResourceDependencies = (key: string) => {
       return blobStorageDefinition.dependencies;
     case AzureResourceTypes.AZUREFUNCTIONS:
       return azureFunctionDefinition.dependencies;
+    case AzureResourceTypes.QNA:
+      return qnaDefinition.dependencies;
     default:
       return [];
   }
@@ -177,6 +179,15 @@ export const provisionConfigToResourceConfigMap = {
       resourceGroupName: config.resourceGroup,
       workerRuntime: config.workerRuntime,
       instrumentationKey: config.instrumentationKey,
+    };
+  },
+  qna: (config: ProvisioningConfig): QnAResourceConfig => {
+    return {
+      key: 'qna',
+      resourceGroupName: config.resourceGroup,
+      location: config.location,
+      name: `${config.hostname}-qna`,
+      sku: config.sku,
     };
   },
 };

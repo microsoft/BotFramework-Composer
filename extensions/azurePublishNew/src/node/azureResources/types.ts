@@ -14,7 +14,6 @@ export type WebAppConfig = ResourceConfig & {
   location: string;
   resourceGroupName: string;
 };
-export type QnAConfigNew = ResourceConfig & {};
 export type AppServiceConfig = ResourceDefinition & {};
 export type BotServiceConfig = ResourceConfig & {
   key: 'botChannel';
