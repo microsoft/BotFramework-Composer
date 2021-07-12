@@ -118,7 +118,37 @@ export async function getTemplateReadMe(req: any, res: any) {
       const moduleURL = `https://registry.npmjs.org/${moduleName}`;
       const response = await fetch(moduleURL);
       const data = await response.json();
-      res.status(200).json(data?.readme || '');
+      // check for readme at root of response obj
+      let readMe = data?.readme;
+
+      // if no readme at root then pull readme from latest published version that has one
+      if (!readMe) {
+        const versionsDict = data?.versions;
+        const versionTimesObj = data?.time;
+        if (versionsDict && versionTimesObj) {
+          // convert versionPublishTimes obj to a 2d array
+          // each entry is an array with two fields, version number and dateTime published
+          const items = Object.entries(versionTimesObj);
+
+          // sort versionPublishTimes entries based on time published
+          items.sort((firstEntry, secondEntry) => {
+            const firstEntryDate = new Date(firstEntry[1] as string).getTime();
+            const secondEntryDate = new Date(secondEntry[1] as string).getTime();
+            return firstEntryDate > secondEntryDate ? 1 : -1;
+          });
+
+          // iterate, starting on most recently published version, and query versionDict for a readMe for the version in question
+          for (let i = items.length - 1; i > -1; i--) {
+            if (versionsDict[items[i][0]] && versionsDict[items[i][0]]?.readme) {
+              // if a readMe exists, set it as our result and break out of the loop
+              readMe = versionsDict[items[i][0]]?.readme;
+              break;
+            }
+          }
+        }
+      }
+
+      res.status(200).json(readMe || formatMessage('Read Me cannot be found for this template'));
     }
   } catch (error) {
     log('Failed getting template readMe', error);

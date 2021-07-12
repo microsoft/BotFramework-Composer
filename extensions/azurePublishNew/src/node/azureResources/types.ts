@@ -14,7 +14,6 @@ export type WebAppConfig = ResourceConfig & {
   location: string;
   resourceGroupName: string;
 };
-export type LuisPredictionConfig = ResourceConfig & {};
 export type LuisAuthoringConfig = {};
 export type QnAConfigNew = ResourceConfig & {};
 export type AppServiceConfig = ResourceDefinition & {};
