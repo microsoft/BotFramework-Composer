@@ -15,7 +15,6 @@ import {
   PublishResponse,
   PublishResult,
   SDKKinds,
-  RecognizerFile,
 } from '@botframework-composer/types';
 import { parseRuntimeKey, applyPublishingProfileToSettings } from '@bfc/shared';
 import { indexer } from '@bfc/indexers';
