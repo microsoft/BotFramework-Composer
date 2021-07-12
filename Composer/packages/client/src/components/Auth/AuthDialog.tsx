@@ -65,7 +65,7 @@ export const AuthDialog: React.FC<AuthDialogProps> = (props) => {
     return (
       <Stack>
         {defaultRender(props)}
-        <CopyableText text={props.data} />
+        <CopyableText text={props['data-azcommand']} />
       </Stack>
     );
   };
@@ -89,7 +89,7 @@ export const AuthDialog: React.FC<AuthDialogProps> = (props) => {
     >
       <TextField
         multiline
-        data="az account get-access-token"
+        data-azcommand="az account get-access-token"
         errorMessage={tokenError}
         label={formatMessage('Provide ARM token by running:')}
         placeholder={formatMessage('Paste token here')}
@@ -107,7 +107,7 @@ export const AuthDialog: React.FC<AuthDialogProps> = (props) => {
       {props.needGraph ? (
         <TextField
           multiline
-          data="az account get-access-token  --resource-type ms-graph"
+          data-azcommand="az account get-access-token  --resource-type ms-graph"
           errorMessage={graphError}
           label={formatMessage('Provide graph token by running:')}
           placeholder={formatMessage('Paste token here')}
