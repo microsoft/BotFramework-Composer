@@ -11,6 +11,8 @@ import { useCallback, useState } from 'react';
 import { useRecoilValue } from 'recoil';
 import { FontWeights } from 'office-ui-fabric-react/lib/Styling';
 import { FontSizes } from '@uifabric/fluent-theme';
+import { Stack } from 'office-ui-fabric-react/lib/Stack';
+import { CopyableText } from '@bfc/ui-shared';
 
 import { dispatcherState } from '../../recoilModel/atoms';
 import { isTokenExpired } from '../../utils/auth';
@@ -59,6 +61,15 @@ export const AuthDialog: React.FC<AuthDialogProps> = (props) => {
     return true;
   }, [accessToken, graphToken]);
 
+  const renderLabel = (props, defaultRender) => {
+    return (
+      <Stack>
+        {defaultRender(props)}
+        <CopyableText text={props.data} />
+      </Stack>
+    );
+  };
+
   return (
     <Dialog
       dialogContentProps={{
@@ -78,8 +89,9 @@ export const AuthDialog: React.FC<AuthDialogProps> = (props) => {
     >
       <TextField
         multiline
+        data="az account get-access-token"
         errorMessage={tokenError}
-        label={formatMessage('Provide ARM token by running `az account get-access-token`')}
+        label={formatMessage('Provide ARM token by running:')}
         placeholder={formatMessage('Paste token here')}
         rows={4}
         onChange={(event, newValue) => {
@@ -90,14 +102,14 @@ export const AuthDialog: React.FC<AuthDialogProps> = (props) => {
             setTokenError('');
           }
         }}
+        onRenderLabel={renderLabel}
       />
       {props.needGraph ? (
         <TextField
           multiline
+          data="az account get-access-token  --resource-type ms-graph"
           errorMessage={graphError}
-          label={formatMessage(
-            'Provide graph token by running `az account get-access-token  --resource-type ms-graph`'
-          )}
+          label={formatMessage('Provide graph token by running:')}
           placeholder={formatMessage('Paste token here')}
           rows={4}
           onChange={(event, newValue) => {
@@ -108,6 +120,7 @@ export const AuthDialog: React.FC<AuthDialogProps> = (props) => {
               setGraphError('');
             }
           }}
+          onRenderLabel={renderLabel}
         />
       ) : null}
       <DialogFooter>
