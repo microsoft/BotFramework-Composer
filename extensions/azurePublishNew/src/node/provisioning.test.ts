@@ -16,6 +16,7 @@ const testConfig: ProvisioningConfig = {
   type: 'test-type',
   appServiceOperatingSystem: 'test-operatingSystem',
   workerRuntime: 'test-workerRuntime',
+  instrumentationKey: 'test-instrumentationKey',
 };
 
 const expectedTestResources = {
@@ -73,7 +74,7 @@ const expectedTestResources = {
     key: 'qna',
     resourceGroupName: testConfig.resourceGroup,
     location: testConfig.location,
-    name: testConfig.hostname,
+    name: 'test-hostname-qna',
     sku: testConfig.sku,
   },
   resourceGroup: {
@@ -210,13 +211,13 @@ describe('provisioning', () => {
         ],
         expected: [
           expectedTestResources.resourceGroup,
+          expectedTestResources.appRegistration,
+          expectedTestResources.azureFunctions,
           expectedTestResources.qna,
           expectedTestResources.luisPrediction,
           expectedTestResources.luisAuthoring,
           expectedTestResources.cosmosDb,
           expectedTestResources.blobStorage,
-          expectedTestResources.appRegistration,
-          expectedTestResources.azureFunctions,
           expectedTestResources.botRegistration,
           expectedTestResources.appInsights,
         ],
