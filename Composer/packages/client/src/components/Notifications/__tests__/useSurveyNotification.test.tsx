@@ -2,11 +2,11 @@
 // Licensed under the MIT License.
 
 import React from 'react';
-import { useRecoilValue } from 'recoil';
 
 import { renderWithRecoil } from '../../../../__tests__/testUtils';
+import { NotificationContainer } from '../NotificationContainer';
 import { useSurveyNotification } from '../useSurveyNotification';
-import { dispatcherState, machineInfoState } from '../../../recoilModel';
+import { machineInfoState } from '../../../recoilModel';
 import { ClientStorage } from '../../../utils/storage';
 import * as realConstants from '../../../constants';
 
@@ -14,14 +14,6 @@ jest.doMock('../../../constants', () => ({
   ...realConstants,
   get SURVEY_URL_BASE() {
     return 'urlBase';
-  },
-  get SURVEY_PARAMETERS() {
-    return {
-      // these values will cause the notification to always appear
-      daysUntilEligible: 0,
-      timeUntilNextSurvey: 0,
-      chanceToAppear: 1,
-    };
   },
 }));
 
@@ -112,30 +104,17 @@ describe('useSurveyNotification', () => {
   const id = 'machineID12345';
   const os = 'TestOS';
 
-  const mockSetSettings = jest.fn();
-  const mockAddNotification = jest.fn();
   const mockOpen = jest.fn();
 
   const initRecoilState = ({ set }) => {
-    set(dispatcherState, {
-      setSettings: mockSetSettings,
-      addNotification: mockAddNotification,
-      deleteNotification: jest.fn(),
-    });
     set(machineInfoState, { os, id });
   };
 
   window.open = mockOpen;
 
   const TestHarness = () => {
-    const dispatcher = useRecoilValue(dispatcherState);
-    const machineInfo = useRecoilValue(machineInfoState);
-
-    console.log('machineInfo', machineInfo);
-    console.log('dispatcher:', dispatcher, dispatcher.addNotification);
-
     useSurveyNotification();
-    return null;
+    return <NotificationContainer />;
   };
 
   it('builds a URL given parameters', () => {
@@ -143,15 +122,12 @@ describe('useSurveyNotification', () => {
     surveyStorage.set('days', 12345);
     surveyStorage.set(LAST_SURVEY_KEY, null);
 
-    console.log(surveyStorage.getAll());
-    console.log(window.localStorage);
+    //console.log(surveyStorage.getAll());
+    //console.log(window.localStorage);
 
-    renderWithRecoil(<TestHarness />, initRecoilState);
-    expect(mockAddNotification).toHaveBeenCalled();
+    const page = renderWithRecoil(<TestHarness />, initRecoilState);
 
-    const notification = mockAddNotification.mock.calls[0];
-
-    notification.leftLinks.onClick();
+    page.debug();
 
     expect(mockOpen).toHaveBeenCalledWith([expect.stringContaining('Source=Composer'), '_blank']);
   });
