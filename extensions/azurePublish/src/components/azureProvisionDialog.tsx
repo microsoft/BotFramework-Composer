@@ -359,6 +359,7 @@ export const AzureProvisionDialog: React.FC = () => {
   const currentConfig = removePlaceholder(publishConfig);
   const extensionState = { ...defaultExtensionState, ...getItem(profileName) };
   const [subscriptions, setSubscriptions] = useState<Subscription[] | undefined>();
+  const [subscriptionsLoading, setSubscriptionsLoading] = useState<boolean>(false);
   const [subscriptionsErrorMessage, setSubscriptionsErrorMessage] = useState<string>();
   const [deployLocations, setDeployLocations] = useState<DeployLocation[]>([]);
   const [luisLocations, setLuisLocations] = useState<DeployLocation[]>([]);
@@ -493,9 +494,11 @@ export const AzureProvisionDialog: React.FC = () => {
   useEffect(() => {
     if (isAuthenticated) {
       setSubscriptionsErrorMessage(undefined);
+      setSubscriptionsLoading(true);
       getSubscriptions(currentUser.token)
         .then((data) => {
           if (isMounted.current) {
+            setSubscriptionsLoading(false);
             setSubscriptions(data);
             if (data.length === 0) {
               setSubscriptionsErrorMessage(
@@ -508,6 +511,7 @@ export const AzureProvisionDialog: React.FC = () => {
         })
         .catch((err) => {
           if (isMounted.current) {
+            setSubscriptionsLoading(false);
             setSubscriptionsErrorMessage(err.message);
           }
         });
@@ -816,7 +820,7 @@ export const AzureProvisionDialog: React.FC = () => {
               disabled={currentConfig?.subscriptionId}
               errorMessage={subscriptionsErrorMessage}
               options={subscriptionOptions}
-              placeholder={formatMessage('Select one')}
+              placeholder={formatMessage(subscriptionsLoading ? 'Loading ...' : 'Select one')}
               selectedKey={formData.subscriptionId}
               styles={configureResourceDropdownStyles}
               onChange={(_e, o) => {
