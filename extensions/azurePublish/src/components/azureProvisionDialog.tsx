@@ -820,7 +820,7 @@ export const AzureProvisionDialog: React.FC = () => {
               disabled={currentConfig?.subscriptionId}
               errorMessage={subscriptionsErrorMessage}
               options={subscriptionOptions}
-              placeholder={formatMessage(subscriptionsLoading ? 'Loading ...' : 'Select one')}
+              placeholder={subscriptionsLoading ? formatMessage('Loading ...') : formatMessage('Select one')}
               selectedKey={formData.subscriptionId}
               styles={configureResourceDropdownStyles}
               onChange={(_e, o) => {
