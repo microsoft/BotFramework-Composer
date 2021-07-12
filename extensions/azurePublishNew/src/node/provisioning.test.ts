@@ -21,12 +21,13 @@ const testConfig: ProvisioningConfig = {
 const expectedTestResources = {
   appInsights: {
     key: 'appInsights',
-    hostname: testConfig.hostname,
+    name: testConfig.hostname,
     location: testConfig.location,
+    resourceGroupName: testConfig.resourceGroup,
   },
   appRegistration: {
     key: 'appRegistration',
-    hostname: testConfig.hostname,
+    appName: testConfig.hostname,
   },
   azureFunctions: {
     key: 'azureFunctions',
@@ -34,39 +35,46 @@ const expectedTestResources = {
     name: testConfig.hostname,
     workerRuntime: testConfig.workerRuntime,
     operatingSystem: testConfig.appServiceOperatingSystem,
+    resourceGroupName: testConfig.resourceGroup,
+    instrumentationKey: testConfig.instrumentationKey,
   },
   blobStorage: {
     key: 'blobStorage',
-    containerName: 'transcripts',
-    hostname: testConfig.hostname,
     location: testConfig.location,
+    name: 'transcripts',
+    resourceGroupName: testConfig.resourceGroup,
   },
   botRegistration: {
     key: 'botRegistration',
     hostname: testConfig.hostname,
-    location: testConfig.location,
+    resourceGroupName: testConfig.resourceGroup,
   },
   cosmosDb: {
     key: 'cosmosDb',
     containerName: 'botstate-container',
     databaseName: 'botstate-db',
-    hostname: testConfig.hostname,
+    displayName: testConfig.hostname,
     location: testConfig.location,
+    resourceGroupName: testConfig.resourceGroup,
   },
   luisAuthoring: {
     key: 'luisAuthoring',
-    hostname: testConfig.hostname,
-    location: testConfig.location,
+    resourceGroupName: testConfig.resourceGroup,
+    location: testConfig.luisLocation,
+    name: testConfig.hostname,
   },
   luisPrediction: {
     key: 'luisPrediction',
-    hostname: testConfig.hostname,
-    location: testConfig.location,
+    resourceGroupName: testConfig.resourceGroup,
+    location: testConfig.luisLocation,
+    name: testConfig.hostname,
   },
   qna: {
     key: 'qna',
-    hostname: testConfig.hostname,
+    resourceGroupName: testConfig.resourceGroup,
     location: testConfig.location,
+    name: testConfig.hostname,
+    sku: testConfig.sku,
   },
   resourceGroup: {
     key: 'resourceGroup',
@@ -75,15 +83,17 @@ const expectedTestResources = {
   },
   servicePlan: {
     key: 'servicePlan',
-    name: testConfig.hostname,
+    appServicePlanName: testConfig.hostname,
     location: testConfig.location,
     operatingSystem: testConfig.appServiceOperatingSystem,
+    resourceGroupName: testConfig.resourceGroup,
   },
   webApp: {
     key: 'webApp',
-    hostname: testConfig.hostname,
+    webAppName: testConfig.hostname,
     location: testConfig.location,
     operatingSystem: testConfig.appServiceOperatingSystem,
+    resourceGroupName: testConfig.resourceGroup,
   },
 };
 
