@@ -34,7 +34,7 @@ export const botRegistrationDefinition: ResourceDefinition = {
     'When registered with the Azure Bot Service, you can host your bot in any environment and enable customers from a variety of channels, such as your app or website, Direct Line Speech, Microsoft Teams and more.',
   tier: FREE_COGNITIVE_SERVICES_TIER,
   group: AZURE_HOSTING_GROUP_NAME,
-  dependencies: [AzureResourceTypes.RESOURCE_GROUP, AzureResourceTypes.WEBAPP],
+  dependencies: [AzureResourceTypes.RESOURCE_GROUP, AzureResourceTypes.WEBAPP, AzureResourceTypes.APP_REGISTRATION],
 };
 
 const botChannelProvisionMethod = (provisionConfig: ProvisionServiceConfig): ProvisionMethod => {
