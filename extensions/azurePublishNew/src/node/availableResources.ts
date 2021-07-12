@@ -18,13 +18,29 @@ import {
   AppRegistrationResourceConfig,
   getAppRegistrationProvisionService,
 } from './azureResources/appRegistration';
-import { azureFunctionDefinition, getAzureFunctionsProvisionService } from './azureResources/azureFunction';
-import { blobStorageDefinition, getBlogStorageProvisionService } from './azureResources/blobStorage';
-import { botRegistrationDefinition, getBotChannelProvisionService } from './azureResources/botChannel';
-import { cosmosDbDefinition, getCosmosDbProvisionService } from './azureResources/cosmosDb';
-import { getLuisAuthoringProvisionService, luisAuthoringDefinition } from './azureResources/luisAuthoring';
-import { getLuisPredictionProvisionService, luisPredictionDefinition } from './azureResources/luisPrediction';
-import { getQnAProvisionService, qnaDefinition } from './azureResources/qna';
+import {
+  AzureFunctionConfig,
+  azureFunctionDefinition,
+  getAzureFunctionsProvisionService,
+} from './azureResources/azureFunction';
+import { BlobStorageConfig, blobStorageDefinition, getBlogStorageProvisionService } from './azureResources/blobStorage';
+import { CosmosDbConfig, cosmosDbDefinition, getCosmosDbProvisionService } from './azureResources/cosmosDb';
+import {
+  getLuisAuthoringProvisionService,
+  LuisAuthoringConfig,
+  luisAuthoringDefinition,
+} from './azureResources/luisAuthoring';
+import {
+  getLuisPredictionProvisionService,
+  LuisPredictionConfig,
+  luisPredictionDefinition,
+} from './azureResources/luisPrediction';
+import { getQnAProvisionService, qnaDefinition, QnAResourceConfig } from './azureResources/qna';
+import {
+  BotRegistrationConfig,
+  botRegistrationDefinition,
+  getBotChannelProvisionService,
+} from './azureResources/botRegistration';
 import {
   getAppServiceProvisionService,
   servicePlanDefinition,
@@ -53,14 +69,14 @@ export const getProvisionServices = (config: ProvisionServiceConfig): Record<str
     appRegistration: getAppRegistrationProvisionService(config),
     webApp: getWebAppProvisionService(config),
     servicePlan: getAppServiceProvisionService(config),
-    botRegistration: getBotChannelProvisionService(),
-    azureFunctionApp: getAzureFunctionsProvisionService(),
+    botRegistration: getBotChannelProvisionService(config),
+    azureFunctionApp: getAzureFunctionsProvisionService(config),
     cosmosDB: getCosmosDbProvisionService(config),
     appInsights: getAppInsightsProvisionService(config),
-    luisAuthoring: getLuisAuthoringProvisionService(),
-    luisPrediction: getLuisPredictionProvisionService(),
-    blobStorage: getBlogStorageProvisionService(),
-    qna: getQnAProvisionService(),
+    luisAuthoring: getLuisAuthoringProvisionService(config),
+    luisPrediction: getLuisPredictionProvisionService(config),
+    blobStorage: getBlogStorageProvisionService(config),
+    qna: getQnAProvisionService(config),
   };
 };
 
@@ -74,6 +90,20 @@ export const getResourceDependencies = (key: string) => {
       return servicePlanDefinition.dependencies;
     case AzureResourceTypes.APPINSIGHTS:
       return appInsightsDefinition.dependencies;
+    case AzureResourceTypes.BOT_REGISTRATION:
+      return botRegistrationDefinition.dependencies;
+    case AzureResourceTypes.LUIS_PREDICTION:
+      return luisPredictionDefinition.dependencies;
+    case AzureResourceTypes.LUIS_AUTHORING:
+      return luisAuthoringDefinition.dependencies;
+    case AzureResourceTypes.COSMOSDB:
+      return cosmosDbDefinition.dependencies;
+    case AzureResourceTypes.BLOBSTORAGE:
+      return blobStorageDefinition.dependencies;
+    case AzureResourceTypes.AZUREFUNCTIONS:
+      return azureFunctionDefinition.dependencies;
+    case AzureResourceTypes.QNA:
+      return qnaDefinition.dependencies;
     default:
       return [];
   }
@@ -110,6 +140,67 @@ export const provisionConfigToResourceConfigMap = {
       resourceGroupName: config.resourceGroup,
       location: config.location,
       name: config.hostname,
+    };
+  },
+  luisPrediction: (config: ProvisioningConfig): LuisPredictionConfig => {
+    return {
+      key: 'luisPrediction',
+      location: config.luisLocation,
+      name: `${config.hostname}-luis`,
+      resourceGroupName: config.resourceGroup,
+    };
+  },
+  luisAuthoring: (config: ProvisioningConfig): LuisAuthoringConfig => {
+    return {
+      key: 'luisAuthoring',
+      resourceGroupName: config.resourceGroup,
+      location: config.luisLocation,
+      name: `${config.hostname}-luis-authoring`,
+    };
+  },
+  cosmosDB: (config: ProvisioningConfig): CosmosDbConfig => {
+    return {
+      key: 'cosmosDb',
+      containerName: `botstate-container`,
+      databaseName: `botstate-db`,
+      displayName: config.hostname.replace(/_/g, '').substr(0, 31).toLowerCase(),
+      location: config.location,
+      resourceGroupName: config.resourceGroup,
+    };
+  },
+  blobStorage: (config: ProvisioningConfig): BlobStorageConfig => {
+    return {
+      key: 'blobStorage',
+      location: config.location,
+      name: config.hostname.toLowerCase().replace(/-/g, '').replace(/_/g, ''),
+      resourceGroupName: config.resourceGroup,
+    };
+  },
+  azureFunction: (config: ProvisioningConfig): AzureFunctionConfig => {
+    return {
+      key: 'azureFunction',
+      location: config.location,
+      name: config.hostname,
+      operatingSystem: config.appServiceOperatingSystem,
+      resourceGroupName: config.resourceGroup,
+      workerRuntime: config.workerRuntime,
+      instrumentationKey: config.instrumentationKey,
+    };
+  },
+  qna: (config: ProvisioningConfig): QnAResourceConfig => {
+    return {
+      key: 'qna',
+      resourceGroupName: config.resourceGroup,
+      location: config.location,
+      name: `${config.hostname}-qna`,
+      sku: config.sku,
+    };
+  },
+  botRegistration: (config: ProvisioningConfig): BotRegistrationConfig => {
+    return {
+      key: 'botRegistration',
+      hostname: config.hostname, // probably should be derived from webapp provisioning result, not here
+      resourceGroupName: config.resourceGroup,
     };
   },
 };
