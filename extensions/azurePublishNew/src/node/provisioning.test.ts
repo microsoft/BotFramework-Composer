@@ -41,7 +41,7 @@ const expectedTestResources = {
   blobStorage: {
     key: 'blobStorage',
     location: testConfig.location,
-    name: 'transcripts',
+    name: 'testhostname',
     resourceGroupName: testConfig.resourceGroup,
   },
   botRegistration: {
