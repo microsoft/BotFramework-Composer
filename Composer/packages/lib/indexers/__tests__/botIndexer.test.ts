@@ -73,6 +73,8 @@ const botAssets: BotAssets = {
   setting: {
     languages: ['en-us', 'zh-cn', 'af'],
     defaultLanguage: 'en-us',
+    customFunctions: [],
+    importedLibraries: [],
     botId: '',
     skillHostEndpoint: '',
     skill: {
@@ -98,15 +100,19 @@ describe('check manifest', () => {
 });
 
 describe('check LUIS & QnA key', () => {
-  it('LUIS authoringKey should exist in setting', () => {
+  it('LUIS authoringKey and region should exist in setting', () => {
     const diagnostics = checkSetting(botAssets);
-    expect(diagnostics.length).toEqual(1);
+    expect(diagnostics.length).toEqual(2);
   });
 
-  it('LUIS authoringKey should exist in setting', () => {
+  it('No diagnostics when LUIS authoringKey should exist in setting', () => {
     const mergedSettings = {
       ...botAssets.setting,
-      luis: { authoringKey: '4d210acc6d794d71a2a3450*****2fb7', endpointKey: '' } as ILuisConfig,
+      luis: {
+        authoringKey: '4d210acc6d794d71a2a3450*****2fb7',
+        endpointKey: '',
+        authoringRegion: 'westus',
+      } as ILuisConfig,
     };
     const diagnostics = checkSetting({ ...botAssets, setting: mergedSettings });
     expect(diagnostics.length).toEqual(0);
@@ -115,6 +121,14 @@ describe('check LUIS & QnA key', () => {
   it('QnA subscriptionKey should exist in setting, when qna file is not empty', () => {
     const botAssets2 = {
       ...botAssets,
+      setting: {
+        ...botAssets.setting,
+        luis: {
+          authoringKey: '4d210acc6d794d71a2a3450*****2fb7',
+          endpointKey: '',
+          authoringRegion: 'westus',
+        } as ILuisConfig,
+      },
       dialogs: [
         {
           luFile: 'a.lu',
@@ -129,12 +143,20 @@ describe('check LUIS & QnA key', () => {
       ],
     };
     const diagnostics = checkSetting(botAssets2);
-    expect(diagnostics.length).toEqual(2);
+    expect(diagnostics.length).toEqual(1);
   });
 
-  it('QnA subscriptionKey should exist in setting, when qna file is empty', () => {
+  it('QnA subscriptionKey should not be required in setting, when qna file is empty', () => {
     const botAssets2 = {
       ...botAssets,
+      setting: {
+        ...botAssets.setting,
+        luis: {
+          authoringKey: '4d210acc6d794d71a2a3450*****2fb7',
+          endpointKey: '',
+          authoringRegion: 'westus',
+        } as ILuisConfig,
+      },
       dialogs: [
         {
           luFile: 'a.lu',
@@ -143,7 +165,7 @@ describe('check LUIS & QnA key', () => {
       ],
     };
     const diagnostics = checkSetting(botAssets2);
-    expect(diagnostics.length).toEqual(1);
+    expect(diagnostics.length).toEqual(0);
   });
 });
 
@@ -159,7 +181,22 @@ describe('checkLUISLocales', () => {
 
 describe('checkQnALocales', () => {
   it('should check qna not supported locales', () => {
-    const diagnostics = checkQnALocales(botAssets);
+    const botAssets2 = {
+      ...botAssets,
+      dialogs: [
+        {
+          luFile: 'a.lu',
+          qnaFile: 'a.lu.qna',
+        } as DialogInfo,
+      ],
+      qnaFiles: [
+        {
+          id: 'a.en-us',
+          empty: false,
+        } as QnAFile,
+      ],
+    };
+    const diagnostics = checkQnALocales(botAssets2);
     const errors = diagnostics.filter((item) => item.severity === DiagnosticSeverity.Error);
     const warnings = diagnostics.filter((item) => item.severity === DiagnosticSeverity.Warning);
     expect(errors.length).toEqual(0);
@@ -224,7 +261,30 @@ describe('filterLUISFilesToPublish', () => {
   });
   describe('filterQnAFilesToPublish', () => {
     it('should filter qnaFiles left QnA supported locale file', () => {
-      const qnaFilesToPublish = filterQnAFilesToPublish(botAssets.qnaFiles, botAssets.dialogs);
+      const botAssets2 = {
+        ...botAssets,
+        dialogs: [
+          {
+            luFile: 'a.lu',
+            qnaFile: 'a.lu.qna',
+          } as DialogInfo,
+        ],
+        qnaFiles: [
+          {
+            id: 'a.en-us',
+            empty: false,
+          } as QnAFile,
+          {
+            id: 'a.zh-cn',
+            empty: false,
+          } as QnAFile,
+          {
+            id: 'a.af',
+            empty: false,
+          } as QnAFile,
+        ],
+      };
+      const qnaFilesToPublish = filterQnAFilesToPublish(botAssets2.qnaFiles);
       expect(qnaFilesToPublish.length).toEqual(2);
       expect(qnaFilesToPublish).not.toContain({
         id: 'a.af',
