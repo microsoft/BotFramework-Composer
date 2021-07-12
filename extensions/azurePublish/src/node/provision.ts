@@ -117,7 +117,7 @@ export class BotProjectProvision {
     while (retryCount >= 0) {
       try {
         const response = await axios.post(applicationUri, { displayName }, appCreateOptions);
-        appCreated = response?.data;
+        appCreated = response.data;
       } catch (err) {
         this.logger({
           status: BotProjectDeployLoggerType.PROVISION_ERROR,
@@ -159,7 +159,8 @@ export class BotProjectProvision {
     retryCount = 3;
     while (retryCount >= 0) {
       try {
-        passwordSet = await axios.post(addPasswordUri, requestBody, setSecretOptions);
+        const response = await axios.post(addPasswordUri, requestBody, setSecretOptions);
+        passwordSet = response.data;
       } catch (err) {
         this.logger({
           status: BotProjectDeployLoggerType.PROVISION_ERROR,
@@ -179,7 +180,7 @@ export class BotProjectProvision {
       }
       break;
     }
-    const appPassword = passwordSet.secretText;
+    const appPassword = passwordSet?.secretText;
 
     this.logger({
       status: BotProjectDeployLoggerType.PROVISION_INFO,
