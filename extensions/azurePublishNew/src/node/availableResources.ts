@@ -49,6 +49,7 @@ import {
 import { getWebAppProvisionService, WebAppResourceConfig, webAppResourceDefinition } from './azureResources/webApp';
 import { AzureResourceTypes } from './constants';
 import { ProvisioningConfig } from './provisioning';
+import { getResourceGroupProvisionService, ResourceGroupResourceConfig } from './azureResources/resourceGroup';
 
 export const availableResources: ResourceDefinition[] = [
   appRegistrationDefinition,
@@ -66,6 +67,7 @@ export const availableResources: ResourceDefinition[] = [
 
 export const getProvisionServices = (config: ProvisionServiceConfig): Record<string, ResourceProvisionService> => {
   return {
+    resourceGroup: getResourceGroupProvisionService(config),
     appRegistration: getAppRegistrationProvisionService(config),
     webApp: getWebAppProvisionService(config),
     servicePlan: getAppServiceProvisionService(config),
@@ -110,6 +112,13 @@ export const getResourceDependencies = (key: string) => {
 };
 
 export const provisionConfigToResourceConfigMap = {
+  resourceGroup: (config: ProvisioningConfig): ResourceGroupResourceConfig => {
+    return {
+      key: 'resourceGroup',
+      name: config.resourceGroup,
+      location: config.location,
+    };
+  },
   appRegistration: (config: ProvisioningConfig): AppRegistrationResourceConfig => {
     return {
       key: 'appRegistration',
