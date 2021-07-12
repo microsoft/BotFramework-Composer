@@ -46,6 +46,7 @@ module.exports = {
     '<rootDir>/packages/lib/code-editor',
     '<rootDir>/packages/lib/shared',
     '<rootDir>/packages/lib/indexers',
+    '<rootDir>/packages/lib/ui-shared',
     '<rootDir>/packages/server',
     '<rootDir>/packages/electron-server',
     '<rootDir>/packages/tools/language-servers/language-generation',
