@@ -302,7 +302,7 @@ export const CreateSkillModal: React.FC<CreateSkillModalProps> = (props) => {
     });
 
     const result = await validateLocalZip(files);
-    result.error.manifestUrl && setFormDataErrors(result.error);
+    setFormDataErrors(result.error);
     result.path && setManifestDirPath(result.path);
     result.zipContent && setZipContent(result.zipContent);
     if (result.manifestContent) {
@@ -385,8 +385,8 @@ export const CreateSkillModal: React.FC<CreateSkillModalProps> = (props) => {
                   <TextField
                     required
                     errorMessage={formDataErrors.manifestUrl}
-                    label={formatMessage('Skill Manifest URL')}
-                    placeholder={formatMessage('Ask the skill owner for the URL and provide your bot’s App ID')}
+                    label={formatMessage('Skill Manifest')}
+                    placeholder={formatMessage('Enter manifest URL or select a .zip file')}
                     styles={{ root: { width: '300px' } }}
                     value={formData.manifestUrl || ''}
                     onChange={handleManifestUrlChange}
