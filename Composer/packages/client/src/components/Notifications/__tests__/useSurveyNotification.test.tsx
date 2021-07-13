@@ -28,70 +28,6 @@ afterAll(() => {
   process.env.COMPOSER_VERSION = savedVersion;
 });
 
-// describe('buildUrl', () => {
-//   it('builds a URL given parameters', () => {
-//     const id = 'machineID12345';
-//     const os = 'TestOS';
-
-//     const url = buildUrl({ id, os });
-
-//     expect(url).toMatch(/^urlBase/);
-//     expect(url).toContain('Source=Composer');
-//     expect(url).toContain(`machineId=${id}`);
-//     expect(url).toContain(`version=${MOCK_VERSION}`);
-//     expect(url).toContain(`os=${os}`);
-//   });
-
-//   it('builds a URL given no OS', () => {
-//     const id = 'machineID12345';
-
-//     const url = buildUrl({ id, os: '' });
-
-//     expect(url).toMatch(/^urlBase/);
-//     expect(url).toContain('Source=Composer');
-//     expect(url).toContain(`machineId=${id}`);
-//     expect(url).toContain(`version=${MOCK_VERSION}`);
-//     expect(url).toContain(`os=Unknown`);
-//   });
-// });
-
-// describe('getSurveyEligibility', () => {
-//   it('returns false when the user has opted out', () => {
-//     surveyStorage.set('optedOut', true);
-
-//     expect(getSurveyEligibility()).toEqual(false);
-//   });
-//   it("returns false when there haven't been enough eligible days", () => {
-//     surveyStorage.set('days', 0);
-//     surveyParameters.daysUntilEligible = 2000;
-
-//     expect(getSurveyEligibility()).toEqual(false);
-//   });
-
-//   it("returns false when it hasn't been long enough since the last survey", () => {
-//     surveyStorage.set('dateLastUsed', Date.now() - 10000); // i.e. ten seconds ago
-//     surveyParameters.timeUntilNextSurvey = 60000; // pretend 60 seconds is the bound
-
-//     expect(getSurveyEligibility()).toEqual(false);
-//   });
-//   it("returns false when the random chance doesn't hit", () => {
-//     surveyParameters.chanceToAppear = 0;
-
-//     expect(getSurveyEligibility()).toEqual(false);
-//   });
-//   it('returns true when everything lines up right', () => {
-//     surveyStorage.set('optedOut', false);
-//     surveyStorage.set('days', 3);
-//     surveyStorage.set('dateLastUsed', Date.now() - 10000);
-
-//     surveyParameters.daysUntilEligible = 1;
-//     surveyParameters.timeUntilNextSurvey = 100; // somewhat less than 10s
-//     surveyParameters.chanceToAppear = 1; // 100% chance of appearing
-
-//     expect(getSurveyEligibility()).toEqual(true);
-//   });
-// });
-
 describe('useSurveyNotification', () => {
   const id = 'machineID12345';
   const os = 'TestOS';
@@ -109,54 +45,108 @@ describe('useSurveyNotification', () => {
     return <NotificationContainer />;
   };
 
-  it('builds a URL given parameters', async () => {
-    surveyStorage.set('optedOut', false);
-    surveyStorage.set('days', 12345);
-    surveyStorage.set(LAST_SURVEY_KEY, null);
+  describe('building the URL', () => {
+    beforeEach(() => {
+      surveyStorage.set('optedOut', false);
+      surveyStorage.set('days', 12345);
+      surveyStorage.set(LAST_SURVEY_KEY, null);
+    });
 
-    const page = renderWithRecoil(<TestHarness />, initRecoilState);
+    it('builds a URL given parameters', async () => {
+      const page = renderWithRecoil(<TestHarness />, initRecoilState);
 
-    const surveyButton = await page.findByText('Take survey');
-    surveyButton.click();
+      const surveyButton = await page.findByText('Take survey');
+      surveyButton.click();
 
-    // We know these should all occur, but we don't care about the order
-    const patterns = [
-      'https://aka.ms/bfcomposersurvey',
-      'Source=Composer',
-      `machineId=${id}`,
-      `os=${os}`,
-      `version=${MOCK_VERSION}`,
-    ];
+      // We know these should all occur, but we don't care about the order
+      const patterns = [
+        'https://aka.ms/bfcomposersurvey',
+        'Source=Composer',
+        `machineId=${id}`,
+        `os=${os}`,
+        `version=${MOCK_VERSION}`,
+      ];
 
-    for (const pattern of patterns) {
-      expect(mockOpen).toHaveBeenCalledWith(expect.stringContaining(pattern), '_blank');
-    }
+      for (const pattern of patterns) {
+        expect(mockOpen).toHaveBeenCalledWith(expect.stringContaining(pattern), '_blank');
+      }
+    });
+
+    it('builds a URL given no OS', async () => {
+      const newRecoilState = ({ set }) => {
+        set(machineInfoState, { os: null, id });
+      };
+
+      const page = renderWithRecoil(<TestHarness />, newRecoilState);
+
+      const surveyButton = await page.findByText('Take survey');
+      surveyButton.click();
+
+      const patterns = [
+        'https://aka.ms/bfcomposersurvey',
+        'Source=Composer',
+        `machineId=${id}`,
+        `os=Unknown`,
+        `version=${MOCK_VERSION}`,
+      ];
+
+      for (const pattern of patterns) {
+        expect(mockOpen).toHaveBeenCalledWith(expect.stringContaining(pattern), '_blank');
+      }
+    });
   });
 
-  it('builds a URL given no OS', async () => {
-    surveyStorage.set('optedOut', false);
-    surveyStorage.set('days', 12345);
-    surveyStorage.set(LAST_SURVEY_KEY, null);
+  describe('determining eligibility', () => {
+    beforeEach(() => {
+      surveyStorage.set('optedOut', false);
+      surveyStorage.set('days', 12345);
+      surveyStorage.set(LAST_SURVEY_KEY, null);
+    });
 
-    const newRecoilState = ({ set }) => {
-      set(machineInfoState, { os: null, id });
-    };
+    it('shows the box under normal conditions', async () => {
+      const page = renderWithRecoil(<TestHarness />, initRecoilState);
 
-    const page = renderWithRecoil(<TestHarness />, newRecoilState);
+      const surveyButton = await page.findByText('Take survey');
+      expect(surveyButton).not.toBeNull();
+    });
 
-    const surveyButton = await page.findByText('Take survey');
-    surveyButton.click();
+    it("doesn't show the box when the user has opted out", () => {
+      surveyStorage.set('optedOut', true);
 
-    const patterns = [
-      'https://aka.ms/bfcomposersurvey',
-      'Source=Composer',
-      `machineId=${id}`,
-      `os=Unknown`,
-      `version=${MOCK_VERSION}`,
-    ];
+      const page = renderWithRecoil(<TestHarness />, initRecoilState);
 
-    for (const pattern of patterns) {
-      expect(mockOpen).toHaveBeenCalledWith(expect.stringContaining(pattern), '_blank');
-    }
+      const surveyButton = page.queryByText('Take survey');
+      expect(surveyButton).toBeNull();
+    });
+
+    it("doesn't show the box when the user hasn't spent enough days with Composer", () => {
+      // logically impossible, but makes a good test case
+      surveyStorage.set('days', -1);
+
+      const page = renderWithRecoil(<TestHarness />, initRecoilState);
+
+      const surveyButton = page.queryByText('Take survey');
+      expect(surveyButton).toBeNull();
+    });
+
+    it("returns false when it hasn't been long enough since the last survey", () => {
+      // also logically impossible, but makes a good test case
+      surveyStorage.set(LAST_SURVEY_KEY, Date.now() + 10000);
+
+      const page = renderWithRecoil(<TestHarness />, initRecoilState);
+
+      const surveyButton = page.queryByText('Take survey');
+      expect(surveyButton).toBeNull();
+    });
+
+    it("returns false when it hasn't been long enough since the last survey", () => {
+      // also logically impossible, but makes a good test case
+      surveyStorage.set(LAST_SURVEY_KEY, Date.now() + 10000);
+
+      const page = renderWithRecoil(<TestHarness />, initRecoilState);
+
+      const surveyButton = page.queryByText('Take survey');
+      expect(surveyButton).toBeNull();
+    });
   });
 });

@@ -34,6 +34,7 @@ export const getSurveyEligibility = () => {
   const surveyStorage = new ClientStorage(window.localStorage, 'survey');
 
   const optedOut = surveyStorage.get('optedOut', false);
+
   if (optedOut) {
     return false;
   }
