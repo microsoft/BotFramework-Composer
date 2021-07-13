@@ -15,6 +15,10 @@ import { ValuePicker } from '../common/ValuePicker';
 import { EnumExampleContent } from './examples/EnumExampleContent';
 import { StringExampleContent } from './examples/StringExampleContent';
 
+const metaKeys = ['$comment'];
+
+const templateInfoKeysFilter = (key: string) => key.startsWith('$') && !metaKeys.includes(key);
+
 type Props = {
   propertyName: string;
   template: FormDialogSchemaTemplate;
@@ -31,10 +35,24 @@ const renderField = (variable: string, info: Record<string, any>, value: any, on
 
   const convertValue = (value: string) => {
     switch (info.type) {
-      case 'number':
+      case 'integer':
         return parseInt(value, 10);
+      case 'number':
+        return parseFloat(value);
       default:
         return value;
+    }
+  };
+
+  const getTextFieldCustomProps = () => {
+    const defaultProps = { type: info.type ?? 'text' };
+    switch (info.type) {
+      case 'integer':
+        return { ...defaultProps, step: '1' };
+      case 'number':
+        return { ...defaultProps, step: 'any' };
+      default:
+        return defaultProps;
     }
   };
 
@@ -54,7 +72,7 @@ const renderField = (variable: string, info: Record<string, any>, value: any, on
       return hasEnum ? (
         <ComboBox
           allowFreeform
-          autoComplete="on"
+          autoComplete="off"
           label={info.title}
           options={info.enum.map((v) => ({ key: v, text: v }))}
           selectedKey={value}
@@ -64,6 +82,7 @@ const renderField = (variable: string, info: Record<string, any>, value: any, on
         />
       ) : (
         <TextField
+          autoComplete="off"
           label={info.title}
           type={info.type ?? 'text'}
           value={value}
@@ -75,8 +94,9 @@ const renderField = (variable: string, info: Record<string, any>, value: any, on
     default:
       return (
         <TextField
+          autoComplete="off"
           label={info.title}
-          type={info.type ?? 'text'}
+          {...getTextFieldCustomProps()}
           value={value}
           onChange={(_, newValue) => onChange(convertValue(newValue))}
           onRenderLabel={renderLabel(info.description, variable)}
@@ -98,11 +118,13 @@ export const PropertyCardContent = (props: Props) => {
 
   return (
     <Stack tokens={{ childrenGap: 8 }}>
-      {Object.keys(templateInfo).map((variable) => (
-        <Stack key={variable} verticalAlign="center">
-          {renderField(variable, templateInfo[variable], cardValues[variable], formFieldChange(variable))}
-        </Stack>
-      ))}
+      {Object.keys(templateInfo)
+        .filter(templateInfoKeysFilter)
+        .map((variable) => (
+          <Stack key={variable} verticalAlign="center">
+            {renderField(variable, templateInfo[variable], cardValues[variable], formFieldChange(variable))}
+          </Stack>
+        ))}
       {$examples && template.id === 'enum' && (
         <EnumExampleContent
           $examples={$examples}
