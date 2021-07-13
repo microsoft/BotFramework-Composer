@@ -8,6 +8,16 @@ context('breadcrumb', () => {
     cy.createTestBot('TestSample', ({ id }) => {
       cy.visit(`/bot/${id}`);
     });
+    cy.intercept('**/files/**', (req) => {
+      req.reply({
+        statusCode: 201,
+      });
+    });
+    cy.intercept('**/files', (req) => {
+      req.reply({
+        statusCode: 201,
+      });
+    });
   });
 
   function hasBreadcrumbItems(cy: Cypress.cy, items: (string | RegExp)[]) {
