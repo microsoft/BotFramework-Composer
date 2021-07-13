@@ -124,6 +124,7 @@ export const ManageService: React.FC<ManageServiceProps> = (props: ManageService
   const getSubscriptions = async (token: string): Promise<Array<Subscription>> => {
     const tokenCredentials = new TokenCredentials(token);
     try {
+      console.log('get subscriptions for manageservice');
       const subscriptionClient = new SubscriptionClient(tokenCredentials);
       const subscriptionsResult = await subscriptionClient.subscriptions.list();
       // eslint-disable-next-line no-underscore-dangle
@@ -135,7 +136,7 @@ export const ManageService: React.FC<ManageServiceProps> = (props: ManageService
   };
 
   useEffect(() => {
-    if (isAuthenticated) {
+    if (isAuthenticated && !props.hidden) {
       setAvailableSubscriptions([]);
       setSubscriptionsErrorMessage(undefined);
       getSubscriptions(currentUser.token)
@@ -153,7 +154,7 @@ export const ManageService: React.FC<ManageServiceProps> = (props: ManageService
           setSubscriptionsErrorMessage(err.message);
         });
     }
-  }, [isAuthenticated]);
+  }, [isAuthenticated, props.hidden]);
 
   useEffect(() => {
     // reset the ui
