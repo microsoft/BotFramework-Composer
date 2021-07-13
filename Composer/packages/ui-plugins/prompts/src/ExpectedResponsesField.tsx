@@ -12,14 +12,13 @@ const expectedResponsesPlaceholder = (id?: SDKKinds) => {
   switch (id) {
     case SDKKinds.CrossTrainedRecognizerSet:
     case SDKKinds.LuisRecognizer:
-      placeholderText = formatMessage(`> add some expected user responses:
-      > - Please remind me to '{itemTitle=buy milk}'
-      > - remind me to '{itemTitle}'
-      > - add '{itemTitle}' to my todo list
-      >
-      > entity definitions:
-      > @ ml itemTitle
-      `);
+      placeholderText = `> add some expected user responses:
+> - Please remind me to '{itemTitle=buy milk}'
+> - remind me to '{itemTitle}'
+> - add '{itemTitle}' to my todo list
+>
+> entity definitions:
+> @ ml itemTitle`;
       break;
     case SDKKinds.RegexRecognizer:
       placeholderText = formatMessage('Add regex pattern');
