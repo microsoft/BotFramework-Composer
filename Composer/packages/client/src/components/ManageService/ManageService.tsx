@@ -124,7 +124,6 @@ export const ManageService: React.FC<ManageServiceProps> = (props: ManageService
   const getSubscriptions = async (token: string): Promise<Array<Subscription>> => {
     const tokenCredentials = new TokenCredentials(token);
     try {
-      console.log('get subscriptions for manageservice');
       const subscriptionClient = new SubscriptionClient(tokenCredentials);
       const subscriptionsResult = await subscriptionClient.subscriptions.list();
       // eslint-disable-next-line no-underscore-dangle
