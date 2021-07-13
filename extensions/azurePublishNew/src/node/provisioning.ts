@@ -46,9 +46,9 @@ export const getResourceConfigs = (config: ProvisioningConfig): ResourceConfig[]
   const resourceKeys = config.externalResources.map((r) => r.key).concat(AzureResourceTypes.RESOURCE_GROUP);
 
   const hasWebAppResource = config.externalResources.some((r) => r.key === 'webApp');
-  const hasAzureFunctionResource = config.externalResources.some((r) => r.key === 'azureFunctions');
+  const hasAzureFunctionsResource = config.externalResources.some((r) => r.key === 'azureFunctions');
 
-  if (hasWebAppResource && hasAzureFunctionResource) {
+  if (hasWebAppResource && hasAzureFunctionsResource) {
     throw new Error('The App Service cannot be both a web application and an azure function.');
   }
 
