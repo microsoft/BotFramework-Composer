@@ -46,6 +46,16 @@ export interface SkillFormDataErrors {
 
 const urlRegex = /^http[s]?:\/\/\w+/;
 const filePathRegex = /([^<>/\\:""]+\.\w+$)/;
+
+// All endpoints should have endpoint url
+const hasEndpointUrl = (content) => {
+  const endpoints = content.endpoints;
+  if (endpoints && endpoints.length > 0) {
+    return endpoints.every((endpoint) => !!endpoint.endpointUrl);
+  }
+  return true;
+};
+
 export const skillNameRegex = /^\w[-\w]*$/;
 export const msAppIdRegex = /^[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12}$/;
 
@@ -99,9 +109,13 @@ export const validateLocalZip = async (files: Record<string, JSZipObject>) => {
     if (manifestFiles.length > 1) {
       result.error = { manifestUrl: formatMessage('zip folder has multiple manifest json') };
     } else if (manifestFiles.length === 1) {
-      const content = await manifestFiles[0].async('string');
-      result.manifestContent = JSON.parse(content);
-      result.zipContent = zipContent;
+      const content = JSON.parse(await manifestFiles[0].async('string'));
+      if (hasEndpointUrl(content)) {
+        result.manifestContent = content;
+        result.zipContent = zipContent;
+      } else {
+        result.error = { manifestUrl: formatMessage('Endpoint should have endpoint url field in manifest json') };
+      }
     } else {
       result.error = { manifestUrl: formatMessage('could not locate manifest.json in zip') };
     }
