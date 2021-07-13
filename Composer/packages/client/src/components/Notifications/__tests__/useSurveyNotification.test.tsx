@@ -8,18 +8,10 @@ import { NotificationContainer } from '../NotificationContainer';
 import { useSurveyNotification } from '../useSurveyNotification';
 import { machineInfoState } from '../../../recoilModel';
 import { ClientStorage } from '../../../utils/storage';
-import * as realConstants from '../../../constants';
-
-jest.doMock('../../../constants', () => ({
-  ...realConstants,
-  get SURVEY_URL_BASE() {
-    return 'urlBase';
-  },
-}));
+import { LAST_SURVEY_KEY } from '../../../constants';
 
 let savedVersion: string | undefined = '';
 const MOCK_VERSION = '2.3.4_jest';
-const { LAST_SURVEY_KEY } = realConstants;
 
 let surveyStorage;
 
@@ -117,18 +109,54 @@ describe('useSurveyNotification', () => {
     return <NotificationContainer />;
   };
 
-  it('builds a URL given parameters', () => {
+  it('builds a URL given parameters', async () => {
     surveyStorage.set('optedOut', false);
     surveyStorage.set('days', 12345);
     surveyStorage.set(LAST_SURVEY_KEY, null);
 
-    //console.log(surveyStorage.getAll());
-    //console.log(window.localStorage);
-
     const page = renderWithRecoil(<TestHarness />, initRecoilState);
 
-    page.debug();
+    const surveyButton = await page.findByText('Take survey');
+    surveyButton.click();
 
-    expect(mockOpen).toHaveBeenCalledWith([expect.stringContaining('Source=Composer'), '_blank']);
+    // We know these should all occur, but we don't care about the order
+    const patterns = [
+      'https://aka.ms/bfcomposersurvey',
+      'Source=Composer',
+      `machineId=${id}`,
+      `os=${os}`,
+      `version=${MOCK_VERSION}`,
+    ];
+
+    for (const pattern of patterns) {
+      expect(mockOpen).toHaveBeenCalledWith(expect.stringContaining(pattern), '_blank');
+    }
+  });
+
+  it('builds a URL given no OS', async () => {
+    surveyStorage.set('optedOut', false);
+    surveyStorage.set('days', 12345);
+    surveyStorage.set(LAST_SURVEY_KEY, null);
+
+    const newRecoilState = ({ set }) => {
+      set(machineInfoState, { os: null, id });
+    };
+
+    const page = renderWithRecoil(<TestHarness />, newRecoilState);
+
+    const surveyButton = await page.findByText('Take survey');
+    surveyButton.click();
+
+    const patterns = [
+      'https://aka.ms/bfcomposersurvey',
+      'Source=Composer',
+      `machineId=${id}`,
+      `os=Unknown`,
+      `version=${MOCK_VERSION}`,
+    ];
+
+    for (const pattern of patterns) {
+      expect(mockOpen).toHaveBeenCalledWith(expect.stringContaining(pattern), '_blank');
+    }
   });
 });

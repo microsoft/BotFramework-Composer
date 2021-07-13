@@ -38,8 +38,6 @@ export const getSurveyEligibility = () => {
     return false;
   }
 
-  console.log(SURVEY_PARAMETERS);
-
   let days = surveyStorage.get('days', 0);
   const lastUsed = surveyStorage.get('dateLastUsed', null);
   const lastTaken = surveyStorage.get(LAST_SURVEY_KEY, null);
@@ -49,8 +47,6 @@ export const getSurveyEligibility = () => {
     surveyStorage.set('days', days);
   }
   surveyStorage.set('dateLastUsed', today);
-
-  console.log(process.env.NODE_ENV, days, lastTaken);
 
   if (
     // To be eligible for the survey, the user needs to have used Composer
