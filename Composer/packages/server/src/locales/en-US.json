@@ -458,9 +458,6 @@
   "ask_activity_7bb716b4": {
     "message": "Ask activity"
   },
-  "ask_the_skill_owner_for_the_url_and_provide_your_b_70a8b361": {
-    "message": "Ask the skill owner for the URL and provide your bot’s App ID"
-  },
   "at_least_one_question_is_required_6f287e04": {
     "message": "At least one question is required"
   },
@@ -1489,6 +1486,9 @@
   },
   "enter_a_value_d91fdd00": {
     "message": "Enter a value"
+  },
+  "enter_manifest_url_or_select_a_zip_file_3b70ae29": {
+    "message": "Enter manifest URL or select a .zip file"
   },
   "enter_name_for_new_resource_group_96fe8ea8": {
     "message": "Enter name for new resource group"
@@ -3035,6 +3035,9 @@
   "re_prompt_for_input_reprompt_dialog_event_ba028f7": {
     "message": "Re-prompt for input (Reprompt dialog event)"
   },
+  "read_me_cannot_be_found_for_this_template_d11d73fe": {
+    "message": "Read Me cannot be found for this template"
+  },
   "recent_f19e8c64": {
     "message": "Recent"
   },
@@ -3565,9 +3568,6 @@
   },
   "skill_manifest_d7db2e25": {
     "message": "Skill Manifest"
-  },
-  "skill_manifest_url_1094fcba": {
-    "message": "Skill Manifest URL"
   },
   "skill_manifest_url_was_copied_to_the_clipboard_4cfad630": {
     "message": "Skill manifest URL was copied to the clipboard"
