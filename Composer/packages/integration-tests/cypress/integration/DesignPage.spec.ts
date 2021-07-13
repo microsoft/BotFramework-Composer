@@ -43,33 +43,6 @@ context('breadcrumb', () => {
     hasBreadcrumbItems(cy, ['TestBot_TestSample', 'Greeting', 'Send a response']);
   });
 
-  it('can create / remove dialog from project tree', () => {
-    // create
-    cy.findByTestId('BotHeader-TestBot_TestSample').within(() => {
-      cy.findByTestId('dialogMoreButton').click({ force: true });
-    });
-    cy.findAllByText('Add a dialog').click({ force: true });
-    cy.findByTestId('NewDialogName').type('{selectall}TestNewDialog2{enter}');
-    cy.findByTestId('ProjectTree').within(() => {
-      cy.findByText('TestNewDialog2').should('exist');
-    });
-
-    // remove
-    cy.findByTestId('ProjectTree').within(() => {
-      cy.findByTestId('$Root_TestNewDialog2').within(() => {
-        cy.findByTestId('dialogMoreButton').first().invoke('attr', 'style', 'visibility: visible').click();
-      });
-    });
-
-    cy.findByText('Remove this dialog').click();
-
-    cy.findByText('Yes').click();
-
-    cy.findByTestId('ProjectTree').within(() => {
-      cy.get('[title="TestNewDialog2"]').should('not.exist');
-    });
-  });
-
   it('can create different kinds of triggers ', () => {
     cy.visitPage('Create');
     cy.findByTestId('DialogHeader-TestBot_TestSample').click();
@@ -133,6 +106,33 @@ context('breadcrumb', () => {
 
     cy.withinEditor('VisualEditor', () => {
       cy.findByText('ConversationUpdate activity').should('exist');
+    });
+  });
+
+  it('can create / remove dialog from project tree', () => {
+    // create
+    cy.findByTestId('BotHeader-TestBot_TestSample').within(() => {
+      cy.findByTestId('dialogMoreButton').click({ force: true });
+    });
+    cy.findAllByText('Add a dialog').click({ force: true });
+    cy.findByTestId('NewDialogName').type('{selectall}TestNewDialog2{enter}');
+    cy.findByTestId('ProjectTree').within(() => {
+      cy.findByText('TestNewDialog2').should('exist');
+    });
+
+    // remove
+    cy.findByTestId('ProjectTree').within(() => {
+      cy.findByTestId('$Root_TestNewDialog2').within(() => {
+        cy.findByTestId('dialogMoreButton').first().invoke('attr', 'style', 'visibility: visible').click();
+      });
+    });
+
+    cy.findByText('Remove this dialog').click();
+
+    cy.findByText('Yes').click();
+
+    cy.findByTestId('ProjectTree').within(() => {
+      cy.get('[title="TestNewDialog2"]').should('not.exist');
     });
   });
 });

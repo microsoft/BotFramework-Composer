@@ -9,6 +9,8 @@ before(() => {
 });
 
 beforeEach(() => {
+  // eslint-disable-next-line cypress/no-unnecessary-waiting
+  cy.wait(2000);
   cy.exec('yarn clean');
   window.localStorage.setItem('composer:userSettings', JSON.stringify({ telemetry: { allowDataCollection: false } }));
   window.localStorage.setItem('composer:OnboardingState', JSON.stringify({ complete: true }));
