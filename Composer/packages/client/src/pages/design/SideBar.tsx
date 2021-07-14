@@ -4,7 +4,7 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import formatMessage from 'format-message';
-import { Diagnostic } from '@bfc/shared';
+import { Diagnostic, DialogInfo } from '@bfc/shared';
 import { useRecoilValue } from 'recoil';
 import { OpenConfirmModal, dialogStyle } from '@bfc/ui-shared';
 import { useSetRecoilState } from 'recoil';
@@ -47,13 +47,13 @@ function onRenderContent(subTitle, style) {
   );
 }
 
-function getAllRef(targetId, dialogs) {
-  let refs: string[] = [];
+function getAllRef(targetId: string, dialogs: DialogInfo[]) {
+  const refs: string[] = [];
+
+  // find target dialog's all parent
   dialogs.forEach((dialog) => {
-    if (dialog.id === targetId) {
-      refs = refs.concat(dialog.referredDialogs);
-    } else if (!dialog.referredDialogs.every((item) => item !== targetId)) {
-      refs.push(dialog.displayName || dialog.id);
+    if (dialog.referredDialogs?.some((name) => name === targetId)) {
+      refs.push(dialog.id);
     }
   });
   return refs;
