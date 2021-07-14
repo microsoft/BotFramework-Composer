@@ -9,11 +9,14 @@ import React from 'react';
 import { useRecoilValue } from 'recoil';
 
 import { dispatcherState } from '../recoilModel';
+import TelemetryService from '../telemetry/TelemetryClient';
 
 const DataCollectionDialog: React.FC = () => {
   const { updateUserSettings } = useRecoilValue(dispatcherState);
 
   const handleDataCollectionChange = (allowDataCollection: boolean) => () => {
+    TelemetryService.track('TelemetryOptInOut', { enabled: allowDataCollection });
+
     updateUserSettings({
       telemetry: {
         allowDataCollection,
