@@ -13,7 +13,7 @@ import { LAST_SURVEY_KEY } from '../../../constants';
 let savedVersion: string | undefined = '';
 const MOCK_VERSION = '2.3.4_jest';
 
-let surveyStorage;
+let surveyStorage: ClientStorage;
 
 beforeAll(() => {
   process.env.NODE_ENV = 'jest';
