@@ -28,6 +28,9 @@ export const useTranscriptFocusListener = () => {
   // listen for when an activity is focused and inspect the corresponding log item
   const onActivityFocused = useCallback(
     ({ activity }: { activity: Activity }) => {
+      if (!activity) {
+        return;
+      }
       const trafficItem = rawWebChatTraffic.find((t) => {
         if (t.trafficType === 'activity') {
           return t.activity.id === activity?.id;
