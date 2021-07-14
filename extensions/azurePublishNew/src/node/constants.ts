@@ -7,7 +7,7 @@ export const AzureResourceTypes = {
   WEBAPP: 'webApp',
   AZUREFUNCTIONS: 'azureFunctions',
   COSMOSDB: 'cosmosDb',
-  APPINSIGHTS: 'applicationInsights',
+  APPINSIGHTS: 'appInsights',
   LUIS_AUTHORING: 'luisAuthoring',
   LUIS_PREDICTION: 'luisPrediction',
   BLOBSTORAGE: 'blobStorage',
