@@ -123,9 +123,7 @@ const Comment: React.FC<CommentProps> = ({ comment, onChange }) => {
               menuWidth={120}
             />
           </div>
-          <ExpandableText css={styles.noteBody} maxLines={3}>
-            {comment}
-          </ExpandableText>
+          <ExpandableText css={styles.noteBody}>{comment}</ExpandableText>
         </div>
       )}
     </React.Fragment>
