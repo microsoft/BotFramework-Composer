@@ -1,7 +1,7 @@
-// Copyright (c) Microsoft Corporation.
-// Licensed under the MIT License.
+// // Copyright (c) Microsoft Corporation.
+// // Licensed under the MIT License.
 
-// TODO: Remove the types declaration file when https://github.com/microsoft/BotFramework-WebChat/issues/3856 is fixed.
+// // TODO: Remove the types declaration file when https://github.com/microsoft/BotFramework-WebChat/issues/3856 is fixed.
 declare module 'botframework-webchat' {
   export const renderWebChat: any;
   export const createDirectLine: (options: any) => any;
