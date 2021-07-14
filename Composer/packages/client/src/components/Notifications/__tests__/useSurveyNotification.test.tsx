@@ -138,15 +138,5 @@ describe('useSurveyNotification', () => {
       const surveyButton = page.queryByText('Take survey');
       expect(surveyButton).toBeNull();
     });
-
-    it("returns false when it hasn't been long enough since the last survey", () => {
-      // also logically impossible, but makes a good test case
-      surveyStorage.set(LAST_SURVEY_KEY, Date.now() + 10000);
-
-      const page = renderWithRecoil(<TestHarness />, initRecoilState);
-
-      const surveyButton = page.queryByText('Take survey');
-      expect(surveyButton).toBeNull();
-    });
   });
 });
