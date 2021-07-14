@@ -11,8 +11,6 @@ import { IContextualMenuItem } from 'office-ui-fabric-react/lib/ContextualMenu';
 
 import { ExpandableText } from './ExpandableText';
 
-export const MAX_CHARS_FOR_SINGLE_LINE = 65;
-
 const styles = {
   note: css`
     background-color: #fff4ce;
@@ -45,7 +43,6 @@ type CommentProps = {
 
 const Comment: React.FC<CommentProps> = ({ comment, onChange }) => {
   const [isEditing, setIsEditing] = useState(!comment);
-  const [isMultiline, setIsMultiline] = useState((comment ?? '').length >= MAX_CHARS_FOR_SINGLE_LINE);
   const textfieldRef = useRef<ITextField>(null);
   const editingStateRef = useRef<boolean>(isEditing);
 
@@ -60,7 +57,6 @@ const Comment: React.FC<CommentProps> = ({ comment, onChange }) => {
   const handleChange = useCallback(
     (_e, val?: string) => {
       onChange(val);
-      setIsMultiline(Boolean(val && val.length >= MAX_CHARS_FOR_SINGLE_LINE));
     },
     [onChange]
   );
@@ -98,8 +94,8 @@ const Comment: React.FC<CommentProps> = ({ comment, onChange }) => {
   return (
     <React.Fragment>
       <TextField
+        multiline
         componentRef={textfieldRef}
-        multiline={isMultiline}
         placeholder={formatMessage('Add a note')}
         resizable={false}
         rows={5}
@@ -108,8 +104,7 @@ const Comment: React.FC<CommentProps> = ({ comment, onChange }) => {
             display: isEditing ? undefined : 'none',
           },
           field: {
-            paddingRight: isMultiline ? '28px' : undefined,
-            paddingBottom: isMultiline ? '30px' : undefined,
+            paddingRight: '28px',
           },
         }}
         value={comment}
@@ -127,7 +122,9 @@ const Comment: React.FC<CommentProps> = ({ comment, onChange }) => {
               menuWidth={120}
             />
           </div>
-          <ExpandableText css={styles.noteBody}>{comment}</ExpandableText>
+          <ExpandableText css={styles.noteBody} maxLines={3}>
+            {comment}
+          </ExpandableText>
         </div>
       )}
     </React.Fragment>

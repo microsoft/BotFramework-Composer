@@ -2,9 +2,9 @@
 // Licensed under the MIT License.
 
 import React from 'react';
-import { render, fireEvent, act, faker, userEvent } from '@botframework-composer/test-utils';
+import { render, act, faker, userEvent } from '@botframework-composer/test-utils';
 
-import { Comment, MAX_CHARS_FOR_SINGLE_LINE } from '../Comment';
+import { Comment } from '../Comment';
 
 describe('<Comment />', () => {
   let onChange: jest.Mock = jest.fn();
@@ -21,27 +21,6 @@ describe('<Comment />', () => {
     expect(textfield).toBeVisible();
 
     expect(queryByTestId('CommentCard')).not.toBeInTheDocument();
-  });
-
-  it('renders a textarea if the comment is more than 65 characters', async () => {
-    const { findByPlaceholderText } = render(<Comment onChange={onChange} />);
-
-    let textfield = await findByPlaceholderText('Add a note');
-    expect(textfield.tagName.toLowerCase()).toEqual('input');
-
-    const text = faker.lorem.paragraph(2).substring(0, MAX_CHARS_FOR_SINGLE_LINE - 1);
-    act(() => {
-      fireEvent.change(textfield, { target: { value: text } });
-    });
-    expect(textfield.tagName.toLowerCase()).toEqual('input');
-    expect(textfield).toHaveValue(text);
-
-    act(() => {
-      fireEvent.change(textfield, { target: { value: text + faker.lorem.words() } });
-    });
-
-    textfield = await findByPlaceholderText('Add a note');
-    expect(textfield.tagName.toLowerCase()).toEqual('textarea');
   });
 
   it('can edit an existing comment', async () => {
