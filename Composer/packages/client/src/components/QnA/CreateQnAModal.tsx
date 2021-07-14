@@ -121,7 +121,7 @@ export const CreateQnAModal: React.FC<CreateQnAModalProps> = (props) => {
   const avaliableLanguages = uniq(locales.map((item) => localeToLanguage(item)));
 
   const actionOptions: IChoiceGroupOption[] = [
-    { key: 'url', text: formatMessage('Create new knowledge base from URL or file ') },
+    { key: 'url', text: formatMessage('Create new knowledge base from URL') },
     {
       key: 'portal',
       text: formatMessage('Import existing knowledge base from QnA maker portal'),

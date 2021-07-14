@@ -1055,11 +1055,8 @@
   "create_new_knowledge_base_d15d6873": {
     "message": "Create new knowledge base"
   },
-  "create_new_knowledge_base_from_url_or_file_15e5758a": {
-    "message": "Create new knowledge base from URL or file"
-  },
-  "create_new_knowledge_base_from_url_or_file_47826842": {
-    "message": "Create new knowledge base from URL or file "
+  "create_new_knowledge_base_from_url_e8e94121": {
+    "message": "Create new knowledge base from URL"
   },
   "create_new_publish_profile_e27c0950": {
     "message": "Create new publish profile"
@@ -2891,11 +2888,11 @@
   "provide_access_tokens_8ead7563": {
     "message": "Provide access tokens"
   },
-  "provide_arm_token_by_running_az_account_get_access_e9d825a4": {
-    "message": "Provide ARM token by running `az account get-access-token`"
+  "provide_arm_token_by_running_a4bc440b": {
+    "message": "Provide ARM token by running:"
   },
-  "provide_graph_token_by_running_az_account_get_acce_6d27a279": {
-    "message": "Provide graph token by running `az account get-access-token  --resource-type ms-graph`"
+  "provide_graph_token_by_running_a449b2fc": {
+    "message": "Provide graph token by running:"
   },
   "provision_failure_983d3844": {
     "message": "Provision failure"
@@ -3142,9 +3139,6 @@
   },
   "replace_knowledge_base_from_url_2be66ee3": {
     "message": "Replace knowledge base from URL"
-  },
-  "replace_knowledge_base_from_url_or_file_47ef7c15": {
-    "message": "Replace knowledge base from URL or file "
   },
   "replace_this_dialog_e304015e": {
     "message": "Replace this dialog"
@@ -3422,14 +3416,14 @@
   "select_the_subscription_and_resource_you_want_to_c_a3bd2488": {
     "message": "Select the subscription and resource you want to choose a knowledge base from"
   },
-  "select_this_option_when_you_want_to_create_a_knowl_21e43487": {
-    "message": "Select this option when you want to create a knowledge base from  content such as an FAQ available online or in a file .csv, .xls or .doc format "
+  "select_this_option_if_you_want_to_create_a_knowled_ee5a13e0": {
+    "message": "Select this option if you want to create a knowledge base from content hosted online such as an FAQ or document link (.csv, .xls or .doc format)"
+  },
+  "select_this_option_if_you_want_to_replace_current__4b6ca55": {
+    "message": "Select this option if you want to replace current knowledge base from content hosted online such as an FAQ or document link (.csv, .xls or .doc format)"
   },
   "select_this_option_when_you_want_to_import_existin_818c5aaa": {
     "message": "Select this option when you want to import existing knowledge base from QnA maker portal. "
-  },
-  "select_this_option_when_you_want_to_replace_curren_a5139e24": {
-    "message": "Select this option when you want to replace current knowledge base from content such as an FAQ available online or in a file .csv, .xls or .doc format "
   },
   "select_triggers_5ff033ae": {
     "message": "Select triggers"
@@ -3604,9 +3598,6 @@
   },
   "source_url_a7d98ebd": {
     "message": "Source URL"
-  },
-  "source_url_or_file_346d61fb": {
-    "message": "Source URL or file"
   },
   "spaces_and_special_characters_are_not_allowed_20d47684": {
     "message": "Spaces and special characters are not allowed."
