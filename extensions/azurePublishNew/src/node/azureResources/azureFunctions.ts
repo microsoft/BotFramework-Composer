@@ -22,7 +22,7 @@ import {
 
 import { AZURE_HOSTING_GROUP_NAME, S1_STANDARD_TIER } from './constants';
 
-export const azureFunctionDefinition: ResourceDefinition = {
+export const azureFunctionsDefinition: ResourceDefinition = {
   key: 'azureFunctions',
   description: 'Azure Functions hosting your bot services.',
   text: 'Azure Functions',
@@ -31,8 +31,8 @@ export const azureFunctionDefinition: ResourceDefinition = {
   dependencies: [AzureResourceTypes.RESOURCE_GROUP, AzureResourceTypes.APP_REGISTRATION],
 };
 
-export type AzureFunctionConfig = ResourceConfig & {
-  key: 'azureFunction';
+export type AzureFunctionsConfig = ResourceConfig & {
+  key: 'azureFunctions';
   name: string;
   resourceGroupName: string;
   location: string;
@@ -41,12 +41,12 @@ export type AzureFunctionConfig = ResourceConfig & {
   instrumentationKey?: string;
 };
 
-const azureFunctionProvisionMethod = (provisionConfig: ProvisionServiceConfig): ProvisionMethod => {
+const azureFunctionsProvisionMethod = (provisionConfig: ProvisionServiceConfig): ProvisionMethod => {
   const tokenCredentials = new TokenCredentials(provisionConfig.accessToken);
 
   const webSiteManagementClient = new WebSiteManagementClient(tokenCredentials, provisionConfig.subscriptionId);
 
-  return async (config: AzureFunctionConfig, workingSet: ProvisionWorkingSet): Promise<ProvisionWorkingSet> => {
+  return async (config: AzureFunctionsConfig, workingSet: ProvisionWorkingSet): Promise<ProvisionWorkingSet> => {
     try {
       const azureFunctionsName = config.name;
 
@@ -97,7 +97,7 @@ const azureFunctionProvisionMethod = (provisionConfig: ProvisionServiceConfig): 
 
       return {
         ...workingSet,
-        azureFunction: { hostname },
+        azureFunctions: { hostname },
       };
     } catch (err) {
       throw createCustomizeError(ProvisionErrors.CREATE_FUNCTIONS_RESOURCE_ERROR, stringifyError(err));
@@ -112,7 +112,7 @@ export const getAzureFunctionsProvisionService = (config: ProvisionServiceConfig
       const { runtimeType } = parseRuntimeKey(project.settings?.runtime?.key);
       return runtimeType === 'functions' ? 'required' : 'notAllowed';
     },
-    provision: azureFunctionProvisionMethod(config),
+    provision: azureFunctionsProvisionMethod(config),
     canPollStatus: false,
   };
 };
