@@ -19,10 +19,10 @@ import {
   getAppRegistrationProvisionService,
 } from './azureResources/appRegistration';
 import {
-  AzureFunctionConfig,
-  azureFunctionDefinition,
+  AzureFunctionsConfig,
+  azureFunctionsDefinition,
   getAzureFunctionsProvisionService,
-} from './azureResources/azureFunction';
+} from './azureResources/azureFunctions';
 import { BlobStorageConfig, blobStorageDefinition, getBlogStorageProvisionService } from './azureResources/blobStorage';
 import { CosmosDbConfig, cosmosDbDefinition, getCosmosDbProvisionService } from './azureResources/cosmosDb';
 import {
@@ -55,7 +55,7 @@ export const availableResources: ResourceDefinition[] = [
   appRegistrationDefinition,
   webAppResourceDefinition,
   botRegistrationDefinition,
-  azureFunctionDefinition,
+  azureFunctionsDefinition,
   cosmosDbDefinition,
   appInsightsDefinition,
   luisAuthoringDefinition,
@@ -103,7 +103,7 @@ export const getResourceDependencies = (key: string) => {
     case AzureResourceTypes.BLOBSTORAGE:
       return blobStorageDefinition.dependencies;
     case AzureResourceTypes.AZUREFUNCTIONS:
-      return azureFunctionDefinition.dependencies;
+      return azureFunctionsDefinition.dependencies;
     case AzureResourceTypes.QNA:
       return qnaDefinition.dependencies;
     default:
@@ -185,9 +185,9 @@ export const provisionConfigToResourceConfigMap = {
       resourceGroupName: config.resourceGroup,
     };
   },
-  azureFunction: (config: ProvisioningConfig): AzureFunctionConfig => {
+  azureFunctions: (config: ProvisioningConfig): AzureFunctionsConfig => {
     return {
-      key: 'azureFunction',
+      key: 'azureFunctions',
       location: config.location,
       name: config.hostname,
       operatingSystem: config.appServiceOperatingSystem,
