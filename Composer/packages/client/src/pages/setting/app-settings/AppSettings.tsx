@@ -15,6 +15,7 @@ import { useRecoilValue } from 'recoil';
 import { isElectron } from '../../../utils/electronUtil';
 import { onboardingState, userSettingsState, dispatcherState } from '../../../recoilModel';
 import { onboardingDisabled } from '../../../constants';
+import TelemetryService from '../../../telemetry/TelemetryClient';
 
 import { container, section } from './styles';
 import { SettingToggle } from './SettingToggle';
@@ -55,6 +56,7 @@ const AppSettings: React.FC<RouteComponentProps> = () => {
   };
 
   const handleDataCollectionChange = (allowDataCollection: boolean) => {
+    TelemetryService.track('TelemetryOptInOut', { enabled: allowDataCollection });
     updateUserSettings({
       telemetry: {
         allowDataCollection,
