@@ -53,7 +53,7 @@ const hasEndpointUrl = (content) => {
   if (endpoints && endpoints.length > 0) {
     return endpoints.every((endpoint) => !!endpoint.endpointUrl);
   }
-  return true;
+  return false;
 };
 
 export const skillNameRegex = /^\w[-\w]*$/;
@@ -114,7 +114,11 @@ export const validateLocalZip = async (files: Record<string, JSZipObject>) => {
         result.manifestContent = content;
         result.zipContent = zipContent;
       } else {
-        result.error = { manifestUrl: formatMessage('Endpoint should have endpoint url field in manifest json') };
+        result.error = {
+          manifestUrl: formatMessage(
+            'Endpoints should not be empty or endpoint should have endpoint url field in manifest json'
+          ),
+        };
       }
     } else {
       result.error = { manifestUrl: formatMessage('could not locate manifest.json in zip') };
