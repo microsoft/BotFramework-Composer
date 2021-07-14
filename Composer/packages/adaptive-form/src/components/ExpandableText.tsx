@@ -10,6 +10,7 @@ import { Link } from './Link';
 
 const styles = {
   body: (maxLines = 5, isExpanded = false) => css`
+    overflow-wrap: break-word;
     // https://css-tricks.com/line-clampin/#weird-webkit-flexbox-way
     ${!isExpanded
       ? `
