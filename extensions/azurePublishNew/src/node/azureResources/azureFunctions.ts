@@ -97,7 +97,7 @@ const azureFunctionsProvisionMethod = (provisionConfig: ProvisionServiceConfig):
 
       return {
         ...workingSet,
-        azureFunctions: { hostname },
+        webApp: { hostname },
       };
     } catch (err) {
       throw createCustomizeError(ProvisionErrors.CREATE_FUNCTIONS_RESOURCE_ERROR, stringifyError(err));

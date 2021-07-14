@@ -20,6 +20,7 @@ const { useObserveTranscriptFocus } = hooks;
 export const useTranscriptFocusListener = () => {
   const currentProjectId = useRecoilValue(rootBotProjectIdSelector);
   const rawWebChatTraffic = useRecoilValue(webChatTrafficState(currentProjectId ?? ''));
+  const activeDebugPanelTab = useRecoilValue(debugPanelActiveTabState);
   const setDebugPanelActiveTab = useSetRecoilState(debugPanelActiveTabState);
   const setDebugPanelExpansion = useSetRecoilState(debugPanelExpansionState);
   const { setWebChatInspectionData } = useRecoilValue(dispatcherState);
@@ -27,18 +28,24 @@ export const useTranscriptFocusListener = () => {
   // listen for when an activity is focused and inspect the corresponding log item
   const onActivityFocused = useCallback(
     ({ activity }: { activity: Activity }) => {
+      if (!activity) {
+        return;
+      }
       const trafficItem = rawWebChatTraffic.find((t) => {
         if (t.trafficType === 'activity') {
           return t.activity.id === activity?.id;
         }
       });
       if (trafficItem && currentProjectId) {
-        setDebugPanelActiveTab(WebChatInspectorTabKey);
+        // only switch to the Web Chat tab if no tab is active
+        if (activeDebugPanelTab === undefined) {
+          setDebugPanelActiveTab(WebChatInspectorTabKey);
+        }
         setDebugPanelExpansion(true);
         setWebChatInspectionData(currentProjectId, { item: trafficItem });
       }
     },
-    [currentProjectId, rawWebChatTraffic, setDebugPanelActiveTab, setDebugPanelExpansion]
+    [activeDebugPanelTab, currentProjectId, rawWebChatTraffic, setDebugPanelActiveTab, setDebugPanelExpansion]
   );
 
   useObserveTranscriptFocus(onActivityFocused, [onActivityFocused]);
