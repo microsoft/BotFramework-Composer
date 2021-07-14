@@ -19,7 +19,7 @@ export const useMonacoSelectedTextDom = (
 ) => {
   React.useEffect(() => {
     let observer: MutationObserver;
-    if (editor) {
+    if (editor?.getDomNode()) {
       const monacoOverlayContainerDomElm = editor.getDomNode().querySelector(monacoEditorOverlaySelector);
       observer = new MutationObserver(() => {
         const selection = editor.getSelection();
