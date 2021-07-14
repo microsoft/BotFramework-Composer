@@ -28,6 +28,7 @@ const styles = {
     margin: 0;
     padding-right: 18px;
     white-space: pre-line;
+    overflow-wrap: break-word;
   `,
   showMore: css`
     display: flex;
