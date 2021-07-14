@@ -31,7 +31,7 @@ export const qnaDefinition: ResourceDefinition = {
   text: 'Microsoft QnA Maker',
   tier: SO_STANDARD_TIER,
   group: COGNITIVE_SERVICES_GROUP_NAME,
-  dependencies: [AzureResourceTypes.RESOURCE_GROUP, AzureResourceTypes.WEBAPP],
+  dependencies: [AzureResourceTypes.RESOURCE_GROUP],
 };
 
 export type QnAResourceConfig = ResourceConfig & {
