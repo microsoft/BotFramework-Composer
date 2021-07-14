@@ -43,7 +43,7 @@ const title = <div style={titleStyle}>{formatMessage('Replace knowledge base fro
 const description = (
   <div style={descriptionStyle}>
     {formatMessage(
-      'Select this option when you want to replace current knowledge base from content such as an FAQ available online or in a file .csv, .xls or .doc format '
+      'Select this option if you want to replace current knowledge base from content hosted online such as an FAQ or document link (.csv, .xls or .doc format)'
     )}
   </div>
 );
@@ -86,7 +86,7 @@ export const ImportQnAFromUrl: React.FC<ImportQnAFromUrlModalProps> = (props) =>
         <TextField
           data-testid={'ImportNewUrlToOverwriteQnAFile'}
           errorMessage={formErrors.url}
-          label={formatMessage('Source URL or file')}
+          label={formatMessage('Source URL')}
           placeholder={formatMessage('Enter a URL to Import QnA resource')}
           prefix={getLanguage(locale)}
           styles={textFieldKBNameFromScratch}
