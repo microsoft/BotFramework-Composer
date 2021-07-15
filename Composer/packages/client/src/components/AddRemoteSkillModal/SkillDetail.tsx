@@ -25,6 +25,8 @@ type SkillDetailProps = {
 };
 const container = css`
   width: 100%;
+  height: 100%;
+  overflow-y: auto;
   margin: 10px 0px;
 `;
 const segment = css`

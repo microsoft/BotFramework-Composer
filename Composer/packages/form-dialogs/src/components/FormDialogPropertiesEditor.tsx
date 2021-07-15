@@ -66,7 +66,7 @@ const downloadFile = async (fileName: string, schemaExtension: string, content: 
   const href = URL.createObjectURL(blob);
   const link = document.createElement('a');
   link.href = href;
-  link.download = `${fileName}.${schemaExtension}`;
+  link.download = `${fileName}${schemaExtension}`;
   document.body.appendChild(link);
   link.click();
   document.body.removeChild(link);
@@ -152,9 +152,9 @@ export const FormDialogPropertiesEditor = React.memo((props: Props) => {
     {
       key: 'export',
       iconProps: { iconName: 'Export' },
-      text: formatMessage('Export JSON'),
-      title: formatMessage('Export JSON'),
-      ariaLabel: formatMessage('Export JSON'),
+      text: formatMessage('Export schema'),
+      title: formatMessage('Export schema'),
+      ariaLabel: formatMessage('Export schema'),
       disabled: !propertyIds.length || !schemaValid,
       onClick: () => {
         downloadFile(schema.name, schemaExtension, schemaJson);

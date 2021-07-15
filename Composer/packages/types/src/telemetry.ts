@@ -173,6 +173,7 @@ type BotSettingsEvents = {
     region: string;
   };
   SettingsGetKeysResourceRequestSelected: { subscriptionId?: string; resourceType: string };
+  TelemetryOptInOut: { enabled: boolean };
 };
 
 type LgEditorEvents = {
@@ -294,3 +295,14 @@ export type TelemetryClient = {
  * however, they are only logged to Application Insights after the user opts in to data collection.
  */
 export const persistedEvents: TelemetryEventName[] = ['SessionStarted', 'HandoffToComposerCompleted'];
+
+/**
+ * These events are ones which are always tracked regardless of whether tracking is opted
+ * into or not (i.e. those having to do with turning telemetry itself on or off). If
+ * the user opts out, we will strip all PII from the event before sending it. Every event
+ * whose name is in this array should have "enabled: boolean" in its fields.
+ */
+export const alwaysTrackEvents: TelemetryEventName[] = ['TelemetryOptInOut'];
+
+/** Names of the properties containing PII Data */
+export const piiProperties = ['userId'];
