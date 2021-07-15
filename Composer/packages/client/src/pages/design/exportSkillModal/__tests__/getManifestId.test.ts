@@ -7,6 +7,7 @@ const skillManifest = {
   id: 'test',
   content: {
     $schema: 'https://schemas.botframework.com/schemas/skills/skill-manifest-2.1.1.json',
+    version: '2.1.1',
   },
 };
 

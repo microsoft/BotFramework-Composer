@@ -79,7 +79,18 @@ export const getManifestId = (
   skillManifests: SkillManifestFile[],
   { content: { version } = '' }: Partial<SkillManifestFile>
 ): string => {
-  return version ? `${botName}-${version.replace(/\./g, '-')}-manifest` : `${botName}-manifest`;
+  let fileId = version ? `${botName}-${version.replace(/\./g, '-')}-manifest` : `${botName}-manifest`;
+  let i = -1;
+
+  while (skillManifests.some(({ id }) => id === fileId) && i < skillManifests.length) {
+    if (i < 0) {
+      fileId = fileId.concat(`-${++i}`);
+    } else {
+      fileId = fileId.substr(0, fileId.lastIndexOf('-')).concat(`-${++i}`);
+    }
+  }
+
+  return fileId;
 };
 
 const onRenderTitle = (options: IDropdownOption[] | undefined): JSX.Element | null => {
@@ -206,10 +217,8 @@ export const SelectProfile: React.FC<ContentProps> = ({
   }, [settings]);
 
   useEffect(() => {
-    if (!id || id !== getManifestId(botName, skillManifests, manifest)) {
-      const fileId = getManifestId(botName, skillManifests, manifest);
-      setSkillManifest({ ...manifest, id: fileId });
-    }
+    const fileId = getManifestId(botName, skillManifests, manifest);
+    setSkillManifest({ ...manifest, id: fileId });
   }, [id]);
 
   return (
