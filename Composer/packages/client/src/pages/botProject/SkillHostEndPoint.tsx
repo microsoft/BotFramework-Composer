@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import React, { Fragment } from 'react';
+import React, { Fragment, useState } from 'react';
 import { jsx, css } from '@emotion/core';
 import { useRecoilValue } from 'recoil';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
@@ -12,7 +12,6 @@ import formatMessage from 'format-message';
 import { FontSizes } from 'office-ui-fabric-react/lib/Styling';
 import { SharedColors } from '@uifabric/fluent-theme';
 import { Link } from 'office-ui-fabric-react/lib/components/Link';
-import debounce from 'lodash/debounce';
 
 import { dispatcherState, settingsState } from '../../recoilModel';
 import { rootBotProjectIdSelector } from '../../recoilModel/selectors/project';
@@ -69,13 +68,18 @@ export const SkillHostEndPoint: React.FC<SkillHostEndPointProps> = (props) => {
   const rootBotProjectId = useRecoilValue(rootBotProjectIdSelector);
   const mergedSettings = mergePropertiesManagedByRootBot(projectId, rootBotProjectId, settings);
   const { skillHostEndpoint } = useRecoilValue(settingsState(projectId));
+  const [endpointUrl, setEndpointUrl] = useState(skillHostEndpoint);
 
-  const handleChange = debounce((e, value) => {
+  const handleChange = (e, value) => {
+    setEndpointUrl(value);
+  };
+
+  const handleBlur = () => {
     setSettings(projectId, {
       ...mergedSettings,
-      skillHostEndpoint: value,
+      skillHostEndpoint: endpointUrl,
     });
-  }, 500);
+  };
 
   return (
     <Fragment>
@@ -95,9 +99,10 @@ export const SkillHostEndPoint: React.FC<SkillHostEndPointProps> = (props) => {
       <TextField
         ariaLabel={formatMessage('Skill host endpoint url')}
         data-testid={'SkillHostEndPointTextField'}
-        defaultValue={skillHostEndpoint}
         label={formatMessage('Skill host endpoint URL')}
         placeholder={formatMessage('Enter Skill host endpoint URL')}
+        value={endpointUrl}
+        onBlur={handleBlur}
         onChange={handleChange}
         onRenderLabel={onRenderLabel}
       />
