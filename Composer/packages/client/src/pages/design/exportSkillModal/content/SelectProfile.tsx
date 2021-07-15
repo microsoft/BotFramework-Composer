@@ -18,7 +18,7 @@ import { Link } from 'office-ui-fabric-react/lib/Link';
 import { botDisplayNameState, dispatcherState, settingsState, skillManifestsState } from '../../../../recoilModel';
 import { CreatePublishProfileDialog } from '../../../botProject/CreatePublishProfileDialog';
 import { iconStyle } from '../../../botProject/runtime-settings/style';
-import { ContentProps, VERSION_REGEX } from '../constants';
+import { ContentProps } from '../constants';
 import { PublishProfileWrapperDialog } from '../../../botProject/PublishProfieWrapperDialog';
 
 const styles = {
@@ -77,22 +77,9 @@ const onRenderInvalidProfileWarning = (hasValidProfile, handleShowPublishProfile
 export const getManifestId = (
   botName: string,
   skillManifests: SkillManifestFile[],
-  { content: { $schema } = {} }: Partial<SkillManifestFile>
+  { content: { version } = '' }: Partial<SkillManifestFile>
 ): string => {
-  const [version] = VERSION_REGEX.exec($schema) || [''];
-
-  let fileId = version ? `${botName}-${version.replace(/\./g, '-')}-manifest` : `${botName}-manifest`;
-  let i = -1;
-
-  while (skillManifests.some(({ id }) => id === fileId) && i < skillManifests.length) {
-    if (i < 0) {
-      fileId = fileId.concat(`-${++i}`);
-    } else {
-      fileId = fileId.substr(0, fileId.lastIndexOf('-')).concat(`-${++i}`);
-    }
-  }
-
-  return fileId;
+  return version ? `${botName}-${version.replace(/\./g, '-')}-manifest` : `${botName}-manifest`;
 };
 
 const onRenderTitle = (options: IDropdownOption[] | undefined): JSX.Element | null => {
@@ -219,7 +206,7 @@ export const SelectProfile: React.FC<ContentProps> = ({
   }, [settings]);
 
   useEffect(() => {
-    if (!id) {
+    if (!id || id !== getManifestId(botName, skillManifests, manifest)) {
       const fileId = getManifestId(botName, skillManifests, manifest);
       setSkillManifest({ ...manifest, id: fileId });
     }
