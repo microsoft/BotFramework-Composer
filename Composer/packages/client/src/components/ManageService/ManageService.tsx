@@ -135,7 +135,7 @@ export const ManageService: React.FC<ManageServiceProps> = (props: ManageService
   };
 
   useEffect(() => {
-    if (isAuthenticated) {
+    if (isAuthenticated && !props.hidden) {
       setAvailableSubscriptions([]);
       setSubscriptionsErrorMessage(undefined);
       getSubscriptions(currentUser.token)
@@ -153,7 +153,7 @@ export const ManageService: React.FC<ManageServiceProps> = (props: ManageService
           setSubscriptionsErrorMessage(err.message);
         });
     }
-  }, [isAuthenticated]);
+  }, [isAuthenticated, props.hidden]);
 
   useEffect(() => {
     // reset the ui
