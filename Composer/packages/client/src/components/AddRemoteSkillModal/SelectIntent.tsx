@@ -6,7 +6,12 @@ import { join, isAbsolute } from 'path';
 import { jsx, css } from '@emotion/core';
 import React, { Fragment, useState, useMemo, useEffect, useCallback } from 'react';
 import formatMessage from 'format-message';
-import { DetailsList, SelectionMode, CheckboxVisibility } from 'office-ui-fabric-react/lib/DetailsList';
+import {
+  DetailsList,
+  SelectionMode,
+  CheckboxVisibility,
+  IDetailsRowProps,
+} from 'office-ui-fabric-react/lib/DetailsList';
 import { Selection } from 'office-ui-fabric-react/lib/Selection';
 import { Separator } from 'office-ui-fabric-react/lib/Separator';
 import { Stack, StackItem } from 'office-ui-fabric-react/lib/Stack';
@@ -16,6 +21,7 @@ import { LuEditor } from '@bfc/code-editor';
 import { ScrollablePane, ScrollbarVisibility } from 'office-ui-fabric-react/lib/ScrollablePane';
 import { LuFile, LuIntentSection, SDKKinds, ILUFeaturesConfig, DialogSetting } from '@bfc/shared';
 import { useRecoilValue } from 'recoil';
+import { IRenderFunction } from 'office-ui-fabric-react/lib/Utilities';
 
 import TelemetryClient from '../../telemetry/TelemetryClient';
 import { selectIntentDialog, enableOrchestratorDialog } from '../../constants';
@@ -180,6 +186,10 @@ export const SelectIntent: React.FC<SelectIntentProps> = (props) => {
     });
   }, []);
 
+  const onRenderRow = (props?: IDetailsRowProps, defaultRender?: IRenderFunction<IDetailsRowProps>): JSX.Element => {
+    return <div data-selection-toggle>{defaultRender?.(props)}</div>;
+  };
+
   // intents from manifest, intents can be an object or array.
   const intentItems = useMemo(() => {
     let res;
@@ -298,6 +308,7 @@ export const SelectIntent: React.FC<SelectIntentProps> = (props) => {
                     items={intentItems}
                     selection={selection}
                     selectionMode={SelectionMode.multiple}
+                    onRenderRow={onRenderRow}
                   />
                 </ScrollablePane>
               </div>
