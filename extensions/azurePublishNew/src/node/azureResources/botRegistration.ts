@@ -34,7 +34,7 @@ export const botRegistrationDefinition: ResourceDefinition = {
     'When registered with the Azure Bot Service, you can host your bot in any environment and enable customers from a variety of channels, such as your app or website, Direct Line Speech, Microsoft Teams and more.',
   tier: FREE_COGNITIVE_SERVICES_TIER,
   group: AZURE_HOSTING_GROUP_NAME,
-  dependencies: [AzureResourceTypes.RESOURCE_GROUP, AzureResourceTypes.WEBAPP],
+  dependencies: [AzureResourceTypes.RESOURCE_GROUP, AzureResourceTypes.APP_REGISTRATION],
 };
 
 const botChannelProvisionMethod = (provisionConfig: ProvisionServiceConfig): ProvisionMethod => {
@@ -53,8 +53,8 @@ const botChannelProvisionMethod = (provisionConfig: ProvisionServiceConfig): Pro
     checkRequiredField(workingSet.webApp?.hostname, 'webApp.hostname is required.');
 
     const appId = workingSet.appRegistration?.appId;
-    const hostname = workingSet.webApp?.hostname;
-    const endpoint = `https://${hostname ?? config.hostname + '.azurewebsites.net'}/api/messages`;
+    const webAppHostname = workingSet.webApp?.hostname;
+    const endpoint = `https://${webAppHostname ?? config.hostname + '.azurewebsites.net'}/api/messages`;
     const displayName = config.hostname; // how it is in production now - but theres a comment that we might not want to use hostname for displayName
 
     try {
@@ -72,7 +72,7 @@ const botChannelProvisionMethod = (provisionConfig: ProvisionServiceConfig): Pro
         location: 'global',
         kind: 'azurebot',
         tags: {
-          webapp: hostname,
+          webapp: webAppHostname,
         },
       });
 

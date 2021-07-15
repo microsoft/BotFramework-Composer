@@ -155,7 +155,7 @@ export const CreateQnAModal: React.FC<CreateQnAModalProps> = (props) => {
   }, []);
 
   useEffect(() => {
-    if (isAuthenticated) {
+    if (isAuthenticated && showCreateQnAFrom) {
       setAvailableSubscriptions([]);
       setSubscriptionsErrorMessage(undefined);
       getSubscriptions(currentUser.token)
@@ -173,7 +173,7 @@ export const CreateQnAModal: React.FC<CreateQnAModalProps> = (props) => {
           setSubscriptionsErrorMessage(err.message);
         });
     }
-  }, [currentUser, isAuthenticated]);
+  }, [currentUser, isAuthenticated, showCreateQnAFrom]);
 
   useEffect(() => {
     // reset the ui
