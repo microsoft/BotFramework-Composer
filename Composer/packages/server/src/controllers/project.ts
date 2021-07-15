@@ -15,72 +15,9 @@ import { getSkillManifest } from '../models/bot/skillManager';
 import { getFeedUrl } from '../models/bot/feedManager';
 import StorageService from '../services/storage';
 import settings from '../settings';
-import { getLocationRef, getNewProjRef } from '../utility/project';
 import { BackgroundProcessManager } from '../services/backgroundProcessManager';
-import { TelemetryService } from '../services/telemetry';
 
 import { Path } from './../utility/path';
-
-async function createProject(req: Request, res: Response) {
-  let { templateId } = req.body;
-  const {
-    name,
-    description,
-    storageId,
-    location,
-    schemaUrl,
-    locale,
-    preserveRoot,
-    templateDir,
-    eTag,
-    alias,
-  } = req.body;
-  const user = await ExtensionContext.getUserFromRequest(req);
-  if (templateId === '') {
-    templateId = 'EmptyBot';
-  }
-
-  const locationRef = getLocationRef(location, storageId, name);
-
-  try {
-    // the template was downloaded remotely (via import) and will be used instead of an internal Composer template
-    const createFromRemoteTemplate = !!templateDir;
-
-    await BotProjectService.cleanProject(locationRef);
-    const newProjRef = await getNewProjRef(templateDir, templateId, locationRef, user, locale);
-
-    const id = await BotProjectService.openProject(newProjRef, user, true);
-    // in the case of a remote template, we need to update the eTag and alias used by the import mechanism
-    BotProjectService.setProjectLocationData(id, { alias, eTag });
-    const currentProject = await BotProjectService.getProjectById(id, user);
-
-    // inject shared content into every new project.  this comes from assets/shared
-    if (!createFromRemoteTemplate) {
-      await AssetService.manager.copyBoilerplate(currentProject.dataDir, currentProject.fileStorage);
-    }
-
-    if (currentProject !== undefined) {
-      await currentProject.updateBotInfo(name, description, preserveRoot);
-      if (schemaUrl && !createFromRemoteTemplate) {
-        await currentProject.saveSchemaToProject(schemaUrl, locationRef.path);
-      }
-      await currentProject.init();
-
-      const project = currentProject.getProject();
-      log('Project created successfully.');
-      res.status(200).json({
-        id,
-        ...project,
-      });
-    }
-    TelemetryService.trackEvent('CreateNewBotProjectCompleted', { template: templateId, status: 200 });
-  } catch (err) {
-    res.status(404).json({
-      message: err instanceof Error ? err.message : err,
-    });
-    TelemetryService.trackEvent('CreateNewBotProjectCompleted', { template: templateId, status: 404 });
-  }
-}
 
 async function getProjectById(req: Request, res: Response) {
   const projectId = req.params.projectId;
@@ -396,8 +333,8 @@ async function getSkill(req: Request, res: Response) {
   const projectId = req.params.projectId;
   const user = await ExtensionContext.getUserFromRequest(req);
   const ignoreProjectValidation: boolean = req.query.ignoreProjectValidation;
+  const currentProject = await BotProjectService.getProjectById(projectId, user);
   if (!ignoreProjectValidation) {
-    const currentProject = await BotProjectService.getProjectById(projectId, user);
     if (currentProject === undefined) {
       res.status(404).json({
         message: 'No such bot project found',
@@ -405,12 +342,42 @@ async function getSkill(req: Request, res: Response) {
     }
   }
   try {
-    const content = await getSkillManifest(req.query.url);
+    const rootDir = currentProject.dir;
+    const content = await getSkillManifest(req.query.url, rootDir);
     res.status(200).json(content);
   } catch (err) {
     res.status(404).json({
       message: err.message,
     });
+  }
+}
+
+async function createSkillFiles(req: Request, res: Response) {
+  const projectId = req.params.projectId;
+  const user = await ExtensionContext.getUserFromRequest(req);
+
+  const currentProject = await BotProjectService.getProjectById(projectId, user);
+  if (currentProject !== undefined) {
+    const { url, skillName, zipContent } = req.body;
+    const file = await currentProject.createSkillFiles(url, skillName, zipContent);
+    res.status(200).json(file);
+  } else {
+    res.status(404).json({
+      message: 'No such bot project found',
+    });
+  }
+}
+
+async function removeSkillFiles(req: Request, res: Response) {
+  const projectId = req.params.projectId;
+  const user = await ExtensionContext.getUserFromRequest(req);
+
+  const currentProject = await BotProjectService.getProjectById(projectId, user);
+  if (currentProject !== undefined) {
+    const isDelete = await currentProject.deleteSkillFiles(req.params.name);
+    res.status(200).json(isDelete);
+  } else {
+    res.status(404).json({ error: 'No bot project found' });
   }
 }
 
@@ -616,7 +583,7 @@ async function copyTemplateToExistingProject(req: Request, res: Response) {
   }
 }
 
-function createProjectV2(req: Request, res: Response) {
+function createProject(req: Request, res: Response) {
   const jobId = BackgroundProcessManager.startProcess(202, 'create', 'Creating Bot Project');
   BotProjectService.createProjectAsync(req, jobId);
   res.status(202).json({
@@ -662,13 +629,14 @@ export const ProjectController = {
   createManifestFile,
   updateManifestFile,
   removeManifestFile,
+  createSkillFiles,
+  removeSkillFiles,
   getSkill,
   build,
   setQnASettings,
   exportProject,
   saveProjectAs,
   createProject,
-  createProjectV2,
   migrateProject,
   getAllProjects,
   getRecentProjects,

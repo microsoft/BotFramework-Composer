@@ -5,7 +5,7 @@ import { promisify } from 'util';
 
 import { Request, Response } from 'express';
 
-import { parseQnAContent } from '../models/utilities/parser';
+import { parseQnAContent, importQnAContentFromQnAMakerPortal } from '../models/utilities/parser';
 import { getRemoteFile as getFile } from '../models/utilities/util';
 const execAsync = promisify(exec);
 
@@ -21,13 +21,24 @@ async function getQnaContent(req: Request, res: Response) {
   }
 }
 
+async function importQnAContent(req: Request, res: Response) {
+  try {
+    const endpoint = decodeURIComponent(req.body.endpoint);
+    const { kbId, subscriptionKey } = req.body;
+    res.status(200).json(await importQnAContentFromQnAMakerPortal(endpoint, kbId, subscriptionKey));
+  } catch (e) {
+    res.status(400).json({
+      message: e.message || e.text,
+    });
+  }
+}
+
 async function getRemoteFile(req: Request, res: Response) {
   try {
     const url: string = req.query.url;
     const content = await getFile(url);
     const start = decodeURI(url).lastIndexOf('/');
-    const end = decodeURI(url).lastIndexOf('.');
-    const id = url.substring(start + 1, end);
+    const id = url.substring(start + 1);
 
     res.status(200).json({
       content,
@@ -63,4 +74,5 @@ export const UtilitiesController = {
   getQnaContent,
   getRemoteFile,
   checkNodeVersion,
+  importQnAContent,
 };

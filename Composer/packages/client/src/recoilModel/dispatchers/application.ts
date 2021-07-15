@@ -18,10 +18,15 @@ import {
   debugPanelActiveTabState,
   userHasNodeInstalledState,
   applicationErrorState,
+  machineInfoState,
+  showGetStartedTeachingBubbleState,
+  showErrorDiagnosticsState,
+  showWarningDiagnosticsState,
+  projectsForDiagnosticsFilterState,
 } from '../atoms/appState';
 import { AppUpdaterStatus, CreationFlowStatus, CreationFlowType } from '../../constants';
 import OnboardingState from '../../utils/onboardingStorage';
-import { StateError, AppUpdateState } from '../../recoilModel/types';
+import { StateError, AppUpdateState, MachineInfo } from '../../recoilModel/types';
 import { DebugDrawerKeys } from '../../pages/design/DebugPanel/TabExtensions/types';
 import httpClient from '../../utils/httpUtil';
 
@@ -153,6 +158,26 @@ export const applicationDispatcher = () => {
     await flushExistingTasks(callbackHelpers);
   });
 
+  const setMachineInfo = useRecoilCallback((callbackHelpers: CallbackInterface) => (info: MachineInfo) => {
+    callbackHelpers.set(machineInfoState, info);
+  });
+
+  const setShowGetStartedTeachingBubble = useRecoilCallback((callbackHelpers: CallbackInterface) => (show: boolean) => {
+    callbackHelpers.set(showGetStartedTeachingBubbleState, show);
+  });
+
+  const setErrorDiagnosticsFilter = useRecoilCallback(({ set }: CallbackInterface) => (value: boolean) => {
+    set(showErrorDiagnosticsState, value);
+  });
+
+  const setWarningDiagnosticsFilter = useRecoilCallback(({ set }: CallbackInterface) => (value: boolean) => {
+    set(showWarningDiagnosticsState, value);
+  });
+
+  const setProjectsForDiagnosticsFilter = useRecoilCallback(({ set }: CallbackInterface) => (projectIds: string[]) => {
+    set(projectsForDiagnosticsFilterState, projectIds);
+  });
+
   return {
     checkNodeVersion,
     setAppUpdateStatus,
@@ -169,5 +194,10 @@ export const applicationDispatcher = () => {
     setPageElementState,
     setDebugPanelExpansion,
     setActiveTabInDebugPanel,
+    setMachineInfo,
+    setShowGetStartedTeachingBubble,
+    setErrorDiagnosticsFilter,
+    setWarningDiagnosticsFilter,
+    setProjectsForDiagnosticsFilter,
   };
 };

@@ -56,7 +56,7 @@ export const useLabelingMenuProps = (
   options: Partial<{ menuHeaderText: string }> = {}
 ): { menuProps: IContextualMenuProps; noEntities: boolean } => {
   const filterPredicate = React.useMemo(
-    () => (e) => e.Type === 'ml' || (nonMlEntityMode !== 'filter' && e.Type === 'prebuilt'),
+    () => (e) => e.Type === 'ml' || (nonMlEntityMode !== 'filter' && (e.Type === 'prebuilt' || e.Type === 'list')),
     [nonMlEntityMode]
   );
   const { menuHeaderText } = options;

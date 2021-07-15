@@ -4,7 +4,7 @@
   "description": "BotFramework Adaptive Form",
   "main": "lib/index.js",
   "engines": {
-    "node": ">=12"
+    "node": "14.x"
   },
   "files": [
     "css",
@@ -29,13 +29,13 @@
     "@emotion/core": "^10.0.27",
     "@emotion/styled": "^10.0.27",
     "adaptive-expressions": "4.12.0-rc1",
-    "botbuilder-lg": "4.12.0-rc1",
+    "botbuilder-lg": "4.14.0-dev.391a2ab",
     "create-react-class": "^15.6.3",
     "d3": "^5.9.1",
     "dagre": "^0.8.4",
     "dagre-d3": "^0.6.3",
     "lodash": "^4.17.19",
-    "office-ui-fabric-react": "^7.88.1",
+    "office-ui-fabric-react": "7.71.0",
     "prop-types": "^15.7.2",
     "react-measure": "^2.3.0",
     "source-map-loader": "^0.2.4"

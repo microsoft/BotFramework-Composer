@@ -99,7 +99,7 @@ const Home: React.FC<RouteComponentProps> = () => {
   const onClickNewBot = () => {
     setCreationFlowType('Bot');
     setCreationFlowStatus(CreationFlowStatus.NEW);
-    navigate(`v2/projects/create`);
+    navigate(`projects/create`);
   };
 
   const toolbarItems: IToolbarItem[] = [
@@ -163,6 +163,7 @@ const Home: React.FC<RouteComponentProps> = () => {
     //   disabled: botName ? false : true,
     // },
   ];
+
   return (
     <div css={home.outline}>
       <div css={home.page}>

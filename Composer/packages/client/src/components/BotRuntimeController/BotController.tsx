@@ -5,12 +5,14 @@
 import { jsx } from '@emotion/core';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { DefaultButton, IconButton } from 'office-ui-fabric-react/lib/Button';
+import { TooltipHost, DirectionalHint } from 'office-ui-fabric-react/lib/Tooltip';
 import { IContextualMenuItem } from 'office-ui-fabric-react/lib/ContextualMenu';
 import { useRecoilValue } from 'recoil';
 import formatMessage from 'format-message';
 import { css } from '@emotion/core';
 import { NeutralColors, CommunicationColors } from '@uifabric/fluent-theme';
 import { Spinner, SpinnerSize } from 'office-ui-fabric-react/lib/Spinner';
+import { DiagnosticSeverity } from '@botframework-composer/types';
 
 import { DisableFeatureToolTip } from '../DisableFeatureToolTip';
 import TelemetryClient from '../../telemetry/TelemetryClient';
@@ -25,6 +27,7 @@ import { BotStatus } from '../../constants';
 import { useClickOutsideOutsideTarget } from '../../utils/hooks';
 import { usePVACheck } from '../../hooks/usePVACheck';
 
+import { isBotStarting } from './utils';
 import { BotControllerMenu } from './BotControllerMenu';
 import { useBotOperations } from './useBotOperations';
 import { BotRuntimeStatus } from './BotRuntimeStatus';
@@ -65,7 +68,7 @@ type BotControllerProps = {
 const BotController: React.FC<BotControllerProps> = ({ onHideController, isControllerHidden }: BotControllerProps) => {
   const runningBots = useRecoilValue(runningBotsSelector);
   const projectCollection = useRecoilValue(buildConfigurationSelector);
-  const errors = useRecoilValue(allDiagnosticsSelectorFamily('Error'));
+  const errors = useRecoilValue(allDiagnosticsSelectorFamily([DiagnosticSeverity.Error]));
   const { onboardingAddCoachMarkRef } = useRecoilValue(dispatcherState);
   const onboardRef = useCallback((startBot) => onboardingAddCoachMarkRef({ startBot }), []);
   const [disableStartBots, setDisableOnStartBotsWidget] = useState(false);
@@ -101,16 +104,7 @@ const BotController: React.FC<BotControllerProps> = ({ onHideController, isContr
   useEffect(() => {
     const botsProcessing =
       startAllBotsOperationQueued ||
-      projectCollection.some(({ status }) => {
-        return (
-          status === BotStatus.publishing ||
-          status === BotStatus.published ||
-          status == BotStatus.pending ||
-          status == BotStatus.queued ||
-          status == BotStatus.starting ||
-          status == BotStatus.stopping
-        );
-      });
+      projectCollection.some(({ status }) => isBotStarting(status) || status === BotStatus.stopping);
     setBotsProcessing(botsProcessing);
 
     const botOperationsCompleted = projectCollection.some(
@@ -156,14 +150,10 @@ const BotController: React.FC<BotControllerProps> = ({ onHideController, isContr
         setStatusIconClass('Refresh');
 
         setStartPanelButtonText(
-          formatMessage(
-            `{
-          total, plural,
-            =1 {Restart bot}
-          other {Restart all bots ({running}/{total} running)}
-        }`,
-            { running: runningBots.projectIds.length, total: runningBots.totalBots }
-          )
+          formatMessage(`{ total, plural, =1 {Restart bot}other {Restart all bots ({running}/{total} running)}}`, {
+            running: runningBots.projectIds.length,
+            total: runningBots.totalBots,
+          })
         );
         return;
       }
@@ -220,6 +210,8 @@ const BotController: React.FC<BotControllerProps> = ({ onHideController, isContr
     });
   }, [projectCollection, rootBotId]);
 
+  const startStopLabel = formatMessage('Start and stop local bot runtimes');
+
   return (
     <React.Fragment>
       {projectCollection.map(({ projectId }) => {
@@ -235,7 +227,6 @@ const BotController: React.FC<BotControllerProps> = ({ onHideController, isContr
           <DefaultButton
             primary
             aria-roledescription={formatMessage('Bot Controller')}
-            ariaDescription={startPanelButtonText}
             data-testid={'startBotButton'}
             disabled={disableStartBots || areBotsProcessing}
             iconProps={{
@@ -271,7 +262,6 @@ const BotController: React.FC<BotControllerProps> = ({ onHideController, isContr
                 font: '62px',
               },
             }}
-            title={startPanelButtonText}
             onClick={handleClick}
           >
             {areBotsProcessing && (
@@ -288,31 +278,32 @@ const BotController: React.FC<BotControllerProps> = ({ onHideController, isContr
           </DefaultButton>
         </DisableFeatureToolTip>
         <div ref={onboardRef} css={[iconSectionContainer, disableStartBots ? disabledStyle : '']}>
-          <IconButton
-            ariaDescription={formatMessage('Start and stop local bot runtimes')}
-            data-testid="StartBotsPanel"
-            disabled={disableStartBots}
-            iconProps={{
-              iconName: 'List',
-            }}
-            styles={{
-              root: {
-                color: NeutralColors.white,
-                height: '36px',
-                background: isControllerHidden ? CommunicationColors.tint10 : transparentBackground,
-                selectors: {
-                  ':disabled .ms-Button-icon': {
-                    opacity: 0.6,
-                    backgroundColor: CommunicationColors.tint10,
-                    color: `${NeutralColors.white}`,
+          <TooltipHost content={startStopLabel} directionalHint={DirectionalHint.bottomCenter}>
+            <IconButton
+              ariaDescription={startStopLabel}
+              data-testid="StartBotsPanel"
+              disabled={disableStartBots}
+              iconProps={{
+                iconName: 'List',
+              }}
+              styles={{
+                root: {
+                  color: NeutralColors.white,
+                  height: '36px',
+                  background: isControllerHidden ? CommunicationColors.tint10 : transparentBackground,
+                  selectors: {
+                    ':disabled .ms-Button-icon': {
+                      opacity: 0.6,
+                      backgroundColor: CommunicationColors.tint10,
+                      color: `${NeutralColors.white}`,
+                    },
                   },
                 },
-              },
-              rootHovered: { background: transparentBackground, color: NeutralColors.white },
-            }}
-            title={formatMessage('Start and stop local bot runtimes')}
-            onClick={onSplitButtonClick}
-          />
+                rootHovered: { background: transparentBackground, color: NeutralColors.white },
+              }}
+              onClick={onSplitButtonClick}
+            />
+          </TooltipHost>
         </div>
       </div>
       <BotControllerMenu

@@ -44,20 +44,6 @@ export interface ILuisStatusOperation {
   [key: string]: IOperationLUFile;
 }
 
-export interface IOrchestratorNLRList {
-  version: string;
-  defaults: Record<string, string>;
-  readonly models: Record<
-    string,
-    {
-      releaseDate: string;
-      modelUri: string;
-      description: string;
-      minSDKVersion: string;
-    }
-  >;
-}
-
 export interface IOrchestratorProgress {
   (status: string): void;
 }
@@ -81,3 +67,8 @@ export interface IOrchestratorSettings {
     snapshots: Record<string, string>;
   };
 }
+
+export type CrossTrainingSetting = {
+  inter: boolean; //Only performs the inner dialog cross train
+  intra: boolean; //Only performs the intra dialog cross train
+};

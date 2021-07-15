@@ -19,9 +19,9 @@ import {
 } from '../../recoilModel';
 import { CreationFlowStatus } from '../../constants';
 import TelemetryClient from '../../telemetry/TelemetryClient';
-import DefineConversationV2 from '../../components/CreationFlow/v2/DefineConversation';
-import { CreateBotV2 } from '../../components/CreationFlow/v2/CreateBot';
-import { AddBotModal } from '../../components/CreationFlow/v2/AddBotModal';
+import DefineConversation from '../../components/CreationFlow/DefineConversation';
+import { CreateBot } from '../../components/CreationFlow/CreateBot';
+import { AddBotModal } from '../../components/CreationFlow/AddBotModal';
 
 interface CreationModalProps {
   onSubmit: () => void;
@@ -38,7 +38,6 @@ export const CreationModal: React.FC<CreationModalProps> = (props) => {
     updateFolder,
     saveTemplateId,
     createNewBot,
-    createNewBotV2,
     openProject,
     addExistingSkillToBotProject,
     fetchReadMe,
@@ -54,6 +53,7 @@ export const CreationModal: React.FC<CreationModalProps> = (props) => {
   const storage = storages[currentStorageIndex.current];
   const currentStorageId = storage ? storage.id : 'default';
   const [templateId, setTemplateId] = useState(emptyBotNpmTemplateName);
+  const [localTemplatePath, setLocalTemplatePath] = useState('');
 
   useEffect(() => {
     if (storages?.length) {
@@ -110,8 +110,9 @@ export const CreationModal: React.FC<CreationModalProps> = (props) => {
         profile: formData?.profile,
         source: formData?.source,
         isRoot: false,
+        isLocalGenerator: formData?.isLocalGenerator,
       };
-      createNewBotV2(newCreationBotData);
+      createNewBot(newCreationBotData);
     } else {
       createNewBot(newBotData);
     }
@@ -150,9 +151,10 @@ export const CreationModal: React.FC<CreationModalProps> = (props) => {
 
   const renderDefineConversation = () => {
     return (
-      <DefineConversationV2
+      <DefineConversation
         createFolder={createFolder}
         focusedStorageFolder={focusedStorageFolder}
+        localTemplatePath={localTemplatePath}
         templateId={templateId}
         updateFolder={updateFolder}
         onCurrentPathUpdate={updateCurrentPath}
@@ -164,12 +166,14 @@ export const CreationModal: React.FC<CreationModalProps> = (props) => {
 
   const renderCreateOptions = () => {
     return (
-      <CreateBotV2
+      <CreateBot
         isOpen
         fetchReadMe={fetchReadMe}
+        localTemplatePath={localTemplatePath}
         templates={templateProjects}
         onDismiss={handleDismiss}
         onNext={handleCreateNext}
+        onUpdateLocalTemplatePath={setLocalTemplatePath}
       />
     );
   };

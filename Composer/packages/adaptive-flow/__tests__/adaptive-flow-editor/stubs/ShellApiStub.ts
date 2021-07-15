@@ -56,6 +56,7 @@ export const ShellApiStub: ShellApi = {
   updateDialogSchema: fnPromise,
   createTrigger: fnPromise,
   updateFlowZoomRate: fnPromise,
+  toggleComments: fnPromise,
 };
 
 describe('ShellApiStub', () => {

@@ -101,21 +101,46 @@ const getLuText = (entityType: ToolbarLuEntityType, entity: string, entities: re
   }
 };
 
+/**
+ * Helper function to remove empty lines at the end of the editor.
+ */
+const removeTrailingEmptyLines = (editor: any): number => {
+  const lineCount = editor.getModel().getLineCount();
+  editor.getModel().getLineCount();
+
+  const lines: string[] = [];
+  let passedEmptyLines = false;
+  for (let i = lineCount; i !== 0; i--) {
+    const lineContent = editor.getModel().getLineContent(i);
+    if (lineContent.trim() || passedEmptyLines) {
+      passedEmptyLines = true;
+      lines.push(lineContent.trimEnd());
+    }
+  }
+
+  editor.getModel().setValue(lines.reverse().join('\n'));
+
+  return editor.getModel().getLineCount();
+};
+
 export const computeDefineLuEntityEdits = (
-  entityType: ToolbarLuEntityType,
-  entityName: string,
+  entity: { entityType: ToolbarLuEntityType; entityName: string; entityDefinition?: string },
   editor: any,
   entities: readonly LuEntity[]
 ): { edits: MonacoEdit[]; selection?: MonacoRange; scrollLine?: number } | undefined => {
   if (editor) {
-    const lineCount = editor.getModel().getLineCount();
+    const { entityDefinition, entityName, entityType } = entity;
+    const lineCount = removeTrailingEmptyLines(editor);
+
     const firstLineContent = editor.getModel().getLineContent(1).trim();
 
-    const insertText = getLuText(
-      entityType,
-      entityName,
-      entities.map((e) => e.Name)
-    );
+    const insertText =
+      entityDefinition ??
+      getLuText(
+        entityType,
+        entityName,
+        entities.map((e) => e.Name)
+      );
 
     const edits: MonacoEdit[] = [];
 
@@ -152,7 +177,7 @@ export const computeDefineLuEntityEdits = (
       edits,
       scrollLine: lineNumber,
       selection:
-        entityType !== 'prebuilt'
+        entityType === 'ml'
           ? {
               startLineNumber: lineNumber,
               startColumn: 1 + insertText.length,

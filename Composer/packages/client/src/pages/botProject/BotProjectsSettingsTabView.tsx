@@ -89,7 +89,7 @@ export const BotProjectSettingsTabView: React.FC<RouteComponentProps<{
   }, [scrollToSectionId]);
 
   return (
-    <div css={container}>
+    <div css={container} data-testid="settingsTabView">
       <Pivot
         selectedKey={String(selectedKey)}
         onLinkClick={(item) => {

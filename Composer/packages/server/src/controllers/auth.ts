@@ -77,9 +77,20 @@ async function getARMTokenForTenant(req: GetARMTokenForTenantRequest, res: Respo
   }
 }
 
+async function getAccount(req: Request, res: Response) {
+  try {
+    const { getAccount } = useElectronContext();
+    const account = getAccount();
+    res.status(200).json({ account });
+  } catch (e) {
+    return res.status(500).json(e);
+  }
+}
+
 export const AuthController = {
   getAccessToken,
   getTenants,
+  getAccount,
   getARMTokenForTenant,
   logOut,
 };

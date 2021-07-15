@@ -168,6 +168,7 @@ async function loadServer() {
     getARMTokenForTenant: OneAuthService.getARMTokenForTenant.bind(OneAuthService),
     getTenants: OneAuthService.getTenants.bind(OneAuthService),
     logOut: OneAuthService.signOut.bind(OneAuthService),
+    getAccount: OneAuthService.getAccount.bind(OneAuthService),
     telemetryData: {
       composerVersion: app.getVersion(),
       machineId,
@@ -295,11 +296,15 @@ async function run() {
     setTimeout(() => startApp(signalThatMainWindowIsShowing), 500);
 
     const mainWindow = getMainWindow();
+    const machineId = await getMachineId();
+
     mainWindow?.webContents.send('session-update', 'session-started');
 
     if (process.env.COMPOSER_DEV_TOOLS) {
       mainWindow?.webContents.openDevTools();
     }
+
+    mainWindow?.webContents.send('machine-info', { id: machineId, os: os.platform() });
   });
 
   // Quit when all windows are closed.

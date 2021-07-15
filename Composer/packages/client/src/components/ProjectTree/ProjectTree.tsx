@@ -144,7 +144,7 @@ export const ProjectTree: React.FC<Props> = ({
     onboardingAddCoachMarkRef,
     navigateToFormDialogSchema,
     setPageElementState,
-    createQnAFromUrlDialogBegin,
+    createQnADialogBegin,
   } = useRecoilValue(dispatcherState);
   const treeRef = useRef<HTMLDivElement>(null);
 
@@ -233,7 +233,7 @@ export const ProjectTree: React.FC<Props> = ({
       label: formatMessage('Add QnA Maker knowledge base'),
       icon: 'Add',
       onClick: () => {
-        createQnAFromUrlDialogBegin({ projectId: skillId, dialogId: dialog.id });
+        createQnADialogBegin({ projectId: skillId, dialogId: dialog.id });
         TelemetryClient.track('AddNewKnowledgeBaseStarted');
       },
     };
@@ -461,7 +461,10 @@ export const ProjectTree: React.FC<Props> = ({
   const renderDialogTriggersByProperty = (dialog: DialogInfo, projectId: string, startDepth: number) => {
     const jsonSchemaFiles = jsonSchemaFilesByProjectId[projectId];
     const dialogSchemaProperties = extractSchemaProperties(dialog, jsonSchemaFiles);
-    const groupedTriggers = groupTriggersByPropertyReference(dialog, { validProperties: dialogSchemaProperties });
+    const groupedTriggers = groupTriggersByPropertyReference(dialog, {
+      validProperties: dialogSchemaProperties,
+      allowMultiParent: true,
+    });
 
     const triggerGroups = Object.keys(groupedTriggers);
 

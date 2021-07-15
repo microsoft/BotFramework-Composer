@@ -12,19 +12,16 @@ import querystring from 'query-string';
 import { Pivot, PivotItem } from 'office-ui-fabric-react/lib/Pivot';
 import { Stack } from 'office-ui-fabric-react/lib/Stack';
 
-import { dispatcherState, localBotPublishHistorySelector, localBotsDataSelector } from '../../recoilModel';
-import { AuthDialog } from '../../components/Auth/AuthDialog';
+import {
+  dispatcherState,
+  localBotPublishHistorySelector,
+  localBotsDataSelector,
+  currentUserState,
+} from '../../recoilModel';
 import { createNotification } from '../../recoilModel/dispatchers/notification';
 import { Notification } from '../../recoilModel/types';
 import { getSensitiveProperties } from '../../recoilModel/dispatchers/utils/project';
-import {
-  getTokenFromCache,
-  isShowAuthDialog,
-  userShouldProvideTokens,
-  setTenantId,
-  getTenantIdFromCache,
-} from '../../utils/auth';
-// import { vaultScopes } from '../../constants';
+import { getTenantIdFromCache, userShouldProvideTokens } from '../../utils/auth';
 import { useLocation } from '../../utils/hooks';
 import { AuthClient } from '../../utils/authClient';
 import TelemetryClient from '../../telemetry/TelemetryClient';
@@ -77,12 +74,13 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
   const pendingNotificationRef = useRef<Notification>();
   const showNotificationsRef = useRef<Record<string, boolean>>({});
 
+  const currentUser = useRecoilValue(currentUserState);
+
   const [activeTab, setActiveTab] = useState<string>('publish');
   const [provisionProject, setProvisionProject] = useState(projectId);
   const [currentBotList, setCurrentBotList] = useState<Bot[]>([]);
   const [publishDialogVisible, setPublishDialogVisiblity] = useState(false);
   const [pullDialogVisible, setPullDialogVisiblity] = useState(false);
-  const [showAuthDialog, setShowAuthDialog] = useState(false);
   const [updaterStatus, setUpdaterStatus] = useState<{ [skillId: string]: boolean }>(
     initUpdaterStatus(publishHistoryList)
   );
@@ -238,10 +236,10 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
   const updateUpdaterStatus = (payload) => {
     const { botProjectId, targetName, apiResponse } = payload;
     const pending = apiResponse && apiResponse.data.status === ApiStatus.Publishing;
-    setUpdaterStatus({
-      ...updaterStatus,
+    setUpdaterStatus((curStatus) => ({
+      ...curStatus,
       [`${botProjectId}/${targetName}`]: pending,
-    });
+    }));
   };
 
   // updater onData function
@@ -272,11 +270,7 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
   };
 
   const onPublish = () => {
-    if (isShowAuthDialog(false)) {
-      setShowAuthDialog(true);
-    } else {
-      setPublishDialogVisiblity(true);
-    }
+    setPublishDialogVisiblity(true);
     TelemetryClient.track('ToolbarButtonClicked', { name: 'publishSelectedBots' });
   };
 
@@ -288,8 +282,8 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
       if (target && isPublishingToAzure(target)) {
         const { tenantId } = JSON.parse(target.configuration);
 
-        if (userShouldProvideTokens()) {
-          token = getTokenFromCache('accessToken');
+        if (userShouldProvideTokens() && currentUser) {
+          token = currentUser.token;
         } else if (tenantId) {
           token = tenantTokenMap.get(tenantId) ?? (await AuthClient.getARMTokenForTenant(tenantId));
           tenantTokenMap.set(tenantId, token);
@@ -302,8 +296,6 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
               tenants = await AuthClient.getTenants();
 
               tenant = tenants?.[0]?.tenantId;
-              setTenantId(tenant);
-
               token = tenantTokenMap.get(tenant) ?? (await AuthClient.getARMTokenForTenant(tenant));
             } catch (err) {
               let notification;
@@ -350,6 +342,24 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
       setSkillPublishStatus(SKILL_PUBLISH_STATUS.PUBLISHING);
     }
 
+    // initialize the update status for bots going to be published
+    for (const bot of items) {
+      const setting = botPropertyData[bot.id].setting;
+      const publishTargets = botPropertyData[bot.id].publishTargets;
+      if (!(bot.publishTarget && publishTargets && setting)) {
+        return;
+      }
+      const selectedTarget = publishTargets.find((target) => target.name === bot.publishTarget);
+      if (selectedTarget) {
+        const botProjectId = bot.id;
+
+        setUpdaterStatus((curStatus) => ({
+          ...curStatus,
+          [`${botProjectId}/${bot.publishTarget}`]: true,
+        }));
+      }
+    }
+
     // publish to remote
     for (const bot of items) {
       const setting = botPropertyData[bot.id].setting;
@@ -380,6 +390,11 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
         await setPublishTargets(updatedPublishTargets, botProjectId);
         const updater = pollingUpdaterList.find((u) => u.isSameUpdater(botProjectId, bot.publishTarget || ''));
         updater?.restart(onReceiveUpdaterPayload);
+
+        //this removes the concurrency to the publish endpoint - per #7807, if
+        //we simulataneously publish many bots with the same LUIS authoring key or use a key with low
+        //TPS, we might get a 429 status from LUIS.
+        await updater?.waitUntilStopped();
       }
     }
   };
@@ -411,15 +426,6 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
 
   return (
     <Fragment>
-      {showAuthDialog && (
-        <AuthDialog
-          needGraph={false}
-          next={() => setPublishDialogVisiblity(true)}
-          onDismiss={() => {
-            setShowAuthDialog(false);
-          }}
-        />
-      )}
       {publishDialogVisible && (
         <PublishDialog
           items={selectedBots.filter((bot) => !!bot.publishTarget)}

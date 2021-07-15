@@ -3,8 +3,7 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import { useRecoilValue } from 'recoil';
-import { Suspense, Fragment } from 'react';
-import React from 'react';
+import React, { Suspense, Fragment } from 'react';
 
 import { onboardingDisabled } from '../../constants';
 import { useLocation } from '../../utils/hooks';
@@ -25,8 +24,7 @@ export const Assistant = () => {
     location: { pathname },
   } = useLocation();
 
-  const isShowingPVAorCreationFlow =
-    pathname === '/projects/import' || pathname === '/projects/create' || pathname === '/v2/projects/create';
+  const isShowingPVAorCreationFlow = pathname === '/projects/import' || pathname === '/projects/create';
   const renderDataCollectionDialog =
     isElectron() &&
     !isShowingPVAorCreationFlow &&

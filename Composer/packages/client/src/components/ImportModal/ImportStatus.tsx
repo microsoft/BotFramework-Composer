@@ -97,7 +97,7 @@ export const ImportStatus: React.FC<RouteComponentProps & ImportStatusProps> = (
   switch (state) {
     case 'connecting': {
       const label = (
-        <p css={dialogContent}>
+        <p css={dialogContent} data-testid="importModalConnecting">
           {formatMessage.rich('Connecting to <b>{ source }</b> to import bot content...', {
             b: BoldBlue,
             source: getUserFriendlySource(source),

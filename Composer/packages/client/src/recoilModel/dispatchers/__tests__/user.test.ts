@@ -2,16 +2,14 @@
 // Licensed under the MIT License.
 
 import { useRecoilValue } from 'recoil';
-import { act, HookResult } from '@botframework-composer/test-utils/lib/hooks';
-import jwtDecode from 'jwt-decode';
+import { act, RenderResult } from '@botframework-composer/test-utils/lib/hooks';
 
 import { userDispatcher } from '../user';
 import { UserSettingsPayload } from '../../types';
 import { DEFAULT_USER_SETTINGS } from '../../utils';
 import { getDefaultFontSettings } from '../../utils/fontUtil';
-import { userSettingsState, currentUserState, CurrentUser, dispatcherState } from '../../atoms/appState';
+import { userSettingsState, dispatcherState } from '../../atoms/appState';
 import { renderRecoilHook } from '../../../../__tests__/testUtils';
-import { getUserTokenFromCache, loginPopup } from '../../../utils/auth';
 import { Dispatcher } from '..';
 
 const realDate = Date.now;
@@ -19,6 +17,7 @@ const realDate = Date.now;
 jest.mock('../../../utils/auth', () => {
   return {
     getUserTokenFromCache: jest.fn(),
+    getTokenFromCache: jest.fn(),
     loginPopup: jest.fn(),
   };
 });
@@ -35,25 +34,19 @@ afterAll(() => {
   jest.useRealTimers();
 });
 
-const mockGetUserToken = getUserTokenFromCache as jest.Mock;
-const mockLoginPopup = loginPopup as jest.Mock;
-const mockJwtDecode = jwtDecode as jest.Mock;
-
 describe('user dispatcher', () => {
   const useRecoilTestHook = () => {
     const userSettings = useRecoilValue(userSettingsState);
-    const currentUser = useRecoilValue(currentUserState);
 
     const currentDispatcher = useRecoilValue(dispatcherState);
 
     return {
       userSettings,
-      currentUser,
       currentDispatcher,
     };
   };
 
-  let renderedComponent: HookResult<ReturnType<typeof useRecoilTestHook>>, dispatcher: Dispatcher;
+  let renderedComponent: RenderResult<ReturnType<typeof useRecoilTestHook>>, dispatcher: Dispatcher;
 
   beforeEach(() => {
     process.env.COMPOSER_REQUIRE_AUTH = 'true'; // needs to be a string
@@ -64,7 +57,6 @@ describe('user dispatcher', () => {
           recoilState: userSettingsState,
           initialValue: DEFAULT_USER_SETTINGS,
         },
-        { recoilState: currentUserState, initialValue: {} as CurrentUser },
       ],
       dispatcher: {
         recoilState: dispatcherState,
@@ -76,71 +68,6 @@ describe('user dispatcher', () => {
 
     renderedComponent = result;
     dispatcher = renderedComponent.current.currentDispatcher;
-  });
-
-  describe('loginUser', () => {
-    it('without COMPOSER_REQUIRE_AUTH, does nothing', async () => {
-      process.env.COMPOSER_REQUIRE_AUTH = undefined;
-      expect(mockGetUserToken).not.toHaveBeenCalled();
-      expect(mockLoginPopup).not.toHaveBeenCalled();
-    });
-
-    it('without a token', async () => {
-      await act(async () => {
-        mockGetUserToken.mockReturnValueOnce(false);
-        mockLoginPopup.mockReturnValueOnce(false);
-        dispatcher.loginUser();
-      });
-      expect(renderedComponent.current.currentUser).toEqual({
-        token: null,
-        sessionExpired: false,
-      });
-    });
-
-    describe('with a token', () => {
-      mockGetUserToken.mockImplementation(() => 'token');
-      it("spits out an error if it can't decode", async () => {
-        jest.spyOn(console, 'error');
-        mockJwtDecode.mockImplementationOnce(() => {
-          throw new Error();
-        });
-        await act(async () => {
-          dispatcher.loginUser();
-        });
-        expect(console.error).toHaveBeenCalled();
-        expect(renderedComponent.current.currentUser).toEqual({
-          token: 'token',
-          email: undefined,
-          name: undefined,
-          expiration: 0,
-          sessionExpired: false,
-        });
-      });
-
-      it('sets values given a decodable token', async () => {
-        mockJwtDecode.mockImplementationOnce(() => {
-          return {
-            exp: 12345,
-            'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/upn': 'email',
-            'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name': 'name',
-          };
-        });
-        await act(async () => {
-          dispatcher.loginUser();
-        });
-        expect(renderedComponent.current.currentUser).toEqual({
-          token: 'token',
-          email: 'email',
-          name: 'name',
-          expiration: 12345000,
-          sessionExpired: false,
-        });
-        // 12345 is the expiration time in seconds, *1000 = 12345000
-        // 10000000 is the mock time we set
-        // 2045000 = 12345000 - 10000000 - (1000 * 60 * 5)
-        expect(setTimeout).toHaveBeenCalledWith(expect.anything(), 2045000);
-      });
-    });
   });
 
   it('updateUserSettings', async () => {
@@ -167,36 +94,5 @@ describe('user dispatcher', () => {
       appLocale: 'en-US',
       telemetry: {},
     });
-  });
-
-  describe('setUserToken', () => {
-    it('with a token', async () => {
-      await act(async () => {
-        dispatcher.setUserToken({ token: '12345' });
-      });
-      expect(renderedComponent.current.currentUser.token).toEqual('12345');
-      expect(renderedComponent.current.currentUser.sessionExpired).toEqual(false);
-    });
-    it('with no token', async () => {
-      await act(async () => {
-        dispatcher.setUserToken({});
-      });
-      expect(renderedComponent.current.currentUser.token).toEqual(null);
-      expect(renderedComponent.current.currentUser.sessionExpired).toEqual(false);
-    });
-    it('with no argument', async () => {
-      await act(async () => {
-        dispatcher.setUserToken();
-      });
-      expect(renderedComponent.current.currentUser.token).toEqual(null);
-      expect(renderedComponent.current.currentUser.sessionExpired).toEqual(false);
-    });
-  });
-
-  it('setUserSessionExpired', async () => {
-    await act(async () => {
-      dispatcher.setUserSessionExpired(true);
-    });
-    expect(renderedComponent.current.currentUser.sessionExpired).toBe(true);
   });
 });

@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 import { ElectronAuthProvider } from '../auth/electronAuthProvider';
+import { ElectronContext } from '../../utility/electronContext';
 
 let mockIsLinux = false;
 jest.mock('../../utility/platform', () => ({
@@ -9,47 +10,47 @@ jest.mock('../../utility/platform', () => ({
 }));
 
 describe('Electron auth provider', () => {
+  const mockElectronContext: ElectronContext = {
+    getAccessToken: jest.fn().mockResolvedValue({
+      accessToken: 'accessToken',
+    }),
+    getARMTokenForTenant: jest.fn(),
+    getTenants: jest.fn(),
+    logOut: jest.fn(),
+    getAccount: jest.fn(),
+    telemetryData: {} as any,
+  };
+
   beforeEach(() => {
     mockIsLinux = false;
+    jest.useFakeTimers();
+  });
+
+  afterEach(() => {
+    jest.useRealTimers();
   });
 
   it('should not return an access token on Linux', async () => {
     mockIsLinux = true;
-    const provider = new ElectronAuthProvider({});
-    // eslint-disable-next-line no-underscore-dangle
-    (provider as any)._electronContext = {
-      getAccessToken: jest.fn().mockResolvedValue('accessToken'),
-    };
+    const provider = new ElectronAuthProvider({}, mockElectronContext);
     const token = await provider.getAccessToken({} as any);
 
     expect(token).toBe('');
   });
 
   it('should return a fresh access token on Win / Mac', async () => {
-    const provider = new ElectronAuthProvider({});
-    const mockElectronContext = {
-      getAccessToken: jest.fn().mockResolvedValue({
-        accessToken: 'accessToken',
-      }),
-    };
-    // eslint-disable-next-line no-underscore-dangle
-    (provider as any)._electronContext = mockElectronContext;
+    const provider = new ElectronAuthProvider({}, mockElectronContext);
     const token = await provider.getAccessToken({ targetResource: 'https://graph.microsoft.com/' });
 
-    expect(mockElectronContext.getAccessToken).toHaveBeenCalledWith({ targetResource: 'https://graph.microsoft.com/' });
+    expect(mockElectronContext.getAccessToken).toHaveBeenCalledWith({
+      targetResource: 'https://graph.microsoft.com/',
+    });
     expect(token).toBe('accessToken');
   });
 
   it('should return a cached token', async () => {
     const targetResource = 'https://graph.microsoft.com/';
-    const provider = new ElectronAuthProvider({});
-    const mockElectronContext = {
-      getAccessToken: jest.fn().mockResolvedValue({
-        accessToken: 'accessToken',
-      }),
-    };
-    // eslint-disable-next-line no-underscore-dangle
-    (provider as any)._electronContext = mockElectronContext;
+    const provider = new ElectronAuthProvider({}, mockElectronContext);
     (provider as any).tokenCache = {
       [targetResource]: {
         accessToken: 'cachedToken',

@@ -6,27 +6,8 @@ import path from 'path';
 import mergeConfig from '../mergeConfig';
 import baseConfig from '../base/jest.config';
 
-const babelConfig = {
-  configFile: false,
-  presets: [
-    require.resolve('@babel/preset-env'),
-    require.resolve('@babel/preset-react'),
-    [require.resolve('@babel/preset-typescript'), { allowNamespaces: true }],
-  ],
-  plugins: [
-    require.resolve('@babel/plugin-proposal-class-properties'),
-    require.resolve('@babel/plugin-transform-runtime'),
-    require.resolve('@babel/plugin-proposal-optional-chaining'),
-    require.resolve('@babel/plugin-proposal-nullish-coalescing-operator'),
-    require.resolve('@babel/plugin-transform-named-capturing-groups-regex'),
-  ],
-};
-
 export default mergeConfig(baseConfig, {
-  transform: {
-    '^.+\\.jsx?$': [require.resolve('babel-jest'), babelConfig],
-    '^.+\\.tsx?$': [require.resolve('babel-jest'), babelConfig],
-  },
+  testEnvironment: 'jsdom',
 
   moduleNameMapper: {
     // Any imports of .scss / .css files will instead import styleMock.js which is an empty object

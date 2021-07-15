@@ -79,7 +79,13 @@ export const PromptWidget: FC<PromptWdigetProps> = ({
         </NodeWrapper>
       </OffsetContainer>
       <OffsetContainer offset={userAnswersNode.offset}>
-        <NodeWrapper nodeData={data} nodeId={userAnswersNode.id} nodeTab={PromptTab.USER_INPUT} onEvent={onEvent}>
+        <NodeWrapper
+          hideComment
+          nodeData={data}
+          nodeId={userAnswersNode.id}
+          nodeTab={PromptTab.USER_INPUT}
+          onEvent={onEvent}
+        >
           <ElementMeasurer
             onResize={(boundary) => {
               designerCache.cacheBoundary(userAnswersNode.data, boundary);
@@ -91,7 +97,7 @@ export const PromptWidget: FC<PromptWdigetProps> = ({
         </NodeWrapper>
       </OffsetContainer>
       <OffsetContainer offset={brickNode.offset}>
-        <NodeWrapper nodeData={data} nodeId={brickNode.id} nodeTab={PromptTab.OTHER} onEvent={onEvent}>
+        <NodeWrapper hideComment nodeData={data} nodeId={brickNode.id} nodeTab={PromptTab.OTHER} onEvent={onEvent}>
           <IconBrick
             disabled={data.disabled === true}
             onClick={() => onEvent(NodeEventTypes.Focus, { id, tab: PromptTab.OTHER })}

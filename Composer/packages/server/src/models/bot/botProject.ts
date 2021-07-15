@@ -17,21 +17,22 @@ import {
   FileExtensions,
   DialogUtils,
   checkForPVASchema,
+  isManifestJson,
 } from '@bfc/shared';
 import merge from 'lodash/merge';
 import { UserIdentity } from '@bfc/extension';
 import { FeedbackType, generate } from '@microsoft/bf-generate-library';
 
-import { ExtensionContext } from '../extension/extensionContext';
 import { Path } from '../../utility/path';
 import { copyDir } from '../../utility/storage';
 import StorageService from '../../services/storage';
-import { getDialogNameFromFile } from '../utilities/util';
+import { convertFolderNameToSkillName, getDialogNameFromFile } from '../utilities/util';
 import { ISettingManager, OBFUSCATED_VALUE } from '../settings';
 import { DefaultSettingManager } from '../settings/defaultSettingManager';
 import log from '../../logger';
 import { BotProjectService } from '../../services/project';
 import AssetService from '../../services/asset';
+import { bundleSchema } from '../utilities/bundleSchema';
 
 import {
   BotStructureFilesPatterns,
@@ -42,10 +43,12 @@ import {
   serializeFiles,
   parseFileName,
   isRecognizer,
+  defaultSkillFilePath,
 } from './botStructure';
 import { Builder } from './builder';
 import { IFileStorage } from './../storage/interface';
 import { LocationRef, IBuildConfig } from './interface';
+import { getSkillManifest } from './skillManager';
 
 const debug = log.extend('bot-project');
 const mkDirAsync = promisify(fs.mkdir);
@@ -66,7 +69,6 @@ export class BotProject implements IBotProject {
   public dataDir: string;
   public eTag?: string;
   public fileStorage: IFileStorage;
-  public builder: Builder;
   public defaultSDKSchema: {
     [key: string]: string;
   };
@@ -78,6 +80,7 @@ export class BotProject implements IBotProject {
   public settings: DialogSetting | null = null;
 
   private files = new Map<string, FileInfo>();
+  public _builder: Builder | undefined;
 
   constructor(ref: LocationRef, user?: UserIdentity, eTag?: string) {
     this.ref = ref;
@@ -91,7 +94,7 @@ export class BotProject implements IBotProject {
 
     this.settingManager = new DefaultSettingManager(this.dir);
     this.fileStorage = StorageService.getStorageClient(this.ref.storageId, user);
-    this.builder = new Builder(this.dir, this.fileStorage, defaultLanguage);
+
     this.readme = '';
   }
 
@@ -183,6 +186,14 @@ export class BotProject implements IBotProject {
     return this.files.get('app.override.schema') ?? this.files.get('sdk.override.schema');
   }
 
+  public get builder() {
+    if (!this._builder) {
+      this._builder = new Builder(this.dir, this.fileStorage, defaultLanguage);
+    }
+
+    return this._builder;
+  }
+
   public getFile(id: string) {
     return this.files.get(id);
   }
@@ -192,6 +203,8 @@ export class BotProject implements IBotProject {
     this.settings = await this.getEnvSettings(false);
     this.files = await this._getFiles();
     this.readme = await this._getReadme();
+
+    await this._bundleSchemas();
   };
 
   public getProject = () => {
@@ -531,6 +544,18 @@ export class BotProject implements IBotProject {
     await this._cleanUp(file.relativePath);
   };
 
+  public createSkillFiles = async (url: string, skillName: string, zipContent: Record<string, any>) => {
+    if (Object.keys(zipContent).length === 0) {
+      return await this.createSkillFilesFromUrl(url, skillName);
+    } else {
+      return await this.createSkillFilesFromZip(zipContent, skillName);
+    }
+  };
+
+  public deleteSkillFiles = async (skillName: string) => {
+    await this.fileStorage.rmrfDir(Path.join(this.dir, `skills/${skillName}`));
+  };
+
   public createFiles = async (files) => {
     const createdFiles: FileInfo[] = [];
     for (const { name, content } of files) {
@@ -576,7 +601,8 @@ export class BotProject implements IBotProject {
           qnaRegion: qnaConfig.qnaRegion ?? '',
           ...orchestratorConfig,
         },
-        this.settings.downsampling
+        this.settings.downsampling,
+        this.settings.crossTrain
       );
       await this.builder.build(
         luFiles,
@@ -616,10 +642,6 @@ export class BotProject implements IBotProject {
   public async deleteAllFiles(): Promise<boolean> {
     try {
       await this.fileStorage.rmrfDir(this.dir);
-      const projectId = await BotProjectService.getProjectIdByPath(this.dir);
-      if (projectId) {
-        await this.removeLocalRuntimeData(projectId);
-      }
       await BotProjectService.cleanProject({ storageId: 'default', path: this.dir });
       await BotProjectService.deleteRecentProject(this.dir);
     } catch (e) {
@@ -691,18 +713,7 @@ export class BotProject implements IBotProject {
     // merge - if generated assets should be merged with any user customized assets
     // singleton - if the generated assets should be merged into a single dialog
     // feeback - a callback for status and progress and generation happens
-    const success = await generate(
-      generateParams.schemaPath,
-      generateParams.prefix,
-      generateParams.outDir,
-      generateParams.metaSchema,
-      generateParams.allLocales,
-      generateParams.templateDirs,
-      generateParams.force,
-      generateParams.merge,
-      generateParams.singleton,
-      generateParams.feedback
-    );
+    const success = await generate(generateParams.schemaPath, generateParams);
 
     return { success, errors };
   }
@@ -723,22 +734,63 @@ export class BotProject implements IBotProject {
     // also update the bot project map
   }
 
-  private async removeLocalRuntimeData(projectId) {
-    const method = 'localpublish';
-    if (ExtensionContext.extensions.publish[method]?.methods?.stopBot) {
-      const pluginMethod = ExtensionContext.extensions.publish[method].methods.stopBot;
-      if (typeof pluginMethod === 'function') {
-        await pluginMethod.call(null, projectId);
-      }
+  private async createSkillFilesFromUrl(url, skillName) {
+    const manifestContent = await getSkillManifest(url);
+    const manifestName = Path.basename(url, '.json');
+    const luUrls: string[] = [];
+    const languages = manifestContent.dispatchModels?.languages || {};
+    Object.keys(languages).map((key) =>
+      languages[key].map((lu) => {
+        luUrls.push(lu.url);
+        lu.url = defaultSkillFilePath(skillName, Path.basename(lu.url, '.lu'), 'lu');
+        return lu;
+      })
+    );
+    await this.createSkillLuFiles(luUrls, skillName);
+    return await this.createManifestJsonFile(manifestName, manifestContent, skillName);
+  }
+
+  private async createSkillFilesFromZip(zipContent, skillName) {
+    const manifestKey = Object.keys(zipContent).find((key) => isManifestJson(zipContent[key]));
+    if (!manifestKey) {
+      throw new Error('Can not find manifest json');
     }
 
-    if (ExtensionContext.extensions.publish[method]?.methods?.removeRuntimeData) {
-      const pluginMethod = ExtensionContext.extensions.publish[method].methods.removeRuntimeData;
-      if (typeof pluginMethod === 'function') {
-        await pluginMethod.call(null, projectId);
-      }
+    const keys = Object.keys(zipContent).filter((key) => zipContent[key] !== '' && !isManifestJson(zipContent[key]));
+    for (let i = 0; i < keys.length; i++) {
+      await this._createFile(`skills/${convertFolderNameToSkillName(keys[i], skillName)}`, zipContent[keys[i]]);
+    }
+    return await this._createFile(
+      `skills/${convertFolderNameToSkillName(manifestKey, skillName)}`,
+      zipContent[manifestKey]
+    );
+  }
+
+  private async createManifestJsonFile(name, content, skillName) {
+    return this._createSkillFile(name, JSON.stringify(content), skillName, 'json');
+  }
+
+  private async createSkillLuFiles(urls, skillName) {
+    const file = { name: '', content: '' };
+    for (let i = 0; i < urls.length; i++) {
+      file.name = Path.basename(urls[i], '.lu');
+      file.content = await getSkillManifest(urls[i], '', false);
+      await this._createSkillFile(file.name, file.content, skillName, 'lu');
     }
   }
+
+  private _createSkillFile = async (name: string, content = '', skillName: string, fileType: string) => {
+    const filename = name.trim();
+    this.validateFileName(filename);
+    this._validateFileContent(name, content);
+
+    const relativePath = defaultSkillFilePath(skillName, filename, fileType);
+    const file = this.files.get(filename);
+    if (file) {
+      throw new Error(`${filename} ${fileType} already exist`);
+    }
+    return await this._createFile(relativePath, content);
+  };
 
   private _cleanUp = (relativePath: string) => {
     const absolutePath = `${this.dir}/${relativePath}`;
@@ -1052,5 +1104,26 @@ export class BotProject implements IBotProject {
         throw new Error('Invalid file content');
       }
     }
+  };
+
+  private _bundleSchemas = async () => {
+    const schemas: FileInfo[] = [];
+    this.files.forEach((file) => {
+      if (file.name.endsWith('.schema')) {
+        schemas.push(file);
+      }
+    });
+
+    debug('Bundling %d schemas.', schemas.length);
+
+    await Promise.all(
+      schemas.map(async (s) => {
+        const bundled = await bundleSchema(s.path);
+
+        if (bundled) {
+          s.content = bundled;
+        }
+      })
+    );
   };
 }
