@@ -1,14 +1,15 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { fireEvent, act } from '@botframework-composer/test-utils';
 import React from 'react';
+import { fireEvent, act } from '@botframework-composer/test-utils';
 
 import { renderWithRecoil } from '../../testUtils';
 import { ManageQNA } from '../../../src/components/ManageQNA/ManageQNA';
 
 const serviceName = 'QnA Maker';
 const DOWN_ARROW = { keyCode: 40 };
+jest.setTimeout(10000);
 
 jest.mock('@azure/arm-appservice', () => ({
   WebSiteManagementClient: function WebSiteManagementClient() {

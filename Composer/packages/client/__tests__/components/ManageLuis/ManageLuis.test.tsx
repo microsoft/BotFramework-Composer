@@ -9,6 +9,7 @@ import { ManageLuis } from '../../../src/components/ManageLuis/ManageLuis';
 
 const serviceName = 'Language Understanding';
 const DOWN_ARROW = { keyCode: 40 };
+jest.setTimeout(10000);
 
 jest.mock('@azure/arm-cognitiveservices', () => ({
   CognitiveServicesManagementClient: function CognitiveServicesManagementClient() {

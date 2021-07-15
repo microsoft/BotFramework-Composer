@@ -9,6 +9,7 @@ import { ManageSpeech } from '../../../src/components/ManageSpeech/ManageSpeech'
 
 const serviceName = 'Speech';
 const DOWN_ARROW = { keyCode: 40 };
+jest.setTimeout(10000);
 
 jest.mock('@azure/arm-cognitiveservices', () => ({
   CognitiveServicesManagementClient: function CognitiveServicesManagementClient() {

@@ -16,6 +16,8 @@ const serviceKeyType = 'keytype';
 const handoffInstructions = 'handoffInstructions';
 const DOWN_ARROW = { keyCode: 40 };
 
+jest.setTimeout(10000);
+
 jest.mock('../../../src/utils/auth', () => ({
   decodeToken: () => {
     return {
