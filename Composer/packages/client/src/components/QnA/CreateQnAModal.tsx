@@ -121,7 +121,7 @@ export const CreateQnAModal: React.FC<CreateQnAModalProps> = (props) => {
   const avaliableLanguages = uniq(locales.map((item) => localeToLanguage(item)));
 
   const actionOptions: IChoiceGroupOption[] = [
-    { key: 'url', text: formatMessage('Create new knowledge base from URL or file ') },
+    { key: 'url', text: formatMessage('Create new knowledge base from URL') },
     {
       key: 'portal',
       text: formatMessage('Import existing knowledge base from QnA maker portal'),
@@ -155,7 +155,7 @@ export const CreateQnAModal: React.FC<CreateQnAModalProps> = (props) => {
   }, []);
 
   useEffect(() => {
-    if (isAuthenticated) {
+    if (isAuthenticated && showCreateQnAFrom) {
       setAvailableSubscriptions([]);
       setSubscriptionsErrorMessage(undefined);
       getSubscriptions(currentUser.token)
@@ -173,7 +173,7 @@ export const CreateQnAModal: React.FC<CreateQnAModalProps> = (props) => {
           setSubscriptionsErrorMessage(err.message);
         });
     }
-  }, [currentUser, isAuthenticated]);
+  }, [currentUser, isAuthenticated, showCreateQnAFrom]);
 
   useEffect(() => {
     // reset the ui

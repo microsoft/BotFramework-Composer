@@ -102,7 +102,7 @@ export const ReplaceQnAFromModal: React.FC<ReplaceQnAModalProps> = (props) => {
   const currentAuthoringLanuage = localeToLanguage(currentLocale);
 
   const actionOptions: IChoiceGroupOption[] = [
-    { key: 'url', text: formatMessage('Replace knowledge base from URL or file ') },
+    { key: 'url', text: formatMessage('Replace knowledge base from URL') },
     {
       key: 'portal',
       text: formatMessage('Replace with an existing knowledge base from QnA maker portal'),
@@ -136,7 +136,7 @@ export const ReplaceQnAFromModal: React.FC<ReplaceQnAModalProps> = (props) => {
   }, []);
 
   useEffect(() => {
-    if (isAuthenticated) {
+    if (isAuthenticated && !hidden) {
       setAvailableSubscriptions([]);
       setSubscriptionsErrorMessage(undefined);
       getSubscriptions(currentUser.token)
@@ -154,7 +154,7 @@ export const ReplaceQnAFromModal: React.FC<ReplaceQnAModalProps> = (props) => {
           setSubscriptionsErrorMessage(err.message);
         });
     }
-  }, [currentUser, isAuthenticated]);
+  }, [currentUser, isAuthenticated, hidden]);
 
   useEffect(() => {
     // reset the ui
