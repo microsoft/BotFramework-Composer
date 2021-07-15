@@ -23,17 +23,8 @@ import TelemetryClient from '../../../telemetry/TelemetryClient';
 import { LoadingSpinner } from '../../../components/LoadingSpinner';
 import { navigateTo } from '../../../utils/navigation';
 import { botDisplayNameState, settingsState } from '../../../recoilModel';
-import { AuthClient } from '../../../utils/authClient';
-import { AuthDialog } from '../../../components/Auth/AuthDialog';
-import {
-  getTokenFromCache,
-  getTenantIdFromCache,
-  isShowAuthDialog,
-  userShouldProvideTokens,
-} from '../../../utils/auth';
 import httpClient from '../../../utils/httpUtil';
-import { dispatcherState } from '../../../recoilModel';
-import { armScopes } from '../../../constants';
+import { dispatcherState, currentUserState, isAuthenticatedState } from '../../../recoilModel';
 import {
   tableHeaderRow,
   tableRow,
@@ -89,12 +80,10 @@ export enum AzureAPIStatus {
 
 export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
   const { projectId } = props;
-  const [showAuthDialog, setShowAuthDialog] = useState(false);
   const [currentResource, setCurrentResource] = useState<AzureResourcePointer | undefined>();
   const [channelStatus, setChannelStatus] = useState<AzureChannelsStatus | undefined>();
   const { publishTargets } = useRecoilValue(settingsState(projectId));
   const botDisplayName = useRecoilValue(botDisplayNameState(projectId));
-  const [token, setToken] = useState<string | undefined>();
   const [availableSubscriptions, setAvailableSubscriptions] = useState<Subscription[]>([]);
   const [publishTargetOptions, setPublishTargetOptions] = useState<IDropdownOption[]>([]);
   const [isLoading, setLoadingStatus] = useState<boolean>(false);
@@ -102,7 +91,10 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
   const [showSpeechModal, setShowSpeechModal] = useState<boolean>(false);
   const [showTeamsManifestModal, setShowTeamsManifestModal] = useState<boolean>(false);
   const [showTeamsCallOut, setShowTeamsCallOut] = useState<boolean>(false);
-  const { setApplicationLevelError } = useRecoilValue(dispatcherState);
+  const { setApplicationLevelError, requireUserLogin } = useRecoilValue(dispatcherState);
+  const currentUser = useRecoilValue(currentUserState);
+  const isAuthenticated = useRecoilValue(isAuthenticatedState);
+
   /* Copied from Azure Publishing extension */
   const getSubscriptions = async (token: string): Promise<Array<Subscription>> => {
     const tokenCredentials = new TokenCredentials(token);
@@ -123,35 +115,6 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
     }
   };
 
-  const getTokenInteractively = async (tenantId: string) => {
-    let newtoken = '';
-    try {
-      // if tenantId is present, use this to retrieve the arm token.
-      // absence of a tenantId indicates this was a legacy (pre-tenant support) provisioning profile
-      if (!tenantId) {
-        const tenants = await AuthClient.getTenants();
-        const cachedTenantId = getTenantIdFromCache();
-
-        if (tenants.length === 0) {
-          throw new Error('No Azure Directories were found.');
-        } else if (cachedTenantId && tenants.map((t) => t.tenantId).includes(cachedTenantId)) {
-          tenantId = cachedTenantId;
-        } else {
-          tenantId = tenants[0].tenantId;
-        }
-      }
-      if (tenantId) {
-        newtoken = await AuthClient.getARMTokenForTenant(tenantId);
-      } else {
-        newtoken = await AuthClient.getAccessToken(armScopes);
-      }
-    } catch (error) {
-      setErrorMessage(error.message || error.toString());
-      setCurrentResource(undefined);
-    }
-    return newtoken;
-  };
-
   const onSelectProfile = async (_, opt) => {
     if (opt.key === 'manageProfiles') {
       TelemetryClient.track('ConnectionsAddNewProfile');
@@ -160,27 +123,23 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
       // identify the publishing profile in the list
       const profile = publishTargets?.find((p) => p.name === opt.key);
       if (profile) {
-        const config = JSON.parse(profile.configuration);
+        try {
+          const config = JSON.parse(profile.configuration);
 
-        let newtoken = '';
-        if (userShouldProvideTokens()) {
-          if (isShowAuthDialog(false)) {
-            setShowAuthDialog(true);
-          }
-          newtoken = getTokenFromCache('accessToken');
-        } else {
-          newtoken = await getTokenInteractively(config.tenantId);
-        }
-        setToken(newtoken);
+          // NOTE: if config.tenantId is missing (as might be the case with a pre-1.4 composer publish profile)
+          // this will cause the user to be prompted for the correct tenant when they login.
+          // if they choose the WRONG tenant, an error will appear.
+          requireUserLogin(config.tenantId);
 
-        if (newtoken) {
           setCurrentResource({
-            microsoftAppId: config?.settings?.MicrosoftAppId,
+            microsoftAppId: config.settings?.MicrosoftAppId,
             resourceName: config.botName || config.name,
             resourceGroupName: config.resourceGroup || config.botName || config.name,
             tenantId: config.tenantId,
             subscriptionId: config.subscriptionId,
           });
+        } catch (err) {
+          setApplicationLevelError(err);
         }
       }
     }
@@ -204,7 +163,7 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
         }/resourceGroups/${currentResource.resourceGroupName}/providers/Microsoft.BotService/botServices/${
           currentResource.resourceName
         }/channels/${channelId}?api-version=2020-06-02`;
-        await httpClient.get(url, { headers: { Authorization: `Bearer ${token}` } });
+        await httpClient.get(url, { headers: { Authorization: `Bearer ${currentUser.token}` } });
         return {
           enabled: true,
           loading: false,
@@ -284,10 +243,11 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
               location: 'global',
             },
           };
+          break;
       }
-      await httpClient.put(url, data, { headers: { Authorization: `Bearer ${token}` } });
+      await httpClient.put(url, data, { headers: { Authorization: `Bearer ${currentUser.token}` } });
       if (channelId === CHANNELS.TEAMS) {
-        const createResults = await httpClient.get(url, { headers: { Authorization: `Bearer ${token}` } });
+        const createResults = await httpClient.get(url, { headers: { Authorization: `Bearer ${currentUser.token}` } });
         if (!createResults.data?.properties?.properties?.acceptedTerms === true) {
           if (
             await OpenConfirmModal(formatMessage('Microsoft Teams terms and conditions'), null, {
@@ -352,7 +312,7 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
       }/resourceGroups/${currentResource.resourceGroupName}/providers/Microsoft.BotService/botServices/${
         currentResource.resourceName
       }/channels/${channelId}?api-version=2020-06-02`;
-      await httpClient.delete(url, { headers: { Authorization: `Bearer ${token}` } });
+      await httpClient.delete(url, { headers: { Authorization: `Bearer ${currentUser.token}` } });
 
       // success!!
       setChannelStatus({
@@ -397,21 +357,6 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
         setChannelStatus(undefined);
         setErrorMessage(err.message);
       }
-    }
-  };
-
-  const hasAuth = async () => {
-    if (currentResource) {
-      let newtoken = '';
-      if (userShouldProvideTokens()) {
-        if (isShowAuthDialog(false)) {
-          setShowAuthDialog(true);
-        }
-        newtoken = getTokenFromCache('accessToken');
-      } else {
-        newtoken = await getTokenInteractively(currentResource.tenantId);
-      }
-      setToken(newtoken);
     }
   };
 
@@ -534,16 +479,21 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
     // reset UI
     setChannelStatus(undefined);
 
-    if (token && currentResource && !currentResource.subscriptionId && !currentResource.alternateSubscriptionId) {
+    if (
+      isAuthenticated &&
+      currentResource &&
+      !currentResource.subscriptionId &&
+      !currentResource.alternateSubscriptionId
+    ) {
       // if we have no subscription id selected, load available subscriptions
 
       // reset the list
       setAvailableSubscriptions([]);
 
       // fetch list of available subscriptions
-      getSubscriptions(token).then((subscriptions) => setAvailableSubscriptions(subscriptions));
+      getSubscriptions(currentUser.token).then((subscriptions) => setAvailableSubscriptions(subscriptions));
     } else if (
-      token &&
+      isAuthenticated &&
       currentResource &&
       (currentResource.subscriptionId || currentResource.alternateSubscriptionId)
     ) {
@@ -559,7 +509,7 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
       // reset the UI
       setAvailableSubscriptions([]);
     }
-  }, [token, currentResource]);
+  }, [currentUser, isAuthenticated, currentResource]);
 
   const absTableToggle = (key: string) => (
     <Stack horizontal tokens={{ childrenGap: 10 }}>
@@ -567,6 +517,7 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
         <Toggle
           inlineLabel
           checked={channelStatus?.[key].enabled}
+          data-testid={`${key}_toggle`}
           disabled={channelStatus?.[key].loading}
           styles={{ root: { paddingTop: '8px' } }}
           onChange={toggleService(key)}
@@ -606,18 +557,8 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
       </div>
     </div>
   );
-
   return (
     <React.Fragment>
-      {showAuthDialog && (
-        <AuthDialog
-          needGraph={false}
-          next={hasAuth}
-          onDismiss={() => {
-            setShowAuthDialog(false);
-          }}
-        />
-      )}
       <ManageSpeech
         hidden={!showSpeechModal}
         onDismiss={() => {
@@ -652,6 +593,7 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
       )}
       <div>
         <Dropdown
+          data-testid="publishTargetDropDown"
           options={publishTargetOptions}
           placeholder={formatMessage('Select publishing profile')}
           styles={{

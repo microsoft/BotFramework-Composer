@@ -46,7 +46,7 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
     }, 5000);
   };
 
-  // config include botId and version, project is content(ComposerDialogs)
+  // config include botId and version, project is content
   publish = async (config: PublishConfig, project, metadata) => {
     const profileName = config.name;
 

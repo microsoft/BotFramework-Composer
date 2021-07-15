@@ -211,11 +211,10 @@ const getTenantId = async (accessToken) => {
 };
 
 /**
- *
  * @param {*} appId the appId of application registration
  * @param {*} appPwd the app password of application registration
  * @param {*} location the locaiton of all resources
- * @param {*} name the name of resource group
+ * @param {*} name the base name of resources
  * @param {*} shouldCreateAuthoringResource
  * @param {*} shouldCreateLuisResource
  * @param {*} useAppInsights
@@ -236,6 +235,7 @@ const getDeploymentTemplateParam = (
   return {
     appId: pack(appId),
     appSecret: pack(appPwd),
+    name: pack(name),
     appServicePlanLocation: pack(location),
     botId: pack(name),
     shouldCreateAuthoringResource: pack(shouldCreateAuthoringResource),
@@ -378,7 +378,7 @@ const getErrorMesssage = (err) => {
       if (err.body.error.details) {
         const details = err.body.error.details;
         let errMsg = '';
-        for (let detail of details) {
+        for (const detail of details) {
           errMsg += detail.message;
         }
         return errMsg;
@@ -638,22 +638,23 @@ const create = async (
     });
 
     const appinsightsClient = new ApplicationInsightsManagementClient(creds, subId);
-    const appComponents = await appinsightsClient.components.get(resourceGroupName, resourceGroupName);
+    const appInsightsName = name;
+    const appComponents = await appinsightsClient.components.get(resourceGroupName, appInsightsName);
     const appinsightsId = appComponents.appId;
     const appinsightsInstrumentationKey = appComponents.instrumentationKey;
     const apiKeyOptions = {
-      name: `${resourceGroupName}-provision-${timeStamp}`,
+      name: appInsightsName,
       linkedReadProperties: [
-        `/subscriptions/${subId}/resourceGroups/${resourceGroupName}/providers/microsoft.insights/components/${resourceGroupName}/api`,
-        `/subscriptions/${subId}/resourceGroups/${resourceGroupName}/providers/microsoft.insights/components/${resourceGroupName}/agentconfig`,
+        `/subscriptions/${subId}/resourceGroups/${resourceGroupName}/providers/microsoft.insights/components/${appInsightsName}/api`,
+        `/subscriptions/${subId}/resourceGroups/${resourceGroupName}/providers/microsoft.insights/components/${appInsightsName}/agentconfig`,
       ],
       linkedWriteProperties: [
-        `/subscriptions/${subId}/resourceGroups/${resourceGroupName}/providers/microsoft.insights/components/${resourceGroupName}/annotations`,
+        `/subscriptions/${subId}/resourceGroups/${resourceGroupName}/providers/microsoft.insights/components/${appInsightsName}/annotations`,
       ],
     };
     const appinsightsApiKeyResponse = await appinsightsClient.aPIKeys.create(
       resourceGroupName,
-      resourceGroupName,
+      appInsightsName,
       apiKeyOptions
     );
     const appinsightsApiKey = appinsightsApiKeyResponse.apiKey;
@@ -798,8 +799,8 @@ msRestNodeAuth
         accessToken: token.accessToken,
         name: name,
         environment: environment,
-        hostname: `${name}-${environment}`,
-        luisResource: `${name}-${environment}-luis`,
+        hostname: `${name}`,
+        luisResource: `${name}-luis`,
         settings: createResult,
         runtimeIdentifier: 'win-x64',
         resourceGroup: resourceGroup,

@@ -44,17 +44,11 @@ export const FormDialogSchemaDetails = () => {
       // If click outside is the continuation of text select within the card, don't dismiss the card.
       if (selection?.toString()) return;
 
-      const { x, y } = e;
       const elms = Array.prototype.slice.call(
         containerRef.current.querySelectorAll(`.${jsPropertyListClassName}`) || []
       ) as HTMLDivElement[];
-      if (
-        !dragEventRef.current &&
-        !elms.some((elm) => {
-          const { left, right, top, bottom } = elm.getBoundingClientRect();
-          return x <= right && x >= left && y <= bottom && y >= top;
-        })
-      ) {
+
+      if (!dragEventRef.current && !elms.some((elm) => elm.contains(e.target as HTMLElement))) {
         activatePropertyId({ id: '' });
       }
     };

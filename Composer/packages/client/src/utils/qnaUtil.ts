@@ -12,9 +12,15 @@ import { qnaUtil, BotIndexer } from '@bfc/indexers';
 import { getBaseName, getExtension } from './fileUtil';
 
 export const getFileLocale = (fileName: string) => {
-  //file name = 'a.en-us.qna'
-  return getExtension(getBaseName(fileName));
+  //file name = 'a.source.en-us'
+  return getExtension(fileName);
 };
+
+//file name = 'a.source.en-us'
+export const getKBName = (fileName: string) => {
+  return getBaseName(getBaseName(fileName));
+};
+
 export const getReferredQnaFiles = (qnaFiles: QnAFile[], dialogs: DialogInfo[], checkContent = true) => {
   return qnaFiles.filter((file) => {
     const idWithOutLocale = getBaseName(file.id);
@@ -36,7 +42,7 @@ export const substringTextByLine = (text: string, start?: number, end?: number):
   return text.split('\n').slice(start, end).join('\n');
 };
 /**
- * Migrate qna pair in <dialog>.qna to container KB <dialog>-munual.source.qna file.
+ * Migrate qna pair in <dialog>.qna to container knowledge base <dialog>-munual.source.qna file.
  * @param qnaFiles
  */
 export const reformQnAToContainerKB = (projectId: string, qnaFiles: QnAFile[], locales: string[]): QnAFile[] => {

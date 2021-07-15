@@ -2,7 +2,6 @@
 // Licensed under the MIT License.
 
 import rimraf from 'rimraf';
-import { enableFetchMocks } from 'jest-fetch-mock';
 import { BotTemplate } from '@bfc/shared';
 
 import { ExtensionContext } from '../../../models/extension/extensionContext';
@@ -38,11 +37,57 @@ jest.mock('@bfc/server-workers', () => {
   };
 });
 
+const mockFeedResponse1 = {
+  objects: [
+    {
+      package: {
+        name: 'generator-conversational-core',
+        version: '1.0.3',
+        description: 'Preview conversational core package for TESTING ONLY',
+        keywords: ['conversationalcore', 'yeoman-generator'],
+      },
+    },
+  ],
+};
+
+const mockFeedResponse2 = {
+  versions: {
+    '0.0.0': {
+      name: '@microsoft/generator-bot-core-language',
+      version: '0.0.0',
+    },
+    '1.0.0': {
+      name: '@microsoft/generator-bot-core-language',
+      version: '1.0.0',
+    },
+  },
+};
+
+jest.mock('../../../utility/fetch', () => (url: string) => {
+  if (url.includes('conversationalcore')) {
+    return Promise.resolve({ json: () => mockFeedResponse1 });
+  } else {
+    return Promise.resolve({ json: () => mockFeedResponse2 });
+  }
+});
+
 const mockSampleBotPath = Path.join(__dirname, '../../../__mocks__/asset/projects/SampleBot');
 const mockCopyToPath = Path.join(__dirname, '../../../__mocks__/new');
 const locationRef = {
   storageId: 'default',
   path: mockCopyToPath,
+};
+
+const cleanup = (paths: string | string[]) => {
+  const targets = Array.isArray(paths) ? paths : [paths];
+
+  for (const target of targets) {
+    try {
+      rimraf.sync(target);
+    } catch {
+      // do nothing
+    }
+  }
 };
 
 beforeAll(() => {
@@ -54,7 +99,15 @@ beforeAll(() => {
   });
 });
 
+afterAll(() => {
+  cleanup(mockCopyToPath);
+});
+
 describe('assetManager', () => {
+  beforeEach(() => {
+    cleanup(mockCopyToPath);
+  });
+
   it('getProjectTemplate', async () => {
     const assetManager = new AssetManager();
     const result = await assetManager.getProjectTemplates();
@@ -68,12 +121,6 @@ describe('assetManager', () => {
     await assetManager.getProjectTemplates();
 
     await expect(assetManager.copyProjectTemplateTo('SampleBot', locationRef)).resolves.toBe(locationRef);
-    // remove the saveas files
-    try {
-      rimraf.sync(mockCopyToPath);
-    } catch (error) {
-      throw new Error(error);
-    }
   });
 
   describe('copyRemoteProjectTemplateTo', () => {
@@ -110,23 +157,9 @@ describe('assetManager', () => {
   });
 
   describe('getFeedContents', () => {
-    const mockFeedResponse = {
-      objects: [
-        {
-          package: {
-            name: 'generator-conversational-core',
-            version: '1.0.3',
-            description: 'Preview conversational core package for TESTING ONLY',
-            keywords: ['conversationalcore', 'yeoman-generator'],
-          },
-        },
-      ],
-    };
-
-    enableFetchMocks();
-    fetchMock.mockResponseOnce(JSON.stringify(mockFeedResponse));
     it('Get contents of a feed and return template array', async () => {
       const assetManager = new AssetManager();
+
       const mockFeedUrl =
         'https://registry.npmjs.org/-/v1/search?text=conversationalcore&size=100&from=0&quality=0.65&popularity=0.98&maintenance=0.5';
       const templates = await assetManager.getCustomFeedTemplates([mockFeedUrl]);
@@ -140,9 +173,19 @@ describe('assetManager', () => {
             packageName: 'generator-conversational-core',
             packageSource: 'npm',
             packageVersion: '1.0.3',
+            availableVersions: [],
           },
         },
       ] as BotTemplate[]);
+    });
+  });
+
+  describe('getNpmPackageVersions', () => {
+    it('Get available versions for a given npm package', async () => {
+      const assetManager = new AssetManager();
+
+      const versions = await assetManager.getNpmPackageVersions('@microsoft/generator-bot-core-language');
+      expect(versions).toStrictEqual(['0.0.0', '1.0.0']);
     });
   });
 

@@ -6,8 +6,8 @@ import { css } from '@emotion/core';
 export const expandedPanelHeaderHeight = 36;
 export const collapsedPaneHeaderHeight = 32;
 export const debugPanelMaxExpandedHeight = 500;
-export const debugPanelDefaultHeight = 300;
-export const debugPanelMinHeight = 200;
+export const debugPanelDefaultHeight = 400;
+export const debugPanelMinHeight = 300;
 
 export const debugPaneContainerStyle = css`
   display: flex;

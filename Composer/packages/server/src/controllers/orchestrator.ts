@@ -4,9 +4,8 @@
 import { Orchestrator } from '@microsoft/bf-orchestrator';
 import { Request, Response } from 'express';
 import { pathExists } from 'fs-extra';
-import { OrchestratorModelRequest, DownloadState } from '@bfc/shared';
+import { OrchestratorModelRequest, DownloadState, IOrchestratorNLRList } from '@bfc/shared';
 
-import { IOrchestratorNLRList } from '../models/bot/interface';
 import { TelemetryService } from '../services/telemetry';
 import { Path } from '../utility/path';
 
@@ -29,8 +28,6 @@ class OrchestratorController {
   private getModelPath = async (modelName: string) =>
     Path.resolve(await this.getModelBasePath(), modelName.replace('.onnx', ''));
 
-  private getModelList = async (): Promise<IOrchestratorNLRList> => await Orchestrator.baseModelGetVersionsAsync();
-
   private isValidModelRequest(arg: any): arg is OrchestratorModelRequest {
     return arg.kind !== undefined && arg.name !== undefined;
   }
@@ -43,6 +40,8 @@ class OrchestratorController {
     res.send(this.state);
   };
 
+  public getModelList = async (req: Request, res: Response) => res.send(await Orchestrator.baseModelGetVersionsAsync());
+
   public downloadLanguageModel = async (req: Request, res: Response) => {
     const modelData = req.body?.modelData;
     this.errorMsg = null;
@@ -51,7 +50,7 @@ class OrchestratorController {
       return res.sendStatus(400);
     }
 
-    const modelList = await this.getModelList();
+    const modelList: IOrchestratorNLRList = await Orchestrator.baseModelGetVersionsAsync();
     let modelName: string;
 
     if (modelData?.name === 'default') {

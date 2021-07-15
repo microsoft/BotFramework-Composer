@@ -6,7 +6,6 @@ import { jsx, css } from '@emotion/core';
 import { useRecoilValue } from 'recoil';
 import { forwardRef } from 'react';
 
-import { RequireAuth } from '../RequireAuth';
 import { ErrorBoundary } from '../ErrorBoundary';
 import { Conversation } from '../Conversation';
 
@@ -52,9 +51,7 @@ export const RightPanel = () => {
         fetchProject={() => fetchProjectById(projectId)}
         setApplicationLevelError={setApplicationLevelError}
       >
-        <RequireAuth>
-          <div css={{ display: 'flex', flexDirection: 'row', label: 'MainPage' }}>{conversation}</div>
-        </RequireAuth>
+        <div css={{ display: 'flex', flexDirection: 'row', label: 'MainPage' }}>{conversation}</div>
       </ErrorBoundary>
     </div>
   );

@@ -1,11 +1,10 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { useRef, useState, Fragment, useLayoutEffect, MutableRefObject } from 'react';
+import React, { useRef, useState, Fragment, useLayoutEffect, MutableRefObject } from 'react';
 // eslint-disable-next-line @typescript-eslint/camelcase
 import { useRecoilTransactionObserver_UNSTABLE, Snapshot, useRecoilState } from 'recoil';
 import once from 'lodash/once';
-import React from 'react';
 import { BotAssets } from '@bfc/shared';
 import { useRecoilValue } from 'recoil';
 import isEmpty from 'lodash/isEmpty';
@@ -87,7 +86,8 @@ const InitDispatcher = ({ onLoad }) => {
   //so use the useLayoutEffect here
   useLayoutEffect(() => {
     setDispatcher(dispatcherRef.current);
-    prepareAxiosWithRecoil(currentDispatcherState);
+    prepareAxiosWithRecoil();
+    currentDispatcherState; // ToDo: deprecate this
     onLoad(true);
   }, []);
 

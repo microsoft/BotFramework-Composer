@@ -72,7 +72,7 @@ import {
   settingsState,
   skillManifestsState,
   dialogIdsState,
-  showCreateQnAFromUrlDialogState,
+  showCreateQnADialogState,
   createQnAOnState,
   botEndpointsState,
   dispatcherState,
@@ -571,42 +571,50 @@ export const removeRecentProject = async (callbackHelpers: CallbackInterface, pa
 
 export const openRemoteSkill = async (
   callbackHelpers: CallbackInterface,
-  manifestUrl: string,
-  botNameIdentifier = ''
+  { manifestUrl, manifestFromZip = { name: '', content: {} }, rootBotProjectId = '', botNameIdentifier = '' }
 ) => {
   const { set } = callbackHelpers;
 
   const response = await httpClient.get(`/projects/generateProjectId`);
   const projectId = response.data;
-  const stringified = stringify({
-    url: manifestUrl,
-  });
+  let manifestResponseData: Record<string, any>;
+  let finalManifestUrl = '';
+  if (manifestFromZip.name) {
+    finalManifestUrl = manifestFromZip.name;
+    manifestResponseData = manifestFromZip.content;
+  } else {
+    finalManifestUrl = manifestUrl;
+    const stringified = stringify({
+      url: finalManifestUrl,
+    });
+
+    manifestResponseData = (
+      await httpClient.get(
+        `/projects/${rootBotProjectId}/skill/retrieveSkillManifest?${stringified}&ignoreProjectValidation=true`
+      )
+    ).data;
+  }
 
   set(projectMetaDataState(projectId), {
     isRootBot: false,
     isRemote: true,
   });
-
-  const manifestResponse = await httpClient.get(
-    `/projects/${projectId}/skill/retrieveSkillManifest?${stringified}&ignoreProjectValidation=true`
-  );
-
   let uniqueSkillNameIdentifier = botNameIdentifier;
   if (!uniqueSkillNameIdentifier) {
-    uniqueSkillNameIdentifier = await getSkillNameIdentifier(callbackHelpers, manifestResponse.data.name);
+    uniqueSkillNameIdentifier = await getSkillNameIdentifier(callbackHelpers, manifestResponseData.name);
   }
 
   set(botNameIdentifierState(projectId), uniqueSkillNameIdentifier);
-  set(botDisplayNameState(projectId), manifestResponse.data.name);
-  set(locationState(projectId), manifestUrl);
+  set(botDisplayNameState(projectId), manifestResponseData.name);
+  set(locationState(projectId), finalManifestUrl);
   set(skillManifestsState(projectId), [
     {
-      content: manifestResponse.data,
-      id: getManifestNameFromUrl(manifestUrl),
+      content: manifestResponseData,
+      id: getManifestNameFromUrl(finalManifestUrl),
       lastModified: new Date().toDateString(),
     },
   ]);
-  return { projectId, manifestResponse: manifestResponse.data };
+  return { projectId, manifestResponse: manifestResponseData };
 };
 
 export const openLocalSkill = async (callbackHelpers, pathToBot: string, storageId, botNameIdentifier: string) => {
@@ -630,37 +638,6 @@ export const openLocalSkill = async (callbackHelpers, pathToBot: string, storage
     projectId: projectData.id,
     mainDialog,
   };
-};
-
-export const createNewBotFromTemplate = async (
-  callbackHelpers,
-  templateId: string,
-  templateVersion: string,
-  name: string,
-  description: string,
-  location: string,
-  schemaUrl?: string,
-  locale?: string,
-  templateDir?: string,
-  eTag?: string,
-  alias?: string,
-  preserveRoot?: boolean
-) => {
-  const jobId = await httpClient.post(`/projects`, {
-    storageId: 'default',
-    templateId,
-    templateVersion,
-    name,
-    description,
-    location,
-    schemaUrl,
-    locale,
-    templateDir,
-    eTag,
-    alias,
-    preserveRoot,
-  });
-  return jobId;
 };
 
 export const migrateToV2 = async (
@@ -764,7 +741,11 @@ export const openRootBotAndSkills = async (callbackHelpers: CallbackInterface, d
           skillPromise = openLocalSkill(callbackHelpers, absoluteSkillPath, storageId, nameIdentifier);
         } else if (skill.manifest) {
           isRemote = true;
-          skillPromise = openRemoteSkill(callbackHelpers, skill.manifest, nameIdentifier);
+          skillPromise = openRemoteSkill(callbackHelpers, {
+            manifestUrl: skill.manifest,
+            rootBotProjectId: projectData.id,
+            botNameIdentifier: nameIdentifier,
+          });
         }
         if (skillPromise) {
           skillPromise
@@ -825,7 +806,7 @@ export const postRootBotCreation = async (
   // if create from QnATemplate, continue creation flow.
   if (templateId === QnABotTemplateId) {
     callbackHelpers.set(createQnAOnState, { projectId, dialogId: mainDialog });
-    callbackHelpers.set(showCreateQnAFromUrlDialogState(projectId), true);
+    callbackHelpers.set(showCreateQnADialogState(projectId), true);
   }
 
   callbackHelpers.set(botProjectIdsState, [projectId]);

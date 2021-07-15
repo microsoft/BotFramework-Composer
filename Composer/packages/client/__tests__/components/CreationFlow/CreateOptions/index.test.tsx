@@ -12,6 +12,7 @@ describe('<CreateOptions/>', () => {
   const handleCreateNextMock = jest.fn();
   const handleJumpToOpenModal = jest.fn();
   const handleFetchReadMeMock = jest.fn();
+  const onUpdateLocalTemplatePathMock = jest.fn();
 
   const templates = [
     {
@@ -25,6 +26,7 @@ describe('<CreateOptions/>', () => {
         packageName: 'generator-conversational-core',
         packageSource: 'npm',
         packageVersion: '1.0.9',
+        availableVersions: [''],
       },
     },
   ];
@@ -33,11 +35,13 @@ describe('<CreateOptions/>', () => {
     return renderWithRecoil(
       <CreateOptions
         fetchReadMe={handleFetchReadMeMock}
+        localTemplatePath={''}
         path="create"
         templates={templates}
         onDismiss={handleDismissMock}
         onJumpToOpenModal={handleJumpToOpenModal}
         onNext={handleCreateNextMock}
+        onUpdateLocalTemplatePath={onUpdateLocalTemplatePathMock}
       />
     );
   };
@@ -46,7 +50,7 @@ describe('<CreateOptions/>', () => {
     const component = renderComponent();
     const conversationalCoreBot = await component.findByTestId('generator-conversational-core');
     fireEvent.click(conversationalCoreBot);
-    const nextButton = await component.findByText('Next');
+    const nextButton = await component.findByTestId('CreateBotNextStepButton');
     fireEvent.click(nextButton);
     expect(handleCreateNextMock).toBeCalledWith('generator-conversational-core', 'dotnet');
   });

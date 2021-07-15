@@ -12,6 +12,9 @@ import { botNameIdentifierState, botProjectFileState, dispatcherState, locationS
 import { rootBotProjectIdSelector } from '../selectors';
 
 import { setRootBotSettingState } from './setting';
+import { addSkillFiles, deleteSkillFiles } from './utils/skills';
+
+const urlRegex = /^http[s]?:\/\/\w+/;
 
 export const botProjectFileDispatcher = () => {
   const addLocalSkill = useRecoilCallback(({ set, snapshot }: CallbackInterface) => async (skillId: string) => {
@@ -37,16 +40,31 @@ export const botProjectFileDispatcher = () => {
   });
 
   const addRemoteSkill = useRecoilCallback(
-    ({ set, snapshot }: CallbackInterface) => async (skillId: string, manifestUrl: string, endpointName: string) => {
+    ({ set, snapshot }: CallbackInterface) => async (
+      skillId: string,
+      manifestUrl: string,
+      zipContent: Record<string, any>,
+      endpointName: string
+    ) => {
       const rootBotProjectId = await snapshot.getPromise(rootBotProjectIdSelector);
       if (!rootBotProjectId) {
         return;
       }
       const botName = await snapshot.getPromise(botNameIdentifierState(skillId));
+      let finalManifestUrl: string | undefined;
+      if (urlRegex.test(manifestUrl)) {
+        finalManifestUrl = manifestUrl;
+      } else {
+        const data = await addSkillFiles(rootBotProjectId, botName, manifestUrl, zipContent);
+        if (data.error) {
+          throw data.error;
+        }
+        finalManifestUrl = data.manifest?.relativePath;
+      }
       set(botProjectFileState(rootBotProjectId), (current) => {
         const result = produce(current, (draftState) => {
           const skill: BotProjectSpaceSkill = {
-            manifest: manifestUrl,
+            manifest: finalManifestUrl,
             remote: true,
             endpointName,
           };
@@ -72,6 +90,8 @@ export const botProjectFileDispatcher = () => {
       });
       return result;
     });
+
+    await deleteSkillFiles(rootBotProjectId, botNameIdentifier);
 
     const rootBotSettings = await snapshot.getPromise(settingsState(rootBotProjectId));
     if (rootBotSettings.skill) {
