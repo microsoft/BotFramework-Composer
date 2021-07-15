@@ -128,24 +128,24 @@ export const WatchVariablePicker = React.memo((props: WatchVariablePickerProps) 
       text: node.name,
       secondaryText: paths[node.id],
       onClick: (event) => {
-        if (node.children.length) {
-          event?.preventDefault();
-          onToggleExpand(node.id, !propertyTreeExpanded[node.id]);
-        } else {
-          event?.preventDefault();
-          const path = paths[node.id];
-          setQuery(path);
-          setErrorMessage('');
-          TelemetryClient.track('StateWatchPropertyAdded', { property: path });
-          setWatchedVariables(currentProjectId, { ...watchedVariables, [variableId]: path });
-          onHideContextualMenu();
-        }
+        event?.preventDefault();
+        const path = paths[node.id];
+        setQuery(path);
+        setErrorMessage('');
+        TelemetryClient.track('StateWatchPropertyAdded', { property: path });
+        setWatchedVariables(currentProjectId, { ...watchedVariables, [variableId]: path });
+        onHideContextualMenu();
       },
       data: {
         node,
         path: paths[node.id],
         level: levels[node.id] - 1,
         onToggleExpand,
+      },
+      itemProps: {
+        styles: {
+          root: { padding: 0 },
+        },
       },
     }));
   };
@@ -176,6 +176,11 @@ export const WatchVariablePicker = React.memo((props: WatchVariablePickerProps) 
         node,
         path: paths[node.id],
         level: 0,
+      },
+      itemProps: {
+        styles: {
+          root: { padding: 0 },
+        },
       },
     })) as IContextualMenuItem[];
   }, [currentProjectId, onHideContextualMenu, payload, propertyTreeConfig, variableId, watchedVariables]);
