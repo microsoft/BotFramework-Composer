@@ -73,7 +73,7 @@ export const getProvisionServices = (config: ProvisionServiceConfig): Record<str
     servicePlan: getAppServiceProvisionService(config),
     botRegistration: getBotChannelProvisionService(config),
     azureFunctionApp: getAzureFunctionsProvisionService(config),
-    cosmosDB: getCosmosDbProvisionService(config),
+    cosmosDb: getCosmosDbProvisionService(config),
     appInsights: getAppInsightsProvisionService(config),
     luisAuthoring: getLuisAuthoringProvisionService(config),
     luisPrediction: getLuisPredictionProvisionService(config),
@@ -167,7 +167,7 @@ export const provisionConfigToResourceConfigMap = {
       name: `${config.hostname}-luis-authoring`,
     };
   },
-  cosmosDB: (config: ProvisioningConfig): CosmosDbConfig => {
+  cosmosDb: (config: ProvisioningConfig): CosmosDbConfig => {
     return {
       key: 'cosmosDb',
       containerName: `botstate-container`,
