@@ -48,7 +48,6 @@ export const DebugPanel: React.FC = () => {
 
   const onCollapsePanel = useCallback(() => {
     setDebugPanelExpansion(false);
-    setActiveTabInDebugPanel(undefined);
     TelemetryClient.track('DrawerPaneClosed');
   }, []);
 
@@ -188,7 +187,12 @@ export const DebugPanel: React.FC = () => {
         <div css={debugPaneContentStyle} data-testid="debug-panel__content">
           {debugExtensions.map((debugTabs) => {
             const { ContentWidget } = debugTabs;
-            return <ContentWidget key={`tabContent-${debugTabs.key}`} isActive={activeTab === debugTabs.key} />;
+            return (
+              <ContentWidget
+                key={`tabContent-${debugTabs.key}`}
+                isActive={activeTab === debugTabs.key && isPanelExpanded}
+              />
+            );
           })}
         </div>
       </Resizable>
