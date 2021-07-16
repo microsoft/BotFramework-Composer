@@ -88,12 +88,12 @@ The trigger ui schema is used to customize how triggers appear in the new trigge
 
 The menu ui schema is used to customize the way the action appears in action menu. It can be an object or an array of objects. When an array, Composer will show the action in multiple submenus.
 
-| Property   | Type                  | Description                                                                                                                                     |
-| ---------- | --------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
-| `label`    | `string`              | Text that appears as the menu item. Defaults to schema title.                                                                                   |
-| `submenu`  | `string[]` \| `false` | An array of submenu labels to configure how this component is nested in the menu. Set to false to show this component as a top-level menu item. |
-| `disabled` | `boolean`             | When set to true, current $kind will be hidden from the Action flyout menu.                                                                     |
-| `order`    | `number`              | A float number as the indexing order of an Action, be used to sort the Action menu.                                                             |
+| Property   | Type                  | Description                                                                                                                                                                                           |
+| ---------- | --------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `label`    | `string`              | Text that appears as the menu item. Defaults to schema title.                                                                                                                                         |
+| `submenu`  | `string[]` \| `false` | An array of submenu labels to configure how this component is nested in the menu, with the first item coresponding to a top-level menu. Set to false to show this component as a top-level menu item. |
+| `disabled` | `boolean`             | When set to true, current $kind will be hidden from the Action flyout menu.                                                                                                                           |
+| `order`    | `number`              | A float number as the indexing order of an Action, be used to sort the Action menu.                                                                                                                   |
 
 <details>
   <summary>Example</summary>
