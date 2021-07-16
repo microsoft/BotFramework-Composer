@@ -15,7 +15,7 @@ import { chooseIntentTemplatePrefix } from './constant';
 
 interface DesignerAttributes {
   name: string;
-  description: string;
+  comment: string;
 }
 
 const initialInputDialog = {
