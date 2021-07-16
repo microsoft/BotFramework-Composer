@@ -274,15 +274,162 @@ The `ActionHeader` is the only header widget in Composer. Use it to customize th
 
 #### Body Widgets
 
+##### `DialogRef`
+
+The `DialogRef` widget is used for actions that invoke other dialogs. It is a special widget that includes a link to the invoked dialog.
+
+| Property | Type        | Description                                               |
+| -------- | ----------- | --------------------------------------------------------- |
+| `widget` | `DialogRef` |                                                           |
+| `dialog` | `string`    | The id of the dialog being invoked. Can be an expression. |
+
+<details>
+  <summary>Example</summary>
+
+```json
+// Microsoft.BeginDialog.uischema
+{
+  "flow": {
+    "widget": "ActionCard",
+    "body": {
+      "widget": "DialogRef",
+      "dialog": "=action.dialog"
+    }
+  }
+}
+```
+
+![](./Assets/ui-schema/dialog-ref.png)
+
+</details>
+
 ##### `PropertyDescription`
 
-##### `DialogRef`
+The `PropertyDescription` is used to display the value of a dialog property with a label.
+
+| Property      | Type                  | Description                                             |
+| ------------- | --------------------- | ------------------------------------------------------- |
+| `widget`      | `PropertyDescription` |                                                         |
+| `property`    | `string`              | The property value to display. Typically an expression. |
+| `description` | `string`              | Label to display next to property value.                |
+
+<details>
+  <summary>Example</summary>
+
+```json
+// Microsoft.CancelAllDialogs.uischema
+{
+  "flow": {
+    "widget": "ActionCard",
+    "body": {
+      "description": "(Event)",
+      "property": "=coalesce(action.eventName, \"?\")",
+      "widget": "PropertyDescription"
+    }
+  }
+}
+```
+
+![](./Assets/ui-schema/property-description.png)
+
+</details>
 
 ##### `LgWidget`
 
+The `LgWidget` is used to display the value of a dialog property with a label.
+
+| Property         | Type       | Description                                                  |
+| ---------------- | ---------- | ------------------------------------------------------------ |
+| `widget`         | `LgWidget` |                                                              |
+| `field`          | `string`   | The property on the dialog which contains a reference to LG. |
+| `defaultContent` | `string`   | Fallback value to render if the LG property is empty.        |
+
+<details>
+  <summary>Example</summary>
+
+```json
+// Microsoft.UpdateActivity.uischema
+{
+  "flow": {
+    "widget": "ActionCard",
+    "body": {
+      "widget": "LgWidget",
+      "field": "activity"
+    }
+  }
+}
+```
+
+![](./Assets/ui-schema/lg-widget.png)
+
+</details>
+
 ##### `ResourceOperation`
 
+The `ResourceOperation` is used to show an operation. It contains an operation verb and a resource being operated on.
+
+| Property     | Type                | Description                                                    |
+| ------------ | ------------------- | -------------------------------------------------------------- |
+| `widget`     | `ResourceOperation` |                                                                |
+| `operation`  | `string`            | The operation being performed. Can be a string or expression.  |
+| `resource`   | `string`            | The resource being operated on. Can be a string or expression. |
+| `singleline` | `boolean`           | Prevents the text in the node from wrapping. Default: false    |
+
+<details>
+  <summary>Example</summary>
+
+```json
+// Microsoft.EditArray.uischema
+{
+  "flow": {
+    "widget": "ActionCard",
+    "body": {
+      "widget": "ResourceOperation",
+      "operation": "=coalesce(action.changeType, \"?\")",
+      "resource": "=coalesce(action.itemsProperty, \"?\")"
+    }
+  }
+}
+```
+
+![](./Assets/ui-schema/resource-operation.png)
+
+</details>
+
+##### `ListOverview`
+
+The `ListOverview` is used to show an operation. It contains an operation verb and a resource being operated on.
+
+| Property | Type           | Description                                                         |
+| -------- | -------------- | ------------------------------------------------------------------- |
+| `widget` | `ListOverview` |                                                                     |
+| `items`  | `string`       | Expression evaluating to array of strings to display as list items. |
+
+<details>
+  <summary>Example</summary>
+
+```json
+// Microsoft.SetProperties.uischema
+{
+  "flow": {
+    "widget": "ActionCard",
+    "body": {
+      "widget": "ListOverview",
+      "items": "=foreach(action.assignments, x => concat(coalesce(x.property, \"?\"), \" : \", coalesce(x.value, \"?\")))"
+    }
+  }
+}
+```
+
+![](./Assets/ui-schema/list-overview.png)
+
+</details>
+
 #### Footer Widgets
+
+##### `PropertyDescription`
+
+See above.
 
 ### Form
 
