@@ -70,5 +70,8 @@ export const applyPublishingProfileToSettings = (settings: DialogSetting, profil
   settings.MicrosoftAppId = profile.settings.MicrosoftAppId;
   settings.MicrosoftAppPassword = profile.settings.MicrosoftAppPassword;
 
+  // apply the SCM domain host
+  settings.scmHostDomain = profile.scmHostDomain;
+
   return settings;
 };

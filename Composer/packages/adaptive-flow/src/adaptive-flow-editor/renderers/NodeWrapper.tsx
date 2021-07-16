@@ -151,7 +151,10 @@ export const ActionNodeWrapper = ({ id, tab, data, onEvent, hideComment, childre
         gapSpace: 4,
         beakWidth: 12,
         target: escapeId(`#${nodeId}-comment-target`),
-        styles: { container: { borderRadius: '2px' } },
+        styles: {
+          container: { borderRadius: '2px' },
+          calloutMain: { overflowWrap: 'break-word', whiteSpace: 'pre-line' },
+        },
       }}
       content={data.$designer?.comment}
     >
