@@ -155,6 +155,7 @@ export type PublishProfile = {
   resourceGroup?: string;
   subscriptionId?: string;
   region?: string;
+  scmHostDomain?: string;
   settings: {
     applicationInsights?: {
       InstrumentationKey: string;
