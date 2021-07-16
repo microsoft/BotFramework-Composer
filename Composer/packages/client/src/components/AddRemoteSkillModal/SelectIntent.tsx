@@ -172,7 +172,7 @@ export const SelectIntent: React.FC<SelectIntentProps> = (props) => {
   const [pageIndex, setPage] = useState(0);
   const [selectedIntents, setSelectedIntents] = useState<Array<string>>([]);
   // luFiles from manifest, language was included in root bot languages
-  const [lufilesOnLocale, setLufilesOnLocale] = useState<Array<{ locale: string; lufiles: LuFile }>>([]);
+  const [lufilesOnLocale, setLufilesOnLocale] = useState<Array<{ locale: string; lufiles: LuFile[] }>>([]);
   // current locale Lufile
   const [currentLuFile, setCurrentLuFile] = useState<LuFile>();
   // selected intents in different languages
