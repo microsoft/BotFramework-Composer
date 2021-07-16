@@ -172,7 +172,7 @@ export const SelectIntent: React.FC<SelectIntentProps> = (props) => {
   const [pageIndex, setPage] = useState(0);
   const [selectedIntents, setSelectedIntents] = useState<Array<string>>([]);
   // luFiles from manifest, language was included in root bot languages
-  const [luFiles, setLufiles] = useState<Array<LuFile>>([]);
+  const [lufilesOnLocale, setLufilesOnLocale] = useState<Array<{ locale: string; lufiles: LuFile }>>([]);
   // current locale Lufile
   const [currentLuFile, setCurrentLuFile] = useState<LuFile>();
   // selected intents in different languages
@@ -240,9 +240,10 @@ export const SelectIntent: React.FC<SelectIntentProps> = (props) => {
       const skillLanguages = manifest.dispatchModels?.languages;
       getRemoteLuFiles(skillLanguages, languages, setWarningMsg, zipContent, manifestDirPath, locale)
         .then((items) => {
+          const lufilesOnLocale: { locale: string; lufiles: LuFile[] }[] = [];
           for (const key in items) {
             getParsedLuFiles(items[key], luFeatures, []).then((files) => {
-              setLufiles(files);
+              lufilesOnLocale.push({ locale: key, lufiles: files });
               files.map((file) => {
                 if (key === locale && file.id.endsWith('.lu')) {
                   setCurrentLuFile(file);
@@ -250,6 +251,7 @@ export const SelectIntent: React.FC<SelectIntentProps> = (props) => {
               });
             });
           }
+          setLufilesOnLocale(lufilesOnLocale);
         })
         .catch((e) => {
           console.log(e);
@@ -267,17 +269,18 @@ export const SelectIntent: React.FC<SelectIntentProps> = (props) => {
           intents.push(cur);
         }
       });
-      for (const file of luFiles) {
-        const id = file.id.split('.');
-        const language = id[id.length - 1];
-        multiLanguageIntents[language] = [];
-        for (const intent of file.intents) {
-          if (selectedIntents.includes(intent.Name)) {
-            multiLanguageIntents[language].push(intent);
+      for (const { locale, lufiles } of lufilesOnLocale) {
+        // const id = file.id.split('.');
+        // const language = id[id.length - 2];
+        multiLanguageIntents[locale] = [];
+        for (const file of lufiles) {
+          for (const intent of file.intents) {
+            if (selectedIntents.includes(intent.Name)) {
+              multiLanguageIntents[locale].push(intent);
+            }
           }
         }
       }
-
       setMultiLanguageIntents(multiLanguageIntents);
       // current locale, selected intent value.
       const intentsValue = mergeIntentsContent(intents);
@@ -286,7 +289,7 @@ export const SelectIntent: React.FC<SelectIntentProps> = (props) => {
       setDisplayContent('');
       setMultiLanguageIntents({});
     }
-  }, [selectedIntents, currentLuFile, luFiles]);
+  }, [selectedIntents, currentLuFile, lufilesOnLocale]);
 
   const handleSubmit = async (ev, enableOchestractor) => {
     // add trigger to root
