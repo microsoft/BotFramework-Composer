@@ -80,14 +80,25 @@ const getRemoteLuFiles = async (
   composerLangeages: string[],
   setWarningMsg,
   zipContent: Record<string, string>,
-  manifestDirPath: string
+  manifestDirPath: string,
+  locale: string
 ) => {
   const luFiles: Record<string, { id: string; content: string }[]> = {};
   try {
-    for (const [key, value] of Object.entries(skillLanguages)) {
-      if (composerLangeages.includes(key) && Array.isArray(value)) {
-        luFiles[key] = [];
-        for (const item of value) {
+    for (const cl of composerLangeages) {
+      let matchedLanguage = '';
+      if (skillLanguages[cl]) {
+        matchedLanguage = cl;
+      } else {
+        Object.keys(skillLanguages).forEach((sl) => {
+          if (cl.startsWith(sl)) {
+            matchedLanguage = sl;
+          }
+        });
+      }
+      if (matchedLanguage && Array.isArray(skillLanguages[matchedLanguage])) {
+        luFiles[cl] = [];
+        for (const item of skillLanguages[matchedLanguage]) {
           if (/^http[s]?:\/\/\w+/.test(item.url) || isAbsolute(item.url)) {
             // get lu file from remote
             const { data } = await httpClient.get(`/utilities/retrieveRemoteFile`, {
@@ -95,12 +106,12 @@ const getRemoteLuFiles = async (
                 url: item.url,
               },
             });
-            luFiles[key].push(data);
+            luFiles[cl].push(data);
           } else {
             // get luFile from local zip folder
             const fileKey = join(manifestDirPath, item.url);
             if (zipContent[fileKey]) {
-              luFiles[key].push({
+              luFiles[cl].push({
                 id: fileKey.substr(fileKey.lastIndexOf('/') + 1),
                 content: zipContent[fileKey],
               });
@@ -111,10 +122,12 @@ const getRemoteLuFiles = async (
                   url: fileKey,
                 },
               });
-              luFiles[key].push(data);
+              luFiles[cl].push(data);
             }
           }
         }
+      } else if (locale === cl) {
+        setWarningMsg(`no matching locale found for ${locale}`);
       }
     }
     return luFiles;
@@ -225,7 +238,7 @@ export const SelectIntent: React.FC<SelectIntentProps> = (props) => {
   useEffect(() => {
     if (locale) {
       const skillLanguages = manifest.dispatchModels?.languages;
-      getRemoteLuFiles(skillLanguages, languages, setWarningMsg, zipContent, manifestDirPath)
+      getRemoteLuFiles(skillLanguages, languages, setWarningMsg, zipContent, manifestDirPath, locale)
         .then((items) => {
           for (const key in items) {
             getParsedLuFiles(items[key], luFeatures, []).then((files) => {
