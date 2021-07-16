@@ -15,10 +15,7 @@ import { AddCallers } from './content/AddCallers';
 
 export const VERSION_REGEX = /\d\.\d+\.(\d+|preview-\d+)|\d\.\d+/i;
 
-export const SCHEMA_URIS = [
-  'https://schemas.botframework.com/schemas/skills/v2.1/skill-manifest.json',
-  'https://schemas.botframework.com/schemas/skills/skill-manifest-2.0.0.json',
-];
+export const SCHEMA_URI = 'https://schemas.botframework.com/schemas/skills/v2.2/skill-manifest.json';
 
 export enum ActivityTypes {
   ContactRelationUpdate = 'contactRelationUpdate',
