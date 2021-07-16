@@ -15,7 +15,7 @@ import { chooseIntentTemplatePrefix } from './constant';
 
 interface DesignerAttributes {
   name: string;
-  description: string;
+  comment: string;
 }
 
 const initialInputDialog = {
@@ -89,6 +89,12 @@ const initialDialogShape = () => ({
   },
   [SDKKinds.SendActivity]: {
     activity: '',
+  },
+  [SDKKinds.BeginSkill]: {
+    botId: '=settings.MicrosoftAppId',
+    skillHostEndpoint: '=settings.skillHostEndpoint',
+    connectionName: '=settings.connectionName',
+    allowInterruptions: false,
   },
   [SDKKinds.OnQnAMatch]: {
     $kind: SDKKinds.OnQnAMatch,

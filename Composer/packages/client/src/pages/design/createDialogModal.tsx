@@ -80,7 +80,7 @@ export const CreateDialogModal: React.FC<CreateDialogModalProps> = (props) => {
 
   const seedNewDialog = (formData: DialogFormData) => {
     const seededContent = new DialogFactory(schemas.sdk?.content).create(SDKKinds.AdaptiveDialog, {
-      $designer: { name: formData.name, description: formData.description },
+      $designer: { name: formData.name, comment: formData.description },
       generator: `${formData.name}.lg`,
       recognizer: seedNewRecognizer(defaultRecognizer),
     });

@@ -218,10 +218,10 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
         const notificationCard =
           skillPublishStatus !== SKILL_PUBLISH_STATUS.INITIAL
             ? getSkillPublishedNotificationCardProps(
-                { ...updatedBot, status: responseData.status, skillManifestUrls: [] },
+                { ...updatedBot, status: responseData.status, skillManifestUrl: '' },
                 skillManifestUrl
               )
-            : getPublishedNotificationCardProps({ ...updatedBot, status: responseData.status, skillManifestUrls: [] });
+            : getPublishedNotificationCardProps({ ...updatedBot, status: responseData.status, skillManifestUrl: '' });
         const resultNotification = createNotification(notificationCard);
         addNotification(resultNotification);
         setSkillPublishStatus(SKILL_PUBLISH_STATUS.INITIAL);

@@ -16,9 +16,6 @@ import { undoFunctionState } from '../../../src/recoilModel/undo/history';
 import mockProjectResponse from '../../../src/recoilModel/dispatchers/__tests__/mocks/mockProjectResponse.json';
 import DesignPage from '../../../src/pages/design/DesignPage';
 import { SAMPLE_DIALOG } from '../../mocks/sampleDialog';
-import ResizeObserver from '../../mocks/ResizeObserver';
-
-(global as any).ResizeObserver = ResizeObserver;
 
 const projectId = '12345.6789';
 const dialogId = SAMPLE_DIALOG.id;
