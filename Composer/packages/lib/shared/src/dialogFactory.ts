@@ -94,7 +94,7 @@ const initialDialogShape = () => ({
     botId: '=settings.MicrosoftAppId',
     skillHostEndpoint: '=settings.skillHostEndpoint',
     connectionName: '=settings.connectionName',
-    allowInterruptions: 'false',
+    allowInterruptions: false,
   },
   [SDKKinds.OnQnAMatch]: {
     $kind: SDKKinds.OnQnAMatch,
