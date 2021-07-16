@@ -34,6 +34,7 @@ const getSurveyEligibility = () => {
   const surveyStorage = new ClientStorage(window.localStorage, 'survey');
 
   const optedOut = surveyStorage.get('optedOut', false);
+
   if (optedOut) {
     return false;
   }
@@ -57,7 +58,9 @@ const getSurveyEligibility = () => {
     (lastTaken == null || Date.now() - lastTaken > SURVEY_PARAMETERS.timeUntilNextSurvey)
   ) {
     // If the above conditions are true, there's a fixed chance the card will appear.
-    return Math.random() < SURVEY_PARAMETERS.chanceToAppear;
+    return process.env.NODE_ENV === 'jest' || Math.random() < SURVEY_PARAMETERS.chanceToAppear;
+  } else {
+    return false;
   }
 };
 
@@ -71,6 +74,7 @@ export const useSurveyNotification = () => {
 
     if (getSurveyEligibility()) {
       const surveyStorage = new ClientStorage(window.localStorage, 'survey');
+
       TelemetryClient.track('HATSSurveyOffered');
 
       addNotification({
