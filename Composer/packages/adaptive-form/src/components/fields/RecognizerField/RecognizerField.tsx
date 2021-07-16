@@ -27,8 +27,7 @@ const AzureBlue = '#0078D4';
 const recognizerContainer = css`
   position: relative;
   height: 500px;
-  border-top: 1px solid #f3f2f1;
-  border-bottom: 1px solid #f3f2f1;
+  border: 1px solid #f3f2f1;
 `;
 const learnRecognizerUrl = 'https://docs.microsoft.com/en-us/composer/concept-dialog?tabs=v2x#recognizer';
 
