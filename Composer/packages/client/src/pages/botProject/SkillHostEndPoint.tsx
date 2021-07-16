@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import React, { Fragment } from 'react';
+import React, { Fragment, useState } from 'react';
 import { jsx, css } from '@emotion/core';
 import { useRecoilValue } from 'recoil';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
@@ -68,6 +68,18 @@ export const SkillHostEndPoint: React.FC<SkillHostEndPointProps> = (props) => {
   const rootBotProjectId = useRecoilValue(rootBotProjectIdSelector);
   const mergedSettings = mergePropertiesManagedByRootBot(projectId, rootBotProjectId, settings);
   const { skillHostEndpoint } = useRecoilValue(settingsState(projectId));
+  const [endpointUrl, setEndpointUrl] = useState(skillHostEndpoint);
+
+  const handleChange = (e, value) => {
+    setEndpointUrl(value);
+  };
+
+  const handleBlur = () => {
+    setSettings(projectId, {
+      ...mergedSettings,
+      skillHostEndpoint: endpointUrl,
+    });
+  };
 
   return (
     <Fragment>
@@ -89,13 +101,9 @@ export const SkillHostEndPoint: React.FC<SkillHostEndPointProps> = (props) => {
         data-testid={'SkillHostEndPointTextField'}
         label={formatMessage('Skill host endpoint URL')}
         placeholder={formatMessage('Enter Skill host endpoint URL')}
-        value={skillHostEndpoint}
-        onChange={(e, value) => {
-          setSettings(projectId, {
-            ...mergedSettings,
-            skillHostEndpoint: value,
-          });
-        }}
+        value={endpointUrl}
+        onBlur={handleBlur}
+        onChange={handleChange}
         onRenderLabel={onRenderLabel}
       />
     </Fragment>
