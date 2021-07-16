@@ -14,7 +14,7 @@ export const createActionFromManifest = (manifestIdentifier) => {
     botId: '=settings.MicrosoftAppId',
     skillHostEndpoint: '=settings.skillHostEndpoint',
     connectionName: '=settings.connectionName',
-    allowInterruptions: true,
+    allowInterruptions: false,
     skillEndpoint: `=settings.skill['${manifestIdentifier}'].endpointUrl`,
     skillAppId: `=settings.skill['${manifestIdentifier}'].msAppId`,
   };
