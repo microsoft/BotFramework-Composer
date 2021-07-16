@@ -6,13 +6,12 @@ import { useLocalStorage, usePublishApi } from '@bfc/extension-client';
 import mergeWith from 'lodash/mergeWith';
 
 import {
-  tenantState,
   subscriptionState,
   luisRegionState,
   deployLocationState,
   resourceGroupState,
   hostNameState,
-  operatingSystemState,
+  appServiceOperatingSystemState,
 } from '../recoilModel/atoms/resourceConfigurationState';
 import { PublishProfileConfiguration } from '../types';
 import { importConfigurationState } from '../recoilModel/atoms/importConfigurationState';
@@ -57,7 +56,6 @@ export const usePublishProfileInitializer = () => {
       }
     });
 
-    set(tenantState, profile.tenantId);
     set(subscriptionState, profile.subscriptionId);
     set(luisRegionState, profile.luisRegion);
     set(deployLocationState, profile.deployLocation);
@@ -67,7 +65,7 @@ export const usePublishProfileInitializer = () => {
       config: JSON.stringify(publishConfig || getSchema()?.default, null, 2),
       isValidConfiguration: true,
     });
-    set(operatingSystemState, preferredOS);
+    set(appServiceOperatingSystemState, preferredOS);
   };
 
   return initialize;

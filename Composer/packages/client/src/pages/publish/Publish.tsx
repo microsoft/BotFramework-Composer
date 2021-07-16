@@ -12,19 +12,16 @@ import querystring from 'query-string';
 import { Pivot, PivotItem } from 'office-ui-fabric-react/lib/Pivot';
 import { Stack } from 'office-ui-fabric-react/lib/Stack';
 
-import { dispatcherState, localBotPublishHistorySelector, localBotsDataSelector } from '../../recoilModel';
-import { AuthDialog } from '../../components/Auth/AuthDialog';
+import {
+  dispatcherState,
+  localBotPublishHistorySelector,
+  localBotsDataSelector,
+  currentUserState,
+} from '../../recoilModel';
 import { createNotification } from '../../recoilModel/dispatchers/notification';
 import { Notification } from '../../recoilModel/types';
 import { getSensitiveProperties } from '../../recoilModel/dispatchers/utils/project';
-import {
-  getTokenFromCache,
-  isShowAuthDialog,
-  userShouldProvideTokens,
-  setTenantId,
-  getTenantIdFromCache,
-} from '../../utils/auth';
-// import { vaultScopes } from '../../constants';
+import { getTenantIdFromCache, userShouldProvideTokens } from '../../utils/auth';
 import { useLocation } from '../../utils/hooks';
 import { AuthClient } from '../../utils/authClient';
 import TelemetryClient from '../../telemetry/TelemetryClient';
@@ -77,12 +74,13 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
   const pendingNotificationRef = useRef<Notification>();
   const showNotificationsRef = useRef<Record<string, boolean>>({});
 
+  const currentUser = useRecoilValue(currentUserState);
+
   const [activeTab, setActiveTab] = useState<string>('publish');
   const [provisionProject, setProvisionProject] = useState(projectId);
   const [currentBotList, setCurrentBotList] = useState<Bot[]>([]);
   const [publishDialogVisible, setPublishDialogVisiblity] = useState(false);
   const [pullDialogVisible, setPullDialogVisiblity] = useState(false);
-  const [showAuthDialog, setShowAuthDialog] = useState(false);
   const [updaterStatus, setUpdaterStatus] = useState<{ [skillId: string]: boolean }>(
     initUpdaterStatus(publishHistoryList)
   );
@@ -220,10 +218,10 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
         const notificationCard =
           skillPublishStatus !== SKILL_PUBLISH_STATUS.INITIAL
             ? getSkillPublishedNotificationCardProps(
-                { ...updatedBot, status: responseData.status, skillManifestUrls: [] },
+                { ...updatedBot, status: responseData.status, skillManifestUrl: '' },
                 skillManifestUrl
               )
-            : getPublishedNotificationCardProps({ ...updatedBot, status: responseData.status, skillManifestUrls: [] });
+            : getPublishedNotificationCardProps({ ...updatedBot, status: responseData.status, skillManifestUrl: '' });
         const resultNotification = createNotification(notificationCard);
         addNotification(resultNotification);
         setSkillPublishStatus(SKILL_PUBLISH_STATUS.INITIAL);
@@ -272,11 +270,7 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
   };
 
   const onPublish = () => {
-    if (isShowAuthDialog(false)) {
-      setShowAuthDialog(true);
-    } else {
-      setPublishDialogVisiblity(true);
-    }
+    setPublishDialogVisiblity(true);
     TelemetryClient.track('ToolbarButtonClicked', { name: 'publishSelectedBots' });
   };
 
@@ -288,8 +282,8 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
       if (target && isPublishingToAzure(target)) {
         const { tenantId } = JSON.parse(target.configuration);
 
-        if (userShouldProvideTokens()) {
-          token = getTokenFromCache('accessToken');
+        if (userShouldProvideTokens() && currentUser) {
+          token = currentUser.token;
         } else if (tenantId) {
           token = tenantTokenMap.get(tenantId) ?? (await AuthClient.getARMTokenForTenant(tenantId));
           tenantTokenMap.set(tenantId, token);
@@ -302,8 +296,6 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
               tenants = await AuthClient.getTenants();
 
               tenant = tenants?.[0]?.tenantId;
-              setTenantId(tenant);
-
               token = tenantTokenMap.get(tenant) ?? (await AuthClient.getARMTokenForTenant(tenant));
             } catch (err) {
               let notification;
@@ -434,15 +426,6 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
 
   return (
     <Fragment>
-      {showAuthDialog && (
-        <AuthDialog
-          needGraph={false}
-          next={() => setPublishDialogVisiblity(true)}
-          onDismiss={() => {
-            setShowAuthDialog(false);
-          }}
-        />
-      )}
       {publishDialogVisible && (
         <PublishDialog
           items={selectedBots.filter((bot) => !!bot.publishTarget)}

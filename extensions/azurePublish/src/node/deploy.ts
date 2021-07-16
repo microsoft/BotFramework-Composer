@@ -5,9 +5,8 @@
 import * as path from 'path';
 
 import * as fs from 'fs-extra';
-import * as rp from 'request-promise';
 import archiver from 'archiver';
-import axios from 'axios';
+import axios, { AxiosRequestConfig } from 'axios';
 import { AzureBotService } from '@azure/arm-botservice';
 import { TokenCredentials } from '@azure/ms-rest-js';
 import { DialogSetting } from '@botframework-composer/types';
@@ -158,7 +157,7 @@ export class BotProjectDeploy {
         status: BotProjectDeployLoggerType.DEPLOY_INFO,
         message: 'Publishing to Azure ...',
       });
-      await this.deployZip(this.accessToken, this.zipPath, name, environment, hostname);
+      await this.deployZip(this.accessToken, this.zipPath, name, environment, hostname, settings?.scmHostDomain);
       this.logger({
         status: BotProjectDeployLoggerType.DEPLOY_SUCCESS,
         message: 'Published successfully!',
@@ -276,15 +275,22 @@ export class BotProjectDeploy {
 
   // Upload the zip file to Azure
   // DOCS HERE: https://docs.microsoft.com/en-us/azure/app-service/deploy-zip
-  private async deployZip(token: string, zipPath: string, name: string, env: string, hostname?: string) {
+  private async deployZip(
+    token: string,
+    zipPath: string,
+    name: string,
+    env: string,
+    hostname?: string,
+    scmHostDomain?: string
+  ) {
     this.logger({
       status: BotProjectDeployLoggerType.DEPLOY_INFO,
       message: `Uploading zip file... to ${hostname ? hostname : name + (env ? '-' + env : '')}`,
     });
 
-    const publishEndpoint = `https://${
-      hostname ? hostname : name + (env ? '-' + env : '')
-    }.scm.azurewebsites.net/zipdeploy/?isAsync=true`;
+    const publishEndpoint = `https://${hostname ? hostname : name + (env ? '-' + env : '')}.${
+      scmHostDomain ?? 'scm.azurewebsites.net'
+    }/zipdeploy/?isAsync=true`;
     // eslint-disable-next-line security/detect-non-literal-fs-filename
     const fileReadStream = fs.createReadStream(zipPath, { autoClose: true });
     fileReadStream.on('error', function (err) {
@@ -305,18 +311,12 @@ export class BotProjectDeploy {
     } catch (err) {
       // close file read stream
       fileReadStream.close();
-      if (err.statusCode === 403) {
-        throw createCustomizeError(
-          AzurePublishErrors.DEPLOY_ZIP_ERROR,
-          `Token expired, please run az account get-access-token, then replace the accessToken in your configuration`
-        );
-      } else {
-        const errorMessage = JSON.stringify(err, Object.getOwnPropertyNames(err));
-        throw createCustomizeError(
-          AzurePublishErrors.DEPLOY_ZIP_ERROR,
-          `There was a problem publishing bot assets (zip deploy). ${errorMessage}`
-        );
-      }
+
+      const errorMessage = JSON.stringify(err, Object.getOwnPropertyNames(err));
+      throw createCustomizeError(
+        AzurePublishErrors.DEPLOY_ZIP_ERROR,
+        `There was a problem publishing bot assets (zip deploy). ${errorMessage}`
+      );
     }
   }
 
@@ -473,11 +473,11 @@ export class BotProjectDeploy {
     }
     try {
       const tenantUrl = `https://management.azure.com/subscriptions/${subId}?api-version=2020-01-01`;
-      const options = {
+      const options: AxiosRequestConfig = {
         headers: { Authorization: `Bearer ${accessToken}` },
       };
-      const response = await rp.get(tenantUrl, options);
-      const jsonRes = JSON.parse(response);
+      const response = await axios.get(tenantUrl, options);
+      const jsonRes = response?.data;
       if (jsonRes.tenantId === undefined) {
         throw new Error(`No tenants found in the account.`);
       }

@@ -22,14 +22,9 @@ import { ChoiceGroup, IChoiceGroupOption } from 'office-ui-fabric-react/lib/Choi
 import { ProvisionHandoff } from '@bfc/ui-shared';
 import sortBy from 'lodash/sortBy';
 import { NeutralColors } from '@uifabric/fluent-theme';
-import { AzureTenant } from '@botframework-composer/types';
-import jwtDecode from 'jwt-decode';
 
 import TelemetryClient from '../../telemetry/TelemetryClient';
-import { AuthClient } from '../../utils/authClient';
-import { AuthDialog } from '../../components/Auth/AuthDialog';
-import { getTokenFromCache, isShowAuthDialog, userShouldProvideTokens } from '../../utils/auth';
-import { dispatcherState } from '../../recoilModel/atoms';
+import { dispatcherState, currentUserState, isAuthenticatedState, showAuthDialogState } from '../../recoilModel/atoms';
 
 type ManageServiceProps = {
   createService: (
@@ -72,21 +67,19 @@ const mainElementStyle = { marginBottom: 20 };
 const dialogBodyStyles = { height: 400 };
 const CREATE_NEW_KEY = 'CREATE_NEW';
 
-const ManageService: React.FC<ManageServiceProps> = (props: ManageServiceProps) => {
-  const [showAuthDialog, setShowAuthDialog] = useState(false);
-  const [token, setToken] = useState<string | undefined>();
+export const ManageService: React.FC<ManageServiceProps> = (props: ManageServiceProps) => {
+  const currentUser = useRecoilValue(currentUserState);
+  const isAuthenticated = useRecoilValue(isAuthenticatedState);
+  const showAuthDialog = useRecoilValue(showAuthDialogState);
 
-  const { setApplicationLevelError } = useRecoilValue(dispatcherState);
+  const { setApplicationLevelError, requireUserLogin } = useRecoilValue(dispatcherState);
   const [subscriptionId, setSubscription] = useState<string>('');
-  const [tenantId, setTenantId] = useState<string>('');
   const [resourceGroups, setResourceGroups] = useState<any[]>([]);
   const [createResourceGroup, setCreateResourceGroup] = useState<boolean>(false);
   const [newResourceGroupName, setNewResourceGroupName] = useState<string>('');
   const [resourceGroupKey, setResourceGroupKey] = useState<string>('');
   const [resourceGroup, setResourceGroup] = useState<string>('');
   const [tier, setTier] = useState<string>('');
-  const [allTenants, setAllTenants] = useState<AzureTenant[]>([]);
-  const [tenantsErrorMessage, setTenantsErrorMessage] = useState<string | undefined>(undefined);
   const [showHandoff, setShowHandoff] = useState<boolean>(false);
   const [resourceName, setResourceName] = useState<string>('');
   const [loading, setLoading] = useState<string | undefined>(undefined);
@@ -99,7 +92,6 @@ const ManageService: React.FC<ManageServiceProps> = (props: ManageServiceProps) 
   const [keys, setKeys] = useState<KeyRec[]>([]);
   const [dialogTitle, setDialogTitle] = useState<string>('');
 
-  const [userProvidedTokens, setUserProvidedTokens] = useState<boolean>(false);
   const [currentStep, setCurrentStep] = useState<Step>('intro');
   const [outcomeDescription, setOutcomeDescription] = useState<string>('');
   const [outcomeSummary, setOutcomeSummary] = useState<any>();
@@ -116,8 +108,8 @@ const ManageService: React.FC<ManageServiceProps> = (props: ManageServiceProps) 
   ];
 
   const fetchLocations = async (subscriptionId) => {
-    if (token) {
-      const tokenCredentials = new TokenCredentials(token);
+    if (isAuthenticated) {
+      const tokenCredentials = new TokenCredentials(currentUser.token);
       const subscriptionClient = new SubscriptionClient(tokenCredentials);
       const locations = await subscriptionClient.subscriptions.listLocations(subscriptionId);
       setLocationList(
@@ -141,64 +133,12 @@ const ManageService: React.FC<ManageServiceProps> = (props: ManageServiceProps) 
       return [];
     }
   };
-  const decodeToken = (token: string) => {
-    try {
-      return jwtDecode<any>(token);
-    } catch (err) {
-      console.error('decode token error in ', err);
-      return null;
-    }
-  };
 
   useEffect(() => {
-    if (currentStep === 'subscription' && !userShouldProvideTokens()) {
-      AuthClient.getTenants()
-        .then((tenants) => {
-          setAllTenants(tenants);
-          if (tenants.length === 0) {
-            setTenantsErrorMessage(formatMessage('No Azure Directories were found.'));
-          } else if (tenants.length >= 1) {
-            setTenantId(tenants[0].tenantId);
-          } else {
-            setTenantsErrorMessage(undefined);
-          }
-        })
-        .catch((err) => {
-          setTenantsErrorMessage(
-            formatMessage('There was a problem loading Azure directories. {errMessage}', {
-              errMessage: err.message || err.toString(),
-            })
-          );
-        });
-    }
-  }, [currentStep]);
-
-  useEffect(() => {
-    if (tenantId) {
-      AuthClient.getARMTokenForTenant(tenantId)
-        .then((token) => {
-          setToken(token);
-          setTenantsErrorMessage(undefined);
-        })
-        .catch((err) => {
-          setTenantsErrorMessage(
-            formatMessage(
-              'There was a problem getting the access token for the current Azure directory. {errMessage}',
-              {
-                errMessage: err.message || err.toString(),
-              }
-            )
-          );
-          setTenantsErrorMessage(err.message || err.toString());
-        });
-    }
-  }, [tenantId]);
-
-  useEffect(() => {
-    if (token) {
+    if (isAuthenticated && !props.hidden) {
       setAvailableSubscriptions([]);
       setSubscriptionsErrorMessage(undefined);
-      getSubscriptions(token)
+      getSubscriptions(currentUser.token)
         .then((data) => {
           setAvailableSubscriptions(data);
           if (data.length === 0) {
@@ -213,33 +153,7 @@ const ManageService: React.FC<ManageServiceProps> = (props: ManageServiceProps) 
           setSubscriptionsErrorMessage(err.message);
         });
     }
-  }, [token]);
-
-  const hasAuth = async () => {
-    let newtoken = '';
-    if (userShouldProvideTokens()) {
-      if (isShowAuthDialog(false)) {
-        setShowAuthDialog(true);
-      }
-      newtoken = getTokenFromCache('accessToken');
-      if (newtoken) {
-        const decoded = decodeToken(newtoken);
-        if (decoded) {
-          setToken(newtoken);
-          setUserProvidedTokens(true);
-        } else {
-          setTenantsErrorMessage(
-            formatMessage(
-              'There was a problem with the authentication access token. Close this dialog and try again. To be prompted to provide the access token again, clear it from application local storage.'
-            )
-          );
-        }
-      }
-    } else {
-      setUserProvidedTokens(false);
-    }
-    setCurrentStep('subscription');
-  };
+  }, [isAuthenticated, props.hidden]);
 
   useEffect(() => {
     // reset the ui
@@ -289,10 +203,10 @@ const ManageService: React.FC<ManageServiceProps> = (props: ManageServiceProps) 
   };
 
   const fetchAccounts = async (subscriptionId) => {
-    if (token) {
+    if (isAuthenticated) {
       setLoading(formatMessage('Loading keys...'));
       setNoKeys(false);
-      const tokenCredentials = new TokenCredentials(token);
+      const tokenCredentials = new TokenCredentials(currentUser.token);
       const cognitiveServicesManagementClient = new CognitiveServicesManagementClient(tokenCredentials, subscriptionId);
       const accounts = await cognitiveServicesManagementClient.accounts.list();
 
@@ -311,10 +225,11 @@ const ManageService: React.FC<ManageServiceProps> = (props: ManageServiceProps) 
   };
 
   const fetchResourceGroups = async (subscriptionId) => {
-    if (token) {
-      const tokenCredentials = new TokenCredentials(token);
+    if (isAuthenticated) {
+      const tokenCredentials = new TokenCredentials(currentUser.token);
       const resourceClient = new ResourceManagementClient(tokenCredentials, subscriptionId);
-      const groups = sortBy(await resourceClient.resourceGroups.list(), ['name']);
+      const results = await resourceClient.resourceGroups.list();
+      const groups = sortBy(results, ['name']);
       setResourceGroups([
         {
           id: CREATE_NEW_KEY,
@@ -327,10 +242,10 @@ const ManageService: React.FC<ManageServiceProps> = (props: ManageServiceProps) 
   };
 
   const createService = async () => {
-    if (token) {
+    if (isAuthenticated) {
       setLoading(formatMessage('Creating resources...'));
 
-      const tokenCredentials = new TokenCredentials(token);
+      const tokenCredentials = new TokenCredentials(currentUser.token);
 
       const resourceGroupName = resourceGroupKey === CREATE_NEW_KEY ? newResourceGroupName : resourceGroup;
       if (resourceGroupKey === CREATE_NEW_KEY) {
@@ -512,7 +427,8 @@ const ManageService: React.FC<ManageServiceProps> = (props: ManageServiceProps) 
       setShowHandoff(true);
       props.onDismiss();
     } else {
-      hasAuth();
+      requireUserLogin();
+      setCurrentStep('subscription');
     }
   };
 
@@ -561,10 +477,9 @@ const ManageService: React.FC<ManageServiceProps> = (props: ManageServiceProps) 
       <div>
         <div css={dialogBodyStyles}>
           <p css={{ marginTop: 0 }}>
-            {formatMessage(
-              'Select your Azure directory, then choose the subscription where your existing {service} resource is located.',
-              { service: props.serviceName }
-            )}
+            {formatMessage('Choose the subscription where your existing {service} resource is located.', {
+              service: props.serviceName,
+            })}
             {props.learnMore ? (
               <Link href={props.learnMore} target={'_blank'}>
                 {formatMessage('Learn more')}
@@ -572,19 +487,6 @@ const ManageService: React.FC<ManageServiceProps> = (props: ManageServiceProps) 
             ) : null}
           </p>
           <div css={mainElementStyle}>
-            <Dropdown
-              required
-              data-testid="service-useexisting-tenant-selection"
-              disabled={allTenants.length === 1 || !tenantId || tenantId.trim().length === 0}
-              errorMessage={tenantsErrorMessage}
-              label={formatMessage('Azure directory')}
-              options={allTenants.map((t) => ({ key: t.tenantId, text: t.displayName }))}
-              selectedKey={tenantId}
-              styles={dropdownStyles}
-              onChange={(_e, o) => {
-                setTenantId(o?.key as string);
-              }}
-            />
             <Dropdown
               required
               data-testid="service-useexisting-subscription-selection"
@@ -784,10 +686,9 @@ const ManageService: React.FC<ManageServiceProps> = (props: ManageServiceProps) 
       <div>
         <div css={dialogBodyStyles}>
           <p css={{ marginTop: 0 }}>
-            {formatMessage(
-              'Select your Azure directory, then choose the subscription where you’d like your new {service} resource.',
-              { service: props.serviceName }
-            )}
+            {formatMessage('Choose the subscription where you’d like your new {service} resource.', {
+              service: props.serviceName,
+            })}
             {props.learnMore ? (
               <Link href={props.learnMore} target={'_blank'}>
                 {formatMessage('Learn more')}
@@ -795,19 +696,6 @@ const ManageService: React.FC<ManageServiceProps> = (props: ManageServiceProps) 
             ) : null}
           </p>
           <div css={mainElementStyle}>
-            <Dropdown
-              required
-              data-testid="service-create-tenant-selection"
-              disabled={allTenants.length === 1 || !tenantId}
-              errorMessage={tenantsErrorMessage}
-              label={formatMessage('Azure directory')}
-              options={allTenants.map((t) => ({ key: t.tenantId, text: t.displayName }))}
-              selectedKey={tenantId}
-              styles={dropdownStyles}
-              onChange={(_e, o) => {
-                setTenantId(o?.key as string);
-              }}
-            />
             <Dropdown
               required
               data-testid="service-create-subscription-selection"
@@ -832,7 +720,7 @@ const ManageService: React.FC<ManageServiceProps> = (props: ManageServiceProps) 
           {loading && <Spinner label={loading} labelPosition="right" styles={{ root: { float: 'left' } }} />}
           <DefaultButton disabled={!!loading} text={formatMessage('Back')} onClick={() => setCurrentStep('intro')} />
           <PrimaryButton
-            disabled={!!loading || (!userProvidedTokens && !tenantId) || !subscriptionId}
+            disabled={!!loading || !isAuthenticated || !subscriptionId}
             text={formatMessage('Next')}
             onClick={() => setCurrentStep('resourceCreation')}
           />
@@ -881,15 +769,6 @@ const ManageService: React.FC<ManageServiceProps> = (props: ManageServiceProps) 
 
   return (
     <Fragment>
-      {showAuthDialog && (
-        <AuthDialog
-          needGraph={false}
-          next={hasAuth}
-          onDismiss={() => {
-            setShowAuthDialog(false);
-          }}
-        />
-      )}
       <ProvisionHandoff
         developerInstructions={formatMessage(
           'If Azure resources and subscription are managed by others, use the following information to request creation of the resources that you need to build and run your bot.'
@@ -924,5 +803,3 @@ const ManageService: React.FC<ManageServiceProps> = (props: ManageServiceProps) 
     </Fragment>
   );
 };
-
-export { ManageService };

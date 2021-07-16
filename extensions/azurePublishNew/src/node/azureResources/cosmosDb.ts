@@ -5,8 +5,8 @@ import { TokenCredentials } from '@azure/ms-rest-js';
 import { CosmosDBManagementClient } from '@azure/arm-cosmosdb';
 
 import {
-  ProvisionConfig,
   ProvisionMethod,
+  ProvisionServiceConfig,
   ProvisionWorkingSet,
   ResourceConfig,
   ResourceDefinition,
@@ -17,6 +17,7 @@ import {
   ProvisionErrors,
   stringifyError,
 } from '../../../../azurePublish/src/node/utils/errorHandler';
+import { AzureResourceTypes } from '../constants';
 
 import { AZURE_HOSTING_GROUP_NAME, PAY_AS_YOU_GO_TIER } from './constants';
 
@@ -27,6 +28,7 @@ export const cosmosDbDefinition: ResourceDefinition = {
   text: 'Azure Cosmos DB',
   tier: PAY_AS_YOU_GO_TIER,
   group: AZURE_HOSTING_GROUP_NAME,
+  dependencies: [AzureResourceTypes.RESOURCE_GROUP],
 };
 
 type CosmosDbProvisionResult = {
@@ -37,7 +39,7 @@ type CosmosDbProvisionResult = {
   collectionId: string;
 };
 
-type CosmosDbConfig = ResourceConfig & {
+export type CosmosDbConfig = ResourceConfig & {
   key: 'cosmosDb';
   resourceGroupName: string;
   displayName: string;
@@ -46,7 +48,7 @@ type CosmosDbConfig = ResourceConfig & {
   containerName: string;
 };
 
-const cosmosDbProvisionMethod = (provisionConfig: ProvisionConfig): ProvisionMethod => {
+const cosmosDbProvisionMethod = (provisionConfig: ProvisionServiceConfig): ProvisionMethod => {
   const tokenCredentials = new TokenCredentials(provisionConfig.accessToken);
   const cosmosDBManagementClient = new CosmosDBManagementClient(tokenCredentials, provisionConfig.subscriptionId);
 
@@ -151,7 +153,7 @@ const cosmosDbProvisionMethod = (provisionConfig: ProvisionConfig): ProvisionMet
   return provision();
 };
 
-export const getCosmosDbProvisionService = (config: ProvisionConfig): ResourceProvisionService => {
+export const getCosmosDbProvisionService = (config: ProvisionServiceConfig): ResourceProvisionService => {
   return {
     getDependencies: () => [],
     getRecommendationForProject: (project) => 'optional',

@@ -10,12 +10,21 @@ import jwtDecode from 'jwt-decode';
 import formatMessage from 'format-message';
 
 import { USER_TOKEN_STORAGE_KEY, BASEURL } from '../constants';
-import { Dispatcher } from '../recoilModel/dispatchers';
 import { authConfig, authUrl } from '../constants';
 
 import storage from './storage';
 import httpClient from './httpUtil';
 import { isElectron } from './electronUtil';
+import { platform, OS } from './os';
+
+export function decodeToken(token: string) {
+  try {
+    return jwtDecode<any>(token);
+  } catch (err) {
+    console.error('decode token error in ', err);
+    return null;
+  }
+}
 
 export function isTokenExpired(token: string): boolean {
   try {
@@ -62,7 +71,7 @@ export function getUserTokenFromCache(): string | null {
   }
 }
 
-export function prepareAxios({ setUserSessionExpired }: Dispatcher) {
+export function prepareAxios() {
   if (process.env.COMPOSER_REQUIRE_AUTH) {
     const cancelSource = axios.CancelToken.source();
 
@@ -90,7 +99,6 @@ export function prepareAxios({ setUserSessionExpired }: Dispatcher) {
 
           // remove user token from the cache
           clearUserTokenFromCache();
-          setUserSessionExpired(true);
         }
 
         return Promise.reject(err);
@@ -260,6 +268,10 @@ export async function monitorWindowForQueryParam(
   });
 }
 
+export function setTokenInCache(key: string, token: string) {
+  storage.set(key, token);
+}
+
 export function getTokenFromCache(key: string) {
   const token = storage.get(key);
   if (isTokenExpired(token)) {
@@ -328,7 +340,9 @@ export function getAccessTokenUrl(options: { clientId: string; redirectUrl: stri
 }
 
 export function userShouldProvideTokens(): boolean {
-  if (isElectron()) {
+  // If it's electron build and not running on Linux use oneAuth, otherwise ask user to manually enter tokens.
+  const os = platform();
+  if (isElectron() && os !== OS.Linux) {
     return false;
   } else return !(authConfig.clientId && authConfig.redirectUrl && authConfig.tenantId);
 }

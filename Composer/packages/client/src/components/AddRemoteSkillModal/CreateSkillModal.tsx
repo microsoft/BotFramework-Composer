@@ -31,8 +31,6 @@ import httpClient from '../../utils/httpUtil';
 import TelemetryClient from '../../telemetry/TelemetryClient';
 import { TriggerFormData } from '../../utils/dialogUtil';
 import { selectIntentDialog } from '../../constants';
-import { isShowAuthDialog } from '../../utils/auth';
-import { AuthDialog } from '../Auth/AuthDialog';
 import { PublishProfileDialog } from '../../pages/botProject/create-publish-profile/PublishProfileDialog';
 
 import { SelectIntent } from './SelectIntent';
@@ -48,6 +46,16 @@ export interface SkillFormDataErrors {
 
 const urlRegex = /^http[s]?:\/\/\w+/;
 const filePathRegex = /([^<>/\\:""]+\.\w+$)/;
+
+// All endpoints should have endpoint url
+const hasEndpointUrl = (content) => {
+  const endpoints = content.endpoints;
+  if (endpoints && endpoints.length > 0) {
+    return endpoints.every((endpoint) => !!endpoint.endpointUrl);
+  }
+  return false;
+};
+
 export const skillNameRegex = /^\w[-\w]*$/;
 export const msAppIdRegex = /^[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12}$/;
 
@@ -101,9 +109,17 @@ export const validateLocalZip = async (files: Record<string, JSZipObject>) => {
     if (manifestFiles.length > 1) {
       result.error = { manifestUrl: formatMessage('zip folder has multiple manifest json') };
     } else if (manifestFiles.length === 1) {
-      const content = await manifestFiles[0].async('string');
-      result.manifestContent = JSON.parse(content);
-      result.zipContent = zipContent;
+      const content = JSON.parse(await manifestFiles[0].async('string'));
+      if (hasEndpointUrl(content)) {
+        result.manifestContent = content;
+        result.zipContent = zipContent;
+      } else {
+        result.error = {
+          manifestUrl: formatMessage(
+            'Endpoints should not be empty or endpoint should have endpoint url field in manifest json'
+          ),
+        };
+      }
     } else {
       result.error = { manifestUrl: formatMessage('could not locate manifest.json in zip') };
     }
@@ -182,7 +198,6 @@ export const CreateSkillModal: React.FC<CreateSkillModalProps> = (props) => {
   const [formDataErrors, setFormDataErrors] = useState<SkillFormDataErrors>({});
   const [skillManifest, setSkillManifest] = useState<any | null>(null);
   const [showDetail, setShowDetail] = useState(false);
-  const [showAuthDialog, setShowAuthDialog] = useState(false);
   const [createSkillDialogHidden, setCreateSkillDialogHidden] = useState(false);
   const [manifestDirPath, setManifestDirPath] = useState('');
   const [zipContent, setZipContent] = useState({});
@@ -294,7 +309,7 @@ export const CreateSkillModal: React.FC<CreateSkillModalProps> = (props) => {
   };
 
   const handleGotoCreateProfile = () => {
-    isShowAuthDialog(true) ? setShowAuthDialog(true) : setCreateSkillDialogHidden(true);
+    setCreateSkillDialogHidden(true);
   };
 
   const handleBrowseButtonUpdate = async (path: string, files: Record<string, JSZipObject>) => {
@@ -305,7 +320,7 @@ export const CreateSkillModal: React.FC<CreateSkillModalProps> = (props) => {
     });
 
     const result = await validateLocalZip(files);
-    result.error.manifestUrl && setFormDataErrors(result.error);
+    setFormDataErrors(result.error);
     result.path && setManifestDirPath(result.path);
     result.zipContent && setZipContent(result.zipContent);
     if (result.manifestContent) {
@@ -388,8 +403,8 @@ export const CreateSkillModal: React.FC<CreateSkillModalProps> = (props) => {
                   <TextField
                     required
                     errorMessage={formDataErrors.manifestUrl}
-                    label={formatMessage('Skill Manifest URL')}
-                    placeholder={formatMessage('Ask the skill owner for the URL and provide your bot’s App ID')}
+                    label={formatMessage('Skill Manifest')}
+                    placeholder={formatMessage('Enter manifest URL or select a .zip file')}
                     styles={{ root: { width: '300px' } }}
                     value={formData.manifestUrl || ''}
                     onChange={handleManifestUrlChange}
@@ -461,17 +476,6 @@ export const CreateSkillModal: React.FC<CreateSkillModalProps> = (props) => {
           </Fragment>
         )}
       </DialogWrapper>
-      {showAuthDialog && (
-        <AuthDialog
-          needGraph
-          next={() => {
-            setCreateSkillDialogHidden(true);
-          }}
-          onDismiss={() => {
-            setShowAuthDialog(false);
-          }}
-        />
-      )}
       {createSkillDialogHidden ? (
         <PublishProfileDialog
           closeDialog={() => {

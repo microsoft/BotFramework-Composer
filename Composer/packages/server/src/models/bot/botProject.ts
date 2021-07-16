@@ -26,12 +26,13 @@ import { FeedbackType, generate } from '@microsoft/bf-generate-library';
 import { Path } from '../../utility/path';
 import { copyDir } from '../../utility/storage';
 import StorageService from '../../services/storage';
-import { getDialogNameFromFile } from '../utilities/util';
+import { convertFolderNameToSkillName, getDialogNameFromFile } from '../utilities/util';
 import { ISettingManager, OBFUSCATED_VALUE } from '../settings';
 import { DefaultSettingManager } from '../settings/defaultSettingManager';
 import log from '../../logger';
 import { BotProjectService } from '../../services/project';
 import AssetService from '../../services/asset';
+import { bundleSchema } from '../utilities/bundleSchema';
 
 import {
   BotStructureFilesPatterns,
@@ -202,6 +203,8 @@ export class BotProject implements IBotProject {
     this.settings = await this.getEnvSettings(false);
     this.files = await this._getFiles();
     this.readme = await this._getReadme();
+
+    await this._bundleSchemas();
   };
 
   public getProject = () => {
@@ -545,7 +548,7 @@ export class BotProject implements IBotProject {
     if (Object.keys(zipContent).length === 0) {
       return await this.createSkillFilesFromUrl(url, skillName);
     } else {
-      return await this.createSkillFilesFromZip(zipContent);
+      return await this.createSkillFilesFromZip(zipContent, skillName);
     }
   };
 
@@ -747,7 +750,7 @@ export class BotProject implements IBotProject {
     return await this.createManifestJsonFile(manifestName, manifestContent, skillName);
   }
 
-  private async createSkillFilesFromZip(zipContent) {
+  private async createSkillFilesFromZip(zipContent, skillName) {
     const manifestKey = Object.keys(zipContent).find((key) => isManifestJson(zipContent[key]));
     if (!manifestKey) {
       throw new Error('Can not find manifest json');
@@ -755,9 +758,12 @@ export class BotProject implements IBotProject {
 
     const keys = Object.keys(zipContent).filter((key) => zipContent[key] !== '' && !isManifestJson(zipContent[key]));
     for (let i = 0; i < keys.length; i++) {
-      await this._createFile(`skills/${keys[i]}`, zipContent[keys[i]]);
+      await this._createFile(`skills/${convertFolderNameToSkillName(keys[i], skillName)}`, zipContent[keys[i]]);
     }
-    return await this._createFile(`skills/${manifestKey}`, zipContent[manifestKey]);
+    return await this._createFile(
+      `skills/${convertFolderNameToSkillName(manifestKey, skillName)}`,
+      zipContent[manifestKey]
+    );
   }
 
   private async createManifestJsonFile(name, content, skillName) {
@@ -1098,5 +1104,26 @@ export class BotProject implements IBotProject {
         throw new Error('Invalid file content');
       }
     }
+  };
+
+  private _bundleSchemas = async () => {
+    const schemas: FileInfo[] = [];
+    this.files.forEach((file) => {
+      if (file.name.endsWith('.schema')) {
+        schemas.push(file);
+      }
+    });
+
+    debug('Bundling %d schemas.', schemas.length);
+
+    await Promise.all(
+      schemas.map(async (s) => {
+        const bundled = await bundleSchema(s.path);
+
+        if (bundled) {
+          s.content = bundled;
+        }
+      })
+    );
   };
 }

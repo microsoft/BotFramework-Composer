@@ -113,7 +113,7 @@ describe('QnA creation flow', () => {
     const next1 = getByText('Next');
     fireEvent.click(next1);
 
-    const option = getAllByText('Create new KB from URL or file');
+    const option = getAllByText('Create new knowledge base from URL');
     fireEvent.click(option[0]);
 
     const urlField = getByTestId('adden-usInCreateQnAFromUrlModal');
@@ -139,7 +139,7 @@ describe('QnA creation flow', () => {
     const next1 = getByText('Next');
     fireEvent.click(next1);
 
-    const option = getByText('Import existing KB from QnA maker portal');
+    const option = getByText('Import existing knowledge base from QnA maker portal');
     fireEvent.click(option);
 
     const next = getByText('Next');
@@ -163,7 +163,7 @@ describe('QnA creation flow', () => {
     const next1 = getByText('Next');
     fireEvent.click(next1);
 
-    const next = getByText('Skip & Create blank KB');
+    const next = getByText('Skip & Create blank knowledge base');
     fireEvent.click(next);
     expect(handleSubmit).toBeCalled();
   });

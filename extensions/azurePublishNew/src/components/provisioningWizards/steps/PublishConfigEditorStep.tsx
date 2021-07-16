@@ -18,7 +18,6 @@ export const PublishConfigEditorStep = () => {
       errorMessage={isValidConfiguration ? '' : formatMessage('Invalid JSON')}
       height={400}
       value={config}
-      width="100vw"
       onChange={setImportConfiguration}
     />
   );
