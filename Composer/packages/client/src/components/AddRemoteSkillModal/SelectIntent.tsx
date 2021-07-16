@@ -270,8 +270,6 @@ export const SelectIntent: React.FC<SelectIntentProps> = (props) => {
         }
       });
       for (const { locale, lufiles } of lufilesOnLocale) {
-        // const id = file.id.split('.');
-        // const language = id[id.length - 2];
         multiLanguageIntents[locale] = [];
         for (const file of lufiles) {
           for (const intent of file.intents) {
