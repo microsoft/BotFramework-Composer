@@ -24,12 +24,11 @@ export const DropdownWithAllOption: React.FC<DropdownWithAllOptionProps> = (prop
 
   const currentOptions = useMemo(() => {
     const allOptions = [...dropdownOptions];
-    if (allOptions.length > 1) {
-      allOptions.unshift({
-        key: optionAll.key,
-        text: optionAll.text,
-      });
-    }
+
+    allOptions.unshift({
+      key: optionAll.key,
+      text: optionAll.text,
+    });
 
     return allOptions;
   }, [dropdownOptions]);

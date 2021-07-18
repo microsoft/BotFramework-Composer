@@ -63,6 +63,7 @@ export const DiagnosticsContent: React.FC<DebugPanelTabHeaderProps> = ({ isActiv
   if (!isActive) {
     return null;
   }
+
   return (
     <Stack verticalFill>
       <Stack.Item
