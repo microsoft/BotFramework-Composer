@@ -77,7 +77,7 @@ const columns = [
 
 const getRemoteLuFiles = async (
   skillLanguages: object,
-  composerLangeages: string[],
+  composerLanguages: string[],
   setWarningMsg,
   zipContent: Record<string, string>,
   manifestDirPath: string,
@@ -85,7 +85,12 @@ const getRemoteLuFiles = async (
 ) => {
   const luFiles: Record<string, { id: string; content: string }[]> = {};
   try {
-    for (const cl of composerLangeages) {
+    //for each root bot locale, which format is language-locale, we need to find the luFile in matched skill language
+    //currently the rule is:
+    //1. find the exact match, root language-locale matches skill language-locale. en-us matches en-us
+    //2. if no exact match found, root language-locale matches skill language. en-us matches en, zh-cn matches zh.
+
+    for (const cl of composerLanguages) {
       let matchedLanguage = '';
       if (skillLanguages[cl]) {
         matchedLanguage = cl;
