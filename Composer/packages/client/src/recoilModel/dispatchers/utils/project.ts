@@ -79,6 +79,8 @@ import {
   warnAboutDotNetState,
   warnAboutFunctionsState,
   showGetStartedTeachingBubbleState,
+  showErrorDiagnosticsState,
+  showWarningDiagnosticsState,
 } from '../../atoms';
 import * as botstates from '../../atoms/botState';
 import lgWorker from '../../parsers/lgWorker';
@@ -108,6 +110,8 @@ export const resetBotStates = async ({ reset }: CallbackInterface, projectId: st
     reset(currentRecoilAtom(projectId));
   });
   reset(botEndpointsState);
+  reset(showErrorDiagnosticsState);
+  reset(showWarningDiagnosticsState);
 };
 
 export const setErrorOnBotProject = async (

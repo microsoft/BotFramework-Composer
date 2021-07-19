@@ -23,15 +23,13 @@ export const DropdownWithAllOption: React.FC<DropdownWithAllOptionProps> = (prop
   const { selectedKeys, onChange, placeholder, options: dropdownOptions, optionAll } = props;
 
   const currentOptions = useMemo(() => {
-    const allOptions = [...dropdownOptions];
-    if (allOptions.length > 1) {
-      allOptions.unshift({
+    return [
+      {
         key: optionAll.key,
         text: optionAll.text,
-      });
-    }
-
-    return allOptions;
+      },
+      ...dropdownOptions,
+    ];
   }, [dropdownOptions]);
 
   const onOptionSelectionChange = (event: React.FormEvent<HTMLDivElement>, item: IDropdownOption | undefined): void => {
