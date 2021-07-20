@@ -56,7 +56,7 @@ const hasEndpointUrl = (content) => {
   return false;
 };
 
-export const skillNameRegex = /^[a-zA-Z0-9-_ ]+$/;
+export const skillNameRegex = /[^a-zA-Z0-9-_ ]+/g;
 export const msAppIdRegex = /^[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12}$/;
 
 export interface CreateSkillModalProps {
@@ -130,16 +130,9 @@ export const validateLocalZip = async (files: Record<string, JSZipObject>) => {
   return result;
 };
 
-const validateSKillName = (skillContent, setSkillManifest, setFormDataErrors) => {
-  if (skillNameRegex.test(skillContent.name)) {
-    setSkillManifest(skillContent);
-  } else {
-    setFormDataErrors({
-      manifestUrl: formatMessage(
-        'Special characters are not allowed for skill name in manifest.json. Use letters, numbers, -, or _.'
-      ),
-    });
-  }
+const validateSKillName = (skillContent, setSkillManifest) => {
+  skillContent.name = skillContent.name.replace(skillNameRegex, '');
+  setSkillManifest(skillContent);
 };
 export const getSkillManifest = async (
   projectId: string,
@@ -154,7 +147,7 @@ export const getSkillManifest = async (
         url: manifestUrl,
       },
     });
-    validateSKillName(data, setSkillManifest, setFormDataErrors);
+    validateSKillName(data, setSkillManifest);
   } catch (error) {
     const httpMessage = error?.response?.data?.message;
     const message = httpMessage?.match('Unexpected string in JSON')
@@ -335,7 +328,7 @@ export const CreateSkillModal: React.FC<CreateSkillModalProps> = (props) => {
     result.path && setManifestDirPath(result.path);
     result.zipContent && setZipContent(result.zipContent);
     if (result.manifestContent) {
-      validateSKillName(result.manifestContent, setSkillManifest, setFormDataErrors);
+      validateSKillName(result.manifestContent, setSkillManifest);
       setShowDetail(true);
     }
   };
