@@ -480,6 +480,84 @@ The form schema is used to customize the property editor in Composer. It allows 
 
 </details>
 
+#### Fieldsets
+
+The fieldsets property allows Composer to render groups of fields in a collapsable UI or as tabs. Below are two examples.
+
+| Property          | Type                     | Description                                                           |
+| ----------------- | ------------------------ | --------------------------------------------------------------------- |
+| `title`           | `string`                 | The title of the fieldset or tab.                                     |
+| `fields`          | `string[]` \| `object[]` | A list of fields to group in the fieldset. Supports nested fieldsets. |
+| `defaultExpanded` | `boolean`                | Renders the fieldset expanded if true.                                |
+
+<details>
+  <summary>Fieldsets example</summary>
+
+```json
+// Microsoft.EditArray.uischema
+{
+  "form": {
+    "fieldsets": [
+        {
+          "title": "Array Properties",
+          "fields": [
+            "changeType",
+            "itemsProperty",
+            "value"
+          ],
+          "defaultExpanded": true
+        },
+        {
+          "title": "Output",
+          "fields": [
+            "resultProperty",
+            "*"
+          ]
+        }
+      ]
+    }
+  }
+}
+```
+
+![](./Assets/ui-schema/basic-fieldsets.png)
+
+</details>
+
+<details>
+  <summary>Pivot fieldsets example</summary>
+
+```json
+// Microsoft.EditArray.uischema
+{
+  "form": {
+    "pivotFieldsets": true,
+    "fieldsets": [
+        {
+          "title": "Array Properties",
+          "fields": [
+            "changeType",
+            "itemsProperty",
+            "value"
+          ]
+        },
+        {
+          "title": "Output",
+          "fields": [
+            "resultProperty",
+            "*"
+          ]
+        }
+      ]
+    }
+  }
+}
+```
+
+![](./Assets/ui-schema/pivot-fieldsets.png)
+
+</details>
+
 ### Recognizer
 
 The recognizer ui schema allows customization of LU authoring in Composer.
