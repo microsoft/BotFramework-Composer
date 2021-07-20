@@ -480,7 +480,7 @@ The form schema is used to customize the property editor in Composer. It allows 
 
 </details>
 
-#### Fieldsets
+#### `fieldsets`
 
 The fieldsets property allows Composer to render groups of fields in a collapsable UI or as tabs. Below are two examples.
 
@@ -557,6 +557,14 @@ The fieldsets property allows Composer to render groups of fields in a collapsab
 ![](./Assets/ui-schema/pivot-fieldsets.png)
 
 </details>
+
+#### `intellisenseScopes`
+
+`intellisenseScopes` provides Composer with the context needed to enable suggestions when a user is typing in the field. There are 3 valid scopes.
+
+- `variable-scopes`: includes `user`, `conversation`, `turn`, `dialog`, `this` and `settings`
+- `expressions`: includes built-in expression functions
+- `user-variables`: includes user defined variables
 
 ### Recognizer
 
