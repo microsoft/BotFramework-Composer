@@ -7,7 +7,7 @@ import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button'
 import { Stack, StackItem } from 'office-ui-fabric-react/lib/Stack';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { FontSizes } from '@uifabric/fluent-theme';
-import { useRecoilValue } from 'recoil';
+import { errorSelector, useRecoilValue } from 'recoil';
 import debounce from 'lodash/debounce';
 import { isUsingAdaptiveRuntime, SDKKinds, isManifestJson } from '@bfc/shared';
 import { DialogWrapper, DialogTypes } from '@bfc/ui-shared';
@@ -56,7 +56,7 @@ const hasEndpointUrl = (content) => {
   return false;
 };
 
-export const skillNameRegex = /^\w[-\w]*$/;
+export const skillNameRegex = /^[a-zA-Z0-9-_]+$/;
 export const msAppIdRegex = /^[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12}$/;
 
 export interface CreateSkillModalProps {
@@ -130,6 +130,17 @@ export const validateLocalZip = async (files: Record<string, JSZipObject>) => {
   return result;
 };
 
+const validateSKillName = (skillContent, setSkillManifest, setFormDataErrors) => {
+  if (skillNameRegex.test(skillContent.name)) {
+    setSkillManifest(skillContent);
+  } else {
+    setFormDataErrors({
+      manifestUrl: formatMessage(
+        'Spaces and special characters are not allowed for skill name in manifest.json. Use letters, numbers, -, or _.'
+      ),
+    });
+  }
+};
 export const getSkillManifest = async (
   projectId: string,
   manifestUrl: string,
@@ -143,7 +154,7 @@ export const getSkillManifest = async (
         url: manifestUrl,
       },
     });
-    setSkillManifest(data);
+    validateSKillName(data, setSkillManifest, setFormDataErrors);
   } catch (error) {
     const httpMessage = error?.response?.data?.message;
     const message = httpMessage?.match('Unexpected string in JSON')
@@ -324,7 +335,7 @@ export const CreateSkillModal: React.FC<CreateSkillModalProps> = (props) => {
     result.path && setManifestDirPath(result.path);
     result.zipContent && setZipContent(result.zipContent);
     if (result.manifestContent) {
-      setSkillManifest(result.manifestContent);
+      validateSKillName(result.manifestContent, setSkillManifest, setFormDataErrors);
       setShowDetail(true);
     }
   };
