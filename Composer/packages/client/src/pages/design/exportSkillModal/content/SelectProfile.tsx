@@ -74,23 +74,8 @@ const onRenderInvalidProfileWarning = (hasValidProfile, handleShowPublishProfile
   );
 };
 
-export const getManifestId = (
-  botName: string,
-  skillManifests: SkillManifestFile[],
-  { content: { version } = '' }: Partial<SkillManifestFile>
-): string => {
-  let fileId = version ? `${botName}-${version.replace(/\./g, '-')}-manifest` : `${botName}-manifest`;
-  let i = -1;
-
-  while (skillManifests.some(({ id }) => id === fileId) && i < skillManifests.length) {
-    if (i < 0) {
-      fileId = fileId.concat(`-${++i}`);
-    } else {
-      fileId = fileId.substr(0, fileId.lastIndexOf('-')).concat(`-${++i}`);
-    }
-  }
-
-  return fileId;
+export const getManifestId = (botName: string): string => {
+  return `${botName}-manifest`;
 };
 
 const onRenderTitle = (options: IDropdownOption[] | undefined): JSX.Element | null => {
@@ -217,7 +202,7 @@ export const SelectProfile: React.FC<ContentProps> = ({
   }, [settings]);
 
   useEffect(() => {
-    const fileId = getManifestId(botName, skillManifests, manifest);
+    const fileId = getManifestId(botName);
     setSkillManifest({ ...manifest, id: fileId });
   }, [id]);
 
