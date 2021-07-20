@@ -56,7 +56,7 @@ const hasEndpointUrl = (content) => {
   return false;
 };
 
-export const skillNameRegex = /^[a-zA-Z0-9-_]+$/;
+export const skillNameRegex = /^[a-zA-Z0-9-_ ]+$/;
 export const msAppIdRegex = /^[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12}$/;
 
 export interface CreateSkillModalProps {
@@ -136,7 +136,7 @@ const validateSKillName = (skillContent, setSkillManifest, setFormDataErrors) =>
   } else {
     setFormDataErrors({
       manifestUrl: formatMessage(
-        'Spaces and special characters are not allowed for skill name in manifest.json. Use letters, numbers, -, or _.'
+        'Special characters are not allowed for skill name in manifest.json. Use letters, numbers, -, or _.'
       ),
     });
   }
