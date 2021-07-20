@@ -32,6 +32,7 @@ import TelemetryClient from '../../telemetry/TelemetryClient';
 import { TriggerFormData } from '../../utils/dialogUtil';
 import { selectIntentDialog } from '../../constants';
 import { PublishProfileDialog } from '../../pages/botProject/create-publish-profile/PublishProfileDialog';
+import { skillNameRegex } from '../../utils/skillManifestUtil';
 
 import { SelectIntent } from './SelectIntent';
 import { SkillDetail } from './SkillDetail';
@@ -56,7 +57,6 @@ const hasEndpointUrl = (content) => {
   return false;
 };
 
-export const skillNameRegex = /^\w[-\w]*$/;
 export const msAppIdRegex = /^[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12}$/;
 
 export interface CreateSkillModalProps {
@@ -130,6 +130,10 @@ export const validateLocalZip = async (files: Record<string, JSZipObject>) => {
   return result;
 };
 
+const validateSKillName = (skillContent, setSkillManifest) => {
+  skillContent.name = skillContent.name.replace(skillNameRegex, '');
+  setSkillManifest(skillContent);
+};
 export const getSkillManifest = async (
   projectId: string,
   manifestUrl: string,
@@ -143,7 +147,7 @@ export const getSkillManifest = async (
         url: manifestUrl,
       },
     });
-    setSkillManifest(data);
+    validateSKillName(data, setSkillManifest);
   } catch (error) {
     const httpMessage = error?.response?.data?.message;
     const message = httpMessage?.match('Unexpected string in JSON')
@@ -324,7 +328,7 @@ export const CreateSkillModal: React.FC<CreateSkillModalProps> = (props) => {
     result.path && setManifestDirPath(result.path);
     result.zipContent && setZipContent(result.zipContent);
     if (result.manifestContent) {
-      setSkillManifest(result.manifestContent);
+      validateSKillName(result.manifestContent, setSkillManifest);
       setShowDetail(true);
     }
   };
