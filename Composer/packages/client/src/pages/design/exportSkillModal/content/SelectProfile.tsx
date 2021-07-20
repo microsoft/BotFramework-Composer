@@ -3,7 +3,7 @@
 
 /** @jsx jsx */
 import { css, jsx } from '@emotion/core';
-import { PublishTarget, SkillManifestFile } from '@bfc/shared';
+import { PublishTarget } from '@bfc/shared';
 import formatMessage from 'format-message';
 import React, { Fragment, useEffect, useMemo, useState } from 'react';
 import { useRecoilValue } from 'recoil';
@@ -112,7 +112,6 @@ export const SelectProfile: React.FC<ContentProps> = ({
   const [appId, setAppId] = useState<string>();
   const { id, content } = manifest;
   const botName = useRecoilValue(botDisplayNameState(projectId));
-  const skillManifests = useRecoilValue(skillManifestsState(projectId));
 
   const [showCreateProfileDialog, setShowCreateProfileDialog] = useState(true);
   const [selectedKey, setSelectedKey] = useState('');
