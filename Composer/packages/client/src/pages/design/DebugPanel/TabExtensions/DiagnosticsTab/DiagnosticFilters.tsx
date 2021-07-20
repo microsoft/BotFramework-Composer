@@ -86,6 +86,7 @@ export const DiagnosticsFilters: React.FC<DiagnosticsFiltersProps> = (props) => 
   } = props;
   const projects = useRecoilValue(outputsDebugPanelSelector);
   const rootBotProjectId = useRecoilValue(rootBotProjectIdSelector);
+  const optionAll = getOptionAll();
 
   useEffect(() => {
     if (rootBotProjectId) {
@@ -100,6 +101,11 @@ export const DiagnosticsFilters: React.FC<DiagnosticsFiltersProps> = (props) => 
         text: botName,
       };
     });
+  }, [projects]);
+
+  useEffect(() => {
+    const allProjects = projects.map((project) => project.projectId);
+    onProjectFilterChange([...allProjects, optionAll.key]);
   }, [projects]);
 
   if (!rootBotProjectId) {
@@ -143,7 +149,7 @@ export const DiagnosticsFilters: React.FC<DiagnosticsFiltersProps> = (props) => 
         }}
       >
         <DropdownWithAllOption
-          optionAll={getOptionAll()}
+          optionAll={optionAll}
           options={projectSelectorOptions}
           placeholder={formatMessage('Select bots')}
           selectedKeys={projectsToFilter}

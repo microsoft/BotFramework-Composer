@@ -14,6 +14,7 @@ const schemaField = {
     display: flex;
     flex-direction: column;
     margin: 10px ${isRoot ? 18 : 0}px;
+    font-size: 14px;
 
     label: SchemaFieldContainer;
   `,
