@@ -15,7 +15,7 @@ import { NeutralColors } from '@uifabric/fluent-theme';
 import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
 import { Link } from 'office-ui-fabric-react/lib/Link';
 
-import { botDisplayNameState, dispatcherState, settingsState, skillManifestsState } from '../../../../recoilModel';
+import { botDisplayNameState, dispatcherState, settingsState } from '../../../../recoilModel';
 import { CreatePublishProfileDialog } from '../../../botProject/CreatePublishProfileDialog';
 import { iconStyle } from '../../../botProject/runtime-settings/style';
 import { ContentProps } from '../constants';
