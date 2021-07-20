@@ -7,7 +7,7 @@ import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button'
 import { Stack, StackItem } from 'office-ui-fabric-react/lib/Stack';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { FontSizes } from '@uifabric/fluent-theme';
-import { errorSelector, useRecoilValue } from 'recoil';
+import { useRecoilValue } from 'recoil';
 import debounce from 'lodash/debounce';
 import { isUsingAdaptiveRuntime, SDKKinds, isManifestJson } from '@bfc/shared';
 import { DialogWrapper, DialogTypes } from '@bfc/ui-shared';
@@ -32,6 +32,7 @@ import TelemetryClient from '../../telemetry/TelemetryClient';
 import { TriggerFormData } from '../../utils/dialogUtil';
 import { selectIntentDialog } from '../../constants';
 import { PublishProfileDialog } from '../../pages/botProject/create-publish-profile/PublishProfileDialog';
+import { skillNameRegex } from '../../utils/skillManifestUtil';
 
 import { SelectIntent } from './SelectIntent';
 import { SkillDetail } from './SkillDetail';
@@ -56,7 +57,6 @@ const hasEndpointUrl = (content) => {
   return false;
 };
 
-export const skillNameRegex = /[^a-zA-Z0-9-_ ]+/g;
 export const msAppIdRegex = /^[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12}$/;
 
 export interface CreateSkillModalProps {
