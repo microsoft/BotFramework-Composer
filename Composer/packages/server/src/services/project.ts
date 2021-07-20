@@ -637,6 +637,7 @@ export class BotProjectService {
       schemaUrl,
       runtimeType,
       runtimeLanguage,
+      isLocalGenerator,
       isRoot: creatingRootBot = true,
     } = req.body;
 
@@ -683,7 +684,8 @@ export class BotProjectService {
             runtimeType,
             runtimeLanguage,
             null,
-            user
+            user,
+            isLocalGenerator
           );
 
       BackgroundProcessManager.updateProcess(jobId, 202, formatMessage('Bot files created'));

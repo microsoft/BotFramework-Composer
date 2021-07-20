@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 import path from 'path';
 
+import uniq from 'lodash/uniq';
 import URI from 'vscode-uri';
 import { FoldingRangeParams, IConnection, TextDocuments } from 'vscode-languageserver';
 import {
@@ -30,6 +31,8 @@ import { LUOption, LUDocument, generateDiagnostic, convertDiagnostics, createFol
 // define init methods call from client
 const LABELEXPERIENCEREQUEST = 'labelingExperienceRequest';
 const InitializeDocumentsMethodName = 'initializeDocuments';
+const SIMPLEINTENTSECTION = 'simpleIntentSection';
+const NEWENTITYSECTION = 'newEntitySection';
 
 export class LUServer {
   protected workspaceRoot: URI | undefined;
@@ -39,6 +42,7 @@ export class LUServer {
   private luParser = new LuParser();
   private _curFileId = '';
   private _curProjectId = '';
+  private _importedEntities: string[] = [];
 
   constructor(
     protected readonly connection: IConnection,
@@ -228,8 +232,8 @@ export class LUServer {
       const id = fileId || uri;
       this._curFileId = id;
       this._curProjectId = projectId || '';
-      const { intents: sections, diagnostics } = await this.luParser.parse(content, id, luFeatures);
-
+      const { intents: sections, diagnostics, imports } = await this.luParser.parse(content, id, luFeatures);
+      this._importedEntities = await this.findAllImportedEntities(imports, importResolver, luFeatures);
       return { sections, diagnostics, content };
     };
     const luDocument: LUDocument = {
@@ -241,6 +245,53 @@ export class LUServer {
       index,
     };
     this.LUDocuments.push(luDocument);
+  }
+
+  protected async findAllImportedEntities(
+    imports: { id: string; path: string; description: string }[],
+    importResolver: (source: string, id: string) => Promise<{ id: string; content: any }>,
+    luFeatures: any
+  ): Promise<string[]> {
+    let content = '';
+    let result: string[] = [];
+    for (const importFile of imports) {
+      try {
+        content = (await importResolver('.', importFile.id)).content;
+      } catch (error) {
+        // ignore if file not exist
+      }
+
+      let parsed: any;
+      let imported: any;
+      try {
+        const { resource, imports } = await this.luParser.parse(content, importFile.id, luFeatures);
+        parsed = resource;
+        imported = imports;
+      } catch (error) {
+        // ignore if file not exist
+      }
+
+      if (imported && imported.length > 0) {
+        result = await this.findAllImportedEntities(imported, importResolver, luFeatures);
+      }
+
+      if (parsed) {
+        const sections = parsed.Sections;
+        for (const section of sections) {
+          if (section.SectionType === 'newEntitySection') {
+            result.push(section.Name);
+          } else if (section.SectionType === SIMPLEINTENTSECTION) {
+            for (const entity of section.Entities) {
+              if (entity.SectionType === NEWENTITYSECTION) {
+                result.push(entity.Name);
+              }
+            }
+          }
+        }
+      }
+    }
+
+    return uniq(result);
   }
 
   protected getLUDocument(document: TextDocument): LUDocument | undefined {
@@ -523,7 +574,9 @@ export class LUServer {
       luisJson = await this.extractLUISContent(textExceptCurLine);
     }
 
-    const suggestionEntityList = util.getSuggestionEntities(luisJson, util.suggestionAllEntityTypes);
+    const suggestionEntityList = uniq(
+      util.getSuggestionEntities(luisJson, util.suggestionAllEntityTypes).concat(this._importedEntities)
+    );
     const regexEntityList = util.getRegexEntities(luisJson);
 
     //suggest a regex pattern for seperated line definition

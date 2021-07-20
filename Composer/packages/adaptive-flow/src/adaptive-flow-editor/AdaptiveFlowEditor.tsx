@@ -29,7 +29,7 @@ import {
   VisualEditorElementWrapper,
 } from './renderers';
 import { useFlowUIOptions } from './hooks/useFlowUIOptions';
-import { ZoomZone } from './components/ZoomZone';
+import { FlowToolbar } from './components/FlowToolbar';
 
 formatMessage.setup({
   missingTranslation: 'ignore',
@@ -73,11 +73,12 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({ onFocus, onBlur, schema
     hosted,
     schemas,
     flowZoomRate,
+    flowCommentsVisible,
     topics,
     dialogs,
   } = shellData;
 
-  const { updateFlowZoomRate } = shellApi;
+  const { updateFlowZoomRate, toggleFlowComments } = shellApi;
 
   const dataCache = useRef({});
 
@@ -158,7 +159,13 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({ onFocus, onBlur, schema
           >
             <SelectionContext.Provider value={selectionContext}>
               <MarqueeSelection isDraggingConstrainedToRoot selection={selection} styles={marqueeStyles}>
-                <ZoomZone flowZoomRate={flowZoomRate} focusedId={focusedId} updateFlowZoomRate={updateFlowZoomRate}>
+                <FlowToolbar
+                  flowCommentsVisible={flowCommentsVisible}
+                  flowZoomRate={flowZoomRate}
+                  focusedId={focusedId}
+                  toggleFlowComments={toggleFlowComments}
+                  updateFlowZoomRate={updateFlowZoomRate}
+                >
                   <div
                     className="flow-editor-container"
                     css={{
@@ -192,7 +199,7 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({ onFocus, onBlur, schema
                       }}
                     />
                   </div>
-                </ZoomZone>
+                </FlowToolbar>
               </MarqueeSelection>
             </SelectionContext.Provider>
           </div>

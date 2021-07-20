@@ -1,17 +1,20 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { BotTemplate, emptyBotNpmTemplateName, QnABotTemplateId } from '@bfc/shared';
+import { BotTemplate, emptyBotNpmTemplateName, localTemplateId, QnABotTemplateId } from '@bfc/shared';
 import formatMessage from 'format-message';
 
+import fetch from '../utility/fetch';
 import AssetService from '../services/asset';
 import { getNpmTemplates } from '../utility/npm';
 import log from '../logger';
 import { sortTemplates } from '../utility/creation';
+import { FeatureFlagService } from '../services/featureFlags';
 
 export async function getProjTemplates(req: any, res: any) {
   try {
     let templates: BotTemplate[] = [];
+    const advancedTemplateOptionsEnabled = FeatureFlagService.getFeatureFlagValue('ADVANCED_TEMPLATE_OPTIONS');
 
     // Get FeedUrl
     const { feedUrls, getFirstPartyNpm } = req.body;
@@ -41,8 +44,30 @@ export async function getProjTemplates(req: any, res: any) {
           packageName: emptyBotNpmTemplateName,
           packageSource: 'npm',
           packageVersion: qnaTemplateVersion,
+          availableVersions: [],
         },
       });
+      if (advancedTemplateOptionsEnabled) {
+        templates.push({
+          id: localTemplateId,
+          name: 'Create from local template',
+          description: formatMessage('Create a bot using a local yeoman generator'),
+          dotnetSupport: {
+            functionsSupported: true,
+            webAppSupported: true,
+          },
+          nodeSupport: {
+            functionsSupported: true,
+            webAppSupported: true,
+          },
+          package: {
+            packageName: '',
+            packageSource: '',
+            packageVersion: '',
+            availableVersions: [],
+          },
+        });
+      }
     }
 
     if (getFirstPartyNpm) {
@@ -93,7 +118,37 @@ export async function getTemplateReadMe(req: any, res: any) {
       const moduleURL = `https://registry.npmjs.org/${moduleName}`;
       const response = await fetch(moduleURL);
       const data = await response.json();
-      res.status(200).json(data?.readme || '');
+      // check for readme at root of response obj
+      let readMe = data?.readme;
+
+      // if no readme at root then pull readme from latest published version that has one
+      if (!readMe) {
+        const versionsDict = data?.versions;
+        const versionTimesObj = data?.time;
+        if (versionsDict && versionTimesObj) {
+          // convert versionPublishTimes obj to a 2d array
+          // each entry is an array with two fields, version number and dateTime published
+          const items = Object.entries(versionTimesObj);
+
+          // sort versionPublishTimes entries based on time published
+          items.sort((firstEntry, secondEntry) => {
+            const firstEntryDate = new Date(firstEntry[1] as string).getTime();
+            const secondEntryDate = new Date(secondEntry[1] as string).getTime();
+            return firstEntryDate > secondEntryDate ? 1 : -1;
+          });
+
+          // iterate, starting on most recently published version, and query versionDict for a readMe for the version in question
+          for (let i = items.length - 1; i > -1; i--) {
+            if (versionsDict[items[i][0]] && versionsDict[items[i][0]]?.readme) {
+              // if a readMe exists, set it as our result and break out of the loop
+              readMe = versionsDict[items[i][0]]?.readme;
+              break;
+            }
+          }
+        }
+      }
+
+      res.status(200).json(readMe || formatMessage('Read Me cannot be found for this template'));
     }
   } catch (error) {
     log('Failed getting template readMe', error);

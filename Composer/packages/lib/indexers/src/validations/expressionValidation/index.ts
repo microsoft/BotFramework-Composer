@@ -49,7 +49,7 @@ export const validateExpressions: ValidateFunc = (
     let errorMessage = '';
     let warningMessage = '';
     try {
-      newCache[value] = cache?.[value] ? cache[value] : checkExpression(value, required);
+      newCache[value] = cache?.[value] ? cache[value] : checkExpression(value, required, types);
       errorMessage = checkReturnType(newCache[value], types);
     } catch (error) {
       //change the missing custom function error to warning
@@ -57,7 +57,7 @@ export const validateExpressions: ValidateFunc = (
     }
 
     if (errorMessage) diagnostics.push(new Diagnostic(errorMessage, '', DiagnosticSeverity.Error, path));
-    if (warningMessage) diagnostics.push(new Diagnostic(errorMessage, '', DiagnosticSeverity.Warning, path));
+    if (warningMessage) diagnostics.push(new Diagnostic(warningMessage, '', DiagnosticSeverity.Warning, path));
 
     return diagnostics;
   }, []);

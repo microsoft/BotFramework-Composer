@@ -15,6 +15,7 @@ import {
   projectMetaDataState,
   skillsStateSelector,
   skillNameIdentifierByProjectIdSelector,
+  localeState,
 } from '../../recoilModel';
 import { undoVersionState } from '../../recoilModel/undo/history';
 import { LoadingSpinner } from '../../components/LoadingSpinner';
@@ -29,6 +30,7 @@ type PropertyViewProps = {
 };
 
 const PropertyPanel: React.FC<PropertyViewProps> = React.memo(({ projectId = '', isSkill = false }) => {
+  const locale = useRecoilValue(localeState(projectId));
   const schemas = useRecoilValue(schemasState(projectId));
   const focusPath = useRecoilValue(focusPathState(projectId));
   const undoVersion = useRecoilValue(undoVersionState(projectId));
@@ -58,7 +60,7 @@ const PropertyPanel: React.FC<PropertyViewProps> = React.memo(({ projectId = '',
         (isRemoteSkill && skillManifestFile ? (
           <ManifestEditor formData={skillManifestFile} />
         ) : (
-          <PropertyEditor key={focusPath + undoVersion} />
+          <PropertyEditor key={focusPath + undoVersion + locale} />
         ))}
     </EditorExtension>
   );

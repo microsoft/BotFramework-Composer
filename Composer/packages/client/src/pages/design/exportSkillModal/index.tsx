@@ -10,9 +10,8 @@ import { DefaultButton, PrimaryButton } from 'office-ui-fabric-react/lib/Button'
 import { JSONSchema7 } from '@bfc/extension-client';
 import { Link } from 'office-ui-fabric-react/lib/components/Link';
 import { useRecoilValue } from 'recoil';
-import { PublishTarget, SkillManifestFile } from '@bfc/shared';
+import { isUsingAdaptiveRuntime, PublishTarget, SkillManifestFile } from '@bfc/shared';
 import { navigate } from '@reach/router';
-import { isUsingAdaptiveRuntime } from '@bfc/shared';
 import cloneDeep from 'lodash/cloneDeep';
 
 import { Notification } from '../../../recoilModel/types';
@@ -316,7 +315,7 @@ const ExportSkillModal: React.FC<ExportSkillModalProps> = ({ onSubmit, onDismiss
             onUpdateIsCreateProfileFromSkill={setIsCreateProfileFromSkill}
           />
         </div>
-        <DialogFooter>
+        <DialogFooter styles={{ actions: { lineHeight: '0px' } }}>
           <div css={styles.buttonContainer}>
             <div>
               {buttons.map(({ disabled, primary, text, onClick }, index) => {

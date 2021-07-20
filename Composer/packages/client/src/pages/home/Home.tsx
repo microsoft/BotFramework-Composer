@@ -163,6 +163,7 @@ const Home: React.FC<RouteComponentProps> = () => {
     //   disabled: botName ? false : true,
     // },
   ];
+
   return (
     <div css={home.outline}>
       <div css={home.page}>
@@ -188,22 +189,19 @@ const Home: React.FC<RouteComponentProps> = () => {
                   src={noRecentBotsCover}
                 />
                 <div css={home.noRecentBotsDescription}>
-                  {formatMessage.rich(
-                    'Open the product tour to learn about Bot Framework Composer or <Link>create a new bot</Link>',
-                    {
-                      Link: ({ children }) => (
-                        <Link
-                          key="create-new-bot-link"
-                          onClick={() => {
-                            onClickNewBot();
-                            TelemetryClient.track('ToolbarButtonClicked', { name: 'new' });
-                          }}
-                        >
-                          {children}
-                        </Link>
-                      ),
-                    }
-                  )}
+                  {formatMessage.rich('<Link>Create a new bot to get started</Link>', {
+                    Link: ({ children }) => (
+                      <Link
+                        key="create-new-bot-link"
+                        onClick={() => {
+                          onClickNewBot();
+                          TelemetryClient.track('ToolbarButtonClicked', { name: 'new' });
+                        }}
+                      >
+                        {children}
+                      </Link>
+                    ),
+                  })}
                 </div>
               </div>
             )}

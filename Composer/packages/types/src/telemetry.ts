@@ -40,7 +40,7 @@ export enum PageNames {
 
 type ApplicationEvents = {
   NotificationPanelOpened: undefined;
-  HandoffToComposerCompleted: { source: string };
+  HandoffToComposerCompleted: { appId?: string | null; source?: string | null };
 };
 
 type GettingStartedEvents = {
@@ -97,15 +97,20 @@ type DesignerEvents = {
   AddNewDialogStarted: undefined;
   AddNewDialogCompleted: undefined;
   AddNewSkillStarted: { method: string };
-  AddNewSkillCompleted: undefined;
+  AddNewSkillCompleted: { from: string };
   NewTemplateAdded: undefined;
   FormDialogGenerated: { durationMilliseconds: number };
 };
 
 type QnaEvents = {
   AddNewKnowledgeBaseStarted: undefined;
-  AddNewKnowledgeBaseCompleted: { scratch: boolean };
+  AddNewKnowledgeBaseCompleted: { source: 'none' | 'kb' | 'url' };
+  AddNewKnowledgeBaseError: { error: string };
   AddNewKnowledgeBaseCanceled: undefined;
+  UpdateKnowledgeBaseStarted: undefined;
+  UpdateKnowledgeBaseCompleted: { source: 'none' | 'kb' | 'url' };
+  UpdateKnowledgeBaseCanceled: undefined;
+  UpdateKnowledgeBaseError: { error: string };
   NewQnAPair: undefined;
   AlternateQnAPhraseAdded: undefined;
 };
@@ -168,6 +173,7 @@ type BotSettingsEvents = {
     region: string;
   };
   SettingsGetKeysResourceRequestSelected: { subscriptionId?: string; resourceType: string };
+  TelemetryOptInOut: { enabled: boolean };
 };
 
 type LgEditorEvents = {
@@ -193,8 +199,13 @@ type WebChatEvents = {
   WebChatConversationRestarted: { restartType: 'SameUserId' | 'NewUserId' };
   DrawerPaneOpened: undefined;
   DrawerPaneClosed: undefined;
-  DrawerPaneTabOpened: { tabType: 'Diagnostics' | 'WebChatInspector' | 'RuntimeLog' };
+  DrawerPaneTabOpened: { tabType: 'Diagnostics' | 'WebChatInspector' | 'RuntimeLog' | 'Watch' };
   SaveTranscriptClicked: undefined;
+};
+
+type DebuggingEvents = {
+  StateWatchPropertyAdded: { property: string };
+  StateWatchPropertyRemoved: { property: string };
 };
 
 type ABSChannelsEvents = {
@@ -234,6 +245,13 @@ type PageView = {
   [PageNames.PackageManger]: undefined;
 };
 
+type SurveyEvents = {
+  HATSSurveyOffered: undefined;
+  HATSSurveyDismissed: undefined;
+  HATSSurveyAccepted: undefined;
+  HATSSurveyRejected: undefined;
+};
+
 export type TelemetryEvents = ApplicationEvents &
   GettingStartedEvents &
   BotProjectEvents &
@@ -252,7 +270,9 @@ export type TelemetryEvents = ApplicationEvents &
   LuEditorEvents &
   OrchestratorEvents &
   PropertyEditorEvents &
-  CreationEvents;
+  CreationEvents &
+  SurveyEvents &
+  DebuggingEvents;
 
 export type TelemetryEventName = keyof TelemetryEvents;
 
@@ -268,3 +288,21 @@ export type TelemetryClient = {
     properties?: TelemetryEvents[TN] extends undefined ? never : TelemetryEvents[TN]
   ) => void;
 };
+
+/**
+ * persistedEvents is an array of telemetry events that occur before the user has
+ * had a chance to opt in to data collection. These events are added to the event queue;
+ * however, they are only logged to Application Insights after the user opts in to data collection.
+ */
+export const persistedEvents: TelemetryEventName[] = ['SessionStarted', 'HandoffToComposerCompleted'];
+
+/**
+ * These events are ones which are always tracked regardless of whether tracking is opted
+ * into or not (i.e. those having to do with turning telemetry itself on or off). If
+ * the user opts out, we will strip all PII from the event before sending it. Every event
+ * whose name is in this array should have "enabled: boolean" in its fields.
+ */
+export const alwaysTrackEvents: TelemetryEventName[] = ['TelemetryOptInOut'];
+
+/** Names of the properties containing PII Data */
+export const piiProperties = ['userId'];

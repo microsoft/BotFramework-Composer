@@ -43,7 +43,6 @@ export const BotProjectInfo: React.FC<RouteComponentProps<{
   const readme = useRecoilValue(projectReadmeState(projectId));
   const location = useRecoilValue(locationState(projectId));
   const [readmeHidden, setReadmeHidden] = useState<boolean>(true);
-
   return (
     <div>
       <h3 css={headerStyle}>
@@ -53,11 +52,14 @@ export const BotProjectInfo: React.FC<RouteComponentProps<{
       <Stack tokens={{ childrenGap: 10 }}>
         <StackItem>
           <div css={labelStyle}>{formatMessage('Bot project location')}</div>
-          <div css={valueStyle}>{location}</div>
+          <div css={valueStyle} data-testid={'botLocationString'}>
+            {location}
+          </div>
         </StackItem>
         {readme && (
           <StackItem>
             <Link
+              data-testid={'settingsReadMeBtn'}
               onClick={() => {
                 setReadmeHidden(false);
               }}

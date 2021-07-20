@@ -3,7 +3,12 @@
 
 import { join } from 'path';
 
-import { PowerVirtualAgentsProvider } from '../powerVirtualAgentsProvider';
+import {
+  PowerVirtualAgentsProvider,
+  PVA_GOV_APP_ID,
+  PVA_PROD_APP_ID,
+  PVA_TEST_APP_ID,
+} from '../powerVirtualAgentsProvider';
 
 jest.mock('fs', () => ({
   createWriteStream: jest.fn().mockReturnValue({
@@ -29,11 +34,9 @@ jest.mock('../../services/auth/auth', () => ({
 }));
 
 const mockFetch = jest.fn();
-jest.mock('node-fetch', () => async (...args) => await mockFetch(...args));
+jest.mock('../../utility/fetch', () => async (...args) => await mockFetch(...args));
 
 describe('Power Virtual Agents provider', () => {
-  const PVA_TEST_APP_ID = 'a522f059-bb65-47c0-8934-7db6e5286414';
-  const PVA_PROD_APP_ID = '96ff4394-9197-43aa-b393-6a41652e21f8';
   const envBackup = { ...process.env };
   const metadata = {
     baseUrl: 'https://bots.int.customercareintelligence.net/',
@@ -190,6 +193,19 @@ describe('Power Virtual Agents provider', () => {
     const args = mockGetAccessToken.mock.calls[0];
     const credentials = args[0];
     expect(credentials.targetResource).toBe(PVA_PROD_APP_ID);
+    expect(accessToken).toBe('accessToken');
+  });
+
+  it('should authenticate with credentials for the GCC / gov environment', async () => {
+    provider = new PowerVirtualAgentsProvider({
+      ...metadata,
+      baseUrl: 'https://gcc.api.powerva.microsoft.us/api/botmanagement/v1',
+    });
+    const accessToken = await provider.authenticate();
+
+    const args = mockGetAccessToken.mock.calls[0];
+    const credentials = args[0];
+    expect(credentials.targetResource).toBe(PVA_GOV_APP_ID);
     expect(accessToken).toBe('accessToken');
   });
 });

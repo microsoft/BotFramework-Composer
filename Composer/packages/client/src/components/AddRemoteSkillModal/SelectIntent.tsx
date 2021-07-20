@@ -1,10 +1,17 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 /** @jsx jsx */
+import { join, isAbsolute } from 'path';
+
 import { jsx, css } from '@emotion/core';
 import React, { Fragment, useState, useMemo, useEffect, useCallback } from 'react';
 import formatMessage from 'format-message';
-import { DetailsList, SelectionMode, CheckboxVisibility } from 'office-ui-fabric-react/lib/DetailsList';
+import {
+  DetailsList,
+  SelectionMode,
+  CheckboxVisibility,
+  IDetailsRowProps,
+} from 'office-ui-fabric-react/lib/DetailsList';
 import { Selection } from 'office-ui-fabric-react/lib/Selection';
 import { Separator } from 'office-ui-fabric-react/lib/Separator';
 import { Stack, StackItem } from 'office-ui-fabric-react/lib/Stack';
@@ -12,8 +19,9 @@ import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button'
 import { Label } from 'office-ui-fabric-react/lib/Label';
 import { LuEditor } from '@bfc/code-editor';
 import { ScrollablePane, ScrollbarVisibility } from 'office-ui-fabric-react/lib/ScrollablePane';
-import { LuFile, LuIntentSection, SDKKinds, ILUFeaturesConfig } from '@bfc/shared';
+import { LuFile, LuIntentSection, SDKKinds, ILUFeaturesConfig, DialogSetting } from '@bfc/shared';
 import { useRecoilValue } from 'recoil';
+import { IRenderFunction } from 'office-ui-fabric-react/lib/Utilities';
 
 import TelemetryClient from '../../telemetry/TelemetryClient';
 import { selectIntentDialog, enableOrchestratorDialog } from '../../constants';
@@ -23,6 +31,7 @@ import { localeState, dispatcherState } from '../../recoilModel';
 import { recognizersSelectorFamily } from '../../recoilModel/selectors/recognizers';
 
 import { EnableOrchestrator } from './EnableOrchestrator';
+import { canImportOrchestrator } from './helper';
 
 const detailListContainer = css`
   width: 100%;
@@ -45,6 +54,9 @@ type SelectIntentProps = {
   luFeatures: ILUFeaturesConfig;
   rootLuFiles: LuFile[];
   dialogId: string;
+  zipContent: Record<string, string>;
+  manifestDirPath: string;
+  runtime: DialogSetting['runtime'];
   onSubmit: (event: Event, content: string, enable: boolean) => Promise<void>;
   onDismiss: () => void;
   onUpdateTitle: (title: { title: string; subText: string }) => void;
@@ -63,35 +75,70 @@ const columns = [
   },
 ];
 
-const getRemoteLuFiles = async (skillLanguages: object, composerLangeages: string[], setWarningMsg) => {
-  const luFilePromise: Promise<any>[] = [];
+const getRemoteLuFiles = async (
+  skillLanguages: object,
+  composerLanguages: string[],
+  setWarningMsg,
+  zipContent: Record<string, string>,
+  manifestDirPath: string,
+  locale: string
+) => {
+  const luFiles: Record<string, { id: string; content: string }[]> = {};
   try {
-    for (const [key, value] of Object.entries(skillLanguages)) {
-      if (composerLangeages.includes(key)) {
-        value.map((item) => {
-          // get lu file
-          luFilePromise.push(
-            httpClient
-              .get(`/utilities/retrieveRemoteFile`, {
-                params: {
-                  url: item.url,
-                },
-              })
-              .catch((err) => {
-                console.error(err);
-                setWarningMsg('get remote file fail');
-              })
-          );
+    //for each root bot locale, which format is language-locale, we need to find the luFile in matched skill language
+    //currently the rule is:
+    //1. find the exact match, root language-locale matches skill language-locale. en-us matches en-us
+    //2. if no exact match found, root language-locale matches skill language. en-us matches en, zh-cn matches zh.
+
+    for (const cl of composerLanguages) {
+      let matchedLanguage = '';
+      if (skillLanguages[cl]) {
+        matchedLanguage = cl;
+      } else {
+        Object.keys(skillLanguages).forEach((sl) => {
+          if (cl.startsWith(sl)) {
+            matchedLanguage = sl;
+          }
         });
       }
+      if (matchedLanguage && Array.isArray(skillLanguages[matchedLanguage])) {
+        luFiles[cl] = [];
+        for (const item of skillLanguages[matchedLanguage]) {
+          if (/^http[s]?:\/\/\w+/.test(item.url) || isAbsolute(item.url)) {
+            // get lu file from remote
+            const { data } = await httpClient.get(`/utilities/retrieveRemoteFile`, {
+              params: {
+                url: item.url,
+              },
+            });
+            luFiles[cl].push(data);
+          } else {
+            // get luFile from local zip folder
+            const fileKey = join(manifestDirPath, item.url);
+            if (zipContent[fileKey]) {
+              luFiles[cl].push({
+                id: fileKey.substr(fileKey.lastIndexOf('/') + 1),
+                content: zipContent[fileKey],
+              });
+            } else {
+              // get lu file from remote
+              const { data } = await httpClient.get(`/utilities/retrieveRemoteFile`, {
+                params: {
+                  url: fileKey,
+                },
+              });
+              luFiles[cl].push(data);
+            }
+          }
+        }
+      } else if (locale === cl) {
+        setWarningMsg(`no matching locale found for ${locale}`);
+      }
     }
-    const responses = await Promise.all(luFilePromise);
-    const files: { id: string; content: string }[] = responses.map((response) => {
-      return response.data;
-    });
-    return files;
+    return luFiles;
   } catch (e) {
     console.log(e);
+    setWarningMsg('get remote file fail');
   }
 };
 
@@ -121,13 +168,16 @@ export const SelectIntent: React.FC<SelectIntentProps> = (props) => {
     projectId,
     rootLuFiles,
     dialogId,
+    runtime,
     onUpdateTitle,
     onBack,
+    zipContent,
+    manifestDirPath,
   } = props;
   const [pageIndex, setPage] = useState(0);
   const [selectedIntents, setSelectedIntents] = useState<Array<string>>([]);
   // luFiles from manifest, language was included in root bot languages
-  const [luFiles, setLufiles] = useState<Array<LuFile>>([]);
+  const [lufilesOnLocale, setLufilesOnLocale] = useState<Array<{ locale: string; lufiles: LuFile[] }>>([]);
   // current locale Lufile
   const [currentLuFile, setCurrentLuFile] = useState<LuFile>();
   // selected intents in different languages
@@ -153,6 +203,10 @@ export const SelectIntent: React.FC<SelectIntentProps> = (props) => {
       },
     });
   }, []);
+
+  const onRenderRow = (props?: IDetailsRowProps, defaultRender?: IRenderFunction<IDetailsRowProps>): JSX.Element => {
+    return <div data-selection-toggle>{defaultRender?.(props)}</div>;
+  };
 
   // intents from manifest, intents can be an object or array.
   const intentItems = useMemo(() => {
@@ -189,24 +243,27 @@ export const SelectIntent: React.FC<SelectIntentProps> = (props) => {
   useEffect(() => {
     if (locale) {
       const skillLanguages = manifest.dispatchModels?.languages;
-      getRemoteLuFiles(skillLanguages, languages, setWarningMsg)
+      getRemoteLuFiles(skillLanguages, languages, setWarningMsg, zipContent, manifestDirPath, locale)
         .then((items) => {
-          items &&
-            getParsedLuFiles(items, luFeatures, []).then((files) => {
-              setLufiles(files);
+          const lufilesOnLocale: { locale: string; lufiles: LuFile[] }[] = [];
+          for (const key in items) {
+            getParsedLuFiles(items[key], luFeatures, []).then((files) => {
+              lufilesOnLocale.push({ locale: key, lufiles: files });
               files.map((file) => {
-                if (file.id.includes(locale)) {
+                if (key === locale && file.id.endsWith('.lu')) {
                   setCurrentLuFile(file);
                 }
               });
             });
+          }
+          setLufilesOnLocale(lufilesOnLocale);
         })
         .catch((e) => {
           console.log(e);
           setWarningMsg(formatMessage('get remote file fail'));
         });
     }
-  }, [manifest.dispatchModels?.languages, languages, locale, luFeatures]);
+  }, [manifest.dispatchModels?.languages, locale, manifestDirPath]);
 
   useEffect(() => {
     if (selectedIntents.length > 0) {
@@ -217,17 +274,16 @@ export const SelectIntent: React.FC<SelectIntentProps> = (props) => {
           intents.push(cur);
         }
       });
-      for (const file of luFiles) {
-        const id = file.id.split('.');
-        const language = id[id.length - 1];
-        multiLanguageIntents[language] = [];
-        for (const intent of file.intents) {
-          if (selectedIntents.includes(intent.Name)) {
-            multiLanguageIntents[language].push(intent);
+      for (const { locale, lufiles } of lufilesOnLocale) {
+        multiLanguageIntents[locale] = [];
+        for (const file of lufiles) {
+          for (const intent of file.intents) {
+            if (selectedIntents.includes(intent.Name)) {
+              multiLanguageIntents[locale].push(intent);
+            }
           }
         }
       }
-
       setMultiLanguageIntents(multiLanguageIntents);
       // current locale, selected intent value.
       const intentsValue = mergeIntentsContent(intents);
@@ -236,7 +292,7 @@ export const SelectIntent: React.FC<SelectIntentProps> = (props) => {
       setDisplayContent('');
       setMultiLanguageIntents({});
     }
-  }, [selectedIntents, currentLuFile, luFiles]);
+  }, [selectedIntents, currentLuFile, lufilesOnLocale]);
 
   const handleSubmit = async (ev, enableOchestractor) => {
     // add trigger to root
@@ -250,6 +306,7 @@ export const SelectIntent: React.FC<SelectIntentProps> = (props) => {
       {showOrchestratorDialog ? (
         <EnableOrchestrator
           projectId={projectId}
+          runtime={runtime}
           onBack={() => {
             onUpdateTitle(selectIntentDialog.ADD_OR_EDIT_PHRASE(dialogId, manifest.name));
             setShowOrchestratorDialog(false);
@@ -270,6 +327,7 @@ export const SelectIntent: React.FC<SelectIntentProps> = (props) => {
                     items={intentItems}
                     selection={selection}
                     selectionMode={SelectionMode.multiple}
+                    onRenderRow={onRenderRow}
                   />
                 </ScrollablePane>
               </div>
@@ -309,12 +367,16 @@ export const SelectIntent: React.FC<SelectIntentProps> = (props) => {
               <DefaultButton text={formatMessage('Cancel')} onClick={onDismiss} />
               <PrimaryButton
                 styles={{ root: { marginLeft: '8px' } }}
-                text={pageIndex === 1 && hasOrchestrator ? formatMessage('Done') : formatMessage('Next')}
+                text={
+                  pageIndex === 1 && (hasOrchestrator || !canImportOrchestrator(runtime?.key))
+                    ? formatMessage('Done')
+                    : formatMessage('Next')
+                }
                 onClick={(ev) => {
                   if (pageIndex === 1) {
-                    if (hasOrchestrator) {
+                    if (hasOrchestrator || !canImportOrchestrator(runtime?.key)) {
                       // skip orchestrator modal
-                      handleSubmit(ev, true);
+                      handleSubmit(ev, false);
                     } else {
                       // show orchestrator
                       onUpdateTitle(enableOrchestratorDialog);

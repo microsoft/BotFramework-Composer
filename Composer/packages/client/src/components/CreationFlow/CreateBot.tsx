@@ -16,9 +16,9 @@ import {
   CheckboxVisibility,
   DetailsRow,
 } from 'office-ui-fabric-react/lib/DetailsList';
-import { BotTemplate } from '@bfc/shared';
+import { BotTemplate, localTemplateId } from '@bfc/shared';
 import { DialogWrapper, DialogTypes, LoadingSpinner } from '@bfc/ui-shared';
-import { NeutralColors } from '@uifabric/fluent-theme';
+import { NeutralColors, SharedColors } from '@uifabric/fluent-theme';
 import { WindowLocation } from '@reach/router';
 import { IPivotItemProps, Pivot, PivotItem } from 'office-ui-fabric-react/lib/Pivot';
 import { Link } from 'office-ui-fabric-react/lib/Link';
@@ -116,6 +116,8 @@ type CreateBotProps = {
   isOpen: boolean;
   templates: BotTemplate[];
   location?: WindowLocation | undefined;
+  localTemplatePath: string;
+  onUpdateLocalTemplatePath: (path: string) => void;
   onDismiss: () => void;
   onNext: (templateName: string, templateLanguage: string, urlData?: string) => void;
   fetchReadMe: (moduleName: string) => {};
@@ -124,11 +126,12 @@ type CreateBotProps = {
 export function CreateBot(props: CreateBotProps) {
   const [option] = useState(optionKeys.createFromTemplate);
   const [disabled] = useState(false);
-  const { isOpen, templates, onDismiss, onNext } = props;
+  const { isOpen, templates, onDismiss, onNext, localTemplatePath, onUpdateLocalTemplatePath } = props;
   const [currentTemplateId, setCurrentTemplateId] = useState('');
   const [selectedProgLang, setSelectedProgLang] = useState<{ props: IPivotItemProps }>({
     props: { itemKey: csharpFeedKey },
   });
+  const [localTemplatePathValid, setLocalTemplatePathValid] = useState<boolean>(false);
   const [displayedTemplates, setDisplayedTemplates] = useState<BotTemplate[]>([]);
   const [readMe] = useRecoilState(selectedTemplateReadMeState);
   const fetchReadMePending = useRecoilValue(fetchReadMePendingState);
@@ -157,6 +160,35 @@ export function CreateBot(props: CreateBotProps) {
     }
   };
 
+  const renderTemplateIcon = (item: BotTemplate) => {
+    if (item.id === localTemplateId) {
+      return (
+        <FontIcon
+          aria-label={formatMessage('Add Local Template')}
+          iconName="Add"
+          style={{
+            color: `${SharedColors.cyanBlue10}`,
+            marginRight: '3px',
+            height: '12px',
+            width: '12px',
+            position: 'relative',
+            top: '2px',
+          }}
+        />
+      );
+    } else {
+      const labelText = formatMessage('Microsoft Logo');
+      return (
+        <img
+          alt={labelText}
+          aria-label={labelText}
+          src={msftIcon}
+          style={{ marginRight: '3px', height: '12px', width: '12px', position: 'relative', top: '2px', color: 'blue' }}
+        />
+      );
+    }
+  };
+
   const tableColumns = [
     {
       key: 'name',
@@ -170,12 +202,7 @@ export function CreateBot(props: CreateBotProps) {
       onRender: (item) => (
         <div data-is-focusable css={tableCell}>
           <div css={content} tabIndex={-1}>
-            <img
-              alt={formatMessage('Microsoft Logo')}
-              aria-label={formatMessage('Microsoft Logo')}
-              src={msftIcon}
-              style={{ marginRight: '3px', height: '12px', width: '12px', position: 'relative', top: '2px' }}
-            />
+            {renderTemplateIcon(item)}
             {item.name}
           </div>
         </div>
@@ -274,7 +301,17 @@ export function CreateBot(props: CreateBotProps) {
             </ScrollablePane>
           </div>
           <div css={templateDetailContainer} data-is-scrollable="true">
-            {fetchReadMePending ? <LoadingSpinner /> : <TemplateDetailView readMe={readMe} template={getTemplate()} />}
+            {fetchReadMePending ? (
+              <LoadingSpinner />
+            ) : (
+              <TemplateDetailView
+                localTemplatePath={localTemplatePath}
+                readMe={readMe}
+                template={getTemplate()}
+                onUpdateLocalTemplatePath={onUpdateLocalTemplatePath}
+                onValidateLocalTemplatePath={setLocalTemplatePathValid}
+              />
+            )}
           </div>
         </div>
         <DialogFooter>
@@ -289,10 +326,13 @@ export function CreateBot(props: CreateBotProps) {
             <FontIcon iconName="ChatInviteFriend" style={{ marginRight: '5px' }} />
             {formatMessage('Need another template? Send us a request')}
           </Link>
-          <DefaultButton text={formatMessage('Cancel')} onClick={onDismiss} />
+          <DefaultButton data-testid="CreateBotCancelButton" text={formatMessage('Cancel')} onClick={onDismiss} />
           <PrimaryButton
-            data-testid="NextStepButton"
-            disabled={option === optionKeys.createFromTemplate && (templates.length <= 0 || currentTemplateId === null)}
+            data-testid="CreateBotNextStepButton"
+            disabled={
+              (currentTemplateId === localTemplateId && !localTemplatePathValid) ||
+              (option === optionKeys.createFromTemplate && (templates.length <= 0 || currentTemplateId === null))
+            }
             text={formatMessage('Next')}
             onClick={handleJumpToNext}
           />

@@ -1,11 +1,11 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import fs from 'fs';
-
 import rimraf from 'rimraf';
+import fs from 'fs-extra';
 import { DialogFactory, SDKKinds } from '@bfc/shared';
 import endsWith from 'lodash/endsWith';
+import { nanoid } from 'nanoid';
 
 import { Path } from '../../../utility/path';
 import { BotProject } from '../botProject';
@@ -29,13 +29,45 @@ jest.mock('../../../services/asset', () => {
   };
 });
 
-const botDir = '../../../__mocks__/samplebots/bot1';
+jest.mock('../process/orchestratorBuilder', () => ({
+  warmupCache: jest.fn(),
+  build: jest.fn(),
+}));
+
+const newBotName = nanoid();
+const botDir = Path.resolve(__dirname, `../../../__mocks__/samplebots/${newBotName}`);
 
 const mockLocationRef: LocationRef = {
   storageId: 'default',
-  path: Path.join(__dirname, `${botDir}`),
+  path: botDir,
 };
 let proj: BotProject;
+
+const cleanup = (dirs: string | string[]) => {
+  const targets = Array.isArray(dirs) ? dirs : [dirs];
+
+  for (const dir of targets) {
+    try {
+      rimraf.sync(dir);
+    } catch {
+      // ignore
+    }
+  }
+};
+
+beforeAll(async () => {
+  // create a new bot just for these tests to avoid race conditions
+  const sampleBotDir = '../../../__mocks__/samplebots/bot1';
+  const sample = new BotProject({
+    storageId: 'default',
+    path: Path.join(__dirname, sampleBotDir),
+  });
+  await sample.copyTo(mockLocationRef);
+});
+
+afterAll(() => {
+  cleanup(botDir);
+});
 
 beforeEach(async () => {
   proj = new BotProject(mockLocationRef);
@@ -71,11 +103,7 @@ describe('createFromTemplate', () => {
   const content = JSON.stringify(new DialogFactory({}).create(SDKKinds.AdaptiveDialog), null, 2) + '\n';
 
   afterEach(() => {
-    try {
-      rimraf.sync(Path.resolve(__dirname, `${botDir}/dialogs/${dialogName}`));
-    } catch (err) {
-      // ignore
-    }
+    cleanup(Path.join(botDir, `/dialogs/${dialogName}`));
   });
 
   it('should create a dialog file with given steps', async () => {
@@ -87,7 +115,7 @@ describe('createFromTemplate', () => {
   });
 });
 
-const copyDir = Path.join(__dirname, botDir, '../copy');
+const copyDir = Path.join(botDir, '../copy');
 
 describe('copyTo', () => {
   const locationRef: LocationRef = {
@@ -111,7 +139,7 @@ describe('copyTo', () => {
               fs.unlinkSync(curPath);
             }
           });
-          rimraf.sync(path);
+          cleanup(path);
         }
       };
       deleteFolder(copyDir);
@@ -141,11 +169,7 @@ describe('modify non exist files', () => {
 
 describe('lg operations', () => {
   afterEach(() => {
-    try {
-      rimraf.sync(Path.resolve(__dirname, `${botDir}/dialogs/root`));
-    } catch (err) {
-      // ignore
-    }
+    cleanup(Path.join(botDir, '/dialogs/root'));
   });
 
   it('should create lg file and update index', async () => {
@@ -198,12 +222,7 @@ describe('lg operations', () => {
 
 describe('lu operations', () => {
   afterEach(() => {
-    try {
-      rimraf.sync(Path.resolve(__dirname, `${botDir}/dialogs/root`));
-      rimraf.sync(Path.resolve(__dirname, `${botDir}/generated`));
-    } catch (err) {
-      // ignore
-    }
+    cleanup([Path.join(botDir, '/dialogs/root'), Path.join(botDir, '/generated')]);
   });
 
   it('should create lu file and update index', async () => {
@@ -263,18 +282,43 @@ describe('qna operations', () => {
     expect(endpointKey).toBe('new key');
   });
 });
-describe('buildFiles', () => {
-  const path = Path.resolve(__dirname, `${botDir}/generated`);
+
+describe('skill operations', () => {
+  const url = 'https://xxx/manifests/Empty_45-2-1-manifest.json';
+  const skillName = 'manifest';
+  const zipContent = {
+    'manifests/': '',
+    'manifests/Empty-2-1-manifest.json':
+      '{\n  "$schema": "https://schemas.botframework.com/schemas/skills/v2.1/skill-manifest.json",\n  "$id": "Empty-f49bb91b-8d8d-492a-adc5-dd6c599bbc7a",\n  "endpoints": [\n    {\n      "protocol": "BotFrameworkV3",\n      "name": "bb-0622",\n      "endpointUrl": "https://bb-0622.azurewebsites.net/api/messages",\n      "description": "<description>",\n      "msAppId": "56969972-de80-4fbc-ad8c-e0ccf1600d09"\n    }\n  ],\n  "name": "Empty",\n  "version": "abc",\n  "publisherName": "abc",\n  "activities": {\n    "Empty": {\n      "type": "event",\n      "name": "Empty"\n    },\n    "conversationUpdate": {\n      "type": "conversationUpdate"\n    },\n    "message": {\n      "type": "message"\n    }\n  },\n  "dispatchModels": {\n    "languages": {\n      "en-us": [\n        {\n          "name": "Empty",\n          "contentType": "application/lu",\n          "url": "./skill-Empty.en-us.lu",\n          "description": "<description>"\n        }\n      ]\n    },\n    "intents": [\n      "test"\n    ]\n  }\n}\n',
+    'manifests/skill-Empty.en-us.lu':
+      '# test\n> add some example phrases to trigger this intent:\n> - please tell me the weather\n> - what is the weather like in {city=Seattle}\n\n> entity definitions:\n> @ ml city\n-test',
+  };
+
   afterEach(() => {
-    try {
-      rimraf.sync(path);
-    } catch (err) {
-      // ignore
-    }
+    cleanup(Path.join(botDir, '/skills'));
   });
 
+  it('should create skill files', async () => {
+    await proj.init();
+
+    const file = await proj.createSkillFiles(url, skillName, zipContent);
+
+    expect(file).not.toBeUndefined();
+    expect(file?.content).toContain(zipContent['manifests/Empty-2-1-manifest.json']);
+  });
+
+  it('should delete skill files', async () => {
+    await proj.createSkillFiles(url, skillName, zipContent);
+    const fileLength = proj.luFiles.length;
+
+    await proj.deleteSkillFiles(skillName);
+    expect(proj.luFiles.length).toBeLessThanOrEqual(fileLength);
+  });
+});
+
+describe('buildFiles', () => {
   it('should build lu & qna file successfully', async () => {
-    proj.init();
+    await proj.init();
     const luisConfig = {
       authoringEndpoint: '',
       authoringKey: 'test',

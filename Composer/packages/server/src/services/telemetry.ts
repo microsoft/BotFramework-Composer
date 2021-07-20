@@ -2,10 +2,17 @@
 // Licensed under the MIT License.
 
 import * as AppInsights from 'applicationinsights';
-import { TelemetryEventName, TelemetryEvents, TelemetryEventTypes, TelemetryEvent } from '@bfc/shared';
+import {
+  TelemetryEventName,
+  TelemetryEvents,
+  TelemetryEventTypes,
+  TelemetryEvent,
+  piiProperties,
+  alwaysTrackEvents,
+} from '@bfc/shared';
 
 import logger from '../logger';
-import { APPINSIGHTS_INSTRUMENTATIONKEY, piiProperties } from '../constants';
+import { APPINSIGHTS_INSTRUMENTATIONKEY } from '../constants';
 import { useElectronContext } from '../utility/electronContext';
 import { getBuildEnvironment } from '../models/utilities/parser';
 
@@ -13,6 +20,14 @@ import { SettingsService } from './settings';
 const log = logger.extend('telemetry');
 
 const instrumentationKey = APPINSIGHTS_INSTRUMENTATIONKEY || getBuildEnvironment()?.APPINSIGHTS_INSTRUMENTATIONKEY;
+
+const stripPII = (data: AppInsights.Contracts.Data<AppInsights.Contracts.RequestData>) => {
+  for (const property of piiProperties) {
+    if (data.baseData.properties[property] !== undefined) {
+      delete data.baseData.properties[property];
+    }
+  }
+};
 
 const getTelemetryContext = () => {
   const electronContext = useElectronContext();
@@ -43,16 +58,18 @@ if (instrumentationKey) {
   AppInsights.defaultClient.addTelemetryProcessor((envelope: AppInsights.Contracts.Envelope): boolean => {
     const { sessionId, telemetry, composerVersion, userId, architecture, cpus, memory } = getTelemetryContext();
 
-    if (!telemetry?.allowDataCollection) {
+    const data = envelope.data as AppInsights.Contracts.Data<AppInsights.Contracts.RequestData>;
+    const alwaysTrackThisEvent = alwaysTrackEvents.includes(data.baseData.name as TelemetryEventName);
+
+    if (!telemetry?.allowDataCollection && !alwaysTrackThisEvent) {
       return false;
     }
-    const data = envelope.data as AppInsights.Contracts.Data<AppInsights.Contracts.RequestData>;
 
     // Add session id
     envelope.tags[AppInsights.defaultClient.context.keys.sessionId] = sessionId;
 
     // Add truncated user id
-    envelope.tags[AppInsights.defaultClient.context.keys.userId] = userId?.slice(0, Math.floor(userId.length * 0.8));
+    envelope.tags[AppInsights.defaultClient.context.keys.userId] = userId;
 
     // Remove PII from url
     if (envelope.data.baseType === 'RequestData' && data.baseData.url.match(/\/\d+.\d+/i)) {
@@ -86,11 +103,9 @@ if (instrumentationKey) {
         }
       }
 
-      // remove PII
-      for (const property of piiProperties) {
-        if (data.baseData.properties[property] !== undefined) {
-          delete data.baseData.properties[property];
-        }
+      // remove PII from always-tracked events
+      if (alwaysTrackThisEvent && data.baseData.properties.enabled) {
+        stripPII(data);
       }
     }
 

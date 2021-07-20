@@ -6,13 +6,13 @@ import { jsx } from '@emotion/core';
 import { useContext } from 'react';
 import formatMessage from 'format-message';
 import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
+import { IconMenu } from '@bfc/ui-shared';
 
 import { NodeEventTypes, EditorEventHandler } from '../../adaptive-flow-renderer/constants/NodeEventTypes';
 import { MenuTypes } from '../constants/MenuTypes';
 import { AttrNames } from '../constants/ElementAttributes';
 import { SelectionContext } from '../contexts/SelectionContext';
 import { ElementColor } from '../../adaptive-flow-renderer/constants/ElementColors';
-import { IconMenu } from '../components/IconMenu';
 
 const declareElementAttributes = (id: string) => {
   return {
@@ -51,6 +51,8 @@ export const NodeMenu: React.FC<NodeMenuProps> = ({ colors = { color: 'black' },
     >
       <TooltipHost content={moreLabel}>
         <IconMenu
+          // eslint-disable-next-line jsx-a11y/no-autofocus
+          autoFocus={nodeSelected}
           iconName="MoreVertical"
           iconSize={12}
           iconStyles={{
@@ -69,7 +71,6 @@ export const NodeMenu: React.FC<NodeMenuProps> = ({ colors = { color: 'black' },
           label={moreLabel}
           menuItems={menuItems}
           menuWidth={100}
-          nodeSelected={nodeSelected}
         />
       </TooltipHost>
     </div>

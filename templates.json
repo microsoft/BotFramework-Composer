@@ -6,5 +6,6 @@
   { "generatorName": "@microsoft/generator-bot-core-assistant", "displayName": "Core Assistant Bot" },
   { "generatorName": "@microsoft/generator-bot-enterprise-assistant", "displayName": "Enterprise Assistant Bot" },
   { "generatorName": "@microsoft/generator-bot-enterprise-calendar", "displayName": "Enterprise Calendar Bot" },
-  { "generatorName": "@microsoft/generator-bot-enterprise-people", "displayName": "Enterprise People Bot" }
+  { "generatorName": "@microsoft/generator-bot-enterprise-people", "displayName": "Enterprise People Bot" },
+  { "generatorName": "LocalTemplate", "displayName": "Create from local template" }
 ]

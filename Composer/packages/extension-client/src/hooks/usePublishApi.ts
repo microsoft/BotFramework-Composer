@@ -16,8 +16,8 @@ export function usePublishApi() {
     return window[ComposerGlobalName].getPublishConfig();
   }
 
-  function startProvision(config: any): void {
-    return window[ComposerGlobalName].startProvision(config);
+  function startProvision(config: any, arm: string, graph: string): void {
+    return window[ComposerGlobalName].startProvision(config, arm, graph);
   }
 
   function currentProjectId(): string {
@@ -58,6 +58,17 @@ export function usePublishApi() {
   function userShouldProvideTokens(): boolean {
     return window[ComposerGlobalName].userShouldProvideTokens();
   }
+  function requireUserLogin(tenantId: string, options?: { graph: boolean }): boolean {
+    return window[ComposerGlobalName].requireUserLogin(tenantId, options);
+  }
+
+  function getRequiredRecognizers(): {
+    projectId: string;
+    requiresLUIS: boolean;
+    requiresQNA: boolean;
+  }[] {
+    return window[ComposerGlobalName].getRequiredRecognizers();
+  }
   /** @deprecated use `userShouldProvideTokens` instead */
   function isGetTokenFromUser(): boolean {
     return window[ComposerGlobalName].userShouldProvideTokens();
@@ -78,5 +89,7 @@ export function usePublishApi() {
     userShouldProvideTokens,
     getTenantIdFromCache,
     setTenantId,
+    requireUserLogin,
+    getRequiredRecognizers,
   };
 }

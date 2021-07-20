@@ -15,13 +15,7 @@ import log from '../../logger';
 import { FileSettingManager } from './fileSettingManager';
 const debug = log.extend('default-settings-manager');
 
-const newSettingsValuePath = [
-  'downsampling',
-  'luis.endpoint',
-  'luis.authoringEndpoint',
-  'skillConfiguration',
-  'customFunctions',
-];
+const newSettingsValuePath = ['luis.endpoint', 'luis.authoringEndpoint', 'skillConfiguration', 'customFunctions'];
 
 const discardedSettingsValuePath = ['downsampling.maxUtteranceAllowed'];
 
@@ -116,9 +110,6 @@ export class DefaultSettingManager extends FileSettingManager {
         path: '',
         command: '',
         key: '',
-      },
-      downsampling: {
-        maxImbalanceRatio: -1,
       },
       skill: {},
       skillConfiguration: {},

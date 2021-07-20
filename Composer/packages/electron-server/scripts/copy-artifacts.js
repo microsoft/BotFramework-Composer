@@ -26,8 +26,6 @@ const sources = [
     // ignore hostedBots in localPublish extension
     opts: { exclude: [/^node_modules/, /^src/, /^hostedBots/] },
   },
-  // runtimes
-  { source: path.resolve(__dirname, '../../../../runtime'), dest: 'runtime', opts: { exclude: [/^node_modules/] } },
   // form-dialog templates
   {
     source: path.resolve(__dirname, '../../../node_modules/@microsoft/bf-generate-library/templates'),

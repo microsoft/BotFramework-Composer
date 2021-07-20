@@ -9,11 +9,12 @@ import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { FontSizes } from '@uifabric/fluent-theme';
 import { useRecoilValue } from 'recoil';
 import debounce from 'lodash/debounce';
-import { isUsingAdaptiveRuntime, SDKKinds } from '@bfc/shared';
+import { isUsingAdaptiveRuntime, SDKKinds, isManifestJson } from '@bfc/shared';
 import { DialogWrapper, DialogTypes } from '@bfc/ui-shared';
 import { Separator } from 'office-ui-fabric-react/lib/Separator';
 import { Dropdown, IDropdownOption, ResponsiveMode } from 'office-ui-fabric-react/lib/Dropdown';
 import { FontWeights } from 'office-ui-fabric-react/lib/Styling';
+import { JSZipObject } from 'jszip';
 
 import { LoadingSpinner } from '../../components/LoadingSpinner';
 import {
@@ -22,19 +23,21 @@ import {
   dispatcherState,
   luFilesSelectorFamily,
   publishTypesState,
+  botProjectFileState,
+  rootDialogSelector,
 } from '../../recoilModel';
 import { addSkillDialog } from '../../constants';
 import httpClient from '../../utils/httpUtil';
 import TelemetryClient from '../../telemetry/TelemetryClient';
 import { TriggerFormData } from '../../utils/dialogUtil';
 import { selectIntentDialog } from '../../constants';
-import { isShowAuthDialog } from '../../utils/auth';
-import { AuthDialog } from '../Auth/AuthDialog';
 import { PublishProfileDialog } from '../../pages/botProject/create-publish-profile/PublishProfileDialog';
+import { skillNameRegex } from '../../utils/skillManifestUtil';
 
 import { SelectIntent } from './SelectIntent';
 import { SkillDetail } from './SkillDetail';
 import { SetAppId } from './SetAppId';
+import { BrowserModal } from './BrowserModal';
 
 export interface SkillFormDataErrors {
   endpoint?: string;
@@ -42,37 +45,109 @@ export interface SkillFormDataErrors {
   name?: string;
 }
 
-export const urlRegex = /^http[s]?:\/\/\w+/;
-export const skillNameRegex = /^\w[-\w]*$/;
+const urlRegex = /^http[s]?:\/\/\w+/;
+const filePathRegex = /([^<>/\\:""]+\.\w+$)/;
+
+// All endpoints should have endpoint url
+const hasEndpointUrl = (content) => {
+  const endpoints = content.endpoints;
+  if (endpoints && endpoints.length > 0) {
+    return endpoints.every((endpoint) => !!endpoint.endpointUrl);
+  }
+  return false;
+};
+
 export const msAppIdRegex = /^[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12}$/;
 
 export interface CreateSkillModalProps {
   projectId: string;
-  addRemoteSkill: (manifestUrl: string, endpointName: string) => Promise<void>;
+  addRemoteSkill: (manifestUrl: string, endpointName: string, zipContent: Record<string, any>) => Promise<void>;
   addTriggerToRoot: (dialogId: string, triggerFormData: TriggerFormData, skillId: string) => Promise<void>;
   onDismiss: () => void;
 }
 
-export const validateManifestUrl = async ({ formData, formDataErrors, setFormDataErrors }) => {
+export const validateManifestUrl = ({ formData, formDataErrors, setFormDataErrors }, skills: string[] = []) => {
   const { manifestUrl } = formData;
   const { manifestUrl: _, ...errors } = formDataErrors;
 
   if (!manifestUrl) {
     setFormDataErrors({ ...errors, manifestUrl: formatMessage('Please input a manifest URL') });
-  } else if (!urlRegex.test(manifestUrl)) {
-    setFormDataErrors({ ...errors, manifestUrl: formatMessage('URL should start with http:// or https://') });
+  } else if (!urlRegex.test(manifestUrl) && !filePathRegex.test(manifestUrl)) {
+    setFormDataErrors({
+      ...errors,
+      manifestUrl: formatMessage('URL should start with http:// or https:// or file path of your system'),
+    });
+  } else if (skills.includes(manifestUrl)) {
+    setFormDataErrors({
+      ...errors,
+      manifestUrl: formatMessage('The bot is already part of the Bot Project'),
+    });
   } else {
     setFormDataErrors({});
   }
 };
-export const getSkillManifest = async (projectId: string, manifestUrl: string, setSkillManifest, setFormDataErrors) => {
+
+export const validateLocalZip = async (files: Record<string, JSZipObject>) => {
+  const result: { error: any; zipContent?: Record<string, string>; manifestContent?: any; path: string } = {
+    error: {},
+    path: '',
+  };
+  try {
+    // get manifest
+    const manifestFiles: JSZipObject[] = [];
+    const zipContent: Record<string, string> = {};
+    for (const fPath in files) {
+      zipContent[fPath] = await files[fPath].async('string');
+      // eslint-disable-next-line no-useless-escape
+      if (fPath.match(/\.([^\.]+)$/)?.[1] === 'json' && isManifestJson(zipContent[fPath])) {
+        manifestFiles.push(files[fPath]);
+        result.path = fPath.substr(0, fPath.lastIndexOf('/') + 1);
+      }
+    }
+
+    // update content for detail panel and show it
+    if (manifestFiles.length > 1) {
+      result.error = { manifestUrl: formatMessage('zip folder has multiple manifest json') };
+    } else if (manifestFiles.length === 1) {
+      const content = JSON.parse(await manifestFiles[0].async('string'));
+      if (hasEndpointUrl(content)) {
+        result.manifestContent = content;
+        result.zipContent = zipContent;
+      } else {
+        result.error = {
+          manifestUrl: formatMessage(
+            'Endpoints should not be empty or endpoint should have endpoint url field in manifest json'
+          ),
+        };
+      }
+    } else {
+      result.error = { manifestUrl: formatMessage('could not locate manifest.json in zip') };
+    }
+  } catch (err) {
+    // eslint-disable-next-line format-message/literal-pattern
+    result.error = { manifestUrl: formatMessage(err.toString()) };
+  }
+  return result;
+};
+
+const validateSKillName = (skillContent, setSkillManifest) => {
+  skillContent.name = skillContent.name.replace(skillNameRegex, '');
+  setSkillManifest(skillContent);
+};
+export const getSkillManifest = async (
+  projectId: string,
+  manifestUrl: string,
+  setSkillManifest,
+  setFormDataErrors,
+  setShowDetail
+) => {
   try {
     const { data } = await httpClient.get(`/projects/${projectId}/skill/retrieveSkillManifest`, {
       params: {
         url: manifestUrl,
       },
     });
-    setSkillManifest(data);
+    validateSKillName(data, setSkillManifest);
   } catch (error) {
     const httpMessage = error?.response?.data?.message;
     const message = httpMessage?.match('Unexpected string in JSON')
@@ -80,6 +155,7 @@ export const getSkillManifest = async (projectId: string, manifestUrl: string, s
       : formatMessage('Manifest URL can not be accessed');
 
     setFormDataErrors({ ...error, manifestUrl: message });
+    setShowDetail(false);
   }
 };
 const getTriggerFormData = (intent: string, content: string): TriggerFormData => ({
@@ -126,16 +202,20 @@ export const CreateSkillModal: React.FC<CreateSkillModalProps> = (props) => {
   const [formDataErrors, setFormDataErrors] = useState<SkillFormDataErrors>({});
   const [skillManifest, setSkillManifest] = useState<any | null>(null);
   const [showDetail, setShowDetail] = useState(false);
-  const [showAuthDialog, setShowAuthDialog] = useState(false);
   const [createSkillDialogHidden, setCreateSkillDialogHidden] = useState(false);
+  const [manifestDirPath, setManifestDirPath] = useState('');
+  const [zipContent, setZipContent] = useState({});
 
   const publishTypes = useRecoilValue(publishTypesState(projectId));
   const { languages, luFeatures, runtime, publishTargets = [], MicrosoftAppId } = useRecoilValue(
     settingsState(projectId)
   );
   const { dialogId } = useRecoilValue(designPageLocationState(projectId));
+  const rootDialog = useRecoilValue(rootDialogSelector(projectId));
   const luFiles = useRecoilValue(luFilesSelectorFamily(projectId));
   const { updateRecognizer, setMicrosoftAppProperties, setPublishTargets } = useRecoilValue(dispatcherState);
+  const { content: botProjectFile } = useRecoilValue(botProjectFileState(projectId));
+  const skillUrls = Object.keys(botProjectFile.skills).map((key) => botProjectFile.skills[key].manifest as string);
 
   const debouncedValidateManifestURl = useRef(debounce(validateManifestUrl, 500)).current;
 
@@ -157,22 +237,28 @@ export const CreateSkillModal: React.FC<CreateSkillModalProps> = (props) => {
   const handleManifestUrlChange = (_, currentManifestUrl = '') => {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { manifestUrl, ...rest } = formData;
-    debouncedValidateManifestURl({
-      formData: { manifestUrl: currentManifestUrl },
-      ...validationHelpers,
-    });
+    debouncedValidateManifestURl(
+      {
+        formData: { manifestUrl: currentManifestUrl },
+        ...validationHelpers,
+      },
+      skillUrls
+    );
     setFormData({
       ...rest,
       manifestUrl: currentManifestUrl,
     });
     setSkillManifest(null);
+    setShowDetail(false);
   };
 
   const validateUrl = useCallback(
     (event) => {
       event.preventDefault();
       setShowDetail(true);
-      getSkillManifest(projectId, formData.manifestUrl, setSkillManifest, setFormDataErrors);
+      const localManifestPath = formData.manifestUrl.replace(/\\/g, '/');
+      getSkillManifest(projectId, formData.manifestUrl, setSkillManifest, setFormDataErrors, setShowDetail);
+      setManifestDirPath(localManifestPath.substring(0, localManifestPath.lastIndexOf('/')));
     },
     [projectId, formData]
   );
@@ -180,20 +266,28 @@ export const CreateSkillModal: React.FC<CreateSkillModalProps> = (props) => {
   const handleSubmit = async (event, content: string, enable: boolean) => {
     event.preventDefault();
     // add a remote skill, add skill identifier into botProj file
-    await addRemoteSkill(formData.manifestUrl, formData.endpointName);
-    TelemetryClient.track('AddNewSkillCompleted');
+    await addRemoteSkill(formData.manifestUrl, formData.endpointName, zipContent);
+    TelemetryClient.track('AddNewSkillCompleted', {
+      from: Object.keys(zipContent).length > 0 ? 'zip' : 'url',
+    });
     // if added remote skill fail, just not addTrigger to root.
     const skillId = location.href.match(/skill\/([^/]*)/)?.[1];
+
+    //if the root dialog is orchestrator recoginzer type or user chooses orchestrator type before connecting,
+    //add the trigger to the root dialog.
+    const boundId =
+      rootDialog && (rootDialog.luProvider === SDKKinds.OrchestratorRecognizer || enable) ? rootDialog.id : dialogId;
+
     if (skillId) {
       // add trigger with connect to skill action to root bot
       const triggerFormData = getTriggerFormData(skillManifest.name, content);
-      await addTriggerToRoot(dialogId, triggerFormData, skillId);
+      await addTriggerToRoot(boundId, triggerFormData, skillId);
       TelemetryClient.track('AddNewTriggerCompleted', { kind: 'Microsoft.OnIntent' });
     }
 
     if (enable) {
       // update recognizor type to orchestrator
-      await updateRecognizer(projectId, dialogId, SDKKinds.OrchestratorRecognizer);
+      await updateRecognizer(projectId, boundId, SDKKinds.OrchestratorRecognizer);
     }
   };
 
@@ -219,7 +313,24 @@ export const CreateSkillModal: React.FC<CreateSkillModalProps> = (props) => {
   };
 
   const handleGotoCreateProfile = () => {
-    isShowAuthDialog(true) ? setShowAuthDialog(true) : setCreateSkillDialogHidden(true);
+    setCreateSkillDialogHidden(true);
+  };
+
+  const handleBrowseButtonUpdate = async (path: string, files: Record<string, JSZipObject>) => {
+    // update path in input field
+    setFormData({
+      ...formData,
+      manifestUrl: path,
+    });
+
+    const result = await validateLocalZip(files);
+    setFormDataErrors(result.error);
+    result.path && setManifestDirPath(result.path);
+    result.zipContent && setZipContent(result.zipContent);
+    if (result.manifestContent) {
+      validateSKillName(result.manifestContent, setSkillManifest);
+      setShowDetail(true);
+    }
   };
 
   useEffect(() => {
@@ -267,8 +378,11 @@ export const CreateSkillModal: React.FC<CreateSkillModalProps> = (props) => {
             languages={languages}
             luFeatures={luFeatures}
             manifest={skillManifest}
+            manifestDirPath={manifestDirPath}
             projectId={projectId}
             rootLuFiles={luFiles}
+            runtime={runtime}
+            zipContent={zipContent}
             onBack={() => {
               setTitle({
                 subText: '',
@@ -289,14 +403,18 @@ export const CreateSkillModal: React.FC<CreateSkillModalProps> = (props) => {
             <Separator />
             <Stack horizontal horizontalAlign="start" styles={{ root: { height: 300 } }}>
               <div style={{ width: '50%' }}>
-                <TextField
-                  required
-                  errorMessage={formDataErrors.manifestUrl}
-                  label={formatMessage('Skill Manifest URL')}
-                  placeholder={formatMessage('Ask the skill owner for the URL and provide your bot’s App ID')}
-                  value={formData.manifestUrl || ''}
-                  onChange={handleManifestUrlChange}
-                />
+                <div style={{ display: 'flex' }}>
+                  <TextField
+                    required
+                    errorMessage={formDataErrors.manifestUrl}
+                    label={formatMessage('Skill Manifest')}
+                    placeholder={formatMessage('Enter manifest URL or select a .zip file')}
+                    styles={{ root: { width: '300px' } }}
+                    value={formData.manifestUrl || ''}
+                    onChange={handleManifestUrlChange}
+                  />
+                  <BrowserModal onError={setFormDataErrors} onUpdate={handleBrowseButtonUpdate} />
+                </div>
                 {skillManifest?.endpoints?.length > 1 && (
                   <Dropdown
                     defaultSelectedKey={skillManifest.endpoints[0].name}
@@ -345,7 +463,7 @@ export const CreateSkillModal: React.FC<CreateSkillModalProps> = (props) => {
                       styles={buttonStyle}
                       text={formatMessage('Done')}
                       onClick={(event) => {
-                        addRemoteSkill(formData.manifestUrl, formData.endpointName);
+                        addRemoteSkill(formData.manifestUrl, formData.endpointName, zipContent);
                       }}
                     />
                   )
@@ -362,17 +480,6 @@ export const CreateSkillModal: React.FC<CreateSkillModalProps> = (props) => {
           </Fragment>
         )}
       </DialogWrapper>
-      {showAuthDialog && (
-        <AuthDialog
-          needGraph
-          next={() => {
-            setCreateSkillDialogHidden(true);
-          }}
-          onDismiss={() => {
-            setShowAuthDialog(false);
-          }}
-        />
-      )}
       {createSkillDialogHidden ? (
         <PublishProfileDialog
           closeDialog={() => {

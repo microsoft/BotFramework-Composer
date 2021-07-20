@@ -56,25 +56,30 @@ const yeomanWork = async (
   templateGeneratorPath: string,
   runtimeType: string,
   runtimeLanguage: string,
-  yeomanOptions: any
+  yeomanOptions: any,
+  isLocalGenerator: boolean
 ) => {
-  const generatorName = npmPackageName.toLowerCase().replace('generator-', '');
   // create yeoman environment
   log('Getting Yeoman environment');
   parentPort?.postMessage({ status: 'Downloading template' });
+  let generatorName = npmPackageName;
 
   const yeomanEnv = yeoman.createEnv(
     '',
     { yeomanRepository: templateGeneratorPath },
     new TerminalAdapter({ console: console })
   );
-  log('Looking up local packages');
-  yeomanEnv.lookupLocalPackages();
+  if (!isLocalGenerator) {
+    log('Looking up local packages');
+    yeomanEnv.lookupLocalPackages();
 
-  log('Installing Yeoman template');
+    log('Installing Yeoman template');
 
-  await installRemoteTemplate(yeomanEnv, templateGeneratorPath, npmPackageName, templateVersion);
-  log('Instantiating Yeoman template');
+    await installRemoteTemplate(yeomanEnv, templateGeneratorPath, npmPackageName, templateVersion);
+    generatorName = npmPackageName.toLowerCase().replace('generator-', '');
+
+    log('Instantiating Yeoman template');
+  }
   parentPort?.postMessage({ status: 'Creating project' });
 
   await instantiateRemoteTemplate(
@@ -97,6 +102,7 @@ export type TemplateInstallationArgs = {
   runtimeType: string;
   runtimeLanguage: string;
   yeomanOptions?: any;
+  isLocalGenerator?: boolean;
 };
 
 if (!isMainThread) {
@@ -108,7 +114,8 @@ if (!isMainThread) {
     workerData.templateGeneratorPath,
     workerData.runtimeType,
     workerData.runtimeLanguage,
-    workerData.yeomanOptions
+    workerData.yeomanOptions,
+    workerData.isLocalGenerator
   )
     .then(() => {
       process.exit(0);

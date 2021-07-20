@@ -4,7 +4,7 @@
   "description": "Code editor component that is shared in composer packages",
   "main": "lib/index.js",
   "engines": {
-    "node": ">=12"
+    "node": "14.x"
   },
   "repository": "https://github.com/microsoft/BotFramework-Composer",
   "license": "MIT",
@@ -68,7 +68,7 @@
     "lodash": "^4.17.19",
     "monaco-editor": "^0.21.2",
     "monaco-languageclient": "^0.10.0",
-    "normalize-url": "^4.5.0",
+    "normalize-url": "^4.5.1",
     "reconnecting-websocket": "^3.2.2",
     "vscode-ws-jsonrpc": "^0.1.1",
     "@uifabric/fluent-theme": "^7.1.4",

@@ -21,6 +21,7 @@ export const applyPublishingProfileToSettings = (settings: DialogSetting, profil
     profile.settings.applicationInsights?.connectionString
   ) {
     settings.runtimeSettings.telemetry = {
+      ...settings.runtimeSettings.telemetry,
       options: {
         connectionString: profile.settings.applicationInsights.connectionString,
         instrumentationKey: profile.settings.applicationInsights.InstrumentationKey,
@@ -68,6 +69,9 @@ export const applyPublishingProfileToSettings = (settings: DialogSetting, profil
   // apply the app id and password
   settings.MicrosoftAppId = profile.settings.MicrosoftAppId;
   settings.MicrosoftAppPassword = profile.settings.MicrosoftAppPassword;
+
+  // apply the SCM domain host
+  settings.scmHostDomain = profile.scmHostDomain;
 
   return settings;
 };

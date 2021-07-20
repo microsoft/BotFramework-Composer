@@ -19,7 +19,6 @@ export const styles = {
   },
   modal: {
     main: {
-      height: '600px !important',
       maxWidth: '80% !important',
       width: '960px !important',
     },

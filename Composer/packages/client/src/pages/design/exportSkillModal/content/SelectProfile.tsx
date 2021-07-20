@@ -3,7 +3,7 @@
 
 /** @jsx jsx */
 import { css, jsx } from '@emotion/core';
-import { PublishTarget, SkillManifestFile } from '@bfc/shared';
+import { PublishTarget } from '@bfc/shared';
 import formatMessage from 'format-message';
 import React, { Fragment, useEffect, useMemo, useState } from 'react';
 import { useRecoilValue } from 'recoil';
@@ -15,10 +15,10 @@ import { NeutralColors } from '@uifabric/fluent-theme';
 import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
 import { Link } from 'office-ui-fabric-react/lib/Link';
 
-import { botDisplayNameState, dispatcherState, settingsState, skillManifestsState } from '../../../../recoilModel';
+import { botDisplayNameState, dispatcherState, settingsState } from '../../../../recoilModel';
 import { CreatePublishProfileDialog } from '../../../botProject/CreatePublishProfileDialog';
 import { iconStyle } from '../../../botProject/runtime-settings/style';
-import { ContentProps, VERSION_REGEX } from '../constants';
+import { ContentProps } from '../constants';
 import { PublishProfileWrapperDialog } from '../../../botProject/PublishProfieWrapperDialog';
 
 const styles = {
@@ -74,25 +74,8 @@ const onRenderInvalidProfileWarning = (hasValidProfile, handleShowPublishProfile
   );
 };
 
-export const getManifestId = (
-  botName: string,
-  skillManifests: SkillManifestFile[],
-  { content: { $schema } = {} }: Partial<SkillManifestFile>
-): string => {
-  const [version] = VERSION_REGEX.exec($schema) || [''];
-
-  let fileId = version ? `${botName}-${version.replace(/\./g, '-')}-manifest` : `${botName}-manifest`;
-  let i = -1;
-
-  while (skillManifests.some(({ id }) => id === fileId) && i < skillManifests.length) {
-    if (i < 0) {
-      fileId = fileId.concat(`-${++i}`);
-    } else {
-      fileId = fileId.substr(0, fileId.lastIndexOf('-')).concat(`-${++i}`);
-    }
-  }
-
-  return fileId;
+export const getManifestId = (botName: string): string => {
+  return `${botName}-manifest`;
 };
 
 const onRenderTitle = (options: IDropdownOption[] | undefined): JSX.Element | null => {
@@ -129,7 +112,6 @@ export const SelectProfile: React.FC<ContentProps> = ({
   const [appId, setAppId] = useState<string>();
   const { id, content } = manifest;
   const botName = useRecoilValue(botDisplayNameState(projectId));
-  const skillManifests = useRecoilValue(skillManifestsState(projectId));
 
   const [showCreateProfileDialog, setShowCreateProfileDialog] = useState(true);
   const [selectedKey, setSelectedKey] = useState('');
@@ -219,10 +201,8 @@ export const SelectProfile: React.FC<ContentProps> = ({
   }, [settings]);
 
   useEffect(() => {
-    if (!id) {
-      const fileId = getManifestId(botName, skillManifests, manifest);
-      setSkillManifest({ ...manifest, id: fileId });
-    }
+    const fileId = getManifestId(botName);
+    setSkillManifest({ ...manifest, id: fileId });
   }, [id]);
 
   return (
@@ -276,7 +256,6 @@ export const SelectProfile: React.FC<ContentProps> = ({
         <PublishProfileWrapperDialog
           projectId={projectId}
           onClose={handleHiddenPublishProfileWrapperDialog}
-          onOpen={handleShowPublishProfileWrapperDialog}
           onUpdateIsCreateProfileFromSkill={onUpdateIsCreateProfileFromSkill}
         />
       )}

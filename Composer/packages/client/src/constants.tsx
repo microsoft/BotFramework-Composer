@@ -200,9 +200,9 @@ export const BotStatusesCopy = {
 export const DialogCreationCopy = {
   get CREATE_OPTIONS() {
     return {
-      title: formatMessage('Your new Azure Bot is available in Composer'),
+      title: formatMessage('Choose a bot project for your Azure Bot'),
       subText: formatMessage(
-        'The Azure Bot created in Azure Bot Services contains bot resources that can be used as the basis for a new bot, or to add or replace resources of an existing bot.'
+        'Use your Azure Bot resource with a new or existing bot project. You can publish your bot project directly to Azure using the publishing profile created for you.'
       ),
     };
   },
@@ -229,7 +229,7 @@ export const DialogCreationCopy = {
   get DEFINE_BOT_PROJECT() {
     return {
       title: formatMessage('Create a bot project'),
-      subText: formatMessage(`Specify a name, description, and location for your new bot project.`),
+      subText: formatMessage(`Specify a name, runtime type, and location for your new bot project.`),
     };
   },
   get DEFINE_DIALOG() {
@@ -267,7 +267,7 @@ export const DialogCreationCopy = {
   get IMPORT_BOT_PROJECT() {
     return {
       title: formatMessage('Import your bot to new project'),
-      subText: formatMessage(`Specify a name, description, and location for your new bot project.`),
+      subText: formatMessage(`Specify a name, runtime type, and location for your new bot project.`),
     };
   },
 };
@@ -525,3 +525,13 @@ export const defaultTeamsManifest: TeamsManifest = {
 
 export const defaultBotPort = 3979;
 export const defaultBotEndpoint = `http://localhost:${defaultBotPort}/api/messages`;
+
+const DAYS_IN_MS = 1000 * 60 * 60 * 24;
+export const SURVEY_PARAMETERS = {
+  daysUntilEligible: 2,
+  timeUntilNextSurvey: 90 * DAYS_IN_MS,
+  chanceToAppear: 0.3,
+};
+
+export const LAST_SURVEY_KEY = 'lastSurveyTakenOnTimestamp';
+export const SURVEY_URL_BASE = 'https://aka.ms/bfcomposersurvey';

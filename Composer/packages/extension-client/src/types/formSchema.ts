@@ -49,6 +49,8 @@ export interface UIOptions {
   fieldsets?: Fieldset[];
   /** Label override. */
   label?: UIOptionValue<string | false | undefined>;
+  /** Force string input to render as a textarea for long form text. */
+  multiline?: boolean;
   /** Set order of fields. Use * for all other fields. */
   order?: UIOptionValue<(string | [string, string])[]>;
   /** Renders fieldsets in a tabbed view when true */
@@ -82,6 +84,8 @@ export type RecognizerSchema = {
   disabled?: boolean | ((shellData: ShellData, shellApi: ShellApi) => boolean);
   /** Display name used in the UI. Recommended to use function over static string to enable multi-locale feature. */
   displayName: UIOptionValue<string>;
+  /** Description used in the UI. describe the usage of this recognizer */
+  description: UIOptionValue<string>;
   /** An inline editor to edit an intent. If none provided, users will not be able to edit. */
   intentEditor?: FieldWidget | string;
   /** A function invoked with the form data to determine if this is the currently selected recognizer */

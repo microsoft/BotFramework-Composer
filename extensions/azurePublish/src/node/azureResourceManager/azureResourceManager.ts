@@ -14,6 +14,7 @@ import { SearchManagementClient } from '@azure/arm-search';
 import { BotProjectDeployLoggerType } from '../types';
 import { createCustomizeError, ProvisionErrors, stringifyError } from '../utils/errorHandler';
 import { LuisAuthoringSupportLocation } from '../../types';
+import { getProxySetting } from '../utils/getProxySettings';
 
 import {
   AzureResourceManangerConfig,
@@ -39,11 +40,16 @@ export class AzureResourceMananger {
 
   // Subscription id
   private subscriptionId: string;
+  private options: any = {};
 
   constructor(config: AzureResourceManangerConfig) {
     this.logger = config.logger;
     this.creds = config.creds;
     this.subscriptionId = config.subscriptionId;
+    const proxySettings = getProxySetting();
+    if (proxySettings) {
+      this.options = { proxySettings };
+    }
   }
 
   /**
@@ -66,7 +72,7 @@ export class AzureResourceMananger {
     }
 
     try {
-      const resourceManagementClient = new ResourceManagementClient(this.creds, this.subscriptionId);
+      const resourceManagementClient = new ResourceManagementClient(this.creds, this.subscriptionId, this.options);
 
       this.logger({
         status: BotProjectDeployLoggerType.PROVISION_INFO,
@@ -141,7 +147,11 @@ export class AzureResourceMananger {
         status: BotProjectDeployLoggerType.PROVISION_INFO,
         message: 'Deploying Luis Authoring Resource ...',
       });
-      const cognitiveServicesManagementClient = new CognitiveServicesManagementClient(this.creds, this.subscriptionId);
+      const cognitiveServicesManagementClient = new CognitiveServicesManagementClient(
+        this.creds,
+        this.subscriptionId,
+        this.options
+      );
       // check location is validated
       let authoringLocation = config.location;
       if (!LuisAuthoringSupportLocation.includes(config.location)) {
@@ -195,7 +205,11 @@ export class AzureResourceMananger {
         status: BotProjectDeployLoggerType.PROVISION_INFO,
         message: 'Deploying Luis Resource ...',
       });
-      const cognitiveServicesManagementClient = new CognitiveServicesManagementClient(this.creds, this.subscriptionId);
+      const cognitiveServicesManagementClient = new CognitiveServicesManagementClient(
+        this.creds,
+        this.subscriptionId,
+        this.options
+      );
       // check luis publish location is validated
       let authoringLocation = config.location;
       if (!LuisAuthoringSupportLocation.includes(config.location)) {
@@ -256,7 +270,7 @@ export class AzureResourceMananger {
       }
 
       // deploy search service
-      const searchManagementClient = new SearchManagementClient(this.creds, this.subscriptionId);
+      const searchManagementClient = new SearchManagementClient(this.creds, this.subscriptionId, this.options);
       const searchServiceDeployResult = await searchManagementClient.services.createOrUpdate(
         config.resourceGroupName,
         qnaMakerSearchName,
@@ -281,7 +295,7 @@ export class AzureResourceMananger {
 
       // deploy websites
       // Create new Service Plan or update the exisiting service plan created before
-      const webSiteManagementClient = new WebSiteManagementClient(this.creds, this.subscriptionId);
+      const webSiteManagementClient = new WebSiteManagementClient(this.creds, this.subscriptionId, this.options);
       const servicePlanName = config.resourceGroupName;
       const servicePlanResult = await webSiteManagementClient.appServicePlans.createOrUpdate(
         config.resourceGroupName,
@@ -309,7 +323,8 @@ export class AzureResourceMananger {
       // deploy or update exisiting app insights component
       const applicationInsightsManagementClient = new ApplicationInsightsManagementClient(
         this.creds,
-        this.subscriptionId
+        this.subscriptionId,
+        this.options
       );
       const appinsightsName = config.resourceGroupName;
       const appinsightsDeployResult = await applicationInsightsManagementClient.components.createOrUpdate(
@@ -414,7 +429,11 @@ export class AzureResourceMananger {
       }
 
       // Create qna account
-      const cognitiveServicesManagementClient = new CognitiveServicesManagementClient(this.creds, this.subscriptionId);
+      const cognitiveServicesManagementClient = new CognitiveServicesManagementClient(
+        this.creds,
+        this.subscriptionId,
+        this.options
+      );
       const deployResult = await cognitiveServicesManagementClient.accounts.create(
         config.resourceGroupName,
         qnaMakerServiceName,
@@ -472,7 +491,8 @@ export class AzureResourceMananger {
       });
       const applicationInsightsManagementClient = new ApplicationInsightsManagementClient(
         this.creds,
-        this.subscriptionId
+        this.subscriptionId,
+        this.options
       );
       const deployResult = await applicationInsightsManagementClient.components.createOrUpdate(
         config.resourceGroupName,
@@ -513,7 +533,7 @@ export class AzureResourceMananger {
     // timestamp will be used as deployment name
     const timeStamp = new Date().getTime().toString();
 
-    const appinsightsClient = new ApplicationInsightsManagementClient(this.creds, this.subscriptionId);
+    const appinsightsClient = new ApplicationInsightsManagementClient(this.creds, this.subscriptionId, this.options);
     const appComponents = await appinsightsClient.components.get(config.resourceGroupName, config.name);
     const appinsightsId = appComponents.appId;
     const appinsightsInstrumentationKey = appComponents.instrumentationKey;
@@ -602,7 +622,7 @@ export class AzureResourceMananger {
       });
 
       // Create DB accounts
-      const cosmosDBManagementClient = new CosmosDBManagementClient(this.creds, this.subscriptionId);
+      const cosmosDBManagementClient = new CosmosDBManagementClient(this.creds, this.subscriptionId, this.options);
       const dbAccountDeployResult = await cosmosDBManagementClient.databaseAccounts.createOrUpdate(
         config.resourceGroupName,
         config.name,
@@ -733,7 +753,7 @@ export class AzureResourceMananger {
         status: BotProjectDeployLoggerType.PROVISION_INFO,
         message: 'Deploying Blob Storage Resource ...',
       });
-      const storageManagementClient = new StorageManagementClient(this.creds, this.subscriptionId);
+      const storageManagementClient = new StorageManagementClient(this.creds, this.subscriptionId, this.options);
 
       const deployResult = await storageManagementClient.storageAccounts.create(config.resourceGroupName, config.name, {
         location: config.location,
@@ -776,7 +796,9 @@ export class AzureResourceMananger {
         status: BotProjectDeployLoggerType.PROVISION_INFO,
         message: 'Deploying Web App Resource ...',
       });
-      const webSiteManagementClient = new WebSiteManagementClient(this.creds, this.subscriptionId);
+      const webSiteManagementClient = new WebSiteManagementClient(this.creds, this.subscriptionId, this.options);
+
+      const operatingSystem = config.operatingSystem ? config.operatingSystem : 'windows';
 
       // Create new Service Plan
       const servicePlanResult = await webSiteManagementClient.appServicePlans.createOrUpdate(
@@ -784,6 +806,8 @@ export class AzureResourceMananger {
         config.name,
         {
           location: config.location,
+          kind: operatingSystem,
+          reserved: operatingSystem === 'linux',
           sku: {
             name: 'S1',
             tier: 'Standard',
@@ -807,7 +831,7 @@ export class AzureResourceMananger {
         name: webAppName,
         serverFarmId: servicePlanResult.name,
         location: config.location,
-        kind: 'app',
+        kind: operatingSystem === 'linux' ? 'app,linux' : 'app',
         siteConfig: {
           webSocketsEnabled: true,
           appSettings: [
@@ -851,16 +875,20 @@ export class AzureResourceMananger {
         status: BotProjectDeployLoggerType.PROVISION_INFO,
         message: 'Deploying Azure Functions Resource ...',
       });
-      const webSiteManagementClient = new WebSiteManagementClient(this.creds, this.subscriptionId);
+      const webSiteManagementClient = new WebSiteManagementClient(this.creds, this.subscriptionId, this.options);
       const azureFunctionsName = config.name;
+
+      const operatingSystem = config.operatingSystem ? config.operatingSystem : 'windows';
+
       const azureFunctionsResult = await webSiteManagementClient.webApps.createOrUpdate(
         config.resourceGroupName,
         config.name,
         {
           name: azureFunctionsName,
           location: config.location,
-          kind: 'functionapp',
+          kind: operatingSystem === 'linux' ? 'functionapp,linux' : 'functionapp',
           httpsOnly: true,
+          reserved: operatingSystem === 'linux',
           siteConfig: {
             webSocketsEnabled: true,
             appSettings: [
@@ -977,7 +1005,7 @@ export class AzureResourceMananger {
         message: 'Deploying Deployments Counter ...',
       });
 
-      const resourceClient = new ResourceManagementClient(this.creds, this.subscriptionId);
+      const resourceClient = new ResourceManagementClient(this.creds, this.subscriptionId, this.options);
 
       const counterResult = await resourceClient.deployments.createOrUpdate(config.resourceGroupName, config.name, {
         properties: {

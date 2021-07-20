@@ -15,6 +15,7 @@ import { CognitiveServicesManagementClient } from '@azure/arm-cognitiveservices'
 import { TokenCredentials } from '@azure/ms-rest-js';
 import debug from 'debug';
 import sortBy from 'lodash/sortBy';
+import { usePublishApi } from '@bfc/extension-client';
 
 import { AzureResourceTypes } from '../types';
 import {
@@ -24,6 +25,7 @@ import {
   LuisAuthoringSupportLocation,
   LuisPublishSupportLocation,
 } from '../types';
+import { AzureResourceDefinitions } from '../node/resourceTypes';
 
 import * as Images from './images';
 
@@ -392,8 +394,34 @@ export const CheckCognitiveResourceSku = async (
  */
 export const getResourceList = async (projectId: string, type: string): Promise<ResourcesItem[]> => {
   try {
+    const { getRequiredRecognizers } = usePublishApi();
+    const requiredRecognizers = getRequiredRecognizers().filter((p) => p.projectId === projectId);
+
+    const requireLUIS = requiredRecognizers.some((p) => p.requiresLUIS);
+    const requireQNA = requiredRecognizers.some((p) => p.requiresQNA);
     const result = await axios.get(`/api/provision/${projectId}/${type}/resources`);
-    return result.data as ResourcesItem[];
+    const resourceList = result.data as ResourcesItem[];
+
+    // set luis and qna required values based on requiredRecognizers state shared from client workspace
+    const luisAuthoringIndex = resourceList.findIndex((resource) => {
+      return resource.key === AzureResourceTypes.LUIS_AUTHORING;
+    });
+    const luisPredictionIndex = resourceList.findIndex((resource) => {
+      return resource.key === AzureResourceTypes.LUIS_PREDICTION;
+    });
+    const qnaIndex = resourceList.findIndex((resource) => {
+      return resource.key === AzureResourceTypes.QNA;
+    });
+
+    if (luisAuthoringIndex !== -1) {
+      resourceList[luisAuthoringIndex].required = requireLUIS;
+      resourceList[luisPredictionIndex].required = requireLUIS;
+    }
+    if (qnaIndex !== -1) {
+      resourceList[qnaIndex].required = requireQNA;
+    }
+
+    return resourceList;
   } catch (error) {
     logger({
       status: AzureAPIStatus.ERROR,
