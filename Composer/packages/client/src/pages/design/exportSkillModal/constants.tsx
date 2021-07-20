@@ -7,18 +7,12 @@ import { SkillManifestFile } from '@bfc/shared';
 import startCase from 'lodash/startCase';
 import { SDKKinds } from '@bfc/shared';
 
-import { nameRegex } from '../../../constants';
-
-import { Description, ReviewManifest, SaveManifest, SelectDialogs, SelectTriggers } from './content';
-import { SelectProfile } from './content/SelectProfile';
+import { Description, ReviewManifest, SelectDialogs, SelectTriggers, SelectProfile } from './content';
 import { AddCallers } from './content/AddCallers';
 
 export const VERSION_REGEX = /\d\.\d+\.(\d+|preview-\d+)|\d\.\d+/i;
 
-export const SCHEMA_URIS = [
-  'https://schemas.botframework.com/schemas/skills/v2.1/skill-manifest.json',
-  'https://schemas.botframework.com/schemas/skills/skill-manifest-2.0.0.json',
-];
+export const SCHEMA_URI = 'https://schemas.botframework.com/schemas/skills/v2.2/skill-manifest.json';
 
 export enum ActivityTypes {
   ContactRelationUpdate = 'contactRelationUpdate',
@@ -126,7 +120,6 @@ interface EditorStep {
 export enum ManifestEditorSteps {
   MANIFEST_DESCRIPTION = 'MANIFEST_DESCRIPTION',
   MANIFEST_REVIEW = 'MANIFEST_REVIEW',
-  SAVE_MANIFEST = 'SAVE_MANIFEST',
   SELECT_DIALOGS = 'SELECT_DIALOGS',
   SELECT_TRIGGERS = 'SELECT_TRIGGERS',
   SELECT_PROFILE = 'SELECT_PROFILE',
@@ -298,36 +291,5 @@ export const editorSteps: { [key in ManifestEditorSteps]: EditorStep } = {
       formatMessage('Triggers selected below will enable other bots to access the capabilities of your skill.'),
     title: () => formatMessage('Select triggers'),
     helpLink,
-  },
-  [ManifestEditorSteps.SAVE_MANIFEST]: {
-    buttons: [
-      cancelButton,
-      backButton,
-      {
-        primary: true,
-        text: () => formatMessage('Save'),
-        onClick: ({ onNext }) => () => {
-          onNext({ dismiss: true, save: true });
-        },
-      },
-    ],
-    content: SaveManifest,
-    editJson: false,
-    subText: () => formatMessage('Name and save your skill manifest.'),
-    title: () => formatMessage('Save your skill manifest'),
-    validate: ({ editingId, id, skillManifests }) => {
-      if (!id || !nameRegex.test(id)) {
-        return { id: formatMessage('Spaces and special characters are not allowed. Use letters, numbers, -, or _.') };
-      }
-
-      if (
-        (typeof editingId === 'undefined' || editingId !== id) &&
-        skillManifests.some(({ id: manifestId }) => manifestId === id)
-      ) {
-        return { id: formatMessage('{id} already exists. Please enter a unique file name.', { id }) };
-      }
-
-      return {};
-    },
   },
 };
