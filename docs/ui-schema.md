@@ -433,6 +433,53 @@ See above.
 
 ### Form
 
+The form schema is used to customize the property editor in Composer. It allows users to change labels, order the fields, hide fields, and enable more advanced authoring features such as intellisense.
+
+| Property             | Type                | Description                                                                                                           |
+| -------------------- | ------------------- | --------------------------------------------------------------------------------------------------------------------- |
+| `description`        | `string`            | A description override that is used in a property's tooltip.                                                          |
+| `helpLink`           | `string`            | URI to component or property documentation. Used in tooltips.                                                         |
+| `hidden`             | `string[]`          | An array of fields to hide.                                                                                           |
+| `fieldsets`          | `object[]`          | Array of fieldset configurations. Allows grouping fields into collapsable sections.                                   |
+| `intellisenseScopes` | `string[]`          | An array of valid scopes to enable intellisense. Valid scopes are: `variable-scopes`, `expressions`, `user-variables` |
+| `label`              | `string` \| `false` | Label override. If false, hide the label.                                                                             |
+| `multiline`          | `boolean`           | If true, force a string input to render as a textarea.                                                                |
+| `order`              | `string[]`          | Set the order of the fields. Use `*` for all other fields.                                                            |
+| `pivotFieldsets`     | `boolean`           | If `pivotFieldsets` is set to true, the fieldsets render in a tabbed view.                                            |
+| `placeholder`        | `string`            | Placeholder override. Default value is the `examples` property from the component schema.                             |
+| `properties`         | `FormUIOptions`     | A map of component property names to UI options with customizations for each property.                                |
+| `subtitle`           | `string`            | Subtitle render in the form title. Defaults to the `$kind`.                                                           |
+
+<details>
+  <summary>Basic Example</summary>
+
+```json
+// Microsoft.EditArray.uischema
+{
+  "form": {
+    "subtitle": "Edit an array property in the bot memory.",
+    "label": "Edit Array in memory",
+    "helpLink": "https://aka.ms/composer",
+    "order": ["itemsProperty", "changeType", "*"],
+    "properties": {
+      "changeType": {
+        "label": "Array operation",
+        "description": "The type of operation to perform on the array.",
+        "helpLink": "https://github.com/microsoft/botbuilder-dotnet/blob/main/libraries/Microsoft.Bot.Builder.Dialogs.Adaptive/Schemas/Actions/Microsoft.EditArray.schema"
+      },
+      "itemsProperty": {
+        "placeholder": "user.list",
+        "intellisenseScopes": ["user-variables"]
+      }
+    }
+  }
+}
+```
+
+![](./Assets/ui-schema/form-properties.png)
+
+</details>
+
 ### Recognizer
 
 The recognizer ui schema allows customization of LU authoring in Composer.
