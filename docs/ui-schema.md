@@ -434,3 +434,13 @@ See above.
 ### Form
 
 ### Recognizer
+
+The recognizer ui schema allows customization of LU authoring in Composer.
+
+| Property       | Type                                    | Description                                                               |
+| -------------- | --------------------------------------- | ------------------------------------------------------------------------- |
+| `displayName`  | `string`                                | The recognizer name used in the Composer UI.                              |
+| `intentEditor` | `LuIntentEditor` \| `RegexIntentEditor` | LU editor widget.                                                         |
+| `default`      | `boolean`                               | If true, new dialogs will use this recognizer by default.                 |
+| `disabled`     | `boolean`                               | If true, the recognizer will be hidden from the available recognizers.    |
+| `order`        | `number`                                | Indexing order of the recognizer. Used to sort the available recognizers. |
