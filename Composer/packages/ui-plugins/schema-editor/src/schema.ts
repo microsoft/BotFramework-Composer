@@ -52,6 +52,14 @@ export const schema = (): JSONSchema7 => ({
 });
 
 export const valueTypeDefinitions: { [key: string]: JSONSchema7 } = {
+  expression: {
+    $role: 'expression',
+    type: 'string',
+    title: formatMessage('Expression'),
+    description: formatMessage('Expression to evaluate.'),
+    pattern: '^.*\\S.*',
+    examples: ['user.age > 13'],
+  },
   equalsExpression: {
     $role: 'expression',
     type: 'string',
@@ -60,9 +68,26 @@ export const valueTypeDefinitions: { [key: string]: JSONSchema7 } = {
     pattern: '^=.*\\S.*',
     examples: ['=user.name'],
   },
+  condition: {
+    $role: 'expression',
+    title: formatMessage('Boolean condition'),
+    description: formatMessage('Boolean constant or expression to evaluate.'),
+    oneOf: [
+      {
+        $ref: '#/definitions/expression',
+      },
+      {
+        type: 'boolean',
+        title: formatMessage('Boolean'),
+        description: formatMessage('Boolean value.'),
+        default: true,
+        examples: [false],
+      },
+    ],
+  },
   booleanExpression: {
     $role: 'expression',
-    title: formatMessage('Boolean'),
+    title: formatMessage('Boolean or expression'),
     description: formatMessage('Boolean constant or expression to evaluate.'),
     oneOf: [
       {
@@ -80,7 +105,7 @@ export const valueTypeDefinitions: { [key: string]: JSONSchema7 } = {
   },
   numberExpression: {
     $role: 'expression',
-    title: formatMessage('Number'),
+    title: formatMessage('Number or expression'),
     description: formatMessage('Number constant or expression to evaluate.'),
     oneOf: [
       {
@@ -98,7 +123,7 @@ export const valueTypeDefinitions: { [key: string]: JSONSchema7 } = {
   },
   integerExpression: {
     $role: 'expression',
-    title: formatMessage('Integer'),
+    title: formatMessage('Integer or expression'),
     description: formatMessage('Integer constant or expression to evaluate.'),
     oneOf: [
       {
@@ -116,7 +141,7 @@ export const valueTypeDefinitions: { [key: string]: JSONSchema7 } = {
   },
   stringExpression: {
     $role: 'expression',
-    title: formatMessage('String'),
+    title: formatMessage('String or expression'),
     description: formatMessage('Interpolated string or expression to evaluate.'),
     oneOf: [
       {
@@ -134,7 +159,7 @@ export const valueTypeDefinitions: { [key: string]: JSONSchema7 } = {
   },
   arrayExpression: {
     $role: 'expression',
-    title: formatMessage('Array'),
+    title: formatMessage('Array or expression'),
     description: formatMessage('Array or expression to evaluate.'),
     oneOf: [
       {
@@ -149,7 +174,7 @@ export const valueTypeDefinitions: { [key: string]: JSONSchema7 } = {
   },
   objectExpression: {
     $role: 'expression',
-    title: formatMessage('Object'),
+    title: formatMessage('Object or expression'),
     description: formatMessage('Object or expression to evaluate.'),
     oneOf: [
       {
@@ -164,7 +189,7 @@ export const valueTypeDefinitions: { [key: string]: JSONSchema7 } = {
   },
   valueExpression: {
     $role: 'expression',
-    title: formatMessage('Any'),
+    title: formatMessage('Any or expression'),
     description: formatMessage('Any constant or expression to evaluate.'),
     oneOf: [
       {

@@ -28,7 +28,8 @@ const toggleExpandIconStyle: IButtonStyles = {
     alignItems: 'center',
     transition: 'background 250ms ease',
   },
-  rootHovered: { backgroundColor: NeutralColors.gray50 },
+  rootHovered: { backgroundColor: NeutralColors.gray30 },
+  rootPressed: { backgroundColor: NeutralColors.gray40 },
   icon: {
     color: NeutralColors.gray160,
     fontSize: 8,
@@ -85,6 +86,17 @@ export const PropertyTreeItem = React.memo((props: PropertyTreeItemProps) => {
       )}
       <Content
         horizontal
+        styles={{
+          root: {
+            transition: 'background 250ms ease',
+            selectors: isExpandable
+              ? {
+                  '&:hover': { backgroundColor: NeutralColors.gray30 },
+                  '&:active': { backgroundColor: NeutralColors.gray40 },
+                }
+              : undefined,
+          },
+        }}
         verticalAlign="center"
         width={`calc(100% - ${paddingLeft + (isExpandable ? expandIconWidth : 0)}px)`}
       >
