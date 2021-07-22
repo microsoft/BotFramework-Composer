@@ -32,6 +32,7 @@ import { recognizersSelectorFamily } from '../../recoilModel/selectors/recognize
 
 import { EnableOrchestrator } from './EnableOrchestrator';
 import { canImportOrchestrator } from './helper';
+import { Checkbox } from 'office-ui-fabric-react/lib/Checkbox';
 
 const detailListContainer = css`
   width: 100%;
@@ -294,6 +295,10 @@ export const SelectIntent: React.FC<SelectIntentProps> = (props) => {
     }
   }, [selectedIntents, currentLuFile, lufilesOnLocale]);
 
+  const handleToggleSelectAll = () => {
+    selection.setAllSelected(!selection.isAllSelected());
+  };
+
   const handleSubmit = async (ev, enableOchestractor) => {
     // add trigger to root
     await onSubmit(ev, displayContent, enableOchestractor);
@@ -331,6 +336,12 @@ export const SelectIntent: React.FC<SelectIntentProps> = (props) => {
                   />
                 </ScrollablePane>
               </div>
+              <Checkbox
+                checked={selection.isAllSelected()}
+                label={formatMessage('Select all')}
+                styles={{ root: { marginTop: '5px' } }}
+                onChange={handleToggleSelectAll}
+              />
             </StackItem>
           ) : (
             <StackItem>
