@@ -32,7 +32,6 @@ import { DefaultSettingManager } from '../settings/defaultSettingManager';
 import log from '../../logger';
 import { BotProjectService } from '../../services/project';
 import AssetService from '../../services/asset';
-import { bundleSchema } from '../utilities/bundleSchema';
 
 import {
   BotStructureFilesPatterns,
@@ -730,17 +729,6 @@ export class BotProject implements IBotProject {
   public updateETag(eTag: string): void {
     this.eTag = eTag;
     // also update the bot project map
-  }
-
-  public async getDialogSchema(dialogId: string) {
-    const schema = this.dialogSchemaFiles.find(({ name }) => {
-      const basename = name.substr(0, name.lastIndexOf('.dialog.schema'));
-      return basename === dialogId;
-    });
-
-    if (schema) {
-      return bundleSchema(schema.path);
-    }
   }
 
   private async createSkillFilesFromUrl(url, skillName) {
