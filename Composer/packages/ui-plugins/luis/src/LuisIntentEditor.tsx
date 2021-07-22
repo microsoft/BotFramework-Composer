@@ -83,6 +83,8 @@ const LuisIntentEditor: React.FC<FieldProps<string>> = (props) => {
       return;
     }
 
+    if (newValue === placeholder || newValue === inlineModePlaceholder) return;
+
     const newIntent = { Name: intentName, Body: newValue };
     shellApi
       .debouncedUpdateLuIntent(luIntent?.fileId ?? luFile.id, intentName, newIntent)
