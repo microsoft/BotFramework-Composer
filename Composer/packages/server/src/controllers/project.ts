@@ -619,6 +619,31 @@ async function getVariablesByProjectId(req: Request, res: Response) {
   }
 }
 
+async function getDialogSchema(req: Request, res: Response) {
+  const { projectId, dialogId } = req.params;
+  const user = await ExtensionContext.getUserFromRequest(req);
+  const project = await BotProjectService.getProjectById(projectId, user);
+
+  if (project !== undefined && dialogId) {
+    try {
+      const schema = await project.getDialogSchema(dialogId);
+
+      if (schema) {
+        res.status(200).json(schema);
+      } else {
+        res.status(404).end();
+      }
+    } catch (e) {
+      log('Failed to fetch memory variables for project %s: %O', projectId, e);
+      res.status(500).json(e);
+    }
+  } else {
+    res.status(404).json({
+      message: `Could not find bot project with ID: ${projectId}`,
+    });
+  }
+}
+
 export const ProjectController = {
   getProjectById,
   openProject,
@@ -649,4 +674,5 @@ export const ProjectController = {
   backupProject,
   copyTemplateToExistingProject,
   getVariablesByProjectId,
+  getDialogSchema,
 };

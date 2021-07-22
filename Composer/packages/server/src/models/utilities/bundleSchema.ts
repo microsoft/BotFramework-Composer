@@ -11,7 +11,7 @@ export async function bundleSchema(schemaPath: string) {
   try {
     const parser = new $RefParser();
     const bundled = await parser.bundle(schemaPath);
-    return JSON.stringify(bundled);
+    return bundled;
   } catch (err) {
     log('Error while bundling schema at %s', schemaPath);
     log('%O', err);

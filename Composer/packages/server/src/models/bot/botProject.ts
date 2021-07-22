@@ -203,8 +203,6 @@ export class BotProject implements IBotProject {
     this.settings = await this.getEnvSettings(false);
     this.files = await this._getFiles();
     this.readme = await this._getReadme();
-
-    await this._bundleSchemas();
   };
 
   public getProject = () => {
@@ -734,6 +732,17 @@ export class BotProject implements IBotProject {
     // also update the bot project map
   }
 
+  public async getDialogSchema(dialogId: string) {
+    const schema = this.dialogSchemaFiles.find(({ name }) => {
+      const basename = name.substr(0, name.lastIndexOf('.dialog.schema'));
+      return basename === dialogId;
+    });
+
+    if (schema) {
+      return bundleSchema(schema.path);
+    }
+  }
+
   private async createSkillFilesFromUrl(url, skillName) {
     const manifestContent = await getSkillManifest(url);
     const manifestName = Path.basename(url, '.json');
@@ -1104,26 +1113,5 @@ export class BotProject implements IBotProject {
         throw new Error('Invalid file content');
       }
     }
-  };
-
-  private _bundleSchemas = async () => {
-    const schemas: FileInfo[] = [];
-    this.files.forEach((file) => {
-      if (file.name.endsWith('.schema')) {
-        schemas.push(file);
-      }
-    });
-
-    debug('Bundling %d schemas.', schemas.length);
-
-    await Promise.all(
-      schemas.map(async (s) => {
-        const bundled = await bundleSchema(s.path);
-
-        if (bundled) {
-          s.content = bundled;
-        }
-      })
-    );
   };
 }
