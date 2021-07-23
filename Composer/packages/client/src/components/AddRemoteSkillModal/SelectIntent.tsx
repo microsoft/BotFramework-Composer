@@ -22,6 +22,7 @@ import { ScrollablePane, ScrollbarVisibility } from 'office-ui-fabric-react/lib/
 import { LuFile, LuIntentSection, SDKKinds, ILUFeaturesConfig, DialogSetting } from '@bfc/shared';
 import { useRecoilValue } from 'recoil';
 import { IRenderFunction } from 'office-ui-fabric-react/lib/Utilities';
+import { Checkbox } from 'office-ui-fabric-react/lib/Checkbox';
 
 import TelemetryClient from '../../telemetry/TelemetryClient';
 import { selectIntentDialog, enableOrchestratorDialog } from '../../constants';
@@ -32,7 +33,6 @@ import { recognizersSelectorFamily } from '../../recoilModel/selectors/recognize
 
 import { EnableOrchestrator } from './EnableOrchestrator';
 import { canImportOrchestrator } from './helper';
-import { Checkbox } from 'office-ui-fabric-react/lib/Checkbox';
 
 const detailListContainer = css`
   width: 100%;
