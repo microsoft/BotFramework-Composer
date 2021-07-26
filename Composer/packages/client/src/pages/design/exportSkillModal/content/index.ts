@@ -4,6 +4,6 @@
 export * from './Description';
 export * from './Endpoints';
 export * from './ReviewManifest';
-export * from './SaveManifest';
 export * from './SelectDialogs';
 export * from './SelectTriggers';
+export * from './SelectProfile';

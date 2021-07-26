@@ -30,16 +30,6 @@
     call-me-maybe "^1.0.1"
     js-yaml "^3.13.1"
 
-"@apidevtools/json-schema-ref-parser@^9.0.9":
-  version "9.0.9"
-  resolved "https://registry.yarnpkg.com/@apidevtools/json-schema-ref-parser/-/json-schema-ref-parser-9.0.9.tgz#d720f9256e3609621280584f2b47ae165359268b"
-  integrity sha512-GBD2Le9w2+lVFoc4vswGI/TjkNIZSVp7+9xPf+X3uidBfWnAeUWmquteSyt0+VCrhNMWj/FTABISQrD3Z/YA+w==
-  dependencies:
-    "@jsdevtools/ono" "^7.1.3"
-    "@types/json-schema" "^7.0.6"
-    call-me-maybe "^1.0.1"
-    js-yaml "^4.1.0"
-
 "@apidevtools/openapi-schemas@^2.0.4":
   version "2.1.0"
   resolved "https://botbuilder.myget.org/F/botframework-cli/npm/@apidevtools/openapi-schemas/-/@apidevtools/openapi-schemas-2.1.0.tgz#9fa08017fb59d80538812f03fc7cac5992caaa17"
@@ -4327,10 +4317,10 @@
     ts-md5 "^1.2.6"
     tslib "^1.10.0"
 
-"@microsoft/bf-generate-library@4.14.0-preview.20210713.5839ad4":
-  version "4.14.0-preview.20210713.5839ad4"
-  resolved "https://registry.yarnpkg.com/@microsoft/bf-generate-library/-/bf-generate-library-4.14.0-preview.20210713.5839ad4.tgz#cb86eb3fb24d869d33de82375e8f4e6dd59b5d30"
-  integrity sha512-1GE+WsmdJEPl+HF/ZLj8Fuli726FGdiBrNDMfJbeFU74c6gJsc7orzVGVTqzPeOVpCgcft7gYY44fFXE8n8LHQ==
+"@microsoft/bf-generate-library@4.14.0-preview.20210714.e1b6d70":
+  version "4.14.0-preview.20210714.e1b6d70"
+  resolved "https://registry.yarnpkg.com/@microsoft/bf-generate-library/-/bf-generate-library-4.14.0-preview.20210714.e1b6d70.tgz#51a95b38566975215a049b47304b35959cabadfb"
+  integrity sha512-49lBB5ZE1oVTICZv+0ArPQ0Q+S4F5Lb8Obf0TJA7Xk74G5cn+1hn8FVSp4/rrACitwj7uIleq9VHxpOqYLeLTg==
   dependencies:
     "@microsoft/bf-lu" "^4.15.0-dev.20210702.cbf708d"
     adaptive-expressions "^4.15.0-dev.290c7e0"
@@ -5330,7 +5320,7 @@
     jest-diff "^26.0.0"
     pretty-format "^26.0.0"
 
-"@types/json-schema@*", "@types/json-schema@^7.0.6":
+"@types/json-schema@*":
   version "7.0.7"
   resolved "https://registry.yarnpkg.com/@types/json-schema/-/json-schema-7.0.7.tgz#98a993516c859eb0d5c4c8f098317a9ea68db9ad"
   integrity sha512-cxWFQVseBm6O9Gbw1IWb8r6OS4OhSt3hPZLkFApLjM8TEXROBuQGLAH2i2gZpcXdLBIrpXuTDhH7Vbm1iXmNGA==
@@ -15574,13 +15564,6 @@ js-yaml@^3.13.1:
   dependencies:
     argparse "^1.0.7"
     esprima "^4.0.0"
-
-js-yaml@^4.1.0:
-  version "4.1.0"
-  resolved "https://registry.yarnpkg.com/js-yaml/-/js-yaml-4.1.0.tgz#c1fb65f8f5017901cdd2c951864ba18458a10602"
-  integrity sha512-wpxZs9NoxZaJESJGIZTyDEaYpl0FKSA+FB9aJiyemKhMwkxQg63h4T1KJgUGHpTqPDNRcmmYLugrRjJlBtWvRA==
-  dependencies:
-    argparse "^2.0.1"
 
 jsbn@~0.1.0:
   version "0.1.1"
