@@ -22,7 +22,6 @@ import { ScrollablePane, ScrollbarVisibility } from 'office-ui-fabric-react/lib/
 import { LuFile, LuIntentSection, SDKKinds, ILUFeaturesConfig, DialogSetting } from '@bfc/shared';
 import { useRecoilValue } from 'recoil';
 import { IRenderFunction } from 'office-ui-fabric-react/lib/Utilities';
-import { Checkbox } from 'office-ui-fabric-react/lib/Checkbox';
 
 import TelemetryClient from '../../telemetry/TelemetryClient';
 import { selectIntentDialog, enableOrchestratorDialog } from '../../constants';
@@ -294,10 +293,6 @@ export const SelectIntent: React.FC<SelectIntentProps> = (props) => {
       setMultiLanguageIntents({});
     }
   }, [selectedIntents, currentLuFile, lufilesOnLocale]);
-
-  const handleToggleSelectAll = () => {
-    selection.setAllSelected(!selection.isAllSelected());
-  };
 
   const handleSubmit = async (ev, enableOchestractor) => {
     // add trigger to root
