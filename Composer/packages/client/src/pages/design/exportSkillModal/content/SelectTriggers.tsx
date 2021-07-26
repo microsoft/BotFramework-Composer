@@ -4,19 +4,25 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import React, { useEffect, useMemo, useRef } from 'react';
-import { DialogInfo, ITrigger, getFriendlyName } from '@bfc/shared';
+import { DialogInfo, ITrigger, getFriendlyName, SDKKinds } from '@bfc/shared';
 import { Selection } from 'office-ui-fabric-react/lib/DetailsList';
 import { useRecoilValue } from 'recoil';
 import formatMessage from 'format-message';
 
 import { ContentProps } from '../constants';
 import { isSupportedTrigger } from '../generateSkillManifest';
-import { dialogsSelectorFamily } from '../../../../recoilModel';
+import { dialogsSelectorFamily, schemasState } from '../../../../recoilModel';
 
 import { SelectItems } from './SelectItems';
 
+const getLabel = (kind: SDKKinds, uiSchema) => {
+  const { label } = uiSchema?.[kind]?.form || {};
+  return label || kind.replace('Microsoft.', '');
+};
+
 export const SelectTriggers: React.FC<ContentProps> = ({ selectedTriggers, setSelectedTriggers, projectId }) => {
   const dialogs = useRecoilValue(dialogsSelectorFamily(projectId));
+  const schemas = useRecoilValue(schemasState(projectId));
 
   const items = useMemo(() => {
     const { triggers = [] } = dialogs.find(({ isRoot }) => isRoot) || ({} as DialogInfo);
@@ -50,6 +56,25 @@ export const SelectTriggers: React.FC<ContentProps> = ({ selectedTriggers, setSe
       data: 'string',
       onRender: (item: ITrigger) => {
         return <span aria-label={item.displayName}>{item.displayName || getFriendlyName({ $kind: item.type })}</span>;
+      },
+      isPadded: true,
+    },
+    {
+      key: 'column2',
+      name: formatMessage('Type'),
+      fieldName: 'type',
+      minWidth: 300,
+      maxWidth: 350,
+      isRowHeader: true,
+      isResizable: true,
+      isSorted: true,
+      isSortedDescending: false,
+      sortAscendingAriaLabel: formatMessage('Sorted A to Z'),
+      sortDescendingAriaLabel: formatMessage('Sorted Z to A'),
+      data: 'string',
+      onRender: (item: ITrigger) => {
+        const label = getLabel(item.type as SDKKinds, schemas.ui?.content || {});
+        return <span aria-label={label}>{label}</span>;
       },
       isPadded: true,
     },

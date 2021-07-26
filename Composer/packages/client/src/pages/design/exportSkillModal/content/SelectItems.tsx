@@ -13,7 +13,6 @@ import {
   IColumn,
   SelectAllVisibility,
 } from 'office-ui-fabric-react/lib/DetailsList';
-import { Checkbox } from 'office-ui-fabric-react/lib/Checkbox';
 import { IRenderFunction, ISelection, IObjectWithKey } from 'office-ui-fabric-react/lib/Utilities';
 import { Sticky, StickyPositionType } from 'office-ui-fabric-react/lib/Sticky';
 import { ScrollablePane, ScrollbarVisibility } from 'office-ui-fabric-react/lib/ScrollablePane';
@@ -34,14 +33,6 @@ interface SelectItemsProps {
   tableColumns: IColumn[];
 }
 
-const onRenderCheckbox = (props) => {
-  return (
-    <span onClick={(e) => e.preventDefault()}>
-      <Checkbox {...props} />
-    </span>
-  );
-};
-
 const onRenderDetailsHeader = (props, defaultRender) => {
   return (
     <Sticky isScrollSynced stickyPosition={StickyPositionType.Header}>
@@ -49,7 +40,6 @@ const onRenderDetailsHeader = (props, defaultRender) => {
         ...props,
         selectAllVisibility: SelectAllVisibility.visible,
         onRenderColumnHeaderTooltip: (tooltipHostProps) => <TooltipHost {...tooltipHostProps} />,
-        onRenderDetailsCheckbox: onRenderCheckbox,
       })}
     </Sticky>
   );
@@ -73,7 +63,6 @@ export const SelectItems: React.FC<SelectItemsProps> = ({ items, selection, tabl
             layoutMode={DetailsListLayoutMode.justified}
             selection={selection}
             selectionMode={SelectionMode.multiple}
-            onRenderCheckbox={onRenderCheckbox}
             onRenderDetailsHeader={onRenderDetailsHeader}
             onRenderRow={onRenderRow}
           />
