@@ -11,7 +11,12 @@ import { PropertyItem, PropertyTreeItem } from './PropertyTreeItem';
 import { DEFAULT_TREE_ITEM_HEIGHT } from './constants';
 
 const labelContainerStyle: IStackStyles = {
-  root: { whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', height: DEFAULT_TREE_ITEM_HEIGHT },
+  root: {
+    whiteSpace: 'nowrap',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    height: DEFAULT_TREE_ITEM_HEIGHT,
+  },
 };
 
 export const getPickerContextualMenuItem = (query: string, propertyTreeExpanded: Record<string, boolean>) => (
@@ -36,7 +41,7 @@ export const getPickerContextualMenuItem = (query: string, propertyTreeExpanded:
             key={`segment-${idx}`}
             styles={{
               root: {
-                color: idx === pathNodes.length - 1 ? NeutralColors.black : NeutralColors.gray70,
+                color: idx === pathNodes.length - 1 ? NeutralColors.black : NeutralColors.gray130,
               },
             }}
             variant="small"

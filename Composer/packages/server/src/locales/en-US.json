@@ -272,8 +272,8 @@
   "add_some_example_phrases_to_trigger_this_intent_pl_568eaf51": {
     "message": "> add some example phrases to trigger this intent:\n> - please tell me the weather\n> - what is the weather like in '{'city=Seattle'}'\n\n> entity definitions:\n> @ ml city"
   },
-  "add_some_expected_user_responses_please_remind_me__31dc5c07": {
-    "message": "> add some expected user responses:\n      > - Please remind me to '{'itemTitle=buy milk'}'\n      > - remind me to '{'itemTitle'}'\n      > - add '{'itemTitle'}' to my todo list\n      >\n      > entity definitions:\n      > @ ml itemTitle\n      "
+  "add_some_expected_user_responses_please_remind_me__81ddf445": {
+    "message": "> add some expected user responses:\n> - Please remind me to '{'itemTitle=buy milk'}'\n> - remind me to '{'itemTitle'}'\n> - add '{'itemTitle'}' to my todo list\n>\n> entity definitions:\n> @ ml itemTitle"
   },
   "add_suggested_action_baf855ca": {
     "message": "Add suggested action"
@@ -769,6 +769,9 @@
   },
   "collapse_debug_panel_2841f8ba": {
     "message": "Collapse Debug Panel"
+  },
+  "collapse_item_410ba193": {
+    "message": "Collapse item"
   },
   "collapse_navigation_17228b95": {
     "message": "Collapse Navigation"
@@ -1466,6 +1469,9 @@
   "endpoints_ff946539": {
     "message": "Endpoints"
   },
+  "endpoints_should_not_be_empty_or_endpoint_should_h_86729064": {
+    "message": "Endpoints should not be empty or endpoint should have endpoint url field in manifest json"
+  },
   "ensure_your_bot_s_microsoft_app_id_is_on_the_skill_a73799fb": {
     "message": "Ensure your bot’s Microsoft App ID is on the skill’s allowed callers list"
   },
@@ -1592,6 +1598,9 @@
   "expand_debug_panel_6f04e9f2": {
     "message": "Expand Debug Panel"
   },
+  "expand_item_da828a09": {
+    "message": "Expand item"
+  },
   "expand_navigation_20330d1d": {
     "message": "Expand Navigation"
   },
@@ -1607,8 +1616,8 @@
   "export_as_zip_133b7ec": {
     "message": "Export as .zip"
   },
-  "export_json_2e2981f5": {
-    "message": "Export JSON"
+  "export_schema_7b64bf48": {
+    "message": "Export schema"
   },
   "export_your_bot_604e651c": {
     "message": "Export your bot"

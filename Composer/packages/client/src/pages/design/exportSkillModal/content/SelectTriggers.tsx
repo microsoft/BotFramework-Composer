@@ -4,7 +4,7 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import React, { useEffect, useMemo, useRef } from 'react';
-import { DialogInfo, ITrigger, SDKKinds, getFriendlyName } from '@bfc/shared';
+import { DialogInfo, ITrigger, getFriendlyName, SDKKinds } from '@bfc/shared';
 import { Selection } from 'office-ui-fabric-react/lib/DetailsList';
 import { useRecoilValue } from 'recoil';
 import formatMessage from 'format-message';
@@ -44,7 +44,7 @@ export const SelectTriggers: React.FC<ContentProps> = ({ selectedTriggers, setSe
   const tableColumns = [
     {
       key: 'column1',
-      name: formatMessage('Name'),
+      name: formatMessage('Trigger name'),
       fieldName: 'id',
       minWidth: 300,
       maxWidth: 350,
