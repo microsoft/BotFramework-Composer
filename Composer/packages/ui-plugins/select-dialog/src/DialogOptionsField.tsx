@@ -9,7 +9,9 @@ import Stack from 'office-ui-fabric-react/lib/components/Stack/Stack';
 import { FluentTheme, NeutralColors } from '@uifabric/fluent-theme';
 import formatMessage from 'format-message';
 import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
-import Ajv, { AnySchemaObject } from 'ajv';
+import Ajv, { AnySchemaObject, SchemaObject } from 'ajv';
+
+import { bundleSchema } from './bundleSchema';
 
 const loadSchema = async (uri: string) => {
   const res = await fetch(uri);
@@ -80,10 +82,11 @@ const DialogOptionsField: React.FC<FieldProps> = ({
 }) => {
   const { dialog, options } = value;
   const { dialogSchemas } = useShellApi();
-  const { content: schema }: { content?: JSONSchema7 } = React.useMemo(
+  const { content: rawSchema }: { content?: JSONSchema7 } = React.useMemo(
     () => dialogSchemas.find(({ id }) => id === dialog) || {},
     [dialog, dialogSchemas]
   );
+  const [schema, setSchema] = React.useState<JSONSchema7 | undefined>(undefined);
 
   const [selectedKey, setSelectedKey] = React.useState<string>();
   const [validationStatus, setValidationStatus] = React.useState<JSONValidationStatus>('validating');
@@ -92,11 +95,29 @@ const DialogOptionsField: React.FC<FieldProps> = ({
 
   React.useEffect(() => {
     mountRef.current = true;
+
+    return () => {
+      mountRef.current = false;
+    };
+  });
+
+  React.useEffect(() => {
+    (async () => {
+      if (rawSchema) {
+        const bundled = await bundleSchema(rawSchema);
+        if (mountRef.current) {
+          setSchema(bundled);
+        }
+      }
+    })();
+  }, [rawSchema]);
+
+  React.useEffect(() => {
     if (schema && Object.keys(schema.properties || {}).length) {
       (async () => {
         setValidationStatus('validating');
         try {
-          const validate = await ajv.compileAsync(schema, true);
+          const validate = await ajv.compileAsync(schema as SchemaObject, true);
           const valid = validate(schema);
 
           if (mountRef.current) {
@@ -113,10 +134,6 @@ const DialogOptionsField: React.FC<FieldProps> = ({
     } else {
       setSelectedKey(getSelectedKey(options, schema, false));
     }
-
-    return () => {
-      mountRef.current = false;
-    };
   }, [schema]);
 
   const change = React.useCallback(
