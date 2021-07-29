@@ -4,9 +4,10 @@
 
 import React from 'react';
 import { EditorExtension } from '@bfc/extension-client';
-import { render, fireEvent, screen } from '@botframework-composer/test-utils';
+import { render, fireEvent } from '@botframework-composer/test-utils';
 
 import { SchemaEditorField } from '../Fields/SchemaEditorField';
+import { SCHEMA_URI } from '../contants';
 
 const renderSchemaEditor = ({ updateDialogSchema = jest.fn() } = {}) => {
   const api: any = {
@@ -60,12 +61,8 @@ describe('Schema Editor', () => {
           properties: expect.objectContaining({
             propertyName: {
               title: 'Property Name',
-              $ref: '#/definitions/valueExpression',
+              $ref: `${SCHEMA_URI}#/definitions/valueExpression`,
             },
-          }),
-          definitions: expect.objectContaining({
-            valueExpression: expect.any(Object),
-            equalsExpression: expect.any(Object),
           }),
         }),
       })
