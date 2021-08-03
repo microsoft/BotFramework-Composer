@@ -119,7 +119,7 @@
     "portfinder": "^1.0.28",
     "rimraf": "^3.0.2",
     "rsa-pem-from-mod-exp": "^0.8.4",
-    "tar": "^6.0.5",
+    "tar": "^6.1.2",
     "through": "^2.3.8",
     "trumpet": "^1.7.2",
     "ts-md5": "^1.2.7",
