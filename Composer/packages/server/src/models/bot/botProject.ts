@@ -924,6 +924,9 @@ export class BotProject implements IBotProject {
     // load only from the data dir, otherwise may get "build" versions from
     // deployment process
     const root = this.dataDir;
+    if (this.fileStorage.initialize) {
+      await this.fileStorage.initialize();
+    }
     const paths = this.fileStorage.globSync(
       [
         ...BotStructureFilesPatterns,

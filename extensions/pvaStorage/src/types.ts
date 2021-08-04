@@ -1,12 +1,36 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-export interface StorageConnection {
-  id: string;
-  type: 'LocalDisk' | 'AzureBlobStorage';
+/**
+ * PVA API Types
+ */
+
+export type ComponentInfo = {
+  c: string;
+  v: number;
+};
+
+export type ObiFileModification = {
+  componentInfo: ComponentInfo;
+  fileContent: string;
+  isDeleted: boolean;
   path: string;
-  [key: string]: string;
-}
+};
+
+export type BotComponentResponse = {
+  contentSnapshot: string;
+
+  /** Contains the list of created, updated or deleted obi components for consumption by Composer code */
+  obiFileChanges: ObiFileModification[];
+};
+
+export type BotComponentUpsertRequest = {
+  obiFileChanges: ObiFileModification[];
+};
+
+/**
+ * Composer File Storage Interface
+ */
 
 export interface Stat {
   isDir: boolean;
