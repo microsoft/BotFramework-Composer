@@ -924,8 +924,9 @@ export class BotProject implements IBotProject {
     // load only from the data dir, otherwise may get "build" versions from
     // deployment process
     const root = this.dataDir;
-    if (this.fileStorage.initialize) {
-      await this.fileStorage.initialize();
+    if (this.fileStorage.initialize && this.id) {
+      // TODO: need a way to pass credentials to the bot for custom storage (PVA)
+      await this.fileStorage.initialize(this.id);
     }
     const paths = this.fileStorage.globSync(
       [

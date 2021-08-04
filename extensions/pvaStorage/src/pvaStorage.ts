@@ -17,21 +17,14 @@ export type PVACredentials = {};
 /* eslint-disable security/detect-non-literal-fs-filename */
 export class PVAStorage implements IFileStorage {
   private credentials: PVACredentials;
-  private initialized = false;
   private botModel: PVABotModel;
 
-  constructor(credentials: PVACredentials) {
-    this.credentials = credentials;
-    this.botModel = new PVABotModel(this.credentials);
+  constructor(conn, user) {
+    this.botModel = new PVABotModel();
   }
 
-  async initialize(): Promise<void> {
-    // TODO: model probably doesn't need to be its own class
-    // since we are going to end up calling the file I/O on the local disk
-    if (!this.initialized) {
-      await this.botModel.initialize();
-      this.initialized = true;
-    }
+  async initialize(projectId: string): Promise<void> {
+    await this.botModel.initialize(projectId);
   }
 
   async stat(path: string): Promise<Stat> {

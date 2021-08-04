@@ -3,94 +3,83 @@
 
 import { join, resolve } from 'path';
 
-import { ensureFile, writeFile } from 'fs-extra';
+import { ensureFile, unlink, writeFile } from 'fs-extra';
 import fetch from 'node-fetch';
-// import extractZip from 'extract-zip';
 
-import { PVACredentials } from './pvaStorage';
-import { BotComponentResponse, BotComponentUpsertRequest, ComponentInfo, ObiFileModification } from './types';
+import {
+  BotComponentResponse,
+  BotComponentUpsertRequest,
+  ComponentInfo,
+  ContentUpdateMetadata,
+  ObiFileModification,
+} from './types';
+import { PVABotsCache } from './pvaBotsCache';
+import { logger } from './logger';
 
 const tempContentsDir = resolve('C:\\Users\\tonya\\Desktop\\Git Projects\\test\\pva-temp');
-//const zipTargetPath = join(tempContentsDir, 'contents.zip');
 const unzippedContentsPath = join(tempContentsDir, 'unzipped');
-
-type ContentUpdateInfo = {
-  content?: string;
-  isDelete: boolean;
-};
 
 // this is an in-memory representation of a PVA bot's assets
 export class PVABotModel {
-  private credentials: PVACredentials;
-  private _path = '';
+  private projectPath = '';
+  private projectId: string | undefined;
   /** Map of CDS asset path to CDS component info */
   private obiContentMap: Record<string, ComponentInfo> = {};
   private mostRecentContentSnapshot = '';
-  private trackedUpdates: Record<string, ContentUpdateInfo> = {};
+  private trackedUpdates: Record<string, ContentUpdateMetadata> = {};
 
-  // take PVA info from pvaStorage.ts and go fetch bot and map to model?
-  constructor(credentials: PVACredentials) {
-    this.credentials = credentials;
-    console.log(this.credentials);
-  }
-
-  private async fetchBotUpdated(): Promise<void> {
-    const botPath = join(unzippedContentsPath, `pvaBot-${Date.now().toString()}`);
-
+  /**
+   * @param writeFiles Will write all the downloaded content files to disk
+   */
+  private async fetchBotAndCreateContentMap(writeFiles?: boolean) {
     const res = await fetch('http://localhost:5009/api/new/content');
     const data: BotComponentResponse = await res.json();
 
     this.mostRecentContentSnapshot = data.contentSnapshot;
     console.log(this.mostRecentContentSnapshot);
+
+    // construct the content map
     for (const change of data.obiFileChanges) {
-      if (!change.isDeleted) {
+      if (change.isDeleted) {
+        if (writeFiles) {
+          const filePath = join(this.projectPath, change.path);
+          await unlink(filePath);
+        }
+        delete this.obiContentMap[change.path];
+      } else {
         this.obiContentMap[change.path] = change.componentInfo;
-        const filePath = join(botPath, change.path);
-        console.log(`Writing ${filePath}...`);
-        await ensureFile(filePath);
-        await writeFile(filePath, change.fileContent);
-        console.log(`${filePath} successfully written!`);
+        if (writeFiles) {
+          const filePath = join(this.projectPath, change.path);
+          console.log(`Writing ${filePath}...`);
+          await ensureFile(filePath);
+          await writeFile(filePath, change.fileContent);
+          console.log(`${filePath} successfully written!`);
+        }
       }
     }
+    // update the cache
+    PVABotsCache[this.projectId] = {
+      mostRecentContentSnapshot: this.mostRecentContentSnapshot,
+      obiContentMap: this.obiContentMap,
+      trackedUpdates: {},
+    };
   }
 
-  // TODO: fire this before performing any sort of operation on the model
-  // private async fetchBot(): Promise<void> {
-  //   ensureDirSync(tempContentsDir);
-
-  //   // TODO: auth and hit actual PVA endpoint
-
-  //   // go grab the zipped bot contents and write the .zip to disk
-  //   const res = await fetch('http://localhost:5009/api/content');
-  //   const ws = createWriteStream(zipTargetPath);
-  //   await new Promise((resolve, reject) => {
-  //     ws.on('finish', resolve);
-  //     ws.on('error', reject);
-  //     res.body?.pipe(ws);
-  //   });
-
-  //   // unpack the .zip
-  //   const paths: string[] = [];
-  //   const onEntry = (entry: any) => {
-  //     paths.push(entry.fileName);
-  //   };
-
-  //   // TODO: name path based on bot name / id
-  //   const botPath = join(unzippedContentsPath, `pvaBot-${Date.now().toString()}`);
-  //   this._path = botPath;
-  //   await extractZip(zipTargetPath, { dir: botPath, onEntry });
-  //   //console.log(paths);
-
-  //   // build a Record<path, content> dictionary of all the assets
-  //   // paths.forEach(...)
-  // }
-
-  public async initialize() {
-    await this.fetchBotUpdated();
-  }
-
-  public get path(): string {
-    return this._path;
+  public async initialize(projectId: string) {
+    this.projectPath = join(unzippedContentsPath, `composer-project-${projectId}`);
+    this.projectId = projectId;
+    // try to get the bot from the cache
+    const cachedBot = PVABotsCache[projectId];
+    if (cachedBot) {
+      logger.log(`${projectId} already in the PVA cache. Using cached info.`);
+      this.obiContentMap = cachedBot.obiContentMap;
+      this.mostRecentContentSnapshot = cachedBot.mostRecentContentSnapshot;
+      this.trackedUpdates = cachedBot.trackedUpdates;
+    } else {
+      // go download the bot and construct the content map
+      logger.log(`${projectId} is not in the PVA cache. Downloading the bot and building content map.`);
+      await this.fetchBotAndCreateContentMap(true);
+    }
   }
 
   public trackWrite(path, content) {
@@ -133,6 +122,9 @@ export class PVABotModel {
         body: JSON.stringify(request),
         headers: { 'Content-Type': 'application/json' },
       });
+
+      // get an updated list of the bot's assets from PVA and rebuild the content map
+      await this.fetchBotAndCreateContentMap(false);
     }
     // no-op if no changes
   }

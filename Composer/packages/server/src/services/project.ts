@@ -320,8 +320,8 @@ export class BotProjectService {
         throw new Error(`${path} doesn't seem to be exist any longer`);
       }
       const project = new BotProject({ storageId: 'default', path: path }, user, eTag);
-      await project.init();
       project.id = projectId;
+      await project.init();
       // update current indexed bot projects
       BotProjectService.updateCurrentProjects(project);
       return project;
@@ -369,8 +369,8 @@ export class BotProjectService {
           throw new Error(`${path} doesn't seem to be exist any longer`);
         }
         const project = new BotProject({ storageId: 'default', path: path }, user, eTag);
-        await project.init();
         project.id = matchingProjectId;
+        await project.init();
         // update current indexed bot projects
         BotProjectService.updateCurrentProjects(project);
         return project;
