@@ -40,33 +40,40 @@ const JsonEditor: React.FC<JsonEditorProps> = (props) => {
 
   const onInit: OnInit = (monaco) => {
     const disposable = monaco.editor.onDidCreateModel((model) => {
-      const diagnosticOptions: any = {
-        validate: true,
-        enableSchemaRequest: true,
-      };
+      try {
+        const diagnosticOptions: any = {
+          validate: true,
+          enableSchemaRequest: true,
+        };
 
-      if (schema) {
-        const uri = typeof schema === 'object' ? btoa(JSON.stringify(schema)) : schema;
-        const otherSchemas = monaco.languages.json.jsonDefaults.diagnosticsOptions.schemas || [];
-        const currentSchema = otherSchemas.find((s) => s.uri === uri);
+        if (schema) {
+          const uri =
+            typeof schema === 'object'
+              ? URL.createObjectURL(new Blob([JSON.stringify(schema)], { type: 'application/json' }))
+              : schema;
+          const otherSchemas = monaco.languages.json.jsonDefaults.diagnosticsOptions.schemas || [];
+          const currentSchema = otherSchemas.find((s) => s.uri === uri);
 
-        /**
-         * Because we mutate the global language settings, we need to
-         * add new schemas / new models to existing schemas.
-         * This lets us have multiple editors active using different schemas
-         * by taking advantage of the `fileMatch` property + the model's uri.
-         */
-        diagnosticOptions.schemas = [
-          ...otherSchemas.filter((s) => s.uri !== uri),
-          {
-            uri,
-            schema: typeof schema === 'object' ? schema : undefined,
-            fileMatch: [...(currentSchema?.fileMatch || []), model.uri.toString()],
-          },
-        ];
+          /**
+           * Because we mutate the global language settings, we need to
+           * add new schemas / new models to existing schemas.
+           * This lets us have multiple editors active using different schemas
+           * by taking advantage of the `fileMatch` property + the model's uri.
+           */
+          diagnosticOptions.schemas = [
+            ...otherSchemas.filter((s) => s.uri !== uri),
+            {
+              uri,
+              schema: typeof schema === 'object' ? schema : undefined,
+              fileMatch: [...(currentSchema?.fileMatch || []), model.uri.toString()],
+            },
+          ];
+        }
+
+        monaco.languages.json.jsonDefaults.setDiagnosticsOptions(diagnosticOptions);
+      } catch (_err) {
+        // don't worry if we aren't able to set the schema
       }
-
-      monaco.languages.json.jsonDefaults.setDiagnosticsOptions(diagnosticOptions);
 
       if (disposable) {
         // only do this once per model being created
