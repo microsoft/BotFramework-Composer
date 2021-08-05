@@ -45,4 +45,5 @@ export interface IFileStorage {
   rename(oldPath: string, newPath: string): Promise<void>;
   zip(source: string, exclusions: { files: string[]; directories: string[] }, cb: any): unknown;
   initialize?(projectId: string): Promise<void>;
+  autoSave?(projectId: string): Promise<void>;
 }

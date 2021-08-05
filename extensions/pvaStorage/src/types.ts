@@ -55,6 +55,7 @@ export interface MakeDirectoryOptions {
   recursive?: boolean;
 }
 
+// TODO: this should be in @bfc/types
 export interface IFileStorage {
   stat(path: string): Promise<Stat>;
   statSync(path: string): Stat;
@@ -80,4 +81,5 @@ export interface IFileStorage {
   rename(oldPath: string, newPath: string): Promise<void>;
   zip(source: string, exclusions: { files: string[]; directories: string[] }, cb: any): unknown;
   initialize?(projectId: string): Promise<void>;
+  autoSave?(projectId: string): Promise<void>;
 }

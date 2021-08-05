@@ -95,7 +95,7 @@ export class PVABotModel {
     };
   }
 
-  public async saveToPVA() {
+  public async saveToPVA(projectId: string) {
     // check to see if there were any tracked changes
     const changedPaths = Object.keys(this.trackedUpdates);
     if (changedPaths.length) {

@@ -231,4 +231,8 @@ export class PVAStorage implements IFileStorage {
 
     archive.finalize();
   }
+
+  async autoSave(projectId: string): Promise<void> {
+    await this.botModel.saveToPVA(projectId);
+  }
 }

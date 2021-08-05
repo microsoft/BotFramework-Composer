@@ -731,6 +731,15 @@ export class BotProject implements IBotProject {
     // also update the bot project map
   }
 
+  /** Optional functionality that can be implemented by a storage extension to perform
+   *  periodic updates while the user is authoring their bot.
+   */
+  public async autoSave() {
+    if (this.fileStorage.autoSave && this.id) {
+      this.fileStorage.autoSave(this.id);
+    }
+  }
+
   private async createSkillFilesFromUrl(url, skillName) {
     const manifestContent = await getSkillManifest(url);
     const manifestName = Path.basename(url, '.json');
