@@ -7,7 +7,7 @@ import { RouteComponentProps } from '@reach/router';
 import { useRecoilValue } from 'recoil';
 import { Split, SplitMeasuredSizes } from '@geoffcox/react-splitter';
 
-import { dispatcherState } from '../../recoilModel';
+import { dispatcherState, currentDialogState } from '../../recoilModel';
 import { renderThinSplitter } from '../../components/Split/ThinSplitter';
 import { Conversation } from '../../components/Conversation';
 import { useSurveyNotification } from '../../components/Notifications/useSurveyNotification';
@@ -23,10 +23,11 @@ import Modals from './Modals';
 const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: string; skillId?: string }>> = (
   props
 ) => {
-  const { projectId = '', skillId, location } = props;
+  const { projectId = '', skillId, location, dialogId } = props;
 
-  useEmptyPropsHandler(projectId, location, skillId, props.dialogId);
+  useEmptyPropsHandler(projectId, location, skillId, dialogId);
   const { setPageElementState } = useRecoilValue(dispatcherState);
+  const currentDialog = useRecoilValue(currentDialogState({ dialogId, projectId }));
 
   const onMeasuredSizesChanged = (sizes: SplitMeasuredSizes) => {
     setPageElementState('dialogs', { leftSplitWidth: sizes.primary });
@@ -59,16 +60,20 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
           <CommandBar projectId={activeBot} />
           <Conversation css={splitPaneContainer}>
             <div css={splitPaneWrapper}>
-              <Split
-                resetOnDoubleClick
-                initialPrimarySize="65%"
-                minPrimarySize="500px"
-                minSecondarySize="350px"
-                renderSplitter={renderThinSplitter}
-              >
+              {currentDialog?.isTopic ? (
                 <VisualPanel projectId={activeBot} />
-                <PropertyPanel isSkill={activeBot !== projectId} projectId={activeBot} />
-              </Split>
+              ) : (
+                <Split
+                  resetOnDoubleClick
+                  initialPrimarySize="65%"
+                  minPrimarySize="500px"
+                  minSecondarySize="350px"
+                  renderSplitter={renderThinSplitter}
+                >
+                  <VisualPanel projectId={activeBot} />
+                  <PropertyPanel isSkill={activeBot !== projectId} projectId={activeBot} />
+                </Split>
+              )}
             </div>
           </Conversation>
         </div>

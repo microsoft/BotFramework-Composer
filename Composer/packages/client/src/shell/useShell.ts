@@ -315,11 +315,23 @@ export function useShell(source: EventSource, projectId: string): Shell {
   };
 
   const currentDialog = useMemo(() => {
-    let result: any = dialogs.find((d) => d.id === dialogId) ?? dialogs.find((dialog) => dialog.isRoot);
+    let result: any = dialogs.find((d) => d.id === dialogId);
+
+    // look at topics next
+    if (!result) {
+      result = topics.find((t) => t.id === dialogId);
+    }
+
+    // fallback to root dialog
+    if (!result) {
+      result = dialogs.find((dialog) => dialog.isRoot);
+    }
+
     if (!result) {
       // Should not hit here as the seed content should atleast be the root dialog if no current dialog
       result = stubDialog();
     }
+
     return result;
   }, [dialogs, dialogId]);
 

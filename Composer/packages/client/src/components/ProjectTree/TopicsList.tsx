@@ -7,6 +7,9 @@ import React from 'react';
 import { DialogInfo } from '@bfc/shared';
 import formatMessage from 'format-message';
 import get from 'lodash/get';
+import { useRecoilValue } from 'recoil';
+
+import { dispatcherState } from '../../recoilModel';
 
 import { ExpandableNode } from './ExpandableNode';
 import { TreeItem } from './treeItem';
@@ -22,6 +25,7 @@ type TopicsListProps = {
 
 export const TopicsList: React.FC<TopicsListProps> = ({ topics, onToggle, textWidth, projectId }) => {
   const linkTooltip = formatMessage('Edit in Power Virtual Agents');
+  const { navTo } = useRecoilValue(dispatcherState);
 
   const renderTopic = (topic: DialogInfo) => {
     const isSystemTopic = get(topic.content, 'isSystemTopic', false);
@@ -48,6 +52,8 @@ export const TopicsList: React.FC<TopicsListProps> = ({ topics, onToggle, textWi
           if (link.href) {
             // eslint-disable-next-line security/detect-non-literal-fs-filename
             window.open(link.href, '_blank');
+          } else {
+            navTo(projectId, link.dialogId, '0');
           }
         }}
       />
