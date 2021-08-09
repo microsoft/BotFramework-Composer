@@ -32,6 +32,7 @@ import { creationFlowTypeState, fetchReadMePendingState, selectedTemplateReadMeS
 import TelemetryClient from '../../telemetry/TelemetryClient';
 
 import { TemplateDetailView } from './TemplateDetailView';
+import { PackageSourceFeed, TemplateFeedModal } from './TemplateFeedModal';
 
 // -------------------- Styles -------------------- //
 
@@ -134,6 +135,10 @@ export function CreateBot(props: CreateBotProps) {
   const [localTemplatePathValid, setLocalTemplatePathValid] = useState<boolean>(false);
   const [displayedTemplates, setDisplayedTemplates] = useState<BotTemplate[]>([]);
   const [readMe] = useRecoilState(selectedTemplateReadMeState);
+  const [isTemplateFeedModalVisible, setIsTemplateFeedModalVisible] = useState<boolean>(false);
+  const [feeds, updateFeeds] = useState<PackageSourceFeed[]>([]);
+  const [feed, setFeed] = useState<string | undefined>(undefined);
+
   const fetchReadMePending = useRecoilValue(fetchReadMePendingState);
   const creationFlowType = useRecoilValue(creationFlowTypeState);
 
@@ -262,9 +267,31 @@ export function CreateBot(props: CreateBotProps) {
   const dialogWrapperProps =
     creationFlowType === 'Skill' ? DialogCreationCopy.CREATE_NEW_SKILLBOT : DialogCreationCopy.CREATE_NEW_BOT;
 
+  const updateFeed = async (feeds: PackageSourceFeed[]) => {
+    // TODO: Fix for new scenario
+    // const response = await httpClient.post(`${API_ROOT}/feeds`, {
+    //   feeds,
+    // });
+    // // update the list of feeds in the component state
+    // updateFeeds(response.data);
+  };
+
   return (
     <Fragment>
+      <TemplateFeedModal
+        closeDialog={() => setIsTemplateFeedModalVisible(false)}
+        feeds={feeds}
+        hidden={!isTemplateFeedModalVisible}
+        onUpdateFeed={updateFeed}
+      />
       <DialogWrapper isOpen={isOpen} {...dialogWrapperProps} dialogType={DialogTypes.CreateFlow} onDismiss={onDismiss}>
+        <PrimaryButton
+          data-testid="CreateBotEditFeedsBtn"
+          text={formatMessage('Edit Feeds')}
+          onClick={() => {
+            setIsTemplateFeedModalVisible(true);
+          }}
+        />
         <Pivot
           defaultSelectedKey={csharpFeedKey}
           onLinkClick={(item) => {
