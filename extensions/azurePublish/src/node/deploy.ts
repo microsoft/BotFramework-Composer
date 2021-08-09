@@ -193,20 +193,22 @@ export class BotProjectDeploy {
 
       const manifest = await fs.readJson(path.join(skillSettingsPath, manifestFile));
 
-      const endpointIndex = manifest.endpoints.findIndex((x) => x.name === profileName);
-      if (endpointIndex > -1) {
-        // already exists
-        return;
-      }
-      manifest.endpoints.push({
-        protocol: 'BotFrameworkV3',
-        name: profileName,
-        endpointUrl: hostEndpoint,
-        description: '<description>',
-        msAppId: msAppId,
-      });
+      if (manifest.endpoints) {
+        const endpointIndex = manifest.endpoints.findIndex((x) => x.name === profileName);
+        if (endpointIndex > -1) {
+          // already exists
+          return;
+        }
+        manifest.endpoints.push({
+          protocol: 'BotFrameworkV3',
+          name: profileName,
+          endpointUrl: hostEndpoint,
+          description: '<description>',
+          msAppId: msAppId,
+        });
 
-      await fs.writeJson(path.join(skillSettingsPath, manifestFile), manifest, { spaces: 2 });
+        await fs.writeJson(path.join(skillSettingsPath, manifestFile), manifest, { spaces: 2 });
+      }
     }
   }
 
