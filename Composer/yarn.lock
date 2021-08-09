@@ -4293,12 +4293,12 @@
     tslib "^2.0.3"
     xml2js "^0.4.19"
 
-"@microsoft/bf-dispatcher@4.14.0-rc0":
-  version "4.14.0-rc0"
-  resolved "https://registry.yarnpkg.com/@microsoft/bf-dispatcher/-/bf-dispatcher-4.14.0-rc0.tgz#79d50cdf7d4e01b4a9bc2135b6d464573d937720"
-  integrity sha512-4zJbfZjKGTpW1iBSCCvr4buHRI9j8j9RMIuAKSvt5pWPkW3Xcgg/nETIQdA8dJOaVyklRV/GsnCzNVBLenYywQ==
+"@microsoft/bf-dispatcher@4.14.1":
+  version "4.14.1"
+  resolved "https://registry.yarnpkg.com/@microsoft/bf-dispatcher/-/bf-dispatcher-4.14.1.tgz#ed5b51d0b942f63bf27ba7f5c88a2a37ef78a496"
+  integrity sha512-x9kywbgPx+8q9dlueBmnVkh9tQwSdn6jf9gNde+IAqvSCWEvkt/IGcwjTDc91YzMRzUjnSEgrtV6+5BBOoqnxA==
   dependencies:
-    "@microsoft/bf-lu" "4.14.0-rc0"
+    "@microsoft/bf-lu" "4.14.1"
     argparse "~1.0.10"
     readline-sync "^1.4.10"
     ts-md5 "^1.2.6"
@@ -4335,10 +4335,10 @@
     seedrandom "~3.0.5"
     swagger-parser "^10.0.2"
 
-"@microsoft/bf-lu@4.14.0-rc0":
-  version "4.14.0-rc0"
-  resolved "https://registry.yarnpkg.com/@microsoft/bf-lu/-/bf-lu-4.14.0-rc0.tgz#2ae2c271383cf01385d18ec12b79999cd8392bb4"
-  integrity sha512-c60oMIl5BiKynl6/p3mrNhQ8hhl+UbO+PmMmeBIrX8ykvJlzilFIvVUfz6/McCw7Gnu5dDtNsUheshanJLYqcQ==
+"@microsoft/bf-lu@4.14.1":
+  version "4.14.1"
+  resolved "https://registry.yarnpkg.com/@microsoft/bf-lu/-/bf-lu-4.14.1.tgz#1924cb7c70fcce855d0514a136a8f5f6e6035b68"
+  integrity sha512-7NavRwFYic3iZ7BfrJixr+Wzb6gghAqH3s/eceHnfoKvAb1rMA3A7L+7ZMuqLsAv/2Z36LYVWoTtgMkMeM0MpQ==
   dependencies:
     "@types/node-fetch" "~2.5.5"
     antlr4 "4.9.2"
@@ -4399,13 +4399,13 @@
     semver "^5.5.1"
     tslib "^2.0.3"
 
-"@microsoft/bf-orchestrator@4.14.0-rc0":
-  version "4.14.0-rc0"
-  resolved "https://registry.yarnpkg.com/@microsoft/bf-orchestrator/-/bf-orchestrator-4.14.0-rc0.tgz#13865f27eec033b2fa716c5ce1f683cebde912cd"
-  integrity sha512-bG6nlj8x8U8aW5pXZoEAUSulJLsh0axE1D8fMDuTRN4tTpEsIn5JvbI1C/zGPOYp3Kceg4BkacYsky5tAaBSQQ==
+"@microsoft/bf-orchestrator@4.14.1":
+  version "4.14.1"
+  resolved "https://registry.yarnpkg.com/@microsoft/bf-orchestrator/-/bf-orchestrator-4.14.1.tgz#a5271fb288fe25ea1ef26b80f0dcd422700cefe3"
+  integrity sha512-kwfEhiyvGWB2iN8tGFf5//slopyi25wYHKjEwpYpek1D6y0aQwWqN1Pa/C4t46hwWweR5VHjjQakyjlnVvkfUw==
   dependencies:
-    "@microsoft/bf-dispatcher" "4.14.0-rc0"
-    "@microsoft/bf-lu" "4.14.0-rc0"
+    "@microsoft/bf-dispatcher" "4.14.1"
+    "@microsoft/bf-lu" "4.14.1"
     "@microsoft/orchestrator-core" "~4.14.0"
     "@types/fs-extra" "~8.1.0"
     axios "~0.21.1"
@@ -5209,9 +5209,9 @@
     "@types/node" "*"
 
 "@types/fs-extra@~8.1.0":
-  version "8.1.1"
-  resolved "https://registry.yarnpkg.com/@types/fs-extra/-/fs-extra-8.1.1.tgz#1e49f22d09aa46e19b51c0b013cb63d0d923a068"
-  integrity sha512-TcUlBem321DFQzBNuz8p0CLLKp0VvF/XH9E4KHNmgwyp4E3AfgI5cjiIVZWlbfThBop2qxFIh4+LeY6hVWWZ2w==
+  version "8.1.2"
+  resolved "https://registry.yarnpkg.com/@types/fs-extra/-/fs-extra-8.1.2.tgz#7125cc2e4bdd9bd2fc83005ffdb1d0ba00cca61f"
+  integrity sha512-SvSrYXfWSc7R4eqnOzbQF4TZmfpNSM9FrSWLU3EUnWBuyZqNBOrv1B1JA3byUDPUl9z4Ab3jeZG2eDdySlgNMg==
   dependencies:
     "@types/node" "*"
 
@@ -13443,9 +13443,9 @@ graceful-fs@^4.2.0, graceful-fs@^4.2.2:
   integrity sha512-a30VEBm4PEdx1dRB7MFK7BejejvCvBronbLjht+sHuGYj8PHs7M/5Z+rt5lw551vZ7yfTCj4Vuyy3mSJytDWRQ==
 
 graceful-fs@^4.2.6:
-  version "4.2.6"
-  resolved "https://registry.yarnpkg.com/graceful-fs/-/graceful-fs-4.2.6.tgz#ff040b2b0853b23c3d31027523706f1885d76bee"
-  integrity sha512-nTnJ528pbqxYanhpDYsi4Rd8MAeaBA67+RZ10CM1m3bTAVFEDcd5AuA4a6W5YkGZ1iNXHzZz8T6TBKLeBuNriQ==
+  version "4.2.8"
+  resolved "https://registry.yarnpkg.com/graceful-fs/-/graceful-fs-4.2.8.tgz#e412b8d33f5e006593cbd3cee6df9f2cebbe802a"
+  integrity sha512-qkIilPUYcNhJpd33n0GBXTB1MMPp14TxEsEs0pTrsSVucApsYzW5V+Q8Qxhik6KU3evy+qkAAowTByymK0avdg==
 
 graphlib@^2.1.7:
   version "2.1.7"
@@ -17045,9 +17045,9 @@ minipass-collect@^1.0.2:
     minipass "^3.0.0"
 
 minipass-fetch@^1.3.2:
-  version "1.3.3"
-  resolved "https://registry.yarnpkg.com/minipass-fetch/-/minipass-fetch-1.3.3.tgz#34c7cea038c817a8658461bf35174551dce17a0a"
-  integrity sha512-akCrLDWfbdAWkMLBxJEeWTdNsjML+dt5YgOI4gJ53vuO0vrmYQkUPxa6j6V65s9CcePIr2SSWqjT2EcrNseryQ==
+  version "1.3.4"
+  resolved "https://registry.yarnpkg.com/minipass-fetch/-/minipass-fetch-1.3.4.tgz#63f5af868a38746ca7b33b03393ddf8c291244fe"
+  integrity sha512-TielGogIzbUEtd1LsjZFs47RWuHHfhl6TiCx1InVxApBAmQ8bL0dL5ilkLGcRvuyW/A9nE+Lvn855Ewz8S0PnQ==
   dependencies:
     minipass "^3.1.0"
     minipass-sized "^1.0.3"
@@ -21381,9 +21381,9 @@ slice-ansi@^4.0.0:
     is-fullwidth-code-point "^3.0.0"
 
 smart-buffer@^4.1.0:
-  version "4.1.0"
-  resolved "https://registry.yarnpkg.com/smart-buffer/-/smart-buffer-4.1.0.tgz#91605c25d91652f4661ea69ccf45f1b331ca21ba"
-  integrity sha512-iVICrxOzCynf/SNaBQCw34eM9jROU/s5rzIhpOvzhzuYHfJR/DhZfDkXiZSgKXfgv26HT3Yni3AV/DGw0cGnnw==
+  version "4.2.0"
+  resolved "https://registry.yarnpkg.com/smart-buffer/-/smart-buffer-4.2.0.tgz#6e1d71fa4f18c05f7d0ff216dd16a481d0e8d9ae"
+  integrity sha512-94hK0Hh8rPqQl2xXc3HsaBoOXKV20MToPkcXvwbISWLEs+64sBq5kFgn2kJDHb1Pry9yrP0dxrCI9RRci7RXKg==
 
 snapdragon-node@^2.0.1:
   version "2.1.1"
@@ -22288,22 +22288,10 @@ tar@^4:
     safe-buffer "^5.1.2"
     yallist "^3.0.2"
 
-tar@^6.0.2, tar@^6.1.0:
-  version "6.1.0"
-  resolved "https://registry.yarnpkg.com/tar/-/tar-6.1.0.tgz#d1724e9bcc04b977b18d5c573b333a2207229a83"
-  integrity sha512-DUCttfhsnLCjwoDoFcI+B2iJgYa93vBnDUATYEeRx6sntCTdN01VnqsIuTlALXla/LWooNg0yEGeB+Y8WdFxGA==
-  dependencies:
-    chownr "^2.0.0"
-    fs-minipass "^2.0.0"
-    minipass "^3.0.0"
-    minizlib "^2.1.1"
-    mkdirp "^1.0.3"
-    yallist "^4.0.0"
-
-tar@^6.0.5:
-  version "6.0.5"
-  resolved "https://registry.yarnpkg.com/tar/-/tar-6.0.5.tgz#bde815086e10b39f1dcd298e89d596e1535e200f"
-  integrity sha512-0b4HOimQHj9nXNEAA7zWwMM91Zhhba3pspja6sQbgTpynOJf+bkjBnfybNYzbpLbnwXnbyB4LOREvlyXLkCHSg==
+tar@^6.0.2, tar@^6.0.5, tar@^6.1.0:
+  version "6.1.6"
+  resolved "https://registry.yarnpkg.com/tar/-/tar-6.1.6.tgz#c23d797b0a1efe5d479b1490805c5443f3560c5d"
+  integrity sha512-oaWyu5dQbHaYcyZCTfyPpC+VmI62/OM2RTUYavTk1MDr1cwW5Boi3baeYQKiZbY2uSQJGr+iMOzb/JFxLrft+g==
   dependencies:
     chownr "^2.0.0"
     fs-minipass "^2.0.0"
