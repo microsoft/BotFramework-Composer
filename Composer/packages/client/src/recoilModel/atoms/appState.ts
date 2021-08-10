@@ -15,10 +15,17 @@ import {
 } from '../../recoilModel/types';
 import { getUserSettings } from '../utils';
 import onboardingStorage from '../../utils/onboardingStorage';
-import { CreationFlowStatus, AppUpdaterStatus, CreationFlowType, FEEDVERSION } from '../../constants';
+import {
+  CreationFlowStatus,
+  AppUpdaterStatus,
+  CreationFlowType,
+  FEEDVERSION,
+  defaultTemplateFeeds,
+} from '../../constants';
 import { TreeLink } from '../../components/ProjectTree/types';
 import { Dispatcher } from '../dispatchers';
 import { DebugDrawerKeys } from '../../pages/design/DebugPanel/TabExtensions/types';
+import { PackageSourceFeed } from '../../components/CreationFlow/TemplateFeedModal';
 
 export type BotProject = {
   readonly id: string;
@@ -374,4 +381,9 @@ export const projectsForDiagnosticsFilterState = atom<string[]>({
 export const selectedTemplateVersionState = atom<string>({
   key: getFullyQualifiedKey('selectedTemplateVersion'),
   default: '',
+});
+
+export const templateFeedsState = atom<PackageSourceFeed[]>({
+  key: getFullyQualifiedKey('templateFeedsState'),
+  default: defaultTemplateFeeds,
 });

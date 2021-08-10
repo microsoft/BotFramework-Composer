@@ -42,6 +42,7 @@ import {
   orchestratorForSkillsDialogState,
   selectedTemplateVersionState,
   watchedVariablesState,
+  templateFeedsState,
 } from '../atoms';
 import { botRuntimeOperationsSelector, rootBotProjectIdSelector } from '../selectors';
 import { mergePropertiesManagedByRootBot, postRootBotCreation } from '../../recoilModel/dispatchers/utils/project';
@@ -50,6 +51,7 @@ import { deleteTrigger as DialogdeleteTrigger } from '../../utils/dialogUtil';
 import { BotConvertConfirmDialog } from '../../components/BotConvertDialog';
 import { getManifestJsonFromZip } from '../utils/skill';
 import { skillNameRegex } from '../../utils/skillManifestUtil';
+import { PackageSourceFeed } from '../../components/CreationFlow/TemplateFeedModal';
 
 import { announcementState, boilerplateVersionState, recentProjectsState, templateIdState } from './../atoms';
 import { logMessage, setError } from './../dispatchers/shared';
@@ -677,6 +679,12 @@ export const projectDispatcher = () => {
     }
   );
 
+  const setTemplateFeeds = useRecoilCallback(
+    (callbackHelpers: CallbackInterface) => (templateFeeds: PackageSourceFeed[]) => {
+      callbackHelpers.set(templateFeedsState, templateFeeds);
+    }
+  );
+
   return {
     openProject,
     createNewBot,
@@ -703,5 +711,6 @@ export const projectDispatcher = () => {
     setWarnAboutFunctions,
     fetchReadMe,
     setSelectedTemplateVersion,
+    setTemplateFeeds,
   };
 };
