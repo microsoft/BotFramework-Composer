@@ -32,6 +32,7 @@ import { DefaultSettingManager } from '../settings/defaultSettingManager';
 import log from '../../logger';
 import { BotProjectService } from '../../services/project';
 import AssetService from '../../services/asset';
+import { useElectronContext } from '../../utility/electronContext';
 
 import {
   BotStructureFilesPatterns,
@@ -935,7 +936,7 @@ export class BotProject implements IBotProject {
     const root = this.dataDir;
     if (this.fileStorage.initialize && this.id) {
       // TODO: need a way to pass credentials to the bot for custom storage (PVA)
-      await this.fileStorage.initialize(this.id);
+      await this.fileStorage.initialize(this.id, useElectronContext());
     }
     const paths = this.fileStorage.globSync(
       [

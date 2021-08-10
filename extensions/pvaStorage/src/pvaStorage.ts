@@ -3,7 +3,7 @@
 
 import { basename, format } from 'path';
 
-import fs from 'fs-extra';
+import fs, { ensureDir, ensureDirSync } from 'fs-extra';
 import rimraf from 'rimraf';
 import globby from 'globby';
 import archiver from 'archiver';
@@ -23,8 +23,8 @@ export class PVAStorage implements IFileStorage {
     this.botModel = new PVABotModel();
   }
 
-  async initialize(projectId: string): Promise<void> {
-    await this.botModel.initialize(projectId);
+  async initialize(projectId: string, electronContext: any): Promise<void> {
+    await this.botModel.initialize(projectId, electronContext);
   }
 
   async stat(path: string): Promise<Stat> {
@@ -120,11 +120,11 @@ export class PVAStorage implements IFileStorage {
   }
 
   async mkDir(path: string): Promise<void> {
-    await fs.mkdir(path);
+    await ensureDir(path);
   }
 
   mkDirSync(path: string): void {
-    fs.mkdirSync(path);
+    ensureDirSync(path);
   }
 
   async rmDir(path: string): Promise<void> {
