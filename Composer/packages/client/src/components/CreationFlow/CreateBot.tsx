@@ -28,7 +28,13 @@ import { useRecoilState, useRecoilValue } from 'recoil';
 
 import msftIcon from '../../images/msftIcon.svg';
 import { DialogCreationCopy } from '../../constants';
-import { creationFlowTypeState, fetchReadMePendingState, selectedTemplateReadMeState } from '../../recoilModel';
+import {
+  creationFlowTypeState,
+  dispatcherState,
+  fetchReadMePendingState,
+  selectedTemplateReadMeState,
+  templateFeedsState,
+} from '../../recoilModel';
 import TelemetryClient from '../../telemetry/TelemetryClient';
 
 import { TemplateDetailView } from './TemplateDetailView';
@@ -136,8 +142,9 @@ export function CreateBot(props: CreateBotProps) {
   const [displayedTemplates, setDisplayedTemplates] = useState<BotTemplate[]>([]);
   const [readMe] = useRecoilState(selectedTemplateReadMeState);
   const [isTemplateFeedModalVisible, setIsTemplateFeedModalVisible] = useState<boolean>(false);
-  const [feeds, updateFeeds] = useState<PackageSourceFeed[]>([]);
+  const templateFeeds = useRecoilValue(templateFeedsState);
   const [feed, setFeed] = useState<string | undefined>(undefined);
+  const { setTemplateFeeds } = useRecoilValue(dispatcherState);
 
   const fetchReadMePending = useRecoilValue(fetchReadMePendingState);
   const creationFlowType = useRecoilValue(creationFlowTypeState);
@@ -267,22 +274,15 @@ export function CreateBot(props: CreateBotProps) {
   const dialogWrapperProps =
     creationFlowType === 'Skill' ? DialogCreationCopy.CREATE_NEW_SKILLBOT : DialogCreationCopy.CREATE_NEW_BOT;
 
-  const updateFeed = async (feeds: PackageSourceFeed[]) => {
-    // TODO: Fix for new scenario
-    // const response = await httpClient.post(`${API_ROOT}/feeds`, {
-    //   feeds,
-    // });
-    // // update the list of feeds in the component state
-    // updateFeeds(response.data);
-  };
-
   return (
     <Fragment>
       <TemplateFeedModal
         closeDialog={() => setIsTemplateFeedModalVisible(false)}
-        feeds={feeds}
+        feeds={templateFeeds}
         hidden={!isTemplateFeedModalVisible}
-        onUpdateFeed={updateFeed}
+        onUpdateFeed={(feeds: PackageSourceFeed[]) => {
+          setTemplateFeeds(feeds);
+        }}
       />
       <DialogWrapper isOpen={isOpen} {...dialogWrapperProps} dialogType={DialogTypes.CreateFlow} onDismiss={onDismiss}>
         <PrimaryButton

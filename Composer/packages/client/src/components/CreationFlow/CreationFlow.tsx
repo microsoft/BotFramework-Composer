@@ -18,6 +18,7 @@ import {
   userSettingsState,
   templateProjectsState,
   selectedTemplateVersionState,
+  templateFeedsState,
 } from '../../recoilModel';
 import { localBotsDataSelector } from '../../recoilModel/selectors/project';
 import Home from '../../pages/home/Home';
@@ -51,6 +52,7 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
     fetchReadMe,
   } = useRecoilValue(dispatcherState);
 
+  const templateFeeds = useRecoilValue(templateFeedsState);
   const templateProjects = useRecoilValue(templateProjectsState);
   const creationFlowStatus = useRecoilValue(creationFlowStatusState);
   const projectId = useRecoilValue(currentProjectIdState);
@@ -83,7 +85,6 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
       await fetchProjectById(cachedProjectId);
     }
     await fetchStorages();
-    await fetchTemplates([firstPartyTemplateFeed]);
     fetchFeed();
     fetchRecentProjects();
   };
@@ -91,6 +92,13 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
   useEffect(() => {
     fetchResources();
   }, []);
+
+  useEffect(() => {
+    const templateFeedUrls = Array.from(templateFeeds).map((feedObj) => {
+      return feedObj.url;
+    });
+    fetchTemplates(templateFeedUrls);
+  }, [templateFeeds]);
 
   const updateCurrentPath = async (newPath, storageId) => {
     if (!storageId) {
