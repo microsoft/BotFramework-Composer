@@ -98,7 +98,7 @@ export const Description: React.FC<ContentProps> = ({
         content: {
           $schema: SCHEMA_URI,
           $id: `${botName}-${uuid()}`,
-          endpoints: [{}],
+          endpoints: [],
           name: botName,
           ...rest,
         },

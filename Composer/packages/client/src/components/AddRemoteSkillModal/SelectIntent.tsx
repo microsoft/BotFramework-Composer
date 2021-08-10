@@ -321,9 +321,9 @@ export const SelectIntent: React.FC<SelectIntentProps> = (props) => {
               <div css={detailListContainer} data-is-scrollable="true">
                 <ScrollablePane scrollbarVisibility={ScrollbarVisibility.auto}>
                   <DetailsList
+                    isHeaderVisible
                     checkboxVisibility={CheckboxVisibility.always}
                     columns={columns}
-                    isHeaderVisible={false}
                     items={intentItems}
                     selection={selection}
                     selectionMode={SelectionMode.multiple}

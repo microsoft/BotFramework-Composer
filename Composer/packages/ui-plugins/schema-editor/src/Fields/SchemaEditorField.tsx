@@ -11,15 +11,13 @@ import { getDefaultDialogSchema } from '../utils/getDefaultDialogSchema';
 import { getDefinitions } from '../utils/getDefinitions';
 import { uiOptions } from '../uiOptions';
 import { schema, valueTypeDefinitions } from '../schema';
+import { SCHEMA_URI } from '../contants';
 
 const styles = {
   container: css`
     margin: 0 -18px;
   `,
 };
-
-const schemaUrl =
-  'https://raw.githubusercontent.com/microsoft/botframework-sdk/master/schemas/component/component.schema';
 
 export const SchemaEditorField: React.FC = () => {
   const { dialogs, dialogSchemas, dialogId, shellApi } = useShellApi();
@@ -29,7 +27,7 @@ export const SchemaEditorField: React.FC = () => {
   const { content } = dialogSchemas.find(({ id }) => id === dialogId) || {};
 
   const value = useMemo(
-    () => (typeof content === 'object' ? content : getDefaultDialogSchema(schemaUrl, displayName || dialogId)),
+    () => (typeof content === 'object' ? content : getDefaultDialogSchema(SCHEMA_URI, displayName || dialogId)),
     [content]
   );
 
@@ -47,6 +45,7 @@ export const SchemaEditorField: React.FC = () => {
     const definitions = getDefinitions(expressions as JSONSchema7[], valueTypeDefinitions);
 
     const content = {
+      $schema: SCHEMA_URI,
       ...rest,
       properties: dialogValue,
       $result: { ...value.$result, properties: resultValue },
