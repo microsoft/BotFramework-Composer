@@ -25,6 +25,7 @@ import { Link } from 'office-ui-fabric-react/lib/Link';
 import { FontIcon } from 'office-ui-fabric-react/lib/Icon';
 import { csharpFeedKey, nodeFeedKey } from '@botframework-composer/types';
 import { useRecoilState, useRecoilValue } from 'recoil';
+import { Stack } from 'office-ui-fabric-react/lib/Stack';
 
 import msftIcon from '../../images/msftIcon.svg';
 import { DialogCreationCopy } from '../../constants';
@@ -65,6 +66,8 @@ const pickerContainer = css`
   height: 400px;
   border: 1px solid #f3f2f1;
 `;
+
+const tabAndFeedBtnStyles = { root: { paddingBottom: '5px' } };
 
 const rowDetails = (disabled) => {
   return {
@@ -284,28 +287,34 @@ export function CreateBot(props: CreateBotProps) {
         }}
       />
       <DialogWrapper isOpen={isOpen} {...dialogWrapperProps} dialogType={DialogTypes.CreateFlow} onDismiss={onDismiss}>
-        <PrimaryButton
-          data-testid="CreateBotEditFeedsBtn"
-          text={formatMessage('Edit Feeds')}
-          onClick={() => {
-            setIsTemplateFeedModalVisible(true);
-          }}
-        />
-        <Pivot
-          defaultSelectedKey={csharpFeedKey}
-          onLinkClick={(item) => {
-            if (item) {
-              setSelectedProgLang(item);
-            }
-          }}
-        >
-          <PivotItem data-testid="dotnetFeed" headerText="C#" itemKey={csharpFeedKey}></PivotItem>
-          <PivotItem
-            data-testid="nodeFeed"
-            headerText={formatMessage('Node (Preview)')}
-            itemKey={nodeFeedKey}
-          ></PivotItem>
-        </Pivot>
+        <Stack horizontal styles={tabAndFeedBtnStyles}>
+          <Stack.Item align="start">
+            <Pivot
+              defaultSelectedKey={csharpFeedKey}
+              onLinkClick={(item) => {
+                if (item) {
+                  setSelectedProgLang(item);
+                }
+              }}
+            >
+              <PivotItem data-testid="dotnetFeed" headerText="C#" itemKey={csharpFeedKey}></PivotItem>
+              <PivotItem
+                data-testid="nodeFeed"
+                headerText={formatMessage('Node (Preview)')}
+                itemKey={nodeFeedKey}
+              ></PivotItem>
+            </Pivot>
+          </Stack.Item>
+          <Stack.Item align="end">
+            <PrimaryButton
+              data-testid="CreateBotEditFeedsBtn"
+              text={formatMessage('Edit Feeds')}
+              onClick={() => {
+                setIsTemplateFeedModalVisible(true);
+              }}
+            />
+          </Stack.Item>
+        </Stack>
         <div css={pickerContainer}>
           <div css={detailListContainer} data-is-scrollable="true" id="templatePickerContainer">
             <ScrollablePane
