@@ -20,12 +20,11 @@ import {
   AppUpdaterStatus,
   CreationFlowType,
   FEEDVERSION,
-  defaultTemplateFeeds,
+  firstPartyTemplateFeed,
 } from '../../constants';
 import { TreeLink } from '../../components/ProjectTree/types';
 import { Dispatcher } from '../dispatchers';
 import { DebugDrawerKeys } from '../../pages/design/DebugPanel/TabExtensions/types';
-import { PackageSourceFeed } from '../../components/CreationFlow/TemplateFeedModal';
 
 export type BotProject = {
   readonly id: string;
@@ -383,7 +382,7 @@ export const selectedTemplateVersionState = atom<string>({
   default: '',
 });
 
-export const templateFeedsState = atom<PackageSourceFeed[]>({
-  key: getFullyQualifiedKey('templateFeedsState'),
-  default: defaultTemplateFeeds,
+export const templateFeedUrlState = atom<string>({
+  key: getFullyQualifiedKey('templateFeedUrlState'),
+  default: firstPartyTemplateFeed,
 });

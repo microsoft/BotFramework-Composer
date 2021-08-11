@@ -18,7 +18,7 @@ import {
   userSettingsState,
   templateProjectsState,
   selectedTemplateVersionState,
-  templateFeedsState,
+  templateFeedUrlState,
 } from '../../recoilModel';
 import { localBotsDataSelector } from '../../recoilModel/selectors/project';
 import Home from '../../pages/home/Home';
@@ -52,7 +52,7 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
     fetchReadMe,
   } = useRecoilValue(dispatcherState);
 
-  const templateFeeds = useRecoilValue(templateFeedsState);
+  const templateFeedUrl = useRecoilValue(templateFeedUrlState);
   const templateProjects = useRecoilValue(templateProjectsState);
   const creationFlowStatus = useRecoilValue(creationFlowStatusState);
   const projectId = useRecoilValue(currentProjectIdState);
@@ -94,11 +94,8 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
   }, []);
 
   useEffect(() => {
-    const templateFeedUrls = Array.from(templateFeeds).map((feedObj) => {
-      return feedObj.url;
-    });
-    fetchTemplates(templateFeedUrls);
-  }, [templateFeeds]);
+    templateFeedUrl && fetchTemplates([templateFeedUrl]);
+  }, [templateFeedUrl]);
 
   const updateCurrentPath = async (newPath, storageId) => {
     if (!storageId) {

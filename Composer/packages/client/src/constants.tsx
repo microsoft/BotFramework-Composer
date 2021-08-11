@@ -13,8 +13,6 @@ import formatMessage from 'format-message';
 import { IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import { Link } from 'office-ui-fabric-react/lib/Link';
 
-import { PackageSourceFeed } from './components/CreationFlow/TemplateFeedModal';
-
 export const BASEPATH = process.env.PUBLIC_URL || '/';
 export const BASEURL = `${process.env.PUBLIC_URL || ''}/api`;
 
@@ -537,24 +535,3 @@ export const SURVEY_PARAMETERS = {
 
 export const LAST_SURVEY_KEY = 'lastSurveyTakenOnTimestamp';
 export const SURVEY_URL_BASE = 'https://aka.ms/bfcomposersurvey';
-
-export const defaultTemplateFeeds: PackageSourceFeed[] = [
-  {
-    name: '1P nmp feed',
-    key: 'firstPartyNpmFeed',
-    url: firstPartyTemplateFeed,
-    type: 'npm',
-    text: formatMessage('First Party Npm Feed'),
-  },
-];
-
-// name: string;
-// key: string;
-// url: string;
-// type: string;
-// defaultQuery?: {
-//   prerelease?: boolean;
-//   semVerLevel?: string;
-//   query?: string;
-// };
-// readonly?: boolean;

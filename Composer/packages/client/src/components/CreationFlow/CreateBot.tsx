@@ -33,12 +33,12 @@ import {
   dispatcherState,
   fetchReadMePendingState,
   selectedTemplateReadMeState,
-  templateFeedsState,
+  templateFeedUrlState,
 } from '../../recoilModel';
 import TelemetryClient from '../../telemetry/TelemetryClient';
 
 import { TemplateDetailView } from './TemplateDetailView';
-import { PackageSourceFeed, TemplateFeedModal } from './TemplateFeedModal';
+import { TemplateFeedModal } from './TemplateFeedModal';
 
 // -------------------- Styles -------------------- //
 
@@ -142,9 +142,8 @@ export function CreateBot(props: CreateBotProps) {
   const [displayedTemplates, setDisplayedTemplates] = useState<BotTemplate[]>([]);
   const [readMe] = useRecoilState(selectedTemplateReadMeState);
   const [isTemplateFeedModalVisible, setIsTemplateFeedModalVisible] = useState<boolean>(false);
-  const templateFeeds = useRecoilValue(templateFeedsState);
-  const [feed, setFeed] = useState<string | undefined>(undefined);
-  const { setTemplateFeeds } = useRecoilValue(dispatcherState);
+  const templateFeedUrl = useRecoilValue(templateFeedUrlState);
+  const { setTemplateFeedUrl } = useRecoilValue(dispatcherState);
 
   const fetchReadMePending = useRecoilValue(fetchReadMePendingState);
   const creationFlowType = useRecoilValue(creationFlowTypeState);
@@ -278,10 +277,10 @@ export function CreateBot(props: CreateBotProps) {
     <Fragment>
       <TemplateFeedModal
         closeDialog={() => setIsTemplateFeedModalVisible(false)}
-        feeds={templateFeeds}
+        feedUrl={templateFeedUrl}
         hidden={!isTemplateFeedModalVisible}
-        onUpdateFeed={(feeds: PackageSourceFeed[]) => {
-          setTemplateFeeds(feeds);
+        onUpdateFeed={(feed: string) => {
+          setTemplateFeedUrl(feed);
         }}
       />
       <DialogWrapper isOpen={isOpen} {...dialogWrapperProps} dialogType={DialogTypes.CreateFlow} onDismiss={onDismiss}>
