@@ -24,6 +24,7 @@ import { BotProject } from '../bot/botProject';
 import { templateGeneratorPath } from '../../settings/env';
 import { BackgroundProcessManager } from '../../services/backgroundProcessManager';
 import { FeatureFlagService } from '../../services/featureFlags';
+import { FallbackTemplateFeedObj } from '../../constants';
 
 const defaultBotProjectFileContent = {
   $schema:
@@ -311,10 +312,13 @@ export class AssetManager {
           }
         )
       );
+      if (feedUrl === firstPartyTemplateFeed && result.length < 1) {
+        return FallbackTemplateFeedObj;
+      }
       return result;
     } catch (error) {
       if (feedUrl === firstPartyTemplateFeed) {
-        return [];
+        return FallbackTemplateFeedObj;
       }
       return null;
     }
