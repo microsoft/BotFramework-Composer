@@ -9,6 +9,10 @@ import formatMessage from 'format-message';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
 import { PrimaryButton } from 'office-ui-fabric-react/lib/Button';
+import { Link } from 'office-ui-fabric-react/lib/components/Link';
+
+import { firstPartyTemplateFeed } from '../../constants';
+import TelemetryClient from '../../telemetry/TelemetryClient';
 
 export interface WorkingModalProps {
   hidden: boolean;
@@ -21,6 +25,11 @@ export const TemplateFeedModal: React.FC<WorkingModalProps> = (props) => {
   const [urlValue, setUrlValue] = useState(props.feedUrl);
 
   const savePendingEdits = () => {
+    if (urlValue === firstPartyTemplateFeed) {
+      TelemetryClient.track('TemplateFeedChangedToDefaultFeed');
+    } else {
+      TelemetryClient.track('TemplateFeedChangedToCustomFeed');
+    }
     props.onUpdateFeed(urlValue);
   };
 
@@ -42,9 +51,21 @@ export const TemplateFeedModal: React.FC<WorkingModalProps> = (props) => {
         label={formatMessage('Template Feed Url')}
         value={urlValue}
         onChange={(ev, newValue) => {
-          newValue && setUrlValue(newValue);
+          if (newValue) {
+            setUrlValue(newValue);
+          } else {
+            setUrlValue('');
+          }
         }}
       />
+      <Link
+        underline
+        onClick={(ev) => {
+          setUrlValue(firstPartyTemplateFeed);
+        }}
+      >
+        {formatMessage('Reset to default feed')}
+      </Link>
       <DialogFooter>
         <PrimaryButton onClick={closeDialog}>{formatMessage('Done')}</PrimaryButton>
       </DialogFooter>

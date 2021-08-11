@@ -144,7 +144,6 @@ export const storageDispatcher = () => {
     try {
       const response = await httpClient.post(`assets/projectTemplates`, {
         feedUrls: feedUrls,
-        getFirstPartyNpm: false,
       });
 
       const data = response?.data;
@@ -153,9 +152,11 @@ export const storageDispatcher = () => {
         set(templateProjectsState, data);
       }
     } catch (err) {
+      TelemetryClient.track('TemplateNpmRegistryCallFailed', { error: err.message });
+
       set(applicationErrorState, {
         message: err.message,
-        summary: formatMessage('Error fetching runtime templates'),
+        summary: formatMessage('Error fetching not project templates'),
       });
     }
   });

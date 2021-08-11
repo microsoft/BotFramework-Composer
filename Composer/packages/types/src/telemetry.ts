@@ -150,6 +150,9 @@ type CreationEvents = {
   CreationCancelled: undefined;
   NeedAnotherTemplateClicked: undefined;
   CreationExecuted: { runtimeChoice: RuntimeType; runtimeLanguage: FeedType; isPva: boolean; isAbs: boolean };
+  TemplateFeedChangedToCustomFeed: undefined;
+  TemplateFeedChangedToDefaultFeed: undefined;
+  TemplateNpmRegistryCallFailed: { error: string };
 };
 
 type AppSettingsEvents = {

@@ -6,7 +6,6 @@ import formatMessage from 'format-message';
 
 import fetch from '../utility/fetch';
 import AssetService from '../services/asset';
-import { getNpmTemplates } from '../utility/npm';
 import log from '../logger';
 import { sortTemplates } from '../utility/creation';
 import { FeatureFlagService } from '../services/featureFlags';
@@ -17,7 +16,7 @@ export async function getProjTemplates(req: any, res: any) {
     const advancedTemplateOptionsEnabled = FeatureFlagService.getFeatureFlagValue('ADVANCED_TEMPLATE_OPTIONS');
 
     // Get FeedUrl
-    const { feedUrls, getFirstPartyNpm } = req.body;
+    const { feedUrls } = req.body;
 
     // Grab templates from FeedURls
     if (feedUrls) {
@@ -68,11 +67,6 @@ export async function getProjTemplates(req: any, res: any) {
           },
         });
       }
-    }
-
-    if (getFirstPartyNpm) {
-      // Grab templates from public npm
-      templates = templates.concat(await getNpmTemplates());
     }
 
     const sortedTemplateList = await sortTemplates(templates);
