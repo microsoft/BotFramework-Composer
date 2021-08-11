@@ -11,6 +11,8 @@ import { StorageFactory } from '../models/storage/storageFactory';
 import { Store } from '../store/store';
 import settings from '../settings';
 
+import { BotProjectMetadata } from './project';
+
 const fileBlacklist = ['.DS_Store'];
 const isValidFile = (file: string) => {
   return fileBlacklist.filter((badFile) => badFile === file).length === 0;
@@ -24,14 +26,19 @@ class StorageService {
     this.ensureDefaultBotFoldersExist();
   }
 
-  public getStorageClient = (storageId: string, user?: UserIdentity): IFileStorage => {
+  public getStorageClient = (
+    storageId: string,
+    user?: UserIdentity,
+    id?: string,
+    metadata?: BotProjectMetadata
+  ): IFileStorage => {
     const conn = this.storageConnections.find((s) => {
       return s.id === storageId;
     });
     if (conn === undefined) {
       throw new Error(`no storage connection with id ${storageId}`);
     }
-    return StorageFactory.createStorageClient(conn, user);
+    return StorageFactory.createStorageClient(conn, user, id, metadata);
   };
 
   public createStorageConnection = (connection: StorageConnection) => {

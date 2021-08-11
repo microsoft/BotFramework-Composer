@@ -10,7 +10,6 @@ import {
   BotComponentResponse,
   BotComponentUpsertRequest,
   ComponentInfo,
-  ContentModification,
   ContentUpdateMetadata,
   ObiFileModification,
 } from './types';

@@ -19,7 +19,11 @@ export class PVAStorage implements IFileStorage {
   private credentials: PVACredentials;
   private botModel: PVABotModel;
 
-  constructor(conn, user) {
+  constructor(conn, user, id, metadata) {
+    if (id && metadata) {
+      console.log(`Instantiating PVAStorage for project ${id}`);
+      console.log(metadata);
+    }
     this.botModel = new PVABotModel();
   }
 

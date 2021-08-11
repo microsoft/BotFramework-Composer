@@ -34,6 +34,7 @@ const MAX_RECENT_BOTS = 7;
 
 /** Metadata stored by Composer and associated by internal bot project id */
 export type BotProjectMetadata = {
+  additionalInfo?: Record<string, any>;
   alias?: string;
   eTag?: string;
   path: string;
@@ -233,7 +234,8 @@ export class BotProjectService {
     locationRef: LocationRef,
     user?: UserIdentity,
     isRootBot?: boolean,
-    options?: { allowPartialBots: boolean }
+    options?: { allowPartialBots: boolean },
+    additionalMetadata?: Record<string, any>
   ): Promise<string> => {
     BotProjectService.initialize();
 
@@ -260,7 +262,7 @@ export class BotProjectService {
     }
 
     // generate an id and store it in the projectLocationMap
-    const projectId = await BotProjectService.generateProjectId(locationRef.path);
+    const projectId = await BotProjectService.generateProjectId(locationRef.path, additionalMetadata);
     if (isRootBot) BotProjectService.addRecentProject(locationRef.path);
     Store.set('projectLocationMap', BotProjectService.projectLocationMap);
     return projectId.toString();
@@ -277,9 +279,13 @@ export class BotProjectService {
     Store.set('projectLocationMap', BotProjectService.projectLocationMap);
   };
 
-  public static generateProjectId = async (path: string): Promise<string> => {
+  public static generateProjectId = async (path: string, additionalMetadata?: Record<string, any>): Promise<string> => {
     const projectId = (Math.random() * 100000).toString();
-    BotProjectService.projectLocationMap[projectId] = { eTag: '', path };
+    const botInfo: BotProjectMetadata = { eTag: '', path };
+    if (additionalMetadata) {
+      botInfo.additionalInfo = additionalMetadata;
+    }
+    BotProjectService.projectLocationMap[projectId] = botInfo;
     return projectId;
   };
 
@@ -312,15 +318,14 @@ export class BotProjectService {
     if (!projectLoc || projectLoc.path == null) {
       throw new Error(`project ${projectId} not found in cache`);
     } else {
-      const { eTag, path } = projectLoc;
+      const { path } = projectLoc;
       // check to make sure the project is still there!
       if (!(await StorageService.checkBlob('default', path, user))) {
         BotProjectService.deleteRecentProject(path);
         BotProjectService.removeProjectIdFromCache(projectId);
         throw new Error(`${path} doesn't seem to be exist any longer`);
       }
-      const project = new BotProject({ storageId: 'default', path: path }, user, eTag);
-      project.id = projectId;
+      const project = new BotProject({ storageId: 'default', path: path }, user, projectId, projectLoc);
       await project.init();
       // update current indexed bot projects
       BotProjectService.updateCurrentProjects(project);
@@ -358,7 +363,8 @@ export class BotProjectService {
       }
     }
     if (matchingProjectId) {
-      const { eTag, path } = BotProjectService.projectLocationMap[matchingProjectId];
+      const projectLoc = BotProjectService.projectLocationMap[matchingProjectId];
+      const { path } = projectLoc;
       if (path == null) {
         throw new Error(`project ${matchingProjectId} not found in cache`);
       } else {
@@ -368,8 +374,7 @@ export class BotProjectService {
           BotProjectService.removeProjectIdFromCache(matchingProjectId);
           throw new Error(`${path} doesn't seem to be exist any longer`);
         }
-        const project = new BotProject({ storageId: 'default', path: path }, user, eTag);
-        project.id = matchingProjectId;
+        const project = new BotProject({ storageId: 'default', path: path }, user, matchingProjectId, projectLoc);
         await project.init();
         // update current indexed bot projects
         BotProjectService.updateCurrentProjects(project);
