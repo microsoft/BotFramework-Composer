@@ -1,7 +1,14 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 import { atom, atomFamily } from 'recoil';
-import { FormDialogSchemaTemplate, FeatureFlagMap, BotTemplate, UserSettings, ExtensionSettings } from '@bfc/shared';
+import {
+  FormDialogSchemaTemplate,
+  FeatureFlagMap,
+  BotTemplate,
+  UserSettings,
+  ExtensionSettings,
+  firstPartyTemplateFeed,
+} from '@bfc/shared';
 import { ExtensionMetadata } from '@bfc/extension-client';
 
 import {
@@ -15,13 +22,7 @@ import {
 } from '../../recoilModel/types';
 import { getUserSettings } from '../utils';
 import onboardingStorage from '../../utils/onboardingStorage';
-import {
-  CreationFlowStatus,
-  AppUpdaterStatus,
-  CreationFlowType,
-  FEEDVERSION,
-  firstPartyTemplateFeed,
-} from '../../constants';
+import { CreationFlowStatus, AppUpdaterStatus, CreationFlowType, FEEDVERSION } from '../../constants';
 import { TreeLink } from '../../components/ProjectTree/types';
 import { Dispatcher } from '../dispatchers';
 import { DebugDrawerKeys } from '../../pages/design/DebugPanel/TabExtensions/types';

@@ -8,7 +8,7 @@ import { RouteComponentProps, Router, navigate } from '@reach/router';
 import { useRecoilValue } from 'recoil';
 import { BotTemplate } from '@bfc/shared';
 
-import { CreationFlowStatus, firstPartyTemplateFeed } from '../../constants';
+import { CreationFlowStatus } from '../../constants';
 import {
   dispatcherState,
   creationFlowStatusState,

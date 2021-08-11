@@ -7,7 +7,7 @@ import path from 'path';
 import find from 'lodash/find';
 import { UserIdentity, FileExtensions, RuntimeType } from '@bfc/extension';
 import { mkdirSync, readFile } from 'fs-extra';
-import { BotTemplate, emptyBotNpmTemplateName, FeedName, QnABotTemplateId } from '@bfc/shared';
+import { BotTemplate, emptyBotNpmTemplateName, FeedName, QnABotTemplateId, firstPartyTemplateFeed } from '@bfc/shared';
 import { ServerWorker } from '@bfc/server-workers';
 import isArray from 'lodash/isArray';
 
@@ -313,6 +313,9 @@ export class AssetManager {
       );
       return result;
     } catch (error) {
+      if (feedUrl === firstPartyTemplateFeed) {
+        return [];
+      }
       return null;
     }
   }
@@ -327,6 +330,7 @@ export class AssetManager {
         templates = templates.concat(feedTemplates);
       } else if (feedTemplates === null) {
         invalidFeedUrls.push(feed);
+        log('Failed to load any templates from %s', feed);
       }
     }
 

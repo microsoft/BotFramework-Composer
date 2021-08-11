@@ -9,9 +9,9 @@ import formatMessage from 'format-message';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
 import { PrimaryButton } from 'office-ui-fabric-react/lib/Button';
+import { firstPartyTemplateFeed } from '@bfc/shared';
 import { Link } from 'office-ui-fabric-react/lib/components/Link';
 
-import { firstPartyTemplateFeed } from '../../constants';
 import TelemetryClient from '../../telemetry/TelemetryClient';
 
 export interface WorkingModalProps {
