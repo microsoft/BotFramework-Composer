@@ -21,6 +21,8 @@ export async function getProjTemplates(req: any, res: any) {
     // Grab templates from FeedURls
     if (feedUrls) {
       const feedTemplates = await AssetService.manager.getCustomFeedTemplates(feedUrls);
+
+      // Add qna template manually with empty bot template version as qna uses empty bot under the hood
       const emptyBot = feedTemplates.filter((template) => {
         return template.id === emptyBotNpmTemplateName;
       });
@@ -46,6 +48,8 @@ export async function getProjTemplates(req: any, res: any) {
           availableVersions: [],
         },
       });
+
+      // Add local template option for advanced users
       if (advancedTemplateOptionsEnabled) {
         templates.push({
           id: localTemplateId,
