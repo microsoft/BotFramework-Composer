@@ -153,7 +153,7 @@ const renderModalityEditor = ({
       return (
         <TextModalityEditor
           {...commonProps}
-          focusOnMount={modalities.length === 1 && modalities[0] === 'Text'}
+          focusOnMount={false}
           response={structuredResponse?.Text as TextStructuredResponseItem}
         />
       );

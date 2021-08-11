@@ -7,7 +7,7 @@ import { VisualEditorColors as Colors } from '@bfc/ui-shared';
 import formatMessage from 'format-message';
 
 import { LgField } from './LgField';
-import { LgWidget } from './LgWidget';
+import { LgWidget } from './LgWidget/LgWidgetForm';
 
 const config: PluginConfig = {
   uiSchema: {
