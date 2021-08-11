@@ -45,7 +45,7 @@ export const TemplateFeedModal: React.FC<WorkingModalProps> = (props) => {
       minWidth={960}
       subText={formatMessage('You can change the default template feed to a local or custom feed. Learn more.')}
       title={formatMessage('Configure template feed')}
-      onDismiss={props.closeDialog}
+      onDismiss={closeDialog}
     >
       <TextField
         label={formatMessage('Template Feed Url')}
