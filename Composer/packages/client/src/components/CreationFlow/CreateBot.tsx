@@ -288,7 +288,7 @@ export function CreateBot(props: CreateBotProps) {
       />
       <DialogWrapper isOpen={isOpen} {...dialogWrapperProps} dialogType={DialogTypes.CreateFlow} onDismiss={onDismiss}>
         <Stack horizontal styles={tabAndFeedBtnStyles}>
-          <Stack.Item align="start">
+          <Stack.Item align="start" grow={1}>
             <Pivot
               defaultSelectedKey={csharpFeedKey}
               onLinkClick={(item) => {
