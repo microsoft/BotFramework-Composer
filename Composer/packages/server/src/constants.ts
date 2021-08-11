@@ -28,7 +28,7 @@ export const FallbackTemplateFeedObj: BotTemplate[] = [
     package: {
       packageName: '@microsoft/generator-bot-enterprise-calendar',
       packageSource: 'npm',
-      packageVersion: '1.1.2',
+      packageVersion: '*',
       availableVersions: [],
     },
     dotnetSupport: { functionsSupported: true, webAppSupported: true },
@@ -41,7 +41,7 @@ export const FallbackTemplateFeedObj: BotTemplate[] = [
     package: {
       packageName: '@microsoft/generator-bot-empty',
       packageSource: 'npm',
-      packageVersion: '1.1.2',
+      packageVersion: '*',
       availableVersions: [],
     },
     dotnetSupport: { functionsSupported: true, webAppSupported: true },
@@ -56,7 +56,7 @@ export const FallbackTemplateFeedObj: BotTemplate[] = [
     package: {
       packageName: '@microsoft/generator-bot-enterprise-people',
       packageSource: 'npm',
-      packageVersion: '1.1.2',
+      packageVersion: '*',
       availableVersions: [],
     },
     dotnetSupport: { functionsSupported: true, webAppSupported: true },
@@ -69,7 +69,7 @@ export const FallbackTemplateFeedObj: BotTemplate[] = [
     package: {
       packageName: '@microsoft/generator-bot-core-language',
       packageSource: 'npm',
-      packageVersion: '1.1.2',
+      packageVersion: '*',
       availableVersions: [],
     },
     dotnetSupport: { functionsSupported: true, webAppSupported: true },
@@ -83,7 +83,7 @@ export const FallbackTemplateFeedObj: BotTemplate[] = [
     package: {
       packageName: '@microsoft/generator-bot-core-assistant',
       packageSource: 'npm',
-      packageVersion: '1.1.2',
+      packageVersion: '*',
       availableVersions: [],
     },
     dotnetSupport: { functionsSupported: true, webAppSupported: true },
@@ -97,7 +97,7 @@ export const FallbackTemplateFeedObj: BotTemplate[] = [
     package: {
       packageName: '@microsoft/generator-bot-enterprise-assistant',
       packageSource: 'npm',
-      packageVersion: '1.1.2',
+      packageVersion: '*',
       availableVersions: [],
     },
     dotnetSupport: { functionsSupported: true, webAppSupported: true },
