@@ -17,8 +17,8 @@ import TelemetryClient from '../../telemetry/TelemetryClient';
 export interface WorkingModalProps {
   hidden: boolean;
   feedUrl: string;
-  closeDialog: any;
-  onUpdateFeed: any;
+  closeDialog: () => void;
+  onUpdateFeed: (newValue: string) => void;
 }
 
 export const TemplateFeedModal: React.FC<WorkingModalProps> = (props) => {

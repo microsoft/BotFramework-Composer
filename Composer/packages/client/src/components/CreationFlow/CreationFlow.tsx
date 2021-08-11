@@ -50,6 +50,7 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
     fetchProjectById,
     createNewBot,
     fetchReadMe,
+    fetchTemplateFeedUrl,
   } = useRecoilValue(dispatcherState);
 
   const templateFeedUrl = useRecoilValue(templateFeedUrlState);
@@ -85,6 +86,7 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
       await fetchProjectById(cachedProjectId);
     }
     await fetchStorages();
+    await fetchTemplateFeedUrl();
     fetchFeed();
     fetchRecentProjects();
   };

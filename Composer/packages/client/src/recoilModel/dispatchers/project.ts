@@ -678,10 +678,6 @@ export const projectDispatcher = () => {
     }
   );
 
-  const setTemplateFeedUrl = useRecoilCallback((callbackHelpers: CallbackInterface) => (templateFeedUrl: string) => {
-    callbackHelpers.set(templateFeedUrlState, templateFeedUrl);
-  });
-
   return {
     openProject,
     createNewBot,
@@ -708,6 +704,5 @@ export const projectDispatcher = () => {
     setWarnAboutFunctions,
     fetchReadMe,
     setSelectedTemplateVersion,
-    setTemplateFeedUrl,
   };
 };

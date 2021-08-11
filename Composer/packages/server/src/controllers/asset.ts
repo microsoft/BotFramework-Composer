@@ -1,14 +1,22 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { BotTemplate, emptyBotNpmTemplateName, localTemplateId, QnABotTemplateId } from '@bfc/shared';
+import {
+  BotTemplate,
+  emptyBotNpmTemplateName,
+  firstPartyTemplateFeed,
+  localTemplateId,
+  QnABotTemplateId,
+} from '@bfc/shared';
 import formatMessage from 'format-message';
+import { Request, Response } from 'express';
 
 import fetch from '../utility/fetch';
 import AssetService from '../services/asset';
 import log from '../logger';
 import { sortTemplates } from '../utility/creation';
 import { FeatureFlagService } from '../services/featureFlags';
+import { Store } from '../store/store';
 
 export async function getProjTemplates(req: any, res: any) {
   try {
@@ -96,6 +104,15 @@ export async function getLatestGeneratorVersion(moduleName: string): Promise<str
   }
 }
 
+function fetchTemplateFeedUrl(req: any, res: any) {
+  const templateFeedUrl = Store.get('templateFeedUrl', firstPartyTemplateFeed);
+  res.status(200).json({ templateFeedUrl: templateFeedUrl });
+}
+
+function setTemplateFeedUrl(req: Request, res: Response) {
+  Store.set('templateFeedUrl', req.body?.feedUrl);
+}
+
 export async function getTemplateReadMe(req: any, res: any) {
   try {
     const moduleName = req.query?.moduleName;
@@ -158,4 +175,6 @@ export async function getTemplateReadMe(req: any, res: any) {
 export const AssetController = {
   getProjTemplates: getProjTemplates,
   getTemplateReadMe: getTemplateReadMe,
+  fetchTemplateFeedUrl: fetchTemplateFeedUrl,
+  setTemplateFeedUrl: setTemplateFeedUrl,
 };

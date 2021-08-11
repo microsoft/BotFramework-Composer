@@ -385,5 +385,5 @@ export const selectedTemplateVersionState = atom<string>({
 
 export const templateFeedUrlState = atom<string>({
   key: getFullyQualifiedKey('templateFeedUrlState'),
-  default: firstPartyTemplateFeed,
+  default: '',
 });
