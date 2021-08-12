@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { WidgetContainerProps } from '@bfc/extension-client';
+import { WidgetContainerProps, useShellApi } from '@bfc/extension-client';
 import styled from '@emotion/styled';
 import get from 'lodash/get';
 import { Stack } from 'office-ui-fabric-react/lib/Stack';
@@ -9,6 +9,7 @@ import { Text } from 'office-ui-fabric-react/lib/Text';
 import React from 'react';
 
 import { useLgTemplate } from './useLgTemplate';
+import { FlowLgEditor } from './FlowLgEditor';
 
 const getResponseTypeDisplayText = (responseType: string) => {
   switch (responseType) {
@@ -70,7 +71,8 @@ export interface LgWidgetProps extends WidgetContainerProps {
   defaultContent?: string;
 }
 
-export const LgWidget: React.FC<LgWidgetProps> = ({ data, field, defaultContent = '' }) => {
+export const LgWidget: React.FC<LgWidgetProps> = ({ id, data, field, defaultContent = '' }) => {
+  const { shellApi } = useShellApi();
   const activityTemplate = get(data, field, '') as string;
 
   const templateTextData = useLgTemplate(activityTemplate) ?? defaultContent;
@@ -91,6 +93,27 @@ export const LgWidget: React.FC<LgWidgetProps> = ({ data, field, defaultContent 
       </Root>
     );
   }
-  // otherwise show full text
-  return <>{templateTextData}</>;
+  // need to prevent the flow from stealing focus
+  const handleClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+  };
+
+  const onChange = (templateId) => {
+    shellApi.saveData({ ...data, [field]: templateId }, id);
+  };
+
+  // otherwise render editor
+  return (
+    // eslint-disable-next-line jsx-a11y/click-events-have-key-events
+    <div onClick={handleClick}>
+      <FlowLgEditor
+        $kind={get(data, '$kind')}
+        activityTemplate={activityTemplate || defaultContent}
+        designerId={get(data, '$designer.id')}
+        name={field}
+        onChange={onChange}
+      />
+    </div>
+  );
 };

@@ -197,7 +197,14 @@ const LgField: React.FC<FieldProps<string>> = (props) => {
       );
 
       if (confirm) {
-        await shellApi.debouncedUpdateLgTemplate(lgFileId, lgOption.templateId, '');
+        const newTemplateId = new LgTemplateRef(lgOption.templateId + '_text');
+        const content = template.body
+          ? `[Activity
+  Text = ${newTemplateId.toString()}
+]`
+          : '';
+        await shellApi.debouncedUpdateLgTemplate(lgFileId, newTemplateId.name, template.body);
+        await shellApi.debouncedUpdateLgTemplate(lgFileId, lgOption.templateId, content);
         shellApi.commitChanges();
         props.onChange(new LgTemplateRef(lgOption.templateId).toString());
         setEditorMode('responseEditor');
