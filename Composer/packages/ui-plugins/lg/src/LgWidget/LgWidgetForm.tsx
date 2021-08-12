@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import React from 'react';
-import { WidgetContainerProps } from '@bfc/extension-client';
+import { WidgetContainerProps, useShellApi } from '@bfc/extension-client';
 import get from 'lodash/get';
 
 import { FlowLgEditor } from './FlowLgEditor';
@@ -13,21 +13,29 @@ export interface LgWidgetProps extends WidgetContainerProps {
   defaultContent?: string;
 }
 
-export const LgWidget: React.FC<LgWidgetProps> = ({ data, field, defaultContent = '' }) => {
+export const LgWidget: React.FC<LgWidgetProps> = ({ id, data, field, defaultContent = '' }) => {
+  const { shellApi } = useShellApi();
   const activityTemplate = get(data, field, '') as string;
 
+  // need to prevent the flow from stealing focus
   const handleClick = (e: React.MouseEvent) => {
-    console.log('in click handler');
     e.preventDefault();
     e.stopPropagation();
   };
 
+  const onChange = (templateId) => {
+    shellApi.saveData({ ...data, [field]: templateId }, id);
+  };
+
   return (
+    // eslint-disable-next-line jsx-a11y/click-events-have-key-events
     <div onClick={handleClick}>
       <FlowLgEditor
         $kind={get(data, '$kind')}
         activityTemplate={activityTemplate || defaultContent}
         designerId={get(data, '$designer.id')}
+        name={field}
+        onChange={onChange}
       />
     </div>
   );

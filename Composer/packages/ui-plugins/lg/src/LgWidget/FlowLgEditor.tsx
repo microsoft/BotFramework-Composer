@@ -5,7 +5,7 @@
 import { LgEditor } from '@bfc/code-editor';
 import { useShellApi } from '@bfc/extension-client';
 import { filterTemplateDiagnostics } from '@bfc/indexers';
-import { CodeEditorSettings, LgMetaData, LgTemplateRef } from '@bfc/shared';
+import { CodeEditorSettings, LgMetaData, LgTemplateRef, LgType } from '@bfc/shared';
 import { jsx } from '@emotion/core';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
@@ -33,12 +33,18 @@ const getInitialTemplate = (fieldName: string, formData?: string): string => {
   return lgText.startsWith('-') ? lgText : `- ${lgText}`;
 };
 
-const FlowLgEditor: React.FC<{ activityTemplate?: string; $kind: string; designerId: string }> = (props) => {
-  const { activityTemplate, $kind, designerId } = props;
+const FlowLgEditor: React.FC<{
+  activityTemplate?: string;
+  $kind: string;
+  designerId: string;
+  name: string;
+  onChange: (templateId?: string) => void;
+}> = ({ activityTemplate, $kind, designerId, onChange, name }) => {
   const { currentDialog, lgFiles, shellApi, projectId, locale, userSettings } = useShellApi();
 
+  const lgType = new LgType($kind, name).toString();
   const lgTemplateRef = LgTemplateRef.parse(activityTemplate);
-  const lgName = new LgMetaData($kind, designerId || '').toString();
+  const lgName = new LgMetaData(lgType, designerId || '').toString();
 
   const relatedLgFile = locateLgTemplatePosition(lgFiles, lgName, locale);
 
@@ -90,7 +96,7 @@ const FlowLgEditor: React.FC<{ activityTemplate?: string; $kind: string; designe
     template,
   };
 
-  const onChange = useCallback(
+  const handleChange = useCallback(
     (body: string) => {
       if (designerId) {
         if (body) {
@@ -99,8 +105,11 @@ const FlowLgEditor: React.FC<{ activityTemplate?: string; $kind: string; designe
               shellApi.commitChanges();
             }
           });
+          onChange(new LgTemplateRef(lgName).toString());
         } else {
-          shellApi.removeLgTemplate(lgFileId, lgName);
+          shellApi.removeLgTemplate(lgFileId, lgName).then(() => {
+            onChange();
+          });
         }
       }
     },
@@ -111,32 +120,18 @@ const FlowLgEditor: React.FC<{ activityTemplate?: string; $kind: string; designe
     shellApi.updateUserSettings({ codeEditor: settings });
   };
 
-  const navigateToLgPage = useCallback(
-    (lgFileId: string, options?: { templateId?: string; line?: number }) => {
-      // eslint-disable-next-line security/detect-non-literal-regexp
-      const pattern = new RegExp(`.${locale}`, 'g');
-      const fileId = currentDialog.isFormDialog ? lgFileId : lgFileId.replace(pattern, '');
-      let url = currentDialog.isFormDialog
-        ? `/bot/${projectId}/language-generation/${currentDialog.id}/item/${fileId}`
-        : `/bot/${projectId}/language-generation/${fileId}`;
-
-      if (options?.line) {
-        url = url + `/edit#L=${options.line}`;
-      } else if (options?.templateId) {
-        url = url + `/edit?t=${options.templateId}`;
-      }
-
-      shellApi.navigateTo(url);
-    },
-    [shellApi, projectId, locale]
-  );
-
   const onTemplateChange = useCallback(
     async (templateId: string, body?: string) => {
       if (body) {
         await shellApi.debouncedUpdateLgTemplate(lgFileId, templateId, body);
+        if (templateId === lgOption.templateId) {
+          onChange(new LgTemplateRef(templateId).toString());
+        }
       } else {
         await shellApi.removeLgTemplate(lgFileId, templateId);
+        if (templateId === lgOption.templateId) {
+          onChange();
+        }
       }
     },
     [lgOption, shellApi]
@@ -153,7 +148,6 @@ const FlowLgEditor: React.FC<{ activityTemplate?: string; $kind: string; designe
     <React.Fragment>
       <LgEditor
         hidePlaceholder
-        showDirectTemplateLink
         diagnostics={diagnostics}
         editorSettings={userSettings.codeEditor}
         height={75}
@@ -166,9 +160,8 @@ const FlowLgEditor: React.FC<{ activityTemplate?: string; $kind: string; designe
         mode="codeEditor"
         telemetryClient={shellApi.telemetryClient}
         value={template.body}
-        onChange={onChange}
+        onChange={handleChange}
         onChangeSettings={handleSettingsChange}
-        onNavigateToLgPage={navigateToLgPage}
         onRemoveTemplate={onRemoveTemplate}
         onTemplateChange={onTemplateChange}
       />

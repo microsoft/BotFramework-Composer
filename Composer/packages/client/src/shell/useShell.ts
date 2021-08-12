@@ -231,9 +231,9 @@ export function useShell(source: EventSource, projectId: string): Shell {
       });
     },
     saveData: (newData, updatePath, callback) => {
-      let dataPath = '';
-      if (source === FORM_EDITOR) {
-        dataPath = updatePath || focused || '';
+      let dataPath = updatePath || '';
+      if (source === FORM_EDITOR && !dataPath) {
+        dataPath = focused || '';
       }
 
       const updatedDialog = setDialogData(dialogMapRef.current, dialogId, dataPath, newData);
