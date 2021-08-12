@@ -181,11 +181,11 @@ const VisualPanelHeader: React.FC<VisualPanelHeaderProps> = React.memo((props) =
           styles={pageStyles.breadcrumbClass}
         />
       </div>
-      <div css={pageStyles.visualPanelHeaderShowCodeButton}>
+      {/* <div css={pageStyles.visualPanelHeaderShowCodeButton}>
         <ActionButton onClick={onShowCodeClick}>
           {showCode ? formatMessage('Hide code') : formatMessage('Show code')}
         </ActionButton>
-      </div>
+      </div> */}
     </div>
   );
 });
