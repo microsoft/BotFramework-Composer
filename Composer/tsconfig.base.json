@@ -9,7 +9,7 @@
     "module": "commonjs",
     "moduleResolution": "node",
     "noImplicitAny": false,
-    "noUnusedLocals": true,
+    "noUnusedLocals": false,
     "resolveJsonModule": true,
     "skipLibCheck": true,
     "sourceMap": true,
@@ -19,14 +19,10 @@
       {
         "name": "typescript-styled-plugin",
         "lint": {
-          "validProperties": [
-            "label"
-          ]
+          "validProperties": ["label"]
         }
       }
     ]
   },
-  "exclude": [
-    "node_modules"
-  ],
+  "exclude": ["node_modules"]
 }
