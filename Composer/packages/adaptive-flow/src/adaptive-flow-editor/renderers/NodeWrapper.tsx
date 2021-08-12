@@ -11,6 +11,7 @@ import { useShellApi } from '@bfc/extension-client';
 import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
 import { DirectionalHint } from 'office-ui-fabric-react/lib/Callout';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
+import { DefaultEffects } from 'office-ui-fabric-react/lib/Styling';
 
 import { AttrNames } from '../constants/ElementAttributes';
 import { NodeRendererContext } from '../contexts/NodeRendererContext';
@@ -23,7 +24,7 @@ import { NodeEventTypes } from '../../adaptive-flow-renderer/constants/NodeEvent
 
 const nodeBorderSelectedStyle = css`
   // box-shadow: 0px 0px 0px 2px #0078d4;
-  box-shadow: 0 25.6px 57.6px 0 rgba(0, 0, 0, 0.22), 0 4.8px 14.4px 0 rgba(0, 0, 0, 0.18);
+  box-shadow: ${DefaultEffects.elevation64};
 `;
 
 // BotAsks, UserAnswers and InvalidPromptBrick nodes selected style
