@@ -15,7 +15,6 @@ import { useSurveyNotification } from '../../components/Notifications/useSurveyN
 import SideBar from './SideBar';
 import CommandBar from './CommandBar';
 import VisualPanel from './VisualPanel';
-import PropertyPanel from './PropertyPanel';
 import useEmptyPropsHandler from './useEmptyPropsHandler';
 import { contentWrapper, splitPaneContainer, splitPaneWrapper } from './styles';
 import Modals from './Modals';
@@ -60,20 +59,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
           <CommandBar projectId={activeBot} />
           <Conversation css={splitPaneContainer}>
             <div css={splitPaneWrapper}>
-              {currentDialog?.isTopic ? (
-                <VisualPanel projectId={activeBot} />
-              ) : (
-                <Split
-                  resetOnDoubleClick
-                  initialPrimarySize="65%"
-                  minPrimarySize="500px"
-                  minSecondarySize="350px"
-                  renderSplitter={renderThinSplitter}
-                >
-                  <VisualPanel projectId={activeBot} />
-                  <PropertyPanel isSkill={activeBot !== projectId} projectId={activeBot} />
-                </Split>
-              )}
+              <VisualPanel projectId={activeBot} />
             </div>
           </Conversation>
         </div>
@@ -82,5 +68,19 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     </div>
   );
 };
+// {currentDialog?.isTopic ? (
+//   <VisualPanel projectId={activeBot} />
+// ) : (
+//   <Split
+//     resetOnDoubleClick
+//     initialPrimarySize="65%"
+//     minPrimarySize="500px"
+//     minSecondarySize="350px"
+//     renderSplitter={renderThinSplitter}
+//   >
+//     <VisualPanel projectId={activeBot} />
+//     <PropertyPanel isSkill={activeBot !== projectId} projectId={activeBot} />
+//   </Split>
+// )}
 
 export default DesignPage;

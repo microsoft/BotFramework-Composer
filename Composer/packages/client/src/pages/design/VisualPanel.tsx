@@ -7,7 +7,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import formatMessage from 'format-message';
 import { JsonEditor } from '@bfc/code-editor';
 import { PluginConfig } from '@bfc/extension-client';
-import { useRecoilValue } from 'recoil';
+import { useRecoilValue, useRecoilState } from 'recoil';
 
 import plugins, { mergePluginConfigs } from '../../plugins';
 import {
@@ -17,17 +17,20 @@ import {
   projectMetaDataState,
   designPageLocationState,
   currentDialogState,
+  propertyPanelVisibilityState,
 } from '../../recoilModel';
 import { triggerNotSupported } from '../../utils/dialogValidator';
 import { decodeDesignerPathToArrayPath } from '../../utils/convertUtils/designerPathEncoder';
 import TelemetryClient from '../../telemetry/TelemetryClient';
 import { LoadingSpinner } from '../../components/LoadingSpinner';
+import { Tray } from '../../components/Tray';
 
 import { WarningMessage } from './WarningMessage';
 import { visualPanel } from './styles';
 import VisualPanelHeader from './VisualPanelHeader';
 import VisualEditorWrapper from './VisualEditorWrapper';
 import useAssetsParsingState from './useAssetsParsingState';
+import PropertyPanel from './PropertyPanel';
 
 type VisualPanelProps = {
   projectId: string;
@@ -41,6 +44,7 @@ const VisualPanel: React.FC<VisualPanelProps> = React.memo(({ projectId }) => {
   const { isRemote: isRemoteSkill } = useRecoilValue(projectMetaDataState(projectId));
   const loading = useAssetsParsingState(projectId);
   const { updateDialog, navTo } = useRecoilValue(dispatcherState);
+  const [propertyPanelVisible, setPropertyPanelVisibility] = useRecoilState(propertyPanelVisibilityState);
 
   const selected = decodeDesignerPathToArrayPath(currentDialog?.content, encodedSelected || '');
 
@@ -101,7 +105,14 @@ const VisualPanel: React.FC<VisualPanelProps> = React.memo(({ projectId }) => {
             onOk={() => navTo(projectId, dialogId ?? null)}
           />
         ) : (
-          <VisualEditorWrapper dialogId={dialogId} pluginConfig={pluginConfig} projectId={projectId} />
+          <div style={{ position: 'relative', height: '100%', width: '100%', display: 'flex' }}>
+            {/* <div style={{ width: '100%' }}> */}
+            <VisualEditorWrapper dialogId={dialogId} pluginConfig={pluginConfig} projectId={projectId} />
+            {/* </div> */}
+            <Tray isOpen={propertyPanelVisible} onDismiss={() => setPropertyPanelVisibility(false)}>
+              <PropertyPanel isSkill={false} projectId={projectId} />
+            </Tray>
+          </div>
         ))}
     </div>
   );

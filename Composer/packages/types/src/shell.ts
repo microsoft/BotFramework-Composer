@@ -100,6 +100,7 @@ export type ApplicationContextApi = {
   deleteNotification: (id: string) => void;
   markNotificationAsRead: (id: string) => void;
   hideNotification: (id: string) => void;
+  togglePropertyPanel: (isVisible?: boolean) => void;
 };
 
 export type ApplicationContext = {
@@ -112,6 +113,7 @@ export type ApplicationContext = {
   schemas: BotSchemas;
   flowZoomRate: ZoomInfo;
   flowCommentsVisible: boolean;
+  propertyPanelVisible: boolean;
 
   httpClient: HttpClient;
 };

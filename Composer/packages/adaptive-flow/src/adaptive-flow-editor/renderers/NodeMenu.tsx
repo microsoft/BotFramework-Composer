@@ -7,6 +7,7 @@ import { useContext } from 'react';
 import formatMessage from 'format-message';
 import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
 import { IconMenu } from '@bfc/ui-shared';
+import { NeutralColors } from '@uifabric/fluent-theme';
 
 import { NodeEventTypes, EditorEventHandler } from '../../adaptive-flow-renderer/constants/NodeEventTypes';
 import { MenuTypes } from '../constants/MenuTypes';
@@ -29,10 +30,23 @@ interface NodeMenuProps {
 export const NodeMenu: React.FC<NodeMenuProps> = ({ colors = { color: 'black' }, id, onEvent }) => {
   const menuItems = [
     {
+      key: 'propertyPanel',
+      name: 'Advanced Options',
+      iconProps: {
+        iconName: 'DeveloperTools',
+        style: { color: NeutralColors.gray160 },
+      },
+      onClick: () => {
+        onEvent(NodeEventTypes.Focus, { id });
+        onEvent(NodeEventTypes.OpenPropertyPanel, {});
+      },
+    },
+    {
       key: 'delete',
       name: formatMessage('Delete'),
       iconProps: {
         iconName: 'Delete',
+        style: { color: NeutralColors.gray160 },
       },
       onClick: () => onEvent(NodeEventTypes.Delete, { id }),
     },
@@ -70,7 +84,6 @@ export const NodeMenu: React.FC<NodeMenuProps> = ({ colors = { color: 'black' },
           }}
           label={moreLabel}
           menuItems={menuItems}
-          menuWidth={100}
         />
       </TooltipHost>
     </div>

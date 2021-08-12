@@ -22,3 +22,8 @@ export const flowCommentsVisibilityState = atom<boolean>({
   key: getFullyQualifiedKey('flowCommentsVisibility'),
   default: false,
 });
+
+export const propertyPanelVisibilityState = atom<boolean>({
+  key: getFullyQualifiedKey('propertyPanelVisibility'),
+  default: false,
+});

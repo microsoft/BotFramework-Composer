@@ -28,7 +28,7 @@ export const useEditorEventApi = (
   },
   shellApi: ShellApi
 ) => {
-  const { actionsContainLuIntent, getDialog, saveDialog, createDialog } = shellApi;
+  const { actionsContainLuIntent, getDialog, saveDialog, createDialog, togglePropertyPanel } = shellApi;
   const {
     insertAction,
     insertActions,
@@ -338,6 +338,11 @@ export const useEditorEventApi = (
         handler = () => {
           redo?.();
           announce(ScreenReaderMessage.ActionUndo);
+        };
+        break;
+      case NodeEventTypes.OpenPropertyPanel:
+        handler = () => {
+          togglePropertyPanel(true);
         };
         break;
       default:

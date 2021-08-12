@@ -21,6 +21,7 @@ export enum NodeEventTypes {
   InsertSelection = 'event.data.paste-selection--menu',
   Undo = 'event.operation.undo',
   Redo = 'event.operation.redo',
+  OpenPropertyPanel = 'event.view.open-property-panel',
 }
 
 export type EditorEventHandler = (eventType: NodeEventTypes, eventData: any) => any;

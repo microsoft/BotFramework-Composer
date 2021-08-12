@@ -42,6 +42,12 @@ export const styles = {
   comment: css`
     margin: 18px 0;
   `,
+
+  title: css`
+    font-weight: ${FontWeights.semibold};
+    margin-left: 18px;
+    margin-top: 4px;
+  `,
 };
 
 interface FormTitleProps {
@@ -139,6 +145,8 @@ const FormTitle: React.FC<FormTitleProps> = (props) => {
 
     return description || schema.description || '';
   };
+
+  return <h3 css={styles.title}>{initialValue}</h3>;
 
   return uiLabel !== false ? (
     <div css={styles.container} id={props.id}>

@@ -108,6 +108,7 @@ export const visualPanelHeaderContainer = css`
   display: flex;
   align-items: center;
   height: 65px;
+  border-bottom: 1px solid ${NeutralColors.gray30};
 `;
 
 export const visualPanelHeaderShowCodeButton = css`

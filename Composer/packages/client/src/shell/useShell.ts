@@ -13,7 +13,7 @@ import {
   SDKKinds,
   Notification,
 } from '@botframework-composer/types';
-import { useRecoilValue } from 'recoil';
+import { useRecoilValue, useRecoilState } from 'recoil';
 import formatMessage from 'format-message';
 import { OpenConfirmModal } from '@bfc/ui-shared';
 
@@ -43,6 +43,7 @@ import {
   flowCommentsVisibilityState,
   rootBotProjectIdSelector,
   featureFlagsState,
+  propertyPanelVisibilityState,
 } from '../recoilModel';
 import { undoFunctionState } from '../recoilModel/undo/history';
 import {
@@ -118,6 +119,7 @@ export function useShell(source: EventSource, projectId: string): Shell {
     ...bot,
     hasWarnings: false,
   }));
+  const [propertyPanelVisible, setPropertyPanelVisibility] = useRecoilState(propertyPanelVisibilityState);
 
   const userSettings = useRecoilValue(userSettingsState);
   const clipboardActions = useRecoilValue(clipboardActionsState(projectId));
@@ -312,6 +314,8 @@ export function useShell(source: EventSource, projectId: string): Shell {
     markNotificationAsRead,
     hideNotification,
     requireUserLogin,
+    togglePropertyPanel: (isVisible?: boolean) =>
+      setPropertyPanelVisibility(typeof isVisible === 'undefined' ? (current) => !current : isVisible),
   };
 
   const currentDialog = useMemo(() => {
@@ -373,6 +377,7 @@ export function useShell(source: EventSource, projectId: string): Shell {
     skillsSettings: settings.skill || {},
     flowZoomRate,
     flowCommentsVisible,
+    propertyPanelVisible,
     forceDisabledActions: isRootBot
       ? []
       : [
