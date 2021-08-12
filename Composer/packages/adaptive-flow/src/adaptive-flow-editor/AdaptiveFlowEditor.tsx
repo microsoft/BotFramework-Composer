@@ -47,12 +47,13 @@ const styles = css`
   left: 0;
   right: 0;
 
-  border: 1px solid transparent;
+  // TODO: only removed for demo
+  // border: 1px solid transparent;
 
-  &:focus {
-    outline: none;
-    border-color: black;
-  }
+  // &:focus {
+  //   outline: none;
+  //   border-color: black;
+  // }
 `;
 
 export interface VisualDesignerProps {
@@ -151,7 +152,7 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({ onFocus, onBlur, schema
           <div
             ref={divRef}
             css={styles}
-            tabIndex={0}
+            // tabIndex={0}
             onBlur={onBlur}
             onFocus={onFocus}
             {...enableKeyboardCommandAttributes(handleCommand)}
