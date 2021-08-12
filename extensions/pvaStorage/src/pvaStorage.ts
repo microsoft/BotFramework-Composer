@@ -9,26 +9,32 @@ import globby from 'globby';
 import archiver from 'archiver';
 import { FileExtensions } from '@botframework-composer/types';
 
-import { IFileStorage, Stat } from './types';
-import { PVABotModel } from './pvaBotModel';
-
-export type PVACredentials = {};
+import { BotProjectMetadata, IFileStorage, Stat } from './types';
+import { PVABotClient } from './pvaBotClient';
 
 /* eslint-disable security/detect-non-literal-fs-filename */
 export class PVAStorage implements IFileStorage {
-  private credentials: PVACredentials;
-  private botModel: PVABotModel;
+  private botClient: PVABotClient;
+  /** The storage plugin is used globally across the app for reads / writes regardless
+   * of whether there is a bot open. This flag will keep track of when we are performing
+   * storage operations in context of the bot.
+   */
+  private hasBotContext = false;
 
-  constructor(conn, user, id, metadata) {
+  constructor(conn, user, id?: string, metadata?: BotProjectMetadata) {
     if (id && metadata) {
       console.log(`Instantiating PVAStorage for project ${id}`);
       console.log(metadata);
+      this.hasBotContext = true;
+      this.botClient = new PVABotClient(id, metadata);
     }
-    this.botModel = new PVABotModel();
   }
 
-  async initialize(projectId: string, electronContext: any): Promise<void> {
-    await this.botModel.initialize(projectId, electronContext);
+  async initialize(electronContext: any): Promise<void> {
+    // we only need to go fetch the bot from PVA if we are operating on a bot
+    if (this.hasBotContext) {
+      await this.botClient.initialize(electronContext);
+    }
   }
 
   async stat(path: string): Promise<Stat> {
@@ -105,22 +111,30 @@ export class PVAStorage implements IFileStorage {
 
   async writeFile(path: string, content: any): Promise<void> {
     await fs.writeFile(path, content);
-    this.botModel.trackWrite(path, content);
+    if (this.hasBotContext) {
+      this.botClient.trackWrite(path, content);
+    }
   }
 
   writeFileSync(path: string, content: any): void {
     fs.writeFileSync(path, content);
-    this.botModel.trackWrite(path, content);
+    if (this.hasBotContext) {
+      this.botClient.trackWrite(path, content);
+    }
   }
 
   async removeFile(path: string): Promise<void> {
     await fs.unlink(path);
-    this.botModel.trackDelete(path);
+    if (this.hasBotContext) {
+      this.botClient.trackDelete(path);
+    }
   }
 
   removeFileSync(path: string): void {
     fs.unlinkSync(path);
-    this.botModel.trackDelete(path);
+    if (this.hasBotContext) {
+      this.botClient.trackDelete(path);
+    }
   }
 
   async mkDir(path: string): Promise<void> {
@@ -165,14 +179,18 @@ export class PVAStorage implements IFileStorage {
   async copyFile(src: string, dest: string): Promise<void> {
     await fs.copyFile(src, dest);
     const fileContent = await this.readFile(dest);
-    this.botModel.trackWrite(dest, fileContent);
+    if (this.hasBotContext) {
+      this.botClient.trackWrite(dest, fileContent);
+    }
   }
 
   async rename(oldPath: string, newPath: string): Promise<void> {
     await fs.rename(oldPath, newPath);
     const fileContent = await this.readFile(newPath);
-    this.botModel.trackWrite(newPath, fileContent);
-    this.botModel.trackDelete(oldPath);
+    if (this.hasBotContext) {
+      this.botClient.trackWrite(newPath, fileContent);
+      this.botClient.trackDelete(oldPath);
+    }
   }
 
   async zip(source: string, exclusions, cb): Promise<void> {
@@ -236,7 +254,7 @@ export class PVAStorage implements IFileStorage {
     archive.finalize();
   }
 
-  async autoSave(projectId: string): Promise<void> {
-    await this.botModel.saveToPVA(projectId);
+  async autoSave(): Promise<void> {
+    await this.botClient.saveToPVA();
   }
 }

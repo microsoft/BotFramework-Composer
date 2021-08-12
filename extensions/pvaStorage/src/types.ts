@@ -33,9 +33,18 @@ export type ContentUpdateMetadata = {
   isDelete: boolean;
 };
 
-export type CachedPVABot = {
-  obiContentMap: Record<string, ComponentInfo>;
+export type PVAMetadata = {
+  baseUrl: string;
+  botId: string;
+  envId: string;
+  tenantId: string;
+};
+
+export type PVABotModel = {
+  pvaMetadata: PVAMetadata;
   mostRecentContentSnapshot: string;
+  /** Map of CDS asset path to CDS component info */
+  obiContentMap: Record<string, ComponentInfo>;
   trackedUpdates: Record<string, ContentUpdateMetadata>;
 };
 
@@ -80,6 +89,15 @@ export interface IFileStorage {
   copyFile(src: string, dest: string): Promise<void>;
   rename(oldPath: string, newPath: string): Promise<void>;
   zip(source: string, exclusions: { files: string[]; directories: string[] }, cb: any): unknown;
-  initialize?(projectId: string, electronContext: any): Promise<void>;
-  autoSave?(projectId: string): Promise<void>;
+  initialize?(electronContext: any): Promise<void>;
+  autoSave?(): Promise<void>;
 }
+
+// TODO: this should be in @Bfc/types
+/** Metadata stored by Composer and associated by internal bot project id */
+export type BotProjectMetadata = {
+  additionalInfo?: Record<string, any>;
+  alias?: string;
+  eTag?: string;
+  path: string;
+};

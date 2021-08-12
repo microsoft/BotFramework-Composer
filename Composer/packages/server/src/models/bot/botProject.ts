@@ -743,8 +743,9 @@ export class BotProject implements IBotProject {
    *  periodic updates while the user is authoring their bot.
    */
   public async autoSave() {
-    if (this.fileStorage.autoSave && this.id) {
-      this.fileStorage.autoSave(this.id);
+    if (this.fileStorage.autoSave) {
+      // TODO: do we want to block on this? -- think about displaying UX in the client
+      await this.fileStorage.autoSave();
     }
   }
 
@@ -931,6 +932,9 @@ export class BotProject implements IBotProject {
   };
 
   private _getFiles = async () => {
+    if (this.fileStorage.initialize) {
+      await this.fileStorage.initialize(useElectronContext());
+    }
     if (!(await this.exists())) {
       throw new Error(`${this.dir} is not a valid path`);
     }
@@ -941,10 +945,6 @@ export class BotProject implements IBotProject {
     // load only from the data dir, otherwise may get "build" versions from
     // deployment process
     const root = this.dataDir;
-    if (this.fileStorage.initialize && this.id) {
-      // TODO: need a way to pass credentials to the bot for custom storage (PVA)
-      await this.fileStorage.initialize(this.id, useElectronContext());
-    }
     const paths = this.fileStorage.globSync(
       [
         ...BotStructureFilesPatterns,
