@@ -39,12 +39,12 @@ interface ActionCardBodyProps extends WidgetContainerProps {
 }
 
 export const ActionCardBody: WidgetComponent<ActionCardBodyProps> = ({ body, truncate, hideComment, data }) => {
-  const { flowCommentsVisible } = useShellApi();
-  const comment = data.$designer?.comment;
+  // const { flowCommentsVisible } = useShellApi();
+  // const comment = data.$designer?.comment;
 
+  // {!hideComment && flowCommentsVisible && comment && <CardComment comment={comment} />}
   return (
     <div css={containerStyle()}>
-      {!hideComment && flowCommentsVisible && comment && <CardComment comment={comment} />}
       <div css={textStyles(undefined, truncate)}>{body || ' '}</div>
     </div>
   );
