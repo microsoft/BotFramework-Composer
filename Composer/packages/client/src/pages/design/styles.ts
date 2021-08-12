@@ -88,7 +88,8 @@ export const visualPanel = css`
 export const visualEditor = (hidden: boolean) => css`
   border: 0px;
   flex: 1;
-  background-color: #f6f6f6;
+  /* background-color: #f6f6f6; */
+  background-color: ${NeutralColors.gray10};
 
   display: ${hidden ? 'none' : 'block'};
   position: relative;
