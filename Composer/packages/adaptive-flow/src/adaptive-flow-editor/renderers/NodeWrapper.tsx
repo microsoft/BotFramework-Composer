@@ -17,18 +17,19 @@ import { NodeRendererContext } from '../contexts/NodeRendererContext';
 import { SelectionContext } from '../contexts/SelectionContext';
 import { NodeEventTypes } from '../../adaptive-flow-renderer/constants/NodeEventTypes';
 
-const nodeBorderHoveredStyle = css`
-  box-shadow: 0px 0px 0px 1px #323130;
-`;
+// const nodeBorderHoveredStyle = css`
+//   box-shadow: 0px 0px 0px 1px #323130;
+// `;
 
 const nodeBorderSelectedStyle = css`
-  box-shadow: 0px 0px 0px 2px #0078d4;
+  // box-shadow: 0px 0px 0px 2px #0078d4;
+  box-shadow: 0 25.6px 57.6px 0 rgba(0, 0, 0, 0.22), 0 4.8px 14.4px 0 rgba(0, 0, 0, 0.18);
 `;
 
 // BotAsks, UserAnswers and InvalidPromptBrick nodes selected style
-const nodeBorderDoubleSelectedStyle = css`
-  box-shadow: 0px 0px 0px 2px #0078d4, 0px 0px 0px 6px rgba(0, 120, 212, 0.3);
-`;
+// const nodeBorderDoubleSelectedStyle = css`
+//   box-shadow: 0px 0px 0px 2px #0078d4, 0px 0px 0px 6px rgba(0, 120, 212, 0.3);
+// `;
 
 /**
  * When comments are visible, the tooltip target is invisible.
@@ -101,7 +102,7 @@ export const ActionNodeWrapper = ({ id, tab, data, onEvent, hideComment, childre
     }
   }, [nodeSelected, tab, nodeDoubleSelected]);
 
-  // Set 'use-select' to none to disable browser's default
+  // Set 'user-select' to none to disable browser's default
   // text selection effect when pressing Shift + Click.
   const content = (
     <div
@@ -110,12 +111,7 @@ export const ActionNodeWrapper = ({ id, tab, data, onEvent, hideComment, childre
         user-select: none;
         position: relative;
         border-radius: 2px 2px 0 0;
-        ${nodeSelected && nodeBorderSelectedStyle};
-        ${nodeFocused && nodeBorderSelectedStyle};
-        ${nodeDoubleSelected && nodeBorderDoubleSelectedStyle};
-        &:hover {
-          ${!nodeFocused && nodeBorderHoveredStyle}
-        }
+        ${(nodeSelected || nodeFocused) && nodeBorderSelectedStyle};
         &:focus {
           outline: 0;
         }
@@ -143,6 +139,8 @@ export const ActionNodeWrapper = ({ id, tab, data, onEvent, hideComment, childre
       {children}
     </div>
   );
+
+  return content;
 
   return !hideComment && data.$designer?.comment ? (
     <TooltipHost
