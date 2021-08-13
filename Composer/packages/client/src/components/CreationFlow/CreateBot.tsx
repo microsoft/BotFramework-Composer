@@ -330,8 +330,20 @@ export function CreateBot(props: CreateBotProps) {
       <Fragment>
         <div css={noTemplateTextStyle}>
           <Text variant={'medium'}>
-            {formatMessage(
-              'No templates pulled from current feed, please configure your template feed to a valid feed'
+            {formatMessage.rich(
+              `No templates pulled from currently configured template feed, please <feedFormDeeLink>configure your feed</feedFormDeeLink> to get templates.`,
+              {
+                feedFormDeeLink: ({ children }) => (
+                  <Link
+                    key="template-feed-link"
+                    onClick={() => {
+                      navigateTo('/settings');
+                    }}
+                  >
+                    {children}
+                  </Link>
+                ),
+              }
             )}
           </Text>
         </div>
@@ -368,7 +380,7 @@ export function CreateBot(props: CreateBotProps) {
               }}
             >
               <FontIcon iconName="Edit" style={{ marginRight: '5px' }} />
-              {formatMessage('Edit Template Feed')}
+              {formatMessage('Edit template feed')}
             </Link>
           </Stack.Item>
         </Stack>

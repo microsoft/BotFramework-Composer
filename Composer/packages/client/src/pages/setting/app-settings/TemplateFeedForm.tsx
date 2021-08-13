@@ -11,8 +11,7 @@ import { Link } from 'office-ui-fabric-react/lib/components/Link';
 import { useRecoilValue } from 'recoil';
 import { NeutralColors } from '@uifabric/fluent-theme/lib/fluent/FluentColors';
 import React from 'react';
-import { TooltipHost } from 'office-ui-fabric-react/lib/components/Tooltip';
-import { Icon } from 'office-ui-fabric-react/lib/Icon';
+import { Text } from 'office-ui-fabric-react/lib/Text';
 
 import { dispatcherState, templateFeedUrlState } from '../../../recoilModel/atoms/appState';
 import TelemetryClient from '../../../telemetry/TelemetryClient';
@@ -21,7 +20,12 @@ import * as styles from './styles';
 
 const settingsContainer = css`
   border-top: 1px solid ${NeutralColors.gray20};
-  padding: 20px 0px;
+  padding-top: 5px;
+  width: 100%;
+`;
+
+const settingsText = css`
+  padding-bottom: 20px;
   width: 100%;
 `;
 
@@ -44,15 +48,15 @@ export const TemplateFeedForm: React.FC = () => {
     return (
       <div css={styles.labelContainer}>
         <div css={styles.customerLabel}>{dropdownLabel}</div>
-        <TooltipHost content={formatMessage('Alter where Composer templates originate from')}>
-          <Icon iconName="Unknown" styles={styles.icon} />
-        </TooltipHost>
       </div>
     );
   }, []);
 
   return (
     <div css={settingsContainer}>
+      <div css={settingsText}>
+        <Text>{formatMessage('Configure the template feed that Composer sources its bot templates from.')}</Text>
+      </div>
       <TextField
         label={formatMessage('Template Feed Url')}
         value={urlValue}
