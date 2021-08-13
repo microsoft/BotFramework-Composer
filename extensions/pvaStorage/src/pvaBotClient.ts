@@ -97,8 +97,7 @@ export class PVABotClient {
         }
       }
       this.botModel.trackedUpdates = {};
-      // update the cache
-      PVABotsCache[this.projectId] = { ...this.botModel };
+      this.updateBotCache();
     } else {
       const error = await res.text();
       console.error(error);
@@ -117,6 +116,7 @@ export class PVABotClient {
       this.botModel = cachedBot;
     } else {
       // go download the bot and construct the content map
+      this.initializeBotModel();
       logger.log(`${this.projectId} is not in the PVA cache. Downloading the bot and building content map.`);
       await this.fetchBotAndCreateContentMap(true);
     }
@@ -127,16 +127,14 @@ export class PVABotClient {
       content,
       isDelete: false,
     };
-    // update the cache
-    PVABotsCache[this.projectId] = { ...this.botModel };
+    this.updateBotCache();
   }
 
   public trackDelete(path) {
     this.botModel.trackedUpdates[path] = {
       isDelete: true,
     };
-    // update the cache
-    PVABotsCache[this.projectId] = { ...this.botModel };
+    this.updateBotCache();
   }
 
   public async saveToPVA() {
@@ -189,5 +187,21 @@ export class PVABotClient {
       }
     }
     // no-op if no changes
+  }
+
+  private updateBotCache() {
+    if (this.projectId) {
+      PVABotsCache[this.projectId] = { ...this.botModel };
+    }
+  }
+
+  private initializeBotModel() {
+    this.botModel = {
+      obiContentMap: {},
+      mostRecentContentSnapshot: '',
+      pvaMetadata: this.metadata.additionalInfo as PVAMetadata,
+      trackedUpdates: {},
+    };
+    this.updateBotCache();
   }
 }
