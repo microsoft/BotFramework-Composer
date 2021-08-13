@@ -9,6 +9,7 @@ import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button'
 import { DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
 import { ScrollablePane, ScrollbarVisibility } from 'office-ui-fabric-react/lib/ScrollablePane';
 import { Selection } from 'office-ui-fabric-react/lib/DetailsList';
+import { Text } from 'office-ui-fabric-react/lib/Text';
 import {
   DetailsList,
   DetailsListLayoutMode,
@@ -37,6 +38,7 @@ import {
   templateFeedUrlState,
 } from '../../recoilModel';
 import TelemetryClient from '../../telemetry/TelemetryClient';
+import { navigateTo } from '../../utils/navigation';
 
 import { TemplateDetailView } from './TemplateDetailView';
 import { TemplateFeedModal } from './TemplateFeedModal';
@@ -110,6 +112,11 @@ const tableCell = css`
 
 const content = css`
   outline: none;
+`;
+
+const noTemplateTextStyle = css`
+  padding-top: 5px;
+  padding-left: 5px;
 `;
 
 const optionKeys = {
@@ -276,16 +283,64 @@ export function CreateBot(props: CreateBotProps) {
   const dialogWrapperProps =
     creationFlowType === 'Skill' ? DialogCreationCopy.CREATE_NEW_SKILLBOT : DialogCreationCopy.CREATE_NEW_BOT;
 
+  console.log(currentTemplateId);
+
+  const renderTemplateSelector = () => {
+    return (
+      <Fragment>
+        {' '}
+        <div css={detailListContainer} data-is-scrollable="true" id="templatePickerContainer">
+          <ScrollablePane
+            scrollbarVisibility={ScrollbarVisibility.auto}
+            styles={{ root: { width: '100%', height: 'inherit', position: 'relative' } }}
+          >
+            <DetailsList
+              checkboxVisibility={CheckboxVisibility.hidden}
+              columns={tableColumns}
+              compact={false}
+              getKey={(item) => item.name}
+              isHeaderVisible={false}
+              items={displayedTemplates}
+              layoutMode={DetailsListLayoutMode.justified}
+              selection={selectedTemplate}
+              selectionMode={disabled ? SelectionMode.none : SelectionMode.single}
+              onRenderRow={onRenderRow}
+            />
+          </ScrollablePane>
+        </div>
+        <div css={templateDetailContainer} data-is-scrollable="true">
+          {fetchReadMePending ? (
+            <LoadingSpinner />
+          ) : (
+            <TemplateDetailView
+              localTemplatePath={localTemplatePath}
+              readMe={readMe}
+              template={getTemplate()}
+              onUpdateLocalTemplatePath={onUpdateLocalTemplatePath}
+              onValidateLocalTemplatePath={setLocalTemplatePathValid}
+            />
+          )}
+        </div>
+      </Fragment>
+    );
+  };
+
+  const renderNoTemplateView = () => {
+    return (
+      <Fragment>
+        <div css={noTemplateTextStyle}>
+          <Text variant={'medium'}>
+            {formatMessage(
+              'No templates pulled from current feed, please configure your template feed to a valid feed'
+            )}
+          </Text>
+        </div>
+      </Fragment>
+    );
+  };
+
   return (
     <Fragment>
-      {/* <TemplateFeedModal
-        closeDialog={() => setIsTemplateFeedModalVisible(false)}
-        feedUrl={templateFeedUrl}
-        hidden={!isTemplateFeedModalVisible}
-        onUpdateFeed={(feed: string) => {
-          setTemplateFeedUrl(feed);
-        }}
-      /> */}
       <DialogWrapper isOpen={isOpen} {...dialogWrapperProps} dialogType={DialogTypes.CreateFlow} onDismiss={onDismiss}>
         <Stack horizontal styles={tabAndFeedBtnStyles}>
           <Stack.Item align="start" grow={1}>
@@ -306,49 +361,18 @@ export function CreateBot(props: CreateBotProps) {
             </Pivot>
           </Stack.Item>
           <Stack.Item align="end">
-            <PrimaryButton
-              data-testid="CreateBotEditFeedsBtn"
-              text={formatMessage('Edit Feeds')}
+            <Link
+              styles={{ root: { fontSize: '12px', float: 'left' } }}
               onClick={() => {
-                setIsTemplateFeedModalVisible(true);
+                navigateTo('/settings');
               }}
-            />
+            >
+              <FontIcon iconName="Edit" style={{ marginRight: '5px' }} />
+              {formatMessage('Edit Template Feed')}
+            </Link>
           </Stack.Item>
         </Stack>
-        <div css={pickerContainer}>
-          <div css={detailListContainer} data-is-scrollable="true" id="templatePickerContainer">
-            <ScrollablePane
-              scrollbarVisibility={ScrollbarVisibility.auto}
-              styles={{ root: { width: '100%', height: 'inherit', position: 'relative' } }}
-            >
-              <DetailsList
-                checkboxVisibility={CheckboxVisibility.hidden}
-                columns={tableColumns}
-                compact={false}
-                getKey={(item) => item.name}
-                isHeaderVisible={false}
-                items={displayedTemplates}
-                layoutMode={DetailsListLayoutMode.justified}
-                selection={selectedTemplate}
-                selectionMode={disabled ? SelectionMode.none : SelectionMode.single}
-                onRenderRow={onRenderRow}
-              />
-            </ScrollablePane>
-          </div>
-          <div css={templateDetailContainer} data-is-scrollable="true">
-            {fetchReadMePending ? (
-              <LoadingSpinner />
-            ) : (
-              <TemplateDetailView
-                localTemplatePath={localTemplatePath}
-                readMe={readMe}
-                template={getTemplate()}
-                onUpdateLocalTemplatePath={onUpdateLocalTemplatePath}
-                onValidateLocalTemplatePath={setLocalTemplatePathValid}
-              />
-            )}
-          </div>
-        </div>
+        <div css={pickerContainer}>{currentTemplateId ? renderTemplateSelector() : renderNoTemplateView()}</div>
         <DialogFooter>
           <Link
             href={templateRequestUrl}
