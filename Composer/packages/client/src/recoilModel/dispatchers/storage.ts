@@ -16,6 +16,7 @@ import {
   templateProjectsState,
   runtimeTemplatesState,
   featureFlagsState,
+  selectedTemplateReadMeState,
 } from '../atoms/appState';
 import { FileTypes } from '../../constants';
 import { getExtension } from '../../utils/fileUtil';
@@ -151,6 +152,7 @@ export const storageDispatcher = () => {
         set(templateProjectsState, data);
       } else {
         set(templateProjectsState, []);
+        set(selectedTemplateReadMeState, '');
       }
     } catch (err) {
       TelemetryClient.track('TemplateNpmRegistryCallFailed', { error: err.message });
