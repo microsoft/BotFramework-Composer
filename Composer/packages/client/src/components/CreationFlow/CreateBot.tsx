@@ -144,9 +144,9 @@ export function CreateBot(props: CreateBotProps) {
   const [localTemplatePathValid, setLocalTemplatePathValid] = useState<boolean>(false);
   const [displayedTemplates, setDisplayedTemplates] = useState<BotTemplate[]>([]);
   const [readMe] = useRecoilState(selectedTemplateReadMeState);
-  const [isTemplateFeedModalVisible, setIsTemplateFeedModalVisible] = useState<boolean>(false);
-  const templateFeedUrl = useRecoilValue(templateFeedUrlState);
-  const { setTemplateFeedUrl } = useRecoilValue(dispatcherState);
+  // const [isTemplateFeedModalVisible, setIsTemplateFeedModalVisible] = useState<boolean>(false);
+  // const templateFeedUrl = useRecoilValue(templateFeedUrlState);
+  // const { setTemplateFeedUrl } = useRecoilValue(dispatcherState);
 
   const fetchReadMePending = useRecoilValue(fetchReadMePendingState);
   const creationFlowType = useRecoilValue(creationFlowTypeState);
@@ -278,14 +278,14 @@ export function CreateBot(props: CreateBotProps) {
 
   return (
     <Fragment>
-      <TemplateFeedModal
+      {/* <TemplateFeedModal
         closeDialog={() => setIsTemplateFeedModalVisible(false)}
         feedUrl={templateFeedUrl}
         hidden={!isTemplateFeedModalVisible}
         onUpdateFeed={(feed: string) => {
           setTemplateFeedUrl(feed);
         }}
-      />
+      /> */}
       <DialogWrapper isOpen={isOpen} {...dialogWrapperProps} dialogType={DialogTypes.CreateFlow} onDismiss={onDismiss}>
         <Stack horizontal styles={tabAndFeedBtnStyles}>
           <Stack.Item align="start" grow={1}>

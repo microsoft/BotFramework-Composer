@@ -9,7 +9,6 @@ import {
   QnABotTemplateId,
 } from '@bfc/shared';
 import formatMessage from 'format-message';
-import { Request, Response } from 'express';
 
 import fetch from '../utility/fetch';
 import AssetService from '../services/asset';
@@ -104,13 +103,14 @@ export async function getLatestGeneratorVersion(moduleName: string): Promise<str
   }
 }
 
-function fetchTemplateFeedUrl(req: any, res: any) {
+export async function fetchTemplateFeedUrl(req: any, res: any) {
   const templateFeedUrl = Store.get('templateFeedUrl', firstPartyTemplateFeed);
   res.status(200).json({ templateFeedUrl: templateFeedUrl });
 }
 
-function setTemplateFeedUrl(req: Request, res: Response) {
+export async function setTemplateFeedUrl(req: any, res: any) {
   Store.set('templateFeedUrl', req.body?.feedUrl);
+  res.status(200).json({ templateFeedUrl: req.body?.feedUrl });
 }
 
 export async function getTemplateReadMe(req: any, res: any) {
