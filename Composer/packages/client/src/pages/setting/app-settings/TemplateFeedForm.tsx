@@ -28,7 +28,7 @@ const settingsContainer = css`
 export const TemplateFeedForm: React.FC = () => {
   const templateFeedUrl = useRecoilValue(templateFeedUrlState);
   const { setTemplateFeedUrl } = useRecoilValue(dispatcherState);
-  const [urlValue, setUrlValue] = useState(templateFeedUrl);
+  const [urlValue, setUrlValue] = useState(templateFeedUrl ? templateFeedUrl : firstPartyTemplateFeed);
 
   const savePendingEdits = (isFirstPartyFeed?: boolean) => {
     if (urlValue === firstPartyTemplateFeed || isFirstPartyFeed) {

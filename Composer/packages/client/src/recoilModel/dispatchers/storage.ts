@@ -147,9 +147,10 @@ export const storageDispatcher = () => {
       });
 
       const data = response?.data;
-
       if (data && Array.isArray(data) && data.length > 0) {
         set(templateProjectsState, data);
+      } else {
+        set(templateProjectsState, []);
       }
     } catch (err) {
       TelemetryClient.track('TemplateNpmRegistryCallFailed', { error: err.message });

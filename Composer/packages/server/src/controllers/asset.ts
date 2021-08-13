@@ -1,7 +1,13 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { BotTemplate, emptyBotNpmTemplateName, localTemplateId, QnABotTemplateId } from '@bfc/shared';
+import {
+  BotTemplate,
+  emptyBotNpmTemplateName,
+  firstPartyTemplateFeed,
+  localTemplateId,
+  QnABotTemplateId,
+} from '@bfc/shared';
 import formatMessage from 'format-message';
 
 import fetch from '../utility/fetch';
@@ -22,40 +28,21 @@ export async function getProjTemplates(req: any, res: any) {
     // Grab templates from FeedURls
     if (feedUrls) {
       const feedTemplates = await AssetService.manager.getCustomFeedTemplates(feedUrls);
+      templates = templates.concat(feedTemplates);
 
       // Add qna template manually with empty bot template version as qna uses empty bot under the hood
-      const emptyBot = feedTemplates.filter((template) => {
-        return template.id === emptyBotNpmTemplateName;
-      });
-      const qnaTemplateVersion =
-        emptyBot.length > 0 && emptyBot[0].package?.packageVersion ? emptyBot[0].package.packageVersion : '*';
-      templates = templates.concat(feedTemplates);
-      templates.push({
-        id: QnABotTemplateId,
-        name: 'QNA',
-        description: formatMessage('Empty bot template that routes to qna configuration'),
-        dotnetSupport: {
-          functionsSupported: true,
-          webAppSupported: true,
-        },
-        nodeSupport: {
-          functionsSupported: true,
-          webAppSupported: true,
-        },
-        package: {
-          packageName: emptyBotNpmTemplateName,
-          packageSource: 'npm',
-          packageVersion: qnaTemplateVersion,
-          availableVersions: [],
-        },
-      });
+      const addManualFirstPartyTemplates = (feedUrls as string[]).indexOf(firstPartyTemplateFeed) !== -1;
 
-      // Add local template option for advanced users
-      if (advancedTemplateOptionsEnabled) {
+      if (addManualFirstPartyTemplates) {
+        const emptyBot = feedTemplates.filter((template) => {
+          return template.id === emptyBotNpmTemplateName;
+        });
+        const qnaTemplateVersion =
+          emptyBot.length > 0 && emptyBot[0].package?.packageVersion ? emptyBot[0].package.packageVersion : '*';
         templates.push({
-          id: localTemplateId,
-          name: 'Create from local template',
-          description: formatMessage('Create a bot using a local yeoman generator'),
+          id: QnABotTemplateId,
+          name: 'QNA',
+          description: formatMessage('Empty bot template that routes to qna configuration'),
           dotnetSupport: {
             functionsSupported: true,
             webAppSupported: true,
@@ -65,17 +52,38 @@ export async function getProjTemplates(req: any, res: any) {
             webAppSupported: true,
           },
           package: {
-            packageName: '',
-            packageSource: '',
-            packageVersion: '',
+            packageName: emptyBotNpmTemplateName,
+            packageSource: 'npm',
+            packageVersion: qnaTemplateVersion,
             availableVersions: [],
           },
         });
+
+        // Add local template option for advanced users
+        if (advancedTemplateOptionsEnabled) {
+          templates.push({
+            id: localTemplateId,
+            name: 'Create from local template',
+            description: formatMessage('Create a bot using a local yeoman generator'),
+            dotnetSupport: {
+              functionsSupported: true,
+              webAppSupported: true,
+            },
+            nodeSupport: {
+              functionsSupported: true,
+              webAppSupported: true,
+            },
+            package: {
+              packageName: '',
+              packageSource: '',
+              packageVersion: '',
+              availableVersions: [],
+            },
+          });
+        }
       }
     }
-
     const sortedTemplateList = await sortTemplates(templates);
-
     // return templates
     res.status(200).json(sortedTemplateList);
   } catch (error) {
