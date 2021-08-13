@@ -42,7 +42,6 @@ import {
   orchestratorForSkillsDialogState,
   selectedTemplateVersionState,
   watchedVariablesState,
-  templateFeedUrlState,
 } from '../atoms';
 import { botRuntimeOperationsSelector, rootBotProjectIdSelector } from '../selectors';
 import { mergePropertiesManagedByRootBot, postRootBotCreation } from '../../recoilModel/dispatchers/utils/project';

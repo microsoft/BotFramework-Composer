@@ -30,18 +30,11 @@ import { Stack } from 'office-ui-fabric-react/lib/Stack';
 
 import msftIcon from '../../images/msftIcon.svg';
 import { DialogCreationCopy } from '../../constants';
-import {
-  creationFlowTypeState,
-  dispatcherState,
-  fetchReadMePendingState,
-  selectedTemplateReadMeState,
-  templateFeedUrlState,
-} from '../../recoilModel';
+import { creationFlowTypeState, fetchReadMePendingState, selectedTemplateReadMeState } from '../../recoilModel';
 import TelemetryClient from '../../telemetry/TelemetryClient';
 import { navigateTo } from '../../utils/navigation';
 
 import { TemplateDetailView } from './TemplateDetailView';
-import { TemplateFeedModal } from './TemplateFeedModal';
 
 // -------------------- Styles -------------------- //
 
@@ -151,9 +144,6 @@ export function CreateBot(props: CreateBotProps) {
   const [localTemplatePathValid, setLocalTemplatePathValid] = useState<boolean>(false);
   const [displayedTemplates, setDisplayedTemplates] = useState<BotTemplate[]>([]);
   const [readMe] = useRecoilState(selectedTemplateReadMeState);
-  // const [isTemplateFeedModalVisible, setIsTemplateFeedModalVisible] = useState<boolean>(false);
-  // const templateFeedUrl = useRecoilValue(templateFeedUrlState);
-  // const { setTemplateFeedUrl } = useRecoilValue(dispatcherState);
 
   const fetchReadMePending = useRecoilValue(fetchReadMePendingState);
   const creationFlowType = useRecoilValue(creationFlowTypeState);

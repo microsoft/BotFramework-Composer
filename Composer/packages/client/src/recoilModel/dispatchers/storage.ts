@@ -159,7 +159,7 @@ export const storageDispatcher = () => {
 
       set(applicationErrorState, {
         message: err.message,
-        summary: formatMessage('Error fetching not project templates'),
+        summary: formatMessage('Error fetching bot project templates'),
       });
     }
   });
