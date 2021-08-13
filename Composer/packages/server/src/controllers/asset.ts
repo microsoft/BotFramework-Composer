@@ -1,13 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import {
-  BotTemplate,
-  emptyBotNpmTemplateName,
-  firstPartyTemplateFeed,
-  localTemplateId,
-  QnABotTemplateId,
-} from '@bfc/shared';
+import { BotTemplate, emptyBotNpmTemplateName, localTemplateId, QnABotTemplateId } from '@bfc/shared';
 import formatMessage from 'format-message';
 
 import fetch from '../utility/fetch';
@@ -104,12 +98,12 @@ export async function getLatestGeneratorVersion(moduleName: string): Promise<str
 }
 
 export async function fetchTemplateFeedUrl(req: any, res: any) {
-  const templateFeedUrl = Store.get('templateFeedUrl', firstPartyTemplateFeed);
+  const templateFeedUrl = Store.get('customTemplateFeedUrl', '');
   res.status(200).json({ templateFeedUrl: templateFeedUrl });
 }
 
 export async function setTemplateFeedUrl(req: any, res: any) {
-  Store.set('templateFeedUrl', req.body?.feedUrl);
+  Store.set('customTemplateFeedUrl', req.body?.feedUrl);
   res.status(200).json({ templateFeedUrl: req.body?.feedUrl });
 }
 

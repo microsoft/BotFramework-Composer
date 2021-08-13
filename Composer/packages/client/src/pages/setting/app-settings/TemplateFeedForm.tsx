@@ -30,14 +30,14 @@ export const TemplateFeedForm: React.FC = () => {
   const { setTemplateFeedUrl } = useRecoilValue(dispatcherState);
   const [urlValue, setUrlValue] = useState(templateFeedUrl);
 
-  const savePendingEdits = (newValue?: string) => {
-    console.log('saving pending edits');
-    if (urlValue === firstPartyTemplateFeed) {
+  const savePendingEdits = (isFirstPartyFeed?: boolean) => {
+    if (urlValue === firstPartyTemplateFeed || isFirstPartyFeed) {
       TelemetryClient.track('TemplateFeedChangedToDefaultFeed');
+      setTemplateFeedUrl('');
     } else {
       TelemetryClient.track('TemplateFeedChangedToCustomFeed');
+      setTemplateFeedUrl(urlValue);
     }
-    setTemplateFeedUrl(newValue ? newValue : urlValue);
   };
 
   const renderLabel = React.useCallback(({ label: dropdownLabel }) => {
@@ -71,7 +71,7 @@ export const TemplateFeedForm: React.FC = () => {
       <Link
         onClick={(ev) => {
           setUrlValue(firstPartyTemplateFeed);
-          savePendingEdits(firstPartyTemplateFeed);
+          savePendingEdits(true);
         }}
       >
         {formatMessage('Reset to default feed')}

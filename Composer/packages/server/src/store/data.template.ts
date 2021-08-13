@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { firstPartyTemplateFeed, getDefaultFeatureFlags, ServerSettings } from '@bfc/shared';
+import { getDefaultFeatureFlags, ServerSettings } from '@bfc/shared';
 
 import settings from '../settings';
 import { LocationRef } from '../models/bot/interface';
@@ -10,7 +10,7 @@ import { BotProjectMetadata } from '../services/project';
 
 export default {
   version: 1,
-  templateFeedUrl: firstPartyTemplateFeed,
+  customTemplateFeedUrl: '',
   storageConnections: [
     {
       id: 'default',

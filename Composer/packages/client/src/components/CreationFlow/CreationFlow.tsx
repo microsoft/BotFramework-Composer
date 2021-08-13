@@ -6,7 +6,7 @@ import Path from 'path';
 import React, { useEffect, useRef, Fragment, useState } from 'react';
 import { RouteComponentProps, Router, navigate } from '@reach/router';
 import { useRecoilValue } from 'recoil';
-import { BotTemplate } from '@bfc/shared';
+import { BotTemplate, firstPartyTemplateFeed } from '@bfc/shared';
 
 import { CreationFlowStatus } from '../../constants';
 import {
@@ -96,7 +96,11 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
   }, []);
 
   useEffect(() => {
-    templateFeedUrl && fetchTemplates([templateFeedUrl]);
+    if (templateFeedUrl) {
+      fetchTemplates([templateFeedUrl]);
+    } else {
+      fetchTemplates([firstPartyTemplateFeed]);
+    }
   }, [templateFeedUrl]);
 
   const updateCurrentPath = async (newPath, storageId) => {
