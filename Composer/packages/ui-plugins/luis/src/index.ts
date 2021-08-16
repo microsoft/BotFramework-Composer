@@ -6,11 +6,15 @@ import { SDKKinds } from '@bfc/shared';
 import formatMessage from 'format-message';
 
 import { LuisIntentEditor as LuIntentEditor } from './LuisIntentEditor';
+import { TriggerWidget } from './TriggerWidget';
 
 const config: PluginConfig = {
   widgets: {
     recognizer: {
       LuIntentEditor,
+    },
+    flow: {
+      TriggerWidget,
     },
   },
   uiSchema: {
@@ -45,6 +49,20 @@ const config: PluginConfig = {
           const { currentDialog, locale } = shellData;
           shellApi.updateIntentTrigger(currentDialog.id, intentName, newIntentName);
           await shellApi.renameLuIntent(`${currentDialog.id}.${locale}`, intentName, newIntentName);
+        },
+      },
+    },
+    [SDKKinds.OnIntent]: {
+      flow: {
+        widget: 'ActionCard',
+        header: {
+          colors: {
+            theme: '#E7F4F4',
+          },
+          widget: 'ActionHeader',
+        },
+        body: {
+          widget: 'TriggerWidget',
         },
       },
     },

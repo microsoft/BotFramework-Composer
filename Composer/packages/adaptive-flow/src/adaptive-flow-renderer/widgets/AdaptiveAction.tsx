@@ -25,6 +25,7 @@ export const StepRenderer: FC<NodeProps> = ({ id, data, onEvent, onResize }): JS
   if (widgetSchema.nowrap || buitinNowrapWidgetNames.some((name) => name === widgetSchema.widget)) {
     return content;
   }
+
   return (
     <NodeWrapper nodeData={data} nodeId={id} onEvent={onEvent}>
       <ElementMeasurer onResize={(boundary) => onResize(boundary)}>{content}</ElementMeasurer>

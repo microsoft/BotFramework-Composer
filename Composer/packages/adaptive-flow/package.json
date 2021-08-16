@@ -14,6 +14,7 @@
   ],
   "scripts": {
     "build": "yarn clean && yarn build:ts",
+    "build:watch": "yarn clean && tsc --build --watch tsconfig.build.json",
     "build:ts": "tsc --build tsconfig.build.json",
     "clean": "rimraf lib demo/dist",
     "prepublishOnly": "npm run build",

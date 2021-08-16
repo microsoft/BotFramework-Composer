@@ -3,7 +3,7 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { useState, useContext, useMemo, useRef } from 'react';
+import { useState, useContext, useMemo, useRef, useEffect } from 'react';
 import isEqual from 'lodash/isEqual';
 
 import { OffsetContainer } from '../components/OffsetContainer';
@@ -22,9 +22,6 @@ import { GraphNode } from '../models/GraphNode';
 import { TriggerSummary } from '../widgets/TriggerSummary';
 import { outlineObiJson } from '../utils/adaptive/outlineObiJson';
 
-const HeadSize = new Boundary(TriggerSize.width, TriggerSize.height + ElementInterval.y / 2);
-const TailSize = new Boundary(TerminatorSize.width, TerminatorSize.height + ElementInterval.y / 2 + 5);
-
 const calculateNodeMap = (triggerId, triggerData): { [id: string]: GraphNode } => {
   const result = transformObiRules(triggerData, triggerId);
   if (!result) return {};
@@ -35,6 +32,8 @@ const calculateNodeMap = (triggerId, triggerData): { [id: string]: GraphNode } =
   };
 };
 
+const TailSize = new Boundary(TerminatorSize.width, TerminatorSize.height + ElementInterval.y / 2);
+
 export interface AdaptiveTriggerProps {
   triggerId: string;
   triggerData: any;
@@ -42,6 +41,17 @@ export interface AdaptiveTriggerProps {
 }
 
 export const AdaptiveTrigger: React.FC<AdaptiveTriggerProps> = ({ triggerId, triggerData, onEvent }): JSX.Element => {
+  const [HeadSize, setHeadSize] = useState(new Boundary(TriggerSize.width, TriggerSize.height + ElementInterval.y / 2));
+
+  useEffect(() => {
+    if (triggerData?.intent) {
+      const bounds = TriggerSize.height + ElementInterval.y / 2;
+      setHeadSize(new Boundary(TriggerSize.width, bounds + 58));
+    } else {
+      setHeadSize(new Boundary(TriggerSize.width, TriggerSize.height + ElementInterval.y / 2));
+    }
+  }, [triggerData]);
+
   const outlineCache = useRef();
   const outlineVersion = useRef(0);
 
@@ -55,12 +65,23 @@ export const AdaptiveTrigger: React.FC<AdaptiveTriggerProps> = ({ triggerId, tri
   }, [triggerId, triggerData]);
 
   const { stepGroup } = nodeMap;
+
   const { id, data } = stepGroup;
 
   const { EdgeMenu } = useContext(RendererContext);
   const [stepGroupBoundary, setStepGroupBoundary] = useState<Boundary>(measureJsonBoundary(data));
 
-  const trigger = <TriggerSummary data={triggerData} />;
+  const trigger = (
+    <TriggerSummary
+      data={triggerData}
+      onEvent={onEvent}
+      onResize={(boundary) => {
+        if (boundary) {
+          setStepGroupBoundary(boundary);
+        }
+      }}
+    />
+  );
 
   const hasNoSteps = !data || !Array.isArray(data.children) || data.children.length === 0;
   const content = hasNoSteps ? (
@@ -137,7 +158,7 @@ export const AdaptiveTrigger: React.FC<AdaptiveTriggerProps> = ({ triggerId, tri
           />
         </SVGContainer>
         <OffsetContainer offset={{ x: editorAxisX - HeadSize.axisX, y: 0 }}>
-          <div className="step-editor__head" css={{ ...HeadSize, position: 'relative' }}>
+          <div className="step-editor__head" css={{ position: 'relative' }}>
             <OffsetContainer offset={{ x: 0, y: 0 }}>{trigger}</OffsetContainer>
           </div>
         </OffsetContainer>

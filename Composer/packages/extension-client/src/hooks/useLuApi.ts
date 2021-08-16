@@ -19,6 +19,7 @@ const LU_KEYS = [
   'api.debouncedUpdateLuIntent',
   'api.renameLuIntent',
   'api.removeLuIntent',
+  'api.getTriggerPhrasesForAnIntent',
 ];
 
 export function useLuApi(): LuContextApi {

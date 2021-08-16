@@ -152,6 +152,8 @@ const DefaultFormSchema: FormUISchema = {
     helpLink: 'https://aka.ms/BFC-Using-LU',
   },
   [SDKKinds.OnIntent]: {
+    label: () => formatMessage('Trigger Phrases'),
+    subtitle: () => formatMessage('Trigger Phrases'),
     properties: {
       intent: {
         field: IntentField,

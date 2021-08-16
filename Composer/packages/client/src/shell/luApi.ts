@@ -77,6 +77,20 @@ function createLuApi(
     return file.intents.find(({ Name }) => Name === intentName);
   };
 
+  const getTriggerPhrasesForAnIntent = (intentName: string) => {
+    if (state.dialogId) {
+      const focusedDialogId = state.dialogId;
+      const file = luFileResolver(focusedDialogId);
+      if (!file) throw new Error(focusedDialogId);
+      const matchedIntent = file.intents.find((intent) => intent.Name === intentName);
+
+      if (matchedIntent) {
+        return matchedIntent.Body.split('\n').filter((val) => val.startsWith('-'));
+      }
+    }
+    return [];
+  };
+
   return {
     updateLuFile,
     addLuIntent,
@@ -86,6 +100,7 @@ function createLuApi(
     debouncedUpdateLuIntent: debounce(updateLuIntent, 250),
     renameLuIntent,
     removeLuIntent,
+    getTriggerPhrasesForAnIntent,
   };
 }
 
