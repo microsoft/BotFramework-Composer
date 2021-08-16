@@ -318,9 +318,9 @@ export function CreateBot(props: CreateBotProps) {
         <div css={noTemplateTextStyle}>
           <Text variant={'medium'}>
             {formatMessage.rich(
-              `No templates pulled from currently configured template feed, please <feedFormDeeLink>configure your feed</feedFormDeeLink> to get templates.`,
+              `No templates pulled from currently configured template feed, please <feedFormDeepLink>configure your feed</feedFormDeepLink> to get templates.`,
               {
-                feedFormDeeLink: ({ children }) => (
+                feedFormDeepLink: ({ children }) => (
                   <Link
                     key="template-feed-link"
                     onClick={() => {
