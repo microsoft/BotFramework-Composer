@@ -157,7 +157,7 @@ const FlowLgEditor: React.FC<{
         lgOption={lgOption}
         lgTemplates={availableLgTemplates}
         memoryVariables={memoryVariables}
-        mode="codeEditor"
+        mode="responseEditor"
         telemetryClient={shellApi.telemetryClient}
         value={template.body}
         onChange={handleChange}

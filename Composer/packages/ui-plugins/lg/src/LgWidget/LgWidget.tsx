@@ -75,24 +75,24 @@ export const LgWidget: React.FC<LgWidgetProps> = ({ id, data, field, defaultCont
   const { shellApi } = useShellApi();
   const activityTemplate = get(data, field, '') as string;
 
-  const templateTextData = useLgTemplate(activityTemplate) ?? defaultContent;
+  // const templateTextData = useLgTemplate(activityTemplate) ?? defaultContent;
 
-  // If the template has structured response, show rich text
-  if (typeof templateTextData === 'object') {
-    const data = templateTextData as Record<string, { value: string; moreCount?: number }>;
-    return (
-      <Root tokens={rootTokens}>
-        {Object.keys(data).map((k) => (
-          <StructuredResponseRow
-            key={k}
-            keyText={getResponseTypeDisplayText(k)}
-            moreCount={data[k].moreCount}
-            valueText={data[k].value}
-          />
-        ))}
-      </Root>
-    );
-  }
+  // // If the template has structured response, show rich text
+  // if (typeof templateTextData === 'object') {
+  //   const data = templateTextData as Record<string, { value: string; moreCount?: number }>;
+  //   return (
+  //     <Root tokens={rootTokens}>
+  //       {Object.keys(data).map((k) => (
+  //         <StructuredResponseRow
+  //           key={k}
+  //           keyText={getResponseTypeDisplayText(k)}
+  //           moreCount={data[k].moreCount}
+  //           valueText={data[k].value}
+  //         />
+  //       ))}
+  //     </Root>
+  //   );
+  // }
   // need to prevent the flow from stealing focus
   const handleClick = (e: React.MouseEvent) => {
     e.preventDefault();
