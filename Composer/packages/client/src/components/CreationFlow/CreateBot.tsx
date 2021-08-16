@@ -341,36 +341,21 @@ export function CreateBot(props: CreateBotProps) {
   return (
     <Fragment>
       <DialogWrapper isOpen={isOpen} {...dialogWrapperProps} dialogType={DialogTypes.CreateFlow} onDismiss={onDismiss}>
-        <Stack horizontal styles={tabAndFeedBtnStyles}>
-          <Stack.Item align="start" grow={1}>
-            <Pivot
-              defaultSelectedKey={csharpFeedKey}
-              onLinkClick={(item) => {
-                if (item) {
-                  setSelectedProgLang(item);
-                }
-              }}
-            >
-              <PivotItem data-testid="dotnetFeed" headerText="C#" itemKey={csharpFeedKey}></PivotItem>
-              <PivotItem
-                data-testid="nodeFeed"
-                headerText={formatMessage('Node (Preview)')}
-                itemKey={nodeFeedKey}
-              ></PivotItem>
-            </Pivot>
-          </Stack.Item>
-          <Stack.Item align="end">
-            <Link
-              styles={{ root: { fontSize: '12px', float: 'left' } }}
-              onClick={() => {
-                navigateTo('/settings');
-              }}
-            >
-              <FontIcon iconName="Edit" style={{ marginRight: '5px' }} />
-              {formatMessage('Edit template feed')}
-            </Link>
-          </Stack.Item>
-        </Stack>
+        <Pivot
+          defaultSelectedKey={csharpFeedKey}
+          onLinkClick={(item) => {
+            if (item) {
+              setSelectedProgLang(item);
+            }
+          }}
+        >
+          <PivotItem data-testid="dotnetFeed" headerText="C#" itemKey={csharpFeedKey}></PivotItem>
+          <PivotItem
+            data-testid="nodeFeed"
+            headerText={formatMessage('Node (Preview)')}
+            itemKey={nodeFeedKey}
+          ></PivotItem>
+        </Pivot>
         <div css={pickerContainer}>{currentTemplateId ? renderTemplateSelector() : renderNoTemplateView()}</div>
         <DialogFooter>
           <Link
