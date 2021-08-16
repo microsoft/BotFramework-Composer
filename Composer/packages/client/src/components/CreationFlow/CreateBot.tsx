@@ -273,12 +273,9 @@ export function CreateBot(props: CreateBotProps) {
   const dialogWrapperProps =
     creationFlowType === 'Skill' ? DialogCreationCopy.CREATE_NEW_SKILLBOT : DialogCreationCopy.CREATE_NEW_BOT;
 
-  console.log(currentTemplateId);
-
   const renderTemplateSelector = () => {
     return (
       <Fragment>
-        {' '}
         <div css={detailListContainer} data-is-scrollable="true" id="templatePickerContainer">
           <ScrollablePane
             scrollbarVisibility={ScrollbarVisibility.auto}
