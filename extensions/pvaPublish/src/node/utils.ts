@@ -34,6 +34,12 @@ export const getBaseUrl = () => {
       return url;
     }
 
+    case 'gcc-high': {
+      const url = BASE_URLS.GCC_HIGH;
+      logger.log('gcc high pva publish env detected, operation using PVA url: ', url);
+      return url;
+    }
+
     default: {
       const url = BASE_URLS.PROD;
       logger.log('No pva publish env detected, operation using PVA url: ', url);
@@ -46,7 +52,7 @@ export const getBaseUrl = () => {
  * Looks at the base URL for a request and returns the necessary authentication parameters
  * to get an access token for the resource.
  */
-export const getAuthCredentials = (baseUrl = '') => {
+export const getAuthCredentials = (baseUrl = '', tenantId?: string) => {
   if (baseUrl) {
     const host = new URL(baseUrl).host;
 
@@ -56,6 +62,11 @@ export const getAuthCredentials = (baseUrl = '') => {
       return AUTH_CREDENTIALS.PPE;
     } else if (host === 'gcc.api.powerva.microsoft.us') {
       return AUTH_CREDENTIALS.GCC;
+    } else if (host === 'high.api.powerva.microsoft.us') {
+      return {
+        ...AUTH_CREDENTIALS.GCC_HIGH,
+        authority: `https://login.microsoftonline.us/${tenantId}`,
+      };
     }
   }
   // fall back to prod

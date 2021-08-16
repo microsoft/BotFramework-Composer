@@ -5,6 +5,7 @@ import { join } from 'path';
 
 import {
   PowerVirtualAgentsProvider,
+  PVA_GCC_HIGH_APP_ID,
   PVA_GOV_APP_ID,
   PVA_PROD_APP_ID,
   PVA_TEST_APP_ID,
@@ -206,6 +207,19 @@ describe('Power Virtual Agents provider', () => {
     const args = mockGetAccessToken.mock.calls[0];
     const credentials = args[0];
     expect(credentials.targetResource).toBe(PVA_GOV_APP_ID);
+    expect(accessToken).toBe('accessToken');
+  });
+
+  it('should authenticate with credentials for the GCC High / gov environment', async () => {
+    provider = new PowerVirtualAgentsProvider({
+      ...metadata,
+      baseUrl: 'https://high.api.powerva.microsoft.us/api/botmanagement/v1',
+    });
+    const accessToken = await provider.authenticate();
+
+    const args = mockGetAccessToken.mock.calls[0];
+    const credentials = args[0];
+    expect(credentials.targetResource).toBe(PVA_GCC_HIGH_APP_ID);
     expect(accessToken).toBe('accessToken');
   });
 });
