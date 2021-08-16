@@ -260,14 +260,15 @@ export class AzureResourceMananger {
       });
 
       // initialize the name
-      const qnaMakerSearchName = `${config.name}-search`.toLowerCase().replace('_', '');
-      const qnaMakerWebAppName = `${config.name}-qnahost`.toLowerCase().replace('_', '');
+      const qnaMakerSearchName = `${config.name}-qna-search`.toLowerCase().replace('_', '');
+      const qnaMakerWebAppName = `${config.name}-qna-qnahost`.toLowerCase().replace('_', '');
       const qnaMakerServiceName = `${config.name}-qna`;
 
-      // only support westus in qna
-      if (config.location !== 'westus') {
-        config.location = 'westus';
-      }
+      // Only westus is supported for QNA 1.0
+      // When the location is westus, update the existing App Service Plan, identified by config.name
+      // For all other locations, a new App Service Plan needs to be created with a unique name
+      const servicePlanName = config.location === 'westus' ? config.name : `${config.name}-qna-service`;
+      config.location = 'westus'; // only support westus in qna
 
       // deploy search service
       const searchManagementClient = new SearchManagementClient(this.creds, this.subscriptionId, this.options);
@@ -296,7 +297,6 @@ export class AzureResourceMananger {
       // deploy websites
       // Create new Service Plan or update the exisiting service plan created before
       const webSiteManagementClient = new WebSiteManagementClient(this.creds, this.subscriptionId, this.options);
-      const servicePlanName = config.resourceGroupName;
       const servicePlanResult = await webSiteManagementClient.appServicePlans.createOrUpdate(
         config.resourceGroupName,
         servicePlanName,
