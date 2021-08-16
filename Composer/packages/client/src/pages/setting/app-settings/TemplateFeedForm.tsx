@@ -3,14 +3,13 @@
 
 /** @jsx jsx */
 import { css, jsx } from '@emotion/core';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import formatMessage from 'format-message';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { firstPartyTemplateFeed } from '@bfc/shared';
 import { Link } from 'office-ui-fabric-react/lib/components/Link';
 import { useRecoilValue } from 'recoil';
 import { NeutralColors } from '@uifabric/fluent-theme/lib/fluent/FluentColors';
-import React from 'react';
 import { Text } from 'office-ui-fabric-react/lib/Text';
 
 import { dispatcherState, templateFeedUrlState, templateProjectsState } from '../../../recoilModel/atoms/appState';
@@ -29,7 +28,7 @@ const settingsText = css`
   width: 100%;
 `;
 
-export const TemplateFeedForm: React.FC = () => {
+export const TemplateFeedForm = () => {
   const templateFeedUrl = useRecoilValue(templateFeedUrlState);
   const templateProjects = useRecoilValue(templateProjectsState);
   const { setTemplateFeedUrl, fetchTemplates } = useRecoilValue(dispatcherState);
@@ -48,7 +47,7 @@ export const TemplateFeedForm: React.FC = () => {
     }
   };
 
-  const renderLabel = React.useCallback(({ label: dropdownLabel }) => {
+  const renderLabel = useCallback(({ label: dropdownLabel }) => {
     return (
       <div css={styles.labelContainer}>
         <div css={styles.customerLabel}>{dropdownLabel}</div>
@@ -81,6 +80,7 @@ export const TemplateFeedForm: React.FC = () => {
         <Text>{formatMessage('Configure the template feed that Composer sources its bot templates from.')}</Text>
       </div>
       <TextField
+        data-testid={'templateFeedField'}
         disabled={fieldDisabled}
         errorMessage={errorMessage}
         label={formatMessage('Template Feed Url')}
@@ -98,6 +98,7 @@ export const TemplateFeedForm: React.FC = () => {
         onRenderLabel={renderLabel}
       />
       <Link
+        data-testid={'default-feed-link'}
         styles={{ root: { paddingTop: '10px' } }}
         onClick={(ev) => {
           setUrlValue(firstPartyTemplateFeed);
