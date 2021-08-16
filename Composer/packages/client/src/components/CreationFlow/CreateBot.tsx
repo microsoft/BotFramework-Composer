@@ -26,7 +26,6 @@ import { Link } from 'office-ui-fabric-react/lib/Link';
 import { FontIcon } from 'office-ui-fabric-react/lib/Icon';
 import { csharpFeedKey, nodeFeedKey } from '@botframework-composer/types';
 import { useRecoilState, useRecoilValue } from 'recoil';
-import { Stack } from 'office-ui-fabric-react/lib/Stack';
 
 import msftIcon from '../../images/msftIcon.svg';
 import { DialogCreationCopy } from '../../constants';
@@ -61,8 +60,6 @@ const pickerContainer = css`
   height: 400px;
   border: 1px solid #f3f2f1;
 `;
-
-const tabAndFeedBtnStyles = { root: { paddingBottom: '5px' } };
 
 const rowDetails = (disabled) => {
   return {

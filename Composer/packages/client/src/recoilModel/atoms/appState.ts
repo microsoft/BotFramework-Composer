@@ -1,14 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 import { atom, atomFamily } from 'recoil';
-import {
-  FormDialogSchemaTemplate,
-  FeatureFlagMap,
-  BotTemplate,
-  UserSettings,
-  ExtensionSettings,
-  firstPartyTemplateFeed,
-} from '@bfc/shared';
+import { FormDialogSchemaTemplate, FeatureFlagMap, BotTemplate, UserSettings, ExtensionSettings } from '@bfc/shared';
 import { ExtensionMetadata } from '@bfc/extension-client';
 
 import {
