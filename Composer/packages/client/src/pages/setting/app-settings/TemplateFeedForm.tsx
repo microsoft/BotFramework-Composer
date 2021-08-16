@@ -3,7 +3,7 @@
 
 /** @jsx jsx */
 import { css, jsx } from '@emotion/core';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import formatMessage from 'format-message';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { firstPartyTemplateFeed } from '@bfc/shared';
@@ -13,7 +13,7 @@ import { NeutralColors } from '@uifabric/fluent-theme/lib/fluent/FluentColors';
 import React from 'react';
 import { Text } from 'office-ui-fabric-react/lib/Text';
 
-import { dispatcherState, templateFeedUrlState } from '../../../recoilModel/atoms/appState';
+import { dispatcherState, templateFeedUrlState, templateProjectsState } from '../../../recoilModel/atoms/appState';
 import TelemetryClient from '../../../telemetry/TelemetryClient';
 
 import * as styles from './styles';
@@ -31,8 +31,12 @@ const settingsText = css`
 
 export const TemplateFeedForm: React.FC = () => {
   const templateFeedUrl = useRecoilValue(templateFeedUrlState);
-  const { setTemplateFeedUrl } = useRecoilValue(dispatcherState);
+  const templateProjects = useRecoilValue(templateProjectsState);
+  const { setTemplateFeedUrl, fetchTemplates } = useRecoilValue(dispatcherState);
+
   const [urlValue, setUrlValue] = useState(templateFeedUrl ? templateFeedUrl : firstPartyTemplateFeed);
+  const [errorMessage, setErrorMessage] = useState('');
+  const [fieldDisabled, setFieldDisabled] = useState(false);
 
   const savePendingEdits = (isFirstPartyFeed?: boolean) => {
     if (urlValue === firstPartyTemplateFeed || isFirstPartyFeed) {
@@ -52,12 +56,33 @@ export const TemplateFeedForm: React.FC = () => {
     );
   }, []);
 
+  useEffect(() => {
+    setFieldDisabled(true);
+
+    if (templateFeedUrl) {
+      fetchTemplates([templateFeedUrl]);
+    } else {
+      fetchTemplates([firstPartyTemplateFeed]);
+    }
+  }, [templateFeedUrl]);
+
+  useEffect(() => {
+    setFieldDisabled(false);
+    if (templateProjects.length < 1) {
+      setErrorMessage('This feed did not return any templates, please confirm that this is a valid template feed URL.');
+    } else {
+      setErrorMessage('');
+    }
+  }, [templateProjects]);
+
   return (
     <div css={settingsContainer}>
       <div css={settingsText}>
         <Text>{formatMessage('Configure the template feed that Composer sources its bot templates from.')}</Text>
       </div>
       <TextField
+        disabled={fieldDisabled}
+        errorMessage={errorMessage}
         label={formatMessage('Template Feed Url')}
         value={urlValue}
         onBlur={(ev) => {
@@ -73,6 +98,7 @@ export const TemplateFeedForm: React.FC = () => {
         onRenderLabel={renderLabel}
       />
       <Link
+        styles={{ root: { paddingTop: '10px' } }}
         onClick={(ev) => {
           setUrlValue(firstPartyTemplateFeed);
           savePendingEdits(true);

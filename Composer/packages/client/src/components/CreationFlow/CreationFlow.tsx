@@ -93,15 +93,12 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
 
   useEffect(() => {
     fetchResources();
-  }, []);
-
-  useEffect(() => {
     if (templateFeedUrl) {
       fetchTemplates([templateFeedUrl]);
     } else {
       fetchTemplates([firstPartyTemplateFeed]);
     }
-  }, [templateFeedUrl]);
+  }, []);
 
   const updateCurrentPath = async (newPath, storageId) => {
     if (!storageId) {
