@@ -42,7 +42,7 @@ export const publish = async (
     logger.log('Starting publish to Power Virtual Agents.');
     // authenticate with PVA
     const base = baseUrl || getBaseUrl();
-    const creds = getAuthCredentials(base);
+    const creds = getAuthCredentials(base, tenantId);
     const accessToken = await getAccessToken(creds);
 
     // write the .zip to a buffer in memory
@@ -162,7 +162,7 @@ export const getStatus = async (
   try {
     // authenticate with PVA
     const base = baseUrl || getBaseUrl();
-    const creds = getAuthCredentials(base);
+    const creds = getAuthCredentials(base, tenantId);
     const accessToken = await getAccessToken(creds);
 
     // check the status for the publish job
@@ -223,7 +223,7 @@ export const history = async (
   try {
     // authenticate with PVA
     const base = baseUrl || getBaseUrl();
-    const creds = getAuthCredentials(base);
+    const creds = getAuthCredentials(base, tenantId);
     const accessToken = await getAccessToken(creds);
 
     // get the publish history for the bot
@@ -257,7 +257,7 @@ export const pull = async (
   try {
     // authenticate with PVA
     const base = baseUrl || getBaseUrl();
-    const creds = getAuthCredentials(base);
+    const creds = getAuthCredentials(base, tenantId);
     const accessToken = await getAccessToken(creds);
 
     // fetch zip containing bot content
