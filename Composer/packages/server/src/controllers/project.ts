@@ -619,7 +619,22 @@ async function getVariablesByProjectId(req: Request, res: Response) {
   }
 }
 
+async function autoSave(req: Request, res: Response) {
+  const projectId = req.params.projectId;
+  const user = await ExtensionContext.getUserFromRequest(req);
+  const project = await BotProjectService.getProjectById(projectId, user);
+
+  try {
+    await project.autoSave();
+  } catch (e) {
+    log('Failed to auto save bot content for project %s: %O', projectId, e);
+    return res.status(500).json(e);
+  }
+  res.sendStatus(200);
+}
+
 export const ProjectController = {
+  autoSave,
   getProjectById,
   openProject,
   removeProject,
