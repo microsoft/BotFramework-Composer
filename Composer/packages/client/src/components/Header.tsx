@@ -75,6 +75,8 @@ const headerTextContainer = css`
   justify-content: flex-start;
   min-width: 600px;
   width: 50%;
+  font-size: 16px;
+  font-weight: 600;
 `;
 
 const rightSection = css`
