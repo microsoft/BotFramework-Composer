@@ -46,7 +46,7 @@ export const actionButton = css`
 // -------------------- Styles -------------------- //
 const headerContainer = css`
   position: relative;
-  background: ${SharedColors.cyanBlue10};
+  background: #0b556a;
   height: 50px;
   display: flex;
   flex-direction: row;
