@@ -75,74 +75,88 @@ const CommandBar: React.FC<CommandBarProps> = React.memo(({ projectId }) => {
     () => [
       ...debugItems,
       {
-        type: 'dropdown',
-        text: formatMessage('Edit'),
+        type: 'action',
+        text: formatMessage('Undo'),
         align: 'left',
-        dataTestid: 'EditFlyout',
+        dataTestid: 'UndoButton',
         buttonProps: {
-          iconProps: { iconName: 'Edit' },
-        },
-        menuProps: {
-          onMenuOpened: () => {
-            TelemetryClient.track('ToolbarButtonClicked', { name: 'edit' });
+          iconProps: { iconName: 'Undo' },
+          onClick: () => {
+            undo();
+            TelemetryClient.track('ToolbarButtonClicked', { name: 'undo' });
           },
-          items: [
-            {
-              key: 'edit.undo',
-              text: formatMessage('Undo'),
-              disabled: !canUndo,
-              onClick: () => {
-                undo();
-                TelemetryClient.track('ToolbarButtonClicked', { name: 'undo' });
-              },
-            },
-            {
-              key: 'edit.redo',
-              text: formatMessage('Redo'),
-              disabled: !canRedo,
-              onClick: () => {
-                redo();
-                TelemetryClient.track('ToolbarButtonClicked', { name: 'redo' });
-              },
-            },
-            {
-              key: 'edit.cut',
-              text: formatMessage('Cut'),
-              disabled: !actionSelected,
-              onClick: () => {
-                EditorAPI.Actions.CutSelection();
-                TelemetryClient.track('ToolbarButtonClicked', { name: 'cut' });
-              },
-            },
-            {
-              key: 'edit.copy',
-              text: formatMessage('Copy'),
-              disabled: !actionSelected,
-              onClick: () => {
-                EditorAPI.Actions.CopySelection();
-                TelemetryClient.track('ToolbarButtonClicked', { name: 'copy' });
-              },
-            },
-            {
-              key: 'edit.move',
-              text: formatMessage('Move'),
-              disabled: !actionSelected,
-              onClick: () => {
-                EditorAPI.Actions.MoveSelection();
-                TelemetryClient.track('ToolbarButtonClicked', { name: 'move' });
-              },
-            },
-            {
-              key: 'edit.delete',
-              text: formatMessage('Delete'),
-              disabled: !actionSelected,
-              onClick: () => {
-                EditorAPI.Actions.DeleteSelection();
-                TelemetryClient.track('ToolbarButtonClicked', { name: 'delete' });
-              },
-            },
-          ],
         },
+        disabled: !canUndo,
+      },
+      {
+        type: 'action',
+        text: formatMessage('Redo'),
+        align: 'left',
+        dataTestid: 'RedoButton',
+        buttonProps: {
+          iconProps: { iconName: 'Redo' },
+          onClick: () => {
+            redo();
+            TelemetryClient.track('ToolbarButtonClicked', { name: 'redo' });
+          },
+        },
+        disabled: !canRedo,
+      },
+      {
+        type: 'action',
+        text: formatMessage('Cut'),
+        align: 'left',
+        dataTestid: 'CutButton',
+        buttonProps: {
+          iconProps: { iconName: 'Cut' },
+          onClick: () => {
+            EditorAPI.Actions.CutSelection();
+            TelemetryClient.track('ToolbarButtonClicked', { name: 'cut' });
+          },
+        },
+        disabled: !actionSelected,
+      },
+      {
+        type: 'action',
+        text: formatMessage('Copy'),
+        align: 'left',
+        dataTestid: 'CopyButton',
+        buttonProps: {
+          iconProps: { iconName: 'Copy' },
+          onClick: () => {
+            EditorAPI.Actions.CopySelection();
+            TelemetryClient.track('ToolbarButtonClicked', { name: 'copy' });
+          },
+        },
+        disabled: !actionSelected,
+      },
+      {
+        type: 'action',
+        text: formatMessage('Move'),
+        align: 'left',
+        dataTestid: 'MoveButton',
+        buttonProps: {
+          iconProps: { iconName: 'Copy' },
+          onClick: () => {
+            EditorAPI.Actions.CopySelection();
+            TelemetryClient.track('ToolbarButtonClicked', { name: 'copy' });
+          },
+        },
+        disabled: !actionSelected,
+      },
+      {
+        type: 'action',
+        text: formatMessage('Delete'),
+        align: 'left',
+        dataTestid: 'DeleteButton',
+        buttonProps: {
+          iconProps: { iconName: 'Delete' },
+          onClick: () => {
+            EditorAPI.Actions.DeleteSelection();
+            TelemetryClient.track('ToolbarButtonClicked', { name: 'delete' });
+          },
+        },
+        disabled: !actionSelected,
       },
       {
         type: 'dropdown',
