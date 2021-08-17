@@ -1,67 +1,66 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 import * as React from 'react';
+import { Fragment, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import formatMessage from 'format-message';
 import styled from '@emotion/styled';
-import { useState, useMemo, useEffect, Fragment, useCallback, useRef } from 'react';
 import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import { DefaultButton, PrimaryButton } from 'office-ui-fabric-react/lib/Button';
 import {
   logOut,
-  useAuthApi,
-  usePublishApi,
-  useProjectApi,
-  useLocalStorage,
-  useTelemetryClient,
   useApplicationApi,
+  useAuthApi,
+  useLocalStorage,
+  useProjectApi,
+  usePublishApi,
+  useTelemetryClient,
 } from '@bfc/extension-client';
 import { Subscription } from '@azure/arm-subscriptions/esm/models';
 import { DeployLocation, Notification } from '@botframework-composer/types';
 import { FluentTheme, NeutralColors } from '@uifabric/fluent-theme';
 import { LoadingSpinner, OpenConfirmModal, ProvisionHandoff } from '@bfc/ui-shared';
 import {
-  ScrollablePane,
-  ScrollbarVisibility,
+  ChoiceGroup,
   DetailsList,
   DetailsListLayoutMode,
+  FontSizes,
+  FontWeights,
+  IChoiceGroupOption,
   IColumn,
-  TooltipHost,
   Icon,
-  TextField,
-  Persona,
   IPersonaProps,
+  IStackItemStyles,
+  IStackTokens,
+  Label,
+  Link,
+  Persona,
   PersonaSize,
+  ScrollablePane,
+  ScrollbarVisibility,
   SelectionMode,
   Stack,
   Text,
-  FontWeights,
-  FontSizes,
-  Label,
-  IStackTokens,
-  IStackItemStyles,
-  Link,
-  ChoiceGroup,
-  IChoiceGroupOption,
+  TextField,
+  TooltipHost,
 } from 'office-ui-fabric-react';
 import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
 import { JsonEditor } from '@bfc/code-editor';
 import { ResourceGroup } from '@azure/arm-resources/esm/models';
 import sortBy from 'lodash/sortBy';
-import { region } from '@azure/arm-cosmosdb/esm/models/parameters';
 
 import { AzureResourceTypes, ResourcesItem } from '../types';
 
 import {
+  CheckWebAppNameAvailability,
+  getDeployLocations,
+  getLuisAuthoringRegions,
+  getPreview,
+  getResourceGroups,
   getResourceList,
   getSubscriptions,
-  getDeployLocations,
-  getPreview,
-  getLuisAuthoringRegions,
-  CheckWebAppNameAvailability,
-  getResourceGroups,
 } from './api';
 import { ChooseResourcesList } from './ChooseResourcesList';
-import { getExistResources, removePlaceholder, defaultExtensionState, parseRuntimeKey } from './util';
+import { defaultExtensionState, getExistResources, parseRuntimeKey, removePlaceholder } from './util';
 import { ResourceGroupPicker } from './ResourceGroupPicker';
 import { ChooseProvisionAction } from './ChooseProvisionAction';
 
