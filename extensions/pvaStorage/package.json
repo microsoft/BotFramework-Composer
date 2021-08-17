@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Bot Framework Composer storage extension that allows the user to save changes directly to Power Virtual Agents",
   "composer": {
-    "enabled": true
+    "enabled": false
   },
   "main": "dist/extension.js",
   "scripts": {
