@@ -46,7 +46,7 @@ export const actionButton = css`
 const headerContainer = css`
   position: relative;
   background: #0b556a;
-  height: 50px;
+  height: 48px;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -85,6 +85,26 @@ const rightSection = css`
   width: 50%;
   margin: 0 10px;
 `;
+
+const appLaucherButtonStyle: IButtonStyles = {
+  icon: {
+    color: '#fff',
+    fontSize: FontSizes.size16,
+  },
+  root: {
+    height: '48px',
+    width: '48px',
+    selectors: {
+      ':disabled .ms-Button-icon': {
+        opacity: 0.4,
+        color: `${NeutralColors.white}`,
+      },
+    },
+  },
+  rootHovered: {
+    backgroundColor: 'rgba(255, 255, 255, 0.6)',
+  },
+};
 
 const buttonStyles: IButtonStyles = {
   icon: {
@@ -173,7 +193,9 @@ export const Header = () => {
   }, [requiredStuff, botProjectSolutionLoaded]);
   // ... end of get started stuff
 
-  const isShow = useBotControllerBar();
+  // NOTE: disabled for August demo
+  // const isShow = useBotControllerBar();
+  const isShow = false;
 
   useEffect(() => {
     if (!isShow) {
@@ -246,16 +268,25 @@ export const Header = () => {
     }
   };
 
+  const appLauncherLabel = formatMessage('App launcher');
   const testLabel = formatMessage('Test your bot');
   const rocketLabel = formatMessage('Recommended actions');
   const updateLabel = formatMessage('Update available');
 
   return (
     <div css={headerContainer} role="banner">
+      <TooltipHost content={appLauncherLabel} directionalHint={DirectionalHint.bottomRightEdge}>
+            <IconButton
+              ariaLabel={appLauncherLabel}
+              iconProps={{ iconName: 'WaffleOffice365' }}
+              id="appLauncher"
+              styles={appLaucherButtonStyle}
+            />
+          </TooltipHost>
       <div css={headerTextContainer}>
         {projectName && (
           <Fragment>
-            <span css={botName}>Power Virtual Agents v2 | {projectName}</span>
+            <span css={botName}>Power Virtual Agents v2 Demo | {projectName}</span>
             {languageListOptions.length > 1 && (
               <span
                 css={botLocale}
