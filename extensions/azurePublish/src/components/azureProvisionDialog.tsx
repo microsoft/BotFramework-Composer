@@ -47,6 +47,7 @@ import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBa
 import { JsonEditor } from '@bfc/code-editor';
 import { ResourceGroup } from '@azure/arm-resources/esm/models';
 import sortBy from 'lodash/sortBy';
+import { region } from '@azure/arm-cosmosdb/esm/models/parameters';
 
 import { AzureResourceTypes, ResourcesItem } from '../types';
 
@@ -184,17 +185,6 @@ const DialogTitle = {
   },
 };
 
-const getResourceRegion = (item: ResourcesItem): string => {
-  const { key, region } = item;
-  switch (key) {
-    case AzureResourceTypes.APP_REGISTRATION:
-    case AzureResourceTypes.BOT_REGISTRATION:
-      return 'global';
-    default:
-      return region;
-  }
-};
-
 const reviewCols: IColumn[] = [
   {
     key: 'Icon',
@@ -257,11 +247,7 @@ const reviewCols: IColumn[] = [
     isRowHeader: true,
     data: 'string',
     onRender: (item: ResourcesItem) => {
-      return (
-        <div style={{ whiteSpace: 'normal', fontSize: '12px', color: NeutralColors.gray130 }}>
-          {getResourceRegion(item)}
-        </div>
-      );
+      return <div style={{ whiteSpace: 'normal', fontSize: '12px', color: NeutralColors.gray130 }}>{item.region}</div>;
     },
     isPadded: true,
   },
@@ -931,6 +917,20 @@ export const AzureProvisionDialog: React.FC = () => {
               }}
             />
           </Stack>
+          <Stack horizontal tokens={configureResourcePropertyStackTokens} verticalAlign="start">
+            <Stack>
+              <Stack horizontal styles={configureResourcePropertyLabelStackStyles} verticalAlign="center">
+                <ConfigureResourcesPropertyLabel>{formatMessage('QnA region')}</ConfigureResourcesPropertyLabel>
+                {renderPropertyInfoIcon(formatMessage('The region associated with your QnA Maker.'))}
+              </Stack>
+            </Stack>
+            <TextField
+              disabled
+              description={formatMessage('West US is the only QnA region supported.')}
+              styles={configureResourceTextFieldStyles}
+              value={'West US'}
+            />
+          </Stack>
         </Stack>
       </form>
     </ScrollablePane>
@@ -1142,13 +1142,24 @@ export const AzureProvisionDialog: React.FC = () => {
                   setPageAndTitle(PageTypes.ReviewResource);
                   let selectedResources = formData.requiredResources.concat(formData.enabledResources);
                   selectedResources = selectedResources.map((item) => {
-                    let region = currentConfig?.region || formData.region;
-                    if (item.key.includes('luis')) {
-                      region = formData.luisLocation;
-                    }
+                    const getRegion = () => {
+                      switch (item.key) {
+                        case AzureResourceTypes.APP_REGISTRATION:
+                        case AzureResourceTypes.BOT_REGISTRATION:
+                          return 'global';
+                        case AzureResourceTypes.LUIS_AUTHORING:
+                        case AzureResourceTypes.LUIS_PREDICTION:
+                          return formData.luisLocation;
+                        case AzureResourceTypes.QNA:
+                          return 'westus';
+                        default:
+                          return currentConfig?.region || formData.region;
+                      }
+                    };
+
                     return {
                       ...item,
-                      region: region,
+                      region: getRegion(),
                       resourceGroup: currentConfig?.resourceGroup || formData.resourceGroup,
                     };
                   });
