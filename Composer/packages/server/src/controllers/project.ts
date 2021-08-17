@@ -628,7 +628,7 @@ async function autoSave(req: Request, res: Response) {
     await project.autoSave();
   } catch (e) {
     log('Failed to auto save bot content for project %s: %O', projectId, e);
-    res.status(500).json(e);
+    return res.status(500).json(e);
   }
   res.sendStatus(200);
 }
