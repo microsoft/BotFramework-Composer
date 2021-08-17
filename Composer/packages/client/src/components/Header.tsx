@@ -28,7 +28,6 @@ import {
   allRequiredRecognizersSelector,
   showGetStartedTeachingBubbleState,
 } from '../recoilModel';
-import composerIcon from '../images/composerIcon.svg';
 import { AppUpdaterStatus } from '../constants';
 import TelemetryClient from '../telemetry/TelemetryClient';
 import { useBotControllerBar } from '../hooks/useControllerBar';
@@ -246,14 +245,12 @@ export const Header = () => {
     }
   };
 
-  const logoLabel = formatMessage('Composer Logo');
   const testLabel = formatMessage('Test your bot');
   const rocketLabel = formatMessage('Recommended actions');
   const updateLabel = formatMessage('Update available');
 
   return (
     <div css={headerContainer} role="banner">
-      <img alt={logoLabel} aria-label={logoLabel} src={composerIcon} style={{ marginLeft: '9px' }} />
       <div css={headerTextContainer}>
         {projectName && (
           <Fragment>
