@@ -50,12 +50,6 @@ const sideBar = (isExpand: boolean) => css`
   flex-shrink: 0;
 `;
 
-const dividerTop = css`
-  width: 100%;
-  border-bottom: 1px solid ${NeutralColors.gray40};
-  margin: 0 auto;
-`;
-
 const leftNavBottom = () => css`
   height: 90px;
 `;
@@ -94,7 +88,6 @@ export const SideBar: React.FC<RouteComponentProps> = () => {
             }}
           />
         </TooltipHost>
-        <div css={dividerTop} />{' '}
         <FocusZone allowFocusRoot>
           {topLinks.map((link, index) => {
             const navItem = (
