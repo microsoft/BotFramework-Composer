@@ -136,10 +136,10 @@ const CommandBar: React.FC<CommandBarProps> = React.memo(({ projectId }) => {
         align: 'left',
         dataTestid: 'MoveButton',
         buttonProps: {
-          iconProps: { iconName: 'Copy' },
+          iconProps: { iconName: 'Export' },
           onClick: () => {
-            EditorAPI.Actions.CopySelection();
-            TelemetryClient.track('ToolbarButtonClicked', { name: 'copy' });
+            EditorAPI.Actions.MoveSelection();
+            TelemetryClient.track('ToolbarButtonClicked', { name: 'move' });
           },
         },
         disabled: !actionSelected,
@@ -158,40 +158,41 @@ const CommandBar: React.FC<CommandBarProps> = React.memo(({ projectId }) => {
         },
         disabled: !actionSelected,
       },
-      {
-        type: 'dropdown',
-        text: formatMessage('Disable'),
-        align: 'left',
-        disabled: !actionSelected,
-        buttonProps: {
-          iconProps: { iconName: 'RemoveOccurrence' },
-        },
-        menuProps: {
-          onMenuOpened: () => {
-            TelemetryClient.track('ToolbarButtonClicked', { name: 'disableDropdown' });
-          },
-          items: [
-            {
-              key: 'disable',
-              text: formatMessage('Disable'),
-              disabled: !showDisableBtn,
-              onClick: () => {
-                EditorAPI.Actions.DisableSelection();
-                TelemetryClient.track('ToolbarButtonClicked', { name: 'disable' });
-              },
-            },
-            {
-              key: 'enable',
-              text: formatMessage('Enable'),
-              disabled: !showEnableBtn,
-              onClick: () => {
-                EditorAPI.Actions.EnableSelection();
-                TelemetryClient.track('ToolbarButtonClicked', { name: 'enable' });
-              },
-            },
-          ],
-        },
-      },
+      // NOTE: Hidden for August v2 demo
+      // {
+      //   type: 'dropdown',
+      //   text: formatMessage('Disable'),
+      //   align: 'left',
+      //   disabled: !actionSelected,
+      //   buttonProps: {
+      //     iconProps: { iconName: 'RemoveOccurrence' },
+      //   },
+      //   menuProps: {
+      //     onMenuOpened: () => {
+      //       TelemetryClient.track('ToolbarButtonClicked', { name: 'disableDropdown' });
+      //     },
+      //     items: [
+      //       {
+      //         key: 'disable',
+      //         text: formatMessage('Disable'),
+      //         disabled: !showDisableBtn,
+      //         onClick: () => {
+      //           EditorAPI.Actions.DisableSelection();
+      //           TelemetryClient.track('ToolbarButtonClicked', { name: 'disable' });
+      //         },
+      //       },
+      //       {
+      //         key: 'enable',
+      //         text: formatMessage('Enable'),
+      //         disabled: !showEnableBtn,
+      //         onClick: () => {
+      //           EditorAPI.Actions.EnableSelection();
+      //           TelemetryClient.track('ToolbarButtonClicked', { name: 'enable' });
+      //         },
+      //       },
+      //     ],
+      //   },
+      // },
     ],
     [showDisableBtn, showEnableBtn, actionSelected, canUndo, canRedo, debugItems]
   );
