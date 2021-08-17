@@ -54,6 +54,7 @@ const headerContainer = css`
 
 const botName = css`
   font-size: 16px;
+  font-weight: 600;
   color: #fff;
   padding-left: 20px;
 `;
@@ -75,8 +76,6 @@ const headerTextContainer = css`
   justify-content: flex-start;
   min-width: 600px;
   width: 50%;
-  font-size: 16px;
-  font-weight: 600;
 `;
 
 const rightSection = css`
