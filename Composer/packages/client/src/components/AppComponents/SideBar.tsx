@@ -51,7 +51,7 @@ const sideBar = (isExpand: boolean) => css`
 `;
 
 const leftNavBottom = () => css`
-  height: 90px;
+  height: 40px;
 `;
 
 const divider = (isExpand: boolean) => css`
