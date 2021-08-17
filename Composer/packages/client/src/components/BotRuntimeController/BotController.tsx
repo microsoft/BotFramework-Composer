@@ -36,7 +36,7 @@ const iconSectionContainer = css`
   display: flex;
   align-items: flex-end;
   flex-direction: row;
-  background: #0b556a;
+  background: ${CommunicationColors.tint10};
   :before {
     content: '';
     position: relative;
@@ -241,14 +241,14 @@ const BotController: React.FC<BotControllerProps> = ({ onHideController, isContr
             menuAs={() => null}
             styles={{
               root: {
-                backgroundColor: '#0b556a',
+                backgroundColor: CommunicationColors.tint10,
                 display: 'flex',
                 alignItems: 'center',
                 minWidth: '229px',
                 height: '36px',
                 flexDirection: 'row',
                 padding: '0 7px',
-                border: `1px solid #0b556a`,
+                border: `1px solid ${CommunicationColors.tint10}`,
                 width: '100%',
               },
               rootHovered: {
@@ -290,11 +290,11 @@ const BotController: React.FC<BotControllerProps> = ({ onHideController, isContr
                 root: {
                   color: NeutralColors.white,
                   height: '36px',
-                  background: isControllerHidden ? '#0b556a' : transparentBackground,
+                  background: isControllerHidden ? CommunicationColors.tint10 : transparentBackground,
                   selectors: {
                     ':disabled .ms-Button-icon': {
                       opacity: 0.6,
-                      backgroundColor: '#0b556a',
+                      backgroundColor: CommunicationColors.tint10,
                       color: `${NeutralColors.white}`,
                     },
                   },
