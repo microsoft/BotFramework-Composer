@@ -1,10 +1,11 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-const recursive$Kinds = {
-  'Microsoft.IfCondition': ['actions', 'elseActions'],
-  'Microsoft.SwitchCondition': [],
-};
+import { BaseSchema } from '@botframework-composer/types';
+
+enum PVAKinds {
+  Question = 'Microsoft.VirtualAgents.Question',
+}
 
 const questionTypes = {
   text: 'Microsoft.TextInput',
@@ -14,52 +15,103 @@ const questionTypes = {
 };
 
 const converters = {
-  'Microsoft.VirtualAgents.Question': (data) => {
+  [PVAKinds.Question]: (data) => {
     // break into input + condition (if necessary)
     // add some linking in $designer field for deserialzation
+    const { type, choices, ...rest } = data;
 
-    const newKind = questionTypes[data?.type];
-    return [
-      {
-        $kind: newKind,
-        $designer: {
-          ...data?.$designer,
-          $convertedFrom: data?.$kind,
+    const newKind = questionTypes[type];
+    if (newKind) {
+      return [
+        {
+          ...rest,
+          $kind: newKind,
+          $designer: {
+            ...data?.$designer,
+            $convertedFrom: data?.$kind,
+          },
         },
-        ...data,
-      },
-    ];
+      ];
+    }
+
+    return [data];
   },
   'Microsoft.VirtualAgents.ManageVariable': (data) => {
     return data;
   },
-};
-
-function decompose(data: any) {
-  const converter = converters[data?.$kind];
-
-  if (converter) {
-    return converter(data);
-  }
-}
-
-export function decomposeComposite$Kinds(name: string, content: string) {
-  if (name.endsWith('.dialog')) {
-    const data = JSON.parse(content);
-    if (data?.triggers && Array.isArray(data.triggers)) {
-      data.triggers = data.triggers.map((trigger) => {
-        if (trigger?.actions && Array.isArray(trigger.actions)) {
-          // walk through actions
-          // find special kinds (Microsoft.PowerVirtualAgents.Question)
-          // decompose
-          // recurse on some types
-          trigger.actions = trigger.actions.map((a) => decompose(a));
-        }
-      });
+  'Microsoft.TextInput': (data) => {
+    if (data?.$designer?.$convertedFrom === PVAKinds.Question) {
+      return {
+        ...data,
+        $kind: PVAKinds.Question,
+        type: 'text',
+      };
     }
 
-    return JSON.stringify(data, 2, null);
+    return data;
+  },
+  'Microsoft.NumberInput': (data) => {
+    if (data?.$designer?.$convertedFrom === PVAKinds.Question) {
+      return {
+        ...data,
+        $kind: PVAKinds.Question,
+        type: 'number',
+      };
+    }
+
+    return data;
+  },
+  'Microsoft.ConfirmInput': (data) => {
+    if (data?.$designer?.$convertedFrom === PVAKinds.Question) {
+      return {
+        ...data,
+        $kind: PVAKinds.Question,
+        type: 'confirm',
+      };
+    }
+
+    return data;
+  },
+  'Microsoft.ChoiceInput': (data) => {
+    if (data?.$designer?.$convertedFrom === PVAKinds.Question) {
+      return {
+        ...data,
+        $kind: PVAKinds.Question,
+        type: 'choice',
+      };
+    }
+
+    return data;
+  },
+};
+
+function convert(data: any) {
+  const converter = converters[data?.$kind] || (() => data);
+
+  return converter(data);
+}
+
+export function decomposeComposite$Kinds(content: BaseSchema): BaseSchema {
+  const data = content;
+  // first handle triggers (recursive)
+  if (data?.triggers && Array.isArray(data.triggers)) {
+    data.triggers = data.triggers.map((trigger) => decomposeComposite$Kinds(trigger));
   }
 
-  return content;
+  //then check for cases (recursive)
+  if (data?.cases && Array.isArray(data.cases)) {
+    data.cases = data.cases.reduce((all, action) => all.concat(decomposeComposite$Kinds(action)), []);
+  }
+
+  // then check for actions
+  if (data?.actions && Array.isArray(data.actions)) {
+    data.actions = data.actions.reduce((all, action) => all.concat(decomposeComposite$Kinds(action)), []);
+  }
+
+  // then check for elseActions
+  if (data?.elseActions && Array.isArray(data.elseActions)) {
+    data.elseActions = data.elseActions.reduce((all, action) => all.concat(decomposeComposite$Kinds(action)), []);
+  }
+
+  return convert(data);
 }
