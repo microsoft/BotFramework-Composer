@@ -288,9 +288,7 @@ export class BotProjectDeploy {
       message: `Uploading zip file... to ${hostname ? hostname : name + (env ? '-' + env : '')}`,
     });
 
-    const publishEndpoint = `https://${hostname ? hostname : name + (env ? '-' + env : '')}.${
-      scmHostDomain ?? 'scm.azurewebsites.net'
-    }/zipdeploy/?isAsync=true`;
+    const publishEndpoint = this.buildPublishEndpoint(hostname, name, env, scmHostDomain);
     // eslint-disable-next-line security/detect-non-literal-fs-filename
     const fileReadStream = fs.createReadStream(zipPath, { autoClose: true });
     fileReadStream.on('error', function (err) {
@@ -319,6 +317,12 @@ export class BotProjectDeploy {
       );
     }
   }
+
+  private buildPublishEndpoint = (hostname: string, name: string, env: string, scmHostDomain: string) => {
+    const hostnameResult = hostname ? hostname : name + (env ? '-' + env : '');
+    const scmHostDomainResult = scmHostDomain ? scmHostDomain : 'scm.azurewebsites.net';
+    return `https://${hostnameResult}.${scmHostDomainResult}/zipdeploy/?isAsync=true`;
+  };
 
   /**
    * link the bot channel registration with azure web app service
