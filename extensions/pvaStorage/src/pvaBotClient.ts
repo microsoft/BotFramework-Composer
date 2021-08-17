@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { basename, join, resolve } from 'path';
+import { basename, join, relative, resolve } from 'path';
 
 import { ensureFile, pathExists, unlink, writeFile } from 'fs-extra';
 import fetch from 'node-fetch';
@@ -10,6 +10,7 @@ import {
   BotComponentResponse,
   BotComponentUpsertRequest,
   BotProjectMetadata,
+  ComponentInfo,
   ObiFileModification,
   PVABotModel,
   PVAMetadata,
@@ -166,16 +167,17 @@ export class PVABotClient {
       const obiFileChanges: ObiFileModification[] = [];
       for (const obiPath of changedPaths) {
         // fill out the component info for the asset if available (newly created assets will not yet have any component info)
-        const componentInfo = this.botModel.obiContentMap[obiPath] || null;
+        const componentInfo = this.botModel.obiContentMap[obiPath] || ({} as ComponentInfo);
         const modification: ObiFileModification = {
           componentInfo,
           fileContent: this.botModel.trackedUpdates[obiPath].content || '',
           isDeleted: this.botModel.trackedUpdates[obiPath].isDelete,
-          path: obiPath,
+          path: this.convertToPVARelativePath(obiPath),
         };
         obiFileChanges.push(modification);
       }
       const request: BotComponentUpsertRequest = {
+        changes: [], // to satisfy existing API shape
         obiFileChanges,
       };
       const pvaMetadata = this.metadata.additionalInfo as PVAMetadata;
@@ -184,7 +186,7 @@ export class PVABotClient {
         targetResource: PVA_TEST_APP_ID,
       });
       token.accessToken = TEMP_PVA_CONFIG.token || token.accessToken;
-      const url = `${pvaMetadata.baseUrl}api/botauthoring/v1/environments/${pvaMetadata.envId}/bots/${pvaMetadata.botId}/content/botcomponents?includeObiFiles=true`;
+      const url = `${pvaMetadata.baseUrl}api/botauthoring/v1/environments/${pvaMetadata.envId}/bots/${pvaMetadata.botId}/content/botcomponents`;
       const res = await fetch(url, {
         method: 'PUT',
         headers: {
@@ -242,7 +244,31 @@ export class PVABotClient {
         content: rootDialogContent,
         isDelete: false,
       };
+
+      // create the corresponding lu and lg files
+      const locale = 'en-us'; // TODO: make this dynamic?
+      const rootLgPath = join(this.projectPath, 'language-generation', locale, `${botName}.${locale}.lg`);
+      await ensureFile(rootLgPath);
+      logger.log(`Created root LG file at ${rootLgPath}`);
+      this.botModel.trackedUpdates[rootLgPath] = {
+        content: '',
+        isDelete: false,
+      };
+
+      const rootLuPath = join(this.projectPath, 'language-understanding', locale, `${botName}.${locale}.lu`);
+      await ensureFile(rootLuPath);
+      logger.log(`Created root LU file at ${rootLuPath}`);
+      this.botModel.trackedUpdates[rootLuPath] = {
+        content: '',
+        isDelete: false,
+      };
+
       this.updateBotCache();
     }
+  }
+
+  // converts an absolute on-disk path to a path relative to the PVA bot
+  private convertToPVARelativePath(absolutePath: string) {
+    return relative(this.projectPath, absolutePath);
   }
 }

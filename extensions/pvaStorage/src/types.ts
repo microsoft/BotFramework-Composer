@@ -25,6 +25,7 @@ export type BotComponentResponse = {
 };
 
 export type BotComponentUpsertRequest = {
+  changes: any[];
   obiFileChanges: ObiFileModification[];
 };
 
