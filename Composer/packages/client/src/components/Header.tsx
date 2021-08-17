@@ -108,7 +108,7 @@ const buttonStyles: IButtonStyles = {
     backgroundColor: 'rgba(255, 255, 255, 0.6)',
   },
   rootDisabled: {
-    backgroundColor: `${CommunicationColors.primary}`,
+    backgroundColor: `#0b556a`,
   },
 };
 

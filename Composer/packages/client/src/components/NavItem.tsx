@@ -31,7 +31,7 @@ const link = (active: boolean, disabled: boolean) => css`
   ${active
     ? `background-color: ${NeutralColors.white};
 
-     border-left: 3px solid ${CommunicationColors.primary};
+     border-left: 3px solid #0b556a;
     `
     : `
      background-color: transparent;
