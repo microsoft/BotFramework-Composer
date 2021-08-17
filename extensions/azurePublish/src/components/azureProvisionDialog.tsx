@@ -28,6 +28,7 @@ import {
   IChoiceGroupOption,
   IColumn,
   Icon,
+  ILabel,
   IPersonaProps,
   IStackItemStyles,
   IStackTokens,
@@ -108,6 +109,12 @@ const configureResourcePropertyStackTokens: IStackTokens = { childrenGap: 5 };
 const configureResourcePropertyLabelStackStyles: IStackItemStyles = {
   root: {
     width: '200px',
+  },
+};
+
+const configureResourcePropertyLabelNotRequiredStyles: ILabel = {
+  root: {
+    paddingRight: '12px',
   },
 };
 
@@ -919,7 +926,9 @@ export const AzureProvisionDialog: React.FC = () => {
           <Stack horizontal tokens={configureResourcePropertyStackTokens} verticalAlign="start">
             <Stack>
               <Stack horizontal styles={configureResourcePropertyLabelStackStyles} verticalAlign="center">
-                <ConfigureResourcesPropertyLabel>{formatMessage('QnA region')}</ConfigureResourcesPropertyLabel>
+                <ConfigureResourcesPropertyLabel styles={configureResourcePropertyLabelNotRequiredStyles}>
+                  {formatMessage('QnA region')}
+                </ConfigureResourcesPropertyLabel>
                 {renderPropertyInfoIcon(formatMessage('The region associated with your QnA Maker.'))}
               </Stack>
             </Stack>
