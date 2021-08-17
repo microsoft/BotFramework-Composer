@@ -1,9 +1,9 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { join, resolve } from 'path';
+import { basename, join, resolve } from 'path';
 
-import { ensureFile, unlink, writeFile } from 'fs-extra';
+import { ensureFile, pathExists, unlink, writeFile } from 'fs-extra';
 import fetch from 'node-fetch';
 
 import {
@@ -28,6 +28,26 @@ const TEMP_PVA_CONFIG = {
   token: '',
 };
 const PVA_TEST_APP_ID = 'a522f059-bb65-47c0-8934-7db6e5286414';
+
+const getMinimalRootDialogContent = (botName: string) =>
+  JSON.stringify({
+    $kind: 'Microsoft.AdaptiveDialog',
+    $designer: {
+      name: botName || '', // should probably throw if botName is empty
+      description: '',
+      id: Math.random() * 1000 + 1,
+    },
+    autoEndDialog: true,
+    defaultResultProperty: 'dialog.result',
+    triggers: [],
+    recognizer: {
+      $kind: 'Microsoft.VirtualAgents.Recognizer',
+      intents: [],
+    },
+    //generator: '<%= botName %>.lg',
+    id: botName || '',
+    //recognizer: '<%= botName %>.lu.qna',
+  });
 
 /** */
 export class PVABotClient {
@@ -68,11 +88,9 @@ export class PVABotClient {
         'X-CCI-BotId': pvaMetadata.botId,
         'X-CCI-TenantId': pvaMetadata.tenantId,
       },
-      // TODO: make componentDeltaToken dynamic
-      body: JSON.stringify({ componentDeltaToken: '' }),
+      body: JSON.stringify({ componentDeltaToken: this.botModel?.mostRecentContentSnapshot || '' }),
     });
     if (res.status === 200) {
-      // const res = await fetch('http://localhost:5009/api/new/content');
       const data: BotComponentResponse = await res.json();
 
       this.botModel.mostRecentContentSnapshot = data.contentSnapshot;
@@ -98,13 +116,13 @@ export class PVABotClient {
       }
       this.botModel.trackedUpdates = {};
       this.updateBotCache();
+      await this.ensureRootDialog();
     } else {
       const error = await res.text();
       console.error(error);
     }
   }
 
-  // TODO: PVA creds need to be passed into this function
   public async initialize(electronContext: any) {
     // TODO: should electronContext be passed into the constructor?
     this.electronContext = electronContext;
@@ -175,7 +193,6 @@ export class PVABotClient {
           'X-CCI-BotId': pvaMetadata.botId,
           'X-CCI-TenantId': pvaMetadata.tenantId,
         },
-        // TODO: make componentDeltaToken dynamic
         body: JSON.stringify(request),
       });
       if (res.status === 200) {
@@ -203,5 +220,29 @@ export class PVABotClient {
       trackedUpdates: {},
     };
     this.updateBotCache();
+  }
+
+  private async ensureRootDialog() {
+    // look for the placeholder root dialog
+    const tempRootDialogPath = join(this.projectPath, 'temproot.dialog');
+    const tempRootDialogExists = await pathExists(tempRootDialogPath);
+    const botName = basename(this.projectPath);
+    const rootDialogName = `${botName}.dialog`;
+    const rootDialogPath = join(this.projectPath, rootDialogName);
+
+    if (tempRootDialogExists) {
+      // replace it with a real root dialog
+      const rootDialogContent = getMinimalRootDialogContent(botName);
+      await writeFile(rootDialogPath, rootDialogContent); // TODO: need to enforce utf-8?
+      await unlink(tempRootDialogPath);
+      logger.log(`Got rid of temp root dialog and wrote real dialog file at: ${rootDialogPath}`);
+      this.botModel.obiContentMap[rootDialogPath] = undefined;
+      // mark the change to be saved to PVA
+      this.botModel.trackedUpdates[rootDialogPath] = {
+        content: rootDialogContent,
+        isDelete: false,
+      };
+      this.updateBotCache();
+    }
   }
 }

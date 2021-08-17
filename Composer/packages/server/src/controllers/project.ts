@@ -630,7 +630,7 @@ async function autoSave(req: Request, res: Response) {
     log('Failed to auto save bot content for project %s: %O', projectId, e);
     res.status(500).json(e);
   }
-  res.send(200);
+  res.sendStatus(200);
 }
 
 export const ProjectController = {
