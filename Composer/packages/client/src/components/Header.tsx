@@ -255,7 +255,7 @@ export const Header = () => {
       <div css={headerTextContainer}>
         {projectName && (
           <Fragment>
-            <span css={botName}>{projectName}</span>
+            <span css={botName}>Power Virtual Agents v2 | {projectName}</span>
             {languageListOptions.length > 1 && (
               <span
                 css={botLocale}
