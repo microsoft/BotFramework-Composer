@@ -53,6 +53,7 @@ router.post('/projects/:projectId/alias/set', ProjectController.setProjectAlias)
 router.post('/projects/:projectId/backup', ProjectController.backupProject);
 router.post('/projects/:projectId/copyTemplateToExisting', ProjectController.copyTemplateToExistingProject);
 router.get('/projects/:projectId/variables', ProjectController.getVariablesByProjectId);
+router.put('/projects/:projectId/autoSave', ProjectController.autoSave);
 
 // form dialog generation apis
 router.post('/formDialogs/expandJsonSchemaProperty', FormDialogController.expandJsonSchemaProperty);

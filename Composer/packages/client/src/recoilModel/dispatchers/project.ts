@@ -50,6 +50,7 @@ import { deleteTrigger as DialogdeleteTrigger } from '../../utils/dialogUtil';
 import { BotConvertConfirmDialog } from '../../components/BotConvertDialog';
 import { getManifestJsonFromZip } from '../utils/skill';
 import { skillNameRegex } from '../../utils/skillManifestUtil';
+import { triggerAutoSave } from '../../utils/triggerAutoSave';
 
 import { announcementState, boilerplateVersionState, recentProjectsState, templateIdState } from './../atoms';
 import { logMessage, setError } from './../dispatchers/shared';
@@ -249,6 +250,11 @@ export const projectDispatcher = () => {
       const { reset, set, snapshot } = callbackHelpers;
       try {
         set(botOpeningState, true);
+        const currentProjectId = await snapshot.getPromise(currentProjectIdState);
+        if (currentProjectId) {
+          // make sure to auto save if we are switching from another project
+          await triggerAutoSave(currentProjectId);
+        }
 
         await flushExistingTasks(callbackHelpers);
         const { projectId, mainDialog, requiresMigrate, hasOldCustomRuntime } = await openRootBotAndSkillsByPath(

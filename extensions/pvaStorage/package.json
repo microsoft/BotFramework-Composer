@@ -1,0 +1,30 @@
+{
+  "name": "pva-storage",
+  "version": "1.0.0",
+  "description": "Bot Framework Composer storage extension that allows the user to save changes directly to Power Virtual Agents",
+  "composer": {
+    "enabled": false
+  },
+  "main": "dist/extension.js",
+  "scripts": {
+    "build": "node ../scripts/build.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "esbuild": {},
+  "author": "Tony Anziano - toanzian@microsoft.com",
+  "license": "MIT",
+  "dependencies": {
+    "@botframework-composer/types": "file:../../Composer/packages/types",
+    "@types/archiver": "^5.1.1",
+    "@types/node-fetch": "^2.5.12",
+    "archiver": "^5.0.2",
+    "debug": "^4.3.2",
+    "fs-extra": "^10.0.0",
+    "globby": "^11.0.1",
+    "node-fetch": "^2.6.1",
+    "rimraf": "^3.0.2"
+  },
+  "resolutions": {
+    "@botframework-composer/types": "file:../../Composer/packages/types"
+  }
+}
