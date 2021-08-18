@@ -105,18 +105,18 @@ export const FieldToolbar = React.memo((props: FieldToolbarProps) => {
 
   const fixedItems: ICommandBarItemProps[] = React.useMemo(() => {
     const items = [
-      {
-        key: 'template',
-        disabled: !templateRefPayload?.data?.templates?.length,
-        commandBarButtonAs: () => (
-          <TooltipTemplateButton
-            key="template"
-            disabled={!templateRefPayload?.data?.templates?.length}
-            dismissHandlerClassName={dismissHandlerClassName}
-            payload={templateRefPayload}
-          />
-        ),
-      },
+      // {
+      //   key: 'template',
+      //   disabled: !templateRefPayload?.data?.templates?.length,
+      //   commandBarButtonAs: () => (
+      //     <TooltipTemplateButton
+      //       key="template"
+      //       disabled={!templateRefPayload?.data?.templates?.length}
+      //       dismissHandlerClassName={dismissHandlerClassName}
+      //       payload={templateRefPayload}
+      //     />
+      //   ),
+      // },
       {
         key: 'property',
         disabled: !propertyRefPayload?.data?.properties?.length,
@@ -139,6 +139,7 @@ export const FieldToolbar = React.memo((props: FieldToolbarProps) => {
           />
         ),
       },
+      // TODO: add text formatting
     ];
 
     return items.filter(({ key }) => !excludedToolbarItems?.includes(key as ToolbarButtonPayload['kind']));
