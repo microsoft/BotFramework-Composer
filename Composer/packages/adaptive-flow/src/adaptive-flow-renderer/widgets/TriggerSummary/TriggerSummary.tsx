@@ -9,6 +9,7 @@ import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import { useMemo } from 'react';
 
 import { StepRenderer } from '../AdaptiveAction';
+import { NodeEventTypes } from '../../constants/NodeEventTypes';
 
 import {
   triggerContainerStyle,
@@ -27,7 +28,7 @@ function getLabel(data: any): string {
   return data.$kind;
 }
 
-export const TriggerSummary = ({ data, onEvent, onResize }): JSX.Element => {
+export const TriggerSummary = ({ data, onEvent, onResize, id: triggerId }): JSX.Element => {
   const name = getFriendlyName(data);
   const label = getLabel(data);
 
@@ -35,10 +36,13 @@ export const TriggerSummary = ({ data, onEvent, onResize }): JSX.Element => {
     if (data.$kind === 'Microsoft.OnIntent') {
       return (
         <StepRenderer
-          key={`stepGroup/${data.$designer.id}`}
+          key={`stepGroup/${triggerId}hi`}
           data={data}
-          id={data?.$designer.id}
-          onEvent={onEvent}
+          id={triggerId}
+          onEvent={() => {
+            onEvent(NodeEventTypes.FocusEvent, triggerId);
+            onEvent(NodeEventTypes.OpenPropertyPanel, {});
+          }}
           onResize={onResize}
         />
       );
