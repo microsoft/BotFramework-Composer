@@ -36,7 +36,7 @@ export const TriggerSummary = ({ data, onEvent, onResize, id: triggerId }): JSX.
     if (data.$kind === 'Microsoft.OnIntent') {
       return (
         <StepRenderer
-          key={`stepGroup/${triggerId}hi`}
+          key={`stepGroup/${triggerId}`}
           data={data}
           id={triggerId}
           onEvent={() => {
