@@ -103,6 +103,7 @@ import { decomposeComposite$Kinds } from '../../persistence/PVAUtils';
 
 import { crossTrainConfigState, projectIndexingState } from './../../atoms/botState';
 import { recognizersSelectorFamily } from './../../selectors/recognizers';
+import { PVADefs } from './PVADefs';
 
 export const resetBotStates = async ({ reset }: CallbackInterface, projectId: string) => {
   const botStates = Object.keys(botstates);
@@ -417,10 +418,12 @@ export const handleProjectFailure = (callbackHelpers: CallbackInterface, error) 
   }
 };
 
-export const processSchema = (projectId: string, schema: any) => ({
-  ...schema,
-  definitions: dereferenceDefinitions(schema.definitions),
-});
+export const processSchema = (projectId: string, schema: any) => {
+  return {
+    ...schema,
+    definitions: dereferenceDefinitions({ ...schema.definitions, ...PVADefs }),
+  };
+};
 
 // if user set value in terminal or appsetting.json, it should update the value in localStorage
 export const refreshLocalStorage = (projectId: string, settings: DialogSetting) => {

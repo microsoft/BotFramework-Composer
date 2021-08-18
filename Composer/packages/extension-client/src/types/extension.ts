@@ -26,4 +26,12 @@ export type UISchema = {
     trigger?: TriggerUIOption;
     recognizer?: RecognizerOptions;
   };
+} & {
+  [$kind: string]: {
+    flow?: FlowWidget;
+    form?: UIOptions;
+    menu?: MenuOptions | MenuOptions[];
+    trigger?: TriggerUIOption;
+    recognizer?: RecognizerOptions;
+  };
 };
