@@ -6,7 +6,7 @@ import { jsx, css } from '@emotion/core';
 import { useEffect, useRef, useState } from 'react';
 import { FontSizes, NeutralColors } from '@uifabric/fluent-theme';
 import formatMessage from 'format-message';
-import { CommandButton } from 'office-ui-fabric-react/lib/Button';
+import { CommandButton, IButtonProps } from 'office-ui-fabric-react/lib/Button';
 import { IOverflowSetItemProps } from 'office-ui-fabric-react/lib/OverflowSet';
 import { ISearchBox, ISearchBoxStyles, SearchBox } from 'office-ui-fabric-react/lib/SearchBox';
 import { useRecoilValue } from 'recoil';
@@ -45,6 +45,17 @@ const headerText = css`
   margin: 0;
   top: 50%;
   transform: translateY(-50%);
+`;
+
+const closeButtonContainer = css`
+  position: absolute;
+  right: 0px;
+  margin: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  padding-right: 5px;
+  font-size: ${FontSizes.size12};
+  color: ${NeutralColors.black};
 `;
 
 const commands = css`
@@ -128,9 +139,16 @@ export const ProjectTreeHeader: React.FC<ProjectTreeHeaderProps> = ({
   return (
     <div css={headerTextContainer}>
       <div css={headerText}>Topics</div>
-      {/* <div css={commands}>
-        <div>X</div>
-      </div> */}
+      <div css={closeButtonContainer}>
+        <CommandButton
+            ariaLabel={formatMessage('Close')}
+            iconProps={{ iconName: 'ChromeClose' }}
+            tabIndex={0}
+            onClick={() => {
+              // DO STUFF
+            }}
+          />
+      </div>
       { /* Disabled for demo */
       /* {showFilter ? (
         <SearchBox
