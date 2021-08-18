@@ -478,6 +478,7 @@ export const TreeItem: React.FC<ITreeItemProps> = ({
                       width: '12px',
                       marginRight: '8px',
                       outline: 'none',
+                      marginTop: '3px',
                     },
                   }}
                   tabIndex={-1}

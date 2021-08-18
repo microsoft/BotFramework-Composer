@@ -74,6 +74,7 @@ export const AdaptiveTrigger: React.FC<AdaptiveTriggerProps> = ({ triggerId, tri
   const trigger = (
     <TriggerSummary
       data={triggerData}
+      id={triggerId}
       onEvent={onEvent}
       onResize={(boundary) => {
         if (boundary) {
