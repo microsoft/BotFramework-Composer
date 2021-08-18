@@ -634,6 +634,16 @@ async function autoSave(req: Request, res: Response) {
   res.sendStatus(200);
 }
 
+// TEMPORARY -- for pva 2 demo only
+async function getProjectMetadata(req: Request, res: Response) {
+  const projectId = req.params.projectId;
+  if (!projectId) {
+    return res.status(400).send('"projectId" parameter missing in request.');
+  }
+  const metadata = BotProjectService.getProjectMetadata(projectId);
+  res.status(200).json(metadata);
+}
+
 export const ProjectController = {
   autoSave,
   getProjectById,
@@ -665,4 +675,5 @@ export const ProjectController = {
   backupProject,
   copyTemplateToExistingProject,
   getVariablesByProjectId,
+  getProjectMetadata,
 };

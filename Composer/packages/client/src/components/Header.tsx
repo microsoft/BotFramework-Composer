@@ -276,13 +276,13 @@ export const Header = () => {
   return (
     <div css={headerContainer} role="banner">
       <TooltipHost content={appLauncherLabel} directionalHint={DirectionalHint.bottomRightEdge}>
-            <IconButton
-              ariaLabel={appLauncherLabel}
-              iconProps={{ iconName: 'WaffleOffice365' }}
-              id="appLauncher"
-              styles={appLaucherButtonStyle}
-            />
-          </TooltipHost>
+        <IconButton
+          ariaLabel={appLauncherLabel}
+          iconProps={{ iconName: 'WaffleOffice365' }}
+          id="appLauncher"
+          styles={appLaucherButtonStyle}
+        />
+      </TooltipHost>
       <div css={headerTextContainer}>
         {projectName && (
           <Fragment>
