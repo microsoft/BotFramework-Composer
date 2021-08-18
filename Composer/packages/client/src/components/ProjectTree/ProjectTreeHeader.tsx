@@ -9,11 +9,11 @@ import formatMessage from 'format-message';
 import { CommandButton, IButtonProps } from 'office-ui-fabric-react/lib/Button';
 import { IOverflowSetItemProps } from 'office-ui-fabric-react/lib/OverflowSet';
 import { ISearchBox, ISearchBoxStyles, SearchBox } from 'office-ui-fabric-react/lib/SearchBox';
-import { useRecoilValue } from 'recoil';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 
 import { DisableFeatureToolTip } from '../DisableFeatureToolTip';
 import { usePVACheck } from '../../hooks/usePVACheck';
-import { rootBotProjectIdSelector } from '../../recoilModel';
+import { rootBotProjectIdSelector, showProjectTreePanelState } from '../../recoilModel';
 
 const searchBox: ISearchBoxStyles = {
   root: {
@@ -89,6 +89,7 @@ export const ProjectTreeHeader: React.FC<ProjectTreeHeaderProps> = ({
   const [showFilter, setShowFilter] = useState(false);
   const searchBoxRef = useRef<ISearchBox>(null);
   const rootBotId = useRecoilValue(rootBotProjectIdSelector) ?? '';
+  const setShowTreePanel = useSetRecoilState(showProjectTreePanelState);
   const isPVABot = usePVACheck(rootBotId);
 
   useEffect(() => {
@@ -145,7 +146,7 @@ export const ProjectTreeHeader: React.FC<ProjectTreeHeaderProps> = ({
             iconProps={{ iconName: 'ChromeClose' }}
             tabIndex={0}
             onClick={() => {
-              // DO STUFF
+              setShowTreePanel(false);
             }}
           />
       </div>

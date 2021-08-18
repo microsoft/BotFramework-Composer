@@ -8,7 +8,7 @@ import { useRecoilValue } from 'recoil';
 import { Split, SplitMeasuredSizes } from '@geoffcox/react-splitter';
 import { useEffect, useRef } from 'react';
 
-import { dispatcherState, currentDialogState } from '../../recoilModel';
+import { dispatcherState, currentDialogState, showProjectTreePanelState } from '../../recoilModel';
 import { renderThinSplitter } from '../../components/Split/ThinSplitter';
 import { Conversation } from '../../components/Conversation';
 import { useSurveyNotification } from '../../components/Notifications/useSurveyNotification';
@@ -33,6 +33,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   useEmptyPropsHandler(projectId, location, skillId, dialogId);
   const { setPageElementState } = useRecoilValue(dispatcherState);
   const currentDialog = useRecoilValue(currentDialogState({ dialogId, projectId }));
+  const showTreePanel = useRecoilValue(showProjectTreePanelState);
 
   const onMeasuredSizesChanged = (sizes: SplitMeasuredSizes) => {
     setPageElementState('dialogs', { leftSplitWidth: sizes.primary });
@@ -65,13 +66,17 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
         splitterSize="5px"
         onMeasuredSizesChanged={onMeasuredSizesChanged}
       >
-        <div css={contentWrapper}>
-          <div css={splitPaneContainer}>
-            <div css={splitPaneWrapper}>
-              <SideBar projectId={activeBot} />
+        {showTreePanel ? (
+          <div css={contentWrapper}>
+            <div css={splitPaneContainer}>
+              <div css={splitPaneWrapper}>
+                <SideBar projectId={activeBot} />
+              </div>
             </div>
           </div>
-        </div>
+        ) : (
+          <div>HIDE</div>
+        )}
 
         <div css={contentWrapper} role="main">
           <CommandBar projectId={activeBot} />

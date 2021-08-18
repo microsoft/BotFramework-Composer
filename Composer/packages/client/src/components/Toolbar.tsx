@@ -7,7 +7,11 @@ import { Fragment } from 'react';
 import formatMessage from 'format-message';
 import { NeutralColors } from '@uifabric/fluent-theme';
 import { ActionButton, CommandButton } from 'office-ui-fabric-react/lib/Button';
+import { VerticalDivider } from 'office-ui-fabric-react/lib/Divider';
 import { IContextualMenuProps, IIconProps } from 'office-ui-fabric-react/lib';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
+
+import { showProjectTreePanelState } from '../recoilModel';
 
 // -------------------- Styles -------------------- //
 
@@ -33,7 +37,6 @@ export const rightActions = css`
 `;
 
 export const actionButton = css`
-  height: 44px;
   font-size: 14px;
   margin-left: 7px;
   &:hover {
@@ -41,6 +44,25 @@ export const actionButton = css`
     color: ${NeutralColors.black};
   }
 `;
+
+export const expandButton = css`
+  font-size: 14px;
+  margin: 0;
+  &:hover {
+    background: ${NeutralColors.gray20};
+    color: ${NeutralColors.black};
+  }
+`;
+
+export const divider = css`
+  font-size: 14px;
+`;
+
+const dividerStyles = {
+  divider: {
+    height: '32px',
+  },
+};
 
 // -------------------- IToolbarItem -------------------- //
 
@@ -100,6 +122,9 @@ type ToolbarProps = {
 // action = {type:action/element, text, align, element, buttonProps: use
 // fabric-ui IButtonProps interface}
 export const Toolbar = (props: ToolbarProps) => {
+  const showTreePanel = useRecoilValue(showProjectTreePanelState);
+  const setShowTreePanel = useSetRecoilState(showProjectTreePanelState);
+
   const { toolbarItems = [], ...rest } = props;
 
   const left: IToolbarItem[] = [];
@@ -117,7 +142,22 @@ export const Toolbar = (props: ToolbarProps) => {
 
   return (
     <div aria-label={formatMessage('toolbar')} css={headerSub} role="region" {...rest}>
-      <div css={leftActions}>{left.map(renderItemList)} </div>
+      <div css={leftActions}>
+        {!showTreePanel ? (
+          <div>
+            <ActionButton
+              css={expandButton}
+              data-testid={'Expand'}
+              iconProps={{ iconName: 'DockLeft' }}
+              onClick={() => {
+                setShowTreePanel(true);
+              }}
+            ></ActionButton>
+            <VerticalDivider css={divider} styles={dividerStyles} />
+          </div>
+        ) : null}
+        <div>{left.map(renderItemList)}</div>
+      </div>
       <div css={rightActions}>{right.map(renderItemList)}</div>
     </div>
   );
