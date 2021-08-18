@@ -68,7 +68,9 @@ export const TemplateFeedForm = () => {
   useEffect(() => {
     setFieldDisabled(false);
     if (templateProjects.length < 1) {
-      setErrorMessage('This feed did not return any templates, please confirm that this is a valid template feed URL.');
+      setErrorMessage(
+        formatMessage('This feed did not return any templates, please confirm that this is a valid template feed URL.')
+      );
     } else {
       setErrorMessage('');
     }
