@@ -6,11 +6,13 @@ import { jsx } from '@emotion/core';
 import { RouteComponentProps } from '@reach/router';
 import { useRecoilValue } from 'recoil';
 import { Split, SplitMeasuredSizes } from '@geoffcox/react-splitter';
+import { useEffect, useRef } from 'react';
 
 import { dispatcherState, currentDialogState } from '../../recoilModel';
 import { renderThinSplitter } from '../../components/Split/ThinSplitter';
 import { Conversation } from '../../components/Conversation';
 import { useSurveyNotification } from '../../components/Notifications/useSurveyNotification';
+import { useAutoSave } from '../../hooks/useAutoSave';
 
 import SideBar from './SideBar';
 import CommandBar from './CommandBar';
@@ -19,10 +21,14 @@ import useEmptyPropsHandler from './useEmptyPropsHandler';
 import { contentWrapper, splitPaneContainer, splitPaneWrapper } from './styles';
 import Modals from './Modals';
 
+const autoSaveIntervalTime = 30 * 1000;
+
 const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: string; skillId?: string }>> = (
   props
 ) => {
   const { projectId = '', skillId, location, dialogId } = props;
+  const autoSave = useAutoSave();
+  const autoSaveTimer = useRef<NodeJS.Timer | undefined>();
 
   useEmptyPropsHandler(projectId, location, skillId, dialogId);
   const { setPageElementState } = useRecoilValue(dispatcherState);
@@ -35,6 +41,18 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   const activeBot = skillId ?? projectId;
 
   useSurveyNotification();
+
+  useEffect(() => {
+    autoSaveTimer.current = setInterval(async () => {
+      await autoSave();
+    }, autoSaveIntervalTime);
+
+    return () => {
+      if (autoSaveTimer.current) {
+        clearInterval(autoSaveTimer.current);
+      }
+    };
+  }, [autoSaveTimer, projectId]);
 
   return (
     <div css={contentWrapper} role="main">

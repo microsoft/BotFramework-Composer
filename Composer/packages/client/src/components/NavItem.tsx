@@ -25,13 +25,16 @@ const link = (active: boolean, disabled: boolean) => css`
   text-decoration: none;
   color: ${disabled ? '#999' : '#4f4f4f'};
   position: relative;
+  font-size: 14px;
+  padding: 4px 0;
 
   width: 220px;
 
   ${active
     ? `background-color: ${NeutralColors.white};
 
-     border-left: 3px solid ${CommunicationColors.primary};
+     border-left: 3px solid #0b556a;
+     font-weight: 600;
     `
     : `
      background-color: transparent;

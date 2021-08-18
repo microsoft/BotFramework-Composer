@@ -1,12 +1,56 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-export interface StorageConnection {
-  id: string;
-  type: 'LocalDisk' | 'AzureBlobStorage';
+/**
+ * PVA API Types
+ */
+
+export type ComponentInfo = {
+  c: string;
+  v: number;
+};
+
+export type ObiFileModification = {
+  componentInfo: ComponentInfo;
+  fileContent: string;
+  isDeleted: boolean;
   path: string;
-  [key: string]: string;
-}
+};
+
+export type BotComponentResponse = {
+  contentSnapshot: string;
+
+  /** Contains the list of created, updated or deleted obi components for consumption by Composer code */
+  obiFileChanges: ObiFileModification[];
+};
+
+export type BotComponentUpsertRequest = {
+  obiFileChanges: ObiFileModification[];
+};
+
+export type ContentUpdateMetadata = {
+  content?: string;
+  isDelete: boolean;
+};
+
+export type PVAMetadata = {
+  baseUrl: string;
+  botId: string;
+  envId: string;
+  tenantId: string;
+};
+
+export type PVABotModel = {
+  pvaMetadata: PVAMetadata;
+  mostRecentContentSnapshot: string;
+  /** Map of CDS asset path to CDS component info */
+  obiContentMap: Record<string, ComponentInfo>;
+  trackedUpdates: Record<string, ContentUpdateMetadata>;
+};
+
+/**
+ * Composer File Storage Interface
+ */
 
 export interface Stat {
   isDir: boolean;
@@ -20,6 +64,7 @@ export interface MakeDirectoryOptions {
   recursive?: boolean;
 }
 
+// TODO: this should be in @bfc/types
 export interface IFileStorage {
   stat(path: string): Promise<Stat>;
   statSync(path: string): Stat;
@@ -47,3 +92,12 @@ export interface IFileStorage {
   initialize?(electronContext: any): Promise<void>;
   autoSave?(): Promise<void>;
 }
+
+// TODO: this should be in @Bfc/types
+/** Metadata stored by Composer and associated by internal bot project id */
+export type BotProjectMetadata = {
+  additionalInfo?: Record<string, any>;
+  alias?: string;
+  eTag?: string;
+  path: string;
+};

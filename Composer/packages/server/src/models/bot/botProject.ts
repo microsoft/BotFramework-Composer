@@ -30,8 +30,9 @@ import { convertFolderNameToSkillName, getDialogNameFromFile } from '../utilitie
 import { ISettingManager, OBFUSCATED_VALUE } from '../settings';
 import { DefaultSettingManager } from '../settings/defaultSettingManager';
 import log from '../../logger';
-import { BotProjectService } from '../../services/project';
+import { BotProjectMetadata, BotProjectService } from '../../services/project';
 import AssetService from '../../services/asset';
+import { useElectronContext } from '../../utility/electronContext';
 
 import {
   BotStructureFilesPatterns,
@@ -80,19 +81,26 @@ export class BotProject implements IBotProject {
 
   private files = new Map<string, FileInfo>();
   public _builder: Builder | undefined;
+  private metadata: BotProjectMetadata | undefined;
 
-  constructor(ref: LocationRef, user?: UserIdentity, eTag?: string) {
+  // NOTE: regarding additions of "id" and "metadata": keep an eye on the copyTo()
+  // function of this class as it instantiates a BotProject without these params
+  constructor(ref: LocationRef, user?: UserIdentity, id?: string, metadata?: BotProjectMetadata) {
     this.ref = ref;
     this.dir = Path.resolve(this.ref.path); // make sure we switch to posix style after here
     this.dataDir = this.dir;
     this.name = Path.basename(this.dir);
-    this.eTag = eTag;
+    this.eTag = metadata?.eTag;
+    this.metadata = metadata;
+    if (id) {
+      this.id = id;
+    }
 
     this.defaultSDKSchema = JSON.parse(fs.readFileSync(Path.join(__dirname, '../../../schemas/sdk.schema'), 'utf-8'));
     this.defaultUISchema = JSON.parse(fs.readFileSync(Path.join(__dirname, '../../../schemas/sdk.uischema'), 'utf-8'));
 
     this.settingManager = new DefaultSettingManager(this.dir);
-    this.fileStorage = StorageService.getStorageClient(this.ref.storageId, user);
+    this.fileStorage = StorageService.getStorageClient(this.ref.storageId, user, this.id, this.metadata);
 
     this.readme = '';
   }
@@ -731,6 +739,16 @@ export class BotProject implements IBotProject {
     // also update the bot project map
   }
 
+  /** Optional functionality that can be implemented by a storage extension to perform
+   *  periodic updates while the user is authoring their bot.
+   */
+  public async autoSave() {
+    if (this.fileStorage.autoSave) {
+      // TODO: do we want to block on this? -- think about displaying UX in the client
+      await this.fileStorage.autoSave();
+    }
+  }
+
   private async createSkillFilesFromUrl(url, skillName) {
     const manifestContent = await getSkillManifest(url);
     const manifestName = Path.basename(url, '.json');
@@ -914,6 +932,9 @@ export class BotProject implements IBotProject {
   };
 
   private _getFiles = async () => {
+    if (this.fileStorage.initialize) {
+      await this.fileStorage.initialize(useElectronContext());
+    }
     if (!(await this.exists())) {
       throw new Error(`${this.dir} is not a valid path`);
     }
