@@ -6,7 +6,7 @@ import mapValues from 'lodash/mapValues';
 import get from 'lodash/get';
 
 import { EditorExtensionContext } from '../EditorExtensionContext';
-import { FormUISchema } from '../types';
+import { FormUISchema, UIOptions } from '../types';
 
 export function useFormConfig() {
   const { plugins, shellData } = useContext(EditorExtensionContext);
@@ -23,7 +23,7 @@ export function useFormConfig() {
   };
 
   const formConfig: FormUISchema = useMemo(() => {
-    const result = mapValues(plugins.uiSchema, 'form');
+    const result = mapValues(plugins.uiSchema, 'form') as Record<string, UIOptions>;
 
     // Hide 'actions' in all trigger types.
     Object.entries(result)
