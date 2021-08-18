@@ -28,15 +28,23 @@ const buttonStyle = css`
   height: 100%;
 `;
 
-const headerText = css`
+const headerTextContainer = css`
   border-bottom: 1px solid ${NeutralColors.gray30};
-  height: 45px;
+  padding-left: 20px;
+  height: 44px;
   border-radius: 0px;
-  text-align: left;
-  font-size: ${FontSizes.size12};
+  font-size: ${FontSizes.size14};
+  font-weight: 600;
   position: relative;
   display: flex;
+  flex-direction: row;
+`;
+
+const headerText = css`
+  position: absolute;
   margin: 0;
+  top: 50%;
+  transform: translateY(-50%);
 `;
 
 const commands = css`
@@ -118,8 +126,13 @@ export const ProjectTreeHeader: React.FC<ProjectTreeHeaderProps> = ({
   );
 
   return (
-    <div css={headerText}>
-      {showFilter ? (
+    <div css={headerTextContainer}>
+      <div css={headerText}>Topics</div>
+      {/* <div css={commands}>
+        <div>X</div>
+      </div> */}
+      { /* Disabled for demo */
+      /* {showFilter ? (
         <SearchBox
           underlined
           ariaLabel={ariaLabel}
@@ -145,7 +158,7 @@ export const ProjectTreeHeader: React.FC<ProjectTreeHeaderProps> = ({
             }}
           />
         </div>
-      )}
+      )} */}
     </div>
   );
 };
