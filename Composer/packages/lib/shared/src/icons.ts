@@ -3,7 +3,7 @@
 
 export const Icons = {
   TRIGGER: 'LightningBolt',
-  DIALOG: 'Org',
+  DIALOG: 'CannedChat',
   FORM_DIALOG: 'Table',
   FORM_FIELD: 'Variable2', // x in parentheses
   FORM_TRIGGER: 'TriggerAuto', // lightning bolt with gear

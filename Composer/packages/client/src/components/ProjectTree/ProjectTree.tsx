@@ -752,14 +752,13 @@ export const ProjectTree: React.FC<Props> = ({
     );
     if (options.showDialogs && !bot.isRemote && !bot.botError) {
       return (
-        <ExpandableNode
-          key={key}
-          defaultState={getPageElement(key)}
-          summary={projectHeader}
-          onToggle={(newState) => setPageElement(key, newState)}
+        <div
+          style={{
+            marginLeft: '5px',
+          }}
         >
-          <div>{createDetailsTree(bot, 1)}</div>
-        </ExpandableNode>
+          {createDetailsTree(bot, 1)}
+        </div>
       );
     } else if (options.showRemote) {
       return <ExpandableNode key={key} summary={projectHeader} />;
