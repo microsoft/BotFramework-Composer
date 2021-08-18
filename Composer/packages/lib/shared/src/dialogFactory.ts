@@ -415,7 +415,7 @@ class DialogFactory {
     const { $designer, ...propertyOverrides } = overrides;
     const defaultProperties = initialDialogShape()[$kind] || {};
     return merge(
-      { $kind, $designer: merge({ id: generateDesignerId() }, $designer) },
+      { $kind, $designer: merge({ id: generateDesignerId() }, $designer), id: generateDesignerId() },
       this.seedDefaults($kind),
       defaultProperties,
       propertyOverrides

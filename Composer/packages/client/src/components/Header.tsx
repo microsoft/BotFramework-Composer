@@ -28,7 +28,6 @@ import {
   allRequiredRecognizersSelector,
   showGetStartedTeachingBubbleState,
 } from '../recoilModel';
-import composerIcon from '../images/composerIcon.svg';
 import { AppUpdaterStatus } from '../constants';
 import TelemetryClient from '../telemetry/TelemetryClient';
 import { useBotControllerBar } from '../hooks/useControllerBar';
@@ -46,8 +45,8 @@ export const actionButton = css`
 // -------------------- Styles -------------------- //
 const headerContainer = css`
   position: relative;
-  background: ${SharedColors.cyanBlue10};
-  height: 50px;
+  background: #0b556a;
+  height: 48px;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -55,6 +54,7 @@ const headerContainer = css`
 
 const botName = css`
   font-size: 16px;
+  font-weight: 600;
   color: #fff;
   padding-left: 20px;
 `;
@@ -86,6 +86,26 @@ const rightSection = css`
   margin: 0 10px;
 `;
 
+const appLaucherButtonStyle: IButtonStyles = {
+  icon: {
+    color: '#fff',
+    fontSize: FontSizes.size16,
+  },
+  root: {
+    height: '48px',
+    width: '48px',
+    selectors: {
+      ':disabled .ms-Button-icon': {
+        opacity: 0.4,
+        color: `${NeutralColors.white}`,
+      },
+    },
+  },
+  rootHovered: {
+    backgroundColor: 'rgba(255, 255, 255, 0.6)',
+  },
+};
+
 const buttonStyles: IButtonStyles = {
   icon: {
     color: '#fff',
@@ -108,7 +128,7 @@ const buttonStyles: IButtonStyles = {
     backgroundColor: 'rgba(255, 255, 255, 0.6)',
   },
   rootDisabled: {
-    backgroundColor: `${CommunicationColors.primary}`,
+    backgroundColor: `#0b556a`,
   },
 };
 
@@ -173,7 +193,9 @@ export const Header = () => {
   }, [requiredStuff, botProjectSolutionLoaded]);
   // ... end of get started stuff
 
-  const isShow = useBotControllerBar();
+  // NOTE: disabled for August demo
+  // const isShow = useBotControllerBar();
+  const isShow = false;
 
   useEffect(() => {
     if (!isShow) {
@@ -246,18 +268,25 @@ export const Header = () => {
     }
   };
 
-  const logoLabel = formatMessage('Composer Logo');
+  const appLauncherLabel = formatMessage('App launcher');
   const testLabel = formatMessage('Test your bot');
   const rocketLabel = formatMessage('Recommended actions');
   const updateLabel = formatMessage('Update available');
 
   return (
     <div css={headerContainer} role="banner">
-      <img alt={logoLabel} aria-label={logoLabel} src={composerIcon} style={{ marginLeft: '9px' }} />
+      <TooltipHost content={appLauncherLabel} directionalHint={DirectionalHint.bottomRightEdge}>
+            <IconButton
+              ariaLabel={appLauncherLabel}
+              iconProps={{ iconName: 'WaffleOffice365' }}
+              id="appLauncher"
+              styles={appLaucherButtonStyle}
+            />
+          </TooltipHost>
       <div css={headerTextContainer}>
         {projectName && (
           <Fragment>
-            <span css={botName}>{projectName}</span>
+            <span css={botName}>Power Virtual Agents v2 Demo | {projectName}</span>
             {languageListOptions.length > 1 && (
               <span
                 css={botLocale}

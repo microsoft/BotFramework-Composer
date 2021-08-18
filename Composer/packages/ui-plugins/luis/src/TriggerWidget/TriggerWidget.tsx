@@ -34,7 +34,7 @@ export const TriggerWidget: React.FC<WidgetContainerProps> = ({ data }) => {
             },
           }}
         >
-          {phrase}
+          {phrase.substring(1)}
         </Label>
       ))}
     </div>

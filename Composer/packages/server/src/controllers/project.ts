@@ -244,7 +244,8 @@ async function updateFile(req: Request, res: Response) {
   const user = await ExtensionContext.getUserFromRequest(req);
   const currentProject = await BotProjectService.getProjectById(projectId, user);
   if (currentProject !== undefined) {
-    const lastModified = await currentProject.updateFile(req.body.name, req.body.content);
+    const content = typeof req.body.content === 'string' ? req.body.content : JSON.stringify(req.body.content, null, 2);
+    const lastModified = await currentProject.updateFile(req.body.name, content);
     res.status(200).json({ lastModified: lastModified });
   } else {
     res.status(404).json({

@@ -33,9 +33,13 @@ export const rightActions = css`
 `;
 
 export const actionButton = css`
-  font-size: 16px;
-  margin-top: 2px;
-  margin-left: 15px;
+  height: 44px;
+  font-size: 14px;
+  margin-left: 7px;
+  &:hover {
+    background: ${NeutralColors.gray20};
+    color: ${NeutralColors.black};
+  }
 `;
 
 // -------------------- IToolbarItem -------------------- //
