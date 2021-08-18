@@ -390,6 +390,10 @@ export class BotProjectService {
     BotProjectService.setProjectLocationData(projectId, { alias });
   };
 
+  public static getProjectMetadata = (projectId: string): any => {
+    return BotProjectService.projectLocationMap[projectId].additionalInfo || {};
+  };
+
   private static updateCurrentProjects = (project: BotProject): void => {
     const { id } = project;
     const idx = BotProjectService.currentBotProjects.findIndex((item) => item.id === id);
