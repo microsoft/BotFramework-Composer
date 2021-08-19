@@ -27,10 +27,10 @@ export const SetPropertyWidget: React.FC<WidgetContainerProps> = ({ id, data }) 
   const [selectedTagPickerItems, setSelectedTagPickerItems] = useState<ITag[]>([]);
 
   useEffect(() => {
-    let currentDt = options[0].key;
+    let initType = options[0].key;
     if ((data.$designer as any)?.dataType) {
-      currentDt = (data.$designer as any)?.dataType;
-      setCurrentDataType(currentDt);
+      initType = (data.$designer as any)?.dataType;
+      setCurrentDataType(initType);
     }
 
     if (data.value) {
@@ -45,7 +45,7 @@ export const SetPropertyWidget: React.FC<WidgetContainerProps> = ({ id, data }) 
       // Avoid showing the memory model
       const split = data.property.split('.');
       const lastPathSegment = split.length > 1 ? split[split.length - 1] : '';
-      const displayTag = `${lastPathSegment} (${currentDt})`;
+      const displayTag = `${lastPathSegment} (${initType})`;
       setSelectedTagPickerItems([
         {
           key: data.property,
@@ -111,8 +111,8 @@ export const SetPropertyWidget: React.FC<WidgetContainerProps> = ({ id, data }) 
   const onTagPickerItemSelected = (current: ITag | undefined) => {
     if (current) {
       shellApi.saveData({ ...data, property: `dialog.${current?.name}` }, id);
-      const dtName = options.find((option) => option.key === currentDataType);
-      const updatedProperty = { ...current, name: `${current.name} (${dtName?.key})` };
+      const dataTypeName = options.find((option) => option.key === currentDataType);
+      const updatedProperty = { ...current, name: `${current.name} (${dataTypeName?.key})` };
       setSelectedTagPickerItems([updatedProperty]);
     }
     return null;
