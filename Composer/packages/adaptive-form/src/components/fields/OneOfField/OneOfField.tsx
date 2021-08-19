@@ -176,7 +176,6 @@ const OneOfField: React.FC<FieldProps> = (props) => {
             {renderFieldLabel()}
             {renderDropDown()}
           </div>
-          {renderField()}
         </React.Fragment>
       ) : (
         <React.Fragment>

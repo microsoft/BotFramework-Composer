@@ -7,6 +7,7 @@ import formatMessage from 'format-message';
 
 import { LuisIntentEditor as LuIntentEditor } from './LuisIntentEditor';
 import { TriggerWidget } from './TriggerWidget';
+import { SetPropertyWidget } from './SetPropertyWidget';
 
 const config: PluginConfig = {
   widgets: {
@@ -15,6 +16,7 @@ const config: PluginConfig = {
     },
     flow: {
       TriggerWidget,
+      SetPropertyWidget,
     },
   },
   uiSchema: {
@@ -63,6 +65,20 @@ const config: PluginConfig = {
         },
         body: {
           widget: 'TriggerWidget',
+        },
+      },
+    },
+    [SDKKinds.SetProperty]: {
+      flow: {
+        widget: 'ActionCard',
+        header: {
+          colors: {
+            theme: '#E7F4F4',
+          },
+          widget: 'ActionHeader',
+        },
+        body: {
+          widget: 'SetPropertyWidget',
         },
       },
     },
