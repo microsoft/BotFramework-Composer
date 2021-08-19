@@ -103,7 +103,7 @@ export const SetPropertyWidget: React.FC<WidgetContainerProps> = ({ id, data }) 
     return [
       {
         key: filterItem,
-        name: `${filterItem}`,
+        name: filterItem,
       },
     ];
   };
