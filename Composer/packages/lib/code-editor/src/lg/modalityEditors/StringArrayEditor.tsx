@@ -62,6 +62,7 @@ type StringArrayEditorProps = {
   isSpeech?: boolean;
   onChange: (items: TemplateBodyItem[]) => void;
   telemetryClient: TelemetryClient;
+  startWithEmptyResponse?: boolean;
 };
 
 export const StringArrayEditor = React.memo(
@@ -73,6 +74,7 @@ export const StringArrayEditor = React.memo(
     isSpeech = false,
     telemetryClient,
     onChange,
+    startWithEmptyResponse,
   }: StringArrayEditorProps) => {
     const containerRef = useRef<HTMLDivElement | null>(null);
 
@@ -80,6 +82,13 @@ export const StringArrayEditor = React.memo(
       items.length === 1 && items[0].value === '' ? 0 : null
     );
     const [calloutTargetElement, setCalloutTargetElement] = useState<HTMLTextAreaElement | null>(null);
+
+    useEffect(() => {
+      if (startWithEmptyResponse && items.length === 0) {
+        onChange([{ kind: 'variation', value: '' }]);
+        setCurrentIndex(0);
+      }
+    }, []);
 
     const onItemChange = useCallback(
       (index: number) => (_, newValue?: string) => {

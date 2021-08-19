@@ -99,45 +99,45 @@ export const ModalityEditorContainer: React.FC<Props> = ({
   const overflowMenuItems: IContextualMenuItem[] = React.useMemo(
     () => [
       ...menuItems,
-      {
-        key: 'remove',
-        disabled: disableRemoveModality,
-        text: removeModalityOptionText,
-        itemProps: removeMenuButtonItemProps,
-        onClick: () => {
-          (async () => {
-            if (!showRemoveModalityPrompt) {
-              onRemoveModality(modalityType, false);
-              return;
-            }
+      // {
+      //   key: 'remove',
+      //   disabled: disableRemoveModality,
+      //   text: removeModalityOptionText,
+      //   itemProps: removeMenuButtonItemProps,
+      //   onClick: () => {
+      //     (async () => {
+      //       if (!showRemoveModalityPrompt) {
+      //         onRemoveModality(modalityType, false);
+      //         return;
+      //       }
 
-            const confirm = await OpenConfirmModalWithCheckbox(
-              formatMessage('Removing content from action node'),
-              formatMessage(
-                'You are about to remove {modalityTitle} content from this action node. Are you sure you want to proceed?',
-                { modalityTitle }
-              ),
-              {
-                confirmText: formatMessage('Delete'),
-                onRenderContent: renderConfirmDialogContent,
-                checkboxProps:
-                  modalityType === 'Attachments'
-                    ? {
-                        kind: 'additionalConfirm',
-                        label: formatMessage(
-                          'I want to keep the template content in the file, just want to dereference from this response (hint: keep the content if you currently, or plan to re-use in another location)'
-                        ),
-                        defaultChecked: false,
-                      }
-                    : undefined,
-              }
-            );
-            if (confirm) {
-              onRemoveModality(modalityType, !!confirm.additionalConfirm);
-            }
-          })();
-        },
-      },
+      //       const confirm = await OpenConfirmModalWithCheckbox(
+      //         formatMessage('Removing content from action node'),
+      //         formatMessage(
+      //           'You are about to remove {modalityTitle} content from this action node. Are you sure you want to proceed?',
+      //           { modalityTitle }
+      //         ),
+      //         {
+      //           confirmText: formatMessage('Delete'),
+      //           onRenderContent: renderConfirmDialogContent,
+      //           checkboxProps:
+      //             modalityType === 'Attachments'
+      //               ? {
+      //                   kind: 'additionalConfirm',
+      //                   label: formatMessage(
+      //                     'I want to keep the template content in the file, just want to dereference from this response (hint: keep the content if you currently, or plan to re-use in another location)'
+      //                   ),
+      //                   defaultChecked: false,
+      //                 }
+      //               : undefined,
+      //         }
+      //       );
+      //       if (confirm) {
+      //         onRemoveModality(modalityType, !!confirm.additionalConfirm);
+      //       }
+      //     })();
+      //   },
+      // },
     ],
     [modalityType, modalityTitle, menuItems, disableRemoveModality, removeModalityOptionText, onRemoveModality]
   );
@@ -169,36 +169,44 @@ export const ModalityEditorContainer: React.FC<Props> = ({
     []
   );
 
+  const items = [
+    dropdownOptions && onDropdownChange && (
+      <Dropdown
+        calloutProps={dropdownCalloutProps}
+        options={dropdownOptions}
+        placeholder={formatMessage('Select input hint')}
+        styles={styles.dropdown}
+        onChange={onDropdownChange}
+        onRenderOption={renderOption}
+        onRenderTitle={renderTitle}
+      />
+    ),
+    overflowMenuItems.length > 0 && (
+      <OverflowSet
+        items={[]}
+        overflowItems={overflowMenuItems}
+        onRenderItem={() => null}
+        onRenderOverflowButton={onRenderOverflowButton}
+      />
+    ),
+  ].filter(Boolean);
+
   return (
     <Root>
-      <HeaderContainer>
-        <Stack horizontal horizontalAlign="space-between" styles={headerContentStyles} verticalAlign="center">
-          <ModalityEditorTitle
+      {items.length > 0 && (
+        <HeaderContainer>
+          <Stack horizontal horizontalAlign="space-between" styles={headerContentStyles} verticalAlign="center">
+            {/* <ModalityEditorTitle
             helpMessage={contentDescription ?? ''}
             modalityType={modalityType}
             title={contentTitle}
-          />
-          <Stack horizontal verticalAlign="center">
-            {dropdownOptions && onDropdownChange && (
-              <Dropdown
-                calloutProps={dropdownCalloutProps}
-                options={dropdownOptions}
-                placeholder={formatMessage('Select input hint')}
-                styles={styles.dropdown}
-                onChange={onDropdownChange}
-                onRenderOption={renderOption}
-                onRenderTitle={renderTitle}
-              />
-            )}
-            <OverflowSet
-              items={[]}
-              overflowItems={overflowMenuItems}
-              onRenderItem={() => null}
-              onRenderOverflowButton={onRenderOverflowButton}
-            />
+          /> */}
+            <Stack horizontal verticalAlign="center">
+              {items}
+            </Stack>
           </Stack>
-        </Stack>
-      </HeaderContainer>
+        </HeaderContainer>
+      )}
       {children}
     </Root>
   );

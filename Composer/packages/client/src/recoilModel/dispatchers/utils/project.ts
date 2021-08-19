@@ -559,7 +559,7 @@ export const initBotState = async (callbackHelpers: CallbackInterface, data: any
   set(filePersistenceState(projectId), new FilePersistence(projectId));
   set(undoHistoryState(projectId), new UndoHistory(projectId));
   set(projectIndexingState(projectId), true);
-  parseAllAssets(callbackHelpers, projectId, botFiles);
+  await parseAllAssets(callbackHelpers, projectId, botFiles);
 
   return mainDialog;
 };
