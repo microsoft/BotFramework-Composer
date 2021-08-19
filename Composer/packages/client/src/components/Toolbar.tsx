@@ -39,6 +39,7 @@ export const rightActions = css`
 export const actionButton = css`
   font-size: 14px;
   margin-left: 7px;
+  height: 44px;
   &:hover {
     background: ${NeutralColors.gray20};
     color: ${NeutralColors.black};
@@ -48,17 +49,15 @@ export const actionButton = css`
 export const expandButton = css`
   font-size: 14px;
   margin: 0;
+  padding: 0 7px;
+  height: 44px;
   &:hover {
     background: ${NeutralColors.gray20};
     color: ${NeutralColors.black};
   }
 `;
 
-export const divider = css`
-  font-size: 14px;
-`;
-
-const dividerStyles = {
+export const dividerStyles = {
   divider: {
     height: '32px',
   },
@@ -142,22 +141,24 @@ export const Toolbar = (props: ToolbarProps) => {
 
   return (
     <div aria-label={formatMessage('toolbar')} css={headerSub} role="region" {...rest}>
-      <div css={leftActions}>
-        {!showTreePanel ? (
-          <div>
-            <ActionButton
-              css={expandButton}
-              data-testid={'Expand'}
-              iconProps={{ iconName: 'DockLeft' }}
-              onClick={() => {
-                setShowTreePanel(true);
-              }}
-            ></ActionButton>
-            <VerticalDivider css={divider} styles={dividerStyles} />
+      {!showTreePanel ? (
+        <div css={leftActions}>
+          <ActionButton
+            css={expandButton}
+            data-testid={'Expand'}
+            iconProps={{ iconName: 'DockLeft' }}
+            onClick={() => {
+              setShowTreePanel(true);
+            }}
+          ></ActionButton>
+          <div css={{ height: '44px' }}>
+            <VerticalDivider styles={dividerStyles} />
           </div>
-        ) : null}
-        <div>{left.map(renderItemList)}</div>
-      </div>
+          {left.map(renderItemList)}
+        </div>
+      ) : (
+        <div css={leftActions}>{left.map(renderItemList)}</div>
+      )}
       <div css={rightActions}>{right.map(renderItemList)}</div>
     </div>
   );
