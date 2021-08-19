@@ -171,16 +171,20 @@ const VisualPanelHeader: React.FC<VisualPanelHeaderProps> = React.memo((props) =
 
   const items = breadcrumbs.map(createBreadcrumbItem);
 
+  const displayTitle = items.length ? breadcrumbs[breadcrumbs.length - 1].label : '';
+
   return (
     <div css={pageStyles.visualPanelHeaderContainer}>
-      <div style={{ width: '85%' }}>
+      <div css={pageStyles.visualPanelHeaderLabel}>{displayTitle}</div>
+      {/* NOTE: Breadcrumbs disabled for demo */}
+      {/* <div style={{ width: '85%' }}>
         <Breadcrumb
           ariaLabel={formatMessage('Navigation Path')}
           data-testid="Breadcrumb"
           items={items}
           styles={pageStyles.breadcrumbClass}
         />
-      </div>
+      </div> */}
       {/* <div css={pageStyles.visualPanelHeaderShowCodeButton}>
         <ActionButton onClick={onShowCodeClick}>
           {showCode ? formatMessage('Hide code') : formatMessage('Show code')}

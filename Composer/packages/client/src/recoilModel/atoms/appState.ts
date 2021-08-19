@@ -375,3 +375,8 @@ export const selectedTemplateVersionState = atom<string>({
   key: getFullyQualifiedKey('selectedTemplateVersion'),
   default: '',
 });
+
+export const showProjectTreePanelState = atom<boolean>({
+  key: getFullyQualifiedKey('showProjectTreePanel'),
+  default: true,
+});
