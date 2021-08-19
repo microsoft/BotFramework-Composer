@@ -7,7 +7,6 @@ import formatMessage from 'format-message';
 
 import { LuisIntentEditor as LuIntentEditor } from './LuisIntentEditor';
 import { TriggerWidget } from './TriggerWidget';
-import { SetPropertyWidget } from './SetPropertyWidget';
 
 const config: PluginConfig = {
   widgets: {
@@ -16,7 +15,6 @@ const config: PluginConfig = {
     },
     flow: {
       TriggerWidget,
-      SetPropertyWidget,
     },
   },
   uiSchema: {
