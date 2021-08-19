@@ -99,9 +99,11 @@ import { logMessage, setError } from '../shared';
 import { setRootBotSettingState } from '../setting';
 import { lgFilesSelectorFamily } from '../../selectors/lg';
 import { getPublishProfileFromPayload } from '../../../utils/electronUtil';
+import { decomposeComposite$Kinds } from '../../persistence/PVAUtils';
 
 import { crossTrainConfigState, projectIndexingState } from './../../atoms/botState';
 import { recognizersSelectorFamily } from './../../selectors/recognizers';
+import { PVADefs } from './PVADefs';
 
 export const resetBotStates = async ({ reset }: CallbackInterface, projectId: string) => {
   const botStates = Object.keys(botstates);
@@ -338,16 +340,17 @@ export const loadProjectData = async (data) => {
   const mergedSettings = getMergedSettings(projectId, settings, botName);
   const indexedFiles = indexer.index(files, botName);
 
-  const { lgResources, luResources, qnaResources } = indexedFiles;
+  const { lgResources, luResources, qnaResources, dialogs: dialogResources } = indexedFiles;
 
   //parse all resources with worker
   lgWorker.addProject(projectId);
 
+  const dialogs = dialogResources.map((d) => ({ ...d, content: decomposeComposite$Kinds(d.content) }));
   const lgFiles = lgResources.map(({ id, content }) => emptyLgFile(id, content));
   const luFiles = luResources.map(({ id, content }) => emptyLuFile(id, content));
   const qnaFiles = qnaResources.map(({ id, content }) => emptyQnaFile(id, content));
 
-  const assets = { ...indexedFiles, lgFiles, luFiles, qnaFiles };
+  const assets = { ...indexedFiles, dialogs, lgFiles, luFiles, qnaFiles };
   //Validate all files
   const diagnostics = BotIndexer.validate({
     ...assets,
@@ -415,10 +418,12 @@ export const handleProjectFailure = (callbackHelpers: CallbackInterface, error) 
   }
 };
 
-export const processSchema = (projectId: string, schema: any) => ({
-  ...schema,
-  definitions: dereferenceDefinitions(schema.definitions),
-});
+export const processSchema = (projectId: string, schema: any) => {
+  return {
+    ...schema,
+    definitions: dereferenceDefinitions({ ...schema.definitions, ...PVADefs }),
+  };
+};
 
 // if user set value in terminal or appsetting.json, it should update the value in localStorage
 export const refreshLocalStorage = (projectId: string, settings: DialogSetting) => {

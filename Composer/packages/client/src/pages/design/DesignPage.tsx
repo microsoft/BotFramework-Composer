@@ -2,13 +2,14 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx } from '@emotion/core';
+import { jsx, css } from '@emotion/core';
 import { RouteComponentProps } from '@reach/router';
 import { useRecoilValue } from 'recoil';
 import { Split, SplitMeasuredSizes } from '@geoffcox/react-splitter';
 import { useEffect, useRef } from 'react';
+import { NeutralColors } from '@uifabric/fluent-theme';
 
-import { dispatcherState, currentDialogState } from '../../recoilModel';
+import { dispatcherState, currentDialogState, showProjectTreePanelState } from '../../recoilModel';
 import { renderThinSplitter } from '../../components/Split/ThinSplitter';
 import { Conversation } from '../../components/Conversation';
 import { useSurveyNotification } from '../../components/Notifications/useSurveyNotification';
@@ -33,6 +34,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   useEmptyPropsHandler(projectId, location, skillId, dialogId);
   const { setPageElementState } = useRecoilValue(dispatcherState);
   const currentDialog = useRecoilValue(currentDialogState({ dialogId, projectId }));
+  const showTreePanel = useRecoilValue(showProjectTreePanelState);
 
   const onMeasuredSizesChanged = (sizes: SplitMeasuredSizes) => {
     setPageElementState('dialogs', { leftSplitWidth: sizes.primary });
@@ -54,25 +56,46 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     };
   }, [autoSaveTimer, projectId]);
 
+  const designPanelWidth = showTreePanel ? '80%' : '100%';
+
+  const treePanelStyle = css`
+    display: flex;
+    position: relative;
+    width: 20%;
+    min-width: 200px;
+    height: 100%;
+    border-right: 1px solid ${NeutralColors.gray30};
+  `;
+  const designPanelStyle = css`
+    display: flex;
+    position: relative;
+    width: ${designPanelWidth};
+    height: 100%;
+  `;
+
+  const parentWrapper = css`
+    display: flex;
+    flex-direction: row;
+    flex-grow: 1;
+    height: 100%;
+    position: relative;
+    label: DesignPageContent;
+  `;
+
   return (
-    <div css={contentWrapper} role="main">
-      <Split
-        resetOnDoubleClick
-        initialPrimarySize="20%"
-        minPrimarySize="200px"
-        minSecondarySize="800px"
-        renderSplitter={renderThinSplitter}
-        splitterSize="5px"
-        onMeasuredSizesChanged={onMeasuredSizesChanged}
-      >
-        <div css={contentWrapper}>
-          <div css={splitPaneContainer}>
-            <div css={splitPaneWrapper}>
-              <SideBar projectId={activeBot} />
+    <div css={parentWrapper} role="main">
+      {showTreePanel ? (
+        <div css={treePanelStyle}>
+          <div css={contentWrapper}>
+            <div css={splitPaneContainer}>
+              <div css={splitPaneWrapper}>
+                <SideBar projectId={activeBot} />
+              </div>
             </div>
           </div>
         </div>
-
+      ) : null}
+      <div css={designPanelStyle}>
         <div css={contentWrapper} role="main">
           <CommandBar projectId={activeBot} />
           <Conversation css={splitPaneContainer}>
@@ -81,7 +104,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
             </div>
           </Conversation>
         </div>
-      </Split>
+      </div>
       <Modals projectId={activeBot} rootBotId={projectId} />
     </div>
   );

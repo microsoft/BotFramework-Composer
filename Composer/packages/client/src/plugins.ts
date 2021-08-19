@@ -16,6 +16,8 @@ import lg from '@bfc/ui-plugin-lg';
 import lu from '@bfc/ui-plugin-luis';
 import crossTrained from '@bfc/ui-plugin-cross-trained';
 
+import question from './plugins/question';
+
 const mergeArrays: MergeWithCustomizer = (objValue, srcValue, key) => {
   if (isArray(objValue)) {
     // merge recognizers into defaults
@@ -46,5 +48,6 @@ export default mergePluginConfigs(
   lu,
   orchestrator,
   crossTrained,
-  schemaEditor
+  schemaEditor,
+  question
 );

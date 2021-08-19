@@ -66,22 +66,36 @@ export class ConversationService {
 
   private async fetchDirectLineObject(
     conversationId: string,
-    directLineOptions: { mode: WebChatMode; endpointId: string; userId: string }
+    directLineOptions: { mode: WebChatMode; endpointId: string; userId: string },
+    pvaMetadata: { botId: string; envId: string; tenantId: string }
   ) {
     const options = {
       conversationId,
       ...directLineOptions,
     };
-    const secret = btoa(JSON.stringify(options));
-    const directLine = createDirectLine({
-      token: 'emulatorToken',
-      conversationId,
-      secret,
-      domain: `${this.directlineHostUrl}/v3/directline`,
-      webSocket: true,
-      streamUrl: `ws://localhost:${this.restServerForWSPort}/ws/conversation/${conversationId}`,
+    const pvaAccessToken = window.localStorage.getItem('PVA-2-DEMO-TOKEN');
+    const res = await fetch('https://powerva.microsoft.com/api/botmanagement/v1/directline/token', {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${pvaAccessToken}`,
+        'x-cci-routing-botid': pvaMetadata.botId,
+        'x-cci-botid': pvaMetadata.botId,
+        'x-cci-tenantid': pvaMetadata.tenantId,
+      },
     });
-    return directLine;
+    const data = await res.json();
+    const pvaDLToken = data.token;
+    // const pvaConvoId = data.conversationId; <-- necessary?
+    const pvaUserToken = data.userToken;
+    const directLine = createDirectLine({
+      token: pvaDLToken, //'emulatorToken',
+      //conversationId: pvaConvoId,
+      // secret: pvaSecret,
+      // domain: 'https://directline.botframework.com/v3/directline', //`${this.directlineHostUrl}/v3/directline`,
+      // webSocket: true,
+      // streamUrl: `ws://localhost:${this.restServerForWSPort}/ws/conversation/${conversationId}`,
+    });
+    return { directLine, pvaUserToken };
   }
 
   private startConversation(payload: StartConversationPayload): Promise<Response> {
@@ -125,13 +139,33 @@ export class ConversationService {
     const conversationId: string = resp.data.conversationId;
     const endpointId: string = resp.data.endpointId;
 
-    const directline = await this.fetchDirectLineObject(conversationId, {
-      mode: webChatMode,
-      endpointId: endpointId,
-      userId: user.id,
+    const res = await fetch(`/api/projects/${projectId}/metadata`);
+    const pvaMetadata = await res.json();
+
+    const { directLine: directline, pvaUserToken } = await this.fetchDirectLineObject(
+      conversationId,
+      {
+        mode: webChatMode,
+        endpointId: endpointId,
+        userId: user.id,
+      },
+      pvaMetadata
+    );
+
+    // copied from the cci portal
+    const webChatStore: unknown = createWebChatStore({}, ({ dispatch }) => (next) => (action) => {
+      if (action.type === 'DIRECT_LINE/POST_ACTIVITY') {
+        // add pva metadata onto outgoing activities to pass the extra PVA authentication
+        action.payload.activity = {
+          ...action.payload.activity,
+          cci_tenant_id: pvaMetadata.tenantId, // eslint-disable-line
+          cci_user_token: pvaUserToken, // eslint-disable-line
+        };
+      }
+
+      return next(action);
     });
 
-    const webChatStore: unknown = createWebChatStore({});
     return {
       directline,
       webChatMode,
@@ -146,7 +180,8 @@ export class ConversationService {
     oldChatData: ChatData,
     requireNewUserID: boolean,
     activeLocale: string,
-    secret: BotSecret
+    secret: BotSecret,
+    projectId: string
   ) {
     if (oldChatData.directline) {
       oldChatData.directline.end();
@@ -167,12 +202,33 @@ export class ConversationService {
       secret
     );
     const { endpointId } = resp.data;
-    const directline = await this.fetchDirectLineObject(conversationId, {
-      mode: oldChatData.webChatMode,
-      endpointId: endpointId,
-      userId: user.id,
+
+    const res = await fetch(`/api/projects/${projectId}/metadata`);
+    const pvaMetadata = await res.json();
+
+    const { directLine: directline, pvaUserToken } = await this.fetchDirectLineObject(
+      conversationId,
+      {
+        mode: oldChatData.webChatMode,
+        endpointId: endpointId,
+        userId: user.id,
+      },
+      pvaMetadata
+    );
+
+    // copied from the cci portal
+    const webChatStore: unknown = createWebChatStore({}, ({ dispatch }) => (next) => (action) => {
+      if (action.type === 'DIRECT_LINE/POST_ACTIVITY') {
+        // add pva metadata onto outgoing activities to pass the extra PVA authentication
+        action.payload.activity = {
+          ...action.payload.activity,
+          cci_tenant_id: pvaMetadata.tenantId, // eslint-disable-line
+          cci_user_token: pvaUserToken, // eslint-disable-line
+        };
+      }
+
+      return next(action);
     });
-    const webChatStore = createWebChatStore({});
 
     return {
       directline,

@@ -30,6 +30,7 @@ const CommandBar: React.FC<CommandBarProps> = React.memo(({ projectId }) => {
   const { undo, redo, clearUndo } = useRecoilValue(undoFunctionState(projectId));
   const visualEditorSelection = useRecoilValue(visualEditorSelectionState);
   const [canUndo, canRedo] = useRecoilValue(undoStatusSelectorFamily(projectId));
+  const { setWebChatPanelVisibility: toggleWebChatPanel } = useRecoilValue(dispatcherState);
 
   const { onboardingAddCoachMarkRef } = useRecoilValue(dispatcherState);
 
@@ -157,6 +158,18 @@ const CommandBar: React.FC<CommandBarProps> = React.memo(({ projectId }) => {
           },
         },
         disabled: !actionSelected,
+      },
+      {
+        // NOTE: for pva 2 demo
+        type: 'action',
+        align: 'right',
+        text: formatMessage('Test bot'),
+        buttonProps: {
+          iconProps: { iconName: 'ChatBot' },
+          onClick: () => {
+            toggleWebChatPanel(true);
+          },
+        },
       },
       // NOTE: Hidden for August v2 demo
       // {

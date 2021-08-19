@@ -107,8 +107,14 @@ export const formEditor = css`
 export const visualPanelHeaderContainer = css`
   display: flex;
   align-items: center;
-  height: 65px;
+  height: 38px;
   border-bottom: 1px solid ${NeutralColors.gray30};
+`;
+
+export const visualPanelHeaderLabel = css`
+  padding-left: 20px;
+  font-size: 14px;
+  font-weight: 600;
 `;
 
 export const visualPanelHeaderShowCodeButton = css`

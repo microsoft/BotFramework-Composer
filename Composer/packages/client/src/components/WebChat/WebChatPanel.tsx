@@ -123,7 +123,8 @@ export const WebChatPanel: React.FC<WebChatPanelProps> = ({
       }
     };
 
-    bootstrapChat();
+    // we can't log traffic in the demo because we are no longer going through the mock DL channel
+    //bootstrapChat();
 
     return () => {
       webChatTrafficChannel.current?.close();
@@ -137,12 +138,14 @@ export const WebChatPanel: React.FC<WebChatPanelProps> = ({
   }, [botUrl]);
 
   useEffect(() => {
-    setIsRestartButtonDisabled(botStatus !== BotStatus.connected);
+    // NOTE: for the pva 2 demo
+    //setIsRestartButtonDisabled(botStatus !== BotStatus.connected);
   }, [botStatus]);
 
   const sendInitialActivities = async (chatData: ChatData) => {
     try {
-      await conversationService.sendInitialActivity(chatData.conversationId, [chatData.user]);
+      // we don't need to send the activities for the demo
+      //await conversationService.sendInitialActivity(chatData.conversationId, [chatData.user]);
     } catch (ex) {
       // DL errors are handled through socket above.
     }
@@ -191,7 +194,8 @@ export const WebChatPanel: React.FC<WebChatPanelProps> = ({
             oldChatData,
             requireNewUserId,
             activeLocale,
-            secret
+            secret,
+            projectId
           );
 
           TelemetryClient.track('WebChatConversationRestarted', {
@@ -272,7 +276,7 @@ export const WebChatPanel: React.FC<WebChatPanelProps> = ({
         chatData={chats[currentConversation]}
         conversationService={conversationService}
         currentConversation={currentConversation}
-        isDisabled={botStatus !== BotStatus.connected}
+        isDisabled={false /*botStatus !== BotStatus.connected*/}
       />
     </div>
   );
