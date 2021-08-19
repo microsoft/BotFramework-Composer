@@ -68,20 +68,6 @@ const config: PluginConfig = {
         },
       },
     },
-    [SDKKinds.SetProperty]: {
-      flow: {
-        widget: 'ActionCard',
-        header: {
-          colors: {
-            theme: '#E7F4F4',
-          },
-          widget: 'ActionHeader',
-        },
-        body: {
-          widget: 'SetPropertyWidget',
-        },
-      },
-    },
   },
 };
 

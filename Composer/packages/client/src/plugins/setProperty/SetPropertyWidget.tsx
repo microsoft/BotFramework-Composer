@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import { WidgetContainerProps, useShellApi } from '@bfc/extension-client';
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { SharedColors, NeutralColors } from '@uifabric/fluent-theme';
 import formatMessage from 'format-message';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
@@ -27,8 +27,10 @@ export const SetPropertyWidget: React.FC<WidgetContainerProps> = ({ id, data }) 
   const [selectedTagPickerItems, setSelectedTagPickerItems] = useState<ITag[]>([]);
 
   useEffect(() => {
+    let currentDt = options[0].key;
     if ((data.$designer as any)?.dataType) {
-      setCurrentDataType((data.$designer as any)?.dataType);
+      currentDt = (data.$designer as any)?.dataType;
+      setCurrentDataType(currentDt);
     }
 
     if (data.value) {
@@ -43,8 +45,7 @@ export const SetPropertyWidget: React.FC<WidgetContainerProps> = ({ id, data }) 
       // Avoid showing the memory model
       const split = data.property.split('.');
       const lastPathSegment = split.length > 1 ? split[split.length - 1] : '';
-      const dataTypeDisplay = (data.$designer as any)?.dataType;
-      const displayTag = `${lastPathSegment} (${dataTypeDisplay})`;
+      const displayTag = `${lastPathSegment} (${currentDt})`;
       setSelectedTagPickerItems([
         {
           key: data.property,
@@ -169,6 +170,8 @@ export const SetPropertyWidget: React.FC<WidgetContainerProps> = ({ id, data }) 
         }}
         onChange={() => {
           setSelectedTagPickerItems([]);
+          const { property, ...rest } = data;
+          shellApi.saveData(rest, id);
         }}
         onItemSelected={onTagPickerItemSelected}
         onResolveSuggestions={onResolvePickerItem}
@@ -179,7 +182,7 @@ export const SetPropertyWidget: React.FC<WidgetContainerProps> = ({ id, data }) 
           justifyContent: 'center',
           fontSize: '12px',
           margin: '10px 0',
-          textAlign: 'center',
+          textAlign: 'left',
           border: `2px solid ${SharedColors.gray10}`,
           padding: '5px',
         }}
