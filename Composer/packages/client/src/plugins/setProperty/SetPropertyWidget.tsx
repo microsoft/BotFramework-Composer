@@ -55,11 +55,11 @@ export const SetPropertyWidget: React.FC<WidgetContainerProps> = ({ id, data }) 
     }
   }, [data]);
 
-  const handleValueChange = (_, currentVal) => {
+  const onPropertyValueChange = (_, currentVal) => {
     setPropertyValue(currentVal);
   };
 
-  const handleDataTypeChange = (_e: React.FormEvent<HTMLDivElement>, option?: IDropdownOption) => {
+  const onDataTypeChange = (_e: React.FormEvent<HTMLDivElement>, option?: IDropdownOption) => {
     if (option) {
       setCurrentDataType(option.key);
     }
@@ -79,7 +79,7 @@ export const SetPropertyWidget: React.FC<WidgetContainerProps> = ({ id, data }) 
     );
   };
 
-  const handlePropValBlur = () => {
+  const onPropertyValueBlur = () => {
     switch (currentDataType) {
       case 'string':
         handleUpdate(propertyValue, currentDataType);
@@ -99,7 +99,7 @@ export const SetPropertyWidget: React.FC<WidgetContainerProps> = ({ id, data }) 
     }
   };
 
-  const onResolvePickerItem = (filterItem: string): ITag[] => {
+  const onResolveSuggestion = (filterItem: string): ITag[] => {
     return [
       {
         key: filterItem,
@@ -174,7 +174,7 @@ export const SetPropertyWidget: React.FC<WidgetContainerProps> = ({ id, data }) 
           shellApi.saveData(rest, id);
         }}
         onItemSelected={onTagPickerItemSelected}
-        onResolveSuggestions={onResolvePickerItem}
+        onResolveSuggestions={onResolveSuggestion}
       />
       <div
         style={{
@@ -196,7 +196,7 @@ export const SetPropertyWidget: React.FC<WidgetContainerProps> = ({ id, data }) 
           flexDirection: 'row',
         }}
       >
-        <Dropdown options={options} selectedKey={currentDataType} onChange={handleDataTypeChange} />
+        <Dropdown options={options} selectedKey={currentDataType} onChange={onDataTypeChange} />
         <TextField
           styles={{
             root: {
@@ -205,8 +205,8 @@ export const SetPropertyWidget: React.FC<WidgetContainerProps> = ({ id, data }) 
             },
           }}
           value={propertyValue}
-          onBlur={handlePropValBlur}
-          onChange={handleValueChange}
+          onBlur={onPropertyValueBlur}
+          onChange={onPropertyValueChange}
         />
       </div>
     </div>
