@@ -23,6 +23,7 @@ export type LgResponseEditorProps = LgCommonEditorProps & {
   onRemoveTemplate: (templateId: string) => void;
   onTemplateChange: (templateId: string, body?: string) => void;
   editorSettings?: Partial<CodeEditorSettings>;
+  startWithEmptyResponse?: boolean;
 };
 
 /**

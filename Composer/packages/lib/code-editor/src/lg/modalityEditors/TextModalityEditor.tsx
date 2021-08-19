@@ -10,7 +10,11 @@ import { CommonModalityEditorProps, TextStructuredResponseItem } from '../types'
 import { ModalityEditorContainer } from './ModalityEditorContainer';
 import { StringArrayEditor } from './StringArrayEditor';
 
-type Props = CommonModalityEditorProps & { focusOnMount: boolean; response: TextStructuredResponseItem };
+type Props = CommonModalityEditorProps & {
+  focusOnMount: boolean;
+  response: TextStructuredResponseItem;
+  startWithEmptyResponse?: boolean;
+};
 
 const TextModalityEditor = React.memo(
   ({
@@ -25,6 +29,7 @@ const TextModalityEditor = React.memo(
     onRemoveTemplate,
     onUpdateResponseTemplate,
     telemetryClient,
+    startWithEmptyResponse,
   }: Props) => {
     const { items, onChange } = useStringArray<TextStructuredResponseItem>(
       'Text',
@@ -55,6 +60,7 @@ const TextModalityEditor = React.memo(
           lgOption={lgOption}
           lgTemplates={lgTemplates}
           memoryVariables={memoryVariables}
+          startWithEmptyResponse={startWithEmptyResponse}
           telemetryClient={telemetryClient}
           onChange={onChange}
         />
