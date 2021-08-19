@@ -10,7 +10,7 @@ import { DiagnosticSeverity } from '@botframework-composer/types/src';
 
 import { getReferredLuFiles } from '../../utils/luUtil';
 import { INavTreeItem } from '../../components/NavTree';
-import { botDisplayNameState, dialogIdsState } from '../atoms/botState';
+import { botDisplayNameState, dialogIdsState, schemasState } from '../atoms/botState';
 import {
   DialogDiagnostic,
   LgDiagnostic,
@@ -202,12 +202,12 @@ export const schemaDiagnosticsSelectorFamily = selectorFamily({
      *
      * TODO: To fix it entirely, we need to differentiate dialog.schema from sdk.schema in indexer.
      */
-    const sdkSchemaContent = botAssets.dialogSchemas.find((d) => d.id === '')?.content;
-    if (!sdkSchemaContent) return [];
+    const { sdk } = get(schemasState(projectId));
+    if (!sdk.content) return [];
 
     const fullDiagnostics: DiagnosticInfo[] = [];
     botAssets.dialogs.forEach((dialog) => {
-      const diagnostics = validateSchema(dialog.id, dialog.content, sdkSchemaContent);
+      const diagnostics = validateSchema(dialog.id, dialog.content, sdk.content);
       fullDiagnostics.push(
         ...diagnostics.map((d) => {
           let location = dialog.id;

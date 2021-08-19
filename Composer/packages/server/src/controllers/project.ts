@@ -244,7 +244,8 @@ async function updateFile(req: Request, res: Response) {
   const user = await ExtensionContext.getUserFromRequest(req);
   const currentProject = await BotProjectService.getProjectById(projectId, user);
   if (currentProject !== undefined) {
-    const lastModified = await currentProject.updateFile(req.body.name, req.body.content);
+    const content = typeof req.body.content === 'string' ? req.body.content : JSON.stringify(req.body.content, null, 2);
+    const lastModified = await currentProject.updateFile(req.body.name, content);
     res.status(200).json({ lastModified: lastModified });
   } else {
     res.status(404).json({
@@ -633,6 +634,16 @@ async function autoSave(req: Request, res: Response) {
   res.sendStatus(200);
 }
 
+// TEMPORARY -- for pva 2 demo only
+async function getProjectMetadata(req: Request, res: Response) {
+  const projectId = req.params.projectId;
+  if (!projectId) {
+    return res.status(400).send('"projectId" parameter missing in request.');
+  }
+  const metadata = BotProjectService.getProjectMetadata(projectId);
+  res.status(200).json(metadata);
+}
+
 export const ProjectController = {
   autoSave,
   getProjectById,
@@ -664,4 +675,5 @@ export const ProjectController = {
   backupProject,
   copyTemplateToExistingProject,
   getVariablesByProjectId,
+  getProjectMetadata,
 };
