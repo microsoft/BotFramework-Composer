@@ -110,7 +110,7 @@ const VisualPanel: React.FC<VisualPanelProps> = React.memo(({ projectId }) => {
             <VisualEditorWrapper dialogId={dialogId} pluginConfig={pluginConfig} projectId={projectId} />
             {/* </div> */}
             <Tray isOpen={propertyPanelVisible} onDismiss={() => setPropertyPanelVisibility(false)}>
-              <PropertyPanel isSkill={false} projectId={projectId} />
+              {propertyPanelVisible && <PropertyPanel isSkill={false} projectId={projectId} />}
             </Tray>
           </div>
         ))}
