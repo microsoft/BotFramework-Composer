@@ -23,8 +23,9 @@ import {
   showErrorDiagnosticsState,
   showWarningDiagnosticsState,
   projectsForDiagnosticsFilterState,
+  autoSaveState,
 } from '../atoms/appState';
-import { AppUpdaterStatus, CreationFlowStatus, CreationFlowType } from '../../constants';
+import { AppUpdaterStatus, AutoSaveState, CreationFlowStatus, CreationFlowType } from '../../constants';
 import OnboardingState from '../../utils/onboardingStorage';
 import { StateError, AppUpdateState, MachineInfo } from '../../recoilModel/types';
 import { DebugDrawerKeys } from '../../pages/design/DebugPanel/TabExtensions/types';
@@ -178,6 +179,10 @@ export const applicationDispatcher = () => {
     set(projectsForDiagnosticsFilterState, projectIds);
   });
 
+  const setAutoSaveState = useRecoilCallback(({ set }: CallbackInterface) => (state: AutoSaveState) => {
+    set(autoSaveState, state);
+  });
+
   return {
     checkNodeVersion,
     setAppUpdateStatus,
@@ -199,5 +204,6 @@ export const applicationDispatcher = () => {
     setErrorDiagnosticsFilter,
     setWarningDiagnosticsFilter,
     setProjectsForDiagnosticsFilter,
+    setAutoSaveState,
   };
 };
