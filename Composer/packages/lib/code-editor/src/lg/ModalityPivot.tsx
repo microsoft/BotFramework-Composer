@@ -67,6 +67,7 @@ const styles: { tabs: Partial<IPivotStyles> } = {
   tabs: {
     link: {
       fontSize: FontSizes.size12,
+      height: 32,
     },
     linkIsSelected: {
       fontSize: FontSizes.size12,
