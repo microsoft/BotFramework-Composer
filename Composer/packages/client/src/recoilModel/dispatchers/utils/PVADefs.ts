@@ -34,33 +34,31 @@ export const PVADefs = {
         title: 'Array of choices',
         description: 'Choices to choose from.',
         type: 'array',
-        items: [
-          {
-            type: 'string',
-            title: 'Simple choice',
-            description: 'One choice for choice input.',
-          },
-        ],
+        items: {
+          type: 'string',
+          title: 'Simple choice',
+          description: 'One choice for choice input.',
+        },
       },
       cases: {
         type: 'array',
         items: {
           type: 'object',
           properties: {
-            condition: {
-              $ref: '#/definitions/condition',
-              title: 'Condition',
-              description: 'Expression to evaluate.',
-              examples: ['user.age > 3'],
+            value: {
+              type: ['number', 'integer', 'boolean', 'string'],
+              title: 'Value',
+              description: 'The value to compare the condition with.',
+              examples: ['red', 'true', '13'],
             },
-          },
-          actions: {
-            type: 'array',
-            title: 'Actions',
-            description: 'Actions to execute if condition is true.',
-            items: {
-              $kind: 'Microsoft.IDialog',
-              $ref: '#/definitions/Microsoft.IDialog',
+            actions: {
+              type: 'array',
+              title: 'Actions',
+              description: 'Actions to execute.',
+              items: {
+                $kind: 'Microsoft.IDialog',
+                $ref: '#/definitions/Microsoft.IDialog',
+              },
             },
           },
         },
