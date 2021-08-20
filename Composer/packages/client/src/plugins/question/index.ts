@@ -7,18 +7,22 @@ const config: PluginConfig = {
   uiSchema: {
     'Microsoft.VirtualAgents.Question': {
       flow: {
-        widget: 'ActionCard',
-        header: {
-          widget: 'ActionHeader',
-          icon: 'OfficeChat',
-          colors: {
-            icon: '#5C2E91',
-            theme: '#EEEAF4',
+        widget: 'QuestionWidget',
+
+        question: {
+          widget: 'ActionCard',
+          body: {
+            widget: 'LgWidget',
+            field: 'prompt',
           },
-        },
-        body: {
-          widget: 'LgWidget',
-          field: 'prompt',
+          header: {
+            widget: 'ActionHeader',
+            icon: 'OfficeChat',
+            colors: {
+              icon: '#5C2E91',
+              theme: '#EEEAF4',
+            },
+          },
         },
       },
       menu: {

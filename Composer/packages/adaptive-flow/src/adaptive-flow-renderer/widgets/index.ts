@@ -6,6 +6,7 @@ export { DialogRef } from './DialogRef';
 export { PromptWidget } from './PromptWidget';
 export { IfConditionWidget } from './IfConditionWidget';
 export { SwitchConditionWidget } from './SwitchConditionWidget';
+export { QuestionWidget } from './QuestionWidget';
 export { ForeachWidget } from './ForeachWidget';
 export { ActionHeader } from './ActionHeader';
 export { ActionGroup } from './ActionGroup';

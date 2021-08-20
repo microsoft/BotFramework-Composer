@@ -31,7 +31,7 @@ export function calculateSequenceBoundary(
     boundaries.map((x) => x.height).reduce((sum, val) => sum + val, 0) +
     ElementInterval.y * Math.max(boundaries.length - 1, 0);
 
-  if (widthHeadEdge) box.height += ElementInterval.y / 2;
+  if (widthHeadEdge) box.height += ElementInterval.y;
   if (widthTailEdge) box.height += ElementInterval.y / 2;
   return box;
 }
@@ -81,6 +81,46 @@ export function calculateSwitchCaseBoundary(
   if (!conditionBoundary || !choiceBoundary) return new Boundary();
 
   return measureBranchingContainerBoundary(conditionBoundary, choiceBoundary, branchBoundaries);
+}
+
+export function calculateQuestionBoundary(
+  questionBoundary: Boundary | null,
+  branchBoundaries: Boundary[] = []
+): Boundary {
+  if (!questionBoundary) return new Boundary();
+
+  return measureQuestionContainerBoundary(questionBoundary, branchBoundaries);
+}
+
+function measureQuestionContainerBoundary(
+  conditionBoundary: Boundary | null,
+  branchBoundaries: Boundary[] = []
+): Boundary {
+  if (!conditionBoundary) return new Boundary();
+
+  const firstBranchBoundary = branchBoundaries[0] || new Boundary();
+
+  const branchGroupBoundary = new Boundary();
+  branchGroupBoundary.width = branchBoundaries.reduce((acc, x, currentIndex) => {
+    return acc + x.width + calculateBranchNodesIntervalX(x, branchBoundaries[currentIndex + 1]);
+  }, 0);
+  branchGroupBoundary.height = Math.max(...branchBoundaries.map((x) => x.height));
+  branchGroupBoundary.axisX = firstBranchBoundary.axisX;
+
+  /** Calculate boundary */
+  const containerAxisX = Math.max(conditionBoundary.axisX, branchGroupBoundary.axisX);
+  const containerHeight =
+    conditionBoundary.height + BranchIntervalY + BranchIntervalY + branchGroupBoundary.height + BranchIntervalY;
+  const containerWidth =
+    containerAxisX +
+    Math.max(conditionBoundary.width - conditionBoundary.axisX, branchGroupBoundary.width - branchGroupBoundary.axisX) +
+    BranchingNodeMarginRight;
+
+  const containerBoundary = new Boundary();
+  containerBoundary.width = containerWidth;
+  containerBoundary.height = containerHeight;
+  containerBoundary.axisX = containerAxisX;
+  return containerBoundary;
 }
 
 function measureBranchingContainerBoundary(

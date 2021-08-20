@@ -9,6 +9,7 @@ const childrenMap = {
   [AdaptiveKinds.AdaptiveDialog]: [AdaptiveFieldNames.Actions],
   [AdaptiveKinds.IfCondition]: [AdaptiveFieldNames.Actions, AdaptiveFieldNames.ElseActions],
   [AdaptiveKinds.SwitchCondition]: [AdaptiveFieldNames.Cases, AdaptiveFieldNames.DefaultCase],
+  'Microsoft.VirtualAgents.Question': ['cases'],
 };
 
 export function outlineObiJson(input: any) {

@@ -9,7 +9,7 @@ import { Edge, EdgeDirection } from '../models/EdgeData';
 import { calculateSequenceBoundary } from './calculateNodeBoundary';
 
 const StepInterval = ElementInterval.y;
-const ExtraEdgeLength = ElementInterval.y / 2;
+const ExtraEdgeLength = ElementInterval.y;
 
 export function sequentialLayouter(nodes: GraphNode[], withHeadEdge = true, withTrailingEdge = true): GraphLayout {
   if (!Array.isArray(nodes) || nodes.length === 0) {

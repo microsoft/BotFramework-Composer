@@ -13,6 +13,7 @@ enum VirtualElementTypes {
   UserAnswers = 'VisualSDK.UserAnswers',
   InvalidPromptBrick = 'VisualSDK.InvalidPromptBrick',
   ChoiceInputDetail = 'VisualSDK.ChoiceInputDetail',
+  QuestionCondition = 'VisualSDK.QuestionConditionNode',
 }
 
 export const AdaptiveKinds = {

@@ -22,6 +22,7 @@ import { transformSwitchCondition } from '../transformers/transformSwitchConditi
 import { transformForeach } from '../transformers/transformForeach';
 import { transformBaseInput } from '../transformers/transformBaseInput';
 import { designerCache } from '../utils/visual/DesignerCache';
+import { transformQuestion } from '../transformers/transformQuestion';
 
 import {
   calculateIfElseBoundary,
@@ -29,6 +30,7 @@ import {
   calculateSwitchCaseBoundary,
   calculateForeachBoundary,
   calculateBaseInputBoundary,
+  calculateQuestionBoundary,
 } from './calculateNodeBoundary';
 
 function measureStepGroupBoundary(stepGroup): Boundary {
@@ -62,6 +64,17 @@ function measureSwitchConditionBoundary(json): Boundary {
   return calculateSwitchCaseBoundary(
     measureJsonBoundary(condition.json),
     measureJsonBoundary(choice.json),
+    branches.map((x) => measureJsonBoundary(x.json))
+  );
+}
+
+function measureQuestionBoundary(json): Boundary {
+  const result = transformQuestion(json, '');
+  if (result === null) return new Boundary();
+
+  const { question, branches } = result;
+  return calculateQuestionBoundary(
+    measureJsonBoundary(question.json),
     branches.map((x) => measureJsonBoundary(x.json))
   );
 }
@@ -121,6 +134,9 @@ export function measureJsonBoundary(json): Boundary {
       break;
     case AdaptiveKinds.IfCondition:
       boundary = measureIfConditionBoundary(json);
+      break;
+    case 'Microsoft.VirtualAgents.Question':
+      boundary = measureQuestionBoundary(json);
       break;
     case AdaptiveKinds.SwitchCondition:
       boundary = measureSwitchConditionBoundary(json);
