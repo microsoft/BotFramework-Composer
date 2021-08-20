@@ -10,7 +10,7 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 
 import { LGOption } from '../../utils';
 import { getCursorContextWithinLine } from '../../utils/lgUtils';
-import { jsLgToolbarMenuClassName } from '../constants';
+import { jsCKEditorToolbarClassName, jsLgToolbarMenuClassName } from '../constants';
 import { FieldToolbar } from '../../components/toolbar/FieldToolbar';
 import { LgSpeechModalityToolbar, SSMLTagType } from '../LgSpeechModalityToolbar';
 import { ToolbarButtonPayload } from '../../types';
@@ -55,6 +55,7 @@ const getSSMLProps = (tag: 'prosody' | 'audio' | 'break'): string => {
 
 type StringArrayEditorProps = {
   addButtonText?: string;
+  editorMode?: 'editor' | 'rich';
   items: TemplateBodyItem[];
   lgTemplates?: readonly LgTemplate[];
   memoryVariables?: readonly string[];
@@ -68,6 +69,7 @@ type StringArrayEditorProps = {
 export const StringArrayEditor = React.memo(
   ({
     addButtonText,
+    editorMode,
     items,
     lgTemplates,
     memoryVariables,
@@ -91,7 +93,7 @@ export const StringArrayEditor = React.memo(
     }, []);
 
     const onItemChange = useCallback(
-      (index: number) => (_, newValue?: string) => {
+      (index: number) => (newValue?: string) => {
         const updatedItems = [...items];
         updatedItems[index].value = newValue ?? '';
         onChange(updatedItems);
@@ -134,8 +136,8 @@ export const StringArrayEditor = React.memo(
           (e.key === 'Escape' &&
             (!document.activeElement || inputs.includes(document.activeElement.tagName.toLowerCase())))
         ) {
-          // Allow multiline via shift+Enter
-          if (e.key === 'Enter' && e.shiftKey) {
+          // Allow multiline in the rich editor or via shift+Enter
+          if ((e.key === 'Enter' && e.shiftKey) || editorMode === 'rich') {
             return;
           }
 
@@ -173,7 +175,7 @@ export const StringArrayEditor = React.memo(
             .composedPath()
             .filter((n) => n instanceof Element)
             .map((n) => (n as Element).className)
-            .some((c) => c.indexOf(jsLgToolbarMenuClassName) !== -1)
+            .some((c) => c.indexOf(jsLgToolbarMenuClassName) !== -1 || c.indexOf(jsCKEditorToolbarClassName) !== -1)
         ) {
           setCalloutTargetElement(null);
           setCurrentIndex(null);
@@ -191,7 +193,7 @@ export const StringArrayEditor = React.memo(
         document.removeEventListener('keydown', keydownHandler);
         document.removeEventListener('focusin', focusHandler);
       };
-    }, [items, onChange]);
+    }, [editorMode, items, onChange]);
 
     const onSelectToolbarMenuItem = React.useCallback(
       (text: string, itemType: ToolbarButtonPayload['kind']) => {
@@ -311,6 +313,7 @@ export const StringArrayEditor = React.memo(
           item.kind === 'variation' ? (
             <StringArrayItem
               key={`item-${idx}`}
+              editorMode={editorMode}
               mode={idx === currentIndex ? 'edit' : 'view'}
               telemetryClient={telemetryClient}
               value={item.value}
