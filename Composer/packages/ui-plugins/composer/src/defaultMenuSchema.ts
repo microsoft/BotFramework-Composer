@@ -11,14 +11,14 @@ const SubmenuNames = {
   Looping: formatMessage('Looping'),
   DialogManagement: formatMessage('Dialog management'),
   PropertyManagement: formatMessage('Manage properties'),
-  AccessExternalResources: formatMessage('Access external resources'),
+  AccessExternalResources: formatMessage('Call an action'),
   Debugging: formatMessage('Debugging options'),
 };
 
 export const DefaultMenuSchema: MenuUISchema = {
   // Send a response
   [SDKKinds.SendActivity]: {
-    label: formatMessage('Send a response'),
+    label: formatMessage('Show a message'),
     submenu: false,
   },
   // Ask a question

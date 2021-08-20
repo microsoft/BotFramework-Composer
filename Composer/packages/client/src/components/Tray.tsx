@@ -17,6 +17,7 @@ const containerStyles = (isOpen: boolean, width: number) => css`
   border-left: 1px solid ${NeutralColors.gray30};
   transition: width 0.1s linear;
   overflow-x: hidden;
+  z-index: 999;
 `;
 
 const contentStyles = css`

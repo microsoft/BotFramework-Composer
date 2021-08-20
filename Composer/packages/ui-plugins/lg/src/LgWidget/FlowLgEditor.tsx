@@ -148,6 +148,7 @@ const FlowLgEditor: React.FC<{
     <React.Fragment>
       <LgEditor
         hidePlaceholder
+        startWithEmptyResponse
         diagnostics={diagnostics}
         editorSettings={userSettings.codeEditor}
         height={75}

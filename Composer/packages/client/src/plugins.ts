@@ -17,6 +17,7 @@ import lu from '@bfc/ui-plugin-luis';
 import crossTrained from '@bfc/ui-plugin-cross-trained';
 
 import question from './plugins/question';
+import setProperty from './plugins/setProperty';
 
 const mergeArrays: MergeWithCustomizer = (objValue, srcValue, key) => {
   if (isArray(objValue)) {
@@ -49,5 +50,6 @@ export default mergePluginConfigs(
   orchestrator,
   crossTrained,
   schemaEditor,
-  question
+  question,
+  setProperty
 );

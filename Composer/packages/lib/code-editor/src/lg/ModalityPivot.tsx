@@ -93,6 +93,7 @@ const renderModalityEditor = ({
   onInputHintChange,
   onUpdateResponseTemplate,
   onRemoveTemplate,
+  startWithEmptyResponse,
 }: {
   modality: string;
   removeModalityDisabled: boolean;
@@ -109,6 +110,7 @@ const renderModalityEditor = ({
   onInputHintChange: (inputHintString: string) => void;
   onUpdateResponseTemplate: (response: PartialStructuredResponse) => void;
   onRemoveTemplate: (templateId: string) => void;
+  startWithEmptyResponse?: boolean;
 }) => {
   const commonProps = {
     lgOption,
@@ -155,6 +157,7 @@ const renderModalityEditor = ({
           {...commonProps}
           focusOnMount={false}
           response={structuredResponse?.Text as TextStructuredResponseItem}
+          startWithEmptyResponse={startWithEmptyResponse}
         />
       );
   }
@@ -181,6 +184,7 @@ type Props = {
   editorSettings?: Partial<CodeEditorSettings>;
   onTemplateChange: (templateId: string, body?: string) => void;
   onRemoveTemplate: (templateId: string) => void;
+  startWithEmptyResponse?: boolean;
 };
 
 export const ModalityPivot = React.memo((props: Props) => {
@@ -193,6 +197,7 @@ export const ModalityPivot = React.memo((props: Props) => {
     editorSettings,
     onTemplateChange,
     onRemoveTemplate,
+    startWithEmptyResponse,
   } = props;
 
   const containerRef = useRef<HTMLDivElement>(null);
@@ -414,6 +419,7 @@ export const ModalityPivot = React.memo((props: Props) => {
           onAttachmentLayoutChange,
           onInputHintChange,
           onUpdateResponseTemplate,
+          startWithEmptyResponse,
         })}
       </div>
     </Stack>

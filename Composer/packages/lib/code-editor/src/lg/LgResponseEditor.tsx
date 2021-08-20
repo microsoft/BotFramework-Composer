@@ -17,6 +17,7 @@ export const LgResponseEditor = React.memo(
     editorSettings,
     onTemplateChange,
     onRemoveTemplate = () => {},
+    startWithEmptyResponse = false,
   }: LgResponseEditorProps) => {
     const structuredResponse = getStructuredResponseFromTemplate(lgOption?.template);
 
@@ -26,6 +27,7 @@ export const LgResponseEditor = React.memo(
         lgOption={lgOption}
         lgTemplates={lgTemplates}
         memoryVariables={memoryVariables}
+        startWithEmptyResponse={startWithEmptyResponse}
         structuredResponse={structuredResponse}
         telemetryClient={telemetryClient}
         onRemoveTemplate={onRemoveTemplate}

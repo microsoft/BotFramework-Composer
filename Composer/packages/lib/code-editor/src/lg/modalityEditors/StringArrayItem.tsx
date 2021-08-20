@@ -65,7 +65,7 @@ const LgCodeEditorContainer = styled.div({
 
 const textViewContainerStyles = {
   root: {
-    height: 48,
+    // height: 48,
     padding: '0 0 0 13px',
     userSelect: 'none',
     cursor: 'pointer',
