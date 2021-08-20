@@ -15,7 +15,7 @@ import {
 } from '../../recoilModel/types';
 import { getUserSettings } from '../utils';
 import onboardingStorage from '../../utils/onboardingStorage';
-import { CreationFlowStatus, AppUpdaterStatus, CreationFlowType, FEEDVERSION } from '../../constants';
+import { AutoSaveState, CreationFlowStatus, AppUpdaterStatus, CreationFlowType, FEEDVERSION } from '../../constants';
 import { TreeLink } from '../../components/ProjectTree/types';
 import { Dispatcher } from '../dispatchers';
 import { DebugDrawerKeys } from '../../pages/design/DebugPanel/TabExtensions/types';
@@ -379,4 +379,9 @@ export const selectedTemplateVersionState = atom<string>({
 export const showProjectTreePanelState = atom<boolean>({
   key: getFullyQualifiedKey('showProjectTreePanel'),
   default: true,
+});
+
+export const autoSaveState = atom<AutoSaveState>({
+  key: getFullyQualifiedKey('autoSaveState'),
+  default: 'Idle',
 });

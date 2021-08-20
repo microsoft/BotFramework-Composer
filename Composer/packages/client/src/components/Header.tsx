@@ -37,6 +37,7 @@ import { languageListTemplates, languageFullName } from './MultiLanguage';
 import { NotificationButton } from './Notifications/NotificationButton';
 import { BotController } from './BotRuntimeController/BotController';
 import { GetStarted } from './GetStarted/GetStarted';
+import { AutoSaveIndicator } from './autoSaveIndicator';
 export const actionButton = css`
   font-size: ${FontSizes.size18};
   margin-top: 2px;
@@ -299,6 +300,7 @@ export const Header = () => {
                 {languageFullName(locale)}
               </span>
             )}
+            {projectId && <AutoSaveIndicator />}
           </Fragment>
         )}
       </div>
