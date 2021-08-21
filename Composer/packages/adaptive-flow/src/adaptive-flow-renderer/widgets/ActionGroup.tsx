@@ -57,7 +57,7 @@ export const ActionGroup: FunctionComponent<NodeProps> = ({ id, data, onEvent, o
       </SVGContainer>
       {nodes
         ? nodes.map((node, index) => (
-            <OffsetContainer key={`stepGroup/${node.id}/offset`} offset={node.offset}>
+            <OffsetContainer key={`stepGroup/${node.id}/offset`} offset={{ ...node.offset, y: node.offset.y }}>
               <StepRenderer
                 key={`stepGroup/${node.id}`}
                 data={node.data}
@@ -71,12 +71,17 @@ export const ActionGroup: FunctionComponent<NodeProps> = ({ id, data, onEvent, o
             </OffsetContainer>
           ))
         : null}
-      <OffsetContainer
-        css={{ zIndex: 100 }}
-        offset={{ x: boundary.axisX - EdgeAddButtonSize.width / 2, y: StepInterval / 2 - EdgeAddButtonSize.height / 2 }}
-      >
-        <EdgeMenu arrayData={data} arrayId={id} arrayPosition={0} onEvent={onEvent} />
-      </OffsetContainer>
+      {!data.header && (
+        <OffsetContainer
+          css={{ zIndex: 100 }}
+          offset={{
+            x: boundary.axisX - EdgeAddButtonSize.width / 2,
+            y: StepInterval / 2 - EdgeAddButtonSize.height / 2,
+          }}
+        >
+          <EdgeMenu arrayData={data} arrayId={id} arrayPosition={0} onEvent={onEvent} />
+        </OffsetContainer>
+      )}
       {nodes
         ? nodes.map((x, idx) => (
             <OffsetContainer

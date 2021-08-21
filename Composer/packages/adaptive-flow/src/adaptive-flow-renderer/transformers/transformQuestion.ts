@@ -26,8 +26,10 @@ export function transformQuestion(input, jsonpath: string): { question: IndexedN
       const prefix = `${jsonpath}.cases[${index}]`;
       return new IndexedNode(`${prefix}.actions`, {
         $kind: AdaptiveKinds.StepGroup,
-        label: value,
         children: actions || [],
+        header: {
+          condition: value,
+        },
       });
     })
   );

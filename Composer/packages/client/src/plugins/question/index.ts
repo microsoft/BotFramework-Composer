@@ -31,6 +31,24 @@ const config: PluginConfig = {
         order: 2,
       },
     },
+    'VisualSDK.QuestionConditionNode': {
+      flow: {
+        widget: 'ActionCard',
+        body: {
+          widget: 'PropertyDescription',
+          description: '',
+          property: '=action.condition',
+        },
+        header: {
+          widget: 'ActionHeader',
+          colors: {
+            theme: '#e7f4ff',
+          },
+          disableSDKTitle: true,
+          title: 'Condition',
+        },
+      },
+    },
   },
 };
 
