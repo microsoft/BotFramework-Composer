@@ -1,10 +1,11 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { basename, join, normalize, relative, resolve } from 'path';
+import { basename, extname, join, normalize, posix, relative, resolve } from 'path';
 
 import { ensureFile, pathExists, readFile, unlink, writeFile } from 'fs-extra';
 import fetch from 'node-fetch';
+import globby from 'globby';
 
 import {
   BotComponentResponse,
@@ -66,18 +67,8 @@ export class PVABotClient {
    * @param writeFiles Will write all the downloaded content files to disk
    */
   private async fetchBotAndCreateContentMap(writeFiles?: boolean) {
-    if (!this.electronContext) {
-      console.log('NO ELECTRON CONTEXT DETECTED');
-      return;
-    }
-
     const pvaMetadata = this.metadata.additionalInfo as PVAMetadata;
-    let token = process.env.PVA_DEMO_TOKEN;
-    if (!token) {
-      token = await this.electronContext.getAccessToken({
-        targetResource: PVA_TEST_APP_ID,
-      });
-    }
+    const token = process.env.PVA_DEMO_TOKEN; // TODO: will need to replace this with actual auth
     const url = `${pvaMetadata.baseUrl}api/botauthoring/v1/environments/${pvaMetadata.envId}/bots/${pvaMetadata.botId}/content/botcomponents?includeObiFiles=true`;
     const res = await fetch(url, {
       method: 'POST',
@@ -97,28 +88,37 @@ export class PVABotClient {
       // construct the content map
       for (const change of data.obiFileChanges) {
         if (change.isDeleted) {
-          if (writeFiles) {
+          // TODO: we will eventually need to be able to read a .trigger from PVA and alter
+          // the main .dialog and .lu files accordingly (reverse of the splitting logic)
+          if (writeFiles && extname(change.path) !== '.trigger') {
             const filePath = join(this.projectPath, change.path);
             await unlink(filePath);
           }
           delete this.botModel.obiContentMap[change.path];
         } else {
           this.botModel.obiContentMap[change.path] = change.componentInfo;
-          if (writeFiles) {
+          // TODO: we will eventually need to be able to read a .trigger from PVA and alter
+          // the main .dialog and .lu files accordingly (reverse of the splitting logic)
+          if (writeFiles && extname(change.path) !== '.trigger') {
             const filePath = join(this.projectPath, change.path);
-            console.log(`Writing ${filePath}...`);
+            logger.log(`Writing ${filePath}...`);
             await ensureFile(filePath);
             await writeFile(filePath, change.fileContent);
-            console.log(`${filePath} successfully written!`);
+            logger.log(`${filePath} successfully written!`);
           }
         }
       }
-      this.botModel.trackedUpdates = {};
       this.updateBotCache();
       await this.ensureRootDialog();
     } else {
-      const error = await res.text();
-      console.error(error);
+      let error: any = await res.text();
+      try {
+        error = JSON.parse(error);
+      } catch (e) {
+        console.error('Error while trying to parse error JSON: ', e);
+      } finally {
+        console.error(error);
+      }
     }
   }
 
@@ -199,12 +199,7 @@ export class PVABotClient {
       };
       const pvaMetadata = this.metadata.additionalInfo as PVAMetadata;
 
-      let token = process.env.PVA_DEMO_TOKEN;
-      if (!token) {
-        token = await this.electronContext.getAccessToken({
-          targetResource: PVA_TEST_APP_ID,
-        });
-      }
+      const token = process.env.PVA_DEMO_TOKEN; // TODO: will need to replace this with actual auth
       const url = `${pvaMetadata.baseUrl}api/botauthoring/v1/environments/${pvaMetadata.envId}/bots/${pvaMetadata.botId}/content/botcomponents`;
       const res = await fetch(url, {
         method: 'PUT',
@@ -216,12 +211,25 @@ export class PVABotClient {
         },
         body: JSON.stringify(request),
       });
-      if (res.status === 200) {
+      if (res.status >= 200 && res.status < 300) {
         // get an updated list of the bot's assets from PVA and rebuild the content map
         await this.fetchBotAndCreateContentMap(false);
+        this.botModel.trackedUpdates = {};
+        this.updateBotCache();
       } else {
-        const error = await res.text();
-        console.error(error);
+        let error: any = await res.text();
+        try {
+          error = JSON.parse(error);
+          if (error?.ErrorCode === 4104) {
+            // content is out of sync
+            await this.fetchBotAndCreateContentMap(false);
+            await this.saveToPVA();
+          }
+        } catch (e) {
+          console.error('Error while trying to parse error JSON: ', e);
+        } finally {
+          console.error(error);
+        }
       }
     }
     // no-op if no changes
@@ -251,10 +259,17 @@ export class PVABotClient {
 
     // write the root dialog, lg, and lu files for the first time
     if (!rootDialogExists) {
+      // delete the placeholder root dialog that satisfies the "isBotFolder()" call
+      const existingRootDialogPaths = await globby(posix.join(this.projectPath, '*.dialog'));
+      logger.log('Found paths: ', existingRootDialogPaths);
+      for (const existingPath of existingRootDialogPaths) {
+        await unlink(existingPath);
+        logger.log('deleted ', existingPath);
+      }
+
       const rootDialogContent = getMinimalRootDialogContent(botName);
       await writeFile(rootDialogPath, rootDialogContent); // TODO: need to enforce utf-8?
-      //await unlink(tempRootDialogPath);
-      logger.log(`Got rid of temp root dialog and wrote real dialog file at: ${rootDialogPath}`);
+      logger.log(`Wrote real root dialog file at: ${rootDialogPath}`);
 
       // create the corresponding lu and lg files
       const locale = 'en-us'; // TODO: should eventually be dynamic
@@ -277,8 +292,8 @@ export class PVABotClient {
       const rootDialogLuFilePath = join(
         this.projectPath,
         'language-understanding',
-        'en-us' /* <-- this will eventually have to be dynamic */,
-        `${botName}.en-us.lu`
+        locale /* <-- this will eventually have to be dynamic */,
+        `${botName}.${locale}.lu`
       );
       const intents = await parseIntentsFromLuFile(rootDialogLuFilePath);
 
