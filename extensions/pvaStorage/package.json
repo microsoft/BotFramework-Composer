@@ -21,7 +21,7 @@
     "archiver": "^5.0.2",
     "debug": "^4.3.2",
     "fs-extra": "^10.0.0",
-    "globby": "^11.0.1",
+    "globby": "11.0.4",
     "node-fetch": "^2.6.1",
     "rimraf": "^3.0.2"
   },

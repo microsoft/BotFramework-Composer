@@ -90,7 +90,7 @@ export interface IFileStorage {
   copyFile(src: string, dest: string): Promise<void>;
   rename(oldPath: string, newPath: string): Promise<void>;
   zip(source: string, exclusions: { files: string[]; directories: string[] }, cb: any): unknown;
-  initialize?(electronContext: any): Promise<void>;
+  initialize?(electronContext: any, botDir: string): Promise<void>;
   autoSave?(): Promise<void>;
 }
 

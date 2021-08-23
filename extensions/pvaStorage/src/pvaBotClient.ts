@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { basename, extname, join, normalize, posix, relative, resolve } from 'path';
+import { basename, extname, join, posix, relative } from 'path';
 
 import { ensureFile, pathExists, readFile, unlink, writeFile } from 'fs-extra';
 import fetch from 'node-fetch';
@@ -19,10 +19,6 @@ import {
 import { PVABotsCache } from './pvaBotsCache';
 import { logger } from './logger';
 import { parseIntentsFromLuFile, getLuFileContentForIntent } from './luHelpers';
-
-// TODO: make this dynamic
-const HARDCODED_TEST_DIR = resolve('C:\\Users\\tonya\\Desktop\\Git Projects\\test\\PULLED-FROM-PVA');
-const PVA_TEST_APP_ID = 'a522f059-bb65-47c0-8934-7db6e5286414';
 
 const getMinimalRootDialogContent = (botName: string) =>
   JSON.stringify({
@@ -45,7 +41,7 @@ const getMinimalRootDialogContent = (botName: string) =>
 
 // converts all paths to "this/is/some/path" format which is understood by PVA's backend
 function normalizePath(path: string) {
-  return normalize(path).replace(/\\/g, '/');
+  return path.replace(/\\/g, '/');
 }
 
 export class PVABotClient {
@@ -54,6 +50,7 @@ export class PVABotClient {
   private projectPath = '';
   private projectId: string | undefined;
   private electronContext: any;
+  private locale = 'en-us'; // TODO: eventually needs to be dynamic
 
   constructor(id: string, metadata: BotProjectMetadata) {
     this.projectId = id;
@@ -122,10 +119,10 @@ export class PVABotClient {
     }
   }
 
-  public async initialize(electronContext: any) {
+  public async initialize(electronContext: any, botDir: string) {
     // TODO: should electronContext be passed into the constructor?
     this.electronContext = electronContext;
-    this.projectPath = normalizePath(HARDCODED_TEST_DIR);
+    this.projectPath = normalizePath(botDir);
     // try to get the bot from the cache
     const cachedBot = PVABotsCache[this.projectId];
     if (cachedBot) {
@@ -141,20 +138,18 @@ export class PVABotClient {
 
   public trackWrite(path, content) {
     const normalizedPath = normalizePath(path);
-    const locale = 'en-us'; // TODO: eventually needs to be dynamic
 
     // ignore any changes to the root .lu file or .lg file
     if (
       normalizedPath === this.rootDialogPath ||
-      normalizedPath ===
-        normalizePath(join(this.projectPath, 'language-understanding', locale, `${this.botName}.${locale}.lu`)) ||
-      normalizedPath ===
-        normalizePath(join(this.projectPath, 'language-generation', locale, `${this.botName}.${locale}.lg`))
+      normalizedPath === this.rootDialogLgPath ||
+      normalizedPath === this.rootDialogLuPath
     ) {
       logger.log(`Ignoring changes to the root dialog files: ${normalizedPath}`);
       return;
     } else {
-      this.botModel.trackedUpdates[normalizedPath] = {
+      const pvaObiPath = this.convertToPVARelativePath(normalizedPath);
+      this.botModel.trackedUpdates[pvaObiPath] = {
         content,
         isDelete: false,
       };
@@ -164,10 +159,22 @@ export class PVABotClient {
 
   public trackDelete(path) {
     const normalizedPath = normalizePath(path);
-    this.botModel.trackedUpdates[normalizedPath] = {
-      isDelete: true,
-    };
-    this.updateBotCache();
+
+    // ignore any changes to the root .lu file or .lg file
+    if (
+      normalizedPath === this.rootDialogPath ||
+      normalizedPath === this.rootDialogLgPath ||
+      normalizedPath === this.rootDialogLuPath
+    ) {
+      logger.log(`Ignoring deletes to the root dialog files: ${normalizedPath}`);
+      return;
+    } else {
+      const pvaObiPath = this.convertToPVARelativePath(normalizedPath);
+      this.botModel.trackedUpdates[pvaObiPath] = {
+        isDelete: true,
+      };
+      this.updateBotCache();
+    }
   }
 
   public async saveToPVA() {
@@ -179,6 +186,7 @@ export class PVABotClient {
       // only push up changes to .dialog, .lg, and .lu files -- PVA will throw an error for other types
       return !!changedPath && /\.(dialog|lg|lu|trigger)$/.test(changedPath);
     });
+
     if (changedPaths.length) {
       // construct the request
       const obiFileChanges: ObiFileModification[] = [];
@@ -189,7 +197,7 @@ export class PVABotClient {
           componentInfo,
           fileContent: this.botModel.trackedUpdates[obiPath].content || '',
           isDeleted: this.botModel.trackedUpdates[obiPath].isDelete,
-          path: this.convertToPVARelativePath(obiPath),
+          path: obiPath,
         };
         obiFileChanges.push(modification);
       }
@@ -221,9 +229,8 @@ export class PVABotClient {
         try {
           error = JSON.parse(error);
           if (error?.ErrorCode === 4104) {
-            // content is out of sync
+            // content is out of sync -- go get newest content
             await this.fetchBotAndCreateContentMap(false);
-            await this.saveToPVA();
           }
         } catch (e) {
           console.error('Error while trying to parse error JSON: ', e);
@@ -252,10 +259,7 @@ export class PVABotClient {
   }
 
   private async ensureRootDialog() {
-    const botName = basename(this.projectPath);
-    const rootDialogName = `${botName}.dialog`;
-    const rootDialogPath = join(this.projectPath, rootDialogName);
-    const rootDialogExists = await pathExists(rootDialogPath);
+    const rootDialogExists = await pathExists(this.rootDialogPath);
 
     // write the root dialog, lg, and lu files for the first time
     if (!rootDialogExists) {
@@ -267,35 +271,23 @@ export class PVABotClient {
         logger.log('deleted ', existingPath);
       }
 
-      const rootDialogContent = getMinimalRootDialogContent(botName);
-      await writeFile(rootDialogPath, rootDialogContent); // TODO: need to enforce utf-8?
-      logger.log(`Wrote real root dialog file at: ${rootDialogPath}`);
+      const rootDialogContent = getMinimalRootDialogContent(this.botName);
+      await writeFile(this.rootDialogPath, rootDialogContent); // TODO: need to enforce utf-8?
+      logger.log(`Wrote real root dialog file at: ${this.rootDialogPath}`);
 
       // create the corresponding lu and lg files
-      const locale = 'en-us'; // TODO: should eventually be dynamic
-      const rootLgPath = join(this.projectPath, 'language-generation', locale, `${botName}.${locale}.lg`);
-      await ensureFile(rootLgPath);
-      logger.log(`Created root LG file at ${rootLgPath}`);
+      await ensureFile(this.rootDialogLgPath);
+      logger.log(`Created root LG file at ${this.rootDialogLgPath}`);
 
-      const rootLuPath = join(this.projectPath, 'language-understanding', locale, `${botName}.${locale}.lu`);
-      await ensureFile(rootLuPath);
-      logger.log(`Created root LU file at ${rootLuPath}`);
+      await ensureFile(this.rootDialogLuPath);
+      logger.log(`Created root LU file at ${this.rootDialogLuPath}`);
     }
   }
 
   private async trackRootDialogChanges() {
     try {
-      const botName = basename(this.projectPath);
-      const locale = 'en-us'; // TODO: should eventually be dynamic
-
       // parse the root dialog's LU file for any intents and their utterances
-      const rootDialogLuFilePath = join(
-        this.projectPath,
-        'language-understanding',
-        locale /* <-- this will eventually have to be dynamic */,
-        `${botName}.${locale}.lu`
-      );
-      const intents = await parseIntentsFromLuFile(rootDialogLuFilePath);
+      const intents = await parseIntentsFromLuFile(this.rootDialogLuPath);
 
       // create a trigger file OBI entry for every trigger in the root dialog
       const mainDialogContent = await readFile(this.rootDialogPath, { encoding: 'utf-8' });
@@ -316,7 +308,7 @@ export class PVABotClient {
         if (trigger.$kind === 'Microsoft.OnIntent') {
           const triggerIntent = trigger.intent;
           if (intents[triggerIntent]) {
-            const triggerLuPath = `triggers/${triggerId}/language-understanding/${locale}/${triggerId}.${locale}.lu`;
+            const triggerLuPath = `triggers/${triggerId}/language-understanding/${this.locale}/${triggerId}.${this.locale}.lu`;
             const triggerLuContent = await getLuFileContentForIntent(
               triggerLuPath,
               triggerIntent,
@@ -336,14 +328,15 @@ export class PVABotClient {
     }
   }
 
-  // converts an absolute on-disk path to a path relative to the PVA bot
+  // converts an absolute on-disk path to a path relative to the PVA bot (the root is the bot folder)
+  // Ex: "C:\\Users\\user123\\Bots\\MyBot\\dialogs\\sendDialog\\sendDialog.dialog" -> "dialogs/sendDialog/sendDialog.dialog"
   private convertToPVARelativePath(absolutePath: string) {
     // the trigger paths do not need to be converted to the PVA format because
     // they are already in that format
     if (absolutePath.startsWith('triggers')) {
       return absolutePath;
     }
-    return relative(this.projectPath, absolutePath);
+    return normalizePath(relative(this.projectPath, absolutePath));
   }
 
   private get botName(): string {
@@ -351,6 +344,14 @@ export class PVABotClient {
   }
 
   private get rootDialogPath(): string {
-    return normalizePath(join(this.projectPath, `${this.botName}.dialog`));
+    return join(this.projectPath, `${this.botName}.dialog`);
+  }
+
+  private get rootDialogLgPath(): string {
+    return join(this.projectPath, 'language-generation', this.locale, `${this.botName}.${this.locale}.lg`);
+  }
+
+  private get rootDialogLuPath(): string {
+    return join(this.projectPath, 'language-understanding', this.locale, `${this.botName}.${this.locale}.lu`);
   }
 }
