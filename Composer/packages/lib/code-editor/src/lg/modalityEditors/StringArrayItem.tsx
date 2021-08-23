@@ -14,6 +14,7 @@ import { CodeEditorSettings, LgTemplate, TelemetryClient } from '@bfc/shared';
 import { withTooltip } from '../../utils/withTooltip';
 import { LgCodeEditor } from '../LgCodeEditor';
 import { LGOption } from '../../utils';
+import { RichEditor } from '../../rich-text/RichTextEditor';
 
 const removeIconClassName = 'string-array-item-remove-icon';
 
@@ -95,7 +96,7 @@ const textFieldStyles = {
 
 type Props = {
   mode: 'edit' | 'view';
-  editorMode?: 'single' | 'editor';
+  editorMode?: 'single' | 'editor' | 'rich';
   lgOption?: LGOption;
   lgTemplates?: readonly LgTemplate[];
   memoryVariables?: readonly string[];
@@ -108,7 +109,7 @@ type Props = {
   onJumpTo?: (direction: 'next' | 'previous') => void;
   onRemove: () => void;
   onFocus: () => void;
-  onChange?: (event: React.FormEvent<HTMLTextAreaElement | HTMLInputElement>, value?: string) => void;
+  onChange?: (value?: string) => void;
   onLgChange?: (value: string) => void;
   onShowCallout?: (target: HTMLTextAreaElement) => void;
   onEditorPopToggle?: (expanded: boolean) => void;
@@ -201,6 +202,13 @@ const TextFieldItem = React.memo(({ value, onShowCallout, onChange }: TextFieldI
     [onShowCallout]
   );
 
+  const change = React.useCallback(
+    (_, value?: string) => {
+      onChange?.(value);
+    },
+    [onChange]
+  );
+
   return (
     <div ref={containerRef}>
       <Input
@@ -212,7 +220,7 @@ const TextFieldItem = React.memo(({ value, onShowCallout, onChange }: TextFieldI
         resizable={false}
         styles={textFieldStyles}
         value={value}
-        onChange={onChange}
+        onChange={change}
         onClick={click}
         onFocus={focus}
       />
@@ -258,7 +266,7 @@ export const StringArrayItem = (props: Props) => {
       {mode === 'edit' ? (
         editorMode === 'single' ? (
           <TextFieldItem value={value} onChange={onChange} onShowCallout={onShowCallout} />
-        ) : (
+        ) : editorMode === 'editor' ? (
           <LgCodeEditorContainer>
             <LgCodeEditor
               editorDidMount={onEditorDidMount}
@@ -274,6 +282,8 @@ export const StringArrayItem = (props: Props) => {
               onChange={onLgChange}
             />
           </LgCodeEditorContainer>
+        ) : (
+          <RichEditor value={value} onChange={onChange} />
         )
       ) : (
         <TextViewItem

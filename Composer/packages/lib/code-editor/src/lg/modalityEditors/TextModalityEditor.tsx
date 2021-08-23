@@ -56,6 +56,7 @@ const TextModalityEditor = React.memo(
         onRemoveModality={onRemoveModality}
       >
         <StringArrayEditor
+          editorMode="rich"
           items={items}
           lgOption={lgOption}
           lgTemplates={lgTemplates}
