@@ -16,6 +16,7 @@ import {
   AssignmentMarginTop,
   PropertyAssignmentSize,
   AssignmentMarginBottom,
+  QuestionDetailsSize,
 } from '../constants/ElementSizes';
 import { transformIfCondtion } from '../transformers/transformIfCondition';
 import { transformSwitchCondition } from '../transformers/transformSwitchCondition';
@@ -134,6 +135,9 @@ export function measureJsonBoundary(json): Boundary {
       break;
     case AdaptiveKinds.IfCondition:
       boundary = measureIfConditionBoundary(json);
+      break;
+    case AdaptiveKinds.QuestionDetails:
+      boundary = new Boundary(QuestionDetailsSize.width, QuestionDetailsSize.height);
       break;
     case 'Microsoft.VirtualAgents.Question':
       boundary = measureQuestionBoundary(json);

@@ -15,6 +15,11 @@ export const DiamondSize = {
   height: 12,
 };
 
+export const QuestionDetailsSize = {
+  width: InitNodeSize.width,
+  height: 362,
+};
+
 export const LoopIconSize = {
   width: 16,
   height: 16,

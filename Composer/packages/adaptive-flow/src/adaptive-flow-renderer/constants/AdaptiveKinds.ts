@@ -13,6 +13,7 @@ enum VirtualElementTypes {
   UserAnswers = 'VisualSDK.UserAnswers',
   InvalidPromptBrick = 'VisualSDK.InvalidPromptBrick',
   ChoiceInputDetail = 'VisualSDK.ChoiceInputDetail',
+  QuestionDetails = 'VisualSDK.QuestionDetails',
   QuestionCondition = 'VisualSDK.QuestionConditionNode',
 }
 

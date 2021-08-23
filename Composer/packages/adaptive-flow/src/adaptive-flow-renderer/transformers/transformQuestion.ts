@@ -14,7 +14,7 @@ export function transformQuestion(input, jsonpath: string): { question: IndexedN
   const result = {
     question: new IndexedNode(`${jsonpath}`, {
       ...input,
-      $kind: AdaptiveKinds.ConditionNode,
+      $kind: AdaptiveKinds.QuestionDetails,
     }),
     branches: [] as IndexedNode[],
   };
