@@ -6,6 +6,13 @@ import { PluginConfig } from '@bfc/extension-client';
 const config: PluginConfig = {
   uiSchema: {
     'Microsoft.VirtualAgents.Question': {
+      form: {
+        properties: {
+          cases: {
+            hidden: ['actions'],
+          },
+        },
+      },
       flow: {
         widget: 'QuestionWidget',
 
