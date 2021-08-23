@@ -32,7 +32,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   const autoSaveTimer = useRef<NodeJS.Timer | undefined>();
 
   useEmptyPropsHandler(projectId, location, skillId, dialogId);
-  const { setPageElementState } = useRecoilValue(dispatcherState);
+  const { setAutoSaveState, setPageElementState } = useRecoilValue(dispatcherState);
   const currentDialog = useRecoilValue(currentDialogState({ dialogId, projectId }));
   const showTreePanel = useRecoilValue(showProjectTreePanelState);
 
@@ -46,12 +46,15 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
 
   useEffect(() => {
     autoSaveTimer.current = setInterval(async () => {
+      setAutoSaveState('Pending');
       await autoSave();
+      setAutoSaveState('RecentlySaved');
     }, autoSaveIntervalTime);
 
     return () => {
       if (autoSaveTimer.current) {
         clearInterval(autoSaveTimer.current);
+        setAutoSaveState('Idle');
       }
     };
   }, [autoSaveTimer, projectId]);

@@ -535,3 +535,5 @@ export const SURVEY_PARAMETERS = {
 
 export const LAST_SURVEY_KEY = 'lastSurveyTakenOnTimestamp';
 export const SURVEY_URL_BASE = 'https://aka.ms/bfcomposersurvey';
+
+export type AutoSaveState = 'Idle' | 'Pending' | 'RecentlySaved';
