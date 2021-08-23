@@ -5,9 +5,9 @@ import fs from 'fs';
 import path from 'path';
 
 import find from 'lodash/find';
-import { UserIdentity, FileExtensions, FeedType, RuntimeType } from '@bfc/extension';
+import { UserIdentity, FileExtensions, RuntimeType } from '@bfc/extension';
 import { mkdirSync, readFile } from 'fs-extra';
-import { BotTemplate, emptyBotNpmTemplateName, FeedName, QnABotTemplateId } from '@bfc/shared';
+import { BotTemplate, emptyBotNpmTemplateName, FeedName, QnABotTemplateId, firstPartyTemplateFeed } from '@bfc/shared';
 import { ServerWorker } from '@bfc/server-workers';
 import isArray from 'lodash/isArray';
 
@@ -24,6 +24,7 @@ import { BotProject } from '../bot/botProject';
 import { templateGeneratorPath } from '../../settings/env';
 import { BackgroundProcessManager } from '../../services/backgroundProcessManager';
 import { FeatureFlagService } from '../../services/featureFlags';
+import { FallbackTemplateFeedObj } from '../../constants';
 
 const defaultBotProjectFileContent = {
   $schema:
@@ -257,11 +258,6 @@ export class AssetManager {
     }
   }
 
-  private getFeedType(): FeedType {
-    // TODO: parse through data to detect for npm or nuget package schema and return respecive result
-    return 'npm';
-  }
-
   private getPackageDisplayName(packageName: string): string {
     if (packageName) {
       return packageName
@@ -278,53 +274,52 @@ export class AssetManager {
     try {
       const res = await fetch(feedUrl);
       const data = await res.json();
-      const feedType = this.getFeedType();
 
-      if (feedType === 'npm') {
-        const result: BotTemplate[] = await Promise.all(
-          data.objects.map(
-            async (result): Promise<BotTemplate> => {
-              const { name, version, keywords, description = '' } = result.package;
-              const shouldFetchVersions = FeatureFlagService.getFeatureFlagValue('ADVANCED_TEMPLATE_OPTIONS');
-              const versions = shouldFetchVersions ? await this.getNpmPackageVersions(name) : [];
-              const displayName = this.getPackageDisplayName(name);
-              const templateToReturn = {
-                id: name,
-                name: displayName,
-                description: description,
-                package: {
-                  packageName: name,
-                  packageSource: 'npm',
-                  packageVersion: version,
-                  availableVersions: versions,
-                },
-              } as BotTemplate;
-              if (isArray(keywords)) {
-                if (keywords.includes('bf-dotnet-functions') || keywords.includes('bf-dotnet-webapp')) {
-                  templateToReturn.dotnetSupport = {
-                    functionsSupported: keywords.includes('bf-dotnet-functions'),
-                    webAppSupported: keywords.includes('bf-dotnet-webapp'),
-                  };
-                }
-                if (keywords.includes('bf-js-functions') || keywords.includes('bf-js-webapp')) {
-                  templateToReturn.nodeSupport = {
-                    functionsSupported: keywords.includes('bf-js-functions'),
-                    webAppSupported: keywords.includes('bf-js-webapp'),
-                  };
-                }
-                templateToReturn.isMultiBotTemplate = keywords.includes('msbot-multibot-project');
+      const result: BotTemplate[] = await Promise.all(
+        data.objects.map(
+          async (result): Promise<BotTemplate> => {
+            const { name, version, keywords, description = '' } = result.package;
+            const shouldFetchVersions = FeatureFlagService.getFeatureFlagValue('ADVANCED_TEMPLATE_OPTIONS');
+            const versions = shouldFetchVersions ? await this.getNpmPackageVersions(name) : [];
+            const displayName = this.getPackageDisplayName(name);
+            const templateToReturn = {
+              id: name,
+              name: displayName,
+              description: description,
+              package: {
+                packageName: name,
+                packageSource: 'npm',
+                packageVersion: version,
+                availableVersions: versions,
+              },
+            } as BotTemplate;
+            if (isArray(keywords)) {
+              if (keywords.includes('bf-dotnet-functions') || keywords.includes('bf-dotnet-webapp')) {
+                templateToReturn.dotnetSupport = {
+                  functionsSupported: keywords.includes('bf-dotnet-functions'),
+                  webAppSupported: keywords.includes('bf-dotnet-webapp'),
+                };
               }
-              return templateToReturn;
+              if (keywords.includes('bf-js-functions') || keywords.includes('bf-js-webapp')) {
+                templateToReturn.nodeSupport = {
+                  functionsSupported: keywords.includes('bf-js-functions'),
+                  webAppSupported: keywords.includes('bf-js-webapp'),
+                };
+              }
+              templateToReturn.isMultiBotTemplate = keywords.includes('msbot-multibot-project');
             }
-          )
-        );
-        return result;
-      } else if (feedType === 'nuget') {
-        // TODO: handle nuget processing
-      } else {
-        return [];
+            return templateToReturn;
+          }
+        )
+      );
+      if (feedUrl === firstPartyTemplateFeed && result.length < 1) {
+        return FallbackTemplateFeedObj;
       }
+      return result;
     } catch (error) {
+      if (feedUrl === firstPartyTemplateFeed) {
+        return FallbackTemplateFeedObj;
+      }
       return null;
     }
   }
@@ -339,6 +334,7 @@ export class AssetManager {
         templates = templates.concat(feedTemplates);
       } else if (feedTemplates === null) {
         invalidFeedUrls.push(feed);
+        log('Failed to load any templates from %s', feed);
       }
     }
 

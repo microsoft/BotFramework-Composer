@@ -94,6 +94,8 @@ router.get('/publish/:method', PublishController.publish);
 //assets
 router.post('/assets/projectTemplates', AssetController.getProjTemplates);
 router.get('/assets/templateReadme', AssetController.getTemplateReadMe);
+router.get('/assets/templateFeedUrl', AssetController.fetchTemplateFeedUrl);
+router.post('/assets/templateFeedUrl', AssetController.setTemplateFeedUrl);
 
 router.use('/assets/locales/', express.static(path.join(__dirname, '..', '..', 'src', 'locales')));
 

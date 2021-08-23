@@ -9,6 +9,7 @@ import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button'
 import { DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
 import { ScrollablePane, ScrollbarVisibility } from 'office-ui-fabric-react/lib/ScrollablePane';
 import { Selection } from 'office-ui-fabric-react/lib/DetailsList';
+import { Text } from 'office-ui-fabric-react/lib/Text';
 import {
   DetailsList,
   DetailsListLayoutMode,
@@ -30,6 +31,7 @@ import msftIcon from '../../images/msftIcon.svg';
 import { DialogCreationCopy } from '../../constants';
 import { creationFlowTypeState, fetchReadMePendingState, selectedTemplateReadMeState } from '../../recoilModel';
 import TelemetryClient from '../../telemetry/TelemetryClient';
+import { navigateTo } from '../../utils/navigation';
 
 import { TemplateDetailView } from './TemplateDetailView';
 
@@ -102,6 +104,11 @@ const content = css`
   outline: none;
 `;
 
+const noTemplateTextStyle = css`
+  padding-top: 5px;
+  padding-left: 5px;
+`;
+
 const optionKeys = {
   createFromScratch: 'createFromScratch',
   createFromQnA: 'createFromQnA',
@@ -134,6 +141,7 @@ export function CreateBot(props: CreateBotProps) {
   const [localTemplatePathValid, setLocalTemplatePathValid] = useState<boolean>(false);
   const [displayedTemplates, setDisplayedTemplates] = useState<BotTemplate[]>([]);
   const [readMe] = useRecoilState(selectedTemplateReadMeState);
+
   const fetchReadMePending = useRecoilValue(fetchReadMePendingState);
   const creationFlowType = useRecoilValue(creationFlowTypeState);
 
@@ -262,6 +270,71 @@ export function CreateBot(props: CreateBotProps) {
   const dialogWrapperProps =
     creationFlowType === 'Skill' ? DialogCreationCopy.CREATE_NEW_SKILLBOT : DialogCreationCopy.CREATE_NEW_BOT;
 
+  const renderTemplateSelector = () => {
+    return (
+      <Fragment>
+        <div css={detailListContainer} data-is-scrollable="true" id="templatePickerContainer">
+          <ScrollablePane
+            scrollbarVisibility={ScrollbarVisibility.auto}
+            styles={{ root: { width: '100%', height: 'inherit', position: 'relative' } }}
+          >
+            <DetailsList
+              checkboxVisibility={CheckboxVisibility.hidden}
+              columns={tableColumns}
+              compact={false}
+              getKey={(item) => item.name}
+              isHeaderVisible={false}
+              items={displayedTemplates}
+              layoutMode={DetailsListLayoutMode.justified}
+              selection={selectedTemplate}
+              selectionMode={disabled ? SelectionMode.none : SelectionMode.single}
+              onRenderRow={onRenderRow}
+            />
+          </ScrollablePane>
+        </div>
+        <div css={templateDetailContainer} data-is-scrollable="true">
+          {fetchReadMePending ? (
+            <LoadingSpinner />
+          ) : (
+            <TemplateDetailView
+              localTemplatePath={localTemplatePath}
+              readMe={readMe}
+              template={getTemplate()}
+              onUpdateLocalTemplatePath={onUpdateLocalTemplatePath}
+              onValidateLocalTemplatePath={setLocalTemplatePathValid}
+            />
+          )}
+        </div>
+      </Fragment>
+    );
+  };
+
+  const renderNoTemplateView = () => {
+    return (
+      <Fragment>
+        <div css={noTemplateTextStyle}>
+          <Text variant={'medium'}>
+            {formatMessage.rich(
+              `No templates pulled from currently configured template feed, please <feedFormDeepLink>configure your feed</feedFormDeepLink> to get templates.`,
+              {
+                feedFormDeepLink: ({ children }) => (
+                  <Link
+                    key="template-feed-link"
+                    onClick={() => {
+                      navigateTo('/settings');
+                    }}
+                  >
+                    {children}
+                  </Link>
+                ),
+              }
+            )}
+          </Text>
+        </div>
+      </Fragment>
+    );
+  };
+
   return (
     <Fragment>
       <DialogWrapper isOpen={isOpen} {...dialogWrapperProps} dialogType={DialogTypes.CreateFlow} onDismiss={onDismiss}>
@@ -280,40 +353,7 @@ export function CreateBot(props: CreateBotProps) {
             itemKey={nodeFeedKey}
           ></PivotItem>
         </Pivot>
-        <div css={pickerContainer}>
-          <div css={detailListContainer} data-is-scrollable="true" id="templatePickerContainer">
-            <ScrollablePane
-              scrollbarVisibility={ScrollbarVisibility.auto}
-              styles={{ root: { width: '100%', height: 'inherit', position: 'relative' } }}
-            >
-              <DetailsList
-                checkboxVisibility={CheckboxVisibility.hidden}
-                columns={tableColumns}
-                compact={false}
-                getKey={(item) => item.name}
-                isHeaderVisible={false}
-                items={displayedTemplates}
-                layoutMode={DetailsListLayoutMode.justified}
-                selection={selectedTemplate}
-                selectionMode={disabled ? SelectionMode.none : SelectionMode.single}
-                onRenderRow={onRenderRow}
-              />
-            </ScrollablePane>
-          </div>
-          <div css={templateDetailContainer} data-is-scrollable="true">
-            {fetchReadMePending ? (
-              <LoadingSpinner />
-            ) : (
-              <TemplateDetailView
-                localTemplatePath={localTemplatePath}
-                readMe={readMe}
-                template={getTemplate()}
-                onUpdateLocalTemplatePath={onUpdateLocalTemplatePath}
-                onValidateLocalTemplatePath={setLocalTemplatePathValid}
-              />
-            )}
-          </div>
-        </div>
+        <div css={pickerContainer}>{currentTemplateId ? renderTemplateSelector() : renderNoTemplateView()}</div>
         <DialogFooter>
           <Link
             href={templateRequestUrl}

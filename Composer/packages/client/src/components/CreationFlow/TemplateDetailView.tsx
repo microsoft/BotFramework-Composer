@@ -168,24 +168,28 @@ export const TemplateDetailView: React.FC<TemplateDetailViewProps> = (props) => 
     );
   };
 
-  return (
-    <div>
-      <div css={templateTitleContainer(isLocalTemplate)}>
-        <Stack horizontal>
-          <Stack.Item>{renderTemplateIcon()}</Stack.Item>
-          <Stack.Item>
-            <span css={templateTitle(isLocalTemplate)}>
-              {props.template?.name ? props.template.name : formatMessage('Template undefined')}
-            </span>
-            {!isLocalTemplate && renderVersionButton()}
-          </Stack.Item>
-        </Stack>
+  const renderDetailView = () => {
+    return (
+      <div>
+        <div css={templateTitleContainer(isLocalTemplate)}>
+          <Stack horizontal>
+            <Stack.Item>{renderTemplateIcon()}</Stack.Item>
+            <Stack.Item>
+              <span css={templateTitle(isLocalTemplate)}>
+                {props.template?.name ? props.template.name : formatMessage('Template undefined')}
+              </span>
+              {!isLocalTemplate && renderVersionButton()}
+            </Stack.Item>
+          </Stack>
+        </div>
+        {isLocalTemplate ? (
+          renderLocalTemplateForm()
+        ) : (
+          <ReactMarkdown linkTarget="_blank">{getStrippedReadMe()}</ReactMarkdown>
+        )}
       </div>
-      {isLocalTemplate ? (
-        renderLocalTemplateForm()
-      ) : (
-        <ReactMarkdown linkTarget="_blank">{getStrippedReadMe()}</ReactMarkdown>
-      )}
-    </div>
-  );
+    );
+  };
+
+  return <Fragment>{props.template ? renderDetailView() : null}</Fragment>;
 };

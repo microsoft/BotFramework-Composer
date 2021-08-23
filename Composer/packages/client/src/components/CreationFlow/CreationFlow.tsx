@@ -6,9 +6,9 @@ import Path from 'path';
 import React, { useEffect, useRef, Fragment, useState } from 'react';
 import { RouteComponentProps, Router, navigate } from '@reach/router';
 import { useRecoilValue } from 'recoil';
-import { BotTemplate } from '@bfc/shared';
+import { BotTemplate, firstPartyTemplateFeed } from '@bfc/shared';
 
-import { CreationFlowStatus, firstPartyTemplateFeed } from '../../constants';
+import { CreationFlowStatus } from '../../constants';
 import {
   dispatcherState,
   creationFlowStatusState,
@@ -18,6 +18,7 @@ import {
   userSettingsState,
   templateProjectsState,
   selectedTemplateVersionState,
+  templateFeedUrlState,
 } from '../../recoilModel';
 import { localBotsDataSelector } from '../../recoilModel/selectors/project';
 import Home from '../../pages/home/Home';
@@ -49,8 +50,10 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
     fetchProjectById,
     createNewBot,
     fetchReadMe,
+    fetchTemplateFeedUrl,
   } = useRecoilValue(dispatcherState);
 
+  const templateFeedUrl = useRecoilValue(templateFeedUrlState);
   const templateProjects = useRecoilValue(templateProjectsState);
   const creationFlowStatus = useRecoilValue(creationFlowStatusState);
   const projectId = useRecoilValue(currentProjectIdState);
@@ -83,13 +86,18 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
       await fetchProjectById(cachedProjectId);
     }
     await fetchStorages();
-    await fetchTemplates([firstPartyTemplateFeed]);
+    await fetchTemplateFeedUrl();
     fetchFeed();
     fetchRecentProjects();
   };
 
   useEffect(() => {
     fetchResources();
+    if (templateFeedUrl) {
+      fetchTemplates([templateFeedUrl]);
+    } else {
+      fetchTemplates([firstPartyTemplateFeed]);
+    }
   }, []);
 
   const updateCurrentPath = async (newPath, storageId) => {
