@@ -90,12 +90,12 @@ const QuestionFormWidget = ({ prompt, data, id }: QuestionFormWidgetProps) => {
   };
 
   const handleTypeChange = (e, option) => {
-    if (option?.key) {
+    if (option?.key && localData.type !== option.key) {
       const type = option.key;
       // remove cases?
       // handle confirm cases
-      let cases = localData.cases;
-      let choices = localData.choices;
+      let choices: any = undefined;
+      let cases: any = undefined;
 
       if (type !== 'choice') {
         choices = undefined;

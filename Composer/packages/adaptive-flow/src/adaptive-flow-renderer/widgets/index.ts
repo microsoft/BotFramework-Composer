@@ -8,6 +8,7 @@ export { IfConditionWidget } from './IfConditionWidget';
 export { SwitchConditionWidget } from './SwitchConditionWidget';
 export { QuestionWidget } from './Question/QuestionWidget';
 export { QuestionFormWidget } from './Question/QuestionFormWidget';
+export { QuestionConditionWidget } from './Question/QuestionConditionWidget';
 export { ForeachWidget } from './ForeachWidget';
 export { ActionHeader } from './ActionHeader';
 export { ActionGroup } from './ActionGroup';

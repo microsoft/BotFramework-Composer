@@ -22,14 +22,15 @@ export function transformQuestion(input, jsonpath: string): { question: IndexedN
   if (!cases || !Array.isArray(cases)) return result;
 
   result.branches.push(
-    ...cases.map(({ value, actions }, index) => {
+    ...cases.map((c, index) => {
       const prefix = `${jsonpath}.cases[${index}]`;
       return new IndexedNode(`${prefix}.actions`, {
         $kind: AdaptiveKinds.StepGroup,
-        children: actions || [],
+        children: c.actions || [],
         header: {
-          condition: value,
+          ...c,
           id: prefix,
+          question: input,
         },
       });
     })

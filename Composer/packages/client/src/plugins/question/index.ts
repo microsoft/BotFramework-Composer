@@ -45,8 +45,7 @@ const config: PluginConfig = {
       flow: {
         widget: 'ActionCard',
         body: {
-          widget: 'PropertyDescription',
-          description: '',
+          widget: 'QuestionConditionWidget',
           property: '=action.condition',
         },
         header: {
