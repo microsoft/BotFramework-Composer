@@ -87,10 +87,16 @@ async function getAccount(req: Request, res: Response) {
   }
 }
 
+// NOTE: only for the PVA 2 demo
+async function getDemoToken(req: Request, res: Response) {
+  res.status(200).send(process.env.PVA_DEMO_TOKEN || '');
+}
+
 export const AuthController = {
   getAccessToken,
   getTenants,
   getAccount,
   getARMTokenForTenant,
   logOut,
+  getDemoToken,
 };

@@ -124,6 +124,7 @@ router.get('/auth/logOut', AuthController.logOut);
 router.get('/auth/getTenants', csrfProtection, AuthController.getTenants);
 router.get('/auth/getAccount', csrfProtection, AuthController.getAccount);
 router.get('/auth/getARMTokenForTenant', csrfProtection, AuthController.getARMTokenForTenant);
+router.get('/auth/getDemoToken', AuthController.getDemoToken);
 
 // FeatureFlags
 router.get('/featureFlags', FeatureFlagController.getFeatureFlags);
