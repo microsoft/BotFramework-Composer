@@ -29,6 +29,7 @@ export function transformQuestion(input, jsonpath: string): { question: IndexedN
         children: actions || [],
         header: {
           condition: value,
+          id: prefix,
         },
       });
     })

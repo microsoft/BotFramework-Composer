@@ -15,7 +15,7 @@ export function transformStepGroup(input, groupId): IndexedNode[] {
 
   if (input.header) {
     results.push(
-      new IndexedNode(`${groupId}`, {
+      new IndexedNode(input.header.id || groupId, {
         $kind: AdaptiveKinds.QuestionCondition,
         ...input.header,
       })

@@ -34,9 +34,14 @@ export const PVADefs = {
         description: 'Choices to choose from.',
         type: 'array',
         items: {
-          type: 'string',
-          title: 'Simple choice',
-          description: 'One choice for choice input.',
+          type: 'object',
+          properties: {
+            value: {
+              type: 'string',
+              title: 'Simple choice',
+              description: 'One choice for choice input.',
+            },
+          },
         },
       },
       cases: {

@@ -9,6 +9,7 @@ import { FontSizes } from 'office-ui-fabric-react/lib/Styling';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import debounce from 'lodash/debounce';
 import { Label } from 'office-ui-fabric-react/lib/Label';
+import { nanoid } from 'nanoid';
 
 import { QuestionOptions } from './QuestionOptions';
 
@@ -35,17 +36,24 @@ const typeOptions: IDropdownOption[] = [
     key: 'number',
     text: 'Number',
     data: {
-      description: 'Prebuilt, Cardinal numbers in numeric or text form, extracted as a number',
+      description: 'Prebuilt,Cardinal numbers in numeric or text form, extracted as a number',
     },
   },
   {
     key: 'confirm',
     text: 'User confirmation',
     data: {
-      description: 'Prebuilt, User confirmation',
+      description: 'Prebuilt, User confirmation, extracted as a boolean',
     },
   },
 ];
+
+const typeToType = {
+  choice: 'string',
+  text: 'string',
+  number: 'number',
+  confirm: 'boolean',
+};
 
 const renderTypeOption = (props) => {
   return (
@@ -83,9 +91,31 @@ const QuestionFormWidget = ({ prompt, data, id }: QuestionFormWidgetProps) => {
 
   const handleTypeChange = (e, option) => {
     if (option?.key) {
+      const type = option.key;
       // remove cases?
       // handle confirm cases
-      setLocalData({ ...localData, type: option.key });
+      let cases = localData.cases;
+      let choices = localData.choices;
+
+      if (type !== 'choice') {
+        choices = undefined;
+        cases = undefined;
+      }
+
+      if (type === 'confirm') {
+        cases = [
+          {
+            value: true,
+            actions: [],
+          },
+          {
+            value: false,
+            actions: [],
+          },
+        ];
+      }
+
+      setLocalData({ ...localData, type, choices, cases });
     }
   };
 
@@ -97,8 +127,42 @@ const QuestionFormWidget = ({ prompt, data, id }: QuestionFormWidgetProps) => {
     }));
   };
 
-  const updateChoices = (newChoices) => {
-    setLocalData({ ...localData, choices: newChoices });
+  const onAddChoice = () => {
+    const id = nanoid(6);
+    const newChoice = { value: '', id };
+    const choices = (localData.choices || []).concat(newChoice);
+
+    const newCase = { value: '', actions: [], choiceId: id };
+    const cases = (localData.cases || []).concat(newCase);
+
+    setLocalData({ ...localData, choices, cases });
+  };
+
+  const onEditChoice = (id: string, value: string) => {
+    const choices = (localData.choices || []).map((choice) => {
+      if (choice.id === id) {
+        return { ...choice, value };
+      }
+
+      return choice;
+    });
+
+    const cases = (localData.cases || []).map((c) => {
+      if (c.choiceId === id) {
+        return { ...c, value };
+      }
+
+      return c;
+    });
+
+    setLocalData({ ...localData, choices, cases });
+  };
+
+  const onRemoveChoice = (id: string) => {
+    const choices = (localData.choices ?? []).filter((choice) => choice.id !== id);
+    const cases = (localData.cases ?? []).filter((c) => c.choiceId !== id);
+
+    setLocalData({ ...localData, choices, cases });
   };
 
   return (
@@ -118,14 +182,19 @@ const QuestionFormWidget = ({ prompt, data, id }: QuestionFormWidgetProps) => {
         onRenderOption={renderTypeOption}
       />
       {localData.type === 'choice' && (
-        <QuestionOptions options={localData.choices} onChange={updateChoices} onRemove={() => {}} />
+        <QuestionOptions
+          options={localData.choices || []}
+          onAdd={onAddChoice}
+          onChange={onEditChoice}
+          onRemove={onRemoveChoice}
+        />
       )}
       <TextField
         errorMessage={errors.property}
         label="Save response as"
         prefix="{x}"
         styles={{ root: { marginTop: '5px' }, fieldGroup: { marginTop: '5px' } }}
-        suffix={localData.type === 'number' ? '(number)' : '(string)'}
+        suffix={typeToType[localData.type]}
         value={localData.property}
         onChange={handlePropertyChange}
         onClick={clickHandler}

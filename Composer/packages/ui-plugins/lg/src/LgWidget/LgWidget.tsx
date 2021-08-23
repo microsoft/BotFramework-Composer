@@ -6,7 +6,8 @@ import styled from '@emotion/styled';
 import get from 'lodash/get';
 import { Stack } from 'office-ui-fabric-react/lib/Stack';
 import { Text } from 'office-ui-fabric-react/lib/Text';
-import React from 'react';
+import React, { useRef } from 'react';
+import debounce from 'lodash/debounce';
 
 import { useLgTemplate } from './useLgTemplate';
 import { FlowLgEditor } from './FlowLgEditor';
@@ -75,6 +76,12 @@ export const LgWidget: React.FC<LgWidgetProps> = ({ id, data, field, defaultCont
   const { shellApi } = useShellApi();
   const activityTemplate = get(data, field, '') as string;
 
+  const syncData = useRef(
+    debounce((templateId: string) => {
+      shellApi.saveData({ ...data, [field]: templateId }, id);
+    })
+  ).current;
+
   // const templateTextData = useLgTemplate(activityTemplate) ?? defaultContent;
 
   // // If the template has structured response, show rich text
@@ -100,7 +107,7 @@ export const LgWidget: React.FC<LgWidgetProps> = ({ id, data, field, defaultCont
   };
 
   const onChange = (templateId) => {
-    shellApi.saveData({ ...data, [field]: templateId }, id);
+    syncData(templateId);
   };
 
   // otherwise render editor
