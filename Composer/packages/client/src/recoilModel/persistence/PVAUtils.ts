@@ -83,7 +83,6 @@ function convert(data: any) {
 
 export function decomposeComposite$Kinds(action: BaseSchema): BaseSchema {
   const data = action;
-  console.log('[BFC]', data?.$kind, data);
   // first handle triggers (recursive)
   if (data?.triggers && Array.isArray(data.triggers)) {
     data.triggers = data.triggers.map((trigger) => decomposeComposite$Kinds(trigger)).filter(Boolean);

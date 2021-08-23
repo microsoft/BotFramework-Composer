@@ -12,8 +12,11 @@ const config: PluginConfig = {
         question: {
           widget: 'ActionCard',
           body: {
-            widget: 'LgWidget',
-            field: 'prompt',
+            widget: 'QuestionFormWidget',
+            prompt: {
+              widget: 'LgWidget',
+              field: 'prompt',
+            },
           },
           header: {
             widget: 'ActionHeader',

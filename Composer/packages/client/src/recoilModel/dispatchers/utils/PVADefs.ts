@@ -13,7 +13,7 @@ export const PVADefs = {
         title: 'Question Type',
         type: 'string',
         enum: ['text', 'number', 'confirm', 'choice'],
-        default: 'text',
+        default: 'choice',
       },
       prompt: {
         $kind: 'Microsoft.IActivityTemplate',
@@ -30,7 +30,6 @@ export const PVADefs = {
         examples: ['$birthday', 'dialog.${user.name}', '=f(x)'],
       },
       choices: {
-        $role: 'expression',
         title: 'Array of choices',
         description: 'Choices to choose from.',
         type: 'array',
