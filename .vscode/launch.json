@@ -53,7 +53,8 @@
       "name": "Server: Launch",
       "program": "${workspaceFolder}/Composer/packages/server/build/init.js",
       "env": {
-        "DEBUG": "composer*"
+        "DEBUG": "composer*",
+        "PVA_DEMO_TOKEN": "<PVA Portal Token Here>"
       },
       "restart": true,
       "outFiles": [
@@ -91,7 +92,8 @@
         "NODE_ENV": "development",
         "DEBUG": "composer*",
         "COMPOSER_DEV_TOOLS": "true",
-        "COMPOSER_ENABLE_ONEAUTH": "true"
+        "COMPOSER_ENABLE_ONEAUTH": "true",
+        "PVA_DEMO_TOKEN": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsIng1dCI6Im5PbzNaRHJPRFhFSzFqS1doWHNsSFJfS1hFZyIsImtpZCI6Im5PbzNaRHJPRFhFSzFqS1doWHNsSFJfS1hFZyJ9.eyJhdWQiOiJhNTIyZjA1OS1iYjY1LTQ3YzAtODkzNC03ZGI2ZTUyODY0MTQiLCJpc3MiOiJodHRwczovL3N0cy53aW5kb3dzLm5ldC85ZjZiZTc5MC00YTE2LTRkZDYtOTg1MC00NGEwZDI2NDlhZWYvIiwiaWF0IjoxNjI5NDkwMDMxLCJuYmYiOjE2Mjk0OTAwMzEsImV4cCI6MTYyOTQ5MzkzMSwiYWNyIjoiMSIsImFpbyI6IkUyWUFndStUTWkwM0tETVZtUWxXaHN5L3FiL2d4T0hTSjZXdEU2SVdLdXZlQ28wL2Zabjkxa0huRzVQTHdtMHZCWHdLY3prREFBPT0iLCJhbXIiOlsicHdkIl0sImFwcGlkIjoiYTUyMmYwNTktYmI2NS00N2MwLTg5MzQtN2RiNmU1Mjg2NDE0IiwiYXBwaWRhY3IiOiIwIiwiZmFtaWx5X25hbWUiOiJBbnppYW5vIiwiZ2l2ZW5fbmFtZSI6IlRvbnkiLCJpcGFkZHIiOiI3Ni4xMDQuMjQ4LjIzNCIsIm5hbWUiOiJUb255IEFuemlhbm8iLCJvaWQiOiIxZDU0Yzc3My1lY2ZkLTQ2ODUtYTE0Yi04YmU1MTBhMjk5ZTMiLCJwdWlkIjoiMTAwMzIwMDBFRUMxQjI5RCIsInJoIjoiMC5BVGNBa09kcm54WksxazJZVUVTZzBtU2E3MW53SXFWbHU4QkhpVFI5dHVVb1pCUTNBRmsuIiwic2NwIjoiQXBwQ2F0YWxvZy5SZWFkV3JpdGUuQWxsIEFwcGxpY2F0aW9uLlJlYWQuQWxsIEdyb3VwLlJlYWQuQWxsIE9yZ2FuaXphdGlvbi5SZWFkLkFsbCBUZWFtc0FwcEluc3RhbGxhdGlvbi5SZWFkV3JpdGVGb3JUZWFtIFVzZXIuUmVhZC5BbGwiLCJzdWIiOiJycHpHbFR2MUZKbzNZYS1TdVdZMzNOUnBBbWtSeTZvV08wcnhxSVhodnhBIiwidGlkIjoiOWY2YmU3OTAtNGExNi00ZGQ2LTk4NTAtNDRhMGQyNjQ5YWVmIiwidW5pcXVlX25hbWUiOiJ0b2FuemlhbkBnZXRjY2kub25taWNyb3NvZnQuY29tIiwidXBuIjoidG9hbnppYW5AZ2V0Y2NpLm9ubWljcm9zb2Z0LmNvbSIsInV0aSI6InZkVVRkZ1ZCZkV1LXpiWXA3QllnQUEiLCJ2ZXIiOiIxLjAifQ.JYr5LW70wZuwpuchJjSIjnE8YE_NxPCGgvLmLYcrSrDZdRC35yn1PQKQBJvU6AIIqhmYmy0t3z2499lIlB_bKCq6wi2Uzvh8AibxfITBKsru5dq6Ef_oCZuU3G_hAn8KETJGhJp3AZGK_1KO4-QbLXl7dI3rhdlROQzlajMKL2f4cXa4TfkrRWqaSvZ-mS5ItPUb94jwGIJtuVgUE0hCWUEZbO_VXE5OnyGacdJCcA1ZBYOZcDKt6Ds_3wzV7dSxhYnLsBPG46jmSgPZOONlmd6EIAgZolLwuKvUJXCJUXrg7X8fkcJr5Rtz5qddxQte_iFO6_Dh1QWDTlul7ZFxlg"
       },
       "outputCapture": "std",
       "preLaunchTask": "electron: build",
