@@ -22,7 +22,7 @@ import { menuOrderMap } from './defaultMenuOrder';
 const getIconName = ($kind: SDKKinds | string): string | undefined => {
   switch ($kind) {
     case SDKKinds.SetProperty:
-      return 'Variable';
+      return 'Properties';
     case SDKKinds.SendActivity:
       return 'Message';
     case 'Call an action':
