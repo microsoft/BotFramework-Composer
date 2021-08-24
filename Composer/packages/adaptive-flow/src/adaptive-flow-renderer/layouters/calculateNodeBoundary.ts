@@ -99,6 +99,16 @@ function measureQuestionContainerBoundary(
   if (!conditionBoundary) return new Boundary();
 
   const branchGroupBoundary = new Boundary();
+  branchBoundaries.forEach((boundary) => {
+    // Hack: since PVA question uses virtual condition node, assign a min size to empty branches to avoid flickering
+    if (boundary.width < 300) {
+      boundary.width = 300;
+      boundary.axisX = 150;
+    }
+    if (boundary.height < 200) {
+      boundary.height = 200;
+    }
+  });
   branchGroupBoundary.width = branchBoundaries.reduce((acc, x, currentIndex) => {
     return acc + x.width + calculateBranchNodesIntervalX(x, branchBoundaries[currentIndex + 1]);
   }, 0);
