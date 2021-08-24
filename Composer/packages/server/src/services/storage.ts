@@ -171,6 +171,7 @@ class StorageService {
     const children = await storage.readDir(path);
     const dialogFile = /.+(\.)dialog$/;
     const isNewBot = children.some((name) => dialogFile.test(name));
+
     // locate old structure bot: Main.dialog
     const mainPath = Path.join(path, 'Main', 'Main.dialog');
     const isOldBot = await storage.exists(mainPath);

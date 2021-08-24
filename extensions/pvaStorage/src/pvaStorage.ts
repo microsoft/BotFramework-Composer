@@ -30,10 +30,10 @@ export class PVAStorage implements IFileStorage {
     }
   }
 
-  async initialize(electronContext: any): Promise<void> {
+  async initialize(electronContext: any, botDir: string): Promise<void> {
     // we only need to go fetch the bot from PVA if we are operating on a bot
     if (this.hasBotContext) {
-      await this.botClient.initialize(electronContext);
+      await this.botClient.initialize(electronContext, botDir);
     }
   }
 

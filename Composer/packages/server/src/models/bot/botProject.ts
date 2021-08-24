@@ -933,7 +933,7 @@ export class BotProject implements IBotProject {
 
   private _getFiles = async () => {
     if (this.fileStorage.initialize) {
-      await this.fileStorage.initialize(useElectronContext());
+      await this.fileStorage.initialize(useElectronContext(), this.dir);
     }
     if (!(await this.exists())) {
       throw new Error(`${this.dir} is not a valid path`);

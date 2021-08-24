@@ -10,7 +10,7 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 
 import { LGOption } from '../../utils';
 import { getCursorContextWithinLine } from '../../utils/lgUtils';
-import { jsLgToolbarMenuClassName } from '../constants';
+import { jsCKEditorToolbarClassName, jsLgToolbarMenuClassName } from '../constants';
 import { FieldToolbar } from '../../components/toolbar/FieldToolbar';
 import { LgSpeechModalityToolbar, SSMLTagType } from '../LgSpeechModalityToolbar';
 import { ToolbarButtonPayload } from '../../types';
@@ -55,11 +55,14 @@ const getSSMLProps = (tag: 'prosody' | 'audio' | 'break'): string => {
 
 type StringArrayEditorProps = {
   addButtonText?: string;
+  editorMode?: 'editor' | 'rich';
   items: TemplateBodyItem[];
   lgTemplates?: readonly LgTemplate[];
   memoryVariables?: readonly string[];
+  placeholder?: string | null;
   lgOption?: LGOption;
   isSpeech?: boolean;
+  isLu?: boolean;
   onChange: (items: TemplateBodyItem[]) => void;
   telemetryClient: TelemetryClient;
   startWithEmptyResponse?: boolean;
@@ -68,9 +71,12 @@ type StringArrayEditorProps = {
 export const StringArrayEditor = React.memo(
   ({
     addButtonText,
+    editorMode,
     items,
     lgTemplates,
     memoryVariables,
+    placeholder,
+    isLu = false,
     isSpeech = false,
     telemetryClient,
     onChange,
@@ -91,7 +97,7 @@ export const StringArrayEditor = React.memo(
     }, []);
 
     const onItemChange = useCallback(
-      (index: number) => (_, newValue?: string) => {
+      (index: number) => (newValue?: string) => {
         const updatedItems = [...items];
         updatedItems[index].value = newValue ?? '';
         onChange(updatedItems);
@@ -134,8 +140,8 @@ export const StringArrayEditor = React.memo(
           (e.key === 'Escape' &&
             (!document.activeElement || inputs.includes(document.activeElement.tagName.toLowerCase())))
         ) {
-          // Allow multiline via shift+Enter
-          if (e.key === 'Enter' && e.shiftKey) {
+          // Allow multiline in the rich editor or via shift+Enter
+          if ((e.key === 'Enter' && e.shiftKey) || editorMode === 'rich') {
             return;
           }
 
@@ -173,7 +179,7 @@ export const StringArrayEditor = React.memo(
             .composedPath()
             .filter((n) => n instanceof Element)
             .map((n) => (n as Element).className)
-            .some((c) => c.indexOf(jsLgToolbarMenuClassName) !== -1)
+            .some((c) => c.indexOf(jsLgToolbarMenuClassName) !== -1 || c.indexOf(jsCKEditorToolbarClassName) !== -1)
         ) {
           setCalloutTargetElement(null);
           setCurrentIndex(null);
@@ -191,7 +197,7 @@ export const StringArrayEditor = React.memo(
         document.removeEventListener('keydown', keydownHandler);
         document.removeEventListener('focusin', focusHandler);
       };
-    }, [items, onChange]);
+    }, [editorMode, items, onChange]);
 
     const onSelectToolbarMenuItem = React.useCallback(
       (text: string, itemType: ToolbarButtonPayload['kind']) => {
@@ -284,9 +290,13 @@ export const StringArrayEditor = React.memo(
       [calloutTargetElement, currentIndex, items, onChange]
     );
 
-    const toolbar = React.useMemo(
-      () =>
-        isSpeech ? (
+    const toolbar = React.useMemo(() => {
+      if (isLu) {
+        return null;
+      }
+
+      if (isSpeech) {
+        return (
           <LgSpeechModalityToolbar
             key="lg-speech-toolbar"
             lgTemplates={lgTemplates}
@@ -294,16 +304,18 @@ export const StringArrayEditor = React.memo(
             onInsertSSMLTag={onInsertSSMLTag}
             onSelectToolbarMenuItem={onSelectToolbarMenuItem}
           />
-        ) : (
-          <FieldToolbar
-            key="lg-toolbar"
-            lgTemplates={lgTemplates}
-            properties={memoryVariables}
-            onSelectToolbarMenuItem={onSelectToolbarMenuItem}
-          />
-        ),
-      [isSpeech, lgTemplates, memoryVariables, onInsertSSMLTag, onSelectToolbarMenuItem]
-    );
+        );
+      }
+
+      return (
+        <FieldToolbar
+          key="lg-toolbar"
+          lgTemplates={lgTemplates}
+          properties={memoryVariables}
+          onSelectToolbarMenuItem={onSelectToolbarMenuItem}
+        />
+      );
+    }, [isLu, isSpeech, lgTemplates, memoryVariables, onInsertSSMLTag, onSelectToolbarMenuItem]);
 
     return (
       <div ref={containerRef}>
@@ -311,7 +323,9 @@ export const StringArrayEditor = React.memo(
           item.kind === 'variation' ? (
             <StringArrayItem
               key={`item-${idx}`}
+              editorMode={editorMode}
               mode={idx === currentIndex ? 'edit' : 'view'}
+              placeholder={placeholder}
               telemetryClient={telemetryClient}
               value={item.value}
               onChange={onItemChange(idx)}
@@ -326,7 +340,7 @@ export const StringArrayEditor = React.memo(
             {addButtonText ?? formatMessage('Add alternative')}
           </Link>
         )}
-        {calloutTargetElement && (
+        {toolbar && calloutTargetElement && (
           <Callout
             doNotLayer
             directionalHint={DirectionalHint.topLeftEdge}
