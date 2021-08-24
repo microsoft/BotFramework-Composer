@@ -85,23 +85,13 @@ const QuestionWidget: FunctionComponent<QuestionWidgetProps> = ({ id, data, onEv
           <ElementMeasurer
             onResize={(boundary) => {
               designerCache.cacheBoundary(questionNode.data, boundary);
-              // updateNodeBoundary(QuestionNodes.Question, boundary);
               updateNodeBoundary(QuestionNodes.Question, boundary);
             }}
           >
-            {/* replace with the question node */}
             {question}
           </ElementMeasurer>
         </NodeWrapper>
       </OffsetContainer>
-      {/* <OffsetContainer css={{ zIndex: 100 }} offset={choiceNode.offset}>
-        <Diamond
-          data-testid="SwitchConditionDiamond"
-          onClick={() => {
-            onEvent(NodeEventTypes.Focus, { id });
-          }}
-        />
-      </OffsetContainer> */}
       {(casesNodes as any).map((x, index) => (
         <OffsetContainer key={`${x.id}/offset`} offset={x.offset}>
           <ActionGroup
