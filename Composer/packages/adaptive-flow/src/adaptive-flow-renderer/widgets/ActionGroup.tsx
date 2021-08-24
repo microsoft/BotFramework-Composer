@@ -36,17 +36,32 @@ const calculateNodes = (groupId: string, data): GraphNodeMap<StepNodeKey> => {
   }, {} as GraphNodeMap<StepNodeKey>);
 };
 
-const calculateLayout = (nodeMap: GraphNodeMap<StepNodeKey>): GraphLayout => {
+const calculateLayout = (nodeMap: GraphNodeMap<StepNodeKey>, hasTrailingEdge: boolean): GraphLayout => {
   const nodes = Object.keys(nodeMap)
     .sort((a, b) => parseStepIndex(a) - parseStepIndex(b))
     .map((stepName) => nodeMap[stepName]);
-  return sequentialLayouter(nodes);
+  return sequentialLayouter(nodes, true, hasTrailingEdge);
+};
+
+const checkTrailingPVAQuestionAction = (data: any): boolean => {
+  if (!Array.isArray(data.children)) return false;
+  const actions = data.children;
+  const lastAction = actions[actions.length - 1];
+
+  return lastAction && lastAction.$kind === 'Microsoft.VirtualAgents.Question';
 };
 
 export const ActionGroup: FunctionComponent<NodeProps> = ({ id, data, onEvent, onResize }: NodeProps): JSX.Element => {
   const { EdgeMenu } = useContext(RendererContext);
+
+  const hasTrailingQuestionAction = checkTrailingPVAQuestionAction(data);
   const initialNodes = useMemo(() => calculateNodes(id, data), [id, data]);
-  const { layout, updateNodeBoundary } = useSmartLayout(initialNodes, calculateLayout, onResize);
+  const { layout, updateNodeBoundary } = useSmartLayout(
+    initialNodes,
+    // PVA.Question: remove last edge if has trailing Question kind
+    (nodes) => calculateLayout(nodes, !hasTrailingQuestionAction),
+    onResize
+  );
 
   const { boundary, nodes, edges } = layout;
 
@@ -83,18 +98,21 @@ export const ActionGroup: FunctionComponent<NodeProps> = ({ id, data, onEvent, o
         </OffsetContainer>
       )}
       {nodes
-        ? nodes.map((x, idx) => (
-            <OffsetContainer
-              key={`stepGroup/${x.id}/footer/offset`}
-              css={{ zIndex: 100 }}
-              offset={{
-                x: boundary.axisX - EdgeAddButtonSize.width / 2,
-                y: x.offset.y + x.boundary.height + StepInterval / 2 - EdgeAddButtonSize.height / 2,
-              }}
-            >
-              <EdgeMenu arrayData={data} arrayId={id} arrayPosition={idx + 1} onEvent={onEvent} />
-            </OffsetContainer>
-          ))
+        ? nodes
+            // PVA.Question: hide last EdgeMenu if has trailing Quesiton kind.
+            .slice(0, hasTrailingQuestionAction ? nodes.length - 1 : undefined)
+            .map((x, idx) => (
+              <OffsetContainer
+                key={`stepGroup/${x.id}/footer/offset`}
+                css={{ zIndex: 100 }}
+                offset={{
+                  x: boundary.axisX - EdgeAddButtonSize.width / 2,
+                  y: x.offset.y + x.boundary.height + StepInterval / 2 - EdgeAddButtonSize.height / 2,
+                }}
+              >
+                <EdgeMenu arrayData={data} arrayId={id} arrayPosition={idx + 1} onEvent={onEvent} />
+              </OffsetContainer>
+            ))
         : null}
     </div>
   );

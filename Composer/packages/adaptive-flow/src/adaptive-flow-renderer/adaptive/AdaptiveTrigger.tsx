@@ -34,6 +34,14 @@ const calculateNodeMap = (triggerId, triggerData): { [id: string]: GraphNode } =
 
 const TailSize = new Boundary(TerminatorSize.width, TerminatorSize.height + ElementInterval.y / 2);
 
+const checkTrailingPVAQuestionAction = (triggerData: any): boolean => {
+  if (!Array.isArray(triggerData.actions)) return false;
+  const actions = triggerData.actions;
+  const lastAction = actions[actions.length - 1];
+
+  return lastAction && lastAction.$kind === 'Microsoft.VirtualAgents.Question';
+};
+
 export interface AdaptiveTriggerProps {
   triggerId: string;
   triggerData: any;
@@ -112,6 +120,8 @@ export const AdaptiveTrigger: React.FC<AdaptiveTriggerProps> = ({ triggerId, tri
     );
   const editorHeight = HeadSize.height + TailSize.height + contentBoundary.height;
 
+  const hasTrailingQuestionAction = checkTrailingPVAQuestionAction(triggerData);
+
   return (
     <div
       key={`${triggerId}?version=${outlineVersion.current}`}
@@ -141,22 +151,26 @@ export const AdaptiveTrigger: React.FC<AdaptiveTriggerProps> = ({ triggerId, tri
       >
         <SVGContainer height={editorHeight} width={editorWidth}>
           {drawSVGEdge('editor-edge__head', editorAxisX, TriggerSize.height, EdgeDirection.Down, ElementInterval.y / 2)}
-          {drawSVGEdge(
-            'editor-edge__tail',
-            editorAxisX,
-            contentBoundary.height + HeadSize.height,
-            EdgeDirection.Down,
-            ElementInterval.y / 2,
-            { directed: true }
+          {hasTrailingQuestionAction
+            ? null
+            : drawSVGEdge(
+                'editor-edge__tail',
+                editorAxisX,
+                contentBoundary.height + HeadSize.height,
+                EdgeDirection.Down,
+                ElementInterval.y / 2,
+                { directed: true }
+              )}
+          {hasTrailingQuestionAction ? null : (
+            <circle
+              cx={editorAxisX}
+              cy={contentBoundary.height + HeadSize.height + ElementInterval.y / 2 + TerminatorSize.height / 2}
+              fill="none"
+              r={TerminatorSize.height / 2 - 1}
+              stroke={ObiColors.LightGray}
+              strokeWidth="2"
+            />
           )}
-          <circle
-            cx={editorAxisX}
-            cy={contentBoundary.height + HeadSize.height + ElementInterval.y / 2 + TerminatorSize.height / 2}
-            fill="none"
-            r={TerminatorSize.height / 2 - 1}
-            stroke={ObiColors.LightGray}
-            strokeWidth="2"
-          />
         </SVGContainer>
         <OffsetContainer offset={{ x: editorAxisX - HeadSize.axisX, y: 0 }}>
           <div className="step-editor__head" css={{ position: 'relative' }}>
