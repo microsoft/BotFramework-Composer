@@ -64,14 +64,14 @@ export function questionLayouter(questionNode: GraphNode | null, branchNodes: Gr
         y: BaselinePositionY,
         length: x.offset.y - BaselinePositionY,
         options: { label: x.data.label },
-      },
-      {
-        id: `edge/${questionNode.id}/case/${x.id}->bottom`,
-        direction: EdgeDirection.Down,
-        x: x.offset.x + x.boundary.axisX,
-        y: x.offset.y + x.boundary.height,
-        length: BottomelinePositionY - x.offset.y - x.boundary.height,
       }
+      // {
+      //   id: `edge/${questionNode.id}/case/${x.id}->bottom`,
+      //   direction: EdgeDirection.Down,
+      //   x: x.offset.x + x.boundary.axisX,
+      //   y: x.offset.y + x.boundary.height,
+      //   length: BottomelinePositionY - x.offset.y - x.boundary.height,
+      // }
     );
   });
 
@@ -88,14 +88,14 @@ export function questionLayouter(questionNode: GraphNode | null, branchNodes: Gr
         x: linePositionX,
         y: BaselinePositionY,
         length: baseLineLength,
-      },
-      {
-        id: `edge/${questionNode.id}/bottomline`,
-        direction: EdgeDirection.Right,
-        x: linePositionX,
-        y: BottomelinePositionY,
-        length: baseLineLength,
       }
+      // {
+      //   id: `edge/${questionNode.id}/bottomline`,
+      //   direction: EdgeDirection.Right,
+      //   x: linePositionX,
+      //   y: BottomelinePositionY,
+      //   length: baseLineLength,
+      // }
     );
   }
 
