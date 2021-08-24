@@ -11,6 +11,7 @@ import { dispatcherState, userSettingsState } from './recoilModel';
 import { loadLocale } from './utils/fileUtil';
 import { useInitializeLogger } from './telemetry/useInitializeLogger';
 import { setupIcons } from './setupIcons';
+import httpClient from './utils/httpUtil';
 
 setupIcons();
 
@@ -45,6 +46,13 @@ export const App: React.FC = () => {
 
     ipcRenderer?.on('machine-info', (_event, info) => {
       setMachineInfo(info);
+    });
+
+    // NOTE: only for PVA 2 demo
+    // go get the demo token and store it in local storage to be used by Web Chat
+    httpClient.get(`/auth/getDemoToken`).then((res) => {
+      const demoToken = res.data;
+      window.localStorage.setItem('PVA-2-DEMO-TOKEN', demoToken);
     });
   }, []);
 

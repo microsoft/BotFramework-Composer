@@ -75,7 +75,8 @@ export class PVABotClient {
         'X-CCI-BotId': pvaMetadata.botId,
         'X-CCI-TenantId': pvaMetadata.tenantId,
       },
-      body: JSON.stringify({ componentDeltaToken: this.botModel?.mostRecentContentSnapshot || '' }),
+      // TODO: why do we ever want to send the snapshot? we only want the most recent list of assets
+      body: JSON.stringify({ componentDeltaToken: '' /* this.botModel?.mostRecentContentSnapshot || ''*/ }),
     });
     if (res.status === 200) {
       const data: BotComponentResponse = await res.json();
