@@ -98,14 +98,12 @@ function measureQuestionContainerBoundary(
 ): Boundary {
   if (!conditionBoundary) return new Boundary();
 
-  const firstBranchBoundary = branchBoundaries[0] || new Boundary();
-
   const branchGroupBoundary = new Boundary();
   branchGroupBoundary.width = branchBoundaries.reduce((acc, x, currentIndex) => {
     return acc + x.width + calculateBranchNodesIntervalX(x, branchBoundaries[currentIndex + 1]);
   }, 0);
   branchGroupBoundary.height = Math.max(...branchBoundaries.map((x) => x.height));
-  branchGroupBoundary.axisX = firstBranchBoundary.axisX;
+  branchGroupBoundary.axisX = branchGroupBoundary.width / 2;
 
   /** Calculate boundary */
   const containerAxisX = Math.max(conditionBoundary.axisX, branchGroupBoundary.axisX);

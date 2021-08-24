@@ -6,14 +6,14 @@ import { GraphNode } from '../models/GraphNode';
 import { GraphLayout } from '../models/GraphLayout';
 import { Edge, EdgeDirection } from '../models/EdgeData';
 
-import { calculateSwitchCaseBoundary, calculateQuestionBoundary } from './calculateNodeBoundary';
+import { calculateQuestionBoundary } from './calculateNodeBoundary';
 import { calculateBranchNodesIntervalX } from './sharedLayouterUtils';
 
 /**
  *        [question]
  *           |
- *           ------------
- *           |   |  |   |
+ *       ------------
+ *      |   |  |   |
  */
 export function questionLayouter(questionNode: GraphNode | null, branchNodes: GraphNode[] = []): GraphLayout {
   if (!questionNode) {
@@ -33,7 +33,7 @@ export function questionLayouter(questionNode: GraphNode | null, branchNodes: Gr
 
   const BottomelinePositionY = containerBoundary.height;
 
-  const firstBranchNode = branchNodes[0] || new GraphNode();
+  const BranchGroupOffsetX = Math.max(0, questionNode.boundary.axisX - containerBoundary.axisX);
   branchNodes.reduce((accOffsetX, x, currentIndex) => {
     x.offset = {
       x: accOffsetX,
@@ -42,7 +42,7 @@ export function questionLayouter(questionNode: GraphNode | null, branchNodes: Gr
     return (
       accOffsetX + x.boundary.width + calculateBranchNodesIntervalX(x.boundary, branchNodes[currentIndex + 1]?.boundary)
     );
-  }, containerBoundary.axisX - firstBranchNode.boundary.axisX);
+  }, BranchGroupOffsetX);
 
   /** Calculate edges */
   const edges: Edge[] = [];
@@ -76,21 +76,23 @@ export function questionLayouter(questionNode: GraphNode | null, branchNodes: Gr
   });
 
   if (branchNodes.length > 1) {
+    const firstBranchNode = branchNodes[0] || new GraphNode();
     const lastBranchNode = branchNodes[branchNodes.length - 1] || new GraphNode();
-    const baseLineLength = lastBranchNode.offset.x + lastBranchNode.boundary.axisX - containerBoundary.axisX;
+    const linePositionX = BranchGroupOffsetX + firstBranchNode.boundary.axisX;
+    const baseLineLength = lastBranchNode.offset.x + lastBranchNode.boundary.axisX - linePositionX;
 
     edges.push(
       {
         id: `edge/${questionNode.id}/baseline`,
         direction: EdgeDirection.Right,
-        x: containerBoundary.axisX,
+        x: linePositionX,
         y: BaselinePositionY,
         length: baseLineLength,
       },
       {
         id: `edge/${questionNode.id}/bottomline`,
         direction: EdgeDirection.Right,
-        x: containerBoundary.axisX,
+        x: linePositionX,
         y: BottomelinePositionY,
         length: baseLineLength,
       }
