@@ -42,6 +42,7 @@ import {
   orchestratorForSkillsDialogState,
   selectedTemplateVersionState,
   watchedVariablesState,
+  autoSaveState,
 } from '../atoms';
 import { botRuntimeOperationsSelector, rootBotProjectIdSelector } from '../selectors';
 import { mergePropertiesManagedByRootBot, postRootBotCreation } from '../../recoilModel/dispatchers/utils/project';
@@ -253,7 +254,9 @@ export const projectDispatcher = () => {
         const currentProjectId = await snapshot.getPromise(currentProjectIdState);
         if (currentProjectId) {
           // make sure to auto save if we are switching from another project
+          set(autoSaveState, 'Pending');
           await triggerAutoSave(currentProjectId);
+          set(autoSaveState, 'RecentlySaved');
         }
 
         await flushExistingTasks(callbackHelpers);

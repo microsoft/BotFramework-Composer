@@ -7,13 +7,14 @@ import { ITextField, TextField } from 'office-ui-fabric-react/lib/TextField';
 import { Stack } from 'office-ui-fabric-react/lib/Stack';
 import { Text } from 'office-ui-fabric-react/lib/Text';
 import { IconButton } from 'office-ui-fabric-react/lib/Button';
-import React, { useCallback, useEffect, useRef } from 'react';
+import React, { FocusEventHandler, useCallback, useEffect, useRef } from 'react';
 import formatMessage from 'format-message';
 import { CodeEditorSettings, LgTemplate, TelemetryClient } from '@bfc/shared';
 
 import { withTooltip } from '../../utils/withTooltip';
 import { LgCodeEditor } from '../LgCodeEditor';
 import { LGOption } from '../../utils';
+import { RichEditor } from '../../rich-text/RichTextEditor';
 
 const removeIconClassName = 'string-array-item-remove-icon';
 
@@ -95,10 +96,11 @@ const textFieldStyles = {
 
 type Props = {
   mode: 'edit' | 'view';
-  editorMode?: 'single' | 'editor';
+  editorMode?: 'single' | 'editor' | 'rich';
   lgOption?: LGOption;
   lgTemplates?: readonly LgTemplate[];
   memoryVariables?: readonly string[];
+  placeholder?: string | null;
   value: string;
   codeEditorSettings?: Partial<CodeEditorSettings>;
   telemetryClient: TelemetryClient;
@@ -108,7 +110,7 @@ type Props = {
   onJumpTo?: (direction: 'next' | 'previous') => void;
   onRemove: () => void;
   onFocus: () => void;
-  onChange?: (event: React.FormEvent<HTMLTextAreaElement | HTMLInputElement>, value?: string) => void;
+  onChange?: (value?: string) => void;
   onLgChange?: (value: string) => void;
   onShowCallout?: (target: HTMLTextAreaElement) => void;
   onEditorPopToggle?: (expanded: boolean) => void;
@@ -173,7 +175,7 @@ const TextViewItem = React.memo(
 
 type TextFieldItemProps = Omit<Props, 'onRemove' | 'mode' | 'onFocus' | 'telemetryClient'>;
 
-const TextFieldItem = React.memo(({ value, onShowCallout, onChange }: TextFieldItemProps) => {
+const TextFieldItem = React.memo(({ placeholder, value, onBlur, onShowCallout, onChange }: TextFieldItemProps) => {
   const itemRef = useRef<ITextField | null>(null);
   const containerRef = useRef<HTMLDivElement | null>(null);
   const inputRef = useRef<HTMLTextAreaElement | null>(null);
@@ -201,6 +203,20 @@ const TextFieldItem = React.memo(({ value, onShowCallout, onChange }: TextFieldI
     [onShowCallout]
   );
 
+  const change = React.useCallback(
+    (_, value?: string) => {
+      onChange?.(value);
+    },
+    [onChange]
+  );
+
+  const blur = React.useCallback<FocusEventHandler<HTMLTextAreaElement | HTMLInputElement>>(
+    (e) => {
+      onBlur?.();
+    },
+    [onBlur]
+  );
+
   return (
     <div ref={containerRef}>
       <Input
@@ -208,11 +224,12 @@ const TextFieldItem = React.memo(({ value, onShowCallout, onChange }: TextFieldI
         multiline
         componentRef={(ref) => (itemRef.current = ref)}
         defaultValue={value}
-        placeholder={formatMessage('Press Shift+Enter to insert a new line')}
+        placeholder={placeholder ?? formatMessage('Press Shift+Enter to insert a new line')}
         resizable={false}
         styles={textFieldStyles}
         value={value}
-        onChange={onChange}
+        onBlur={blur}
+        onChange={change}
         onClick={click}
         onFocus={focus}
       />
@@ -227,7 +244,9 @@ export const StringArrayItem = (props: Props) => {
     lgTemplates,
     memoryVariables,
     mode,
+    placeholder,
     onRenderDisplayText,
+    onBlur,
     onChange,
     onLgChange = () => {},
     onShowCallout,
@@ -257,8 +276,14 @@ export const StringArrayItem = (props: Props) => {
     <Root verticalAlign="center">
       {mode === 'edit' ? (
         editorMode === 'single' ? (
-          <TextFieldItem value={value} onChange={onChange} onShowCallout={onShowCallout} />
-        ) : (
+          <TextFieldItem
+            placeholder={placeholder}
+            value={value}
+            onBlur={onBlur}
+            onChange={onChange}
+            onShowCallout={onShowCallout}
+          />
+        ) : editorMode === 'editor' ? (
           <LgCodeEditorContainer>
             <LgCodeEditor
               editorDidMount={onEditorDidMount}
@@ -274,6 +299,8 @@ export const StringArrayItem = (props: Props) => {
               onChange={onLgChange}
             />
           </LgCodeEditorContainer>
+        ) : (
+          <RichEditor value={value} onChange={onChange} />
         )
       ) : (
         <TextViewItem

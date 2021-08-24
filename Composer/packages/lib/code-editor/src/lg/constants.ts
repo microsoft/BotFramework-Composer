@@ -4,6 +4,7 @@
 export const activityTemplateType = 'Activity';
 
 export const jsLgToolbarMenuClassName = 'js-lg-toolbar-menu';
+export const jsCKEditorToolbarClassName = 'ck-body-wrapper';
 
 export const defaultMenuHeight = 32;
 

@@ -53,7 +53,8 @@
       "name": "Server: Launch",
       "program": "${workspaceFolder}/Composer/packages/server/build/init.js",
       "env": {
-        "DEBUG": "composer*"
+        "DEBUG": "composer*",
+        "PVA_DEMO_TOKEN": "<PVA Portal Token Here>"
       },
       "restart": true,
       "outFiles": [

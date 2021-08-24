@@ -113,6 +113,7 @@ export function resolveTriggerWidget(
       />
       <Label>{formatMessage('Trigger phrases')}</Label>
       <LuEditor
+        editorMode="utteranceEditor"
         editorSettings={userSettings.codeEditor}
         errorMessage={formData.errors.triggerPhrases}
         height={225}
