@@ -15,7 +15,7 @@ const config: PluginConfig = {
       },
       flow: {
         widget: 'QuestionWidget',
-
+        nowrap: true,
         question: {
           widget: 'ActionCard',
           body: {
