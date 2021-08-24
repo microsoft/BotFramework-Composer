@@ -82,6 +82,9 @@ const createBaseActionMenu = (
         name: labelName || $kind,
         iconProps: {
           iconName: getIconName($kind),
+          styles: {
+            root: { marginTop: '2px' },
+          },
         },
         onClick: (e, itemData) => onClick(itemData),
       };
@@ -240,6 +243,9 @@ const createSubMenu = (
     text: label,
     iconProps: {
       iconName: getIconName(label),
+      styles: {
+        root: { marginTop: '2px' },
+      },
     },
     subMenuProps: {
       items: subMenuItems,
