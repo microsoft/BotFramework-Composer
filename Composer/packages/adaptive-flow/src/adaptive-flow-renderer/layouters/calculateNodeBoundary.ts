@@ -102,7 +102,7 @@ function measureQuestionContainerBoundary(
   branchGroupBoundary.width = branchBoundaries.reduce((acc, x, currentIndex) => {
     return acc + x.width + calculateBranchNodesIntervalX(x, branchBoundaries[currentIndex + 1]);
   }, 0);
-  branchGroupBoundary.height = Math.max(...branchBoundaries.map((x) => x.height));
+  branchGroupBoundary.height = Math.max(0, ...branchBoundaries.map((x) => x.height));
   branchGroupBoundary.axisX = branchGroupBoundary.width / 2;
 
   /** Calculate boundary */

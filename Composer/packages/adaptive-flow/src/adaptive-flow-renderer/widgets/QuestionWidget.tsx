@@ -6,8 +6,6 @@ import { jsx } from '@emotion/core';
 import { FunctionComponent, useMemo, useContext } from 'react';
 import { WidgetContainerProps } from '@bfc/extension-client';
 
-import { NodeEventTypes } from '../constants/NodeEventTypes';
-import { switchCaseLayouter } from '../layouters/switchCaseLayouter';
 import { GraphNode } from '../models/GraphNode';
 import { OffsetContainer } from '../components/OffsetContainer';
 import { ElementMeasurer } from '../components/ElementMeasurer';
