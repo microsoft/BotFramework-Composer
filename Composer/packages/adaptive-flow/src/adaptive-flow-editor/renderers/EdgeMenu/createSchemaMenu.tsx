@@ -19,6 +19,19 @@ import { MenuEventTypes } from '../../constants/MenuTypes';
 
 import { menuOrderMap } from './defaultMenuOrder';
 
+const getIconName = ($kind: SDKKinds | string): string | undefined => {
+  switch ($kind) {
+    case SDKKinds.SetProperty:
+      return 'Variable';
+    case SDKKinds.SendActivity:
+      return 'Message';
+    case 'Call an action':
+      return 'LightningBolt';
+    case 'Microsoft.VirtualAgents.Question':
+      return 'OfficeChat';
+  }
+};
+
 const toolTipHostStyles: Partial<ITooltipHostStyles> = {
   root: {
     display: 'flex',
@@ -67,6 +80,9 @@ const createBaseActionMenu = (
       return {
         key: $kind,
         name: labelName || $kind,
+        iconProps: {
+          iconName: getIconName($kind),
+        },
         onClick: (e, itemData) => onClick(itemData),
       };
     } else {
@@ -222,6 +238,9 @@ const createSubMenu = (
   return {
     key: label,
     text: label,
+    iconProps: {
+      iconName: getIconName(label),
+    },
     subMenuProps: {
       items: subMenuItems,
       onItemClick: (e, itemData) => onClick(itemData),
