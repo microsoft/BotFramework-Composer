@@ -59,8 +59,10 @@ type StringArrayEditorProps = {
   items: TemplateBodyItem[];
   lgTemplates?: readonly LgTemplate[];
   memoryVariables?: readonly string[];
+  placeholder?: string | null;
   lgOption?: LGOption;
   isSpeech?: boolean;
+  isLu?: boolean;
   onChange: (items: TemplateBodyItem[]) => void;
   telemetryClient: TelemetryClient;
   startWithEmptyResponse?: boolean;
@@ -73,6 +75,8 @@ export const StringArrayEditor = React.memo(
     items,
     lgTemplates,
     memoryVariables,
+    placeholder,
+    isLu = false,
     isSpeech = false,
     telemetryClient,
     onChange,
@@ -286,9 +290,13 @@ export const StringArrayEditor = React.memo(
       [calloutTargetElement, currentIndex, items, onChange]
     );
 
-    const toolbar = React.useMemo(
-      () =>
-        isSpeech ? (
+    const toolbar = React.useMemo(() => {
+      if (isLu) {
+        return null;
+      }
+
+      if (isSpeech) {
+        return (
           <LgSpeechModalityToolbar
             key="lg-speech-toolbar"
             lgTemplates={lgTemplates}
@@ -296,16 +304,18 @@ export const StringArrayEditor = React.memo(
             onInsertSSMLTag={onInsertSSMLTag}
             onSelectToolbarMenuItem={onSelectToolbarMenuItem}
           />
-        ) : (
-          <FieldToolbar
-            key="lg-toolbar"
-            lgTemplates={lgTemplates}
-            properties={memoryVariables}
-            onSelectToolbarMenuItem={onSelectToolbarMenuItem}
-          />
-        ),
-      [isSpeech, lgTemplates, memoryVariables, onInsertSSMLTag, onSelectToolbarMenuItem]
-    );
+        );
+      }
+
+      return (
+        <FieldToolbar
+          key="lg-toolbar"
+          lgTemplates={lgTemplates}
+          properties={memoryVariables}
+          onSelectToolbarMenuItem={onSelectToolbarMenuItem}
+        />
+      );
+    }, [isLu, isSpeech, lgTemplates, memoryVariables, onInsertSSMLTag, onSelectToolbarMenuItem]);
 
     return (
       <div ref={containerRef}>
@@ -315,6 +325,7 @@ export const StringArrayEditor = React.memo(
               key={`item-${idx}`}
               editorMode={editorMode}
               mode={idx === currentIndex ? 'edit' : 'view'}
+              placeholder={placeholder}
               telemetryClient={telemetryClient}
               value={item.value}
               onChange={onItemChange(idx)}
@@ -329,7 +340,7 @@ export const StringArrayEditor = React.memo(
             {addButtonText ?? formatMessage('Add alternative')}
           </Link>
         )}
-        {calloutTargetElement && (
+        {toolbar && calloutTargetElement && (
           <Callout
             doNotLayer
             directionalHint={DirectionalHint.topLeftEdge}

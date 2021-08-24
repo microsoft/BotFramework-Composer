@@ -25,6 +25,7 @@ import { getDefaultMlEntityName } from './lu/constants';
 import { useLuEntities } from './lu/hooks/useLuEntities';
 import { LuEditorToolbar as DefaultLuEditorToolbar } from './lu/LuEditorToolbar';
 import { LuLabelingMenu } from './lu/LuLabelingMenu';
+import { LuListEditor } from './lu/LuListEditor';
 import { ToolbarLuEntityType } from './lu/types';
 import { LUOption } from './utils';
 import { createLanguageClient, createUrl, createWebSocket, sendRequestWithRetry } from './utils/lspUtil';
@@ -67,7 +68,10 @@ const LuSectionLink = withTooltip(
 
 const sectionLinkTokens = { childrenGap: 4 };
 
+export type LuEditorMode = 'codeEditor' | 'utteranceEditor';
+
 export type LULSPEditorProps = BaseEditorProps & {
+  editorMode?: LuEditorMode;
   luOption?: LUOption;
   helpURL?: string;
   luFile?: LuFile;
@@ -137,6 +141,7 @@ const LuEditor: React.FC<LULSPEditorProps> = (props) => {
   };
 
   const {
+    editorMode = 'codeEditor',
     toolbarOptions,
     onNavigateToLuPage,
     luOption,
@@ -328,37 +333,43 @@ const LuEditor: React.FC<LULSPEditorProps> = (props) => {
   return (
     <>
       <Stack verticalFill>
-        {toolbarOptions?.hidden !== true && (
-          <LuEditorToolbar
-            editor={editor}
-            farItems={farItems}
-            labelingMenuVisible={labelingMenuVisible}
-            luFile={luFile}
-            options={toolbarOptions}
-            onDefineEntity={defineEntity}
-            onInsertEntity={insertEntity}
-          />
-        )}
+        {editorMode === 'utteranceEditor' ? (
+          <LuListEditor id={editorId} {...restProps} language="lu" onChange={change} />
+        ) : (
+          <React.Fragment>
+            {toolbarOptions?.hidden !== true && (
+              <LuEditorToolbar
+                editor={editor}
+                farItems={farItems}
+                labelingMenuVisible={labelingMenuVisible}
+                luFile={luFile}
+                options={toolbarOptions}
+                onDefineEntity={defineEntity}
+                onInsertEntity={insertEntity}
+              />
+            )}
 
-        <BaseEditor
-          helpURL={LU_HELP}
-          id={editorId}
-          placeholder={placeholder}
-          {...restProps}
-          editorDidMount={editorDidMount}
-          language="lu"
-          options={options}
-          theme="lu"
-          onChange={change}
-          onInit={onInit}
-        />
-        {onNavigateToLuPage && luOption && (
-          <Stack horizontal tokens={sectionLinkTokens} verticalAlign="center">
-            <Text styles={grayTextStyle}>{formatMessage('Intent name: ')}</Text>
-            <LuSectionLink as="button" styles={linkStyles} onClick={navigateToLuPage}>
-              #{luOption.sectionId}
-            </LuSectionLink>
-          </Stack>
+            <BaseEditor
+              helpURL={LU_HELP}
+              id={editorId}
+              placeholder={placeholder}
+              {...restProps}
+              editorDidMount={editorDidMount}
+              language="lu"
+              options={options}
+              theme="lu"
+              onChange={change}
+              onInit={onInit}
+            />
+            {onNavigateToLuPage && luOption && (
+              <Stack horizontal tokens={sectionLinkTokens} verticalAlign="center">
+                <Text styles={grayTextStyle}>{formatMessage('Intent name: ')}</Text>
+                <LuSectionLink as="button" styles={linkStyles} onClick={navigateToLuPage}>
+                  #{luOption.sectionId}
+                </LuSectionLink>
+              </Stack>
+            )}
+          </React.Fragment>
         )}
       </Stack>
       <LuLabelingMenu

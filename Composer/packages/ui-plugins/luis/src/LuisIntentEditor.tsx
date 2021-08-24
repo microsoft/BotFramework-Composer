@@ -101,6 +101,7 @@ const LuisIntentEditor: React.FC<FieldProps<string>> = (props) => {
   return (
     <LuEditor
       diagnostics={diagnostics}
+      editorMode="utteranceEditor"
       editorSettings={userSettings.codeEditor}
       height={225}
       luFile={luFile}
