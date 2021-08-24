@@ -177,7 +177,7 @@ export const useEditorEventApi = (
           handler = (e) => {
             insertActions(path, data, e.id, e.position, clipboardActions).then((dialog) => {
               return onChange(dialog, undefined, async () => {
-                await onFocusSteps([`${e.id}[${e.position || 0}]`]);
+                // await onFocusSteps([`${e.id}[${e.position || 0}]`]);
                 announce(ScreenReaderMessage.ActionCreated);
               });
             });
@@ -187,7 +187,7 @@ export const useEditorEventApi = (
             const newAction = dialogFactory.create(e.$kind);
             insertAction(path, data, e.id, e.position, newAction).then((dialog) => {
               return onChange(dialog, undefined, async () => {
-                await onFocusSteps([`${e.id}[${e.position || 0}]`]);
+                // await onFocusSteps([`${e.id}[${e.position || 0}]`]);
                 announce(ScreenReaderMessage.ActionCreated);
               });
             });
