@@ -2,6 +2,10 @@
 // Licensed under the MIT License.
 
 export const defaultMenuOrder = [
+  'Ask a question (NEW)',
+  'Call an action',
+  'Show a message',
+  'Manage variable',
   // root level
   'Send a response',
   'Ask a question',
