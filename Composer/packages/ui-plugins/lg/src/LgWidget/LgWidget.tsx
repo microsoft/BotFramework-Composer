@@ -77,7 +77,7 @@ export const LgWidget: React.FC<LgWidgetProps> = ({ id, data, field, defaultCont
   const activityTemplate = get(data, field, '') as string;
 
   const syncData = useRef(
-    debounce((templateId: string) => {
+    debounce((data: any, templateId: string) => {
       shellApi.saveData({ ...data, [field]: templateId }, id);
     })
   ).current;
@@ -107,7 +107,7 @@ export const LgWidget: React.FC<LgWidgetProps> = ({ id, data, field, defaultCont
   };
 
   const onChange = (templateId) => {
-    syncData(templateId);
+    syncData(data, templateId);
   };
 
   // otherwise render editor

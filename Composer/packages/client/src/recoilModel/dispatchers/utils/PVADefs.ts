@@ -49,6 +49,9 @@ export const PVADefs = {
         items: {
           type: 'object',
           properties: {
+            isDefault: {
+              type: 'boolean',
+            },
             value: {
               type: ['number', 'integer', 'boolean', 'string'],
               title: 'Value',
@@ -66,6 +69,12 @@ export const PVADefs = {
             },
           },
         },
+        default: [
+          {
+            isDefault: true,
+            actions: [],
+          },
+        ],
       },
     },
   },

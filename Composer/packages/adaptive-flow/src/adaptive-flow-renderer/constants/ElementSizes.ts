@@ -67,6 +67,6 @@ export const BranchAxisXIntervalMin = 150;
 export const BranchingNodeMarginRight = 100;
 
 export const EdgeAddButtonSize = {
-  width: 16,
-  height: 16,
+  width: 24,
+  height: 24,
 };

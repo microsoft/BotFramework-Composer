@@ -12,6 +12,7 @@ import { Label } from 'office-ui-fabric-react/lib/Label';
 import { nanoid } from 'nanoid';
 
 import { QuestionOptions } from './QuestionOptions';
+import { QuestionType } from './QuestionType';
 
 interface QuestionFormWidgetProps extends WidgetContainerProps {
   prompt: React.ReactNode;
@@ -19,40 +20,40 @@ interface QuestionFormWidgetProps extends WidgetContainerProps {
 
 const typeOptions: IDropdownOption[] = [
   {
-    key: 'choice',
+    key: QuestionType.choice,
     text: 'Multiple choice options',
     data: {
       description: 'Prebuilt, String',
     },
   },
   {
-    key: 'text',
+    key: QuestionType.text,
     text: "User's entire response",
     data: {
       description: 'No entity extraction; saved as is',
     },
   },
   {
-    key: 'number',
-    text: 'Number',
-    data: {
-      description: 'Prebuilt,Cardinal numbers in numeric or text form, extracted as a number',
-    },
-  },
-  {
-    key: 'confirm',
+    key: QuestionType.confirm,
     text: 'User confirmation',
     data: {
       description: 'Prebuilt, User confirmation, extracted as a boolean',
     },
   },
+  {
+    key: QuestionType.number,
+    text: 'Number',
+    data: {
+      description: 'Prebuilt,Cardinal numbers in numeric or text form, extracted as a number',
+    },
+  },
 ];
 
 const typeToType = {
-  choice: 'string',
-  text: 'string',
-  number: 'number',
-  confirm: 'boolean',
+  [QuestionType.choice]: 'string',
+  [QuestionType.text]: 'string',
+  [QuestionType.number]: 'number',
+  [QuestionType.confirm]: 'boolean',
 };
 
 const renderTypeOption = (props) => {
@@ -97,12 +98,12 @@ const QuestionFormWidget = ({ prompt, data, id }: QuestionFormWidgetProps) => {
       let choices: any = undefined;
       let cases: any = undefined;
 
-      if (type !== 'choice') {
+      if (type !== QuestionType.choice) {
         choices = undefined;
         cases = undefined;
       }
 
-      if (type === 'confirm') {
+      if (type === QuestionType.confirm) {
         cases = [
           {
             value: true,
@@ -115,12 +116,22 @@ const QuestionFormWidget = ({ prompt, data, id }: QuestionFormWidgetProps) => {
         ];
       }
 
-      setLocalData({ ...localData, type, choices, cases });
+      if (type === QuestionType.choice) {
+        cases = [
+          {
+            value: '',
+            isDefault: true,
+            actions: [],
+          },
+        ];
+      }
+
+      setLocalData((current) => ({ ...current, type, choices, cases }));
     }
   };
 
   const handlePropertyChange = (e, newValue) => {
-    setLocalData({ ...localData, property: newValue });
+    setLocalData((current) => ({ ...current, property: newValue }));
     setErrors((current) => ({
       ...current,
       property: newValue ? undefined : 'Variable name required',
@@ -133,9 +144,13 @@ const QuestionFormWidget = ({ prompt, data, id }: QuestionFormWidgetProps) => {
     const choices = (localData.choices || []).concat(newChoice);
 
     const newCase = { value: '', actions: [], choiceId: id };
-    const cases = (localData.cases || []).concat(newCase);
+    const currentCases = [...(localData.cases || [])];
+    const defaultIdx = currentCases.findIndex((c) => c.isDefault);
+    const newItemIdx = defaultIdx > -1 ? defaultIdx : currentCases.length;
+    currentCases.splice(newItemIdx, 0, newCase);
 
-    setLocalData({ ...localData, choices, cases });
+    setLocalData((current) => ({ ...current, choices, cases: currentCases }));
+    syncData.flush();
   };
 
   const onEditChoice = (id: string, value: string) => {
@@ -155,14 +170,14 @@ const QuestionFormWidget = ({ prompt, data, id }: QuestionFormWidgetProps) => {
       return c;
     });
 
-    setLocalData({ ...localData, choices, cases });
+    setLocalData((current) => ({ ...current, choices, cases }));
   };
 
   const onRemoveChoice = (id: string) => {
     const choices = (localData.choices ?? []).filter((choice) => choice.id !== id);
     const cases = (localData.cases ?? []).filter((c) => c.choiceId !== id);
 
-    setLocalData({ ...localData, choices, cases });
+    setLocalData((current) => ({ ...current, choices, cases }));
   };
 
   return (
@@ -181,7 +196,7 @@ const QuestionFormWidget = ({ prompt, data, id }: QuestionFormWidgetProps) => {
         onChange={handleTypeChange}
         onRenderOption={renderTypeOption}
       />
-      {localData.type === 'choice' && (
+      {localData.type === QuestionType.choice && (
         <QuestionOptions
           options={localData.choices || []}
           onAdd={onAddChoice}

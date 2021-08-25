@@ -1,18 +1,17 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import React from 'react';
+import React, { FC } from 'react';
 import { WidgetContainerProps } from '@bfc/extension-client';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { ActionButton } from 'office-ui-fabric-react/lib/Button';
 
-interface QuestionConditionWidget extends WidgetContainerProps {
-  value: string;
-  question: any;
-}
+export const QuestionConditionWidget: FC<WidgetContainerProps> = ({ data }) => {
+  const { question, isDefault, choiceValue, choiceId } = data;
 
-function QuestionConditionWidget({ data }: QuestionConditionWidget) {
-  const { question, value } = data;
+  if (isDefault) {
+    return <div style={{ padding: '4px' }}>All other conditions</div>;
+  }
 
   return (
     <div>
@@ -29,8 +28,9 @@ function QuestionConditionWidget({ data }: QuestionConditionWidget) {
       />
       <TextField
         readOnly
+        id={choiceId}
         styles={{ fieldGroup: { borderTopLeftRadius: 0, borderTopRightRadius: 0 } }}
-        value={value.toString()}
+        value={choiceValue.toString()}
       />
 
       <ActionButton iconProps={{ iconName: 'Add' }} styles={{ root: { marginTop: '5px' } }}>
@@ -38,6 +38,4 @@ function QuestionConditionWidget({ data }: QuestionConditionWidget) {
       </ActionButton>
     </div>
   );
-}
-
-export { QuestionConditionWidget };
+};
