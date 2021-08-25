@@ -35,10 +35,25 @@ const converters = {
       const additionalSteps: any[] = [];
 
       if (cases) {
+        const { conditionCases, defaultActions } = (cases || []).reduce(
+          (all, c) => {
+            if (c.isDefault) {
+              all.defaultActions = c.actions || [];
+            } else {
+              all.conditionCases = all.conditionCases || [];
+              all.conditionCases.push(c);
+            }
+
+            return all;
+          },
+          { conditionCases: [], defaultActions: [] }
+        );
+
         const switchCondition = {
           $kind: 'Microsoft.SwitchCondition',
           condition: data.property,
-          cases,
+          cases: conditionCases,
+          default: defaultActions,
           $designer: {
             __virtual: true,
           },

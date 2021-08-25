@@ -9,10 +9,15 @@ import { ActionButton } from 'office-ui-fabric-react/lib/Button';
 interface QuestionConditionWidget extends WidgetContainerProps {
   value: string;
   question: any;
+  isDefault?: boolean;
 }
 
 function QuestionConditionWidget({ data }: QuestionConditionWidget) {
-  const { question, value } = data;
+  const { question, value, isDefault } = data;
+
+  if (isDefault) {
+    return <div style={{ padding: '4px' }}>All other conditions</div>;
+  }
 
   return (
     <div>
