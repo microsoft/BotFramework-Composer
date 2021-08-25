@@ -135,7 +135,7 @@ function questionLayouterBranching(
 
 function questionLayouterNonBranching(questionNode: GraphNode): GraphLayout {
   return {
-    boundary: new Boundary(300, 187),
+    boundary: new Boundary(300, 286),
     nodeMap: { questionNode },
     edges: [],
     nodes: [],
