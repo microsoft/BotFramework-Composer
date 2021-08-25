@@ -24,7 +24,7 @@ const config: PluginConfig = {
       menu: {
         label: 'Ask a question',
         submenu: false,
-        order: 2,
+        order: 0,
       },
     },
   },

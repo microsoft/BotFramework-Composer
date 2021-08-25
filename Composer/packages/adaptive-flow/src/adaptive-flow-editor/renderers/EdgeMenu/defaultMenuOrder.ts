@@ -8,7 +8,7 @@ export const defaultMenuOrder = [
   'Manage variable',
   // root level
   'Send a response',
-  'Ask a question',
+  // 'Ask a question',
   'Create a condition',
   'Looping',
   'Dialog management',
