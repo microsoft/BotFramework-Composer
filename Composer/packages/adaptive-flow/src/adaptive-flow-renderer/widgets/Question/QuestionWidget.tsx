@@ -18,6 +18,8 @@ import { transformQuestion } from '../../transformers/transformQuestion';
 import { questionLayouter } from '../../layouters/questionLayouter';
 import { ActionGroup } from '../ActionGroup';
 
+import { isBranchingQuestionType } from './QuestionType';
+
 enum QuestionNodes {
   Question = 'questionNode',
 }
@@ -90,6 +92,21 @@ export const QuestionWidget: FunctionComponent<QuestionWidgetProps> = ({ id, dat
 
   const { boundary, edges } = layout;
   const { questionNode, casesNodes } = getNodesFromNodeMap(nodeMap);
+
+  if (!isBranchingQuestionType(data.type)) {
+    return (
+      <NodeWrapper nodeData={data} nodeId={questionNode.id} onEvent={onEvent}>
+        <ElementMeasurer
+          onResize={(boundary) => {
+            designerCache.cacheBoundary(questionNode.data, boundary);
+            updateNodeBoundary(QuestionNodes.Question, boundary);
+          }}
+        >
+          {question}
+        </ElementMeasurer>
+      </NodeWrapper>
+    );
+  }
 
   return (
     <div css={{ width: boundary.width, height: boundary.height, position: 'relative' }}>

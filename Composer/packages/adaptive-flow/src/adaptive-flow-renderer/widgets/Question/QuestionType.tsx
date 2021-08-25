@@ -7,3 +7,7 @@ export enum QuestionType {
   confirm = 'confirm',
   number = 'number',
 }
+
+export const isBranchingQuestionType = (questionType: any) => {
+  return questionType === QuestionType.choice || questionType === QuestionType.confirm;
+};
