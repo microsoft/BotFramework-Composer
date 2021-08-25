@@ -20,7 +20,6 @@ import { ActionGroup } from '../ActionGroup';
 
 enum QuestionNodes {
   Question = 'questionNode',
-  Choice = 'choiceNode',
 }
 
 type CaseNodeKey = string;
@@ -28,18 +27,26 @@ type CaseNodeKey = string;
 const getCaseKey = (caseIndex: number): CaseNodeKey => `cases[${caseIndex}]`;
 const parseCaseIndex = (caseKey: CaseNodeKey): number => parseInt(caseKey.replace(/cases\[(\d+)\]/, '$1'));
 
+const getChoiceKey = (choiceIndex: number): CaseNodeKey => `choices[${choiceIndex}]`;
+const parseChoiceIndex = (choiceKey: CaseNodeKey): number => parseInt(choiceKey.replace(/choices\[(\d+)\]/, '$1'));
+
 const calculateNodeMap = (path: string, data): GraphNodeMap<QuestionNodes | CaseNodeKey> => {
   const result = transformQuestion(data, path);
   if (!result)
     return {
       [QuestionNodes.Question]: new GraphNode(),
-      [QuestionNodes.Choice]: new GraphNode(),
     };
 
-  const { question, branches } = result;
+  const { question, choices, branches } = result;
   const nodeMap = {
     [QuestionNodes.Question]: GraphNode.fromIndexedJson(question),
   };
+
+  choices.forEach((choice, index) => {
+    const key = getChoiceKey(index);
+    const value = GraphNode.fromIndexedJson(choice);
+    nodeMap[key] = value;
+  });
 
   branches.forEach((branch, index) => {
     const key = getCaseKey(index);
@@ -50,19 +57,29 @@ const calculateNodeMap = (path: string, data): GraphNodeMap<QuestionNodes | Case
   return nodeMap;
 };
 
-const calculateLayout = (nodeMap: GraphNodeMap<QuestionNodes | CaseNodeKey>) => {
-  const { questionNode, ...cases } = nodeMap as GraphNodeMap<QuestionNodes>;
-  const casesNodes = Object.keys(cases)
+const getNodesFromNodeMap = (nodeMap: GraphNodeMap<QuestionNodes | CaseNodeKey>) => {
+  const { questionNode, ...restNodes } = nodeMap as GraphNodeMap<QuestionNodes>;
+  const choiceNodes = Object.keys(restNodes)
+    .filter((key) => key.startsWith('choices'))
+    .sort((a, b) => parseChoiceIndex(a) - parseChoiceIndex(b))
+    .map((x) => nodeMap[x]);
+  const casesNodes = Object.keys(restNodes)
+    .filter((key) => key.startsWith('cases'))
     .sort((a, b) => parseCaseIndex(a) - parseCaseIndex(b))
-    .map((caseName) => nodeMap[caseName]);
-  return questionLayouter(questionNode, casesNodes);
+    .map((x) => nodeMap[x]);
+  return { questionNode, choiceNodes, casesNodes };
+};
+
+const calculateLayout = (nodeMap: GraphNodeMap<QuestionNodes | CaseNodeKey>) => {
+  const { questionNode, choiceNodes, casesNodes } = getNodesFromNodeMap(nodeMap);
+  return questionLayouter(questionNode, choiceNodes, casesNodes);
 };
 
 export interface QuestionWidgetProps extends WidgetContainerProps {
   question: JSX.Element;
 }
 
-const QuestionWidget: FunctionComponent<QuestionWidgetProps> = ({ id, data, onEvent, onResize, question }) => {
+export const QuestionWidget: FunctionComponent<QuestionWidgetProps> = ({ id, data, onEvent, onResize, question }) => {
   const { NodeWrapper } = useContext(RendererContext);
   const nodeMap = useMemo(() => calculateNodeMap(id, data), [id, data]);
   const { layout, updateNodeBoundary } = useSmartLayout<QuestionNodes | CaseNodeKey>(
@@ -72,8 +89,7 @@ const QuestionWidget: FunctionComponent<QuestionWidgetProps> = ({ id, data, onEv
   );
 
   const { boundary, edges } = layout;
-  const { questionNode, ...cases } = nodeMap as GraphNodeMap<QuestionNodes>;
-  const casesNodes = Object.keys(cases).map((x) => nodeMap[x]);
+  const { questionNode, casesNodes } = getNodesFromNodeMap(nodeMap);
 
   return (
     <div css={{ width: boundary.width, height: boundary.height, position: 'relative' }}>
@@ -112,5 +128,3 @@ const QuestionWidget: FunctionComponent<QuestionWidgetProps> = ({ id, data, onEv
 QuestionWidget.defaultProps = {
   onResize: () => null,
 };
-
-export { QuestionWidget };

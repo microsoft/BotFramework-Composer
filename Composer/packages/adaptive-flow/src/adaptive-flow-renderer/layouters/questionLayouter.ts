@@ -15,7 +15,11 @@ import { calculateBranchNodesIntervalX } from './sharedLayouterUtils';
  *       ------------
  *      |   |  |   |
  */
-export function questionLayouter(questionNode: GraphNode | null, branchNodes: GraphNode[] = []): GraphLayout {
+export function questionLayouter(
+  questionNode: GraphNode | null,
+  choiceNodes: GraphNode[],
+  branchNodes: GraphNode[] = []
+): GraphLayout {
   if (!questionNode) {
     return new GraphLayout();
   }
