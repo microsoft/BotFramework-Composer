@@ -260,9 +260,13 @@ async function createFile(req: Request, res: Response) {
 
   const currentProject = await BotProjectService.getProjectById(projectId, user);
   if (currentProject !== undefined) {
-    const { name, content } = req.body;
+    const { name } = req.body;
+    let { content } = req.body;
 
-    //dir = id
+    // if the JSON comes in parsed, convert it to a string
+    if (typeof content !== 'string') {
+      content = JSON.stringify(content);
+    }
     const file = await currentProject.createFile(name, content);
     res.status(200).json(file);
   } else {

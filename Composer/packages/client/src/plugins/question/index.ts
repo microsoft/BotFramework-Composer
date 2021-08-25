@@ -36,7 +36,7 @@ const config: PluginConfig = {
         },
       },
       menu: {
-        label: 'Ask a question (NEW)',
+        label: 'Ask a question',
         submenu: false,
         order: 2,
       },

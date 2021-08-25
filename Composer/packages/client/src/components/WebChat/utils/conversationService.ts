@@ -67,14 +67,14 @@ export class ConversationService {
   private async fetchDirectLineObject(
     conversationId: string,
     directLineOptions: { mode: WebChatMode; endpointId: string; userId: string },
-    pvaMetadata: { botId: string; envId: string; tenantId: string }
+    pvaMetadata: { baseUrl: string; botId: string; envId: string; tenantId: string }
   ) {
     const options = {
       conversationId,
       ...directLineOptions,
     };
     const pvaAccessToken = window.localStorage.getItem('PVA-2-DEMO-TOKEN');
-    const res = await fetch('https://powerva.microsoft.com/api/botmanagement/v1/directline/token', {
+    const res = await fetch(`${pvaMetadata.baseUrl}api/botmanagement/v1/directline/token`, {
       method: 'GET',
       headers: {
         Authorization: `Bearer ${pvaAccessToken}`,

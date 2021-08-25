@@ -32,6 +32,7 @@ export const leftActions = css`
 
 export const rightActions = css`
   position: relative;
+  display: flex;
   height: 44px;
   margin-right: 20px;
 `;
