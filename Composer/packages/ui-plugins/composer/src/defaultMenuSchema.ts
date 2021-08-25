@@ -22,40 +22,40 @@ export const DefaultMenuSchema: MenuUISchema = {
     submenu: false,
   },
   // Ask a question
-  [SDKKinds.TextInput]: {
-    label: formatMessage('Text'),
-    submenu: [SubmenuNames.AskQuestion],
-  },
-  [SDKKinds.NumberInput]: {
-    label: formatMessage('Number'),
-    submenu: [SubmenuNames.AskQuestion],
-  },
-  [SDKKinds.ConfirmInput]: {
-    label: formatMessage('Confirmation'),
-    submenu: [SubmenuNames.AskQuestion],
-  },
-  [SDKKinds.ChoiceInput]: {
-    label: formatMessage('Multi-choice'),
-    submenu: [SubmenuNames.AskQuestion],
-  },
-  [SDKKinds.AttachmentInput]: {
-    label: formatMessage('File or attachment'),
-    submenu: [SubmenuNames.AskQuestion],
-  },
-  [SDKKinds.DateTimeInput]: {
-    label: formatMessage('Date or time'),
-    submenu: [SubmenuNames.AskQuestion],
-  },
-  [SDKKinds.Ask]: {
-    label: formatMessage('Ask activity'),
-    submenu: [SubmenuNames.AskQuestion],
-  },
-  // OAuthInput appears twice
+  // [SDKKinds.TextInput]: {
+  //   label: formatMessage('Text'),
+  //   submenu: [SubmenuNames.AskQuestion],
+  // },
+  // [SDKKinds.NumberInput]: {
+  //   label: formatMessage('Number'),
+  //   submenu: [SubmenuNames.AskQuestion],
+  // },
+  // [SDKKinds.ConfirmInput]: {
+  //   label: formatMessage('Confirmation'),
+  //   submenu: [SubmenuNames.AskQuestion],
+  // },
+  // [SDKKinds.ChoiceInput]: {
+  //   label: formatMessage('Multi-choice'),
+  //   submenu: [SubmenuNames.AskQuestion],
+  // },
+  // [SDKKinds.AttachmentInput]: {
+  //   label: formatMessage('File or attachment'),
+  //   submenu: [SubmenuNames.AskQuestion],
+  // },
+  // [SDKKinds.DateTimeInput]: {
+  //   label: formatMessage('Date or time'),
+  //   submenu: [SubmenuNames.AskQuestion],
+  // },
+  // [SDKKinds.Ask]: {
+  //   label: formatMessage('Ask activity'),
+  //   submenu: [SubmenuNames.AskQuestion],
+  // },
+  // // OAuthInput appears twice
   [SDKKinds.OAuthInput]: [
-    {
-      label: formatMessage('OAuth login'),
-      submenu: [SubmenuNames.AskQuestion],
-    },
+    // {
+    //   label: formatMessage('OAuth login'),
+    //   submenu: [SubmenuNames.AskQuestion],
+    // },
     {
       label: formatMessage('OAuth login'),
       submenu: [SubmenuNames.AccessExternalResources],
@@ -113,26 +113,26 @@ export const DefaultMenuSchema: MenuUISchema = {
     submenu: [SubmenuNames.DialogManagement],
   },
   // Manage properties
-  [SDKKinds.SetProperty]: {
-    label: formatMessage('Set a property'),
-    submenu: [SubmenuNames.PropertyManagement],
-  },
-  [SDKKinds.SetProperties]: {
-    label: formatMessage('Set properties'),
-    submenu: [SubmenuNames.PropertyManagement],
-  },
-  [SDKKinds.DeleteProperty]: {
-    label: formatMessage('Delete a property'),
-    submenu: [SubmenuNames.PropertyManagement],
-  },
-  [SDKKinds.DeleteProperties]: {
-    label: formatMessage('Delete properties'),
-    submenu: [SubmenuNames.PropertyManagement],
-  },
-  [SDKKinds.EditArray]: {
-    label: formatMessage('Edit an array property'),
-    submenu: [SubmenuNames.PropertyManagement],
-  },
+  // [SDKKinds.SetProperty]: {
+  //   label: formatMessage('Set a property'),
+  //   submenu: [SubmenuNames.PropertyManagement],
+  // },
+  // [SDKKinds.SetProperties]: {
+  //   label: formatMessage('Set properties'),
+  //   submenu: [SubmenuNames.PropertyManagement],
+  // },
+  // [SDKKinds.DeleteProperty]: {
+  //   label: formatMessage('Delete a property'),
+  //   submenu: [SubmenuNames.PropertyManagement],
+  // },
+  // [SDKKinds.DeleteProperties]: {
+  //   label: formatMessage('Delete properties'),
+  //   submenu: [SubmenuNames.PropertyManagement],
+  // },
+  // [SDKKinds.EditArray]: {
+  //   label: formatMessage('Edit an array property'),
+  //   submenu: [SubmenuNames.PropertyManagement],
+  // },
   // Access external resources
   [SDKKinds.BeginSkill]: {
     label: formatMessage('Connect to a skill'),
@@ -167,22 +167,22 @@ export const DefaultMenuSchema: MenuUISchema = {
     label: formatMessage('Emit a telemetry track event'),
     submenu: [SubmenuNames.Debugging],
   },
-  [SDKKinds.UpdateActivity]: {
-    label: formatMessage('Update activity'),
-    submenu: [SubmenuNames.PropertyManagement],
-  },
-  [SDKKinds.DeleteActivity]: {
-    label: formatMessage('Delete activity'),
-    submenu: [SubmenuNames.PropertyManagement],
-  },
-  [SDKKinds.GetActivityMembers]: {
-    label: formatMessage('Get activity members'),
-    submenu: [SubmenuNames.PropertyManagement],
-  },
-  [SDKKinds.GetConversationMembers]: {
-    label: formatMessage('Get conversation members'),
-    submenu: [SubmenuNames.PropertyManagement],
-  },
+  // [SDKKinds.UpdateActivity]: {
+  //   label: formatMessage('Update activity'),
+  //   submenu: [SubmenuNames.PropertyManagement],
+  // },
+  // [SDKKinds.DeleteActivity]: {
+  //   label: formatMessage('Delete activity'),
+  //   submenu: [SubmenuNames.PropertyManagement],
+  // },
+  // [SDKKinds.GetActivityMembers]: {
+  //   label: formatMessage('Get activity members'),
+  //   submenu: [SubmenuNames.PropertyManagement],
+  // },
+  // [SDKKinds.GetConversationMembers]: {
+  //   label: formatMessage('Get conversation members'),
+  //   submenu: [SubmenuNames.PropertyManagement],
+  // },
   [SDKKinds.ThrowException]: {
     label: formatMessage('Throw exception'),
     submenu: [SubmenuNames.Debugging],
@@ -190,5 +190,9 @@ export const DefaultMenuSchema: MenuUISchema = {
   [SDKKinds.SendHandoffActivity]: {
     label: formatMessage('Send handoff activity'),
     submenu: [SubmenuNames.AccessExternalResources],
+  },
+  [SDKKinds.SetProperty]: {
+    label: formatMessage('Manage variable'),
+    submenu: false,
   },
 };
