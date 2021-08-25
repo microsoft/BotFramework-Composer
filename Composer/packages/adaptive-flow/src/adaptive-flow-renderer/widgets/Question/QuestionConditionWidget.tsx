@@ -1,18 +1,18 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import React from 'react';
+import React, { FC } from 'react';
 import { WidgetContainerProps } from '@bfc/extension-client';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { ActionButton } from 'office-ui-fabric-react/lib/Button';
 
-interface QuestionConditionWidget extends WidgetContainerProps {
+export interface QuestionConditionProps extends WidgetContainerProps {
   value: string;
   question: any;
   isDefault?: boolean;
 }
 
-function QuestionConditionWidget({ data }: QuestionConditionWidget) {
+export const QuestionConditionWidget: FC<QuestionConditionProps> = ({ data }) => {
   const { question, value, isDefault } = data;
 
   if (isDefault) {
@@ -43,6 +43,4 @@ function QuestionConditionWidget({ data }: QuestionConditionWidget) {
       </ActionButton>
     </div>
   );
-}
-
-export { QuestionConditionWidget };
+};
