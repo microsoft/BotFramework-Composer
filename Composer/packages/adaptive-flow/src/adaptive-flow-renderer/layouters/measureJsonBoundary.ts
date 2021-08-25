@@ -142,6 +142,9 @@ export function measureJsonBoundary(json): Boundary {
     case 'Microsoft.VirtualAgents.Question':
       boundary = measureQuestionBoundary(json);
       break;
+    case AdaptiveKinds.QuestionCondition:
+      boundary = new Boundary(300, 187);
+      break;
     case AdaptiveKinds.SwitchCondition:
       boundary = measureSwitchConditionBoundary(json);
       break;
