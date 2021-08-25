@@ -6,14 +6,8 @@ import { WidgetContainerProps } from '@bfc/extension-client';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { ActionButton } from 'office-ui-fabric-react/lib/Button';
 
-export interface QuestionConditionProps extends WidgetContainerProps {
-  value: string;
-  question: any;
-  isDefault?: boolean;
-}
-
-export const QuestionConditionWidget: FC<QuestionConditionProps> = ({ data }) => {
-  const { question, value, isDefault } = data;
+export const QuestionConditionWidget: FC<WidgetContainerProps> = ({ data }) => {
+  const { question, isDefault, choiceValue, choiceId } = data;
 
   if (isDefault) {
     return <div style={{ padding: '4px' }}>All other conditions</div>;
@@ -34,8 +28,9 @@ export const QuestionConditionWidget: FC<QuestionConditionProps> = ({ data }) =>
       />
       <TextField
         readOnly
+        id={choiceId}
         styles={{ fieldGroup: { borderTopLeftRadius: 0, borderTopRightRadius: 0 } }}
-        value={value.toString()}
+        value={choiceValue.toString()}
       />
 
       <ActionButton iconProps={{ iconName: 'Add' }} styles={{ root: { marginTop: '5px' } }}>

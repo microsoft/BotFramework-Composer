@@ -12,16 +12,10 @@ import { Label } from 'office-ui-fabric-react/lib/Label';
 import { nanoid } from 'nanoid';
 
 import { QuestionOptions } from './QuestionOptions';
+import { QuestionType } from './QuestionType';
 
 interface QuestionFormWidgetProps extends WidgetContainerProps {
   prompt: React.ReactNode;
-}
-
-enum QuestionType {
-  choice = 'choice',
-  text = 'text',
-  confirm = 'confirm',
-  number = 'number',
 }
 
 const typeOptions: IDropdownOption[] = [
