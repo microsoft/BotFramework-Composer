@@ -15,7 +15,7 @@ const config: PluginConfig = {
       },
       flow: {
         widget: 'QuestionWidget',
-        nowrap: true,
+        nowrap: '=equals(action.type, "choice") || equals(action.type, "confirm")' as any,
         question: {
           widget: 'ActionCard',
           body: {

@@ -5,9 +5,32 @@ import { BranchIntervalY } from '../constants/ElementSizes';
 import { GraphNode } from '../models/GraphNode';
 import { GraphLayout } from '../models/GraphLayout';
 import { Edge, EdgeDirection } from '../models/EdgeData';
+import { QuestionType } from '../widgets/Question/QuestionType';
+import { Boundary } from '../models/Boundary';
 
 import { calculateQuestionBoundary } from './calculateNodeBoundary';
 import { calculateBranchNodesIntervalX } from './sharedLayouterUtils';
+
+export function questionLayouter(
+  questionNode: GraphNode | null,
+  choiceNodes: GraphNode[],
+  branchNodes: GraphNode[] = []
+): GraphLayout {
+  if (!questionNode) {
+    return new GraphLayout();
+  }
+  const questionType = questionNode?.data?.type;
+
+  switch (questionType) {
+    case QuestionType.choice:
+    case QuestionType.confirm:
+      return questionLayouterBranching(questionNode, choiceNodes, branchNodes);
+    case QuestionType.text:
+    case QuestionType.number:
+    default:
+      return questionLayouterNonBranching(questionNode);
+  }
+}
 
 /**
  *        [question]
@@ -15,7 +38,7 @@ import { calculateBranchNodesIntervalX } from './sharedLayouterUtils';
  *       ------------
  *      |   |  |   |
  */
-export function questionLayouter(
+function questionLayouterBranching(
   questionNode: GraphNode | null,
   choiceNodes: GraphNode[],
   branchNodes: GraphNode[] = []
@@ -34,8 +57,6 @@ export function questionLayouter(
     x: containerBoundary.axisX - questionNode.boundary.axisX,
     y: 0,
   };
-
-  const BottomelinePositionY = containerBoundary.height;
 
   const BranchGroupOffsetX = Math.max(0, questionNode.boundary.axisX - containerBoundary.axisX);
   branchNodes.reduce((accOffsetX, x, currentIndex) => {
@@ -108,6 +129,15 @@ export function questionLayouter(
     boundary: containerBoundary,
     nodeMap: { questionNode, branchNodes: branchNodes as any },
     edges,
+    nodes: [],
+  };
+}
+
+function questionLayouterNonBranching(questionNode: GraphNode): GraphLayout {
+  return {
+    boundary: new Boundary(300, 187),
+    nodeMap: { questionNode },
+    edges: [],
     nodes: [],
   };
 }
