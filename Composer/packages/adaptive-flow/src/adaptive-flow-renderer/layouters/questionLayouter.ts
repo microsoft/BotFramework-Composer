@@ -50,7 +50,7 @@ function questionLayouterBranching(
   const choiceWithBranchNodes: GraphCoord[] = [];
   for (let i = 0; i < Math.min(choiceNodes.length, branchNodes.length); i++) {
     choiceWithBranchNodes.push(
-      new GraphCoord(choiceNodes[i], [[branchNodes[i], [DT.AxisX, 0], [DT.BottomMargin, ElementInterval.y / 2]]])
+      new GraphCoord(choiceNodes[i], [[branchNodes[i], [DT.AxisX, 0], [DT.BottomMargin, ElementInterval.y]]])
     );
   }
 
@@ -88,25 +88,56 @@ function questionLayouterBranchingWithConvergence(
     return new GraphLayout();
   }
 
-  const choiceWithBranchNodes: GraphCoord[] = [];
-  for (let i = 0; i < Math.min(choiceNodes.length, branchNodes.length); i++) {
-    choiceWithBranchNodes.push(
-      new GraphCoord(choiceNodes[i], [[branchNodes[i], [DT.AxisX, 0], [DT.BottomMargin, ElementInterval.y / 2]]])
-    );
+  // choiceIndex => caseIndex
+  const convergenceMap: Map<number, number> = new Map();
+  choiceNodes.forEach((node, choiceIndex) => {
+    const { gotoChoice } = node.data;
+    if (!gotoChoice || gotoChoice === node?.data?.choiceId) return;
+    const caseIndex = branchNodes.findIndex((n) => n.data.choiceId === gotoChoice);
+    if (caseIndex > -1) convergenceMap.set(choiceIndex, caseIndex);
+  });
+
+  if (convergenceMap.size === 0) {
+    return questionLayouterBranching(questionNode, choiceNodes, branchNodes);
   }
 
-  const contentCoord = GraphCoord.topAlignWithInterval(choiceWithBranchNodes, BranchIntervalX, false);
-  // HACK: increase bottom space to hide following nodes if any
-  contentCoord.boundary.height += 200;
-  const questionCoord = new GraphCoord(questionNode, [
+  // [caseIndex, [choiceIndex1, choiceIndex2, ...]]
+  const connections: [number, number[]][] = [];
+  for (let iChoice = 0; iChoice < choiceNodes.length; iChoice++) {
+    const iCase = convergenceMap.get(iChoice) ?? iChoice;
+    if (connections[iCase]) {
+      connections[iCase][1].push(iChoice);
+    } else {
+      connections[iCase] = [iCase, [iChoice]];
+    }
+  }
+
+  // Some cases are unreachable. Mark as hidden.
+  for (let i = 0; i < branchNodes.length; i++) {
+    if (!connections[i]) branchNodes[i].hidden = true;
+  }
+
+  const compositedBranchCoords: GraphCoord[] = [];
+  const reachableConnections: [number, number[]][] = connections.filter(Boolean);
+  for (const [caseIdx, choiceIndices] of reachableConnections) {
+    const choices = choiceIndices.map((i) => choiceNodes[i]);
+    const choicesGroupCoord = GraphCoord.topAlignWithInterval(choices, BranchIntervalX, false);
+    const branch = branchNodes[caseIdx];
+    const branchCoord = new GraphCoord(choicesGroupCoord, [
+      [branch, [DT.AxisX, 0], [DT.BottomMargin, ElementInterval.y]],
+    ]);
+    compositedBranchCoords.push(branchCoord);
+  }
+
+  const contentCoord = GraphCoord.topAlignWithInterval(compositedBranchCoords, BranchIntervalX, false);
+  const rootCoord = new GraphCoord(questionNode, [
     [contentCoord, [DT.AxisX, 0], [DT.BottomMargin, BranchIntervalY * 2]],
   ]);
-  questionCoord.moveCoordTo(0, 0);
+  rootCoord.moveCoordTo(0, 0);
 
-  const edges: Edge[] = calculateEdges(questionCoord.boundary, questionNode, branchNodes);
-
+  const edges = calculateEdges(rootCoord.boundary, questionNode, branchNodes);
   return {
-    boundary: questionCoord.boundary,
+    boundary: rootCoord.boundary,
     nodeMap: { questionNode, choiceNodes: choiceNodes as any, branchNodes: branchNodes as any },
     edges,
     nodes: [],

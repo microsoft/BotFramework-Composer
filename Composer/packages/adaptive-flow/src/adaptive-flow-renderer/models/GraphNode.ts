@@ -20,6 +20,7 @@ export class GraphNode {
   data: any = {};
   boundary: Boundary;
   offset: CoordPoint = new CoordPoint();
+  hidden = false;
 
   constructor(id = '', data = {}, boundary = new Boundary()) {
     this.id = id;

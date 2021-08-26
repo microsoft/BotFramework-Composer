@@ -142,19 +142,21 @@ export const QuestionWidget: FunctionComponent<QuestionWidgetProps> = ({ id, dat
           />
         </OffsetContainer>
       ))}
-      {(casesNodes as any).map((x, index) => (
-        <OffsetContainer key={`${x.id}/offset`} offset={x.offset}>
-          <ActionGroup
-            key={x.id}
-            data={x.data}
-            id={x.id}
-            onEvent={onEvent}
-            onResize={(size) => {
-              updateNodeBoundary(getCaseKey(index), size);
-            }}
-          />
-        </OffsetContainer>
-      ))}
+      {casesNodes.map((x, index) =>
+        x.hidden ? null : (
+          <OffsetContainer key={`${x.id}/offset`} offset={x.offset}>
+            <ActionGroup
+              key={x.id}
+              data={x.data}
+              id={x.id}
+              onEvent={onEvent}
+              onResize={(size) => {
+                updateNodeBoundary(getCaseKey(index), size);
+              }}
+            />
+          </OffsetContainer>
+        )
+      )}
     </div>
   );
 };
