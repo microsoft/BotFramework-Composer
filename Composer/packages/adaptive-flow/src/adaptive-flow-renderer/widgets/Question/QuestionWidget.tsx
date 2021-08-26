@@ -17,6 +17,7 @@ import { RendererContext } from '../../contexts/RendererContext';
 import { transformQuestion } from '../../transformers/transformQuestion';
 import { questionLayouter } from '../../layouters/questionLayouter';
 import { ActionGroup } from '../ActionGroup';
+import { StepRenderer } from '../AdaptiveAction';
 
 import { isBranchingQuestionType } from './QuestionType';
 
@@ -91,7 +92,7 @@ export const QuestionWidget: FunctionComponent<QuestionWidgetProps> = ({ id, dat
   );
 
   const { boundary, edges } = layout;
-  const { questionNode, casesNodes } = getNodesFromNodeMap(nodeMap);
+  const { questionNode, choiceNodes, casesNodes } = getNodesFromNodeMap(nodeMap);
 
   if (!isBranchingQuestionType(data.type)) {
     return (
@@ -125,6 +126,22 @@ export const QuestionWidget: FunctionComponent<QuestionWidgetProps> = ({ id, dat
           </ElementMeasurer>
         </NodeWrapper>
       </OffsetContainer>
+      {choiceNodes.map((x, index) => (
+        <OffsetContainer key={`${x.id}/offset`} offset={x.offset}>
+          <StepRenderer
+            key={x.id}
+            data={x.data}
+            id={x.id}
+            onEvent={() => {
+              // Stop event bubbling. This is a fake node.
+            }}
+            onResize={(size) => {
+              designerCache.cacheBoundary(x.data, size);
+              updateNodeBoundary(getChoiceKey(index), size);
+            }}
+          />
+        </OffsetContainer>
+      ))}
       {(casesNodes as any).map((x, index) => (
         <OffsetContainer key={`${x.id}/offset`} offset={x.offset}>
           <ActionGroup

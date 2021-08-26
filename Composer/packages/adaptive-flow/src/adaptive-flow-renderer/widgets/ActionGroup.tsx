@@ -79,17 +79,15 @@ export const ActionGroup: FunctionComponent<NodeProps> = ({ id, data, onEvent, o
             </OffsetContainer>
           ))
         : null}
-      {!data.header && (
-        <OffsetContainer
-          css={{ zIndex: 100 }}
-          offset={{
-            x: boundary.axisX - EdgeAddButtonSize.width / 2,
-            y: 0 - EdgeAddButtonSize.height / 2,
-          }}
-        >
-          <EdgeMenu arrayData={data} arrayId={id} arrayPosition={0} onEvent={onEvent} />
-        </OffsetContainer>
-      )}
+      <OffsetContainer
+        css={{ zIndex: 100 }}
+        offset={{
+          x: boundary.axisX - EdgeAddButtonSize.width / 2,
+          y: 0 - EdgeAddButtonSize.height / 2,
+        }}
+      >
+        <EdgeMenu arrayData={data} arrayId={id} arrayPosition={0} onEvent={onEvent} />
+      </OffsetContainer>
       {nodes
         ? nodes
             // PVA.Question: hide last EdgeMenu if has trailing Quesiton kind.
