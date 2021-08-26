@@ -21,7 +21,7 @@ import { transformObiRules } from '../transformers/transformObiRules';
 import { GraphNode } from '../models/GraphNode';
 import { TriggerSummary } from '../widgets/TriggerSummary';
 import { outlineObiJson } from '../utils/adaptive/outlineObiJson';
-import { checkTrailingPVAQuestionAction } from '../widgets/Question/QuestionType';
+import { actionGroupIsOpened } from '../widgets/Question/QuestionType';
 
 const calculateNodeMap = (triggerId, triggerData): { [id: string]: GraphNode } => {
   const result = transformObiRules(triggerData, triggerId);
@@ -113,7 +113,7 @@ export const AdaptiveTrigger: React.FC<AdaptiveTriggerProps> = ({ triggerId, tri
     );
   const editorHeight = HeadSize.height + TailSize.height + contentBoundary.height;
 
-  const hasTrailingQuestionAction = checkTrailingPVAQuestionAction(triggerData?.actions);
+  const hasTrailingQuestionAction = actionGroupIsOpened(triggerData?.actions);
 
   return (
     <div

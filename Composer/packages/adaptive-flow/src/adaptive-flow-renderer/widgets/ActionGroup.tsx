@@ -19,7 +19,7 @@ import { FlowEdges } from '../components/FlowEdges';
 import { RendererContext } from '../contexts/RendererContext';
 
 import { StepRenderer } from './AdaptiveAction';
-import { checkTrailingPVAQuestionAction } from './Question/QuestionType';
+import { actionGroupIsOpened } from './Question/QuestionType';
 
 const StepInterval = ElementInterval.y;
 
@@ -47,7 +47,7 @@ const calculateLayout = (nodeMap: GraphNodeMap<StepNodeKey>, hasTrailingEdge: bo
 export const ActionGroup: FunctionComponent<NodeProps> = ({ id, data, onEvent, onResize }: NodeProps): JSX.Element => {
   const { EdgeMenu } = useContext(RendererContext);
 
-  const hasTrailingQuestionAction = checkTrailingPVAQuestionAction(data.children);
+  const hasTrailingQuestionAction = actionGroupIsOpened(data.children);
   const initialNodes = useMemo(() => calculateNodes(id, data), [id, data]);
   const { layout, updateNodeBoundary } = useSmartLayout(
     initialNodes,
