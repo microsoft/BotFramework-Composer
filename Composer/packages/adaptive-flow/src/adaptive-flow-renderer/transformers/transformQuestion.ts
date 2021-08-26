@@ -78,14 +78,8 @@ export function transformQuestion(
       return new IndexedNode(`${prefix}.actions`, {
         $kind: AdaptiveKinds.StepGroup,
         children: c.actions || [],
-        choiceId: c.choiceId,
-        header: {
-          isDefault: c.isDefault,
-          choiceValue: c.value,
-          choiceId: c.choiceId || 'default',
-          id: prefix,
-          question: input,
-        },
+        choiceId: c.choiceId ?? 'default',
+        caseValue: c.value,
       });
     })
   );
