@@ -24,6 +24,7 @@ export function questionLayouter(
 
   switch (questionType) {
     case QuestionType.choice:
+      return questionLayouterBranchingWithConvergence(questionNode, choiceNodes, branchNodes);
     case QuestionType.confirm:
       return questionLayouterBranching(questionNode, choiceNodes, branchNodes);
     case QuestionType.text:
@@ -62,7 +63,61 @@ function questionLayouterBranching(
   ]);
   questionCoord.moveCoordTo(0, 0);
 
-  /** Calculate edges */
+  const edges: Edge[] = calculateEdges(questionNode, questionCoord, branchNodes, branchesCoord);
+
+  return {
+    boundary: questionCoord.boundary,
+    nodeMap: { questionNode, branchNodes: branchNodes as any },
+    edges,
+    nodes: [],
+  };
+}
+
+/**
+ *        [question]
+ *           |
+ *       ------------
+ *      |   |  |   |
+ */
+function questionLayouterBranchingWithConvergence(
+  questionNode: GraphNode | null,
+  choiceNodes: GraphNode[],
+  branchNodes: GraphNode[] = []
+): GraphLayout {
+  if (!questionNode || !branchNodes.length) {
+    return new GraphLayout();
+  }
+
+  const branchesOtherNodesPos: GraphElementCoord[] = [];
+  let totalMargin = 0;
+  for (let i = 1; i < branchNodes.length; i++) {
+    const currNode = branchNodes[i];
+    totalMargin += calculateBranchNodesIntervalX(branchNodes[i - 1].boundary, currNode.boundary);
+    branchesOtherNodesPos.push([currNode, [DT.RightMargin, totalMargin], [DT.Top, 0]]);
+    totalMargin += currNode.boundary.width;
+  }
+  const branchesCoord = new GraphCoord(branchNodes[0], branchesOtherNodesPos, false);
+  const questionCoord = new GraphCoord(questionNode, [
+    [branchesCoord, [DT.AxisX, 0], [DT.BottomMargin, BranchIntervalY]],
+  ]);
+  questionCoord.moveCoordTo(0, 0);
+
+  const edges: Edge[] = calculateEdges(questionNode, questionCoord, branchNodes, branchesCoord);
+
+  return {
+    boundary: questionCoord.boundary,
+    nodeMap: { questionNode, branchNodes: branchNodes as any },
+    edges,
+    nodes: [],
+  };
+}
+
+function calculateEdges(
+  questionNode: GraphNode,
+  questionCoord: GraphCoord,
+  branchNodes: GraphNode[],
+  branchesCoord: GraphCoord
+) {
   const edges: Edge[] = [];
   edges.push({
     id: `edge/${questionNode.id}/switch/condition->switch`,
@@ -116,14 +171,7 @@ function questionLayouterBranching(
       // }
     );
   }
-
-  // TODO: remove this 'any' type conversion after LogicFlow PR.
-  return {
-    boundary: questionCoord.boundary,
-    nodeMap: { questionNode, branchNodes: branchNodes as any },
-    edges,
-    nodes: [],
-  };
+  return edges;
 }
 
 function questionLayouterNonBranching(questionNode: GraphNode): GraphLayout {

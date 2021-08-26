@@ -3,17 +3,20 @@
 
 import { AdaptiveKinds } from '../constants/AdaptiveKinds';
 import { IndexedNode } from '../models/IndexedNode';
-import { QuestionType } from '../widgets/Question/QuestionType';
+import { isBranchingQuestionType, QuestionType } from '../widgets/Question/QuestionType';
 
 import { inheritParentProperties } from './inheritParentProperty';
 
 export function transformQuestion(
   input,
   jsonpath: string
-): { question: IndexedNode; choices: IndexedNode[]; branches: IndexedNode[] } | null {
+): {
+  question: IndexedNode;
+  choices: IndexedNode[];
+  branches: IndexedNode[];
+  convergence: { [choiceIndex: number]: number };
+} | null {
   if (!input || typeof input !== 'object') return null;
-
-  const cases = input.cases || [];
 
   const result = {
     question: new IndexedNode(`${jsonpath}`, {
@@ -22,6 +25,7 @@ export function transformQuestion(
     }),
     choices: [] as IndexedNode[],
     branches: [] as IndexedNode[],
+    convergence: {},
   };
   switch (input?.type) {
     case QuestionType.choice:
@@ -32,6 +36,7 @@ export function transformQuestion(
           $kind: AdaptiveKinds.QuestionCondition,
           choiceValue: choice.value,
           choiceId: choice.id,
+          gotoChoice: choice.gotoChoice,
           question: input,
         });
       });
@@ -64,7 +69,8 @@ export function transformQuestion(
       break;
   }
 
-  if (!cases || !Array.isArray(cases)) return result;
+  const cases = input.cases || [];
+  if (!cases || !Array.isArray(cases) || !isBranchingQuestionType(input?.type)) return result;
 
   result.branches.push(
     ...cases.map((c, index) => {
@@ -72,6 +78,7 @@ export function transformQuestion(
       return new IndexedNode(`${prefix}.actions`, {
         $kind: AdaptiveKinds.StepGroup,
         children: c.actions || [],
+        choiceId: c.choiceId,
         header: {
           isDefault: c.isDefault,
           choiceValue: c.value,
@@ -84,5 +91,16 @@ export function transformQuestion(
   );
 
   inheritParentProperties(input, [result.question, ...result.branches]);
+
+  // Converge choices and cases (branches) mapping rule
+  if (input?.type === QuestionType.choice) {
+    result.choices.forEach((node, choiceIndex) => {
+      const { gotoChoice } = node.json;
+      if (!gotoChoice) return;
+      const caseIndex = result.branches.findIndex((caseData) => caseData.json.choiceId === gotoChoice);
+      if (caseIndex > -1) result.convergence[choiceIndex] = caseIndex;
+    });
+  }
+
   return result;
 }
