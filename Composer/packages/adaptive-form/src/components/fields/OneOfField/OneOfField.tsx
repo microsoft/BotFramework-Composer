@@ -81,7 +81,7 @@ const onRenderTitle = (options: IDropdownOption[] | undefined): JSX.Element => {
 };
 
 const OneOfField: React.FC<FieldProps> = (props) => {
-  const { definitions, description, id, label, schema, required, uiOptions, value } = props;
+  const { definitions, description, id, label, schema, required, uiOptions, value, onTypeChange } = props;
   const formUIOptions = useFormConfig();
 
   const { options, isNested } = useMemo(() => getOptions(schema, definitions), [schema, definitions]);
@@ -102,6 +102,7 @@ const OneOfField: React.FC<FieldProps> = (props) => {
     if (option) {
       setSelectedOption(option);
       props.onChange(undefined);
+      onTypeChange(option.text);
     }
   };
 

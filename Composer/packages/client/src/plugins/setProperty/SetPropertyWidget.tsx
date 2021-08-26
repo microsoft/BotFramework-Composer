@@ -1,214 +1,85 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { WidgetContainerProps, useShellApi } from '@bfc/extension-client';
-import React, { useState, useEffect } from 'react';
-import { SharedColors, NeutralColors } from '@uifabric/fluent-theme';
-import formatMessage from 'format-message';
-import { TextField } from 'office-ui-fabric-react/lib/TextField';
-import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
-import { TagPicker } from 'office-ui-fabric-react/lib/components/pickers/TagPicker/TagPicker';
-import { ITag } from 'office-ui-fabric-react/lib/components/pickers/TagPicker/TagPicker.types';
-import { useId } from '@uifabric/react-hooks';
+import styled from '@emotion/styled';
+import { useShellApi, WidgetContainerProps } from '@bfc/extension-client';
+import React from 'react';
+import { SchemaField, getSelectedOption, getOptions } from '@bfc/adaptive-form/lib';
+import { IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
+import { SharedColors } from '@uifabric/fluent-theme/lib/fluent';
 
-const options: IDropdownOption[] = [
-  { key: 'string', text: 'abc' },
-  { key: 'number', text: '123' },
-  { key: 'bool', text: 'y/n' },
-  { key: 'array', text: '[ ]' },
-  { key: 'object', text: '{ }' },
-];
+import { PropertyField } from './PropertyField';
 
-export const SetPropertyWidget: React.FC<WidgetContainerProps> = ({ id, data }) => {
+const ValueField = styled(SchemaField)({
+  margin: '0px',
+  '& .ms-TextField-fieldGroup': {
+    borderColor: SharedColors.gray10,
+  },
+  '& .ms-Dropdown-title, & .ms-Dropdown-title:hover ': {
+    borderColor: SharedColors.gray10,
+  },
+});
+
+export const SetPropertyWidget: React.FC<WidgetContainerProps> = ({ adaptiveSchema, data, id }) => {
   const { shellApi } = useShellApi();
-  const [currentDataType, setCurrentDataType] = useState(options[0].key);
-  const pickerId = useId('inline-picker');
-  const [propertyValue, setPropertyValue] = useState<any>('');
-  const [selectedTagPickerItems, setSelectedTagPickerItems] = useState<ITag[]>([]);
+  const { saveData } = shellApi;
 
-  useEffect(() => {
-    let initType = options[0].key;
-    if ((data.$designer as any)?.dataType) {
-      initType = (data.$designer as any)?.dataType;
-      setCurrentDataType(initType);
-    }
+  const { options } = React.useMemo(() => getOptions(adaptiveSchema.properties?.value || {}), [adaptiveSchema]);
+  const initialSelectedOption = React.useMemo(
+    () => getSelectedOption(data.value, options) || ({ key: '', data: { schema: undefined } } as IDropdownOption),
+    []
+  );
 
-    if (data.value) {
-      if (typeof data.value === 'object') {
-        setPropertyValue(JSON.stringify(data.value));
-      } else {
-        setPropertyValue(data.value);
-      }
-    }
+  const [selectedDataType, setSelectedDataType] = React.useState(initialSelectedOption.text || 'string');
 
-    if (data.property) {
-      // Avoid showing the memory model
-      const split = data.property.split('.');
-      const lastPathSegment = split.length > 1 ? split[split.length - 1] : '';
-      const displayTag = `${lastPathSegment} (${initType})`;
-      setSelectedTagPickerItems([
-        {
-          key: data.property,
-          name: displayTag,
-        },
-      ]);
-    }
-  }, [data]);
+  const handleChange = React.useCallback(
+    (value) => {
+      saveData(value, id);
+    },
+    [saveData]
+  );
 
-  const onPropertyValueChange = (_, currentVal) => {
-    setPropertyValue(currentVal);
-  };
-
-  const onDataTypeChange = (_e: React.FormEvent<HTMLDivElement>, option?: IDropdownOption) => {
-    if (option) {
-      setCurrentDataType(option.key);
-    }
-  };
-
-  const handleUpdate = (val: any, dataType) => {
-    shellApi.saveData(
-      {
+  const handlePropertyNameChange = React.useCallback(
+    (property?: any) => {
+      handleChange({
         ...data,
-        value: val,
-        $designer: {
-          ...data.$designer,
-          dataType,
-        },
-      },
-      id
-    );
-  };
+        property,
+      });
+    },
+    [handleChange]
+  );
 
-  const onPropertyValueBlur = () => {
-    switch (currentDataType) {
-      case 'string':
-        handleUpdate(propertyValue, currentDataType);
-        break;
-      case 'number':
-        handleUpdate(Number(propertyValue), currentDataType);
-        break;
+  const handleValueChange = React.useCallback(
+    (value) => {
+      handleChange({
+        ...data,
+        value,
+      });
+    },
+    [handleChange]
+  );
 
-      default:
-        try {
-          const parsed = JSON.parse(propertyValue);
-          handleUpdate(parsed, currentDataType);
-        } catch {
-          handleUpdate(propertyValue, 'string');
-        }
-        break;
-    }
-  };
-
-  const onResolveSuggestion = (filterItem: string): ITag[] => {
-    return [
-      {
-        key: filterItem,
-        name: filterItem,
-      },
-    ];
-  };
-
-  const onTagPickerItemSelected = (current: ITag | undefined) => {
-    if (current) {
-      shellApi.saveData({ ...data, property: `dialog.${current?.name}` }, id);
-      const dataTypeName = options.find((option) => option.key === currentDataType);
-      const updatedProperty = { ...current, name: `${current.name} (${dataTypeName?.key})` };
-      setSelectedTagPickerItems([updatedProperty]);
-    }
-    return null;
-  };
+  const handleTypeChange = React.useCallback((dataType: string) => {
+    setSelectedDataType(dataType);
+  }, []);
 
   return (
-    <div
-      style={{
-        display: 'flex',
-        flex: '1 1 auto',
-        flexDirection: 'column',
-      }}
-    >
-      <TagPicker
-        inputProps={{
-          id: pickerId,
-        }}
-        itemLimit={1}
-        pickerCalloutProps={{ doNotLayer: true }}
-        selectedItems={selectedTagPickerItems}
-        styles={{
-          itemsWrapper: {
-            color: 'black',
-            border: 'none',
-          },
-          root: {
-            selectors: {
-              '.ms-BasePicker-text': {
-                outline: 'none',
-                border: `1px solid ${SharedColors.gray10}`,
-              },
-              '.ms-Suggestions-item': {
-                display: 'none',
-              },
-              '.ms-TagItem': {
-                backgroundColor: NeutralColors.gray20,
-                color: NeutralColors.black,
-                selectors: {
-                  ':hover': {
-                    backgroundColor: NeutralColors.gray20,
-                  },
-                },
-              },
-              '.ms-TagItem-close': {
-                color: `black`,
-                marginTop: '2px',
-                selectors: {
-                  ':hover': {
-                    backgroundColor: NeutralColors.gray70,
-                  },
-                },
-              },
-            },
-          },
-        }}
-        onChange={() => {
-          setSelectedTagPickerItems([]);
-          const { property, ...rest } = data;
-          shellApi.saveData(rest, id);
-        }}
-        onItemSelected={onTagPickerItemSelected}
-        onResolveSuggestions={onResolveSuggestion}
+    <div>
+      <PropertyField
+        dataType={selectedDataType}
+        value={data.property}
+        onPropertyNameChange={handlePropertyNameChange}
       />
-      <div
-        style={{
-          alignItems: 'center',
-          justifyContent: 'center',
-          fontSize: '12px',
-          margin: '10px 0',
-          textAlign: 'left',
-          border: `2px solid ${SharedColors.gray10}`,
-          padding: '5px',
-        }}
-      >
-        {formatMessage('Set to')}
-      </div>
-      <div
-        style={{
-          display: 'flex',
-          flex: '1 1 auto',
-          flexDirection: 'row',
-        }}
-      >
-        <Dropdown options={options} selectedKey={currentDataType} onChange={onDataTypeChange} />
-        <TextField
-          styles={{
-            root: {
-              height: '40px',
-              width: '232px',
-            },
-          }}
-          value={propertyValue}
-          onBlur={onPropertyValueBlur}
-          onChange={onPropertyValueChange}
-        />
-      </div>
+      <ValueField
+        definitions={{}}
+        id="value"
+        name="value"
+        schema={adaptiveSchema.properties?.value || {}}
+        uiOptions={{ label: false }}
+        value={data.value}
+        onChange={handleValueChange}
+        onTypeChange={handleTypeChange}
+      />
     </div>
   );
 };
