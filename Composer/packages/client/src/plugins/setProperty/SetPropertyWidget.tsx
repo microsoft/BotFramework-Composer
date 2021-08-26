@@ -71,6 +71,7 @@ export const SetPropertyWidget: React.FC<WidgetContainerProps> = ({ adaptiveSche
         onPropertyNameChange={handlePropertyNameChange}
       />
       <ValueField
+        disableIntellisense
         definitions={{}}
         id="value"
         name="value"

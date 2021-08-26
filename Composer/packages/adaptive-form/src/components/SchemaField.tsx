@@ -81,6 +81,7 @@ export const SchemaField: React.FC<FieldProps> = (props) => {
     globalUIOptions: formUIOptions,
     value,
     expression,
+    disableIntellisense: props.disableIntellisense,
   });
 
   const label = getUiLabel({ ...props, uiOptions });
