@@ -28,8 +28,9 @@ export function resolveFieldWidget(params: {
   value?: any;
   expression?: boolean;
   isOneOf?: boolean;
+  disableIntellisense?: boolean;
 }): { field: FieldWidget; customProps?: Partial<FieldProps> } {
-  const { schema, uiOptions, globalUIOptions, value, expression, isOneOf } = params;
+  const { schema, uiOptions, globalUIOptions, value, expression, isOneOf, disableIntellisense } = params;
 
   const FieldOverride = uiOptions?.field;
 
@@ -38,7 +39,7 @@ export function resolveFieldWidget(params: {
   }
 
   if (schema) {
-    const showIntellisense = uiOptions?.intellisenseScopes?.length || expression;
+    const showIntellisense = !disableIntellisense && (uiOptions?.intellisenseScopes?.length || expression);
 
     if (schema.$role) {
       switch (schema.$role) {

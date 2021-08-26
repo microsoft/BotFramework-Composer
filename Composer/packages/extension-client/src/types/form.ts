@@ -37,10 +37,14 @@ export interface FieldProps<T = any> {
   cursorPosition?: number;
   isRoot?: boolean;
   hasIcon?: boolean;
+  disableIntellisense?: boolean;
 
   onChange: ChangeHandler<T>;
   onFocus?: (id: string, value?: T, event?: React.FocusEvent<any>) => void;
   onBlur?: (id: string, value?: T) => void;
+
+  // For PVA Demo purposes only
+  onTypeChange?: (dataType: string) => void;
 
   onKeyDown?: (event: React.KeyboardEvent<HTMLInputElement>) => void;
   onKeyUp?: (event: React.KeyboardEvent<HTMLInputElement>) => void;
