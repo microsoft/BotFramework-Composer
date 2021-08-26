@@ -41,6 +41,11 @@ export const PVADefs = {
               title: 'Simple choice',
               description: 'One choice for choice input.',
             },
+            gotoChoice: {
+              type: 'string',
+              title: 'Share logic with another choice',
+              description: 'Converge to another choice and shares the flow.',
+            },
           },
         },
       },

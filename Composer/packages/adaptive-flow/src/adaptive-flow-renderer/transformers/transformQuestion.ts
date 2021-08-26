@@ -79,22 +79,11 @@ export function transformQuestion(
         $kind: AdaptiveKinds.StepGroup,
         children: c.actions || [],
         choiceId: c.choiceId ?? 'default',
-        caseValue: c.value,
+        choiceValue: c.value,
       });
     })
   );
 
   inheritParentProperties(input, [result.question, ...result.branches]);
-
-  // Converge choices and cases (branches) mapping rule
-  if (input?.type === QuestionType.choice) {
-    result.choices.forEach((node, choiceIndex) => {
-      const { gotoChoice } = node.json;
-      if (!gotoChoice) return;
-      const caseIndex = result.branches.findIndex((caseData) => caseData.json.choiceId === gotoChoice);
-      if (caseIndex > -1) result.convergence[choiceIndex] = caseIndex;
-    });
-  }
-
   return result;
 }

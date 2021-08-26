@@ -93,8 +93,8 @@ function questionLayouterBranchingWithConvergence(
   const convergenceMap: Map<number, number> = new Map();
   choiceNodes.forEach((node, choiceIndex) => {
     const { gotoChoice } = node.data;
-    if (!gotoChoice || gotoChoice === node?.data?.choiceId) return;
-    const caseIndex = branchNodes.findIndex((n) => n.data.choiceId === gotoChoice);
+    if (!gotoChoice || gotoChoice === node?.data?.choiceValue) return;
+    const caseIndex = branchNodes.findIndex((n) => n.data.choiceValue === gotoChoice);
     if (caseIndex > -1) convergenceMap.set(choiceIndex, caseIndex);
   });
 
