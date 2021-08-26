@@ -49,15 +49,7 @@ function questionLayouterBranching(
     return new GraphLayout();
   }
 
-  const branchesOtherNodesPos: GraphElementCoord[] = [];
-  let totalMargin = 0;
-  for (let i = 1; i < branchNodes.length; i++) {
-    const currNode = branchNodes[i];
-    totalMargin += calculateBranchNodesIntervalX(branchNodes[i - 1].boundary, currNode.boundary);
-    branchesOtherNodesPos.push([currNode, [DT.RightMargin, totalMargin], [DT.Top, 0]]);
-    totalMargin += currNode.boundary.width;
-  }
-  const branchesCoord = new GraphCoord(branchNodes[0], branchesOtherNodesPos, false);
+  const branchesCoord = GraphCoord.topAlignWithInterval(branchNodes, BranchIntervalY, false);
   const questionCoord = new GraphCoord(questionNode, [
     [branchesCoord, [DT.AxisX, 0], [DT.BottomMargin, BranchIntervalY]],
   ]);

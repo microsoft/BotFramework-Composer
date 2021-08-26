@@ -2,7 +2,13 @@
 // Licensed under the MIT License.
 
 import { Boundary } from './Boundary';
-import { CoordDistance, RelativeDistanceX, RelativeDistanceY, transformRelativeDistance } from './GraphDistanceUtils';
+import {
+  CoordDistance,
+  DT,
+  RelativeDistanceX,
+  RelativeDistanceY,
+  transformRelativeDistance,
+} from './GraphDistanceUtils';
 import { GraphNode } from './GraphNode';
 
 type GraphElement = GraphCoord | GraphNode;
@@ -25,6 +31,22 @@ export class GraphCoord {
       this.boundary.axisX = this.boundary.width / 2;
     }
     this.boundary.axisY = this.boundary.height / 2;
+  }
+
+  static topAlignWithInterval(graphElements: GraphElement[], interval: number, useFirstElementAxis = true): GraphCoord {
+    if (!graphElements.length) return new GraphCoord(new GraphNode('', {}, new Boundary()), []);
+
+    const first = graphElements[0];
+    const relativeNodes: GraphElementCoord[] = [];
+
+    let margin = 0;
+    for (let i = 1; i < graphElements.length; i++) {
+      margin += interval;
+      relativeNodes.push([graphElements[i], [DT.RightMargin, margin], [DT.Top, 0]]);
+      margin += graphElements[i].boundary.width;
+    }
+
+    return new GraphCoord(first, relativeNodes, useFirstElementAxis);
   }
 
   moveCoordTo(x: number, y: number) {
