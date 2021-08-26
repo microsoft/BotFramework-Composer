@@ -148,7 +148,7 @@ export function measureJsonBoundary(json): Boundary {
       }
       break;
     case AdaptiveKinds.QuestionCondition:
-      boundary = new Boundary(300, 187);
+      boundary = new Boundary(300, json.isDefault ? 72 : 187);
       break;
     case AdaptiveKinds.SwitchCondition:
       boundary = measureSwitchConditionBoundary(json);
