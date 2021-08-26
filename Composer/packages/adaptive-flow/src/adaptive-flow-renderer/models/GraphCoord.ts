@@ -7,16 +7,23 @@ import { GraphNode } from './GraphNode';
 
 type GraphElement = GraphCoord | GraphNode;
 
+export type GraphElementCoord = [GraphElement, RelativeDistanceX, RelativeDistanceY];
+
 export class GraphCoord {
   boundary: Boundary = new Boundary();
   sharedDistance: CoordDistance = [0, 0];
+  offset = [0, 0];
   private coordNodes: [GraphElement, CoordDistance][];
 
-  constructor(anchorNode: GraphElement, relativeNodes: [GraphElement, RelativeDistanceX, RelativeDistanceY][]) {
+  constructor(anchorNode: GraphElement, relativeNodes: GraphElementCoord[], inheritAxisXFromAnchor = true) {
     this.coordNodes = this.computeCoordDistance(anchorNode, relativeNodes);
     this.computeAndSetCoord(this.coordNodes);
 
-    this.boundary.axisX = anchorNode.boundary.axisX + this.sharedDistance[0];
+    if (inheritAxisXFromAnchor) {
+      this.boundary.axisX = anchorNode.boundary.axisX + this.sharedDistance[0];
+    } else {
+      this.boundary.axisX = this.boundary.width / 2;
+    }
     this.boundary.axisY = this.boundary.height / 2;
   }
 
@@ -29,14 +36,13 @@ export class GraphCoord {
       } else {
         // Move children coord recursively
         n.moveCoordTo(x + cx + dx, y + cy + dy);
+        // Record self offset
+        this.offset = [x, y];
       }
     });
   }
 
-  private computeCoordDistance(
-    anchorNode: GraphElement,
-    relativeNodes: [GraphElement, RelativeDistanceX, RelativeDistanceY][]
-  ) {
+  private computeCoordDistance(anchorNode: GraphElement, relativeNodes: GraphElementCoord[]) {
     const result: [GraphElement, CoordDistance][] = [];
     // anchor node distance set to 0, 0
     result.push([anchorNode, [0, 0]]);
@@ -48,8 +54,11 @@ export class GraphCoord {
   }
 
   private computeAndSetCoord(coordNodes: [GraphElement, CoordDistance][]) {
+    const [sx, sy] = this.sharedDistance;
     let [xMin, xMax, yMin, yMax] = [0, 0, 0, 0];
-    for (const [{ boundary }, [x, y]] of coordNodes) {
+    for (const [{ boundary }, [rx, ry]] of coordNodes) {
+      const x = rx + sx;
+      const y = ry + sy;
       xMin = Math.min(xMin, x);
       yMin = Math.min(yMin, y);
 

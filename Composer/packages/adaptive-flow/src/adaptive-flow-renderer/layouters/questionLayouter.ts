@@ -7,8 +7,9 @@ import { GraphLayout } from '../models/GraphLayout';
 import { Edge, EdgeDirection } from '../models/EdgeData';
 import { QuestionType } from '../widgets/Question/QuestionType';
 import { Boundary } from '../models/Boundary';
+import { GraphCoord, GraphElementCoord } from '../models/GraphCoord';
+import { DT } from '../models/GraphDistanceUtils';
 
-import { calculateQuestionBoundary } from './calculateNodeBoundary';
 import { calculateBranchNodesIntervalX } from './sharedLayouterUtils';
 
 export function questionLayouter(
@@ -43,38 +44,30 @@ function questionLayouterBranching(
   choiceNodes: GraphNode[],
   branchNodes: GraphNode[] = []
 ): GraphLayout {
-  if (!questionNode) {
+  if (!questionNode || !branchNodes.length) {
     return new GraphLayout();
   }
 
-  const containerBoundary = calculateQuestionBoundary(
-    questionNode.boundary,
-    branchNodes.map((x) => x.boundary)
-  );
-
-  /** Calculate nodes position */
-  questionNode.offset = {
-    x: containerBoundary.axisX - questionNode.boundary.axisX,
-    y: 0,
-  };
-
-  const BranchGroupOffsetX = Math.max(0, questionNode.boundary.axisX - containerBoundary.axisX);
-  branchNodes.reduce((accOffsetX, x, currentIndex) => {
-    x.offset = {
-      x: accOffsetX,
-      y: questionNode.offset.y + questionNode.boundary.height + BranchIntervalY,
-    };
-    return (
-      accOffsetX + x.boundary.width + calculateBranchNodesIntervalX(x.boundary, branchNodes[currentIndex + 1]?.boundary)
-    );
-  }, BranchGroupOffsetX);
+  const branchesOtherNodesPos: GraphElementCoord[] = [];
+  let totalMargin = 0;
+  for (let i = 1; i < branchNodes.length; i++) {
+    const currNode = branchNodes[i];
+    totalMargin += calculateBranchNodesIntervalX(branchNodes[i - 1].boundary, currNode.boundary);
+    branchesOtherNodesPos.push([currNode, [DT.RightMargin, totalMargin], [DT.Top, 0]]);
+    totalMargin += currNode.boundary.width;
+  }
+  const branchesCoord = new GraphCoord(branchNodes[0], branchesOtherNodesPos, false);
+  const questionCoord = new GraphCoord(questionNode, [
+    [branchesCoord, [DT.AxisX, 0], [DT.BottomMargin, BranchIntervalY]],
+  ]);
+  questionCoord.moveCoordTo(0, 0);
 
   /** Calculate edges */
   const edges: Edge[] = [];
   edges.push({
     id: `edge/${questionNode.id}/switch/condition->switch`,
     direction: EdgeDirection.Down,
-    x: containerBoundary.axisX,
+    x: questionCoord.boundary.axisX,
     y: questionNode.offset.y + questionNode.boundary.height,
     length: BranchIntervalY,
   });
@@ -103,7 +96,7 @@ function questionLayouterBranching(
   if (branchNodes.length > 1) {
     const firstBranchNode = branchNodes[0] || new GraphNode();
     const lastBranchNode = branchNodes[branchNodes.length - 1] || new GraphNode();
-    const linePositionX = BranchGroupOffsetX + firstBranchNode.boundary.axisX;
+    const linePositionX = branchesCoord.offset[0] + firstBranchNode.boundary.axisX;
     const baseLineLength = lastBranchNode.offset.x + lastBranchNode.boundary.axisX - linePositionX;
 
     edges.push(
@@ -126,7 +119,7 @@ function questionLayouterBranching(
 
   // TODO: remove this 'any' type conversion after LogicFlow PR.
   return {
-    boundary: containerBoundary,
+    boundary: questionCoord.boundary,
     nodeMap: { questionNode, branchNodes: branchNodes as any },
     edges,
     nodes: [],

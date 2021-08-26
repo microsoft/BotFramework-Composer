@@ -24,6 +24,7 @@ import { transformForeach } from '../transformers/transformForeach';
 import { transformBaseInput } from '../transformers/transformBaseInput';
 import { designerCache } from '../utils/visual/DesignerCache';
 import { transformQuestion } from '../transformers/transformQuestion';
+import { isBranchingQuestionType } from '../widgets/Question/QuestionType';
 
 import {
   calculateIfElseBoundary,
@@ -140,7 +141,11 @@ export function measureJsonBoundary(json): Boundary {
       boundary = new Boundary(QuestionDetailsSize.width, QuestionDetailsSize.height);
       break;
     case 'Microsoft.VirtualAgents.Question':
-      boundary = measureQuestionBoundary(json);
+      if (isBranchingQuestionType(json.type)) {
+        boundary = measureQuestionBoundary(json);
+      } else {
+        boundary = new Boundary(QuestionDetailsSize.width, QuestionDetailsSize.height);
+      }
       break;
     case AdaptiveKinds.QuestionCondition:
       boundary = new Boundary(300, 187);

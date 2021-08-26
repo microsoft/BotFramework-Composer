@@ -12,6 +12,9 @@ import {
   IconBrickSize,
   BoxMargin,
 } from '../constants/ElementSizes';
+import { GraphCoord, GraphElementCoord } from '../models/GraphCoord';
+import { DT } from '../models/GraphDistanceUtils';
+import { GraphNode } from '../models/GraphNode';
 
 import { calculateBranchNodesIntervalX } from './sharedLayouterUtils';
 
@@ -98,37 +101,24 @@ function measureQuestionContainerBoundary(
 ): Boundary {
   if (!conditionBoundary) return new Boundary();
 
-  const branchGroupBoundary = new Boundary();
-  branchBoundaries.forEach((boundary) => {
-    // Hack: since PVA question uses virtual condition node, assign a min size to empty branches to avoid flickering
-    if (boundary.width < 300) {
-      boundary.width = 300;
-      boundary.axisX = 150;
-    }
-    if (boundary.height < 200) {
-      boundary.height = 200;
-    }
-  });
-  branchGroupBoundary.width = branchBoundaries.reduce((acc, x, currentIndex) => {
-    return acc + x.width + calculateBranchNodesIntervalX(x, branchBoundaries[currentIndex + 1]);
-  }, 0);
-  branchGroupBoundary.height = Math.max(0, ...branchBoundaries.map((x) => x.height));
-  branchGroupBoundary.axisX = branchGroupBoundary.width / 2;
+  const conditionNode = new GraphNode('', {}, conditionBoundary);
+  const branchNodes = branchBoundaries.map((b) => new GraphNode('', {}, b));
 
-  /** Calculate boundary */
-  const containerAxisX = Math.max(conditionBoundary.axisX, branchGroupBoundary.axisX);
-  const containerHeight =
-    conditionBoundary.height + BranchIntervalY + BranchIntervalY + branchGroupBoundary.height + BranchIntervalY;
-  const containerWidth =
-    containerAxisX +
-    Math.max(conditionBoundary.width - conditionBoundary.axisX, branchGroupBoundary.width - branchGroupBoundary.axisX) +
-    BranchingNodeMarginRight;
+  const branchesOtherNodesPos: GraphElementCoord[] = [];
+  let totalMargin = 0;
+  for (let i = 1; i < branchNodes.length; i++) {
+    const currNode = branchNodes[i];
+    totalMargin += calculateBranchNodesIntervalX(branchNodes[i - 1].boundary, currNode.boundary);
+    branchesOtherNodesPos.push([currNode, [DT.RightMargin, totalMargin], [DT.Top, 0]]);
+    totalMargin += currNode.boundary.width;
+  }
+  const branchesCoord = new GraphCoord(branchNodes[0], branchesOtherNodesPos, false);
+  const questionCoord = new GraphCoord(conditionNode, [
+    [branchesCoord, [DT.AxisX, 0], [DT.BottomMargin, BranchIntervalY]],
+  ]);
+  questionCoord.moveCoordTo(0, 0);
 
-  const containerBoundary = new Boundary();
-  containerBoundary.width = containerWidth;
-  containerBoundary.height = containerHeight;
-  containerBoundary.axisX = containerAxisX;
-  return containerBoundary;
+  return questionCoord.boundary;
 }
 
 function measureBranchingContainerBoundary(
