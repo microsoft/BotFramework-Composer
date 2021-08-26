@@ -102,7 +102,7 @@ const OneOfField: React.FC<FieldProps> = (props) => {
     if (option) {
       setSelectedOption(option);
       props.onChange(undefined);
-      onTypeChange(option.text);
+      onTypeChange?.(option.text);
     }
   };
 

@@ -35,7 +35,7 @@ interface ErrorBoundaryState {
   };
 }
 
-const patternsToIgnore = [/ResizeObserver/g];
+const patternsToIgnore = [`ResizeObserver`];
 
 // only class component can be a error boundary
 export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
@@ -55,14 +55,18 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
 
   eventHandler(error) {
     console.error(error);
-    this.props.setApplicationLevelError(formatToStateError(error));
+    // eslint-disable-next-line security/detect-non-literal-regexp
+    if (!patternsToIgnore.some((pattern) => new RegExp(pattern, 'g').test(error.message))) {
+      this.props.setApplicationLevelError(formatToStateError(error));
+    }
   }
 
   onErrorHandler(message, source, lineno, colno, error) {
     console.error({ message, source, lineno, colno, error });
     // If this is one we don't want to ignore, then make sure we surface
     // it to the app as well.
-    if (!patternsToIgnore.some((regex) => regex.test(message))) {
+    // eslint-disable-next-line security/detect-non-literal-regexp
+    if (!patternsToIgnore.some((pattern) => new RegExp(pattern, 'g').test(message))) {
       this.props.setApplicationLevelError(formatToStateError(message));
     }
     return true;
