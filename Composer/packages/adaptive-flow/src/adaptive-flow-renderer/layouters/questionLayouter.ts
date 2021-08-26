@@ -55,6 +55,9 @@ function questionLayouterBranching(
   }
 
   const contentCoord = GraphCoord.topAlignWithInterval(choiceWithBranchNodes, BranchIntervalX, false);
+  // HACK: increase bottom space to hide following nodes if any
+  // TODO: the good approach is only allow question nodes created at the end of actions
+  contentCoord.boundary.height += 200;
   const questionCoord = new GraphCoord(questionNode, [
     [contentCoord, [DT.AxisX, 0], [DT.BottomMargin, BranchIntervalY * 2]],
   ]);
@@ -93,6 +96,8 @@ function questionLayouterBranchingWithConvergence(
   }
 
   const contentCoord = GraphCoord.topAlignWithInterval(choiceWithBranchNodes, BranchIntervalX, false);
+  // HACK: increase bottom space to hide following nodes if any
+  contentCoord.boundary.height += 200;
   const questionCoord = new GraphCoord(questionNode, [
     [contentCoord, [DT.AxisX, 0], [DT.BottomMargin, BranchIntervalY * 2]],
   ]);
