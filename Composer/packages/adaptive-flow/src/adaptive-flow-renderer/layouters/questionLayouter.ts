@@ -88,6 +88,7 @@ function questionLayouterBranchingWithConvergence(
     return new GraphLayout();
   }
 
+  /** Build convergence index map */
   // choiceIndex => caseIndex
   const convergenceMap: Map<number, number> = new Map();
   choiceNodes.forEach((node, choiceIndex) => {
@@ -117,6 +118,7 @@ function questionLayouterBranchingWithConvergence(
     if (!connections[i]) branchNodes[i].hidden = true;
   }
 
+  /** Convergence positioning logic */
   const compositedBranchCoords: GraphCoord[] = [];
   const reachableConnections: [number, number[]][] = connections.filter(Boolean);
   for (const [caseIdx, choiceIndices] of reachableConnections) {
@@ -135,7 +137,70 @@ function questionLayouterBranchingWithConvergence(
   ]);
   rootCoord.moveCoordTo(0, 0);
 
-  const edges = calculateEdges(rootCoord.boundary, questionNode, branchNodes);
+  /** Draw edges */
+  const edges: Edge[] = [];
+
+  edges.push({
+    id: `edge/${questionNode.id}/q->baseline`,
+    direction: EdgeDirection.Down,
+    x: questionNode.offset.x + questionNode.boundary.axisX,
+    y: questionNode.offset.y + questionNode.boundary.height,
+    length: BranchIntervalY,
+  });
+  const BaselineUnderQuestionPosY = questionNode.offset.y + questionNode.boundary.height + BranchIntervalY;
+  const firstChocie = choiceNodes[0];
+  const lastChoice = choiceNodes[choiceNodes.length - 1];
+  edges.push({
+    id: `edge/${questionNode.id}/baseline`,
+    direction: EdgeDirection.Right,
+    x: firstChocie.offset.x + firstChocie.boundary.axisX,
+    y: BaselineUnderQuestionPosY,
+    length: lastChoice.offset.x + lastChoice.boundary.axisX - (firstChocie.offset.x + firstChocie.boundary.axisX),
+  });
+
+  for (const [caseIdx, choiceIndices] of reachableConnections) {
+    const converged = choiceIndices.length > 1;
+    for (const choiceIdx of choiceIndices) {
+      const choice = choiceNodes[choiceIdx];
+      edges.push({
+        id: `edge/${choice.id}/baseline->choice`,
+        direction: EdgeDirection.Down,
+        x: choice.offset.x + choice.boundary.axisX,
+        y: BaselineUnderQuestionPosY,
+        length: BranchIntervalY,
+      });
+      edges.push({
+        id: `edge/${choice.id}/choice->mid-baseline`,
+        direction: EdgeDirection.Down,
+        x: choice.offset.x + choice.boundary.axisX,
+        y: choice.offset.y + choice.boundary.height,
+        // Converged choices have an extra baseline. This length will be shorter if choices heigh are different.
+        length: converged ? ElementInterval.y / 2 : ElementInterval.y,
+      });
+    }
+    // merge converged edges
+    if (converged) {
+      const branch = branchNodes[caseIdx];
+      edges.push({
+        id: `edge/${branch.id}/mid-baseline->case`,
+        direction: EdgeDirection.Up,
+        x: branch.offset.x + branch.boundary.axisX,
+        y: branch.offset.y,
+        length: BranchIntervalY,
+      });
+
+      const cFirst = choiceNodes[choiceIndices[0]];
+      const cLast = choiceNodes[choiceIndices[choiceIndices.length - 1]];
+      edges.push({
+        id: `edge/${branch.id}/converged/mid-baseline`,
+        direction: EdgeDirection.Right,
+        x: cFirst.offset.x + cFirst.boundary.axisX,
+        y: cFirst.offset.y + cFirst.boundary.height + ElementInterval.y / 2,
+        length: cLast.offset.x + cLast.boundary.axisX - (cFirst.offset.x + cFirst.boundary.axisX),
+      });
+    }
+  }
+
   return {
     boundary: rootCoord.boundary,
     nodeMap: { questionNode, choiceNodes: choiceNodes as any, branchNodes: branchNodes as any },
