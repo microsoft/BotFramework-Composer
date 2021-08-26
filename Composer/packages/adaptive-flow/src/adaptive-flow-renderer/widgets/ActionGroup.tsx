@@ -19,6 +19,7 @@ import { FlowEdges } from '../components/FlowEdges';
 import { RendererContext } from '../contexts/RendererContext';
 
 import { StepRenderer } from './AdaptiveAction';
+import { checkTrailingPVAQuestionAction } from './Question/QuestionType';
 
 const StepInterval = ElementInterval.y;
 
@@ -43,18 +44,10 @@ const calculateLayout = (nodeMap: GraphNodeMap<StepNodeKey>, hasTrailingEdge: bo
   return sequentialLayouter(nodes, true, hasTrailingEdge);
 };
 
-const checkTrailingPVAQuestionAction = (data: any): boolean => {
-  if (!Array.isArray(data.children)) return false;
-  const actions = data.children;
-  const lastAction = actions[actions.length - 1];
-
-  return lastAction && lastAction.$kind === 'Microsoft.VirtualAgents.Question';
-};
-
 export const ActionGroup: FunctionComponent<NodeProps> = ({ id, data, onEvent, onResize }: NodeProps): JSX.Element => {
   const { EdgeMenu } = useContext(RendererContext);
 
-  const hasTrailingQuestionAction = checkTrailingPVAQuestionAction(data);
+  const hasTrailingQuestionAction = checkTrailingPVAQuestionAction(data.children);
   const initialNodes = useMemo(() => calculateNodes(id, data), [id, data]);
   const { layout, updateNodeBoundary } = useSmartLayout(
     initialNodes,

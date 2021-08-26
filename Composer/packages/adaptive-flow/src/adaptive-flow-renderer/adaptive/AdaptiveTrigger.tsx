@@ -21,6 +21,7 @@ import { transformObiRules } from '../transformers/transformObiRules';
 import { GraphNode } from '../models/GraphNode';
 import { TriggerSummary } from '../widgets/TriggerSummary';
 import { outlineObiJson } from '../utils/adaptive/outlineObiJson';
+import { checkTrailingPVAQuestionAction } from '../widgets/Question/QuestionType';
 
 const calculateNodeMap = (triggerId, triggerData): { [id: string]: GraphNode } => {
   const result = transformObiRules(triggerData, triggerId);
@@ -33,14 +34,6 @@ const calculateNodeMap = (triggerId, triggerData): { [id: string]: GraphNode } =
 };
 
 const TailSize = new Boundary(TerminatorSize.width, TerminatorSize.height + ElementInterval.y / 2);
-
-const checkTrailingPVAQuestionAction = (triggerData: any): boolean => {
-  if (!Array.isArray(triggerData.actions)) return false;
-  const actions = triggerData.actions;
-  const lastAction = actions[actions.length - 1];
-
-  return lastAction && lastAction.$kind === 'Microsoft.VirtualAgents.Question';
-};
 
 export interface AdaptiveTriggerProps {
   triggerId: string;
@@ -120,7 +113,7 @@ export const AdaptiveTrigger: React.FC<AdaptiveTriggerProps> = ({ triggerId, tri
     );
   const editorHeight = HeadSize.height + TailSize.height + contentBoundary.height;
 
-  const hasTrailingQuestionAction = checkTrailingPVAQuestionAction(triggerData);
+  const hasTrailingQuestionAction = checkTrailingPVAQuestionAction(triggerData?.actions);
 
   return (
     <div
