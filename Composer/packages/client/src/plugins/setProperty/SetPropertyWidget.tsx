@@ -63,8 +63,14 @@ export const SetPropertyWidget: React.FC<WidgetContainerProps> = ({ adaptiveSche
     setSelectedDataType(dataType);
   }, []);
 
+  // need to prevent the flow from stealing focus
+  const handleClick = React.useCallback((event: React.MouseEvent) => {
+    event.preventDefault();
+    event.stopPropagation();
+  }, []);
+
   return (
-    <div>
+    <div onClick={handleClick}>
       <PropertyField
         dataType={selectedDataType}
         value={data.property}
