@@ -147,15 +147,21 @@ function questionLayouterBranchingWithConvergence(
     y: questionNode.offset.y + questionNode.boundary.height,
     length: BranchIntervalY,
   });
+
   const BaselineUnderQuestionPosY = questionNode.offset.y + questionNode.boundary.height + BranchIntervalY;
-  const firstChocie = choiceNodes[0];
-  const lastChoice = choiceNodes[choiceNodes.length - 1];
+  let minAxisX = rootCoord.boundary.width;
+  let maxAxisX = 0;
+  for (const choice of choiceNodes) {
+    const currAxisX = choice.boundary.axisX + choice.offset.x;
+    minAxisX = Math.min(minAxisX, currAxisX);
+    maxAxisX = Math.max(maxAxisX, currAxisX);
+  }
   edges.push({
     id: `edge/${questionNode.id}/baseline`,
     direction: EdgeDirection.Right,
-    x: firstChocie.offset.x + firstChocie.boundary.axisX,
+    x: minAxisX,
     y: BaselineUnderQuestionPosY,
-    length: lastChoice.offset.x + lastChoice.boundary.axisX - (firstChocie.offset.x + firstChocie.boundary.axisX),
+    length: maxAxisX - minAxisX,
   });
 
   for (const [caseIdx, choiceIndices] of reachableConnections) {
