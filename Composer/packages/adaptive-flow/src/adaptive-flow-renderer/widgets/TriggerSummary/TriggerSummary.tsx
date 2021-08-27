@@ -3,7 +3,7 @@
 
 /** @jsx jsx */
 
-import { getFriendlyName, conceptLabels } from '@bfc/shared';
+import { getFriendlyName, conceptLabels, SDKKinds } from '@bfc/shared';
 import { jsx } from '@emotion/core';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import { useMemo } from 'react';
@@ -33,7 +33,7 @@ export const TriggerSummary = ({ data, onEvent, onResize, id: triggerId }): JSX.
   const label = getLabel(data);
 
   const memoizedRender = useMemo(() => {
-    if (data.$kind === 'Microsoft.OnIntent') {
+    if ([SDKKinds.OnIntent, SDKKinds.OnConversationUpdateActivity, SDKKinds.OnBeginDialog].includes(data.$kind)) {
       return (
         <StepRenderer
           key={`stepGroup/${triggerId}`}
