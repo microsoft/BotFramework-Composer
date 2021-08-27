@@ -30,6 +30,8 @@ const HeaderContainer = styled.div({
 
 const headerContentStyles = { root: { height: 32 } };
 
+const headerItemStyles = { root: { marginLeft: 'auto' } };
+
 const styles = {
   dropdown: {
     root: {
@@ -74,6 +76,7 @@ type Props = {
   menuItems?: IContextualMenuItem[];
   modalityTitle: string;
   modalityType: ModalityType;
+  showContentTitle?: boolean;
   showRemoveModalityPrompt: boolean;
   removeModalityOptionText: string;
   onRemoveModality: (modality: ModalityType, keepReferencedTemplates: boolean) => void;
@@ -92,6 +95,7 @@ export const ModalityEditorContainer: React.FC<Props> = ({
   removeModalityOptionText,
   modalityTitle,
   contentTitle,
+  showContentTitle,
   onDropdownChange,
   onRemoveModality,
 }) => {
@@ -196,12 +200,14 @@ export const ModalityEditorContainer: React.FC<Props> = ({
       {items.length > 0 && (
         <HeaderContainer>
           <Stack horizontal horizontalAlign="space-between" styles={headerContentStyles} verticalAlign="center">
-            {/* <ModalityEditorTitle
-            helpMessage={contentDescription ?? ''}
-            modalityType={modalityType}
-            title={contentTitle}
-          /> */}
-            <Stack horizontal verticalAlign="center">
+            {showContentTitle && (
+              <ModalityEditorTitle
+                helpMessage={contentDescription ?? ''}
+                modalityType={modalityType}
+                title={contentTitle}
+              />
+            )}
+            <Stack horizontal styles={headerItemStyles} verticalAlign="center">
               {items}
             </Stack>
           </Stack>
