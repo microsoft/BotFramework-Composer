@@ -119,6 +119,7 @@ const AttachmentModalityEditor = React.memo(
 
     return (
       <ModalityEditorContainer
+        showContentTitle
         contentDescription="List of attachments to send to users. Multiple attachments will be displayed simultaneously."
         contentTitle={formatMessage('Attachments')}
         disableRemoveModality={disableRemoveModality}

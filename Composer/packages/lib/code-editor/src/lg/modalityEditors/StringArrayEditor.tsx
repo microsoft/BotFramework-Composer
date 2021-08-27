@@ -338,7 +338,7 @@ export const StringArrayEditor = React.memo(
         )}
         {currentIndex === null && (
           <Link as="button" styles={styles.link} onClick={onClickAddVariation}>
-            {addButtonText ?? formatMessage('Add alternative')}
+            {addButtonText ?? formatMessage('Add variation')}
           </Link>
         )}
         {toolbar && calloutTargetElement && (

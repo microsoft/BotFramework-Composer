@@ -18,6 +18,8 @@ import crossTrained from '@bfc/ui-plugin-cross-trained';
 
 import question from './plugins/question';
 import setProperty from './plugins/setProperty';
+import propertyEditor from './plugins/propertyEditor';
+import headers from './plugins/headers';
 
 const mergeArrays: MergeWithCustomizer = (objValue, srcValue, key) => {
   if (isArray(objValue)) {
@@ -51,5 +53,7 @@ export default mergePluginConfigs(
   crossTrained,
   schemaEditor,
   question,
-  setProperty
+  setProperty,
+  propertyEditor,
+  headers
 );
