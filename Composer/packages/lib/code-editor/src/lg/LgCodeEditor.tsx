@@ -27,6 +27,8 @@ import { createLanguageClient, createUrl, createWebSocket, sendRequestWithRetry 
 import { withTooltip } from '../utils/withTooltip';
 
 import { jsLgToolbarMenuClassName } from './constants';
+import { LgAdaptiveCardEditor } from './LgAdaptiveCardEditor';
+import { getAdaptiveCard } from './utils';
 
 const placeholder = formatMessage(
   `> To learn more about the LG file format, read the documentation at
@@ -264,7 +266,7 @@ export const LgCodeEditor = (props: LgCodeEditorProps) => {
         <EditorPopExpandDialog<LgCodeEditorProps>
           popExpandOptions={popExpandOptions}
           {...omit(props, ['popExpandOptions'])}
-          EditorComponent={LgCodeEditor}
+          EditorComponent={!getAdaptiveCard(props.value) ? LgCodeEditor : LgAdaptiveCardEditor}
           height={400}
           onChange={onExpandedEditorChange}
           onDismiss={dismiss}
