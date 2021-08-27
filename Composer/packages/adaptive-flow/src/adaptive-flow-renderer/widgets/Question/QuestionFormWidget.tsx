@@ -67,23 +67,28 @@ const renderTypeOption = (props) => {
 
 const QuestionFormWidget = ({ prompt, data, id }: QuestionFormWidgetProps) => {
   const { shellApi } = useShellApi();
-  const [localData, setLocalData] = useState(data);
+  const [localData, setLocalData] = useState({
+    type: data.type,
+    choices: data.choices,
+    cases: data.cases,
+    property: data.property,
+  });
   const [errors, setErrors] = useState<Record<string, string | undefined>>({});
 
   const syncData = useRef(
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    debounce((data: any, id: string) => {
-      shellApi.saveData(data, id);
+    debounce((lData: any, rData: any, id: string) => {
+      shellApi.saveData({ ...rData, ...lData }, id);
     }, 300)
   ).current;
 
   useEffect(() => {
-    syncData(localData, id);
+    syncData(localData, data, id);
 
     return () => {
       syncData.cancel();
     };
-  }, [localData]);
+  }, [localData, data]);
 
   const clickHandler = (e: React.MouseEvent) => {
     e.preventDefault();
