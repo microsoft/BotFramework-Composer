@@ -6953,7 +6953,7 @@ adaptive-expressions@4.15.0-dev.e9769e2, adaptive-expressions@^4.15.0-dev.290c7e
     xmldom "^0.5.0"
     xpath "^0.0.32"
 
-adaptivecards@2.9.0:
+adaptivecards@2.9.0, adaptivecards@^2.7.0:
   version "2.9.0"
   resolved "https://registry.yarnpkg.com/adaptivecards/-/adaptivecards-2.9.0.tgz#1006fe56703a5aab94bfeb944637b684e7ea850c"
   integrity sha512-TXbtzc6LwisTdlfEAooropj9ZwgcQz8bSirWOnph3bzJJr9QF8YQCfSIpcAXKTJ7b6YrOfH+9xw/a8RaKgeOZg==
