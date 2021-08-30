@@ -174,6 +174,7 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({ onFocus, onBlur, schema
                       height: '100%',
                       padding: '48px 20px',
                       boxSizing: 'border-box',
+                      paddingLeft: '92px',
                     }}
                     data-testid="flow-editor-container"
                     onClick={(e) => {

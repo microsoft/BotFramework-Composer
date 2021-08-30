@@ -1,10 +1,11 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import { TextField, ITextField } from 'office-ui-fabric-react/lib/TextField';
 import { ActionButton, IconButton } from 'office-ui-fabric-react/lib/Button';
 import { Label } from 'office-ui-fabric-react/lib/Label';
+import { string } from 'prop-types';
 
 type QuestionOptionsProps = {
   options: { value: string; id: string }[];
@@ -47,10 +48,10 @@ function QuestionOptions({ options = [], onAdd, onChange, onRemove, canAdd = tru
         <div key={option.id} style={{ display: 'flex', justifyContent: 'space-between', marginTop: '5px' }}>
           <TextField
             componentRef={(el) => (inputRefs.current[idx] = el)}
+            defaultValue={option.value}
             prefix={option.value?.startsWith('=') ? 'f(x)' : undefined}
             styles={{ root: { flex: 1, marginRight: '5px' } }}
-            value={option.value}
-            onChange={(e, val) => updateOption(option.id, val)}
+            onBlur={(e) => updateOption(option.id, e.target.value)}
           />
           <IconButton iconProps={{ iconName: 'Trash' }} onClick={() => removeOption(option.id)} />
         </div>

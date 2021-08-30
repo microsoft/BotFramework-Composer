@@ -1,13 +1,12 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState } from 'react';
 import { WidgetContainerProps, useShellApi } from '@bfc/extension-client';
 import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import { NeutralColors } from '@uifabric/fluent-theme';
 import { FontSizes } from 'office-ui-fabric-react/lib/Styling';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
-import debounce from 'lodash/debounce';
 import { Label } from 'office-ui-fabric-react/lib/Label';
 import { nanoid } from 'nanoid';
 
@@ -67,28 +66,29 @@ const renderTypeOption = (props) => {
 
 const QuestionFormWidget = ({ prompt, data, id }: QuestionFormWidgetProps) => {
   const { shellApi } = useShellApi();
-  const [localData, setLocalData] = useState({
-    type: data.type,
-    choices: data.choices,
-    cases: data.cases,
-    property: data.property,
-  });
+  console.log('[BFC]', data);
+  // const [localData, setLocalData] = useState({
+  //   type: data.type,
+  //   choices: data.choices,
+  //   cases: data.cases,
+  //   property: data.property,
+  // });
   const [errors, setErrors] = useState<Record<string, string | undefined>>({});
 
-  const syncData = useRef(
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    debounce((lData: any, rData: any, id: string) => {
-      shellApi.saveData({ ...rData, ...lData }, id);
-    }, 300)
-  ).current;
+  // const syncData = useRef(
+  //   // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  //   debounce((lData: any, rData: any, id: string) => {
+  //     shellApi.saveData({ ...rData, ...lData }, id);
+  //   }, 300)
+  // ).current;
 
-  useEffect(() => {
-    syncData(localData, data, id);
+  // useEffect(() => {
+  //   syncData(localData, data, id);
 
-    return () => {
-      syncData.cancel();
-    };
-  }, [localData, data]);
+  //   return () => {
+  //     syncData.cancel();
+  //   };
+  // }, [localData, data]);
 
   const clickHandler = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -96,7 +96,7 @@ const QuestionFormWidget = ({ prompt, data, id }: QuestionFormWidgetProps) => {
   };
 
   const handleTypeChange = (e, option) => {
-    if (option?.key && localData.type !== option.key) {
+    if (option?.key && data.type !== option.key) {
       const type = option.key;
       // remove cases?
       // handle confirm cases
@@ -131,62 +131,60 @@ const QuestionFormWidget = ({ prompt, data, id }: QuestionFormWidgetProps) => {
         ];
       }
 
-      setLocalData((current) => ({ ...current, type, choices, cases }));
+      shellApi.saveData({ ...data, type, choices, cases }, id);
     }
   };
 
-  const handlePropertyChange = (e, newValue) => {
-    setLocalData((current) => ({ ...current, property: newValue }));
+  const handlePropertyChange = (e: React.FocusEvent<HTMLInputElement>) => {
+    shellApi.saveData({ ...data, property: e.target.value }, id);
     setErrors((current) => ({
       ...current,
-      property: newValue ? undefined : 'Variable name required',
+      property: e.target.value ? undefined : 'Variable name required',
     }));
   };
 
   const onAddChoice = () => {
-    const id = nanoid(6);
-    const newChoice = { value: '', id };
-    const choices = (localData.choices || []).concat(newChoice);
+    const choiceId = nanoid(6);
+    const newChoice = { value: '', id: choiceId };
+    const choices = (data.choices || []).concat(newChoice);
 
-    const newCase = { value: '', actions: [], choiceId: id };
-    const currentCases = [...(localData.cases || [])];
+    const newCase = { value: '', actions: [], choiceId };
+    const currentCases = [...(data.cases || [])];
     const defaultIdx = currentCases.findIndex((c) => c.isDefault);
     const newItemIdx = defaultIdx > -1 ? defaultIdx : currentCases.length;
     currentCases.splice(newItemIdx, 0, newCase);
 
-    setLocalData((current) => ({ ...current, choices, cases: currentCases }));
-    syncData.flush();
+    shellApi.saveData({ ...data, choices, cases: currentCases }, id);
   };
 
-  const onEditChoice = (id: string, value: string) => {
-    const choices = (localData.choices || []).map((choice) => {
-      if (choice.id === id) {
+  const onEditChoice = (choiceId: string, value: string) => {
+    const choices = (data.choices || []).map((choice) => {
+      if (choice.id === choiceId) {
         return { ...choice, value };
       }
 
       return choice;
     });
 
-    const cases = (localData.cases || []).map((c) => {
-      if (c.choiceId === id) {
+    const cases = (data.cases || []).map((c) => {
+      if (c.choiceId === choiceId) {
         return { ...c, value };
       }
 
       return c;
     });
 
-    setLocalData((current) => ({ ...current, choices, cases }));
+    shellApi.saveData({ ...data, choices, cases }, id);
   };
 
-  const onRemoveChoice = (id: string) => {
-    const choices = (localData.choices ?? []).filter((choice) => choice.id !== id);
-    const cases = (localData.cases ?? []).filter((c) => c.choiceId !== id);
+  const onRemoveChoice = (choiceId: string) => {
+    const choices = (data.choices ?? []).filter((choice) => choice.id !== choiceId);
+    const cases = (data.cases ?? []).filter((c) => c.choiceId !== choiceId);
 
-    setLocalData((current) => ({ ...current, choices, cases }));
+    shellApi.saveData({ ...data, choices, cases }, id);
   };
 
-  const isChoiceExpression =
-    localData.choices && localData.choices.length === 1 && localData.choices[0].value.startsWith('=');
+  const isChoiceExpression = data.choices && data.choices.length === 1 && data.choices[0].value.startsWith('=');
 
   return (
     <React.Fragment>
@@ -195,7 +193,7 @@ const QuestionFormWidget = ({ prompt, data, id }: QuestionFormWidgetProps) => {
       <Dropdown
         label="Identify"
         options={typeOptions}
-        selectedKey={localData.type}
+        selectedKey={data.type}
         styles={{
           label: { margin: '5px 0' },
           dropdownItem: { height: 'auto' },
@@ -204,24 +202,24 @@ const QuestionFormWidget = ({ prompt, data, id }: QuestionFormWidgetProps) => {
         onChange={handleTypeChange}
         onRenderOption={renderTypeOption}
       />
-      {localData.type === QuestionType.choice && (
+      {data.type === QuestionType.choice && (
         <QuestionOptions
           // disable ability to add if choices is an expression
           canAdd={!isChoiceExpression}
-          options={localData.choices || []}
+          options={data.choices || []}
           onAdd={onAddChoice}
           onChange={onEditChoice}
           onRemove={onRemoveChoice}
         />
       )}
       <TextField
+        defaultValue={data.property}
         errorMessage={errors.property}
         label="Save response as"
         prefix="{x}"
         styles={{ root: { marginTop: '5px' }, fieldGroup: { marginTop: '5px' } }}
-        suffix={typeToType[localData.type]}
-        value={localData.property}
-        onChange={handlePropertyChange}
+        suffix={typeToType[data.type]}
+        onBlur={handlePropertyChange}
         onClick={clickHandler}
       />
     </React.Fragment>
