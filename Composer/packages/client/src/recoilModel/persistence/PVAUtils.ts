@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { BaseSchema } from '@botframework-composer/types';
+import { BaseSchema, IChoiceObject } from '@botframework-composer/types';
 
 enum PVAKinds {
   Question = 'Microsoft.VirtualAgents.Question',
@@ -22,6 +22,14 @@ const inputConverter = ($kind: string) => (data: any) => {
   }
 
   return data;
+};
+
+const checkForChoiceExpression = (choices?: IChoiceObject[]): string | IChoiceObject[] | undefined => {
+  if (choices && choices.length === 1 && choices[0].value?.startsWith('=')) {
+    return choices[0].value;
+  }
+
+  return choices;
 };
 
 const converters = {
@@ -69,7 +77,7 @@ const converters = {
             ...data?.$designer,
             $convertedFrom: data,
           },
-          choices,
+          choices: checkForChoiceExpression(choices),
         },
         ...additionalSteps,
       ];

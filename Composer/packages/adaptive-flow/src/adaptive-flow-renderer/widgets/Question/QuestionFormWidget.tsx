@@ -185,6 +185,9 @@ const QuestionFormWidget = ({ prompt, data, id }: QuestionFormWidgetProps) => {
     setLocalData((current) => ({ ...current, choices, cases }));
   };
 
+  const isChoiceExpression =
+    localData.choices && localData.choices.length === 1 && localData.choices[0].value.startsWith('=');
+
   return (
     <React.Fragment>
       <Label>Question</Label>
@@ -203,6 +206,8 @@ const QuestionFormWidget = ({ prompt, data, id }: QuestionFormWidgetProps) => {
       />
       {localData.type === QuestionType.choice && (
         <QuestionOptions
+          // disable ability to add if choices is an expression
+          canAdd={!isChoiceExpression}
           options={localData.choices || []}
           onAdd={onAddChoice}
           onChange={onEditChoice}

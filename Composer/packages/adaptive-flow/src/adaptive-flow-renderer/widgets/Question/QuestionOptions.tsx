@@ -11,9 +11,10 @@ type QuestionOptionsProps = {
   onAdd: () => void;
   onChange: (id: string, value: string) => void;
   onRemove: (id: string) => void;
+  canAdd: boolean;
 };
 
-function QuestionOptions({ options = [], onAdd, onChange, onRemove }: QuestionOptionsProps) {
+function QuestionOptions({ options = [], onAdd, onChange, onRemove, canAdd = true }: QuestionOptionsProps) {
   const inputRefs = useRef<Record<number, ITextField | null>>({});
 
   const newOption = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -46,6 +47,7 @@ function QuestionOptions({ options = [], onAdd, onChange, onRemove }: QuestionOp
         <div key={option.id} style={{ display: 'flex', justifyContent: 'space-between', marginTop: '5px' }}>
           <TextField
             componentRef={(el) => (inputRefs.current[idx] = el)}
+            prefix={option.value?.startsWith('=') ? 'f(x)' : undefined}
             styles={{ root: { flex: 1, marginRight: '5px' } }}
             value={option.value}
             onChange={(e, val) => updateOption(option.id, val)}
@@ -53,9 +55,11 @@ function QuestionOptions({ options = [], onAdd, onChange, onRemove }: QuestionOp
           <IconButton iconProps={{ iconName: 'Trash' }} onClick={() => removeOption(option.id)} />
         </div>
       ))}
-      <ActionButton iconProps={{ iconName: 'Add' }} onClick={newOption}>
-        New Option
-      </ActionButton>
+      {canAdd && (
+        <ActionButton iconProps={{ iconName: 'Add' }} onClick={newOption}>
+          New Option
+        </ActionButton>
+      )}
     </div>
   );
 }
