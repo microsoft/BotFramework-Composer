@@ -66,7 +66,6 @@ const renderTypeOption = (props) => {
 
 const QuestionFormWidget = ({ prompt, data, id }: QuestionFormWidgetProps) => {
   const { shellApi } = useShellApi();
-  console.log('[BFC]', data);
   // const [localData, setLocalData] = useState({
   //   type: data.type,
   //   choices: data.choices,
