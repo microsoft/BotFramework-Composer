@@ -103,7 +103,7 @@ export function decomposeComposite$Kinds(action: BaseSchema): BaseSchema {
     data.triggers = data.triggers.map((trigger) => decomposeComposite$Kinds(trigger)).filter(Boolean);
   }
 
-  if (data?.$kind === 'Microsoft.SwitchCondition' && data?.cases && Array.isArray(data.cases)) {
+  if (data?.cases && Array.isArray(data.cases)) {
     data.cases = data.cases.reduce((all, action) => all.concat(decomposeComposite$Kinds(action)), []).filter(Boolean);
   }
 
