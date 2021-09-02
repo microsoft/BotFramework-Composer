@@ -17,7 +17,7 @@ import { StringExampleContent } from './examples/StringExampleContent';
 
 const metaKeys = ['$comment'];
 
-const templateInfoKeysFilter = (key: string) => key.startsWith('$') && !metaKeys.includes(key);
+const templateInfoKeysFilter = (key: string) => !metaKeys.includes(key);
 
 type Props = {
   propertyName: string;
