@@ -16,6 +16,7 @@ import {
   templateProjectsState,
   runtimeTemplatesState,
   featureFlagsState,
+  selectedTemplateReadMeState,
 } from '../atoms/appState';
 import { FileTypes } from '../../constants';
 import { getExtension } from '../../utils/fileUtil';
@@ -144,18 +145,21 @@ export const storageDispatcher = () => {
     try {
       const response = await httpClient.post(`assets/projectTemplates`, {
         feedUrls: feedUrls,
-        getFirstPartyNpm: false,
       });
 
       const data = response?.data;
-
       if (data && Array.isArray(data) && data.length > 0) {
         set(templateProjectsState, data);
+      } else {
+        set(templateProjectsState, []);
+        set(selectedTemplateReadMeState, '');
       }
     } catch (err) {
+      TelemetryClient.track('TemplateNpmRegistryCallFailed', { error: err.message });
+
       set(applicationErrorState, {
         message: err.message,
-        summary: formatMessage('Error fetching runtime templates'),
+        summary: formatMessage('Error fetching bot project templates'),
       });
     }
   });
