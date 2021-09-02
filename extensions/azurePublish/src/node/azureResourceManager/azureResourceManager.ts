@@ -260,14 +260,13 @@ export class AzureResourceMananger {
       });
 
       // initialize the name
-      const qnaMakerSearchName = `${config.name}-search`.toLowerCase().replace('_', '');
-      const qnaMakerWebAppName = `${config.name}-qnahost`.toLowerCase().replace('_', '');
       const qnaMakerServiceName = `${config.name}-qna`;
+      const qnaMakerSearchName = `${qnaMakerServiceName}-search`.toLowerCase().replace('_', '');
+      const qnaMakerWebAppName = `${qnaMakerServiceName}-qnahost`.toLowerCase().replace('_', '');
+      const qnaMakerServicePlanName = `${qnaMakerServiceName}-serviceplan`;
 
       // only support westus in qna
-      if (config.location !== 'westus') {
-        config.location = 'westus';
-      }
+      config.location = 'westus';
 
       // deploy search service
       const searchManagementClient = new SearchManagementClient(this.creds, this.subscriptionId, this.options);
@@ -296,10 +295,9 @@ export class AzureResourceMananger {
       // deploy websites
       // Create new Service Plan or update the exisiting service plan created before
       const webSiteManagementClient = new WebSiteManagementClient(this.creds, this.subscriptionId, this.options);
-      const servicePlanName = config.resourceGroupName;
       const servicePlanResult = await webSiteManagementClient.appServicePlans.createOrUpdate(
         config.resourceGroupName,
-        servicePlanName,
+        qnaMakerServicePlanName,
         {
           location: config.location,
           sku: {
