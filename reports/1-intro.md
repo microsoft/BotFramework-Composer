@@ -129,7 +129,7 @@ The BOT framework Composer sample provides a Power BI template that can be used 
 
 ### Prerequisites
 * [Install Power BI Desktop](https://powerbi.microsoft.com/desktop/)
-* [Download the Virtual Assistant analytics Power BI template](./Power-BI-Report-Composer.pbit)
+* [Download the Bot Composer analytics Power BI template](./Power-BI-Report-Composer.pbit)
 * [Create a Bot in Composer](https://docs.microsoft.com/en-us/composer/quickstart-create-bot?tabs=v2x) to deploy your Azure resources
 
 ### Time To Complete
