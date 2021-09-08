@@ -422,7 +422,7 @@ export class BotProjectProvision {
             provisionResults.qna = await this.azureResourceManagementClient.deployQnAReource({
               resourceGroupName: resourceGroupName,
               location: config.location ?? provisionResults.resourceGroup.location,
-              name: `${config.hostname}-qna`,
+              name: config.hostname,
             });
             break;
 

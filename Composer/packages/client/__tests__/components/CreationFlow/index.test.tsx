@@ -34,6 +34,7 @@ describe('<CreationFlow/>', () => {
       navTo: jest.fn(),
       saveTemplateId: jest.fn(),
       setCurrentPageMode: jest.fn(),
+      fetchTemplateFeedUrl: jest.fn(),
     });
     set(creationFlowStatusState, CreationFlowStatus.NEW_FROM_TEMPLATE);
     set(featureFlagsState, getDefaultFeatureFlags());

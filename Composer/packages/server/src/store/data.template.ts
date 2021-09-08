@@ -10,6 +10,7 @@ import { BotProjectMetadata } from '../services/project';
 
 export default {
   version: 1,
+  customTemplateFeedUrl: '',
   storageConnections: [
     {
       id: 'default',

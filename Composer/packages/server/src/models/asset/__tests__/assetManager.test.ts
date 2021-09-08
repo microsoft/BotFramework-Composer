@@ -2,12 +2,13 @@
 // Licensed under the MIT License.
 
 import rimraf from 'rimraf';
-import { BotTemplate } from '@bfc/shared';
+import { BotTemplate, firstPartyTemplateFeed } from '@bfc/shared';
 
 import { ExtensionContext } from '../../../models/extension/extensionContext';
 import { Path } from '../../../utility/path';
 import { AssetManager } from '../assetManager';
 import StorageService from '../../../services/storage';
+import { FallbackTemplateFeedObj } from '../../../constants';
 
 jest.mock('azure-storage', () => {
   return {};
@@ -37,7 +38,7 @@ jest.mock('@bfc/server-workers', () => {
   };
 });
 
-const mockFeedResponse1 = {
+const mockFetchResponseForSuccessfulFeed = {
   objects: [
     {
       package: {
@@ -50,7 +51,11 @@ const mockFeedResponse1 = {
   ],
 };
 
-const mockFeedResponse2 = {
+const mockFetchResponseForFailedFeed = {
+  objects: [],
+};
+
+const mockFetchForVersionCall = {
   versions: {
     '0.0.0': {
       name: '@microsoft/generator-bot-core-language',
@@ -65,9 +70,11 @@ const mockFeedResponse2 = {
 
 jest.mock('../../../utility/fetch', () => (url: string) => {
   if (url.includes('conversationalcore')) {
-    return Promise.resolve({ json: () => mockFeedResponse1 });
+    return Promise.resolve({ json: () => mockFetchResponseForSuccessfulFeed });
+  } else if (url === firstPartyTemplateFeed) {
+    return Promise.resolve({ json: () => mockFetchResponseForFailedFeed });
   } else {
-    return Promise.resolve({ json: () => mockFeedResponse2 });
+    return Promise.resolve({ json: () => mockFetchForVersionCall });
   }
 });
 
@@ -177,6 +184,12 @@ describe('assetManager', () => {
           },
         },
       ] as BotTemplate[]);
+    });
+
+    it('Fallback to defaults if call to default feed url fails', async () => {
+      const assetManager = new AssetManager();
+      const templates = await assetManager.getCustomFeedTemplates([firstPartyTemplateFeed]);
+      expect(templates).toStrictEqual(FallbackTemplateFeedObj);
     });
   });
 

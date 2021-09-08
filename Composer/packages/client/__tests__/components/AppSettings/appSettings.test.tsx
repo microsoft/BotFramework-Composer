@@ -3,10 +3,10 @@
 
 import React from 'react';
 
-import { AppSettings } from '../../src/pages/setting/app-settings/AppSettings';
-import { ElectronSettings } from '../../src/pages/setting/app-settings/electronSettings';
-import { renderWithRecoil } from '../testUtils';
-import { onboardingState, userSettingsState } from '../../src/recoilModel';
+import { AppSettings } from '../../../src/pages/setting/app-settings/AppSettings';
+import { ElectronSettings } from '../../../src/pages/setting/app-settings/electronSettings';
+import { renderWithRecoil } from '../../testUtils';
+import { onboardingState, userSettingsState } from '../../../src/recoilModel';
 
 describe('<AppSettings /> & <ElectronSettings />', () => {
   beforeEach(() => {
@@ -28,6 +28,7 @@ describe('<AppSettings /> & <ElectronSettings />', () => {
     getAllByText('Onboarding');
     getByText('Property editor preferences');
     getByText('Application Updates');
+    getByText('Template Feed Settings');
   });
 
   it('should render the electron settings section', () => {
