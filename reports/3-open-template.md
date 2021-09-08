@@ -2,8 +2,8 @@
 
 ## Open the Power BI template
 
-1. Open the [Virtual Assistant analytics template](./assets/analytics/virtual-assistant-analytics-sample.pbit) and paste your **Application Insights Application ID**.
-![Screenshot of the load template view of a new Virtual Assistant analytics Power BI template](./assets/images/analytics/virtual-assistant-analytics-powerbi-load-template.png)
+1. Open the [Bot Composer analytics template](./Power-BI-Report-Composer.pbit) and paste your **Application Insights Application ID**.
+![Screenshot of the load template view of a new Composer Bot analytics Power BI template](./assets/images/analytics/virtual-assistant-analytics-powerbi-load-template.png)
 
 1. After loading the tables with your populated data, you should now see insights from your Virtual Assistant.
 
