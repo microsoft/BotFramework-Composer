@@ -129,11 +129,11 @@ The BOT framework Composer sample provides a Power BI template that can be used 
 
 ### Prerequisites
 * [Install Power BI Desktop](https://powerbi.microsoft.com/desktop/)
-* [Download the Virtual Assistant analytics Power BI template](./assets/analytics/virtual-assistant-analytics-sample.pbit)
-* [Create a Virtual Assistant](./virtual-assistant/tutorials/create-assistant/csharp/1-intro) to deploy your Azure resources
+* [Download the Virtual Assistant analytics Power BI template](./Power-BI-Report-Composer.pbit)
+* [Create a Bot in Composer](https://docs.microsoft.com/en-us/composer/quickstart-create-bot?tabs=v2x) to deploy your Azure resources
 
 ### Time To Complete
 10 minutes
 
 ### Scenario
-A Power BI dashboard showing Application Insights telemetry captured from a Virtual Assistant.
+A Power BI dashboard showing Application Insights telemetry captured from a Bot Composer BOT.
