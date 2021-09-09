@@ -58,7 +58,7 @@
     "botframework-webchat-core": "4.14.0",
     "format-message": "^6.2.3",
     "format-message-generate-id": "^6.2.3",
-    "immer": "^8.0.1",
+    "immer": "^9.0.6",
     "jsonwebtoken": "^8.5.1",
     "jszip": "^3.6.0",
     "jwt-decode": "^2.2.0",
