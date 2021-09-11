@@ -64,6 +64,21 @@ async function getFiles(dir: string): Promise<string[]> {
   return files;
 }
 
+const extractLuisErrorData = (err) => {
+  let errorMsg = '';
+  if (err.response?.data) {
+    errorMsg = `Response Status: ${err.response.status || 'Unknown'}; `;
+    if (err.response.data.error) {
+      errorMsg =
+        errorMsg +
+        `Error Code: ${err.response.data.error.code || 'Unknown'}; Error Message: ${
+          err.response.data.error.message || 'Unknown'
+        } `;
+    }
+  }
+  return errorMsg;
+};
+
 export async function publishLuisToPrediction(
   name: string,
   environment: string,
@@ -191,8 +206,13 @@ export async function publishLuisToPrediction(
               );
             }
           }
+
+          const luisError = extractLuisErrorData(err);
+          const luisDebugInfo = `Luis App ID: ${luisAppId}; Luis Authoring Key: ${luisAuthoringKey}; AzureSubscriptionID: ${account.AzureSubscriptionId} ResourceGroup: ${account.ResourceGroup}; AccountName: ${account.AccountName}; Location: ${account.Location}`;
           throw Error(
-            'Failed to bind luis prediction resource to luis applications. Please check if your luisResource is set to luis prediction service name in your publish profile.'
+            `Failed to bind luis prediction resource to luis applications. Please check if your luisResource is set to luis prediction service name in your publish profile.
+            ${luisDebugInfo}.
+            ${luisError}`
           );
         }
       }
