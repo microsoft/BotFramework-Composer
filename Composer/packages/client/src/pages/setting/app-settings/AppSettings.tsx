@@ -23,6 +23,7 @@ import { SettingDropdown } from './SettingDropdown';
 import { FontSettings } from './fontSettings';
 import * as images from './images';
 import { PreviewFeatureToggle } from './PreviewFeatureToggle';
+import { TemplateFeedForm } from './TemplateFeedForm';
 
 const ElectronSettings = lazy(() =>
   import('./electronSettings').then((module) => ({ default: module.ElectronSettings }))
@@ -111,6 +112,10 @@ const AppSettings: React.FC<RouteComponentProps> = () => {
             tooltip={formatMessage('This is the language used for Composer’s user interface.')}
             onChange={onLocaleChange}
           />
+        </section>
+        <section css={section}>
+          <h2>{formatMessage('Template Feed Settings')}</h2>
+          <TemplateFeedForm />
         </section>
         {!onboardingDisabled && (
           <React.Fragment>

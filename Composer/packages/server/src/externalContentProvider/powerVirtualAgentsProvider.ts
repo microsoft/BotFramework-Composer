@@ -19,6 +19,7 @@ const COMPOSER_1P_APP_ID = 'ce48853e-0605-4f77-8746-d70ac63cc6bc';
 export const PVA_TEST_APP_ID = 'a522f059-bb65-47c0-8934-7db6e5286414';
 export const PVA_PROD_APP_ID = '96ff4394-9197-43aa-b393-6a41652e21f8';
 export const PVA_GOV_APP_ID = '9315aedd-209b-43b3-b149-2abff6a95d59';
+export const PVA_GCC_HIGH_APP_ID = '69c6e40c-465f-4154-987d-da5cba10734e';
 
 export type PowerVirtualAgentsMetadata = IContentProviderMetadata & {
   baseUrl: string;
@@ -30,7 +31,7 @@ export type PowerVirtualAgentsMetadata = IContentProviderMetadata & {
   triggerId?: string;
 };
 
-const getAuthCredentials = (baseUrl: string) => {
+const getAuthCredentials = (baseUrl: string, metadata: PowerVirtualAgentsMetadata) => {
   const url = new URL(baseUrl);
   if (url.hostname.includes('.int.') || url.hostname.includes('.ppe.')) {
     log('Using INT / PPE auth credentials.');
@@ -45,6 +46,14 @@ const getAuthCredentials = (baseUrl: string) => {
       clientId: COMPOSER_1P_APP_ID,
       scopes: [`${PVA_GOV_APP_ID}/.default`],
       targetResource: PVA_GOV_APP_ID,
+    };
+  } else if (url.hostname.includes('high.api.powerva.microsoft.us')) {
+    log('Using GCC High auth credentials.');
+    return {
+      authority: `https://login.microsoftonline.us/${metadata.tenantId}`,
+      clientId: COMPOSER_1P_APP_ID,
+      scopes: [`${PVA_GCC_HIGH_APP_ID}/.default`],
+      targetResource: PVA_GCC_HIGH_APP_ID,
     };
   }
   log('Using PROD auth credentials.');
@@ -79,6 +88,12 @@ const getBaseUrl = () => {
     case 'gcc': {
       const url = 'https://gcc.api.powerva.microsoft.us/api/botmanagement/v1';
       log('GCC env detected, grabbing PVA content from %s', url);
+      return url;
+    }
+
+    case 'gcc-high': {
+      const url = 'https://high.api.powerva.microsoft.us/api/botmanagement/v1';
+      log('GCC High env detected, grabbing PVA content from %s', url);
       return url;
     }
 
@@ -162,7 +177,7 @@ export class PowerVirtualAgentsProvider extends ExternalContentProvider<PowerVir
     try {
       // login to the 1P app and get an access token
       const { baseUrl } = this.metadata;
-      const authCredentials = getAuthCredentials(baseUrl || getBaseUrl());
+      const authCredentials = getAuthCredentials(baseUrl || getBaseUrl(), this.metadata);
       const accessToken = await authService.getAccessToken(authCredentials);
       if (accessToken === '') {
         throw 'User cancelled login flow.';

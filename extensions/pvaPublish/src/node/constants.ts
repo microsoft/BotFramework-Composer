@@ -30,6 +30,11 @@ export const AUTH_CREDENTIALS = {
     scopes: ['9315aedd-209b-43b3-b149-2abff6a95d59/.default'],
     targetResource: '9315aedd-209b-43b3-b149-2abff6a95d59',
   },
+  GCC_HIGH: {
+    clientId: COMPOSER_1P_APP_ID,
+    scopes: ['69c6e40c-465f-4154-987d-da5cba10734e/.default'],
+    targetResource: '69c6e40c-465f-4154-987d-da5cba10734e',
+  },
 };
 
 export const BASE_URLS = {
@@ -37,4 +42,5 @@ export const BASE_URLS = {
   PPE: 'https://bots.ppe.customercareintelligence.net/',
   PROD: 'https://powerva.microsoft.com/',
   GCC: 'https://gcc.api.powerva.microsoft.us/',
+  GCC_HIGH: 'https://high.api.powerva.microsoft.us/',
 };

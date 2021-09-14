@@ -64,9 +64,9 @@ export class NpmFeed implements IFeed {
       return {
         name: i.package.name,
         version: i.package.version,
-        authors: i.package?.author?.name,
+        authors: i.package.author?.name,
         keywords: i.package.keywords,
-        repository: i.package?.links.repository,
+        repository: i.package.links?.repository,
         description: i.package.description,
         language: this.language,
         source: this.source,

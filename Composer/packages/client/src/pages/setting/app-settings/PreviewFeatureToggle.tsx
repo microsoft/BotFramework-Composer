@@ -39,7 +39,11 @@ export const PreviewFeatureToggle: React.FC = () => {
       }
     });
     if (result.length === 0) {
-      result.push(<span css={noFeatureFlagText}>{formatMessage('There are no preview features at this time.')}</span>);
+      result.push(
+        <span key={'noPreviewFeatureText'} css={noFeatureFlagText}>
+          {formatMessage('There are no preview features at this time.')}
+        </span>
+      );
     }
     return <div css={featureFlagGroupContainer}>{result}</div>;
   };

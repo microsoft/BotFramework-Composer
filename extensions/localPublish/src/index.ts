@@ -428,7 +428,9 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
         setTimeout(async () => {
           killPort(port)
             .then(() => {
-              this.removeListener(proc);
+              if (proc) {
+                this.removeListener(proc);
+              }
               delete LocalPublisher.runningBots[botId];
               resolve('Stopped');
             })
