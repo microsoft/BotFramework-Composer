@@ -147,7 +147,7 @@ const schema: JSONSchema7 = {
       required: ['MicrosoftAppId', 'MicrosoftAppPassword'],
     },
   },
-  required: ['subscriptionID', 'publishName', 'provision'],
+  required: ['subscriptionId', 'name', 'settings', 'accessToken'],
   default: {
     name: '<unique name in your subscription>',
     environment: 'dev',
