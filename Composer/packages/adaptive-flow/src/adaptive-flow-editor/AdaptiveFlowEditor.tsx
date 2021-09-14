@@ -153,10 +153,10 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({ onFocus, onBlur, schema
             ref={divRef}
             css={styles}
             // tabIndex={0}
-            onBlur={onBlur}
-            onFocus={onFocus}
-            {...enableKeyboardCommandAttributes(handleCommand)}
             data-testid="visualdesigner-container"
+            onBlur={onBlur}
+            // {...enableKeyboardCommandAttributes(handleCommand)}
+            onFocus={onFocus}
           >
             <SelectionContext.Provider value={selectionContext}>
               <MarqueeSelection isDraggingConstrainedToRoot selection={selection} styles={marqueeStyles}>
@@ -174,6 +174,7 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({ onFocus, onBlur, schema
                       height: '100%',
                       padding: '48px 20px',
                       boxSizing: 'border-box',
+                      paddingLeft: '92px',
                     }}
                     data-testid="flow-editor-container"
                     onClick={(e) => {

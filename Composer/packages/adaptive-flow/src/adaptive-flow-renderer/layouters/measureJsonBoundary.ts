@@ -16,12 +16,15 @@ import {
   AssignmentMarginTop,
   PropertyAssignmentSize,
   AssignmentMarginBottom,
+  QuestionDetailsSize,
 } from '../constants/ElementSizes';
 import { transformIfCondtion } from '../transformers/transformIfCondition';
 import { transformSwitchCondition } from '../transformers/transformSwitchCondition';
 import { transformForeach } from '../transformers/transformForeach';
 import { transformBaseInput } from '../transformers/transformBaseInput';
 import { designerCache } from '../utils/visual/DesignerCache';
+import { transformQuestion } from '../transformers/transformQuestion';
+import { isBranchingQuestionType } from '../widgets/Question/QuestionType';
 
 import {
   calculateIfElseBoundary,
@@ -29,6 +32,7 @@ import {
   calculateSwitchCaseBoundary,
   calculateForeachBoundary,
   calculateBaseInputBoundary,
+  calculateQuestionBoundary,
 } from './calculateNodeBoundary';
 
 function measureStepGroupBoundary(stepGroup): Boundary {
@@ -62,6 +66,17 @@ function measureSwitchConditionBoundary(json): Boundary {
   return calculateSwitchCaseBoundary(
     measureJsonBoundary(condition.json),
     measureJsonBoundary(choice.json),
+    branches.map((x) => measureJsonBoundary(x.json))
+  );
+}
+
+function measureQuestionBoundary(json): Boundary {
+  const result = transformQuestion(json, '');
+  if (result === null) return new Boundary();
+
+  const { question, branches } = result;
+  return calculateQuestionBoundary(
+    measureJsonBoundary(question.json),
     branches.map((x) => measureJsonBoundary(x.json))
   );
 }
@@ -121,6 +136,19 @@ export function measureJsonBoundary(json): Boundary {
       break;
     case AdaptiveKinds.IfCondition:
       boundary = measureIfConditionBoundary(json);
+      break;
+    case AdaptiveKinds.QuestionDetails:
+      boundary = new Boundary(QuestionDetailsSize.width, QuestionDetailsSize.height);
+      break;
+    case 'Microsoft.VirtualAgents.Question':
+      if (isBranchingQuestionType(json.type)) {
+        boundary = measureQuestionBoundary(json);
+      } else {
+        boundary = new Boundary(QuestionDetailsSize.width, QuestionDetailsSize.height);
+      }
+      break;
+    case AdaptiveKinds.QuestionCondition:
+      boundary = new Boundary(300, json.isDefault ? 72 : 187);
       break;
     case AdaptiveKinds.SwitchCondition:
       boundary = measureSwitchConditionBoundary(json);

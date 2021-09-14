@@ -15,6 +15,11 @@ export const DiamondSize = {
   height: 12,
 };
 
+export const QuestionDetailsSize = {
+  width: InitNodeSize.width,
+  height: 362,
+};
+
 export const LoopIconSize = {
   width: 16,
   height: 16,
@@ -62,6 +67,6 @@ export const BranchAxisXIntervalMin = 150;
 export const BranchingNodeMarginRight = 100;
 
 export const EdgeAddButtonSize = {
-  width: 16,
-  height: 16,
+  width: 24,
+  height: 24,
 };

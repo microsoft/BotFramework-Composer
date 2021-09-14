@@ -13,7 +13,7 @@ export const PVADefs = {
         title: 'Question Type',
         type: 'string',
         enum: ['text', 'number', 'confirm', 'choice'],
-        default: 'text',
+        default: 'choice',
       },
       prompt: {
         $kind: 'Microsoft.IActivityTemplate',
@@ -30,40 +30,56 @@ export const PVADefs = {
         examples: ['$birthday', 'dialog.${user.name}', '=f(x)'],
       },
       choices: {
-        $role: 'expression',
         title: 'Array of choices',
         description: 'Choices to choose from.',
         type: 'array',
-        items: [
-          {
-            type: 'string',
-            title: 'Simple choice',
-            description: 'One choice for choice input.',
+        items: {
+          type: 'object',
+          properties: {
+            value: {
+              type: 'string',
+              title: 'Simple choice',
+              description: 'One choice for choice input.',
+            },
+            gotoChoice: {
+              type: 'string',
+              title: 'Share logic with another choice',
+              description: 'Converge to another choice and shares the flow.',
+            },
           },
-        ],
+        },
       },
       cases: {
         type: 'array',
         items: {
           type: 'object',
           properties: {
-            condition: {
-              $ref: '#/definitions/condition',
-              title: 'Condition',
-              description: 'Expression to evaluate.',
-              examples: ['user.age > 3'],
+            isDefault: {
+              type: 'boolean',
             },
-          },
-          actions: {
-            type: 'array',
-            title: 'Actions',
-            description: 'Actions to execute if condition is true.',
-            items: {
-              $kind: 'Microsoft.IDialog',
-              $ref: '#/definitions/Microsoft.IDialog',
+            value: {
+              type: ['number', 'integer', 'boolean', 'string'],
+              title: 'Value',
+              description: 'The value to compare the condition with.',
+              examples: ['red', 'true', '13'],
+            },
+            actions: {
+              type: 'array',
+              title: 'Actions',
+              description: 'Actions to execute.',
+              items: {
+                $kind: 'Microsoft.IDialog',
+                $ref: '#/definitions/Microsoft.IDialog',
+              },
             },
           },
         },
+        default: [
+          {
+            isDefault: true,
+            actions: [],
+          },
+        ],
       },
     },
   },

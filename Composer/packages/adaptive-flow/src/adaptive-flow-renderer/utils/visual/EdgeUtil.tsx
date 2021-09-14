@@ -98,6 +98,7 @@ export const drawSVGEdge = (
     const line = (
       <line
         key={`edge-${id}__line`}
+        data-testid={`edge-${id}__line`}
         x1={startPoint.x}
         x2={endPoint.x}
         y1={startPoint.y}

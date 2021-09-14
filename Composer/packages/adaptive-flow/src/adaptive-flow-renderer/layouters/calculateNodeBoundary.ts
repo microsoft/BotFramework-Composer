@@ -12,6 +12,9 @@ import {
   IconBrickSize,
   BoxMargin,
 } from '../constants/ElementSizes';
+import { GraphCoord, GraphElementCoord } from '../models/GraphCoord';
+import { DT } from '../models/GraphDistanceUtils';
+import { GraphNode } from '../models/GraphNode';
 
 import { calculateBranchNodesIntervalX } from './sharedLayouterUtils';
 
@@ -31,7 +34,7 @@ export function calculateSequenceBoundary(
     boundaries.map((x) => x.height).reduce((sum, val) => sum + val, 0) +
     ElementInterval.y * Math.max(boundaries.length - 1, 0);
 
-  if (widthHeadEdge) box.height += ElementInterval.y / 2;
+  if (widthHeadEdge) box.height += ElementInterval.y;
   if (widthTailEdge) box.height += ElementInterval.y / 2;
   return box;
 }
@@ -81,6 +84,41 @@ export function calculateSwitchCaseBoundary(
   if (!conditionBoundary || !choiceBoundary) return new Boundary();
 
   return measureBranchingContainerBoundary(conditionBoundary, choiceBoundary, branchBoundaries);
+}
+
+export function calculateQuestionBoundary(
+  questionBoundary: Boundary | null,
+  branchBoundaries: Boundary[] = []
+): Boundary {
+  if (!questionBoundary) return new Boundary();
+
+  return measureQuestionContainerBoundary(questionBoundary, branchBoundaries);
+}
+
+function measureQuestionContainerBoundary(
+  conditionBoundary: Boundary | null,
+  branchBoundaries: Boundary[] = []
+): Boundary {
+  if (!conditionBoundary) return new Boundary();
+
+  const conditionNode = new GraphNode('', {}, conditionBoundary);
+  const branchNodes = branchBoundaries.map((b) => new GraphNode('', {}, b));
+
+  const branchesOtherNodesPos: GraphElementCoord[] = [];
+  let totalMargin = 0;
+  for (let i = 1; i < branchNodes.length; i++) {
+    const currNode = branchNodes[i];
+    totalMargin += calculateBranchNodesIntervalX(branchNodes[i - 1].boundary, currNode.boundary);
+    branchesOtherNodesPos.push([currNode, [DT.RightMargin, totalMargin], [DT.Top, 0]]);
+    totalMargin += currNode.boundary.width;
+  }
+  const branchesCoord = new GraphCoord(branchNodes[0], branchesOtherNodesPos, false);
+  const questionCoord = new GraphCoord(conditionNode, [
+    [branchesCoord, [DT.AxisX, 0], [DT.BottomMargin, BranchIntervalY]],
+  ]);
+  questionCoord.moveCoordTo(0, 0);
+
+  return questionCoord.boundary;
 }
 
 function measureBranchingContainerBoundary(

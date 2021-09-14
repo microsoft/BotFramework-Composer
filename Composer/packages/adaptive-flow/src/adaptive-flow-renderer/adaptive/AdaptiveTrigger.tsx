@@ -3,11 +3,11 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { useState, useContext, useMemo, useRef, useEffect } from 'react';
+import { useState, useContext, useMemo, useRef } from 'react';
 import isEqual from 'lodash/isEqual';
 
 import { OffsetContainer } from '../components/OffsetContainer';
-import { ElementInterval, TriggerSize, TerminatorSize } from '../constants/ElementSizes';
+import { ElementInterval, TerminatorSize } from '../constants/ElementSizes';
 import { measureJsonBoundary } from '../layouters/measureJsonBoundary';
 import { Boundary } from '../models/Boundary';
 import { EdgeDirection } from '../models/EdgeData';
@@ -21,6 +21,7 @@ import { transformObiRules } from '../transformers/transformObiRules';
 import { GraphNode } from '../models/GraphNode';
 import { TriggerSummary } from '../widgets/TriggerSummary';
 import { outlineObiJson } from '../utils/adaptive/outlineObiJson';
+import { actionGroupIsOpened } from '../widgets/Question/QuestionType';
 
 const calculateNodeMap = (triggerId, triggerData): { [id: string]: GraphNode } => {
   const result = transformObiRules(triggerData, triggerId);
@@ -41,16 +42,8 @@ export interface AdaptiveTriggerProps {
 }
 
 export const AdaptiveTrigger: React.FC<AdaptiveTriggerProps> = ({ triggerId, triggerData, onEvent }): JSX.Element => {
-  const [HeadSize, setHeadSize] = useState(new Boundary(TriggerSize.width, TriggerSize.height + ElementInterval.y / 2));
-
-  useEffect(() => {
-    if (triggerData?.intent) {
-      const bounds = TriggerSize.height + ElementInterval.y / 2;
-      setHeadSize(new Boundary(TriggerSize.width, bounds + 58));
-    } else {
-      setHeadSize(new Boundary(TriggerSize.width, TriggerSize.height + ElementInterval.y / 2));
-    }
-  }, [triggerData]);
+  const initHeaderSize = triggerData?.intent ? new Boundary(300, 148) : new Boundary(300, 64);
+  const [HeadSize, setHeadSize] = useState(initHeaderSize);
 
   const outlineCache = useRef();
   const outlineVersion = useRef(0);
@@ -78,7 +71,7 @@ export const AdaptiveTrigger: React.FC<AdaptiveTriggerProps> = ({ triggerId, tri
       onEvent={onEvent}
       onResize={(boundary) => {
         if (boundary) {
-          setStepGroupBoundary(boundary);
+          setHeadSize(boundary);
         }
       }}
     />
@@ -110,7 +103,9 @@ export const AdaptiveTrigger: React.FC<AdaptiveTriggerProps> = ({ triggerId, tri
       TailSize.width - TailSize.axisX,
       contentBoundary.width - contentBoundary.axisX
     );
-  const editorHeight = HeadSize.height + TailSize.height + contentBoundary.height;
+  const editorHeight = HeadSize.height + ElementInterval.y + TailSize.height + contentBoundary.height;
+
+  const hasTrailingQuestionAction = actionGroupIsOpened(triggerData?.actions);
 
   return (
     <div
@@ -140,30 +135,34 @@ export const AdaptiveTrigger: React.FC<AdaptiveTriggerProps> = ({ triggerId, tri
         css={{ position: 'relative', width: editorWidth, height: editorHeight, maxWidth: '100%' }}
       >
         <SVGContainer height={editorHeight} width={editorWidth}>
-          {drawSVGEdge('editor-edge__head', editorAxisX, TriggerSize.height, EdgeDirection.Down, ElementInterval.y / 2)}
-          {drawSVGEdge(
-            'editor-edge__tail',
-            editorAxisX,
-            contentBoundary.height + HeadSize.height,
-            EdgeDirection.Down,
-            ElementInterval.y / 2,
-            { directed: true }
+          {drawSVGEdge('editor-edge__head', editorAxisX, HeadSize.height, EdgeDirection.Down, ElementInterval.y)}
+          {hasTrailingQuestionAction
+            ? null
+            : drawSVGEdge(
+                'editor-edge__tail',
+                editorAxisX,
+                contentBoundary.height + HeadSize.height,
+                EdgeDirection.Down,
+                ElementInterval.y / 2,
+                { directed: true }
+              )}
+          {hasTrailingQuestionAction ? null : (
+            <circle
+              cx={editorAxisX}
+              cy={contentBoundary.height + HeadSize.height + ElementInterval.y / 2 + TerminatorSize.height / 2}
+              fill="none"
+              r={TerminatorSize.height / 2 - 1}
+              stroke={ObiColors.LightGray}
+              strokeWidth="2"
+            />
           )}
-          <circle
-            cx={editorAxisX}
-            cy={contentBoundary.height + HeadSize.height + ElementInterval.y / 2 + TerminatorSize.height / 2}
-            fill="none"
-            r={TerminatorSize.height / 2 - 1}
-            stroke={ObiColors.LightGray}
-            strokeWidth="2"
-          />
         </SVGContainer>
         <OffsetContainer offset={{ x: editorAxisX - HeadSize.axisX, y: 0 }}>
           <div className="step-editor__head" css={{ position: 'relative' }}>
             <OffsetContainer offset={{ x: 0, y: 0 }}>{trigger}</OffsetContainer>
           </div>
         </OffsetContainer>
-        <OffsetContainer offset={{ x: editorAxisX - contentBoundary.axisX, y: HeadSize.height }}>
+        <OffsetContainer offset={{ x: editorAxisX - contentBoundary.axisX, y: HeadSize.height + ElementInterval.y }}>
           {content}
         </OffsetContainer>
       </div>

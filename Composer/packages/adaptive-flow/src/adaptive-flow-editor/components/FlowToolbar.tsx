@@ -15,6 +15,7 @@ import { DefaultEffects } from 'office-ui-fabric-react/lib/Styling';
 
 import { scrollNodeIntoView } from '../utils/scrollNodeIntoView';
 import { AttrNames } from '../constants/ElementAttributes';
+import { InitNodeSize } from '../../adaptive-flow-renderer/constants/ElementSizes';
 
 function scrollZoom(delta: number, rateList: number[], maxRate: number, minRate: number, currentRate: number): number {
   let rate: number = currentRate;
@@ -225,6 +226,18 @@ export const FlowToolbar: React.FC<FlowToolbarProps> = ({
     }
     return () => divRef.current?.removeEventListener('wheel', onWheel);
   }, [flowZoomRate]);
+
+  useEffect(() => {
+    setTimeout(() => {
+      if (divRef.current) {
+        const { clientWidth, scrollWidth } = divRef.current;
+
+        if (scrollWidth > clientWidth) {
+          divRef.current.scrollLeft = clientWidth / 2 - InitNodeSize.width;
+        }
+      }
+    }, 100);
+  }, []);
 
   return (
     <div css={{ width: '100%', height: '100%' }}>

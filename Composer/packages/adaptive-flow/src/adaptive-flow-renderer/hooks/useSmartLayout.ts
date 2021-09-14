@@ -25,7 +25,7 @@ export function useSmartLayout<T extends string>(
   const [boundaryMap, setBoundaryMap] = useState<BoundaryMap<T>>({} as BoundaryMap<T>);
   /**
    * The object `accumulatedPatches` is used to collect all accumulated
-   *  boundary changes happen in a same JS event cyle. After collecting
+   *  boundary changes happen in a same JS event cycle. After collecting
    *  them together, they will be submitted to component states to guide
    *  next redraw.
    *

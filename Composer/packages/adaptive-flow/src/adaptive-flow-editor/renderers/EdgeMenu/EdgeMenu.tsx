@@ -74,11 +74,14 @@ export const EdgeMenu: React.FC<EdgeMenuProps> = ({ id, onClick }) => {
       style={{
         width: EdgeAddButtonSize.width,
         height: EdgeAddButtonSize.height,
-        borderRadius: '8px',
+        borderRadius: '50%',
         backdropFilter: 'white',
         boxShadow: boxShadow,
         overflow: 'hidden',
         background: 'white',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
       }}
       {...declareElementAttributes(id)}
     >
@@ -88,7 +91,7 @@ export const EdgeMenu: React.FC<EdgeMenuProps> = ({ id, onClick }) => {
           autoFocus={nodeSelected}
           handleMenuShow={handleMenuShow}
           iconName="Add"
-          iconSize={7}
+          iconSize={12}
           iconStyles={{
             color: '#005CE6',
             selectors: {

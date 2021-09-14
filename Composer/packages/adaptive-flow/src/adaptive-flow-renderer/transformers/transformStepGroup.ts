@@ -11,7 +11,9 @@ export function transformStepGroup(input, groupId): IndexedNode[] {
   if (!input || input.$kind !== AdaptiveKinds.StepGroup) return [];
   if (!input.children || !Array.isArray(input.children)) return [];
 
-  const results = input.children.map((step, index) => new IndexedNode(`${groupId}[${index}]`, normalizeObiStep(step)));
+  const results: any[] = input.children.map(
+    (step, index) => new IndexedNode(`${groupId}[${index}]`, normalizeObiStep(step))
+  );
   inheritParentProperties(input, results);
   return results;
 }

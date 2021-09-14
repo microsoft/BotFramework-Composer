@@ -80,21 +80,22 @@ export const StringArrayEditor = React.memo(
     isSpeech = false,
     telemetryClient,
     onChange,
-    startWithEmptyResponse,
-  }: StringArrayEditorProps) => {
+  }: // startWithEmptyResponse,
+  StringArrayEditorProps) => {
     const containerRef = useRef<HTMLDivElement | null>(null);
 
     const [currentIndex, setCurrentIndex] = useState<number | null>(
-      items.length === 1 && items[0].value === '' ? 0 : null
+      null
+      // items.length === 1 && items[0].value === '' ? 0 : null
     );
     const [calloutTargetElement, setCalloutTargetElement] = useState<HTMLTextAreaElement | null>(null);
 
-    useEffect(() => {
-      if (startWithEmptyResponse && items.length === 0) {
-        onChange([{ kind: 'variation', value: '' }]);
-        setCurrentIndex(0);
-      }
-    }, []);
+    // useEffect(() => {
+    //   if (startWithEmptyResponse && items.length === 0) {
+    //     onChange([{ kind: 'variation', value: '' }]);
+    //     setCurrentIndex(0);
+    //   }
+    // }, []);
 
     const onItemChange = useCallback(
       (index: number) => (newValue?: string) => {
