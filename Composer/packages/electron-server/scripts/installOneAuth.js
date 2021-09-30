@@ -21,7 +21,7 @@ const { log } = require('./common');
  */
 
 let packageName = null;
-const packageVersion = process.env.ONEAUTH_VERSION || '1.15.0';
+const packageVersion = process.env.ONEAUTH_VERSION || '1.36.0';
 
 switch (process.platform) {
   case 'darwin':
