@@ -344,7 +344,9 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
     const configList: string[] = [];
     if (config.MicrosoftAppPassword) {
       configList.push('--MicrosoftAppPassword');
-      configList.push(`"${config.MicrosoftAppPassword}"`);
+      // since the password could conceivably contain quote marks, make sure they are properly escaped
+      const escapedPassword = config.MicrosoftAppPassword.replace(/"/g, '\\"');
+      configList.push(`"${escapedPassword}"`);
     }
     if (config.luis && (config.luis.endpointKey || config.luis.authoringKey)) {
       configList.push('--luis:endpointKey');
