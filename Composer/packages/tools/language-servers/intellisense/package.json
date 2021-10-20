@@ -11,6 +11,11 @@
     "ws": "^7.4.6",
     "@bfc/built-in-functions": "*"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/microsoft/BotFramework-Composer.git",
+    "directory": "Composer/packages/tools/language-servers/intellisense"
+  },
   "scripts": {
     "dev": "ts-node src/server.ts",
     "start": "ts-node lib/server.js",

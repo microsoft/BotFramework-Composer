@@ -27,6 +27,11 @@
     "react": "16.13.1",
     "react-dom": "16.13.1"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/microsoft/BotFramework-Composer.git",
+    "directory": "Composer/packages/ui-plugins/schema-editor"
+  },
   "devDependencies": {
     "@bfc/extension-client": "*",
     "@bfc/adaptive-form": "*",

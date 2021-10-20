@@ -26,6 +26,11 @@
     "l10n:babel": "babel --config-file ./babel.l10n.config.js --extensions \".ts,.tsx,.jsx,.js\" --out-dir l10ntemp .",
     "l10n": "yarn l10n:babel && yarn l10n:extract && yarn l10n:transform locales/en-US.json && rimraf l10ntemp"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/microsoft/BotFramework-Composer.git",
+    "directory": "Composer/packages/electron-server"
+  },
   "devDependencies": {
     "@babel/plugin-proposal-class-properties": "7.8.3",
     "@babel/plugin-transform-runtime": "7.9.6",

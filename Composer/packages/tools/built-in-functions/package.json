@@ -7,6 +7,11 @@
     "build": "rimraf ./lib && tsc --build tsconfig.build.json",
     "test": "jest"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/microsoft/BotFramework-Composer.git",
+    "directory": "Composer/packages/tools/built-in-functions"
+  },
   "devDependencies": {
     "@botframework-composer/test-utils": "*"
   },

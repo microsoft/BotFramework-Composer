@@ -10,6 +10,11 @@
     "build:ts": "tsc --build tsconfig.build.json",
     "clean": "rimraf lib"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/microsoft/BotFramework-Composer.git",
+    "directory": "Composer/packages/extension-client"
+  },
   "peerDependencies": {
     "@botframework-composer/types": "*",
     "react": "16.13.1",

@@ -32,6 +32,11 @@
     "vscode-ws-jsonrpc": "^0.1.1",
     "ws": "^7.4.6"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/microsoft/BotFramework-Composer.git",
+    "directory": "Composer/packages/tools/language-servers/language-understanding"
+  },
   "devDependencies": {
     "@botframework-composer/test-utils": "*",
     "@types/node": "^12.0.4",

@@ -10,6 +10,11 @@
     "clean-all": "node scripts/clean-e2e.js --all",
     "lint": "eslint --quiet cypress"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/microsoft/BotFramework-Composer.git",
+    "directory": "Composer/packages/integration-tests"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
