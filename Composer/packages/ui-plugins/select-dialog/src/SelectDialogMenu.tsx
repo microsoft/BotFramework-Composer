@@ -71,7 +71,8 @@ const buttonStyles: IButtonStyles = {
   rootExpanded: { backgroundColor: 'initial' },
   rootExpandedHovered: { backgroundColor: 'initial' },
   flexContainer: { justifyContent: 'space-between' },
-  label: { margin: '0', fontWeight: 'normal' },
+  textContainer: { overflow: 'hidden' },
+  label: { margin: '0', fontWeight: 'normal', overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis' },
 };
 
 const searchFieldStyles: ISearchBoxStyles = {
