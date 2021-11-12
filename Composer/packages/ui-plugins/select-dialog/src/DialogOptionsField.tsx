@@ -81,9 +81,20 @@ const DialogOptionsField: React.FC<FieldProps> = ({
   onChange,
 }) => {
   const { dialog, options } = value;
-  const { dialogSchemas } = useShellApi();
+  const { dialogSchemas, topics } = useShellApi();
+
+  const topicIdMap = React.useMemo(() => {
+    return topics.reduce((all, t) => {
+      if (t.content?.id) {
+        all[t.content.id] = t.id;
+      }
+      return all;
+    }, {} as Record<string, string>);
+  }, [topics]);
+
+  const dialogId = (dialog && topicIdMap[dialog]) ?? dialog;
   const { content: rawSchema }: { content?: JSONSchema7 } = React.useMemo(
-    () => dialogSchemas.find(({ id }) => id === dialog) || {},
+    () => dialogSchemas.find(({ id }) => id === dialogId) || {},
     [dialog, dialogSchemas]
   );
   const [schema, setSchema] = React.useState<JSONSchema7 | undefined>(undefined);
