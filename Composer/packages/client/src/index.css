@@ -44,3 +44,11 @@ code {
   font-weight: 200;
   src: url("./fonts/segoe-ui-light.woff2") format("woff2");
 }
+
+/*
+  Make anchor outline color consistent across browsers
+  Fixes anchor focus outline color in Electron doesn't meet contrast ratio
+*/
+a:focus {
+  outline-color: #000000;
+}
