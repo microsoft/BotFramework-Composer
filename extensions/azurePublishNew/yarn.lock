@@ -36,13 +36,14 @@
     "@azure/ms-rest-js" "^2.0.4"
     tslib "^1.10.0"
 
-"@azure/arm-botservice@2.0.0":
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/@azure/arm-botservice/-/arm-botservice-2.0.0.tgz#f82469374dde5ed6cdbe1f11669aa30d27889ec6"
-  integrity sha512-j1XH6LUP8SOrjANXJcnn6wTuSCg4KHp0hXJPA8xOcELw3xnMKJKwqnC5rXZoHBmOPLz5hQ0SY4xjn73yZQxoNQ==
+"@azure/arm-botservice@3.1.0":
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/@azure/arm-botservice/-/arm-botservice-3.1.0.tgz#83acb1e79ee6723d6a82200d2b346021df4a9dd8"
+  integrity sha512-X6fzfOubSgLe3GBIFmIAvo2Qzwy71utkJyKnh815kguju2UZZAX/JvoukLoGZ1Ap0cQW1Bgu4Nm/ocaXPuwIBQ==
   dependencies:
-    "@azure/ms-rest-azure-js" "^2.0.1"
-    "@azure/ms-rest-js" "^2.0.4"
+    "@azure/core-auth" "^1.1.4"
+    "@azure/ms-rest-azure-js" "^2.1.0"
+    "@azure/ms-rest-js" "^2.2.0"
     tslib "^1.10.0"
 
 "@azure/arm-cognitiveservices@^5.2.0":
@@ -275,7 +276,7 @@
     "@azure/ms-rest-js" "^1.10.0"
     tslib "^1.9.3"
 
-"@azure/ms-rest-azure-js@^2.0.0", "@azure/ms-rest-azure-js@^2.0.1":
+"@azure/ms-rest-azure-js@^2.0.0", "@azure/ms-rest-azure-js@^2.0.1", "@azure/ms-rest-azure-js@^2.1.0":
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/@azure/ms-rest-azure-js/-/ms-rest-azure-js-2.1.0.tgz#8c90b31468aeca3146b06c7144b386fd4827f64c"
   integrity sha512-CjZjB8apvXl5h97Ck6SbeeCmU0sk56YPozPtTyGudPp1RGoHXNjFNtoOvwOG76EdpmMpxbK10DqcygI16Lu60Q==
@@ -1453,7 +1454,7 @@
 "@bfc/indexers@../../Composer/packages/lib/indexers":
   version "0.0.0"
   dependencies:
-    "@microsoft/bf-lu" "4.14.0-dev.20210602.be805a8"
+    "@microsoft/bf-lu" "4.15.0-dev.20210702.cbf708d"
     adaptive-expressions "4.12.0-rc1"
     botbuilder-lg "4.14.0-dev.391a2ab"
     lodash "^4.17.19"
@@ -1856,13 +1857,13 @@
     "@types/yargs" "^15.0.0"
     chalk "^4.0.0"
 
-"@microsoft/bf-lu@4.14.0-dev.20210602.be805a8":
-  version "4.14.0-dev.20210602.be805a8"
-  resolved "https://botbuilder.myget.org/F/botframework-cli/npm/@microsoft/bf-lu/-/@microsoft/bf-lu-4.14.0-dev.20210602.be805a8.tgz#dc35016c5ea1688fa5adf430a969d5c9ce817cc5"
-  integrity sha1-3DUBbF6haI+lrfQwqWnVyc6BfMU=
+"@microsoft/bf-lu@4.15.0-dev.20210702.cbf708d":
+  version "4.15.0-dev.20210702.cbf708d"
+  resolved "https://registry.yarnpkg.com/@microsoft/bf-lu/-/bf-lu-4.15.0-dev.20210702.cbf708d.tgz#18ba631cba4f6d15510105d7afb999069aef32b8"
+  integrity sha512-GB28ECMcYx5honk1v1gvJjRPOPfP14E7yGOsYrM5+BVKhfX69KQHVGLmqPjNpjJVxskfm5gpnGAk6d50Iqo8TQ==
   dependencies:
     "@types/node-fetch" "~2.5.5"
-    antlr4 "~4.8.0"
+    antlr4 "4.9.2"
     axios "~0.21.1"
     chalk "2.4.1"
     console-stream "^0.1.1"
@@ -2822,10 +2823,10 @@ ansi-styles@^4.0.0, ansi-styles@^4.1.0:
   dependencies:
     color-convert "^2.0.1"
 
-antlr4@~4.8.0:
-  version "4.8.0"
-  resolved "https://registry.yarnpkg.com/antlr4/-/antlr4-4.8.0.tgz#f938ec171be7fc2855cd3a533e87647185b32b6a"
-  integrity sha512-en/MxQ4OkPgGJQ3wD/muzj1uDnFSzdFIhc2+c6bHZokWkuBb6RRvFjpWhPxWLbgQvaEzldJZ0GSQpfSAaE3hqg==
+antlr4@4.9.2:
+  version "4.9.2"
+  resolved "https://registry.yarnpkg.com/antlr4/-/antlr4-4.9.2.tgz#abbc53d275954b1b6f4d8b3468b4a2cb258121fc"
+  integrity sha512-UjMSlenUORL+a+6g4RNZxRh5LcFWybRi2g0ASDBpgXBY6nlavg0BRVAVEQF0dz8jH6SyX3lV7uP5y/krJzc+Hw==
 
 antlr4ts@0.5.0-alpha.3:
   version "0.5.0-alpha.3"
