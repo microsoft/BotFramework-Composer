@@ -7,7 +7,8 @@ import formatMessage from 'format-message';
 import { Stack } from 'office-ui-fabric-react/lib/Stack';
 import { Link } from 'office-ui-fabric-react/lib/Link';
 
-import { title, subtitle, subtext, headerText } from '../styles';
+import { subtitle, subtext, headerText } from '../styles';
+import { SettingTitle } from '../shared/SettingTitle';
 import { navigateTo } from '../../../utils/navigation';
 
 import ExternalAdapterSettings from './ExternalAdapterSettings';
@@ -41,14 +42,14 @@ const AdapterSection = ({ projectId, scrollToSectionId }: Props) => {
         )}
       </div>
       <Stack>
-        <div css={title}>{formatMessage('Azure connections')}</div>
+        <SettingTitle>{formatMessage('Azure connections')}</SettingTitle>
         <div css={subtitle}>
           {formatMessage('Connect your bot to Microsoft Teams and WebChat, or enable DirectLine Speech.')}
         </div>
         <ABSChannels projectId={projectId} />
       </Stack>
       <Stack>
-        <div css={title}>{formatMessage('External connections')}</div>
+        <SettingTitle>{formatMessage('External connections')}</SettingTitle>
         <div css={subtext}>
           {formatMessage.rich(
             'Find and install more external services to your bot project in <a>package manager</a>. For further guidance, see documentation for <a2>adding external connections.</a2>',
