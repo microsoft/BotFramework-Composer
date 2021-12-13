@@ -123,6 +123,13 @@ export function convertLuParseResultToLuFile(
   }
 
   const syntaxDiagnostics = Errors.map((e) => convertLuDiagnostic(e, id)) as Diagnostic[];
+  for (const item of syntaxDiagnostics) {
+    const reseveredPrebuiltEntittyError = /.*The model name .* is reserved./g;
+    if (reseveredPrebuiltEntittyError.test(item.message)) {
+      item.severity = DiagnosticSeverity.Warning;
+    }
+  }
+
   const semanticDiagnostics = validateResource(resource, appliedluFeatures).map((e) =>
     convertLuDiagnostic(e, id)
   ) as Diagnostic[];
