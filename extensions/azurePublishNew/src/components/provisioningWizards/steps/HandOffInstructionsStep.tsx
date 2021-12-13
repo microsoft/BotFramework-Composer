@@ -6,14 +6,10 @@ import formatMessage from 'format-message';
 import styled from '@emotion/styled';
 import { FluentTheme } from '@uifabric/fluent-theme';
 import { Link, Stack, Text } from 'office-ui-fabric-react';
+import { SectionTitle } from '@bfc/ui-shared';
 
 const Content = styled(Stack)`
   padding: 0px 20px;
-`;
-
-const Title = styled(Text)`
-  font-size: ${FluentTheme.fonts.xLarge.fontSize};
-  margin: 8px 0;
 `;
 
 const Summary = styled.div`
@@ -49,7 +45,7 @@ const urls = {
 export const HandOffInstructionsStep = () => {
   return (
     <Content>
-      <Title>{formatMessage('Hand off to admin')}</Title>
+      <SectionTitle level={2}>{formatMessage('Hand off to admin')}</SectionTitle>
       <Summary>
         <Text>
           {formatMessage(
