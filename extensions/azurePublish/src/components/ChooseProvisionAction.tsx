@@ -9,6 +9,7 @@ import { Stack } from 'office-ui-fabric-react/lib/Stack';
 import { Text } from 'office-ui-fabric-react/lib/Text';
 import { FluentTheme, NeutralColors } from '@uifabric/fluent-theme';
 import { Link } from 'office-ui-fabric-react/lib/Link';
+import { SectionTitle } from '@bfc/ui-shared';
 
 // ---------- Styles ---------- //
 
@@ -33,11 +34,6 @@ const ContentPane = styled(Stack)`
 
 const Content = styled(Stack)`
   padding: 0px 20px;
-`;
-
-const Title = styled(Text)`
-  font-size: ${FluentTheme.fonts.xLarge.fontSize};
-  margin: 8px 0;
 `;
 
 const Summary = styled.div`
@@ -75,7 +71,7 @@ const LearnMoreLink = styled(Link)`
 const CreateActionContent = () => {
   return (
     <Content>
-      <Title>{formatMessage('Create new resources')}</Title>
+      <SectionTitle level={2}>{formatMessage('Create new resources')}</SectionTitle>
       <Summary>
         <Text>
           {formatMessage(
@@ -133,7 +129,7 @@ const CreateActionContent = () => {
 const ImportActionContent = () => {
   return (
     <Content>
-      <Title>{formatMessage('Use existing resources')}</Title>
+      <SectionTitle level={2}>{formatMessage('Use existing resources')}</SectionTitle>
       <Summary>
         <p>
           <Text>
@@ -186,7 +182,7 @@ const ImportActionContent = () => {
 const GenerateActionContent = () => {
   return (
     <Content>
-      <Title>{formatMessage('Hand off to admin')}</Title>
+      <SectionTitle level={2}>{formatMessage('Hand off to admin')}</SectionTitle>
       <Summary>
         <Text>
           {formatMessage(

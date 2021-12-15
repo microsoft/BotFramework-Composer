@@ -26,7 +26,9 @@ import { FieldWithCustomButton } from '../../components/FieldWithCustomButton';
 import { mergePropertiesManagedByRootBot } from '../../recoilModel/dispatchers/utils/project';
 import { LUIS_REGIONS } from '../../constants';
 
-import { subtext, title } from './styles';
+import { subtext } from './styles';
+import { SettingTitle } from './shared/SettingTitle';
+
 // -------------------- Styles -------------------- //
 
 const externalServiceContainerStyle = css`
@@ -139,7 +141,7 @@ export const SkillBotExternalService: React.FC<SkillBotExternalServiceProps> = (
 
   return (
     <Fragment>
-      <div css={title}>{formatMessage('Azure Language Understanding')}</div>
+      <SettingTitle>{formatMessage('Azure Language Understanding')}</SettingTitle>
       <div css={subtext}>
         {formatMessage.rich(
           'Language Understanding (LUIS) is an Azure Cognitive Service that uses machine learning to understand natural language input and direct the conversation flow. <a>Learn more.</a> Use an existing Language Understanding (LUIS) key from Azure or create a new key. <a2>Learn more</a2>',
@@ -201,7 +203,7 @@ export const SkillBotExternalService: React.FC<SkillBotExternalServiceProps> = (
             onBlur={handleLUISRegionOnBlur}
           />
         </div>
-        <div css={title}>{formatMessage('Azure QnA Maker')}</div>
+        <SettingTitle>{formatMessage('Azure QnA Maker')}</SettingTitle>
         <div css={subtext}>
           {formatMessage.rich(
             'QnA Maker is an Azure Cognitive services that can extract question-and-answer pairs from a website FAQ. <a>Learn more.</a> Use an existing key from Azure or create a new key. <a2>Learn more</a2>',
