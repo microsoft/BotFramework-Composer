@@ -17,7 +17,9 @@ import { dispatcherState, settingsState } from '../../recoilModel';
 import { rootBotProjectIdSelector } from '../../recoilModel/selectors/project';
 import { mergePropertiesManagedByRootBot } from '../../recoilModel/dispatchers/utils/project';
 
-import { subtext, title } from './styles';
+import { subtext } from './styles';
+import { SettingTitle } from './shared/SettingTitle';
+
 // -------------------- Styles -------------------- //
 
 const labelContainer = css`
@@ -83,7 +85,7 @@ export const SkillHostEndPoint: React.FC<SkillHostEndPointProps> = (props) => {
 
   return (
     <Fragment>
-      <div css={title}>{formatMessage('Call skills')}</div>
+      <SettingTitle>{formatMessage('Call skills')}</SettingTitle>
       <div css={subtext}>
         {formatMessage.rich(
           'Add a skill host endpoint so your skills can reliably connect to your root bot. <a>Learn more</a>.',

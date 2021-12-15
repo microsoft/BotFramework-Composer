@@ -34,7 +34,8 @@ import { LUIS_REGIONS } from '../../constants';
 import { ManageLuis } from '../../components/ManageLuis/ManageLuis';
 import { ManageQNA } from '../../components/ManageQNA/ManageQNA';
 
-import { inputFieldStyles, subtext, title } from './styles';
+import { inputFieldStyles, subtext } from './styles';
+import { SettingTitle } from './shared/SettingTitle';
 
 // -------------------- Styles -------------------- //
 
@@ -336,7 +337,7 @@ export const RootBotExternalService: React.FC<RootBotExternalServiceProps> = (pr
 
   return (
     <Fragment>
-      <div css={title}>{formatMessage('Azure Language Understanding')}</div>
+      <SettingTitle>{formatMessage('Azure Language Understanding')}</SettingTitle>
       <div css={subtext}>
         {formatMessage.rich(
           'Language Understanding (LUIS) is an Azure Cognitive Service that uses machine learning to understand natural language input and direct the conversation flow. <a>Learn more.</a> Use an existing Language Understanding (LUIS) key from Azure or create a new key. <a2>Learn more</a2>',
@@ -439,7 +440,7 @@ export const RootBotExternalService: React.FC<RootBotExternalServiceProps> = (pr
             )}
           </MessageBar>
         )}
-        <div css={title}>{formatMessage('Azure QnA Maker')}</div>
+        <SettingTitle>{formatMessage('Azure QnA Maker')}</SettingTitle>
         <div css={subtext}>
           {formatMessage.rich(
             'QnA Maker is an Azure Cognitive services that can extract question-and-answer pairs from a website FAQ. <a>Learn more.</a> Use an existing key from Azure or create a new key. <a2>Learn more.</a2>',

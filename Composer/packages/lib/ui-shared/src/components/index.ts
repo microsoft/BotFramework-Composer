@@ -12,3 +12,4 @@ export * from './DisplayMarkdownDialog/DisplayMarkdownDialog';
 export * from './tags/TagInput';
 export * from './IconMenu';
 export * from './CopyableText';
+export * from './SectionTitle';
