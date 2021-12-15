@@ -18,7 +18,8 @@ import { dispatcherState, settingsState } from '../../recoilModel';
 import { mergePropertiesManagedByRootBot } from '../../recoilModel/dispatchers/utils/project';
 import { rootBotProjectIdSelector } from '../../recoilModel/selectors/project';
 
-import { inputFieldStyles, subtext, title } from './styles';
+import { inputFieldStyles, subtext } from './styles';
+import { SettingTitle } from './shared/SettingTitle';
 import { GetAppInfoFromPublishProfileDialog } from './GetAppInfoFromPublishProfileDialog';
 // -------------------- Styles -------------------- //
 
@@ -118,7 +119,7 @@ export const AppIdAndPassword: React.FC<AppIdAndPasswordProps> = (props) => {
 
   return (
     <Fragment>
-      <div css={title}>{formatMessage('Microsoft App ID')}</div>
+      <SettingTitle>{formatMessage('Microsoft App ID')}</SettingTitle>
       <div css={subtext}>
         {formatMessage.rich(
           'An App ID is used for communication between your bot and skills, services, websites or applications. Use an existing App ID or automatically generate an App ID when creating a publishing profile for this bot. <a>Learn more</a>',
