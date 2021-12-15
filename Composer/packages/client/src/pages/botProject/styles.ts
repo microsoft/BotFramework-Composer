@@ -5,13 +5,6 @@ import { css } from '@emotion/core';
 import { NeutralColors, SharedColors } from '@uifabric/fluent-theme';
 import { FontSizes, FontWeights, mergeStyleSets } from 'office-ui-fabric-react/lib/Styling';
 
-export const title = css`
-  font-size: ${FontSizes.large};
-  font-weight: ${FontWeights.semibold};
-  margin-top: 25px;
-  margin-bottom: 5px;
-`;
-
 export const tabContentContainer = css`
   margin-left: 10px;
   max-width: 580px;
