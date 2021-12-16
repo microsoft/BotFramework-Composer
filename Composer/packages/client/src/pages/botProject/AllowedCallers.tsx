@@ -19,7 +19,8 @@ import { useArrayItems } from '@bfc/adaptive-form';
 import { dispatcherState, rootBotProjectIdSelector, settingsState } from '../../recoilModel';
 import { mergePropertiesManagedByRootBot } from '../../recoilModel/dispatchers/utils/project';
 
-import { actionButton, subtext, title } from './styles';
+import { actionButton, subtext } from './styles';
+import { SettingTitle } from './shared/SettingTitle';
 
 const Input = styled(TextField)({
   width: '100%',
@@ -159,7 +160,7 @@ export const AllowedCallers: React.FC<Props> = ({ projectId }) => {
 
   return (
     <Fragment>
-      <div css={title}>{formatMessage('Allowed Callers')}</div>
+      <SettingTitle>{formatMessage('Allowed Callers')}</SettingTitle>
       <div css={subtext}>
         {formatMessage.rich(
           'Skills can be “called” by external bots. Allow other bots to call your skill by adding their App IDs to the list below. <a>Learn more</a>',
