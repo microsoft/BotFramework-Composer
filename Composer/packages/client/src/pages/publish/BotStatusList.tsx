@@ -125,9 +125,18 @@ export const BotStatusList: React.FC<BotStatusListProps> = ({
     }
   };
 
-  const handleChangePublishTarget = (item: BotStatus, option?: IDropdownOption): void => {
+  const isDropdownFocusEvent = (event: React.FormEvent<HTMLDivElement>) => event.type === 'focus';
+
+  const handleChangePublishTarget = (
+    event: React.FormEvent<HTMLDivElement>,
+    item: BotStatus,
+    option?: IDropdownOption
+  ): void => {
     if (option) {
       if (option.key === 'manageProfiles') {
+        // Focus events trigger onChange when no option selected
+        // This prevents navigation on focus events
+        if (isDropdownFocusEvent(event)) return;
         onManagePublishProfile(item.id);
       } else {
         onChangePublishTarget(option.text, item);
@@ -215,14 +224,14 @@ export const BotStatusList: React.FC<BotStatusListProps> = ({
       onRender: (item: BotStatus) => {
         return (
           <Dropdown
-            defaultSelectedKey={item.publishTarget}
             options={getPublishTargetOptions(item)}
             placeholder={formatMessage('Select a publish target')}
+            selectedKey={item.publishTarget}
             styles={{
               root: { width: '100%' },
               dropdownItems: { selectors: { '.ms-Button-flexContainer': { width: '100%' } } },
             }}
-            onChange={(_, option?: IDropdownOption) => handleChangePublishTarget(item, option)}
+            onChange={(event, option?: IDropdownOption) => handleChangePublishTarget(event, item, option)}
             onRenderOption={renderDropdownOption}
           />
         );
