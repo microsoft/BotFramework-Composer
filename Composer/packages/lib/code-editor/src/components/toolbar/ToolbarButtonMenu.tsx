@@ -19,7 +19,7 @@ import { IStackStyles, Stack } from 'office-ui-fabric-react/lib/Stack';
 import { Text } from 'office-ui-fabric-react/lib/Text';
 import { DirectionalHint } from 'office-ui-fabric-react/lib/Tooltip';
 import * as React from 'react';
-import { FontWeights } from 'office-ui-fabric-react';
+import { FontWeights } from 'office-ui-fabric-react/lib/Styling';
 
 import { useNoSearchResultMenuItem } from '../../hooks/useNoSearchResultMenuItem';
 import { useSearchableMenuListCallback } from '../../hooks/useSearchableMenuListCallback';
