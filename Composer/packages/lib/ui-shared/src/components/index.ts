@@ -13,3 +13,5 @@ export * from './tags/TagInput';
 export * from './IconMenu';
 export * from './CopyableText';
 export * from './SectionTitle';
+export * from './HelpTooltip';
+export * from './Field';

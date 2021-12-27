@@ -7,17 +7,15 @@ import { PublishTarget } from '@bfc/shared';
 import formatMessage from 'format-message';
 import React, { Fragment, useEffect, useMemo, useState } from 'react';
 import { useRecoilValue } from 'recoil';
-import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
-import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { NeutralColors } from '@uifabric/fluent-theme';
 import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
 import { Link } from 'office-ui-fabric-react/lib/Link';
+import { TextField } from '@bfc/ui-shared';
 
 import { botDisplayNameState, dispatcherState, settingsState } from '../../../../recoilModel';
 import { CreatePublishProfileDialog } from '../../../botProject/CreatePublishProfileDialog';
-import { iconStyle } from '../../../botProject/runtime-settings/style';
 import { ContentProps } from '../constants';
 import { PublishProfileWrapperDialog } from '../../../botProject/PublishProfieWrapperDialog';
 
@@ -26,37 +24,6 @@ const styles = {
     height: 350px;
     overflow: auto;
   `,
-};
-
-const onRenderLabel = (props) => {
-  return (
-    <div
-      style={{
-        display: 'flex',
-        flexDirection: 'row',
-        marginBottom: '5px',
-      }}
-    >
-      <div
-        style={{
-          marginRight: '5px',
-          fontWeight: 600,
-          fontSize: '14px',
-        }}
-      >
-        <div
-          style={{
-            padding: '0 5px',
-          }}
-        >
-          {props.label}
-        </div>
-      </div>
-      <TooltipHost content={props.ariaLabel}>
-        <Icon iconName="Info" styles={iconStyle(props.required)} />
-      </TooltipHost>
-    </div>
-  );
 };
 
 const onRenderInvalidProfileWarning = (hasValidProfile, handleShowPublishProfileWrapperDialog) => {
@@ -227,22 +194,20 @@ export const SelectProfile: React.FC<ContentProps> = ({
               <TextField
                 disabled
                 required
-                ariaLabel={formatMessage('The endpoint url')}
                 label={formatMessage('Endpoint Url')}
                 placeholder={formatMessage('The endpoint url of your web app resource')}
                 styles={{ root: { paddingBottom: '8px' } }}
+                tooltip={formatMessage('The endpoint url')}
                 value={endpointUrl}
-                onRenderLabel={onRenderLabel}
               />
               <TextField
                 disabled
                 required
-                ariaLabel={formatMessage('The app id of your application registration')}
                 label={formatMessage('Microsoft App ID')}
                 placeholder={formatMessage('The App ID')}
                 styles={{ root: { paddingBottom: '8px' } }}
+                tooltip={formatMessage('The app id of your application registration')}
                 value={appId}
-                onRenderLabel={onRenderLabel}
               />
             </Fragment>
           )}
