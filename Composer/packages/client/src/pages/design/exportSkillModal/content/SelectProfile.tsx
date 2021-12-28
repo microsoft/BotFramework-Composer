@@ -9,7 +9,7 @@ import React, { Fragment, useEffect, useMemo, useState } from 'react';
 import { useRecoilValue } from 'recoil';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
-import { NeutralColors } from '@uifabric/fluent-theme';
+import { FluentTheme, NeutralColors } from '@uifabric/fluent-theme';
 import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
 import { Link } from 'office-ui-fabric-react/lib/Link';
 import { TextField } from '@bfc/ui-shared';
@@ -24,6 +24,17 @@ const styles = {
     height: 350px;
     overflow: auto;
   `,
+};
+
+const inputStyles = {
+  root: { paddingBottom: '8px' },
+  subComponentStyles: {
+    label: {
+      root: {
+        color: FluentTheme.palette.neutralPrimary,
+      },
+    },
+  },
 };
 
 const onRenderInvalidProfileWarning = (hasValidProfile, handleShowPublishProfileWrapperDialog) => {
@@ -183,7 +194,7 @@ export const SelectProfile: React.FC<ContentProps> = ({
             options={publishingOptions}
             placeholder={formatMessage('Select one')}
             selectedKey={selectedKey}
-            styles={{ root: { paddingBottom: '8px' } }}
+            styles={inputStyles}
             onChange={handleCurrentProfileChange}
             onRenderTitle={onRenderTitle}
           />
@@ -196,8 +207,9 @@ export const SelectProfile: React.FC<ContentProps> = ({
                 required
                 label={formatMessage('Endpoint Url')}
                 placeholder={formatMessage('The endpoint url of your web app resource')}
-                styles={{ root: { paddingBottom: '8px' } }}
+                styles={inputStyles}
                 tooltip={formatMessage('The endpoint url')}
+                tooltipIconName="Info"
                 value={endpointUrl}
               />
               <TextField
@@ -205,8 +217,9 @@ export const SelectProfile: React.FC<ContentProps> = ({
                 required
                 label={formatMessage('Microsoft App ID')}
                 placeholder={formatMessage('The App ID')}
-                styles={{ root: { paddingBottom: '8px' } }}
+                styles={inputStyles}
                 tooltip={formatMessage('The app id of your application registration')}
+                tooltipIconName="Info"
                 value={appId}
               />
             </Fragment>

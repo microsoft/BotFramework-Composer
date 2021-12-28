@@ -6,7 +6,7 @@ import { DropdownField } from '@bfc/ui-shared';
 import { jsx } from '@emotion/core';
 import { useId } from '@uifabric/react-hooks';
 import kebabCase from 'lodash/kebabCase';
-import { mergeStyleSets } from 'office-ui-fabric-react/lib/Styling';
+import { FontSizes, mergeStyleSets } from 'office-ui-fabric-react/lib/Styling';
 import { IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import React from 'react';
 
@@ -29,6 +29,16 @@ type Props = {
   onChange: (key: string) => void;
 };
 
+const tooltipStyles = {
+  subComponentStyles: {
+    helpTooltip: {
+      helpIcon: {
+        fontSize: FontSizes.small,
+      },
+    },
+  },
+};
+
 export const SettingDropdown: React.FC<Props> = ({
   id,
   label,
@@ -49,7 +59,7 @@ export const SettingDropdown: React.FC<Props> = ({
         label={label}
         options={options}
         selectedKey={selected}
-        styles={mergeStyleSets(customFieldLabel, { root: { width } })}
+        styles={mergeStyleSets(customFieldLabel, tooltipStyles, { root: { width } })}
         tooltip={tooltip ?? label}
         onChange={(_e, option) => onChange(option?.key?.toString() ?? '')}
       />

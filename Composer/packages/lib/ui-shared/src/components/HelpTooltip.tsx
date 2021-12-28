@@ -21,6 +21,7 @@ const getClassNames = (theme: ITheme, props: Pick<HelpTooltipProps, 'styles'>) =
       root: {
         display: 'flex',
         padding: '5px',
+        cursor: 'default',
       },
       helpIcon: [
         {

@@ -5,7 +5,7 @@
 import { jsx, css } from '@emotion/core';
 import React, { useState, useRef, Fragment, useEffect } from 'react';
 import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
-import { SharedColors } from '@uifabric/fluent-theme';
+import { FluentTheme, SharedColors } from '@uifabric/fluent-theme';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import { ActionButton } from 'office-ui-fabric-react/lib/Button';
 import { FontWeights, mergeStyleSets } from 'office-ui-fabric-react/lib/Styling';
@@ -25,6 +25,13 @@ const disabledTextFieldStyle = mergeStyleSets(customFieldLabel, {
       },
       'p > span': {
         width: '100%',
+      },
+    },
+  },
+  subComponentStyles: {
+    label: {
+      root: {
+        color: FluentTheme.palette.neutralPrimary,
       },
     },
   },
@@ -65,7 +72,7 @@ const errorTextStyle = css`
 
 type Props = {
   label: string;
-  ariaLabel: string;
+  ariaLabel?: string;
   buttonText: string;
   errorMessage?;
   placeholder: string;
@@ -78,6 +85,7 @@ type Props = {
   options?: IDropdownOption[];
   fieldDataTestId?: string;
   buttonDataTestId?: string;
+  tooltip?: string;
 };
 
 const errorElement = (errorText: string) => {
@@ -106,6 +114,7 @@ export const FieldWithCustomButton: React.FC<Props> = (props) => {
     options,
     fieldDataTestId = '',
     buttonDataTestId = '',
+    tooltip,
   } = props;
   const [isDisabled, setDisabled] = useState<boolean>(!value);
   const fieldComponentRef = useRef<any>(null);
@@ -127,6 +136,7 @@ export const FieldWithCustomButton: React.FC<Props> = (props) => {
     label,
     required,
     ariaLabel,
+    tooltip,
     styles: customFieldLabel,
   };
   const commonDisabledProps = {

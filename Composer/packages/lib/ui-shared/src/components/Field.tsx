@@ -39,6 +39,7 @@ const getClassNames = (
   mergeStyleSets(
     {
       subComponentStyles: {
+        helpTooltip: {},
         label: {
           root: {
             selectors: {
@@ -55,18 +56,26 @@ const getClassNames = (
 
 const useClassNames = <Styles,>(styles: Styles) => useMemo(() => getClassNames(getTheme(), { styles }), [styles]);
 
-const useOnRenderLabelWithHelpTooltip = <Props, Styles>(props: LabelWithTooltipProps<Props, Styles>) =>
-  useCallback<IRenderFunction<Props>>(
+const useOnRenderLabelWithHelpTooltip = <Props, Styles>(props: LabelWithTooltipProps<Props, Styles>) => {
+  const classNames = useClassNames(props.styles);
+
+  return useCallback<IRenderFunction<Props>>(
     (componentProps, defaultRender) => (
       <Stack horizontal verticalAlign="center">
         {componentProps && defaultRender && defaultRender(componentProps)}
         {props.tooltip && (
-          <HelpTooltip aria-label={props.tooltip} content={props.tooltip} iconName={props.tooltipIconName} />
+          <HelpTooltip
+            aria-label={props.tooltip}
+            content={props.tooltip}
+            iconName={props.tooltipIconName}
+            styles={classNames.subComponentStyles.helpTooltip}
+          />
         )}
       </Stack>
     ),
-    [props.tooltip, props.tooltipIconName]
+    [classNames, props.tooltip, props.tooltipIconName]
   );
+};
 
 export type DropdownFieldProps = LabelWithTooltipProps<IDropdownProps, IDropdownStyles>;
 

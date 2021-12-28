@@ -4,13 +4,13 @@
 import { FluentTheme } from '@uifabric/fluent-theme';
 import * as React from 'react';
 import { HelpTooltip as SharedHelpTooltip } from '@bfc/ui-shared';
+import { FontSizes } from 'office-ui-fabric-react/lib/Styling';
 
 const iconStyles = {
   helpIcon: {
     color: FluentTheme.palette.neutralSecondary,
-    fontSize: 12,
-    lineHeight: '12px',
-    cursor: 'default',
+    fontSize: FontSizes.small,
+    lineHeight: '1',
   },
 };
 
