@@ -3,7 +3,7 @@
 
 /** @jsx jsx */
 import { css, jsx } from '@emotion/core';
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState } from 'react';
 import formatMessage from 'format-message';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { firstPartyTemplateFeed } from '@bfc/shared';
