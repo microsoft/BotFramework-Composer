@@ -372,7 +372,6 @@ export const RootBotExternalService: React.FC<RootBotExternalServiceProps> = (pr
           )}
         </div>
         <PrimaryButton
-          disabled={displayManageLuis || displayManageQNA}
           styles={{ root: { width: '250px', marginTop: '15px' } }}
           text={formatMessage('Set up Language Understanding')}
           onClick={() => {
@@ -440,7 +439,6 @@ export const RootBotExternalService: React.FC<RootBotExternalServiceProps> = (pr
           />
         </div>
         <PrimaryButton
-          disabled={displayManageLuis || displayManageQNA}
           styles={{ root: { width: '250px', marginTop: '15px' } }}
           text={formatMessage('Set up QnA Maker')}
           onClick={() => {
