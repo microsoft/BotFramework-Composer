@@ -36,9 +36,11 @@ const DescriptionCallout: React.FC<DescriptionCalloutProps> = function Descripti
   return (
     <HelpTooltip
       aria-label={title + '; ' + description}
-      data-testid="FieldLabelHelpTooltip"
       delay={TooltipDelay.zero}
       directionalHint={DirectionalHint.bottomAutoEdge}
+      iconProps={{
+        'data-testid': 'FieldLabelHelpIcon',
+      }}
       styles={{
         helpIcon: {
           fontSize: FontSizes.size12,
