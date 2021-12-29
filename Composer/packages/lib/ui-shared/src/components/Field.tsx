@@ -12,11 +12,11 @@ import { getTheme, mergeStyleSets, ITheme } from 'office-ui-fabric-react/lib/Sty
 
 import { HelpTooltip } from './HelpTooltip';
 
-import { HelpTooltipStyles } from '.';
+import { HelpTooltipProps, HelpTooltipStyles } from '.';
 
 type LabelWithTooltipProps<Props, Styles> = Omit<Props, 'styles'> & {
   tooltip?: string;
-  tooltipIconName?: string;
+  tooltipIconProps?: HelpTooltipProps['iconProps'];
   styles?: IStyleFunctionOrObject<
     never,
     // @ts-expect-error: subComponentStyles won't match the exact component's interface
@@ -67,13 +67,13 @@ const useOnRenderLabelWithHelpTooltip = <Props, Styles>(props: LabelWithTooltipP
           <HelpTooltip
             aria-label={props.tooltip}
             content={props.tooltip}
-            iconName={props.tooltipIconName}
+            iconProps={props.tooltipIconProps}
             styles={classNames.subComponentStyles.helpTooltip}
           />
         )}
       </Stack>
     ),
-    [classNames, props.tooltip, props.tooltipIconName]
+    [classNames, props.tooltip, props.tooltipIconProps]
   );
 };
 

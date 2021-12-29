@@ -209,7 +209,7 @@ export const SelectProfile: React.FC<ContentProps> = ({
                 placeholder={formatMessage('The endpoint url of your web app resource')}
                 styles={inputStyles}
                 tooltip={formatMessage('The endpoint url')}
-                tooltipIconName="Info"
+                tooltipIconProps={{ iconName: 'Info' }}
                 value={endpointUrl}
               />
               <TextField
@@ -219,7 +219,7 @@ export const SelectProfile: React.FC<ContentProps> = ({
                 placeholder={formatMessage('The App ID')}
                 styles={inputStyles}
                 tooltip={formatMessage('The app id of your application registration')}
-                tooltipIconName="Info"
+                tooltipIconProps={{ iconName: 'Info' }}
                 value={appId}
               />
             </Fragment>

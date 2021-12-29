@@ -30,7 +30,7 @@ export const HelpIconTooltip = React.memo(
       <HelpTooltip
         {...tooltipProps}
         content={helpMessage}
-        data-testid="helpIcon"
+        iconProps={{ 'data-testid': 'helpIcon' }}
         id={tooltipId}
         styles={tooltipStyles}
       />

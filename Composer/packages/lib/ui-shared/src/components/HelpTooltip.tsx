@@ -14,6 +14,7 @@ import {
 import React, { useMemo } from 'react';
 import { mergeStyleSets, getFocusStyle, getTheme, ITheme, IStyle } from 'office-ui-fabric-react/lib/Styling';
 import { IStyleFunctionOrObject } from 'office-ui-fabric-react/lib/Utilities';
+import { IIconProps } from 'office-ui-fabric-react/lib/Icon';
 
 const getClassNames = (theme: ITheme, props: Pick<HelpTooltipProps, 'styles'>) =>
   mergeStyleSets(
@@ -45,17 +46,23 @@ export type HelpTooltipStyles = IStyleFunctionOrObject<
 >;
 
 export type HelpTooltipProps = Omit<ITooltipHostProps, 'styles'> & {
-  iconName?: string;
+  iconProps?: IIconProps & { 'data-testid'?: string };
   styles?: HelpTooltipStyles;
 };
 
 const useClassNames = <Styles,>(styles: Styles) => useMemo(() => getClassNames(getTheme(), { styles }), [styles]);
 
-export const HelpTooltip: React.FC<HelpTooltipProps> = ({ iconName = 'Unknown', ...props }) => {
+export const HelpTooltip: React.FC<HelpTooltipProps> = ({ iconProps, ...props }) => {
   const classNames = useClassNames(props.styles);
   return (
     <TooltipHost {...props} styles={classNames}>
-      <Icon aria-label={props['aria-label']} className={classNames.helpIcon} iconName={iconName} tabIndex={0} />
+      <Icon
+        aria-label={props['aria-label']}
+        className={classNames.helpIcon}
+        iconName="Unknown"
+        tabIndex={0}
+        {...iconProps}
+      />
     </TooltipHost>
   );
 };
