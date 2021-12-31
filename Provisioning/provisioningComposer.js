@@ -484,7 +484,7 @@ const create = async (
     return provisionFailed();
   }
 
-  // Caste the parameters into the right format
+  // Cast the parameters into the right format
   const deploymentTemplateParam = getDeploymentTemplateParam(
     appId,
     appPassword,
@@ -552,6 +552,8 @@ const create = async (
       message: getErrorMesssage(err),
     });
     return provisionFailed();
+  } finally {
+    spinner.succeed("Main resources successfully completed");
   }
 
   var qnaResult = null;
@@ -589,7 +591,7 @@ const create = async (
       status: BotProjectDeployLoggerType.PROVISION_INFO,
       message: `> Deploying QnA Resources (this could take a while)...`,
     });
-    const spinner = ora().start();
+    const qnaspinner = ora().start();
     try {
       const qnaDeployment = await createQnADeployment(
         client,
@@ -599,7 +601,7 @@ const create = async (
       );
       // Handle errors
       if (qnaDeployment._response.status != 200) {
-        spinner.fail();
+        qnaspinner.fail();
         logger({
           status: BotProjectDeployLoggerType.PROVISION_ERROR,
           message: `! QnA Template is not valid with provided parameters. Review the log for more information.`,
@@ -615,12 +617,14 @@ const create = async (
         return provisionFailed();
       }
     } catch (err) {
-      spinner.fail();
+      qnaspinner.fail();
       logger({
         status: BotProjectDeployLoggerType.PROVISION_ERROR,
         message: getErrorMesssage(err),
       });
       return provisionFailed();
+    } finally {
+      qnaspinner.succeed("QnA resources successfully completed");
     }
 
     const qnaDeploymentOutput = await client.deployments.get(resourceGroupName, qnaDeployName);
@@ -703,7 +707,6 @@ const create = async (
     }
   }
 
-  spinner.succeed('Success!');
 
   // Validate that everything was successfully created.
   // Then, update the settings file with information about the new resources
