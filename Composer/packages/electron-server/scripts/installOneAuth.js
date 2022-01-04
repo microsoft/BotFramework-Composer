@@ -29,7 +29,7 @@ switch (process.platform) {
     log.info('Mac detected. Using %s package.', packageName);
     break;
   case 'win32':
-    packageName = process.env.ONEAUTH_PACKAGE_WIN || 'oneauth-win64-x64';
+    packageName = process.env.ONEAUTH_PACKAGE_WIN || 'oneauth-win-x64';
     log.info('Windows detected. Using %s package.', packageName);
     break;
   default:
