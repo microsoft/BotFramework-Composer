@@ -21,15 +21,15 @@ const { log } = require('./common');
  */
 
 let packageName = null;
-const packageVersion = process.env.ONEAUTH_VERSION || '1.36.0';
+const packageVersion = process.env.ONEAUTH_VERSION || '1.43.0';
 
 switch (process.platform) {
   case 'darwin':
-    packageName = 'oneauth-mac';
+    packageName = process.env.ONEAUTH_PACKAGE_MAC || 'oneauth-mac-x64';
     log.info('Mac detected. Using %s package.', packageName);
     break;
   case 'win32':
-    packageName = 'oneauth-win64';
+    packageName = process.env.ONEAUTH_PACKAGE_WIN || 'oneauth-win64-x64';
     log.info('Windows detected. Using %s package.', packageName);
     break;
   default:
