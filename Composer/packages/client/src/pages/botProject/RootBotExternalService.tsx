@@ -6,18 +6,17 @@ import React, { useState, useEffect, useRef, Fragment } from 'react';
 import { jsx, keyframes } from '@emotion/core';
 import { BotIndexer } from '@bfc/indexers';
 import { useRecoilValue } from 'recoil';
-import { TextField } from 'office-ui-fabric-react/lib/TextField';
-import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
-import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
+import { IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import formatMessage from 'format-message';
 import get from 'lodash/get';
 import { css } from '@emotion/core';
 import { FontSizes } from 'office-ui-fabric-react/lib/Styling';
-import { NeutralColors, SharedColors } from '@uifabric/fluent-theme';
+import { NeutralColors } from '@uifabric/fluent-theme';
 import { PrimaryButton } from 'office-ui-fabric-react/lib/Button';
 import { Link } from 'office-ui-fabric-react/lib/Link';
 import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
+import { TextField, DropdownField } from '@bfc/ui-shared';
 
 import {
   dispatcherState,
@@ -34,33 +33,9 @@ import { LUIS_REGIONS } from '../../constants';
 import { ManageLuis } from '../../components/ManageLuis/ManageLuis';
 import { ManageQNA } from '../../components/ManageQNA/ManageQNA';
 
-import { inputFieldStyles, subtext, title } from './styles';
-
+import { inputFieldStyles, subtext } from './styles';
+import { SettingTitle } from './shared/SettingTitle';
 // -------------------- Styles -------------------- //
-
-const labelContainer = css`
-  display: flex;
-  flex-direction: row;
-`;
-
-const customerLabel = css`
-  font-size: ${FontSizes.small};
-  margin-right: 5px;
-`;
-
-const unknownIconStyle = (required) => {
-  return {
-    root: {
-      selectors: {
-        '&::before': {
-          content: required ? " '*'" : '',
-          color: SharedColors.red10,
-          paddingRight: 3,
-        },
-      },
-    },
-  };
-};
 
 const externalServiceContainerStyle = css`
   display: flex;
@@ -118,17 +93,6 @@ const luisRegionErrorTextStyle = css`
 type RootBotExternalServiceProps = {
   projectId: string;
   scrollToSectionId?: string;
-};
-
-const onRenderLabel = (props) => {
-  return (
-    <div css={labelContainer}>
-      <div css={customerLabel}> {props.label} </div>
-      <TooltipHost content={props.label}>
-        <Icon iconName="Unknown" styles={unknownIconStyle(props.required)} />
-      </TooltipHost>
-    </div>
-  );
 };
 
 const errorElement = (errorText: string) => {
@@ -336,7 +300,7 @@ export const RootBotExternalService: React.FC<RootBotExternalServiceProps> = (pr
 
   return (
     <Fragment>
-      <div css={title}>{formatMessage('Azure Language Understanding')}</div>
+      <SettingTitle>{formatMessage('Azure Language Understanding')}</SettingTitle>
       <div css={subtext}>
         {formatMessage.rich(
           'Language Understanding (LUIS) is an Azure Cognitive Service that uses machine learning to understand natural language input and direct the conversation flow. <a>Learn more.</a> Use an existing Language Understanding (LUIS) key from Azure or create a new key. <a2>Learn more</a2>',
@@ -360,20 +324,18 @@ export const RootBotExternalService: React.FC<RootBotExternalServiceProps> = (pr
       </div>
       <div css={externalServiceContainerStyle}>
         <TextField
-          ariaLabel={formatMessage('Application name')}
           data-testid={'rootLUISApplicationName'}
           id={'luisName'}
           label={formatMessage('Application name')}
           placeholder={formatMessage('Type application name')}
           styles={inputFieldStyles}
+          tooltip={formatMessage('Application name')}
           value={localRootLuisName}
           onBlur={handleRootLUISNameOnBlur}
           onChange={handleRootLUISNameOnChange}
-          onRenderLabel={onRenderLabel}
         />
         <div ref={luisKeyFieldRef}>
           <TextField
-            ariaLabel={formatMessage('Language Understanding authoring key')}
             data-testid={'rootLUISAuthoringKey'}
             errorMessage={isLUISKeyNeeded ? errorElement(luisKeyErrorMsg) : ''}
             id={'luisAuthoringKey'}
@@ -381,14 +343,14 @@ export const RootBotExternalService: React.FC<RootBotExternalServiceProps> = (pr
             placeholder={formatMessage('Type Language Understanding authoring key')}
             required={isLUISKeyNeeded}
             styles={inputFieldStyles}
+            tooltip={formatMessage('Language Understanding authoring key')}
             value={localRootLuisKey}
             onBlur={handleRootLuisAuthoringKeyOnBlur}
             onChange={handleRootLUISKeyOnChange}
-            onRenderLabel={onRenderLabel}
           />
         </div>
         <div ref={luisRegionFieldRef}>
-          <Dropdown
+          <DropdownField
             ariaLabel={formatMessage('Language Understanding region')}
             data-testid={'rootLUISRegion'}
             id={'luisRegion'}
@@ -398,9 +360,9 @@ export const RootBotExternalService: React.FC<RootBotExternalServiceProps> = (pr
             required={isLUISKeyNeeded}
             selectedKey={localRootLuisRegion}
             styles={inputFieldStyles}
+            tooltip={formatMessage('Language Understanding region')}
             onBlur={handleRootLuisRegionOnBlur}
             onChange={handleRootLuisRegionOnChange}
-            onRenderLabel={onRenderLabel}
           />
           {luisRegionErrorMsg && (
             <div css={luisRegionErrorContainerStyle}>
@@ -410,7 +372,6 @@ export const RootBotExternalService: React.FC<RootBotExternalServiceProps> = (pr
           )}
         </div>
         <PrimaryButton
-          disabled={displayManageLuis || displayManageQNA}
           styles={{ root: { width: '250px', marginTop: '15px' } }}
           text={formatMessage('Set up Language Understanding')}
           onClick={() => {
@@ -440,7 +401,7 @@ export const RootBotExternalService: React.FC<RootBotExternalServiceProps> = (pr
             )}
           </MessageBar>
         )}
-        <div css={title}>{formatMessage('Azure QnA Maker')}</div>
+        <SettingTitle>{formatMessage('Azure QnA Maker')}</SettingTitle>
         <div css={subtext}>
           {formatMessage.rich(
             'QnA Maker is an Azure Cognitive services that can extract question-and-answer pairs from a website FAQ. <a>Learn more.</a> Use an existing key from Azure or create a new key. <a2>Learn more.</a2>',
@@ -464,7 +425,6 @@ export const RootBotExternalService: React.FC<RootBotExternalServiceProps> = (pr
         </div>
         <div ref={qnaKeyFieldRef}>
           <TextField
-            ariaLabel={formatMessage('QnA Maker Subscription key')}
             data-testid={'QnASubscriptionKey'}
             errorMessage={isQnAKeyNeeded ? errorElement(qnaKeyErrorMsg) : ''}
             id={'qnaKey'}
@@ -472,14 +432,13 @@ export const RootBotExternalService: React.FC<RootBotExternalServiceProps> = (pr
             placeholder={formatMessage('Type subscription key')}
             required={isQnAKeyNeeded}
             styles={inputFieldStyles}
+            tooltip={formatMessage('QnA Maker Subscription key')}
             value={localRootQnAKey}
             onBlur={handleRootQnAKeyOnBlur}
             onChange={handleRootQnAKeyOnChange}
-            onRenderLabel={onRenderLabel}
           />
         </div>
         <PrimaryButton
-          disabled={displayManageLuis || displayManageQNA}
           styles={{ root: { width: '250px', marginTop: '15px' } }}
           text={formatMessage('Set up QnA Maker')}
           onClick={() => {

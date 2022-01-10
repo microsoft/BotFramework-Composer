@@ -8,15 +8,13 @@ import { Dialog, DialogType } from 'office-ui-fabric-react/lib/Dialog';
 import { FontWeights, FontSizes } from 'office-ui-fabric-react/lib/Styling';
 import { DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
 import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button';
-import { TextField, ITextFieldProps } from 'office-ui-fabric-react/lib/TextField';
 import { Link } from 'office-ui-fabric-react/lib/Link';
-import { IconButton } from 'office-ui-fabric-react/lib/Button';
 import { Stack } from 'office-ui-fabric-react/lib/Stack';
-import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
 import formatMessage from 'format-message';
 import { useRecoilValue } from 'recoil';
 import { IConfig, IPublishConfig, IQnAConfig } from '@bfc/shared';
 import { Dropdown, ResponsiveMode } from 'office-ui-fabric-react/lib/Dropdown';
+import { TextField } from '@bfc/ui-shared';
 
 import { Text, Tips, Links, nameRegex, LUIS_REGIONS } from '../../constants';
 import { FieldConfig, useForm } from '../../hooks/useForm';
@@ -25,9 +23,6 @@ import { getLuisBuildLuFiles } from '../../utils/luUtil';
 import { luFilesSelectorFamily, qnaFilesSelectorFamily, dialogsSelectorFamily } from '../../recoilModel';
 
 // -------------------- Styles -------------------- //
-const textFieldLabel = css`
-  font-weight: ${FontWeights.semibold};
-`;
 
 const dialogSubTitle = css`
   font-size: ${FontSizes.medium};
@@ -69,16 +64,6 @@ const validate = (value?: string) => {
   }
 };
 
-// eslint-disable-next-line react/display-name
-const onRenderLabel = (info: string) => (props?: ITextFieldProps) => (
-  <Stack horizontal verticalAlign="center">
-    <span css={textFieldLabel}>{props?.label}</span>
-    <TooltipHost calloutProps={{ gapSpace: 0 }} content={info}>
-      <IconButton iconProps={{ iconName: 'Info' }} styles={{ root: { marginBottom: -3 } }} />
-    </TooltipHost>
-  </Stack>
-);
-
 interface IPublishDialogProps {
   botName: string;
   isOpen: boolean;
@@ -88,7 +73,7 @@ interface IPublishDialogProps {
   projectId: string;
 }
 
-export const PublishDialog: React.FC<IPublishDialogProps> = (props) => {
+const PublishDialog: React.FC<IPublishDialogProps> = (props) => {
   const { isOpen, onDismiss, onPublish, botName, config, projectId } = props;
   const dialogs = useRecoilValue(dialogsSelectorFamily(projectId));
   const luFiles = useRecoilValue(luFilesSelectorFamily(projectId));
@@ -218,17 +203,17 @@ export const PublishDialog: React.FC<IPublishDialogProps> = (props) => {
             data-testid="ProjectNameInput"
             errorMessage={formErrors.name}
             label={formatMessage('What is the name of your bot?')}
+            tooltip={Tips.PROJECT_NAME}
             value={formData.name}
             onChange={(_e, val) => updateField('name', val)}
-            onRenderLabel={onRenderLabel(Tips.PROJECT_NAME)}
           />
           <TextField
             data-testid="EnvironmentInput"
             errorMessage={formErrors.environment}
             label={formatMessage('Environment')}
+            tooltip={Tips.ENVIRONMENT}
             value={formData.environment}
             onChange={(_e, val) => updateField('environment', val)}
-            onRenderLabel={onRenderLabel(Tips.ENVIRONMENT)}
           />
           {luConfigShow && (
             <Fragment>
@@ -236,9 +221,9 @@ export const PublishDialog: React.FC<IPublishDialogProps> = (props) => {
                 data-testid="AuthoringKeyInput"
                 errorMessage={formErrors.authoringKey}
                 label={formatMessage('LUIS authoring key:')}
+                tooltip={Tips.AUTHORING_KEY}
                 value={formData.authoringKey}
                 onChange={(_e, val) => updateField('authoringKey', val)}
-                onRenderLabel={onRenderLabel(Tips.AUTHORING_KEY)}
               />
               <Dropdown
                 data-testid="regionDropdown"
@@ -260,17 +245,17 @@ export const PublishDialog: React.FC<IPublishDialogProps> = (props) => {
                 data-testid="SubscriptionKeyInput"
                 errorMessage={formErrors.subscriptionKey}
                 label={formatMessage('QnA Maker subscription key:')}
+                tooltip={Tips.SUBSCRIPTION_KEY}
                 value={formData.subscriptionKey}
                 onChange={(_e, val) => updateField('subscriptionKey', val)}
-                onRenderLabel={onRenderLabel(Tips.SUBSCRIPTION_KEY)}
               />
               <TextField
                 disabled
                 readOnly
                 errorMessage={formErrors.qnaRegion}
                 label={formatMessage('QnA region')}
+                tooltip={Tips.AUTHORING_REGION}
                 value={formData.qnaRegion}
-                onRenderLabel={onRenderLabel(Tips.AUTHORING_REGION)}
               />
             </Fragment>
           )}
@@ -279,8 +264,8 @@ export const PublishDialog: React.FC<IPublishDialogProps> = (props) => {
             readOnly
             errorMessage={formErrors.defaultLanguage}
             label={formatMessage('Default language')}
+            tooltip={Tips.DEFAULT_LANGUAGE}
             value={formData.defaultLanguage}
-            onRenderLabel={onRenderLabel(Tips.DEFAULT_LANGUAGE)}
           />
         </Stack>
       </form>
@@ -291,3 +276,5 @@ export const PublishDialog: React.FC<IPublishDialogProps> = (props) => {
     </Dialog>
   );
 };
+
+export { PublishDialog as _PublishDialog };

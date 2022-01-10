@@ -65,6 +65,8 @@ jobs:
         workingDirectory: Composer
   - job: security
     displayName: Security Analysis
+    pool:
+      vmImage: ubuntu-latest
     steps:
       - task: ComponentGovernanceComponentDetection@0
         displayName: Component Detection

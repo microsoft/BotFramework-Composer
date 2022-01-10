@@ -27,7 +27,12 @@ const execTimeout = 5 * 60 * 1000; // timeout after 5 minutes
 const writeLocalFunctionsSetting = async (name: string, value: string, cwd: string, log) => {
   // only set if there is both a setting and a value.
   if (name && value && cwd) {
-    const { stderr: err } = await execAsync(`func settings add ${name} ${value}`, { cwd: cwd });
+    // since these values could conceivably contain quote marks, make sure they are properly escaped
+    const escapedName = name.replace(/"/g, '\\"');
+    const escapedValue = value.replace(/"/g, '\\"');
+    const command = `func settings add "${escapedName}" "${escapedValue}"`;
+    log('EXEC: ', command);
+    const { stderr: err } = await execAsync(command, { cwd: cwd });
     if (err) {
       log('Error calling func settings add', err);
       throw new Error(err);

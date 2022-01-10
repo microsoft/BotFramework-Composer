@@ -349,7 +349,7 @@ export const FileSelector: React.FC<FileSelectorProps> = (props) => {
     },
     {
       key: 'Edit',
-      name: '',
+      name: formatMessage('Edit'),
       fieldName: '',
       minWidth: 30,
       maxWidth: 30,

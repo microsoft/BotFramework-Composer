@@ -2,19 +2,17 @@
 // Licensed under the MIT License.
 
 import { FluentTheme } from '@uifabric/fluent-theme';
-import { Icon, IIconProps, IIconStyles } from 'office-ui-fabric-react/lib/Icon';
-import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
-import { classNamesFunction } from 'office-ui-fabric-react/lib/Utilities';
 import * as React from 'react';
+import { HelpTooltip as SharedHelpTooltip } from '@bfc/ui-shared';
+import { FontSizes } from 'office-ui-fabric-react/lib/Styling';
 
-const iconStyles = classNamesFunction<IIconProps, IIconStyles>()({
-  root: {
+const iconStyles = {
+  helpIcon: {
     color: FluentTheme.palette.neutralSecondary,
-    fontSize: 12,
-    lineHeight: '12px',
-    cursor: 'default',
+    fontSize: FontSizes.small,
+    lineHeight: '1',
   },
-});
+};
 
 type Props = {
   tooltipId: string;
@@ -23,8 +21,11 @@ type Props = {
 
 export const HelpTooltip = React.memo((props: Props) => {
   return (
-    <TooltipHost content={props.helpMessage} id={props.tooltipId}>
-      <Icon aria-label={props.helpMessage} iconName={'Unknown'} styles={iconStyles} />
-    </TooltipHost>
+    <SharedHelpTooltip
+      aria-label={props.helpMessage}
+      content={props.helpMessage}
+      id={props.tooltipId}
+      styles={iconStyles}
+    />
   );
 });

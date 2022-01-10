@@ -23,6 +23,6 @@ describe('<FieldLabel />', () => {
       <FieldLabel description="my description" helpLink="https://aka.ms" label="My Label" />
     );
 
-    expect(await findByTestId('FieldLabelDescriptionIcon')).toBeInTheDocument();
+    expect(await findByTestId('FieldLabelHelpIcon')).toBeInTheDocument();
   });
 });
