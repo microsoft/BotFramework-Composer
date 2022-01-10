@@ -5,14 +5,10 @@
 import React, { useState, useEffect, useCallback, Fragment } from 'react';
 import { jsx, css } from '@emotion/core';
 import { useRecoilValue } from 'recoil';
-import { TextField } from 'office-ui-fabric-react/lib/TextField';
-import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
-import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import formatMessage from 'format-message';
-import { FontSizes } from 'office-ui-fabric-react/lib/Styling';
-import { SharedColors } from '@uifabric/fluent-theme';
 import { Link } from 'office-ui-fabric-react/lib/Link';
 import { PrimaryButton } from 'office-ui-fabric-react/lib/Button';
+import { TextField } from '@bfc/ui-shared';
 
 import { dispatcherState, settingsState } from '../../recoilModel';
 import { mergePropertiesManagedByRootBot } from '../../recoilModel/dispatchers/utils/project';
@@ -23,30 +19,6 @@ import { SettingTitle } from './shared/SettingTitle';
 import { GetAppInfoFromPublishProfileDialog } from './GetAppInfoFromPublishProfileDialog';
 // -------------------- Styles -------------------- //
 
-const labelContainer = css`
-  display: flex;
-  flex-direction: row;
-`;
-
-const customerLabel = css`
-  font-size: ${FontSizes.small};
-  margin-right: 5px;
-`;
-
-const unknownIconStyle = (required) => {
-  return {
-    root: {
-      selectors: {
-        '&::before': {
-          content: required ? " '*'" : '',
-          color: SharedColors.red10,
-          paddingRight: 3,
-        },
-      },
-    },
-  };
-};
-
 const appIdAndPasswordStyle = css`
   display: flex;
   flex-direction: column;
@@ -56,17 +28,6 @@ const appIdAndPasswordStyle = css`
 
 type AppIdAndPasswordProps = {
   projectId: string;
-};
-
-const onRenderLabel = (props) => {
-  return (
-    <div css={labelContainer}>
-      <div css={customerLabel}> {props.label} </div>
-      <TooltipHost content={props.label}>
-        <Icon iconName="Unknown" styles={unknownIconStyle(props.required)} />
-      </TooltipHost>
-    </div>
-  );
 };
 
 export const AppIdAndPassword: React.FC<AppIdAndPasswordProps> = (props) => {
@@ -134,26 +95,24 @@ export const AppIdAndPassword: React.FC<AppIdAndPasswordProps> = (props) => {
       </div>
       <div css={appIdAndPasswordStyle}>
         <TextField
-          ariaLabel={formatMessage('Microsoft App Id')}
           data-testid={'MicrosoftAppId'}
           label={formatMessage('Microsoft App Id')}
           placeholder={formatMessage('Type App Id')}
           styles={inputFieldStyles}
+          tooltip={formatMessage('Microsoft App Id')}
           value={localMicrosoftAppId}
           onBlur={handleAppIdOnBlur}
           onChange={handleAppIdOnChange}
-          onRenderLabel={onRenderLabel}
         />
         <TextField
-          ariaLabel={formatMessage('Microsoft App Password')}
           data-testid={'MicrosoftPassword'}
           label={formatMessage('Microsoft App Password')}
           placeholder={formatMessage('Type App Password')}
           styles={inputFieldStyles}
+          tooltip={formatMessage('Microsoft App Password')}
           value={localMicrosoftAppPassword}
           onBlur={handleAppPasswordOnBlur}
           onChange={handleAppPasswordOnChange}
-          onRenderLabel={onRenderLabel}
         />
         <PrimaryButton
           styles={{ root: { width: '230px', marginTop: '15px' } }}

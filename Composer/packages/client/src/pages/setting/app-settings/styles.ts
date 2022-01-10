@@ -60,22 +60,6 @@ export const image = css`
   width: 86px;
 `;
 
-export const labelContainer = css`
-  display: flex;
-  flex-direction: row;
-`;
-
-export const customerLabel = css`
-  font-size: ${FontSizes.size12};
-  margin-right: 5px;
-`;
-
-export const icon = {
-  root: {
-    fontSize: FontSizes.size12,
-  },
-};
-
 export const featureFlagGroupContainer = css`
   margin-left: 166px;
   font-size: ${FontSizes.size12};

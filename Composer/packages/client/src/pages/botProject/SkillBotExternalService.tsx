@@ -9,8 +9,9 @@ import { useRecoilValue } from 'recoil';
 import formatMessage from 'format-message';
 import get from 'lodash/get';
 import { css } from '@emotion/core';
-import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { Link } from 'office-ui-fabric-react/lib/Link';
+import { mergeStyleSets } from 'office-ui-fabric-react/lib/Styling';
+import { TextField } from '@bfc/ui-shared';
 
 import {
   dispatcherState,
@@ -25,6 +26,7 @@ import { rootBotProjectIdSelector } from '../../recoilModel/selectors/project';
 import { FieldWithCustomButton } from '../../components/FieldWithCustomButton';
 import { mergePropertiesManagedByRootBot } from '../../recoilModel/dispatchers/utils/project';
 import { LUIS_REGIONS } from '../../constants';
+import { customFieldLabel } from '../../styles';
 
 import { subtext } from './styles';
 import { SettingTitle } from './shared/SettingTitle';
@@ -161,19 +163,17 @@ export const SkillBotExternalService: React.FC<SkillBotExternalServiceProps> = (
       </div>
       <div css={externalServiceContainerStyle}>
         <TextField
-          ariaLabel={formatMessage('Application name')}
           data-testid={'skillLUISApplicationName'}
           id={'luisName'}
           label={formatMessage('Application name')}
           placeholder={formatMessage('Type application name')}
-          styles={{ root: { marginBottom: 10 } }}
+          styles={mergeStyleSets(customFieldLabel, { root: { marginBottom: 10 } })}
           value={localSkillLuisName}
           onBlur={handleSkillLUISNameOnBlur}
           onChange={handleSkillLUISNameOnChange}
         />
         <div ref={luisKeyFieldRef}>
           <FieldWithCustomButton
-            ariaLabel={formatMessage('Language Understanding authoring key')}
             buttonDataTestId="skillLUISAuthoringKeyBtn"
             buttonText={formatMessage('Use custom LUIS authoring key')}
             errorMessage={!rootLuisKey ? formatMessage('Root Bot LUIS authoring key is empty') : ''}
@@ -183,13 +183,13 @@ export const SkillBotExternalService: React.FC<SkillBotExternalServiceProps> = (
             placeholder={formatMessage('Type Language Understanding authoring key')}
             placeholderOnDisable={rootLuisKey}
             required={isLUISKeyNeeded}
+            tooltip={formatMessage('Language Understanding authoring key')}
             value={skillLuisKey}
             onBlur={handleLUISKeyOnBlur}
           />
         </div>
         <div ref={luisRegionFieldRef}>
           <FieldWithCustomButton
-            ariaLabel={formatMessage('Language Understanding region')}
             buttonDataTestId="skillLUISAuthoringRegionBtn"
             buttonText={formatMessage('Use custom LUIS region')}
             errorMessage={!rootLuisRegion ? formatMessage('Root Bot LUIS region is empty') : ''}
@@ -199,6 +199,7 @@ export const SkillBotExternalService: React.FC<SkillBotExternalServiceProps> = (
             placeholder={formatMessage('Select region')}
             placeholderOnDisable={rootLuisRegion}
             required={isLUISKeyNeeded}
+            tooltip={formatMessage('Language Understanding region')}
             value={skillLuisRegion}
             onBlur={handleLUISRegionOnBlur}
           />
@@ -227,7 +228,6 @@ export const SkillBotExternalService: React.FC<SkillBotExternalServiceProps> = (
         </div>
         <div ref={qnaKeyFieldRef}>
           <FieldWithCustomButton
-            ariaLabel={formatMessage('QnA Maker Subscription key')}
             buttonDataTestId="skillQnaAuthoringBtn"
             buttonText={formatMessage('Use custom QnA Maker Subscription key')}
             errorMessage={!rootQnAKey ? formatMessage('Root Bot QnA Maker Subscription key is empty') : ''}
@@ -237,6 +237,7 @@ export const SkillBotExternalService: React.FC<SkillBotExternalServiceProps> = (
             placeholder={formatMessage('Enter QnA Maker Subscription key')}
             placeholderOnDisable={rootQnAKey}
             required={isQnAKeyNeeded}
+            tooltip={formatMessage('QnA Maker Subscription key')}
             value={skillQnAKey}
             onBlur={handleSkillQnAKeyOnBlur}
           />

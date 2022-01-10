@@ -15,16 +15,13 @@ import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { RouteComponentProps } from '@reach/router';
 import querystring from 'query-string';
 import { FontWeights } from '@uifabric/styling';
-import { DialogWrapper, DialogTypes } from '@bfc/ui-shared';
+import { DialogWrapper, DialogTypes, DropdownField } from '@bfc/ui-shared';
 import { useRecoilValue } from 'recoil';
 import { csharpFeedKey, FeedType, functionsRuntimeKey, nodeFeedKey, QnABotTemplateId } from '@bfc/shared';
 import { RuntimeType, webAppRuntimeKey, localTemplateId } from '@bfc/shared';
-import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
+import { IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import camelCase from 'lodash/camelCase';
 import upperFirst from 'lodash/upperFirst';
-import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
-import { Icon } from 'office-ui-fabric-react/lib/Icon';
-import { NeutralColors } from '@uifabric/fluent-theme';
 import { Label } from 'office-ui-fabric-react/lib/Label';
 
 import { CreationFlowStatus, DialogCreationCopy, nameRegex, botNameRegex } from '../../constants';
@@ -429,7 +426,8 @@ const DefineConversation: React.FC<DefineConversationProps> = (props) => {
               <StackItem grow={0} styles={halfstack}>
                 <Stack horizontal styles={stackinput} tokens={{ childrenGap: '2rem' }}>
                   <StackItem grow={0}>
-                    <Dropdown
+                    <DropdownField
+                      required
                       data-testid="NewDialogRuntimeType"
                       label={formatMessage('Runtime type')}
                       options={getSupportedRuntimesForTemplate()}
@@ -439,33 +437,16 @@ const DefineConversation: React.FC<DefineConversationProps> = (props) => {
                         dropdownItem: { height: '100px' },
                         dropdownItemSelected: { height: '100px' },
                       }}
-                      onChange={(_e, option) => updateField('runtimeType', option?.key.toString())}
-                      onRenderLabel={(props) => (
-                        <Stack horizontal styles={{ root: { alignItems: 'center' } }}>
-                          <Label required>{props?.label}</Label>
-                          <TooltipHost
-                            content={formatMessage(
-                              'Azure offers a number of ways to host your application code. The runtime type refers to the hosting model for the computing resources that your application runs on.'
-                            )}
-                          >
-                            <Icon
-                              iconName="Unknown"
-                              styles={{
-                                root: {
-                                  color: NeutralColors.gray160,
-                                  userSelect: 'none',
-                                },
-                              }}
-                            />
-                          </TooltipHost>
-                        </Stack>
+                      tooltip={formatMessage(
+                        'Azure offers a number of ways to host your application code. The runtime type refers to the hosting model for the computing resources that your application runs on.'
                       )}
+                      onChange={(_e, option) => updateField('runtimeType', option?.key.toString())}
                       onRenderOption={renderRuntimeDropdownOption}
                     />
                   </StackItem>
                   {inBotMigration && (
                     <StackItem grow={0}>
-                      <Dropdown
+                      <DropdownField
                         data-testid="NewDialogRuntimeLanguage"
                         label={formatMessage('Runtime Language')}
                         options={getRuntimeLanguageOptions()}
