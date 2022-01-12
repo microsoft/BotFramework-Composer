@@ -21,3 +21,5 @@ export const SectionTitle: React.FC<SectionTitleProps> = ({ level, ...props }) =
     {...props}
   />
 );
+
+SectionTitle.displayName = 'SectionTitle';

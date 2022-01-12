@@ -5,6 +5,8 @@ import { css } from '@emotion/core';
 import { NeutralColors, SharedColors } from '@uifabric/fluent-theme';
 import { FontSizes, FontWeights, mergeStyleSets } from 'office-ui-fabric-react/lib/Styling';
 
+import { customFieldLabel } from '../../styles';
+
 export const tabContentContainer = css`
   margin-left: 10px;
   max-width: 580px;
@@ -121,21 +123,6 @@ export const errorIcon = {
   },
 };
 
-export const unknownIconStyle = (required: boolean) => {
-  return {
-    root: {
-      selectors: {
-        '&::before': {
-          content: required ? " '*'" : '',
-          color: SharedColors.red10,
-          paddingRight: 10,
-        },
-      },
-      fontSize: FontSizes.medium,
-    },
-  };
-};
-
 export const columnSizes = ['300px', '150px', '150px'];
 export const extendedColumnSizes = ['220px', '80px', '250px'];
 export const publishProfileButtonColumnSize = '50px';
@@ -151,7 +138,7 @@ export const actionButton = {
   },
 };
 
-export const inputFieldStyles = mergeStyleSets({ root: { marginTop: 10 } }, customError);
+export const inputFieldStyles = mergeStyleSets({ root: { marginTop: 10 } }, customError, customFieldLabel);
 
 export const teamsCallOutStyles = mergeStyleSets({
   callout: {

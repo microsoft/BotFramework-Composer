@@ -2,13 +2,15 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
+import { DropdownField } from '@bfc/ui-shared';
 import { jsx } from '@emotion/core';
 import { useId } from '@uifabric/react-hooks';
 import kebabCase from 'lodash/kebabCase';
-import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
-import { Icon } from 'office-ui-fabric-react/lib/Icon';
-import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
+import { FontSizes, mergeStyleSets } from 'office-ui-fabric-react/lib/Styling';
+import { IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import React from 'react';
+
+import { customFieldLabel } from '../../../styles';
 
 import * as styles from './styles';
 
@@ -19,12 +21,22 @@ const defaultDropdownWidth = 300;
 type Props = {
   label: string;
   options: IDropdownOption[];
-  tooltip?: React.ReactNode;
+  tooltip?: string;
   id?: string;
   selected?: string;
   width?: number;
   itemCountBeforeScroll?: number;
   onChange: (key: string) => void;
+};
+
+const tooltipStyles = {
+  subComponentStyles: {
+    helpTooltip: {
+      helpIcon: {
+        fontSize: FontSizes.small,
+      },
+    },
+  },
 };
 
 export const SettingDropdown: React.FC<Props> = ({
@@ -39,28 +51,17 @@ export const SettingDropdown: React.FC<Props> = ({
 }) => {
   const uniqueId = useId(kebabCase(label));
 
-  const renderLabel = React.useCallback(({ label: dropdownLabel }) => {
-    return (
-      <div css={styles.labelContainer}>
-        <div css={styles.customerLabel}>{dropdownLabel}</div>
-        <TooltipHost content={tooltip ?? dropdownLabel}>
-          <Icon iconName="Unknown" styles={styles.icon} />
-        </TooltipHost>
-      </div>
-    );
-  }, []);
-
   return (
     <div css={styles.settingsContainer}>
-      <Dropdown
+      <DropdownField
         calloutProps={{ calloutMaxHeight: defaultItemHeight * itemCountBeforeScroll }}
         id={id || uniqueId}
         label={label}
         options={options}
         selectedKey={selected}
-        styles={{ root: { width } }}
+        styles={mergeStyleSets(customFieldLabel, tooltipStyles, { root: { width } })}
+        tooltip={tooltip ?? label}
         onChange={(_e, option) => onChange(option?.key?.toString() ?? '')}
-        onRenderLabel={renderLabel}
       />
     </div>
   );
