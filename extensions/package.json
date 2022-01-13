@@ -5,6 +5,7 @@
   "scripts": {
     "build:all": "cross-env NODE_ENV=production node scripts/compileExtensions.js",
     "lint": "eslint --quiet --ext .ts,.tsx .",
+    "rebase:yarn:all": "node scripts/rebaseExtensionYarnLocks.js",
     "create:extension": "node scripts/create.js"
   },
   "keywords": [],
