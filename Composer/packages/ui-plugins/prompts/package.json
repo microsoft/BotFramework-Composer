@@ -21,8 +21,8 @@
   "author": "andy.brown@microsoft.com",
   "license": "MIT",
   "peerDependencies": {
-    "@bfc/extension-client": "*",
     "@bfc/adaptive-form": "*",
+    "@bfc/extension-client": "*",
     "@uifabric/fluent-theme": "^7.1.4",
     "@uifabric/icons": "^7.3.0",
     "@uifabric/styling": "^7.7.4",
@@ -32,8 +32,8 @@
     "react-dom": "16.13.1"
   },
   "devDependencies": {
-    "@bfc/extension-client": "*",
     "@bfc/adaptive-form": "*",
+    "@bfc/extension-client": "*",
     "@botframework-composer/test-utils": "*",
     "@types/react": "16.9.23",
     "@types/react-dom": "16.9.5",

@@ -37,8 +37,8 @@
     "react-dom": "16.13.1"
   },
   "dependencies": {
-    "@bfc/shared": "*",
     "@bfc/indexers": "*",
+    "@bfc/shared": "*",
     "@emotion/core": "^10.0.27"
   }
 }
