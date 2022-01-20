@@ -64,7 +64,6 @@
     "build:server": "yarn workspace @bfc/server build",
     "build:client": "yarn workspace @bfc/client build",
     "build:extensions": "cd ../extensions && yarn && yarn build:all",
-    "rebase:yarn": "node scripts/rebaseYarnLock.js",
     "start": "cross-env NODE_ENV=production PORT=3000 yarn start:server",
     "start:debug": "cross-env NODE_ENV=production PORT=3000 DEBUG=* yarn start:server",
     "startall": "yarn start",
