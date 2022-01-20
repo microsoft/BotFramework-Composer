@@ -60,7 +60,7 @@
     "build:ci": "yarn l10n:check && yarn build:dev",
     "build:dev": "yarn build:libs && yarn build:extensions",
     "build:electron": "yarn workspace @bfc/electron-server build && yarn workspace @bfc/electron-server l10n",
-    "build:libs": "wsrun -ltm -x @bfc/electron-server -x @bfc/client -x @bfc/server -p @botframework-composer/* -p @bfc/* -c build",
+    "build:libs": "wsrun -ltm -x @bfc/electron-server -x @bfc/client -x @bfc/server -p '@botframework-composer/*' -p '@bfc/*' -c build",
     "build:server": "yarn workspace @bfc/server build",
     "build:client": "yarn workspace @bfc/client build",
     "build:extensions": "cd ../extensions && yarn && yarn build:all",
