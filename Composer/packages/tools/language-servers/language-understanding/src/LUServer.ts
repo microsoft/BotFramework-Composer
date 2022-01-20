@@ -95,7 +95,7 @@ export class LUServer {
       if (method === LABELEXPERIENCEREQUEST) {
         this.labelingExperienceHandler(params);
       } else if (InitializeDocumentsMethodName === method) {
-        const { uri, luOption }: { uri: string; luOption?: LUOption } = params;
+        const { uri, luOption }: { uri: string; luOption?: LUOption } = params as { uri: string; luOption?: LUOption };
         const textDocument = this.documents.get(uri);
         if (textDocument) {
           this.addLUDocument(textDocument, luOption);

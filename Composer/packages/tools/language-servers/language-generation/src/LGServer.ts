@@ -117,7 +117,7 @@ export class LGServer {
 
     this.connection.onRequest((method, params) => {
       if (initializeDocumentsMethodName === method) {
-        const { uri, lgOption }: { uri: string; lgOption?: LGOption } = params;
+        const { uri, lgOption }: { uri: string; lgOption?: LGOption } = params as { uri: string; lgOption?: LGOption };
         const textDocument = this.documents.get(uri);
         if (textDocument) {
           this.addLGDocument(textDocument, lgOption);
