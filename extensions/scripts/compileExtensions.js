@@ -95,8 +95,15 @@ const hasChanges = (name, lastModified) => {
 };
 
 const install = async (name, extPath) => {
-  console.log(`[%s] yarn install --production=false --frozen-lockfile ${FORCE ? '--force' : ''}`, name);
-  execSync(`yarn --production=false --frozen-lockfile ${FORCE ? '--force' : ''}`, { cwd: extPath, stdio: 'inherit' });
+  if (process.env.BERRY_ENABLED) {
+    // yarn berry (v2+)
+    console.log('[%s] yarn install --immutable', name);
+    execSync('yarn install --immutable', { cwd: extPath, stdio: 'inherit' });
+  } else {
+    // yarn v1
+    console.log(`[%s] yarn install --production=false --frozen-lockfile ${FORCE ? '--force' : ''}`, name);
+    execSync(`yarn --production=false --frozen-lockfile ${FORCE ? '--force' : ''}`, { cwd: extPath, stdio: 'inherit' });
+  }
 };
 
 async function main() {
