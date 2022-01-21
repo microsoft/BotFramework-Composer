@@ -69,7 +69,7 @@
     "json-schema-defaults": "^0.4.0",
     "lodash": "^4.17.19",
     "monaco-editor": "^0.21.2",
-    "monaco-languageclient": "^0.10.0",
+    "monaco-languageclient": "0.10.2",
     "normalize-url": "^4.5.1",
     "reconnecting-websocket": "^3.2.2",
     "vscode-ws-jsonrpc": "^0.1.1"

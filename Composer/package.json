@@ -24,7 +24,8 @@
     "json-ptr": "^2.1",
     "css-what": "^5.0.1",
     "css-select": "^4.1.3",
-    "ejs": "^3.1.6"
+    "ejs": "^3.1.6",
+    "vscode-languageserver-protocol": "3.15.0-next.8"
   },
   "engines": {
     "node": "14.x"
