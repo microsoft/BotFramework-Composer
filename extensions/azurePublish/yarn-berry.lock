@@ -1808,7 +1808,7 @@ __metadata:
 
 "@bfc/code-editor@file:../../Composer/packages/lib/code-editor::locator=azurePublish%40workspace%3A.":
   version: 0.0.0
-  resolution: "@bfc/code-editor@file:../../Composer/packages/lib/code-editor#../../Composer/packages/lib/code-editor::hash=894ea3&locator=azurePublish%40workspace%3A."
+  resolution: "@bfc/code-editor@file:../../Composer/packages/lib/code-editor#../../Composer/packages/lib/code-editor::hash=c052fd&locator=azurePublish%40workspace%3A."
   dependencies:
     "@emotion/core": ^10.0.27
     "@emotion/styled": ^10.0.27
@@ -1818,7 +1818,7 @@ __metadata:
     json-schema-defaults: ^0.4.0
     lodash: ^4.17.19
     monaco-editor: ^0.21.2
-    monaco-languageclient: ^0.10.0
+    monaco-languageclient: 0.10.2
     normalize-url: ^4.5.1
     reconnecting-websocket: ^3.2.2
     vscode-ws-jsonrpc: ^0.1.1
@@ -1830,7 +1830,7 @@ __metadata:
     "@bfc/ui-shared": "*"
     react: 16.13.1
     react-dom: 16.13.1
-  checksum: 482965304eb21ad28ea352af8c1b3348fc0078d97318f31dc37722befa222986705a66275667b34d4dc2d6cf1fc62364b1fb306de4417e59d6d54700f17e5d06
+  checksum: d72c4faf672d19a4e6f1af08bc390023f0a7a29cead6ed77fdfb536f9aa730135704c10ba27ee655bb82fa9e2db62851f06911fdabed8c31d2e4e838bb668c4b
   languageName: node
   linkType: hard
 
@@ -9118,7 +9118,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"monaco-languageclient@npm:^0.10.0":
+"monaco-languageclient@npm:0.10.2":
   version: 0.10.2
   resolution: "monaco-languageclient@npm:0.10.2"
   dependencies:
