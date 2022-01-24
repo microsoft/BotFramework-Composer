@@ -2841,7 +2841,7 @@ __metadata:
     "@types/express": 4.16.1
     "@types/express-serve-static-core": 4.16.1
     "@types/form-data": ^2.2.1
-    "@types/formidable": ^1.0.32
+    "@types/formidable": 1.0.32
     "@types/http-errors": ^1.6.1
     "@types/jest": ^26.0.15
     "@types/lodash": ^4.14.146
@@ -2874,7 +2874,7 @@ __metadata:
     extract-zip: 2.0.1
     form-data: ^2.3.3
     format-message: ^6.2.3
-    formidable: ^1.2.2
+    formidable: 1.2.2
     fs-extra: 7.0.1
     globby: ^11.0.1
     http-errors: ^1.7.2
@@ -5412,12 +5412,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/formidable@npm:^1.0.32":
-  version: 1.2.5
-  resolution: "@types/formidable@npm:1.2.5"
+"@types/formidable@npm:1.0.32":
+  version: 1.0.32
+  resolution: "@types/formidable@npm:1.0.32"
   dependencies:
     "@types/node": "*"
-  checksum: 2e4eea700f5bf392e98df1c2fc9afa1666204097cbdf69b826b7e13292ce194bcd77e3babcf6e41c184e9ab55d80c1a1461d369118c576dcc7cfaafc09fcf775
+  checksum: a415574050c9b79584cc194bd360113abf75e419e9d85e2a2cf2cde98b48f51a6993fc11a9421a4a84b515e1ee6efb56bedf2fa27fdf4fa4bea564a5e06d3fa5
   languageName: node
   linkType: hard
 
@@ -14321,10 +14321,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"formidable@npm:^1.2.2":
-  version: 1.2.6
-  resolution: "formidable@npm:1.2.6"
-  checksum: 2b68ed07ba88302b9c63f8eda94f19a460cef6017bfda48348f09f41d2a36660c9353137991618e0e4c3db115b41e4b8f6fa63bc973b7a7c91dec66acdd02a56
+"formidable@npm:1.2.2":
+  version: 1.2.2
+  resolution: "formidable@npm:1.2.2"
+  checksum: 43b3ec9a8f8055112e1a9a40eb748cdcd86cb9076dc9a17b0caa2bc26908eeae865dbee62d7c4bc26681fb75c2f42d60323af9c9d06c843e94f51f9b46954a0a
   languageName: node
   linkType: hard
 
