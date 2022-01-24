@@ -7,15 +7,15 @@ __metadata:
 
 "@botframework-composer/types@file:../../Composer/packages/types::locator=plugin-runtimes%40workspace%3A.":
   version: 0.0.2
-  resolution: "@botframework-composer/types@file:../../Composer/packages/types#../../Composer/packages/types::hash=764256&locator=plugin-runtimes%40workspace%3A."
+  resolution: "@botframework-composer/types@file:../../Composer/packages/types#../../Composer/packages/types::hash=bbc4a2&locator=plugin-runtimes%40workspace%3A."
   dependencies:
-    "@types/express": ^4.16.1
+    "@types/express": 4.16.1
     "@types/passport": ^1.0.4
     axios: ^0.21.1
     botframework-schema: ^4.11.1
     express-serve-static-core: 0.1.1
     json-schema: ^0.2.5
-  checksum: 60ac515cc3d25f190e2825d9d3fab2ec284c3993fd9f8a8af80f58896e286411525905aa979f9ab70e0ae0bb528bc278a1d751d10de683deeae08fd05f6aed75
+  checksum: 4ff5d95a44fa230e116a3309585b896f52560d8baa37b678413efd6e7c2f7e8038a0a65919bf9a8f89f85c5b4ca4e0e5db0d369c56ae54a99f5b52903f3a8acf
   languageName: node
   linkType: hard
 
@@ -72,7 +72,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/express-serve-static-core@npm:^4.17.18":
+"@types/express-serve-static-core@npm:*, @types/express-serve-static-core@npm:^4.17.18":
   version: 4.17.28
   resolution: "@types/express-serve-static-core@npm:4.17.28"
   dependencies:
@@ -83,7 +83,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/express@npm:*, @types/express@npm:^4.16.1":
+"@types/express@npm:*":
   version: 4.17.13
   resolution: "@types/express@npm:4.17.13"
   dependencies:
@@ -92,6 +92,17 @@ __metadata:
     "@types/qs": "*"
     "@types/serve-static": "*"
   checksum: 12a2a0e6c4b993fc0854bec665906788aea0d8ee4392389d7a98a5de1eefdd33c9e1e40a91f3afd274011119c506f7b4126acb97fae62ae20b654974d44cba12
+  languageName: node
+  linkType: hard
+
+"@types/express@npm:4.16.1":
+  version: 4.16.1
+  resolution: "@types/express@npm:4.16.1"
+  dependencies:
+    "@types/body-parser": "*"
+    "@types/express-serve-static-core": "*"
+    "@types/serve-static": "*"
+  checksum: 8d977094bd4820c34bbb2c896dcf12a91feb263859514aa079bdaa86f9048d53803ef7dce3641e6a48bb466f60fb3cb340de834d8656aeea8edc83c15996a236
   languageName: node
   linkType: hard
 

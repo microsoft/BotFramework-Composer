@@ -2508,7 +2508,7 @@ __metadata:
     "@botframework-composer/types": "*"
     "@types/archiver": ^3.1.0
     "@types/body-parser": ^1.17.0
-    "@types/compression": ^1.0.1
+    "@types/compression": 1.0.1
     "@types/cookie-parser": ^1.4.1
     "@types/debug": ^4.1.2
     "@types/express": 4.16.1
@@ -2835,11 +2835,11 @@ __metadata:
     "@microsoft/bf-orchestrator": 4.14.1
     "@types/archiver": ^3.1.0
     "@types/body-parser": ^1.17.0
-    "@types/compression": ^1.0.1
+    "@types/compression": 1.0.1
     "@types/cookie-parser": ^1.4.1
     "@types/debug": ^4.1.2
     "@types/express": 4.16.1
-    "@types/express-serve-static-core": 4.16.1
+    "@types/express-serve-static-core": 4.16.2
     "@types/form-data": ^2.2.1
     "@types/formidable": 1.0.32
     "@types/http-errors": ^1.6.1
@@ -2860,7 +2860,7 @@ __metadata:
     body-parser: ^1.18.3
     botframework-schema: ^4.11.1
     chalk: ^4.0.0
-    compression: ^1.7.4
+    compression: 1.7.4
     cross-env: ^7.0.2
     crypto: ^1.0.1
     debug: ^4.1.1
@@ -2869,7 +2869,7 @@ __metadata:
     ejs: ^3.1.6
     eslint: 7.0.0
     express: 4.16.1
-    express-serve-static-core: ^0.1.1
+    express-serve-static-core: 0.1.1
     express-session: ^1.17.0
     extract-zip: 2.0.1
     form-data: ^2.3.3
@@ -5269,12 +5269,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/compression@npm:^1.0.1":
-  version: 1.7.2
-  resolution: "@types/compression@npm:1.7.2"
+"@types/compression@npm:1.0.1":
+  version: 1.0.1
+  resolution: "@types/compression@npm:1.0.1"
   dependencies:
     "@types/express": "*"
-  checksum: 3457f9d39ed73d58387bccf15bcfe8e140298c5d6e90fe354dfeb24ec7828432658caebee8ab6f4e4ac39a7d03bc0a6a52686d7fb2fe405fbdefede41d6b5834
+  checksum: cd5786f2538535a5de5ac0a9a4e011edc40bef87dc54345bd0e8b7928e54782849049495d04f618c74c385a448d2a00f3664b6c3a8ffd98f2fc2fe7396f2afb5
   languageName: node
   linkType: hard
 
@@ -5354,13 +5354,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/express-serve-static-core@npm:4.16.1":
-  version: 4.16.1
-  resolution: "@types/express-serve-static-core@npm:4.16.1"
+"@types/express-serve-static-core@npm:4.16.2":
+  version: 4.16.2
+  resolution: "@types/express-serve-static-core@npm:4.16.2"
   dependencies:
     "@types/node": "*"
     "@types/range-parser": "*"
-  checksum: 9d51b3fa9601fa9099a58c0a2bc0de4307e125323a1d06923f9aea29a7f7fa7a49baee8f8ca9cf0d52568bc8aacee7d39423a4ea44b2473680d0befd8d0dda71
+  checksum: 1cfceaa15988d3eb3c354fbc473faf8747b7841de39c4ce16d91b130e2ba2255970af19c7171896cd59a5ce9876ddca3ceec399e53668f4c2a9829767ded335b
   languageName: node
   linkType: hard
 
@@ -9960,7 +9960,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"compression@npm:^1.7.4":
+"compression@npm:1.7.4, compression@npm:^1.7.4":
   version: 1.7.4
   resolution: "compression@npm:1.7.4"
   dependencies:
@@ -13488,7 +13488,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"express-serve-static-core@npm:0.1.1, express-serve-static-core@npm:^0.1.1":
+"express-serve-static-core@npm:0.1.1":
   version: 0.1.1
   resolution: "express-serve-static-core@npm:0.1.1"
   checksum: 0f387ae5c12f51b9e843ade07bd412b4a0cbe23bbd5e95e047e45f4b3e1a6aa6bee53f765b039441f93110401221ec23a533844dce3e4f118e38cda5ed3dba0a
