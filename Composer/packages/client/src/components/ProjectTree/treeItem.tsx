@@ -5,7 +5,7 @@
 import { jsx, css } from '@emotion/core';
 import React, { useState, useCallback } from 'react';
 import { FontSizes, FluentTheme } from '@uifabric/fluent-theme';
-import { DefaultPalette } from '@uifabric/styling';
+import { DefaultPalette, getFocusStyle, getTheme, mergeStyles } from '@uifabric/styling';
 import { OverflowSet, IOverflowSetItemProps } from 'office-ui-fabric-react/lib/OverflowSet';
 import { TooltipHost, DirectionalHint } from 'office-ui-fabric-react/lib/Tooltip';
 import { ContextualMenuItemType, IContextualMenuItem } from 'office-ui-fabric-react/lib/ContextualMenu';
@@ -29,10 +29,6 @@ import { TreeItemContent } from './TreeItemContent';
 
 const projectTreeItemContainer = (extraSpace: number) => css`
   outline: none;
-  :focus {
-    outline: rgb(102, 102, 102) solid 1px;
-    z-index: 1;
-  }
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
@@ -49,7 +45,7 @@ const projectTreeItem = css`
   display: flex;
   align-items: center;
   height: 24px;
-  padding-left: 4px;
+  padding: 0 4px;
 
   label: ProjectTreeItem;
 `;
@@ -59,6 +55,10 @@ export const moreMenu: Partial<ICalloutContentStyles> = {
     marginTop: '-1px',
   },
 };
+
+const treeItemFocusClass = mergeStyles(getFocusStyle(getTheme()), {
+  inset: 1,
+});
 
 export const menuStyle: Partial<IContextualMenuStyles> = {
   subComponentStyles: {
@@ -464,6 +464,7 @@ export const TreeItem: React.FC<ITreeItemProps> = ({
           <div
             data-is-focusable
             aria-label={`${ariaLabel} ${warningContent} ${errorContent}`}
+            className={treeItemFocusClass}
             css={projectTreeItemContainer}
             tabIndex={0}
             onBlur={item.onBlur}
@@ -529,7 +530,7 @@ export const TreeItem: React.FC<ITreeItemProps> = ({
             <IconButton
               ariaLabel={moreLabel}
               className="dialog-more-btn"
-              data-is-focusable={isActive}
+              data-is-focusable={isActive || isChildSelected}
               data-testid="dialogMoreButton"
               menuIconProps={{
                 iconName: 'More',
