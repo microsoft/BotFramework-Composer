@@ -20,7 +20,7 @@
   },
   "devDependencies": {
     "@botframework-composer/test-utils": "*",
-    "@types/node": "^12.0.0",
+    "@types/node": "13.9.3",
     "@types/vscode": "^1.46.0",
     "@types/ws": "^7.2.6",
     "monaco-languageclient": "0.10.2"

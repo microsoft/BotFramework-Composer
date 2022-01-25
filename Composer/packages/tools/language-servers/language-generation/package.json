@@ -24,7 +24,7 @@
   },
   "devDependencies": {
     "@botframework-composer/test-utils": "*",
-    "@types/node": "^12.0.4",
+    "@types/node": "13.9.3",
     "cross-env": "^6.0.3",
     "express": "4.16.1",
     "rimraf": "^2.6.3",
