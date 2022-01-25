@@ -2523,6 +2523,7 @@ __metadata:
     "@types/morgan": 1.7.35
     "@types/node": 13.9.3
     "@types/rimraf": ^2.0.2
+    cross-env: 7.0.2
     crypto: ^1.0.1
     debug: 4.1.1
     electron: 8.2.4
@@ -2704,7 +2705,7 @@ __metadata:
     "@types/node": 13.9.3
     adaptive-expressions: 4.12.0-rc1
     botbuilder-lg: 4.14.0-dev.391a2ab
-    cross-env: ^6.0.3
+    cross-env: 7.0.2
     express: 4.16.1
     rimraf: ^2.6.3
     ts-node: ^8.4.1
@@ -2766,7 +2767,7 @@ __metadata:
     "@typescript-eslint/parser": 2.34.0
     concurrently: ^4.1.0
     coveralls: ^3.1.0
-    cross-env: ^6.0.3
+    cross-env: 7.0.2
     eslint: 7.0.0
     eslint-config-prettier: 6.11.0
     eslint-formatter-github-actions: ^1.0.0
@@ -2863,7 +2864,7 @@ __metadata:
     botframework-schema: ^4.11.1
     chalk: ^4.0.0
     compression: 1.7.4
-    cross-env: ^7.0.2
+    cross-env: 7.0.2
     crypto: ^1.0.1
     debug: ^4.1.1
     dotenv: ^8.1.0
@@ -10389,27 +10390,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"cross-env@npm:^6.0.3":
-  version: 6.0.3
-  resolution: "cross-env@npm:6.0.3"
-  dependencies:
-    cross-spawn: ^7.0.0
-  bin:
-    cross-env: src/bin/cross-env.js
-    cross-env-shell: src/bin/cross-env-shell.js
-  checksum: 1b2d532ad7beff8017db7c28fbee8f902377969b8090cd2b8716ec93bef958bb2838cd061c89c30e904d72f3ff7d3a4e80f0d762b14e60e8191a576be1376578
-  languageName: node
-  linkType: hard
-
-"cross-env@npm:^7.0.2":
-  version: 7.0.3
-  resolution: "cross-env@npm:7.0.3"
+"cross-env@npm:7.0.2":
+  version: 7.0.2
+  resolution: "cross-env@npm:7.0.2"
   dependencies:
     cross-spawn: ^7.0.1
   bin:
     cross-env: src/bin/cross-env.js
     cross-env-shell: src/bin/cross-env-shell.js
-  checksum: 26f2f3ea2ab32617f57effb70d329c2070d2f5630adc800985d8b30b56e8bf7f5f439dd3a0358b79cee6f930afc23cf8e23515f17ccfb30092c6b62c6b630a79
+  checksum: dcfb07e279ca83abfe2205199a38d719bd9e1ba1dd4eed0878b12bb9b45132df0e7aea4a2fcf310b6845d232d2991488fafb30059261bb4c822fd12f71fe5e28
   languageName: node
   linkType: hard
 

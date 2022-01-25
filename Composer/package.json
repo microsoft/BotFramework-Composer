@@ -131,7 +131,7 @@
     "@typescript-eslint/parser": "2.34.0",
     "concurrently": "^4.1.0",
     "coveralls": "^3.1.0",
-    "cross-env": "^6.0.3",
+    "cross-env": "7.0.2",
     "eslint": "7.0.0",
     "eslint-config-prettier": "6.11.0",
     "eslint-formatter-github-actions": "^1.0.0",

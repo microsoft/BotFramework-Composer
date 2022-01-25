@@ -55,7 +55,7 @@
     "@types/rimraf": "^2.0.2",
     "@types/ws": "^7.4.0",
     "@types/yeoman-environment": "^2.10.2",
-    "cross-env": "^7.0.2",
+    "cross-env": "7.0.2",
     "eslint": "7.0.0",
     "fs-extra": "7.0.1",
     "mock-fs": "^4.10.1",
