@@ -157,10 +157,5 @@
     "typescript": "3.9.2",
     "wait-on": "^5.3.0",
     "wsrun": "^5.2.0"
-  },
-  "dependenciesMeta": {
-    "@microsoft/orchestrator-core": {
-      "built": false
-    }
   }
 }
