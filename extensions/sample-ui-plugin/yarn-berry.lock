@@ -62,7 +62,7 @@ __metadata:
 
 "@bfc/extension-client@file:../../Composer/packages/extension-client::locator=sample-ui-plugin%40workspace%3A.":
   version: 1.0.0
-  resolution: "@bfc/extension-client@file:../../Composer/packages/extension-client#../../Composer/packages/extension-client::hash=17f844&locator=sample-ui-plugin%40workspace%3A."
+  resolution: "@bfc/extension-client@file:../../Composer/packages/extension-client#../../Composer/packages/extension-client::hash=c99b45&locator=sample-ui-plugin%40workspace%3A."
   dependencies:
     debug: ^4.1.1
     lodash: ^4.17.19
@@ -70,13 +70,13 @@ __metadata:
     "@botframework-composer/types": "*"
     react: 16.13.1
     react-dom: 16.13.1
-  checksum: 51db040ec31f824634b1470134b11907cc24fe432c8e43f0b75c2f290a18ba6f54f6d2407931cca2977b401355fbe081c885bce90df99301708c59fa17836902
+  checksum: 9a2fe7a82c4355166880e0923a8e3f3bf695fbb3f6ec8d4bf8bdeca30a4453209b040f462247f8373e074a24c5abc9be2a2301db4f730ef3f996805e615419d3
   languageName: node
   linkType: hard
 
 "@botframework-composer/types@file:../../Composer/packages/types::locator=sample-ui-plugin%40workspace%3A.":
   version: 0.0.2
-  resolution: "@botframework-composer/types@file:../../Composer/packages/types#../../Composer/packages/types::hash=bbc4a2&locator=sample-ui-plugin%40workspace%3A."
+  resolution: "@botframework-composer/types@file:../../Composer/packages/types#../../Composer/packages/types::hash=1c038e&locator=sample-ui-plugin%40workspace%3A."
   dependencies:
     "@types/express": 4.16.1
     "@types/passport": ^1.0.4
@@ -84,7 +84,7 @@ __metadata:
     botframework-schema: ^4.11.1
     express-serve-static-core: 0.1.1
     json-schema: ^0.2.5
-  checksum: 4ff5d95a44fa230e116a3309585b896f52560d8baa37b678413efd6e7c2f7e8038a0a65919bf9a8f89f85c5b4ca4e0e5db0d369c56ae54a99f5b52903f3a8acf
+  checksum: 271c9143dfe616addea586a892d2e2cf5a99c190cb4e5d89ee0fce1a4f82b76943ad760acd2410a70aca7dfa90ed51f78bece9810b5e238c7631e4fa33c9c7d3
   languageName: node
   linkType: hard
 
