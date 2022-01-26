@@ -312,7 +312,7 @@ export const ToolbarButtonMenu = React.memo((props: ToolbarButtonMenuProps) => {
     []
   );
 
-  const { onRenderMenuList, query, setQuery } = useSearchableMenuListCallback(
+  const { onRenderMenuList, query, onReset } = useSearchableMenuListCallback(
     uiStrings.searchPlaceholder,
     menuHeaderRenderer
   );
@@ -340,8 +340,8 @@ export const ToolbarButtonMenu = React.memo((props: ToolbarButtonMenuProps) => {
     }
   }, [menuItems, flatPropertyListItems, flatFunctionListItems, noSearchResultMenuItem, query, payload.kind]);
 
-  const onDismiss = React.useCallback(() => {
-    setQuery('');
+  const onMenuDismissed = React.useCallback(() => {
+    onReset();
     setPropertyTreeExpanded({});
   }, []);
 
@@ -349,7 +349,7 @@ export const ToolbarButtonMenu = React.memo((props: ToolbarButtonMenuProps) => {
     switch (payload.kind) {
       case 'template': {
         return {
-          onDismiss,
+          onMenuDismissed,
           items,
           calloutProps,
           onRenderMenuList,
@@ -360,7 +360,7 @@ export const ToolbarButtonMenu = React.memo((props: ToolbarButtonMenuProps) => {
       }
       case 'function': {
         return {
-          onDismiss,
+          onMenuDismissed,
           items,
           calloutProps,
           onRenderMenuList,
@@ -378,7 +378,7 @@ export const ToolbarButtonMenu = React.memo((props: ToolbarButtonMenuProps) => {
       }
       case 'property': {
         return {
-          onDismiss,
+          onMenuDismissed,
           items,
           calloutProps,
           onRenderMenuList,
@@ -438,7 +438,7 @@ export const ToolbarButtonMenu = React.memo((props: ToolbarButtonMenuProps) => {
         } as IContextualMenuProps;
       }
     }
-  }, [items, calloutProps, onRenderMenuList, onDismiss, propertyTreeExpanded, query]);
+  }, [items, calloutProps, onRenderMenuList, onMenuDismissed, propertyTreeExpanded, query]);
 
   const renderIcon = React.useCallback(() => getIcon(payload.kind), [payload.kind]);
 
