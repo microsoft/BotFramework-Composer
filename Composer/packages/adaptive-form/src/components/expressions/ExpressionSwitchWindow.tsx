@@ -6,13 +6,13 @@ import { css, jsx } from '@emotion/core';
 import { FontIcon } from 'office-ui-fabric-react/lib/Icon';
 import React from 'react';
 import formatMessage from 'format-message';
-import { SharedColors } from '@uifabric/fluent-theme';
+import { FluentTheme, SharedColors } from '@uifabric/fluent-theme';
 
 const styles = {
   fieldTypeText: css`
     height: 32px;
     font-style: italic;
-    color: #8a8886;
+    color: ${FluentTheme.palette.neutralSecondary};
     padding: 0 4px;
     width: 100%;
     display: flex;

@@ -10,13 +10,14 @@ import { DisplayMarkdownDialog } from '@bfc/ui-shared';
 import formatMessage from 'format-message';
 import { Stack, StackItem } from 'office-ui-fabric-react/lib/Stack';
 import { Link } from 'office-ui-fabric-react/lib/Link';
+import { FluentTheme } from '@uifabric/fluent-theme';
 
 import { projectReadmeState, locationState } from '../../recoilModel/atoms';
 import { localBotsDataSelector } from '../../recoilModel/selectors/project';
 
 const labelStyle = css`
   font-size: 12px;
-  color: #828282;
+  color: ${FluentTheme.palette.neutralSecondary};
 `;
 
 const valueStyle = css`
