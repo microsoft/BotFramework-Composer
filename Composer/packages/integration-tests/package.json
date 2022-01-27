@@ -17,7 +17,8 @@
     "@testing-library/cypress": "7.0.6",
     "chalk": "^4.0.0",
     "cypress": "^7.5.0",
-    "eslint-plugin-cypress": "2.11.1"
+    "eslint-plugin-cypress": "2.11.1",
+    "tslib": "2.0.3"
   },
   "devDependencies": {
     "@types/fs-extra": "^9.0.11",

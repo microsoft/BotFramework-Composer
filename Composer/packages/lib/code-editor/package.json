@@ -72,6 +72,7 @@
     "monaco-languageclient": "0.10.2",
     "normalize-url": "^4.5.1",
     "reconnecting-websocket": "^3.2.2",
+    "tslib": "2.0.3",
     "vscode-ws-jsonrpc": "^0.1.1"
   }
 }

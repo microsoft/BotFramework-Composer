@@ -36,6 +36,7 @@
   "dependencies": {
     "@bfc/indexers": "*",
     "@bfc/shared": "*",
-    "@emotion/core": "^10.0.27"
+    "@emotion/core": "^10.0.27",
+    "tslib": "2.0.3"
   }
 }

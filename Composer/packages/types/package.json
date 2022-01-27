@@ -20,7 +20,8 @@
     "axios": "^0.21.1",
     "botframework-schema": "^4.11.1",
     "express-serve-static-core": "0.1.1",
-    "json-schema": "^0.2.5"
+    "json-schema": "^0.2.5",
+    "tslib": "2.0.3"
   },
   "devDependencies": {
     "eslint": "7.0.0",
