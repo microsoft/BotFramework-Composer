@@ -107,7 +107,7 @@ const VisualEditor: React.FC<VisualEditorProps> = (props) => {
         data-testid="VisualEditor"
         onKeyDownCapture={(ev) => {
           if (ev.key === 'Escape') {
-            (document.activeElement as any)?.blur();
+            (document.activeElement as HTMLElement)?.blur();
           }
         }}
       >

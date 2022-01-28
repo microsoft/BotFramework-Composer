@@ -217,7 +217,7 @@ const BaseEditor: React.FC<BaseEditorProps> = (props) => {
   useEffect(() => {
     if (!editorRef.current) return;
     editorRef.current.addCommand(KeyCode.Escape, () => {
-      (document.activeElement as any)?.blur();
+      (document.activeElement as HTMLElement)?.blur();
     });
   }, [editorRef.current]);
 
