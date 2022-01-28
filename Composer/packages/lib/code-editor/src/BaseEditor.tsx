@@ -12,6 +12,7 @@ import formatMessage from 'format-message';
 import { Diagnostic } from '@bfc/shared';
 import { findErrors, combineSimpleMessage, findWarnings } from '@bfc/indexers';
 import { CodeEditorSettings, assignDefined } from '@bfc/shared';
+import { KeyCode } from 'monaco-editor';
 
 import { isElectron } from './utils';
 
@@ -211,6 +212,14 @@ const BaseEditor: React.FC<BaseEditorProps> = (props) => {
       };
     }
   }, [onChange, editorRef.current]);
+
+  // Add a command to escape from editor
+  useEffect(() => {
+    if (!editorRef.current) return;
+    editorRef.current.addCommand(KeyCode.Escape, () => {
+      (document.activeElement as any)?.blur();
+    });
+  }, [editorRef.current]);
 
   const errorMsgFromDiagnostics = useMemo(() => {
     const errors = findErrors(diagnostics);

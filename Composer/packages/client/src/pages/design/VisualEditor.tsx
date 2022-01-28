@@ -105,6 +105,11 @@ const VisualEditor: React.FC<VisualEditorProps> = (props) => {
         aria-label={formatMessage('Visual editor')}
         css={visualEditor(triggerButtonVisible || !selected)}
         data-testid="VisualEditor"
+        onKeyDownCapture={(ev) => {
+          if (ev.key === 'Escape') {
+            (document.activeElement as any)?.blur();
+          }
+        }}
       >
         {!isRemoteSkill ? (
           <VisualDesigner
