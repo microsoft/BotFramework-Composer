@@ -12,9 +12,16 @@ import formatMessage from 'format-message';
 import { Diagnostic } from '@bfc/shared';
 import { findErrors, combineSimpleMessage, findWarnings } from '@bfc/indexers';
 import { CodeEditorSettings, assignDefined } from '@bfc/shared';
-import { KeyCode } from 'monaco-editor';
 
 import { isElectron } from './utils';
+
+/**
+ * Taken from node_modules/monaco-editor/esm/vs/editor/editor.api.d.ts
+ * to overcome jest related tests issues
+ */
+enum MonacoKeyCode {
+  Escape = 9,
+}
 
 const defaultOptions = {
   scrollBeyondLastLine: false,
@@ -216,7 +223,7 @@ const BaseEditor: React.FC<BaseEditorProps> = (props) => {
   // Add a command to escape from editor
   useEffect(() => {
     if (!editorRef.current) return;
-    editorRef.current.addCommand(KeyCode.Escape, () => {
+    editorRef.current.addCommand(MonacoKeyCode.Escape, () => {
       (document.activeElement as HTMLElement)?.blur();
     });
   }, [editorRef.current]);
