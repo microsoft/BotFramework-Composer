@@ -47,6 +47,8 @@ import {
   createFoldingRanges,
 } from './utils';
 
+type LGRequestParams = { uri: string; lgOption?: LGOption };
+
 // define init methods call from client
 const initializeDocumentsMethodName = 'initializeDocuments';
 
@@ -117,7 +119,7 @@ export class LGServer {
 
     this.connection.onRequest((method, params) => {
       if (initializeDocumentsMethodName === method) {
-        const { uri, lgOption }: { uri: string; lgOption?: LGOption } = params as { uri: string; lgOption?: LGOption };
+        const { uri, lgOption }: { uri: string; lgOption?: LGOption } = params as LGRequestParams;
         const textDocument = this.documents.get(uri);
         if (textDocument) {
           this.addLGDocument(textDocument, lgOption);

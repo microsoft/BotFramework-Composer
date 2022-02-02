@@ -28,6 +28,8 @@ import { EntityTypesObj, LineState } from './entityEnum';
 import * as util from './matchingPattern';
 import { LUOption, LUDocument, generateDiagnostic, convertDiagnostics, createFoldingRanges } from './utils';
 
+type LURequestParams = { uri: string; luOption?: LUOption };
+
 // define init methods call from client
 const LABELEXPERIENCEREQUEST = 'labelingExperienceRequest';
 const InitializeDocumentsMethodName = 'initializeDocuments';
@@ -95,7 +97,7 @@ export class LUServer {
       if (method === LABELEXPERIENCEREQUEST) {
         this.labelingExperienceHandler(params);
       } else if (InitializeDocumentsMethodName === method) {
-        const { uri, luOption }: { uri: string; luOption?: LUOption } = params as { uri: string; luOption?: LUOption };
+        const { uri, luOption }: { uri: string; luOption?: LUOption } = params as LURequestParams;
         const textDocument = this.documents.get(uri);
         if (textDocument) {
           this.addLUDocument(textDocument, luOption);
