@@ -63,7 +63,7 @@ export const SchemaField: React.FC<FieldProps> = (props) => {
         handleChange(schema.default);
       }
     }
-  }, []);
+  }, [value]);
 
   if (name.startsWith('$') || hidden) {
     return null;

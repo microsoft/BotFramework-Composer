@@ -8,6 +8,7 @@ import { IContextualMenuItem } from 'office-ui-fabric-react/lib/ContextualMenu';
 import { OverflowSet } from 'office-ui-fabric-react/lib/OverflowSet';
 import { IRenderFunction } from 'office-ui-fabric-react/lib/Utilities';
 import { ICalloutProps } from 'office-ui-fabric-react/lib/Callout';
+import { getFocusStyle, getTheme } from 'office-ui-fabric-react/lib/Styling';
 
 interface IconMenuProps {
   autoFocus?: boolean;
@@ -26,6 +27,15 @@ interface IconMenuProps {
   handleMenuShow?: (menuShowed: boolean) => void;
 }
 
+const menuItemStyles = {
+  root: [
+    { marginRight: 10 },
+    getFocusStyle(getTheme(), {
+      inset: 2,
+    }),
+  ],
+};
+
 export const IconMenu: React.FC<IconMenuProps> = ({
   autoFocus,
   iconName,
@@ -40,7 +50,7 @@ export const IconMenu: React.FC<IconMenuProps> = ({
 }): JSX.Element => {
   const onRenderItem = (item): React.ReactNode => {
     return (
-      <Link styles={{ root: { marginRight: 10 } }} onClick={item.onClick}>
+      <Link styles={menuItemStyles} onClick={item.onClick}>
         {item.name}
       </Link>
     );
