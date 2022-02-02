@@ -71,7 +71,7 @@ export const useLabelingMenuProps = (
     [menuHeaderText]
   );
 
-  const { onRenderMenuList, query, setQuery } = useSearchableMenuListCallback(
+  const { onRenderMenuList, query, onReset } = useSearchableMenuListCallback(
     formatMessage('Search entities'),
     searchHeaderRenderer
   );
@@ -109,12 +109,8 @@ export const useLabelingMenuProps = (
     );
   }, []);
 
-  const onDismiss = React.useCallback(() => {
-    setQuery('');
-  }, []);
-
   return {
     noEntities: !entities.length,
-    menuProps: { items, onRenderMenuList, contextualMenuItemAs, onDismiss },
+    menuProps: { items, onRenderMenuList, contextualMenuItemAs, onMenuDismissed: onReset },
   };
 };
