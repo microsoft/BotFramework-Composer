@@ -126,11 +126,6 @@ export const itemContainer = css`
   height: 50%;
 `;
 
-export const fullCardLink = css`
-  inset: 0;
-  position: absolute;
-`;
-
 export const subtitle = css`
   font-size: 18px;
   line-height: 24px;
