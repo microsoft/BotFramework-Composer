@@ -105,7 +105,6 @@ describe('<Home/>', () => {
     };
     const { container } = renderWithRecoil(
       <CardWidget
-        ariaLabel="test"
         cardType={'video'}
         content={videoItem.description}
         href={videoItem.url}
