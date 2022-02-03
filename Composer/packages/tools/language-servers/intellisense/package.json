@@ -4,12 +4,13 @@
   "description": "",
   "main": "lib/index.js",
   "dependencies": {
+    "@bfc/built-in-functions": "*",
     "fuse.js": "^6.4.0",
     "ts-node": "^8.10.2",
-    "vscode-languageserver": "^5.3.0-next",
+    "tslib": "2.0.3",
+    "vscode-languageserver": "5.3.0-next.10",
     "vscode-ws-jsonrpc": "^0.1.1",
-    "ws": "^7.4.6",
-    "@bfc/built-in-functions": "*"
+    "ws": "^7.4.6"
   },
   "scripts": {
     "dev": "ts-node src/server.ts",

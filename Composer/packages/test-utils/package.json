@@ -22,7 +22,8 @@
     "jest": "^27.0.4",
     "jest-github-actions-reporter": "^1.0.3",
     "lodash": "^4.17.19",
-    "react-test-renderer": "^16.13.1"
+    "react-test-renderer": "^16.13.1",
+    "tslib": "2.0.3"
   },
   "devDependencies": {
     "@types/faker": "^5.5.6",
