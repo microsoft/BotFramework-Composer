@@ -135,6 +135,7 @@
     "eslint": "7.0.0",
     "eslint-config-prettier": "6.11.0",
     "eslint-formatter-github-actions": "^1.0.0",
+    "eslint-plugin-security": "^1.4.0",
     "eslint-plugin-emotion": "10.0.27",
     "eslint-plugin-format-message": "6.2.3",
     "eslint-plugin-import": "2.20.2",
