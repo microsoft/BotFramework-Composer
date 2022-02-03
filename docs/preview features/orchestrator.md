@@ -1,4 +1,4 @@
-# Orchestrator preview
+# Orchestrator
 Orchestrator is a powerful LU solution optimized for conversational AI applications.
 
 Read more about Orchestrator [here](https://aka.ms/bf-orchestrator).
@@ -9,9 +9,8 @@ Read more about Orchestrator [here](https://aka.ms/bf-orchestrator).
 ## Orchestrator features
 - Easy to use - Use your existing LU files from LUIS without modification
 - State of the art - Extensive pre-trained transformer-based models for conversational applications
-- Extremely fast inference time: Written in C++ for performance
 - Cross-platform support: Runs on Windows, Linux and Mac OS X, including Cloud platforms
-- Supports a [large number of languages](https://github.com/microsoft/botframework-sdk/blob/main/Orchestrator/docs/NLRModels.md#pretrained20210205microsoftdte0006unicoder_multilingualonnx) out of the box
+- Supports [additional language models](https://github.com/microsoft/botframework-sdk/blob/main/Orchestrator/docs/NLRModels.md#pretrained20210205microsoftdte0006unicoder_multilingualonnx) out of the box
 - Free to use: Language models are deployed alongside your bot and runs in memory. No external services required
 
 ## Getting started
@@ -21,11 +20,9 @@ For this preview release, please be aware of these limitations:
 
 1. It is recommended to deploy Orchestrator on the `x86-64` platform. On Azure, it is recommended to publish your bot application with the `win-x64` [runtime identifier](https://docs.microsoft.com/en-us/dotnet/core/tools/dotnet-publish), or use Composer's built-in Azure deployment to do this automatically.
 
-1. Orchestrator does not support entity extraction for this release. Any entities declared in your LU file will be ignored.
+2. Orchestrator does not support entity extraction. Any entities declared in your LU file will be ignored.
 
-1. A default base model is provided with this release. Future models will be made available for Composer users at a later date.
-
-Please see the [roadmap](https://github.com/microsoft/botframework-sdk/blob/main/Orchestrator/docs/Overview.md#Roadmap) for when these features will be added to Orchestrator.
+3. A default base model is provided with this release. Future models will be made available for Composer users at a later date.
 
 
 ### Adding Orchestrator to a new bot in Composer
