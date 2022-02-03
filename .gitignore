@@ -399,3 +399,12 @@ Composer/.vscode/
 docker-compose.override.yml
 
 *.tsbuildinfo
+
+# Yarn Berry (v2+)
+**/.pnp.*
+**/.yarn/*
+!**/.yarn/patches
+!**/.yarn/plugins
+!**/.yarn/releases
+!**/.yarn/sdks
+!**/.yarn/versions

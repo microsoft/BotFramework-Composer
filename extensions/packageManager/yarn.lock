@@ -59,6 +59,7 @@
   dependencies:
     debug "^4.1.1"
     lodash "^4.17.19"
+    tslib "2.0.3"
 
 "@bfc/extension@file:../../Composer/packages/extension":
   version "1.0.0"
@@ -74,6 +75,7 @@
     passport "^0.4.1"
     path-to-regexp "^6.1.0"
     tar "^6.1.6"
+    tslib "2.0.3"
 
 "@bfc/ui-shared@file:../../Composer/packages/lib/ui-shared":
   version "0.0.0"
@@ -82,16 +84,18 @@
     "@emotion/styled" "^10.0.27"
     office-ui-fabric-react "7.71.0"
     react-markdown "^5.0.3"
+    tslib "2.0.3"
 
 "@botframework-composer/types@*", "@botframework-composer/types@file:../../Composer/packages/types":
   version "0.0.2"
   dependencies:
-    "@types/express" "^4.16.1"
+    "@types/express" "4.16.1"
     "@types/passport" "^1.0.4"
     axios "^0.21.1"
     botframework-schema "^4.11.1"
     express-serve-static-core "0.1.1"
     json-schema "^0.2.5"
+    tslib "2.0.3"
 
 "@emotion/cache@^10.0.27":
   version "10.0.29"
@@ -465,6 +469,15 @@
   resolved "https://registry.yarnpkg.com/@types/debug/-/debug-4.1.5.tgz#b14efa8852b7768d898906613c23f688713e02cd"
   integrity sha512-Q1y515GcOdTHgagaVFhHnIFQ38ygs/kmxdNpvpou+raI9UO3YZcHDngBSYKQklcKlvA7iuQlmIKbzvmxcOE9CQ==
 
+"@types/express-serve-static-core@*":
+  version "4.17.28"
+  resolved "https://registry.yarnpkg.com/@types/express-serve-static-core/-/express-serve-static-core-4.17.28.tgz#c47def9f34ec81dc6328d0b1b5303d1ec98d86b8"
+  integrity sha512-P1BJAEAW3E2DJUlkgq4tOL3RyMunoWXqbSCygWo5ZIWTjUgN1YnaXWW4VWl/oc8vs/XoYibEGBKP0uZyF4AHig==
+  dependencies:
+    "@types/node" "*"
+    "@types/qs" "*"
+    "@types/range-parser" "*"
+
 "@types/express-serve-static-core@^4.17.18":
   version "4.17.19"
   resolved "https://registry.yarnpkg.com/@types/express-serve-static-core/-/express-serve-static-core-4.17.19.tgz#00acfc1632e729acac4f1530e9e16f6dd1508a1d"
@@ -474,7 +487,7 @@
     "@types/qs" "*"
     "@types/range-parser" "*"
 
-"@types/express@*", "@types/express@^4.16.1", "@types/express@^4.17.6":
+"@types/express@*":
   version "4.17.11"
   resolved "https://registry.yarnpkg.com/@types/express/-/express-4.17.11.tgz#debe3caa6f8e5fcda96b47bd54e2f40c4ee59545"
   integrity sha512-no+R6rW60JEc59977wIxreQVsIEOAYwgCqldrA/vkpCnbD7MqTefO97lmoBe4WE0F156bC4uLSP1XHDOySnChg==
@@ -482,6 +495,15 @@
     "@types/body-parser" "*"
     "@types/express-serve-static-core" "^4.17.18"
     "@types/qs" "*"
+    "@types/serve-static" "*"
+
+"@types/express@4.16.1":
+  version "4.16.1"
+  resolved "https://registry.yarnpkg.com/@types/express/-/express-4.16.1.tgz#d756bd1a85c34d87eaf44c888bad27ba8a4b7cf0"
+  integrity sha512-V0clmJow23WeyblmACoxbHBu2JKlE5TiIme6Lem14FnPW9gsttyHtk6wq7njcdIWH1njAaFgR8gW09lgY98gQg==
+  dependencies:
+    "@types/body-parser" "*"
+    "@types/express-serve-static-core" "*"
     "@types/serve-static" "*"
 
 "@types/fs-extra@^9.0.1":
@@ -4361,6 +4383,11 @@ ts-loader@^8.0.0:
     loader-utils "^2.0.0"
     micromatch "^4.0.0"
     semver "^7.3.4"
+
+tslib@2.0.3:
+  version "2.0.3"
+  resolved "https://registry.yarnpkg.com/tslib/-/tslib-2.0.3.tgz#8e0741ac45fc0c226e58a17bfc3e64b9bc6ca61c"
+  integrity sha512-uZtkfKblCEQtZKBF6EBXVZeQNl82yqtDQdv+eck8u7tdPxjLu2/lp5/uPW+um2tpuxINHWy3GhiccY7QgEaVHQ==
 
 tslib@^1.10.0, tslib@^1.7.1, tslib@^1.9.3:
   version "1.14.1"
