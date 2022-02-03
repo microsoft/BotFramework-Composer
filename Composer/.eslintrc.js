@@ -9,8 +9,9 @@ module.exports = {
     'plugin:@typescript-eslint/eslint-recommended',
     'prettier/@typescript-eslint',
     'plugin:@bfc/bfcomposer/recommended',
+    'plugin:security/recommended',
   ],
-  plugins: ['import', 'notice', 'security', 'lodash'],
+  plugins: ['import', 'notice', 'security', 'lodash', 'security'],
   env: {
     browser: true,
     es6: true,
