@@ -60,10 +60,12 @@ export interface ProjectTreeHeaderProps {
   placeholder?: string;
   ariaLabel?: string;
   onFilter?: (newValue?: string) => void;
+  filterValue: string;
 }
 
 export const ProjectTreeHeader: React.FC<ProjectTreeHeaderProps> = ({
   menu,
+  filterValue,
   onFilter = () => {},
   placeholder = '',
   ariaLabel = '',
@@ -94,8 +96,10 @@ export const ProjectTreeHeader: React.FC<ProjectTreeHeaderProps> = ({
   }) as IOverflowSetItemProps[];
 
   const handleSearchBoxBlur = () => {
-    onFilter('');
-    setShowFilter(false);
+    if (!filterValue) {
+      onFilter('');
+      setShowFilter(false);
+    }
   };
 
   // Move focus back to the filter button after the filter search box gets closed
@@ -141,11 +145,7 @@ export const ProjectTreeHeader: React.FC<ProjectTreeHeaderProps> = ({
           styles={searchBox}
           onBlur={handleSearchBoxBlur}
           onChange={(_e, value) => onFilter(value)}
-          onClear={(ev) => {
-            if (!ev.target.value) {
-              handleSearchBoxBlur();
-            }
-          }}
+          onClear={handleSearchBoxBlur}
         />
       ) : (
         <div css={commands}>
