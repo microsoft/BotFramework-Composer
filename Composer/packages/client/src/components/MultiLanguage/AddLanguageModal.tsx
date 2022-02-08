@@ -15,12 +15,17 @@ import { Checkbox } from 'office-ui-fabric-react/lib/Checkbox';
 import { Label } from 'office-ui-fabric-react/lib/Label';
 import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import { DialogWrapper, DialogTypes } from '@bfc/ui-shared';
+import { hiddenContentStyle, mergeStyles } from 'office-ui-fabric-react/lib/Styling';
+import { Announced } from 'office-ui-fabric-react/lib/Announced';
+import { useId } from '@uifabric/react-hooks';
 
 import { MultiLanguagesDialog } from '../../constants';
 
 import { ILanguageFormData } from './types';
 import { classNames } from './styles';
 import { languageListTemplatesSorted, languageListTemplates } from './utils';
+
+const screenReaderOnly = mergeStyles(hiddenContentStyle);
 
 export interface IAddLanguageModalProps {
   isOpen: boolean;
@@ -108,15 +113,16 @@ const AddLanguageModal: React.FC<IAddLanguageModalProps> = (props) => {
         label += formatMessage(' - Current');
       }
       return (
-        <Checkbox
-          key={locale}
-          className={classNames.checkboxItem}
-          defaultChecked={isEnabled}
-          disabled={isEnabled}
-          label={label}
-          title={locale}
-          onChange={onChange(locale)}
-        />
+        <div key={locale} role="listitem">
+          <Checkbox
+            className={classNames.checkboxItem}
+            defaultChecked={isEnabled}
+            disabled={isEnabled}
+            label={label}
+            title={locale}
+            onChange={onChange(locale)}
+          />
+        </div>
       );
     });
 
@@ -132,6 +138,9 @@ const AddLanguageModal: React.FC<IAddLanguageModalProps> = (props) => {
       };
     });
   }, [currentLanguages]);
+
+  const searchBoxLabelId = useId('search-box-label');
+  const translationsLabelId = useId('translations-label');
 
   const onSearch = (_e, newValue) => {
     setSearchKeywords(newValue.trim());
@@ -156,15 +165,48 @@ const AddLanguageModal: React.FC<IAddLanguageModalProps> = (props) => {
               onChange={onDefaultLanguageChange}
             />
           </StackItem>
-          <StackItem grow={0}>
-            <Label>{MultiLanguagesDialog.ADD_DIALOG.selectionTitle}</Label>
+          <StackItem aria-labelledBy={translationsLabelId} grow={0}>
+            <div id={translationsLabelId}>
+              <div className={screenReaderOnly}>{formatMessage('Bot language translations')}</div>
+              <Announced
+                message={formatMessage(
+                  `{
+                    hasFilter, select,
+                      false {}
+                      other {Search results for "{searchKeywords}":}
+                  } {
+                    languagesCount, plural,
+                      =1 {one language found}
+                      =0 {no languages found}
+                      other {# languages found}
+                  }
+              `,
+                  { searchKeywords, hasFilter: !!searchKeywords, languagesCount: languageCheckBoxList.length }
+                )}
+              />
+              <Announced
+                message={formatMessage(
+                  `{
+                    languagesCount, plural,
+                      =0 {No languages selected}
+                      =1 {One language selected}
+                      other {# languages selected}
+                  }`,
+                  { languagesCount: formData.languages.length }
+                )}
+              />
+            </div>
+            <Label id={searchBoxLabelId}>{MultiLanguagesDialog.ADD_DIALOG.selectionTitle}</Label>
             <SearchBox
               disableAnimation
+              aria-labelledBy={searchBoxLabelId}
               placeholder={MultiLanguagesDialog.ADD_DIALOG.searchPlaceHolder}
               styles={{ root: { width: 300 } }}
               onChange={onSearch}
             />
-            <ScrollablePane styles={scrollablePaneStyles}>{languageCheckBoxList}</ScrollablePane>
+            <ScrollablePane styles={scrollablePaneStyles}>
+              <div role="list">{languageCheckBoxList}</div>
+            </ScrollablePane>
           </StackItem>
           <StackItem>
             <Checkbox
