@@ -208,16 +208,16 @@ const Home: React.FC<RouteComponentProps> = () => {
           </div>
           <div css={home.resourcesContainer}>
             <h2 css={home.subtitle}>{formatMessage('Resources')}&nbsp;</h2>
-            <div css={home.rowContainer}>
+            <div css={home.rowContainer} role="list">
               {resources.map((item, index) => (
                 <CardWidget
                   key={index}
-                  ariaLabel={item.title}
                   cardType={'resource'}
                   content={item.description}
                   href={item.url}
                   imageCover={item.imageCover}
                   moreLinkText={item.moreText}
+                  role="listitem"
                   target="_blank"
                   title={item.title}
                 />
@@ -234,15 +234,15 @@ const Home: React.FC<RouteComponentProps> = () => {
                         {tab.viewAllLinkText} <Icon iconName={'OpenInNewWindow'}></Icon>{' '}
                       </Link>
                     )}
-                    <div css={home.tabRowContainer}>
+                    <div css={home.tabRowContainer} role="list">
                       {tab.cards.map((card, index) => (
                         <CardWidget
                           key={index}
-                          ariaLabel={card.title}
                           cardType={tab.title === 'Videos' ? 'video' : 'article'}
                           content={card.description}
                           href={card.url}
                           imageCover={card.image}
+                          role="listitem"
                           target="_blank"
                           title={card.title}
                         />

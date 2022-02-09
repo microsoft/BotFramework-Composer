@@ -106,6 +106,11 @@ export const tabRowViewMore = css`
   }
 `;
 
+export const cardWrapper = css`
+  display: flex;
+  margin-right: 12px;
+`;
+
 export const itemContainerWrapper = (disabled?: boolean) => css`
   border-radius: 2px;
   border-width: 0;
@@ -113,7 +118,6 @@ export const itemContainerWrapper = (disabled?: boolean) => css`
   display: block;
   height: auto;
   text-decoration-line: none;
-  margin-right: 12px;
   padding: 0;
 `;
 
@@ -130,12 +134,11 @@ export const subtitle = css`
   margin: 0;
 `;
 
-export const bluetitle = css`
+export const blueTitle = css`
   line-height: 20px;
   font-size: ${fonts.medium.fontSize};
   display: inline-block;
   color: #0078d4;
-  margin: 16px 0 0 0;
 `;
 
 export const toolbar = css`
@@ -199,7 +202,8 @@ export const cardItem = {
     box-shadow: ${Depths.depth4};
     transition: box-shadow ${MotionDurations.duration2} ${MotionTimings.standard};
     &:hover,
-    &:focus {
+    &:focus,
+    &:focus-within {
       box-shadow: ${Depths.depth16};
     }
 
@@ -333,6 +337,14 @@ export const whatsNewsContainer = css`
 
 export const whatsNewsList = css`
   flex: 1;
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+`;
+
+export const whatsNewsListItem = css`
+  display: block;
+  margin: 16px 0 0 0;
 `;
 
 export const loading = css`

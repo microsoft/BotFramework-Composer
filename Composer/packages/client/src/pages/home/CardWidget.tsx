@@ -3,9 +3,10 @@
 
 /** @jsx jsx */
 import { jsx, SerializedStyles } from '@emotion/core';
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
 import { Image, ImageFit, ImageLoadState } from 'office-ui-fabric-react/lib/Image';
 import { Link } from 'office-ui-fabric-react/lib/Link';
+import { useId } from '@uifabric/react-hooks';
 
 import defaultArticleCardCover from '../../images/defaultArticleCardCover.svg';
 import defaultVideoCardCover from '../../images/defaultVideoCardCover.svg';
@@ -20,7 +21,6 @@ export interface CardWidgetProps {
   href?: string;
   target?: string;
   title: string | JSX.Element;
-  subContent?: string;
   content: string;
   styles?: {
     container?: SerializedStyles;
@@ -31,9 +31,8 @@ export interface CardWidgetProps {
   };
   disabled?: boolean;
   forwardedRef?: (project: any) => void | Promise<void>;
-  openExternal?: boolean;
   moreLinkText?: string;
-  ariaLabel: string;
+  role?: string;
 }
 
 export const CardWidget: React.FC<CardWidgetProps> = ({
@@ -42,11 +41,8 @@ export const CardWidget: React.FC<CardWidgetProps> = ({
   target = '_blank',
   title,
   content,
-  subContent,
   disabled,
   forwardedRef,
-  openExternal,
-  ariaLabel,
   imageCover,
   cardType,
   moreLinkText,
@@ -54,7 +50,6 @@ export const CardWidget: React.FC<CardWidgetProps> = ({
 }) => {
   const defaultImageCover = cardType === 'video' ? defaultVideoCardCover : defaultArticleCardCover;
   const [appliedImageCover, setAppliedImageCover] = useState<string>(imageCover ?? defaultImageCover);
-  const imageContainerEl = useRef<HTMLDivElement>(null);
   const styles =
     rest.styles || cardType === 'resource'
       ? home.cardItem
@@ -68,32 +63,41 @@ export const CardWidget: React.FC<CardWidgetProps> = ({
     }
   };
 
+  const labelId = useId('link-label');
+
   return (
-    <a
-      css={[itemContainerWrapper(disabled), styles.container]}
-      href={href}
-      target={target}
-      onClick={async (e) => {
-        if (onClick != null) {
-          e.preventDefault();
-          await onClick();
-        }
-      }}
-      {...rest}
-    >
-      <div ref={forwardedRef} aria-label={ariaLabel}>
-        <div ref={imageContainerEl} css={styles.imageCover}>
+    <div ref={forwardedRef} css={home.cardWrapper} {...rest}>
+      <a
+        aria-labelledBy={labelId}
+        css={[itemContainerWrapper(disabled), styles.container]}
+        href={href}
+        target={target}
+        onClick={async (e) => {
+          if (onClick != null) {
+            e.preventDefault();
+            await onClick();
+          }
+        }}
+      >
+        <div css={styles.imageCover}>
           <Image
             className={'image-cover-img'}
             imageFit={ImageFit.contain}
+            role="presentation"
             src={appliedImageCover}
             onLoadingStateChange={onImageLoading}
           />
         </div>
-        <div css={styles.title}>{title}</div>
-        <div css={styles.content}>{content}</div>
-        {moreLinkText && <Link css={styles.moreLink}> {moreLinkText} </Link>}
-      </div>
-    </a>
+        <div id={labelId}>
+          <div css={styles.title}>{title}</div>
+          <div css={styles.content}>{content}</div>
+        </div>
+        {moreLinkText && (
+          <Link aria-labelledBy={labelId} css={styles.moreLink} role="link">
+            {moreLinkText}
+          </Link>
+        )}
+      </a>
+    </div>
   );
 };
