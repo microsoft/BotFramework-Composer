@@ -481,7 +481,13 @@ export const ManageService: React.FC<ManageServiceProps> = (props: ManageService
               service: props.serviceName,
             })}
             {props.learnMore ? (
-              <Link href={props.learnMore} target={'_blank'}>
+              <Link
+                aria-label={formatMessage('Learn more about {service}', {
+                  service: props.serviceName,
+                })}
+                href={props.learnMore}
+                target={'_blank'}
+              >
                 {formatMessage('Learn more')}
               </Link>
             ) : null}

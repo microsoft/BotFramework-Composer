@@ -306,13 +306,19 @@ export const RootBotExternalService: React.FC<RootBotExternalServiceProps> = (pr
           'Language Understanding (LUIS) is an Azure Cognitive Service that uses machine learning to understand natural language input and direct the conversation flow. <a>Learn more.</a> Use an existing Language Understanding (LUIS) key from Azure or create a new key. <a2>Learn more</a2>',
           {
             a: ({ children }) => (
-              <Link key="luis-root-bot-settings-page" href={'https://www.luis.ai/'} target="_blank">
+              <Link
+                key="luis-root-bot-settings-page"
+                aria-label={formatMessage('Learn more about Language Understanding (LUIS)')}
+                href={'https://www.luis.ai/'}
+                target="_blank"
+              >
                 {children}
               </Link>
             ),
             a2: ({ children }) => (
               <Link
                 key="luis-root-bot-settings-page-learn-more"
+                aria-label={formatMessage('Learn more on how to add Language Understanding to your bot')}
                 href={'https://aka.ms/composer-luis-learnmore'}
                 target="_blank"
               >
@@ -384,13 +390,18 @@ export const RootBotExternalService: React.FC<RootBotExternalServiceProps> = (pr
               'Your bot is configured with only a LUIS authoring key, which has a limit of 1,000 calls per month. If your bot hits this limit, publish it to Azure using a <a>publishing profile</a> to continue testing.<a2>Learn more</a2>',
               {
                 a: ({ children }) => (
-                  <Link key="luis-endpoint-key-info" href={linkToPublishProfile}>
+                  <Link
+                    key="luis-endpoint-key-info"
+                    aria-label={formatMessage('Go to "Publishing Profiles" page to configure Azure publishing')}
+                    href={linkToPublishProfile}
+                  >
                     {children}
                   </Link>
                 ),
                 a2: ({ children }) => (
                   <Link
                     key="luis-endpoint-key-limits-info"
+                    aria-label={formatMessage('Learn more about LUIS usage limits')}
                     href={'https://aka.ms/composer-settings-luislimits'}
                     target="_blank"
                   >
@@ -407,13 +418,19 @@ export const RootBotExternalService: React.FC<RootBotExternalServiceProps> = (pr
             'QnA Maker is an Azure Cognitive services that can extract question-and-answer pairs from a website FAQ. <a>Learn more.</a> Use an existing key from Azure or create a new key. <a2>Learn more.</a2>',
             {
               a: ({ children }) => (
-                <Link key="qna-root-bot-settings-page" href={'https://www.qnamaker.ai/'} target="_blank">
+                <Link
+                  key="qna-root-bot-settings-page"
+                  aria-label={formatMessage('Learn more about QnA Maker')}
+                  href={'https://www.qnamaker.ai/'}
+                  target="_blank"
+                >
                   {children}
                 </Link>
               ),
               a2: ({ children }) => (
                 <Link
                   key="qna-root-bot-settings-page-learn-more"
+                  aria-label={formatMessage('Learn more on how to add QnA to your bot')}
                   href={'https://aka.ms/composer-addqnamaker-learnmore'}
                   target="_blank"
                 >

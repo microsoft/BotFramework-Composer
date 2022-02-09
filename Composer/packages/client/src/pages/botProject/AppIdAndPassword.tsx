@@ -86,7 +86,12 @@ export const AppIdAndPassword: React.FC<AppIdAndPasswordProps> = (props) => {
           'An App ID is used for communication between your bot and skills, services, websites or applications. Use an existing App ID or automatically generate an App ID when creating a publishing profile for this bot. <a>Learn more</a>',
           {
             a: ({ children }) => (
-              <Link key="app-id-settings-page" href={'https://aka.ms/composer-appid-learnmore'} target="_blank">
+              <Link
+                key="app-id-settings-page"
+                aria-label={formatMessage('Learn more about App ID')}
+                href={'https://aka.ms/composer-appid-learnmore'}
+                target="_blank"
+              >
                 {children}
               </Link>
             ),

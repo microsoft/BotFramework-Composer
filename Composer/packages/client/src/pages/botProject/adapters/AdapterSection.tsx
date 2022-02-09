@@ -34,7 +34,12 @@ const AdapterSection = ({ projectId, scrollToSectionId }: Props) => {
           'Add connections to make your bot available in Webchat, Direct Line Speech, Microsoft Teams and more. <a>Learn more.</a>',
           {
             a: ({ children }) => (
-              <Link key="adapters-settings-page" href={'https://aka.ms/composer-connections-learnmore'} target="_blank">
+              <Link
+                key="adapters-settings-page"
+                aria-label={formatMessage('Learn more on how to connect a bot to channels')}
+                href={'https://aka.ms/composer-connections-learnmore'}
+                target="_blank"
+              >
                 {children}
               </Link>
             ),

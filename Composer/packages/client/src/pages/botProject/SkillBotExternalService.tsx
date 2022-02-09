@@ -149,12 +149,22 @@ export const SkillBotExternalService: React.FC<SkillBotExternalServiceProps> = (
           'Language Understanding (LUIS) is an Azure Cognitive Service that uses machine learning to understand natural language input and direct the conversation flow. <a>Learn more.</a> Use an existing Language Understanding (LUIS) key from Azure or create a new key. <a2>Learn more</a2>',
           {
             a: ({ children }) => (
-              <Link key="luis-skill-settings-page" href={'https://www.luis.ai/'} target="_blank">
+              <Link
+                key="luis-skill-settings-page"
+                aria-label={formatMessage('Learn more about Language Understanding (LUIS)')}
+                href={'https://www.luis.ai/'}
+                target="_blank"
+              >
                 {children}
               </Link>
             ),
             a2: ({ children }) => (
-              <Link key="luis-skill-settings-page-2" href={'https://aka.ms/composer-luis-learnmore'} target="_blank">
+              <Link
+                key="luis-skill-settings-page-2"
+                aria-label={formatMessage('Learn more on how to add Language Understanding to your bot')}
+                href={'https://aka.ms/composer-luis-learnmore'}
+                target="_blank"
+              >
                 {children}
               </Link>
             ),
@@ -210,13 +220,19 @@ export const SkillBotExternalService: React.FC<SkillBotExternalServiceProps> = (
             'QnA Maker is an Azure Cognitive services that can extract question-and-answer pairs from a website FAQ. <a>Learn more.</a> Use an existing key from Azure or create a new key. <a2>Learn more</a2>',
             {
               a: ({ children }) => (
-                <Link key="qna-skill-settings-page" href={'https://www.qnamaker.ai/'} target="_blank">
+                <Link
+                  key="qna-skill-settings-page"
+                  aria-label={formatMessage('Go to "Publishing Profiles" page to configure Azure publishing')}
+                  href={'https://www.qnamaker.ai/'}
+                  target="_blank"
+                >
                   {children}
                 </Link>
               ),
               a2: ({ children }) => (
                 <Link
                   key="qna-skill-settings-page-2"
+                  aria-label={formatMessage('Learn more about LUIS usage limits')}
                   href={'https://aka.ms/composer-addqnamaker-learnmore'}
                   target="_blank"
                 >

@@ -41,6 +41,7 @@ export const ElectronSettings: React.FC<RouteComponentProps> = () => {
               a: (props) => {
                 <Link
                   key="nightly-link-learn-more-link"
+                  aria-label={formatMessage('Learn more about Bot Framework Composer Nightly Releases')}
                   href="https://github.com/microsoft/BotFramework-Composer-Nightlies"
                   rel="noopener noreferrer"
                   styles={link}
