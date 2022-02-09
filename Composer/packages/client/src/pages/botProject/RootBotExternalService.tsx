@@ -392,7 +392,9 @@ export const RootBotExternalService: React.FC<RootBotExternalServiceProps> = (pr
                 a: ({ children }) => (
                   <Link
                     key="luis-endpoint-key-info"
-                    aria-label={formatMessage('Go to "Publishing Profiles" page to configure Azure publishing')}
+                    aria-label={formatMessage(
+                      'Learn more about configuring Azure publishing on the "Publishing Profiles" page'
+                    )}
                     href={linkToPublishProfile}
                   >
                     {children}

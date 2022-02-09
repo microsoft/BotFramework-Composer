@@ -222,7 +222,9 @@ export const SkillBotExternalService: React.FC<SkillBotExternalServiceProps> = (
               a: ({ children }) => (
                 <Link
                   key="qna-skill-settings-page"
-                  aria-label={formatMessage('Go to "Publishing Profiles" page to configure Azure publishing')}
+                  aria-label={formatMessage(
+                    'Learn more about configuring Azure publishing on the "Publishing Profiles" page'
+                  )}
                   href={'https://www.qnamaker.ai/'}
                   target="_blank"
                 >
