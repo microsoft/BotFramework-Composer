@@ -162,6 +162,7 @@ const DialogTitle = {
         a: ({ children }) => (
           <a
             key="add-resource-learn-more"
+            aria-label={formatMessage('Learn more on how to add more Azure resources')}
             href={'https://aka.ms/composer-publish-bot#create-new-azure-resources'}
             rel="noopener noreferrer"
             target="_blank"
