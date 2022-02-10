@@ -170,6 +170,7 @@ export const AllowedCallers: React.FC<Props> = ({ projectId }) => {
             a: ({ children }) => (
               <Link
                 key="allowed-callers-settings-page"
+                aria-label={formatMessage('Learn more about skills')}
                 href={'https://aka.ms/composer-skills-learnmore'}
                 target="_blank"
               >

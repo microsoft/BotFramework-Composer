@@ -360,7 +360,14 @@ export const WatchTabContent: React.FC<DebugPanelTabHeaderProps> = ({ isActive }
                 'Add properties to watch while testing your bot in the Web Chat pane. <a>Learn more.</a>',
                 {
                   a: ({ children }) => (
-                    <Link key="watch-table-empty-state-link" href="https://aka.ms/bfcomposer-2-watch" target="_blank">
+                    <Link
+                      key="watch-table-empty-state-link"
+                      aria-label={formatMessage(
+                        'Learn more on how to test your bot in Bot Framework Composer Documentation'
+                      )}
+                      href="https://aka.ms/bfcomposer-2-watch"
+                      target="_blank"
+                    >
                       {children}
                     </Link>
                   ),
