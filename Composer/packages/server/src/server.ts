@@ -137,6 +137,13 @@ export async function start(electronContext?: ElectronContext): Promise<number |
   const preferredPort = toNumber(process.env.PORT) || 5000;
   let port = preferredPort;
 
+  if (process.env.NODE_ENV === 'production') {
+    // Dynamically search for an open PORT starting with PORT or 5000, so that
+    // the app doesn't crash if the port is already being used.
+    // (disabled in dev in order to avoid breaking the webpack dev server proxy)
+    port = await portfinder.getPortPromise({ port: preferredPort });
+  }
+
   // Setup directline and conversation routes for v3 bots
   const DLServerState = DLServerContext.getInstance(port);
   const conversationRouter = mountConversationsRoutes(DLServerState);
@@ -171,12 +178,6 @@ export async function start(electronContext?: ElectronContext): Promise<number |
     });
   });
 
-  if (process.env.NODE_ENV === 'production') {
-    // Dynamically search for an open PORT starting with PORT or 5000, so that
-    // the app doesn't crash if the port is already being used.
-    // (disabled in dev in order to avoid breaking the webpack dev server proxy)
-    port = await portfinder.getPortPromise({ port: preferredPort });
-  }
   let server;
   await new Promise((resolve) => {
     server = app.listen(port, () => {
