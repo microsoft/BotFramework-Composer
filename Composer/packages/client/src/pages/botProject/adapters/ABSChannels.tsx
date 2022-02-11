@@ -94,6 +94,7 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
   const { setApplicationLevelError, requireUserLogin } = useRecoilValue(dispatcherState);
   const currentUser = useRecoilValue(currentUserState);
   const isAuthenticated = useRecoilValue(isAuthenticatedState);
+  const [selectedConnectionKey, setSelectedConnectionKey] = useState<string>('');
 
   /* Copied from Azure Publishing extension */
   const getSubscriptions = async (token: string): Promise<Array<Subscription>> => {
@@ -115,11 +116,15 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
     }
   };
 
-  const onSelectProfile = async (_, opt) => {
+  const isDropdownFocusEvent = (event: React.FormEvent<HTMLDivElement>) => event.type === 'focus';
+
+  const onSelectProfile = async (ev, opt) => {
     if (opt.key === 'manageProfiles') {
+      if (isDropdownFocusEvent(ev)) return;
       TelemetryClient.track('ConnectionsAddNewProfile');
       navigateTo(`/bot/${projectId}/publish/all/#addNewPublishProfile`);
     } else {
+      setSelectedConnectionKey(opt.key);
       // identify the publishing profile in the list
       const profile = publishTargets?.find((p) => p.name === opt.key);
       if (profile) {
@@ -593,9 +598,11 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
       )}
       <div>
         <Dropdown
+          ariaLabel={formatMessage('Select publishing profile')}
           data-testid="publishTargetDropDown"
           options={publishTargetOptions}
           placeholder={formatMessage('Select publishing profile')}
+          selectedKey={selectedConnectionKey}
           styles={{
             root: { display: 'flex', alignItems: 'center', marginBottom: 10 },
             label: { width: 200 },
