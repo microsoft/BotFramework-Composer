@@ -134,7 +134,13 @@ export const TemplateDetailView: React.FC<TemplateDetailViewProps> = (props) => 
           `To create a bot from your own Bot Framework Template you need to add a path to your local templates index.js file. <templateDocLink>Learn more</templateDocLink>`,
           {
             templateDocLink: ({ children }) => (
-              <Link key="local-template-link" href={templateDocUrl} rel="noopener noreferrer" target="_blank">
+              <Link
+                key="local-template-link"
+                aria-label={formatMessage('Learn more on how to add Bot Framework Templates')}
+                href={templateDocUrl}
+                rel="noopener noreferrer"
+                target="_blank"
+              >
                 {children}
               </Link>
             ),

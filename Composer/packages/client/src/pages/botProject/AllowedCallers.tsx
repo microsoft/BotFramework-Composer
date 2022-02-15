@@ -57,13 +57,14 @@ const ItemContainer = styled.div({
 });
 
 type ItemProps = {
+  index: number;
   value: string;
   onBlur: () => void;
   onChange: (event: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, newValue?: string) => void;
   onRemove: () => void;
 };
 
-const Item = React.memo(({ value, onBlur, onChange, onRemove }: ItemProps) => {
+const Item = React.memo(({ index, value, onBlur, onChange, onRemove }: ItemProps) => {
   const itemRef = React.useRef<ITextField | null>(null);
   const didMount = React.useRef<boolean>(false);
 
@@ -75,8 +76,9 @@ const Item = React.memo(({ value, onBlur, onChange, onRemove }: ItemProps) => {
   }, []);
 
   return (
-    <Stack horizontal verticalAlign={'center'}>
+    <Stack horizontal role="listitem" verticalAlign={'center'}>
       <Input
+        ariaLabel={formatMessage('Item {index}: Allowed caller bot App ID', { index })}
         componentRef={(ref) => (itemRef.current = ref)}
         data-testid="addCallerInputField"
         styles={textFieldStyles}
@@ -85,7 +87,7 @@ const Item = React.memo(({ value, onBlur, onChange, onRemove }: ItemProps) => {
         onChange={onChange}
       />
       <ActionButton
-        aria-label={formatMessage('Remove item')}
+        ariaLabel={formatMessage('Remove item {index}', { index })}
         data-testid="addCallerRemoveBtn"
         styles={actionButton}
         onClick={onRemove}
@@ -168,6 +170,7 @@ export const AllowedCallers: React.FC<Props> = ({ projectId }) => {
             a: ({ children }) => (
               <Link
                 key="allowed-callers-settings-page"
+                aria-label={formatMessage('Learn more about skills')}
                 href={'https://aka.ms/composer-skills-learnmore'}
                 target="_blank"
               >
@@ -177,9 +180,18 @@ export const AllowedCallers: React.FC<Props> = ({ projectId }) => {
           }
         )}
       </div>
-      <ItemContainer>
+      <ItemContainer role="list">
         {allowedCallers.map(({ value, id }, index) => {
-          return <Item key={id} value={value} onBlur={onBlur} onChange={onChange(index)} onRemove={onRemove(index)} />;
+          return (
+            <Item
+              key={id}
+              index={index + 1}
+              value={value}
+              onBlur={onBlur}
+              onChange={onChange(index)}
+              onRemove={onRemove(index)}
+            />
+          );
         })}
       </ItemContainer>
       {!allowedCallers.length && (

@@ -68,9 +68,7 @@ export const DefineEntityButton = React.memo((props: Props) => {
 
   const [showListEntityCreationDialog, setShowListEntityCreationDialog] = React.useState(false);
   const { iconName, text } = React.useMemo(() => getLuToolbarItemTextAndIcon('defineEntity'), []);
-  const { onRenderMenuList, query, setQuery } = useSearchableMenuListCallback(
-    formatMessage('Search prebuilt entities')
-  );
+  const { onRenderMenuList, query, onReset } = useSearchableMenuListCallback(formatMessage('Search prebuilt entities'));
 
   const noSearchResultsMenuItem = useNoSearchResultMenuItem(formatMessage('no prebuilt entities found'));
 
@@ -110,18 +108,14 @@ export const DefineEntityButton = React.memo((props: Props) => {
     }));
   }, [onDefineEntity, noSearchResultsMenuItem, query]);
 
-  const onDismiss = React.useCallback(() => {
-    setQuery('');
-  }, []);
-
   const prebuiltSubMenuProps = React.useMemo<IContextualMenuProps>(
     () => ({
       calloutProps: { calloutMaxHeight: 216 },
       items: filteredPrebuiltEntities,
       onRenderMenuList,
-      onDismiss,
+      onMenuDismissed: onReset,
     }),
-    [filteredPrebuiltEntities, onDismiss, onRenderMenuList]
+    [filteredPrebuiltEntities, onReset, onRenderMenuList]
   );
 
   const renderMenuItemHeader = React.useCallback(

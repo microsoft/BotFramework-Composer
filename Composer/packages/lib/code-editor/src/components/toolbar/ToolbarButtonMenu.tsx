@@ -4,7 +4,7 @@
 import { buildInFunctionsMap, getBuiltInFunctionInsertText } from '@bfc/built-in-functions';
 import styled from '@emotion/styled';
 import { createSvgIcon } from '@fluentui/react-icons';
-import { FluentTheme, NeutralColors } from '@uifabric/fluent-theme';
+import { FluentTheme } from '@uifabric/fluent-theme';
 import formatMessage from 'format-message';
 import { IconButton } from 'office-ui-fabric-react/lib/Button';
 import {
@@ -19,6 +19,7 @@ import { IStackStyles, Stack } from 'office-ui-fabric-react/lib/Stack';
 import { Text } from 'office-ui-fabric-react/lib/Text';
 import { DirectionalHint } from 'office-ui-fabric-react/lib/Tooltip';
 import * as React from 'react';
+import { FontWeights } from 'office-ui-fabric-react/lib/Styling';
 
 import { useNoSearchResultMenuItem } from '../../hooks/useNoSearchResultMenuItem';
 import { useSearchableMenuListCallback } from '../../hooks/useSearchableMenuListCallback';
@@ -54,7 +55,7 @@ const templateSvgIcon = (
 
 const defaultTreeItemHeight = 36;
 
-const buttonStyles = { menuIcon: { fontSize: 8, color: NeutralColors.black } };
+const buttonStyles = { menuIcon: { fontSize: 8, color: FluentTheme.palette.neutralPrimary } };
 const labelContainerStyle: IStackStyles = {
   root: { whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', height: defaultTreeItemHeight },
 };
@@ -81,8 +82,8 @@ const OneLiner = styled.div({
   padding: '0 8px',
 });
 
-const svgIconStyle = { fill: NeutralColors.black, margin: '0 4px', width: 16, height: 16 };
-const iconStyles = { root: { color: NeutralColors.black, margin: '0 4px', width: 16, height: 16 } };
+const svgIconStyle = { fill: FluentTheme.palette.neutralPrimary, margin: '0 4px', width: 16, height: 16 };
+const iconStyles = { root: { color: FluentTheme.palette.neutralPrimary, margin: '0 4px', width: 16, height: 16 } };
 
 type ToolbarButtonMenuProps = {
   payload: ToolbarButtonPayload;
@@ -311,7 +312,7 @@ export const ToolbarButtonMenu = React.memo((props: ToolbarButtonMenuProps) => {
     []
   );
 
-  const { onRenderMenuList, query, setQuery } = useSearchableMenuListCallback(
+  const { onRenderMenuList, query, onReset } = useSearchableMenuListCallback(
     uiStrings.searchPlaceholder,
     menuHeaderRenderer
   );
@@ -339,8 +340,8 @@ export const ToolbarButtonMenu = React.memo((props: ToolbarButtonMenuProps) => {
     }
   }, [menuItems, flatPropertyListItems, flatFunctionListItems, noSearchResultMenuItem, query, payload.kind]);
 
-  const onDismiss = React.useCallback(() => {
-    setQuery('');
+  const onMenuDismissed = React.useCallback(() => {
+    onReset();
     setPropertyTreeExpanded({});
   }, []);
 
@@ -348,7 +349,7 @@ export const ToolbarButtonMenu = React.memo((props: ToolbarButtonMenuProps) => {
     switch (payload.kind) {
       case 'template': {
         return {
-          onDismiss,
+          onMenuDismissed,
           items,
           calloutProps,
           onRenderMenuList,
@@ -359,7 +360,7 @@ export const ToolbarButtonMenu = React.memo((props: ToolbarButtonMenuProps) => {
       }
       case 'function': {
         return {
-          onDismiss,
+          onMenuDismissed,
           items,
           calloutProps,
           onRenderMenuList,
@@ -377,7 +378,7 @@ export const ToolbarButtonMenu = React.memo((props: ToolbarButtonMenuProps) => {
       }
       case 'property': {
         return {
-          onDismiss,
+          onMenuDismissed,
           items,
           calloutProps,
           onRenderMenuList,
@@ -399,9 +400,15 @@ export const ToolbarButtonMenu = React.memo((props: ToolbarButtonMenuProps) => {
                     <Text
                       key={`segment-${idx}`}
                       styles={{
-                        root: {
-                          color: idx === pathNodes.length - 1 ? NeutralColors.black : NeutralColors.gray70,
-                        },
+                        root:
+                          idx === pathNodes.length - 1
+                            ? {
+                                color: FluentTheme.palette.neutralPrimary,
+                              }
+                            : {
+                                fontWeight: FontWeights.semilight,
+                                color: FluentTheme.palette.neutralSecondary,
+                              },
                       }}
                       variant="small"
                     >
@@ -431,7 +438,7 @@ export const ToolbarButtonMenu = React.memo((props: ToolbarButtonMenuProps) => {
         } as IContextualMenuProps;
       }
     }
-  }, [items, calloutProps, onRenderMenuList, onDismiss, propertyTreeExpanded, query]);
+  }, [items, calloutProps, onRenderMenuList, onMenuDismissed, propertyTreeExpanded, query]);
 
   const renderIcon = React.useCallback(() => getIcon(payload.kind), [payload.kind]);
 

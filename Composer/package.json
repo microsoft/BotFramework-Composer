@@ -24,7 +24,14 @@
     "json-ptr": "^2.1",
     "css-what": "^5.0.1",
     "css-select": "^4.1.3",
-    "ejs": "^3.1.6"
+    "ejs": "^3.1.6",
+    "vscode-languageserver-protocol": "3.15.0-next.8",
+    "@types/node": "13.9.3",
+    "express": "4.17.1",
+    "@types/express": "4.16.1",
+    "@types/express-serve-static-core": "4.16.2",
+    "@types/morgan": "1.7.35",
+    "@types/serve-static": "1.13.2"
   },
   "engines": {
     "node": "14.x"
@@ -60,7 +67,7 @@
     "build:ci": "yarn l10n:check && yarn build:dev",
     "build:dev": "yarn build:libs && yarn build:extensions",
     "build:electron": "yarn workspace @bfc/electron-server build && yarn workspace @bfc/electron-server l10n",
-    "build:libs": "wsrun -ltm -x @bfc/electron-server -x @bfc/client -x @bfc/server -p @botframework-composer/* -p @bfc/* -c build",
+    "build:libs": "wsrun -ltm -x @bfc/electron-server -x @bfc/client -x @bfc/server -p '@botframework-composer/*' -p '@bfc/*' -c build",
     "build:server": "yarn workspace @bfc/server build",
     "build:client": "yarn workspace @bfc/client build",
     "build:extensions": "cd ../extensions && yarn && yarn build:all",
@@ -124,10 +131,11 @@
     "@typescript-eslint/parser": "2.34.0",
     "concurrently": "^4.1.0",
     "coveralls": "^3.1.0",
-    "cross-env": "^6.0.3",
+    "cross-env": "7.0.2",
     "eslint": "7.0.0",
     "eslint-config-prettier": "6.11.0",
     "eslint-formatter-github-actions": "^1.0.0",
+    "eslint-plugin-security": "^1.4.0",
     "eslint-plugin-emotion": "10.0.27",
     "eslint-plugin-format-message": "6.2.3",
     "eslint-plugin-import": "2.20.2",
@@ -138,6 +146,8 @@
     "eslint-plugin-react": "7.20.0",
     "eslint-plugin-react-hooks": "4.0.2",
     "eslint-plugin-security": "1.4.0",
+    "format-message": "6.2.3",
+    "format-message-cli": "6.2.3",
     "get-port": "^5.1.1",
     "husky": "^1.3.1",
     "lint-staged": "^8.1.0",
@@ -148,5 +158,10 @@
     "typescript": "3.9.2",
     "wait-on": "^5.3.0",
     "wsrun": "^5.2.0"
+  },
+  "dependenciesMeta": {
+    "@microsoft/orchestrator-core": {
+      "built": false
+    }
   }
 }

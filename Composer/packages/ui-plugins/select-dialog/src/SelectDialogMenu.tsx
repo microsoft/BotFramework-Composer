@@ -121,6 +121,7 @@ export const SelectDialogMenu: React.FC<SelectDialogMenuProps> = (props) => {
       text: d.displayName,
       isSelected: value === d.displayName,
       data: d,
+      role: 'option',
       iconProps: {
         iconName: getIconName(d),
         styles: {
@@ -141,6 +142,7 @@ export const SelectDialogMenu: React.FC<SelectDialogMenuProps> = (props) => {
         sectionProps: {
           items: dialogItems,
         },
+        role: 'option',
       },
       {
         key: 'actions',
@@ -154,6 +156,7 @@ export const SelectDialogMenu: React.FC<SelectDialogMenuProps> = (props) => {
               iconProps: {
                 iconName: Icons.EXPRESSION,
               },
+              role: 'option',
             },
             {
               key: ADD_DIALOG,
@@ -161,6 +164,7 @@ export const SelectDialogMenu: React.FC<SelectDialogMenuProps> = (props) => {
               iconProps: {
                 iconName: 'Add',
               },
+              role: 'option',
             },
           ],
         },
@@ -266,6 +270,7 @@ export const SelectDialogMenu: React.FC<SelectDialogMenuProps> = (props) => {
                 }
               `,
             }}
+            role="listbox"
             styles={buttonStyles}
             text={selectedLabel || ' '}
             onBlur={() => onBlur?.(id, value)}

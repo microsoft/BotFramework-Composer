@@ -6,10 +6,11 @@ import { jsx, css } from '@emotion/core';
 import { useEffect, useRef, useState } from 'react';
 import { FontSizes, NeutralColors } from '@uifabric/fluent-theme';
 import formatMessage from 'format-message';
-import { CommandButton } from 'office-ui-fabric-react/lib/Button';
+import { CommandButton, IButton } from 'office-ui-fabric-react/lib/Button';
 import { IOverflowSetItemProps } from 'office-ui-fabric-react/lib/OverflowSet';
 import { ISearchBox, ISearchBoxStyles, SearchBox } from 'office-ui-fabric-react/lib/SearchBox';
 import { useRecoilValue } from 'recoil';
+import { usePrevious } from '@uifabric/react-hooks';
 
 import { DisableFeatureToolTip } from '../DisableFeatureToolTip';
 import { usePVACheck } from '../../hooks/usePVACheck';
@@ -59,10 +60,12 @@ export interface ProjectTreeHeaderProps {
   placeholder?: string;
   ariaLabel?: string;
   onFilter?: (newValue?: string) => void;
+  filterValue: string;
 }
 
 export const ProjectTreeHeader: React.FC<ProjectTreeHeaderProps> = ({
   menu,
+  filterValue,
   onFilter = () => {},
   placeholder = '',
   ariaLabel = '',
@@ -93,9 +96,22 @@ export const ProjectTreeHeader: React.FC<ProjectTreeHeaderProps> = ({
   }) as IOverflowSetItemProps[];
 
   const handleSearchBoxBlur = () => {
-    onFilter('');
-    setShowFilter(false);
+    if (!filterValue) {
+      onFilter('');
+      setShowFilter(false);
+    }
   };
+
+  // Move focus back to the filter button after the filter search box gets closed
+  const filterButtonRef = useRef<IButton>(null);
+  const prevShowFilter = usePrevious(showFilter);
+  useEffect(() => {
+    if (prevShowFilter && prevShowFilter !== showFilter) {
+      setTimeout(() => {
+        if (filterButtonRef.current) filterButtonRef.current.focus();
+      });
+    }
+  }, [prevShowFilter, showFilter]);
 
   const addCommandBtn = (
     <CommandButton
@@ -129,6 +145,7 @@ export const ProjectTreeHeader: React.FC<ProjectTreeHeaderProps> = ({
           styles={searchBox}
           onBlur={handleSearchBoxBlur}
           onChange={(_e, value) => onFilter(value)}
+          onClear={handleSearchBoxBlur}
         />
       ) : (
         <div css={commands}>
@@ -137,6 +154,7 @@ export const ProjectTreeHeader: React.FC<ProjectTreeHeaderProps> = ({
           ) : null}
           <CommandButton
             ariaLabel={formatMessage('Filter')}
+            componentRef={filterButtonRef}
             css={buttonStyle}
             iconProps={{ iconName: 'Filter' }}
             tabIndex={0}

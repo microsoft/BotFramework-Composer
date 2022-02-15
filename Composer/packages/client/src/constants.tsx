@@ -333,7 +333,13 @@ export const addSkillDialog = {
           `To connect to a skill, your bot needs the information captured in the skill’s manifest of the bot, and, for secure access, the skill needs to know your bot's AppID. <link>Learn more.</link>`,
           {
             link: ({ children }) => (
-              <Link key="learn-more-about-skills" href={url} rel="noopener noreferrer" target="_blank">
+              <Link
+                key="learn-more-about-skills"
+                aria-label={formatMessage('Learn more about skills')}
+                href={url}
+                rel="noopener noreferrer"
+                target="_blank"
+              >
                 {children}
               </Link>
             ),

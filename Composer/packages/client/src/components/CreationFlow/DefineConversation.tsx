@@ -95,6 +95,14 @@ type DefineConversationFormData = {
   };
 };
 
+type DefineConversationUrlData = {
+  alias?: string;
+  eTag?: string;
+  imported?: string;
+  templateDir?: string;
+  urlSuffix?: string;
+};
+
 type DefineConversationProps = {
   createFolder: (path: string, name: string) => void;
   updateFolder: (path: string, oldName: string, newName: string) => void;
@@ -175,8 +183,8 @@ const DefineConversation: React.FC<DefineConversationProps> = (props) => {
 
   useEffect(() => {
     if (props.location?.state) {
-      const { imported } = props.location.state;
-      setIsImported(imported);
+      const { imported } = props.location.state as DefineConversationUrlData;
+      setIsImported(!!imported);
     }
   }, [props.location?.state]);
 
@@ -278,7 +286,7 @@ const DefineConversation: React.FC<DefineConversationProps> = (props) => {
         ...formData,
       };
       if (props.location?.state) {
-        const { alias, eTag, imported, templateDir, urlSuffix } = props.location.state;
+        const { alias, eTag, imported, templateDir, urlSuffix } = props.location.state as DefineConversationUrlData;
 
         if (imported) {
           dataToSubmit.pvaData = {

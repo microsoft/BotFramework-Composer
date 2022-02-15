@@ -40,6 +40,7 @@
     "@bfc/ui-shared": "*",
     "@emotion/core": "^10.0.27",
     "lodash": "^4.17.19",
-    "react-error-boundary": "^1.2.5"
+    "react-error-boundary": "^1.2.5",
+    "tslib": "2.0.3"
   }
 }

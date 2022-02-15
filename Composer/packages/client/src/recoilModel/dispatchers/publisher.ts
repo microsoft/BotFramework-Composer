@@ -20,7 +20,7 @@ import { openInEmulator } from '../../utils/navigation';
 import { botEndpointsState } from '../atoms';
 import {
   rootBotProjectIdSelector,
-  dialogsSelectorFamily,
+  dialogsWithLuProviderSelectorFamily,
   luFilesSelectorFamily,
   qnaFilesSelectorFamily,
 } from '../selectors';
@@ -211,7 +211,7 @@ export const publisherDispatcher = () => {
     ) => {
       try {
         const { snapshot } = callbackHelpers;
-        const dialogs = await snapshot.getPromise(dialogsSelectorFamily(projectId));
+        const dialogs = await snapshot.getPromise(dialogsWithLuProviderSelectorFamily(projectId));
         const luFiles = await snapshot.getPromise(luFilesSelectorFamily(projectId));
         const qnaFiles = await snapshot.getPromise(qnaFilesSelectorFamily(projectId));
         const referredLuFiles = luUtil.checkLuisBuild(luFiles, dialogs);

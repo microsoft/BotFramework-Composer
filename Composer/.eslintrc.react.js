@@ -2,8 +2,8 @@
 // Licensed under the MIT License.
 
 module.exports = {
-  extends: ['./.eslintrc.js', 'plugin:react/recommended'],
-  plugins: ['react-hooks', 'format-message', 'emotion', 'jsx-a11y'],
+  extends: ['./.eslintrc.js', 'plugin:react/recommended', 'plugin:security/recommended'],
+  plugins: ['react-hooks', 'format-message', 'emotion', 'jsx-a11y', 'security'],
   settings: {
     react: {
       version: '16.9.16',
