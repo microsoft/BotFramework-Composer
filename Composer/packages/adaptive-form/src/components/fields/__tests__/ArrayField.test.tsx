@@ -34,4 +34,13 @@ describe('<ArrayField />', () => {
     fireEvent.click(button);
     await findByTestId('string-field');
   });
+
+  it('can add more items unless the previous item is empty', async () => {
+    const { getByTestId } = renderSubject();
+
+    const button = getByTestId('add-button');
+    expect(button).not.toBeDisabled();
+    fireEvent.click(button);
+    expect(getByTestId('add-button')).toBeDisabled();
+  });
 });

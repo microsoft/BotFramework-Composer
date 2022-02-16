@@ -69,32 +69,6 @@ describe('<ArrayFieldItem />', () => {
     });
   });
 
-  it('removes itself on blur if there is no value', () => {
-    const onRemove = jest.fn();
-    const { container } = renderSubject({
-      canRemove: true,
-      onRemove,
-      value: '',
-    });
-    const field = container.querySelector('input');
-    // @ts-ignore
-    fireEvent.blur(field);
-    expect(onRemove).toHaveBeenCalled();
-  });
-
-  it('removes itself on blur if there is no value', () => {
-    const onRemove = jest.fn();
-    const { container } = renderSubject({
-      canRemove: true,
-      onRemove,
-      value: { foo: '' },
-    });
-    const field = container.querySelector('input');
-    // @ts-ignore
-    fireEvent.blur(field);
-    expect(onRemove).toHaveBeenCalled();
-  });
-
   it('shows a label if the items are stacked', () => {
     const { getByLabelText } = renderSubject({
       schema: { type: 'object', properties: { foo: { title: 'Foo Title' } } },

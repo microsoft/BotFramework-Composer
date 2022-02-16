@@ -4,6 +4,7 @@
 import { css } from '@emotion/core';
 import { NeutralColors } from '@uifabric/fluent-theme';
 import { FontSizes } from '@uifabric/styling';
+import { getTheme, mergeStyles, getFocusStyle } from 'office-ui-fabric-react/lib/Styling';
 
 export const arrayItem = {
   container: css`
@@ -13,6 +14,12 @@ export const arrayItem = {
 
     label: ArrayFieldItemContainer;
   `,
+
+  contaInerFocus: mergeStyles(
+    getFocusStyle(getTheme(), {
+      inset: -3,
+    })
+  ),
 
   field: css`
     display: flex;
