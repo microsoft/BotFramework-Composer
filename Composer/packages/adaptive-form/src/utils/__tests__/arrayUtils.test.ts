@@ -3,6 +3,7 @@
 
 import { renderHook, act } from '@botframework-composer/test-utils/lib/hooks';
 
+import { isItemValueEmpty } from '..';
 import { ArrayItem, getArrayItemProps, useArrayItems } from '../arrayUtils';
 
 describe('useArrayItems', () => {
@@ -119,6 +120,36 @@ describe('getArrayItemProps', () => {
         { id: '3', value: 3 },
       ]);
       expect(onChange.mock.calls[0][0]).not.toBe(value);
+    });
+  });
+
+  describe('isItemValueEmpty', () => {
+    it('treats falsy values as an empty value', () => {
+      expect(isItemValueEmpty(NaN)).toBeTruthy();
+      expect(isItemValueEmpty(undefined)).toBeTruthy();
+      expect(isItemValueEmpty(false)).toBeTruthy();
+      expect(isItemValueEmpty('')).toBeTruthy();
+    });
+
+    it('treats empty object as an empty value', () => {
+      expect(isItemValueEmpty({})).toBeTruthy();
+    });
+
+    it('treats any value as a non-empty value', () => {
+      expect(isItemValueEmpty('test')).toBeFalsy();
+      expect(isItemValueEmpty(42)).toBeFalsy();
+    });
+
+    it('treats any object with only falsy values as an empty value', () => {
+      expect(isItemValueEmpty({ foo: false, bar: undefined })).toBeTruthy();
+      expect(isItemValueEmpty({ foo: NaN, bar: NaN })).toBeTruthy();
+      expect(isItemValueEmpty({ foo: undefined })).toBeTruthy();
+    });
+
+    it('treats any object with at least one value as a non-empty value', () => {
+      expect(isItemValueEmpty({ foo: 'test', bar: undefined })).toBeFalsy();
+      expect(isItemValueEmpty({ foo: 42, bar: NaN })).toBeFalsy();
+      expect(isItemValueEmpty({ foo: 42 })).toBeFalsy();
     });
   });
 });

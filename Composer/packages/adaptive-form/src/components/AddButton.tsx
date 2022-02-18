@@ -23,13 +23,14 @@ export const actionButtonStyles: IButtonStyles = {
 };
 
 type Props = {
-  onClick: () => void;
+  disabled?: boolean;
+  onClick: React.MouseEventHandler<unknown>;
 };
 
-export const AddButton = ({ children, onClick }: React.PropsWithChildren<Props>) => {
+export const AddButton = ({ children, onClick, disabled }: React.PropsWithChildren<Props>) => {
   return (
     <ButtonContainer>
-      <ActionButton styles={actionButtonStyles} onClick={onClick}>
+      <ActionButton data-testid="add-button" disabled={disabled} styles={actionButtonStyles} onClick={onClick}>
         {children ?? formatMessage('Add new')}
       </ActionButton>
     </ButtonContainer>
