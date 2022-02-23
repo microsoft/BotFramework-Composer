@@ -311,6 +311,7 @@ const BotController: React.FC<BotControllerProps> = ({ onHideController, isContr
         hidden={isControllerHidden}
         items={items}
         target={botControllerMenuTarget}
+        onDismiss={() => onHideController(true)}
       />
     </React.Fragment>
   );

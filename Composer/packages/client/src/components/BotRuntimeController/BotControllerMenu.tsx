@@ -4,7 +4,7 @@
 /** @jsx jsx */
 import { css, jsx } from '@emotion/core';
 import React from 'react';
-import { Callout, DirectionalHint } from 'office-ui-fabric-react/lib/Callout';
+import { FocusTrapCallout, DirectionalHint } from 'office-ui-fabric-react/lib/Callout';
 import { DetailsList, DetailsListLayoutMode, IColumn } from 'office-ui-fabric-react/lib/DetailsList';
 import { IContextualMenuProps } from 'office-ui-fabric-react/lib/ContextualMenu';
 import { SelectionMode } from 'office-ui-fabric-react/lib/Utilities';
@@ -100,10 +100,14 @@ const tableColumns: IColumn[] = [
 const BotControllerMenu = React.forwardRef<HTMLDivElement, IContextualMenuProps>((props, ref) => {
   const { items, target, onDismiss, hidden } = props;
   return (
-    <Callout
+    <FocusTrapCallout
       hideOverflow
       setInitialFocus
       directionalHint={DirectionalHint.topRightEdge}
+      focusTrapProps={{
+        isClickableOutsideFocusTrap: true,
+        forceFocusInsideTrap: false,
+      }}
       hidden={hidden}
       role="dialog"
       styles={{
@@ -134,7 +138,7 @@ const BotControllerMenu = React.forwardRef<HTMLDivElement, IContextualMenuProps>
           />
         </div>
       </div>
-    </Callout>
+    </FocusTrapCallout>
   );
 });
 
