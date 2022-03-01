@@ -15,7 +15,6 @@ import {
   IDetailsGroupRenderProps,
   IGroup,
   IDetailsList,
-  IColumn,
 } from 'office-ui-fabric-react/lib/DetailsList';
 import { GroupHeader, CollapseAllVisibility } from 'office-ui-fabric-react/lib/GroupedList';
 import { IOverflowSetItemProps, OverflowSet } from 'office-ui-fabric-react/lib/OverflowSet';
@@ -525,7 +524,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
   );
 
   const getTableColums = () => {
-    const tableColums: IColumn[] = [
+    const tableColums = [
       {
         key: 'ToggleShowAll',
         name: '',
