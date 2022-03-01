@@ -23,16 +23,6 @@ export const codeEditorContainer = css`
   width: 100%;
 `;
 
-export const formCell = css`
-  outline: none;
-  :focus {
-    outline: rgb(102, 102, 102) solid 1px;
-  }
-  white-space: pre-wrap;
-  font-size: 14px;
-  line-height: 28px;
-`;
-
 export const luPhraseCell = css`
   outline: none;
   :focus {

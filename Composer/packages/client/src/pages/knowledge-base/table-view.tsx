@@ -15,6 +15,7 @@ import {
   IDetailsGroupRenderProps,
   IGroup,
   IDetailsList,
+  IColumn,
 } from 'office-ui-fabric-react/lib/DetailsList';
 import { GroupHeader, CollapseAllVisibility } from 'office-ui-fabric-react/lib/GroupedList';
 import { IOverflowSetItemProps, OverflowSet } from 'office-ui-fabric-react/lib/OverflowSet';
@@ -43,6 +44,7 @@ import { EditQnAModal } from '../../components/QnA/EditQnAFrom';
 import { ReplaceQnAFromModal } from '../../components/QnA/ReplaceQnAFromModal';
 import { getQnAFileUrlOption } from '../../utils/qnaUtil';
 import TelemetryClient from '../../telemetry/TelemetryClient';
+import { CellFocusZone } from '../../components/CellFocusZone';
 
 import {
   formCell,
@@ -523,7 +525,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
   );
 
   const getTableColums = () => {
-    const tableColums = [
+    const tableColums: IColumn[] = [
       {
         key: 'ToggleShowAll',
         name: '',
@@ -566,7 +568,8 @@ const TableView: React.FC<TableViewProps> = (props) => {
           const addQuestionButton = (
             <ActionButton
               styles={addAlternative}
-              onClick={() => {
+              onClick={(ev) => {
+                ev.stopPropagation();
                 setCreatingQuestionInKthSection(item.sectionId);
                 TelemetryClient.track('AlternateQnAPhraseAdded');
               }}
@@ -576,7 +579,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
           );
 
           return (
-            <div data-is-focusable css={formCell}>
+            <CellFocusZone>
               {questions.map((question, qIndex: number) => {
                 const isQuestionEmpty = question.content === '';
                 const isOnlyQuestion = questions.length === 1 && qIndex === 0;
@@ -627,6 +630,9 @@ const TableView: React.FC<TableViewProps> = (props) => {
                       }}
                       onChange={() => {}}
                       onFocus={() => setExpandedIndex(index)}
+                      onNewLine={() => {
+                        setCreatingQuestionInKthSection(item.sectionId);
+                      }}
                     />
                   </div>
                 );
@@ -674,11 +680,12 @@ const TableView: React.FC<TableViewProps> = (props) => {
                   }}
                   onChange={() => {}}
                   onFocus={() => setExpandedIndex(index)}
+                  onNewLine={() => {}}
                 />
               ) : (
                 addQuestionButton
               )}
-            </div>
+            </CellFocusZone>
           );
         },
       },
@@ -698,7 +705,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
             item.fileId === createQnAPairSettings.groupKey && index === createQnAPairSettings.sectionIndex;
 
           return (
-            <div data-is-focusable css={formCell}>
+            <CellFocusZone>
               <EditableField
                 required
                 ariaLabel={formatMessage(`Answer is {content}`, { content: item.Answer })}
@@ -741,7 +748,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
                 onChange={() => {}}
                 onFocus={() => setExpandedIndex(index)}
               />
-            </div>
+            </CellFocusZone>
           );
         },
       },
@@ -755,7 +762,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
         data: 'string',
         onRender: (item) => {
           return (
-            <div data-is-focusable css={formCell} style={{ marginTop: 10, marginLeft: 13 }}>
+            <div css={formCell} style={{ marginTop: 10, marginLeft: 13 }}>
               {item.usedIn.map(({ id, displayName }) => {
                 return (
                   <Link
@@ -928,6 +935,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
           checkboxVisibility={CheckboxVisibility.hidden}
           columns={getTableColums()}
           componentRef={detailListRef}
+          getKey={(item, index) => `row-${index}`}
           groupProps={{
             onRenderHeader: onRenderGroupHeader,
             collapseAllVisibility: CollapseAllVisibility.hidden,

@@ -8,6 +8,7 @@ import { NeutralColors, SharedColors } from '@uifabric/fluent-theme';
 import { mergeStyleSets } from '@uifabric/styling';
 import { IconButton } from 'office-ui-fabric-react/lib/Button';
 import { IIconProps } from 'office-ui-fabric-react/lib/Icon';
+import { Announced } from 'office-ui-fabric-react/lib/Announced';
 
 import { FieldConfig, useForm } from '../hooks/useForm';
 
@@ -24,10 +25,12 @@ const defaultContainerStyle = (hasFocus, hasErrors) => css`
     : undefined};
   background: ${hasFocus || hasErrors ? NeutralColors.white : 'inherit'};
   margin-top: 2px;
-  :hover .ms-Button-icon {
+  :hover .ms-Button-icon,
+  :focus-within .ms-Button-icon {
     visibility: visible;
   }
   .ms-TextField-field {
+    min-height: 35px;
     cursor: pointer;
     padding-left: ${hasFocus || hasErrors ? '8px' : '0px'};
     :focus {
@@ -64,7 +67,6 @@ interface EditableFieldProps extends Omit<ITextFieldProps, 'onChange' | 'onFocus
   styles?: Partial<ITextFieldStyles>;
   transparentBorder?: boolean;
   ariaLabel?: string;
-  error?: string | JSX.Element;
   extraContent?: string;
   containerStyles?: SerializedStyles;
   className?: string;
@@ -81,9 +83,11 @@ interface EditableFieldProps extends Omit<ITextFieldProps, 'onChange' | 'onFocus
   value?: string;
   iconProps?: IconProps;
   enableIcon?: boolean;
+  error?: string;
   onBlur?: (id: string, value?: string) => void;
   onChange: (newValue?: string) => void;
   onFocus?: () => void;
+  onNewLine?: () => void;
 }
 
 const EditableField: React.FC<EditableFieldProps> = (props) => {
@@ -102,6 +106,7 @@ const EditableField: React.FC<EditableFieldProps> = (props) => {
     onChange,
     onFocus,
     onBlur,
+    onNewLine,
     value,
     id,
     error,
@@ -192,13 +197,29 @@ const EditableField: React.FC<EditableFieldProps> = (props) => {
       e.stopPropagation();
     }
     const enterOnField = e.key === 'Enter' && hasFocus;
-    if (enterOnField && !multiline) {
+    if (enterOnField && !multiline && e.shiftKey) {
+      e.stopPropagation();
+      if (onNewLine) {
+        onNewLine();
+        return;
+      }
       setMultiline(true);
+      updateField('value', e.target.value + '\n');
+      // wait for the textarea to be rendered and then restore focus and selection
+      setTimeout(() => {
+        const len = fieldRef.current?.value?.length;
+        fieldRef.current?.focus();
+        if (len) {
+          fieldRef.current?.setSelectionRange(len, len);
+        }
+      }, 100);
     }
     if (enterOnField && !e.shiftKey) {
-      handleCommit();
+      // blur triggers commit, so call blur to avoid multiple commits
+      fieldRef.current?.blur();
     }
     if (e.key === 'Escape') {
+      e.stopPropagation();
       cancel();
     }
   };
@@ -298,6 +319,8 @@ const EditableField: React.FC<EditableFieldProps> = (props) => {
         <span style={{ color: SharedColors.red20 }}>{requiredMessage || formErrors.value}</span>
       )}
       {error && <span style={{ color: SharedColors.red20 }}>{error}</span>}
+      {hasErrors && hasBeenEdited && <Announced message={requiredMessage || formErrors.value} role="alert" />}
+      {error && <Announced message={error} role="alert" />}
     </Fragment>
   );
 };
