@@ -11,6 +11,7 @@ import { IIconProps } from 'office-ui-fabric-react/lib/Icon';
 import { Announced } from 'office-ui-fabric-react/lib/Announced';
 
 import { FieldConfig, useForm } from '../hooks/useForm';
+import { useAfterRender } from '../hooks/useAfterRender';
 
 const allowedNavigationKeys = ['ArrowDown', 'ArrowUp', 'ArrowLeft', 'ArrowRight', 'PageDown', 'PageUp', 'Home', 'End'];
 
@@ -119,6 +120,7 @@ const EditableField: React.FC<EditableFieldProps> = (props) => {
   const [hasFocus, setHasFocus] = useState<boolean>(false);
   const [hasBeenEdited, setHasBeenEdited] = useState<boolean>(false);
   const [multiline, setMultiline] = useState<boolean>(true);
+  const onAfterRender = useAfterRender();
 
   const formConfig: FieldConfig<{ value: string }> = {
     value: {
@@ -206,13 +208,13 @@ const EditableField: React.FC<EditableFieldProps> = (props) => {
       setMultiline(true);
       updateField('value', e.target.value + '\n');
       // wait for the textarea to be rendered and then restore focus and selection
-      setTimeout(() => {
+      onAfterRender(() => {
         const len = fieldRef.current?.value?.length;
         fieldRef.current?.focus();
         if (len) {
           fieldRef.current?.setSelectionRange(len, len);
         }
-      }, 100);
+      });
     }
     if (enterOnField && !e.shiftKey) {
       // blur triggers commit, so call blur to avoid multiple commits

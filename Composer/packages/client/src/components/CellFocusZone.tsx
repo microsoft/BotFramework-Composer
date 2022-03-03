@@ -6,6 +6,8 @@ import React, { useCallback } from 'react';
 import { FocusZone, FocusZoneTabbableElements, IFocusZoneProps } from 'office-ui-fabric-react/lib/FocusZone';
 import { getFocusStyle, getTheme, mergeStyles } from 'office-ui-fabric-react/lib/Styling';
 
+import { useAfterRender } from '../hooks/useAfterRender';
+
 export const formCell = css`
   outline: none;
   white-space: pre-wrap;
@@ -38,16 +40,17 @@ type CellFocusZoneProps = Omit<
 >;
 
 const CellFocusZone: React.FC<CellFocusZoneProps> = (props) => {
+  const onAfterRender = useAfterRender();
   const focusCurrentZoneAfterRender = useCallback((focusZoneEl: any) => {
     const focusZoneId = focusZoneEl?.dataset?.focuszoneId;
     if (!focusZoneId) {
       return;
     }
     // wait for render to happen before placing focus back to the focus zone
-    setTimeout(() => {
+    onAfterRender(() => {
       const focusZone: HTMLElement | null = document.querySelector(`[data-focuszone-id=${focusZoneId}]`);
       focusZone?.focus();
-    }, 100);
+    });
   }, []);
 
   const onCellKeyDown = useCallback((ev) => {
