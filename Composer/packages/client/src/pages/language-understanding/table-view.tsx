@@ -31,8 +31,10 @@ import {
   dialogsSelectorFamily,
   luFilesSelectorFamily,
 } from '../../recoilModel';
+import { CellFocusZone } from '../../components/CellFocusZone';
 
-import { formCell, luPhraseCell, tableCell, editableFieldContainer } from './styles';
+import { luPhraseCell, tableCell, editableFieldContainer } from './styles';
+
 interface TableViewProps extends RouteComponentProps<{ dialogId: string; skillId: string; projectId: string }> {
   projectId: string;
   skillId?: string;
@@ -199,7 +201,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
         onRender: (item: Intent) => {
           const displayName = `#${item.name}`;
           return (
-            <div data-is-focusable css={formCell}>
+            <CellFocusZone>
               <EditableField
                 multiline
                 ariaLabel={formatMessage(`Name is {name}`, { name: displayName })}
@@ -217,7 +219,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
                 }}
                 onChange={() => {}}
               />
-            </div>
+            </CellFocusZone>
           );
         },
       },
@@ -231,7 +233,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
         onRender: (item) => {
           const text = item.phrases;
           return (
-            <div data-is-focusable css={luPhraseCell}>
+            <CellFocusZone>
               <EditableField
                 multiline
                 ariaLabel={formatMessage(`Sample Phrases are {phrases}`, { phrases: text })}
@@ -250,7 +252,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
                 }}
                 onChange={() => {}}
               />
-            </div>
+            </CellFocusZone>
           );
         },
       },
@@ -265,7 +267,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
         onRender: (item) => {
           const text = item.phrases;
           return (
-            <div data-is-focusable css={luPhraseCell}>
+            <CellFocusZone css={luPhraseCell}>
               <EditableField
                 multiline
                 ariaLabel={formatMessage(`Sample Phrases are {phrases}`, { phrases: text })}
@@ -284,7 +286,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
                 }}
                 onChange={() => {}}
               />
-            </div>
+            </CellFocusZone>
           );
         },
       },
@@ -298,7 +300,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
         onRender: (item) => {
           const text = item[`body-${defaultLanguage}`];
           return (
-            <div data-is-focusable css={luPhraseCell}>
+            <CellFocusZone css={luPhraseCell}>
               <EditableField
                 multiline
                 ariaLabel={formatMessage(`Sample Phrases are {phrases}`, { phrases: text })}
@@ -320,7 +322,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
                 }}
                 onChange={() => {}}
               />
-            </div>
+            </CellFocusZone>
           );
         },
       },
@@ -338,7 +340,6 @@ const TableView: React.FC<TableViewProps> = (props) => {
           return (
             <div
               key={id}
-              data-is-focusable
               aria-label={formatMessage(`link to where this LUIS intent is defined`)}
               onClick={() => navigateTo(`${baseURL}dialogs/${id}`)}
             >
@@ -399,7 +400,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
         data: 'string',
         onRender: (item) => {
           return (
-            <div data-is-focusable css={tableCell}>
+            <div css={tableCell}>
               <div aria-label={formatMessage(`State is {state}`, { state: item.state })} tabIndex={-1}>
                 {item.state}
               </div>

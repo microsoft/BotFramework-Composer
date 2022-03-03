@@ -94,7 +94,7 @@ export const rowDetails = {
       '.ms-GroupHeader-expand': {
         fontSize: 8,
       },
-      '&:hover': {
+      '&:hover, &:focus-within': {
         background: NeutralColors.gray30,
         selectors: {
           '.ms-TextField-fieldGroup': {
