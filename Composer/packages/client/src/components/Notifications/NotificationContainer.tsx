@@ -4,7 +4,7 @@
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core';
 import isEmpty from 'lodash/isEmpty';
-import { Layer } from 'office-ui-fabric-react/lib/Layer';
+import { Layer } from '@fluentui/react/lib/Layer';
 import { useRecoilValue } from 'recoil';
 
 import { dispatcherState } from '../../recoilModel';

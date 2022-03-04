@@ -3,10 +3,10 @@
 
 import * as React from 'react';
 import formatMessage from 'format-message';
-import { Text } from 'office-ui-fabric-react/lib/Text';
+import { Text } from '@fluentui/react/lib/Text';
 import styled from '@emotion/styled';
-import { FluentTheme } from '@uifabric/fluent-theme';
-import { Link, Stack } from 'office-ui-fabric-react';
+import { FluentTheme } from '@fluentui/theme';
+import { Link, Stack } from '@fluentui/react';
 import { SectionTitle } from '@bfc/ui-shared';
 
 const Content = styled(Stack)`

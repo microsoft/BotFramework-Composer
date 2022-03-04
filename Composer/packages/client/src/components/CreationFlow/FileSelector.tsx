@@ -6,26 +6,26 @@ import path from 'path';
 
 import { useMemo, useState, useRef, useEffect } from 'react';
 import { jsx, css } from '@emotion/core';
-import { Icon } from 'office-ui-fabric-react/lib/Icon';
-import { IconButton } from 'office-ui-fabric-react/lib/Button';
-import { Link } from 'office-ui-fabric-react/lib/Link';
-import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
-import { Sticky, StickyPositionType } from 'office-ui-fabric-react/lib/Sticky';
-import { ScrollablePane, ScrollbarVisibility } from 'office-ui-fabric-react/lib/ScrollablePane';
+import { Icon } from '@fluentui/react/lib/Icon';
+import { IconButton } from '@fluentui/react/lib/Button';
+import { Link } from '@fluentui/react/lib/Link';
+import { TooltipHost } from '@fluentui/react/lib/Tooltip';
+import { Sticky, StickyPositionType } from '@fluentui/react/lib/Sticky';
+import { ScrollablePane, ScrollbarVisibility } from '@fluentui/react/lib/ScrollablePane';
 import {
   DetailsList,
   DetailsListLayoutMode,
   Selection,
   SelectionMode,
   CheckboxVisibility,
-} from 'office-ui-fabric-react/lib/DetailsList';
+} from '@fluentui/react/lib/DetailsList';
 import formatMessage from 'format-message';
 import { Fragment } from 'react';
-import { Stack, StackItem } from 'office-ui-fabric-react/lib/Stack';
-import { ComboBox, IComboBox, IComboBoxOption } from 'office-ui-fabric-react/lib/ComboBox';
-import { TextField } from 'office-ui-fabric-react/lib/TextField';
+import { Stack, StackItem } from '@fluentui/react/lib/Stack';
+import { ComboBox, IComboBox, IComboBoxOption } from '@fluentui/react/lib/ComboBox';
+import { TextField } from '@fluentui/react/lib/TextField';
 import moment from 'moment';
-import { mergeStyleSets } from 'office-ui-fabric-react/lib/Styling';
+import { mergeStyleSets } from '@fluentui/react/lib/Styling';
 import debounce from 'lodash/debounce';
 
 import { FileTypes, nameRegex } from '../../constants';

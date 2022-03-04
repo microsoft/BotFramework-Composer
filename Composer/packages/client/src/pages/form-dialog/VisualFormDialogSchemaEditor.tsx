@@ -5,11 +5,11 @@ import { JsonEditor } from '@bfc/code-editor';
 import { FormDialogSchemaEditor } from '@bfc/form-dialogs';
 import { FileExtensions, FormDialogSchemaTemplate } from '@bfc/shared';
 import styled from '@emotion/styled';
-import { NeutralColors } from '@uifabric/fluent-theme';
+import { NeutralColors } from '@fluentui/theme';
 import formatMessage from 'format-message';
-import { ActionButton } from 'office-ui-fabric-react/lib/Button';
-import { IStackProps, IStackStyles, Stack } from 'office-ui-fabric-react/lib/Stack';
-import { classNamesFunction } from 'office-ui-fabric-react/lib/Utilities';
+import { ActionButton } from '@fluentui/react/lib/Button';
+import { IStackProps, IStackStyles, Stack } from '@fluentui/react/lib/Stack';
+import { classNamesFunction } from '@fluentui/react/lib/Utilities';
 import * as React from 'react';
 import { useRecoilValue } from 'recoil';
 

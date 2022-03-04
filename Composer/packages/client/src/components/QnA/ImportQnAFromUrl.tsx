@@ -5,9 +5,9 @@
 import { jsx } from '@emotion/core';
 import React, { useEffect } from 'react';
 import formatMessage from 'format-message';
-import { Stack } from 'office-ui-fabric-react/lib/Stack';
-import { TextField } from 'office-ui-fabric-react/lib/TextField';
-import { Checkbox } from 'office-ui-fabric-react/lib/Checkbox';
+import { Stack } from '@fluentui/react/lib/Stack';
+import { TextField } from '@fluentui/react/lib/TextField';
+import { Checkbox } from '@fluentui/react/lib/Checkbox';
 import { QnAFile } from '@bfc/shared';
 
 import { FieldConfig, useForm } from '../../hooks/useForm';

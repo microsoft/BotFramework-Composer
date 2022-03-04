@@ -5,12 +5,12 @@
 import { css, jsx } from '@emotion/core';
 import { useEffect, useState } from 'react';
 import formatMessage from 'format-message';
-import { TextField } from 'office-ui-fabric-react/lib/TextField';
+import { TextField } from '@fluentui/react/lib/TextField';
 import { firstPartyTemplateFeed } from '@bfc/shared';
-import { Link } from 'office-ui-fabric-react/lib/components/Link';
+import { Link } from '@fluentui/react/lib/components/Link';
 import { useRecoilValue } from 'recoil';
-import { NeutralColors } from '@uifabric/fluent-theme/lib/fluent/FluentColors';
-import { Text } from 'office-ui-fabric-react/lib/Text';
+import { NeutralColors } from '@fluentui/theme';
+import { Text } from '@fluentui/react/lib/Text';
 
 import { dispatcherState, templateFeedUrlState, templateProjectsState } from '../../../recoilModel/atoms/appState';
 import TelemetryClient from '../../../telemetry/TelemetryClient';

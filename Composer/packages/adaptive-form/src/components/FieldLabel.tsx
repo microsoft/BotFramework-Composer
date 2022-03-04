@@ -3,12 +3,13 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import React, { useRef } from 'react';
-import { DirectionalHint, TooltipDelay } from 'office-ui-fabric-react/lib/Tooltip';
-import { Label } from 'office-ui-fabric-react/lib/Label';
+import { TooltipDelay } from '@fluentui/react/lib/Tooltip';
+import { Label } from '@fluentui/react/lib/Label';
 import formatMessage from 'format-message';
 import { useShellApi } from '@bfc/extension-client';
 import { HelpTooltip } from '@bfc/ui-shared';
-import { FontSizes } from 'office-ui-fabric-react/lib/Styling';
+import { FontSizes } from '@fluentui/react/lib/Styling';
+import { DirectionalHint } from '@fluentui/react';
 
 import { useAdaptiveFormContext } from '../AdaptiveFormContext';
 

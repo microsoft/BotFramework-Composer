@@ -9,8 +9,8 @@ import formatMessage from 'format-message';
 import { useRecoilValue } from 'recoil';
 import { PublishResult, PublishTarget } from '@bfc/shared';
 import querystring from 'query-string';
-import { Pivot, PivotItem } from 'office-ui-fabric-react/lib/Pivot';
-import { Stack } from 'office-ui-fabric-react/lib/Stack';
+import { Pivot, PivotItem } from '@fluentui/react/lib/Pivot';
+import { Stack } from '@fluentui/react/lib/Stack';
 
 import {
   dispatcherState,

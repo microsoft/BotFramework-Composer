@@ -3,14 +3,14 @@
 
 import { OpenConfirmModalWithCheckbox } from '@bfc/ui-shared';
 import styled from '@emotion/styled';
-import { FluentTheme } from '@uifabric/fluent-theme';
+import { FluentTheme } from '@fluentui/theme';
 import formatMessage from 'format-message';
-import { CommandBarButton } from 'office-ui-fabric-react/lib/Button';
-import { IContextualMenuItem } from 'office-ui-fabric-react/lib/ContextualMenu';
-import { Dropdown, DropdownMenuItemType, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
-import { OverflowSet } from 'office-ui-fabric-react/lib/OverflowSet';
-import { Stack } from 'office-ui-fabric-react/lib/Stack';
-import { Text } from 'office-ui-fabric-react/lib/Text';
+import { CommandBarButton } from '@fluentui/react/lib/Button';
+import { IContextualMenuItem } from '@fluentui/react/lib/ContextualMenu';
+import { Dropdown, DropdownMenuItemType, IDropdownOption } from '@fluentui/react/lib/Dropdown';
+import { OverflowSet } from '@fluentui/react/lib/OverflowSet';
+import { Stack } from '@fluentui/react/lib/Stack';
+import { Text } from '@fluentui/react/lib/Text';
 import React from 'react';
 
 import { ItemWithTooltip } from '../../components/ItemWithTooltip';

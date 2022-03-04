@@ -30,7 +30,7 @@
     "@types/react-dom": "16.9.5",
     "autoprefixer": "^9.5.1",
     "copyfiles": "^2.1.0",
-    "office-ui-fabric-react": "^7.88.1",
+    "@fluentui/react": "^8.57.1",
     "react": "16.13.1",
     "react-dom": "16.13.1",
     "rimraf": "^2.6.3"

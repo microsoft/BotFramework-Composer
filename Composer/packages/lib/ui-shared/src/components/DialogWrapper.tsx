@@ -2,11 +2,11 @@
 // Licensed under the MIT License.
 
 import React from 'react';
-import { Dialog, DialogType, IDialogProps } from 'office-ui-fabric-react/lib/Dialog';
-import { FontWeights } from 'office-ui-fabric-react/lib/Styling';
-import { FontSizes } from '@uifabric/fluent-theme';
-import { IDialogContentStyles } from 'office-ui-fabric-react/lib/Dialog';
-import { IModalStyles } from 'office-ui-fabric-react/lib/Modal';
+import { Dialog, DialogType, IDialogProps } from '@fluentui/react/lib/Dialog';
+import { FontWeights } from '@fluentui/react/lib/Styling';
+import { FontSizes } from '@fluentui/theme';
+import { IDialogContentStyles } from '@fluentui/react/lib/Dialog';
+import { IModalStyles } from '@fluentui/react/lib/Modal';
 
 export enum DialogTypes {
   CreateFlow,

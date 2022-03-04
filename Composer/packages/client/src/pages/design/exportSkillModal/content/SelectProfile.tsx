@@ -7,11 +7,11 @@ import { PublishTarget } from '@bfc/shared';
 import formatMessage from 'format-message';
 import React, { Fragment, useEffect, useMemo, useState } from 'react';
 import { useRecoilValue } from 'recoil';
-import { Icon } from 'office-ui-fabric-react/lib/Icon';
-import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
-import { FluentTheme, NeutralColors } from '@uifabric/fluent-theme';
-import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
-import { Link } from 'office-ui-fabric-react/lib/Link';
+import { Icon } from '@fluentui/react/lib/Icon';
+import { Dropdown, IDropdownOption } from '@fluentui/react/lib/Dropdown';
+import { FluentTheme, NeutralColors } from '@fluentui/theme';
+import { MessageBar, MessageBarType } from '@fluentui/react/lib/MessageBar';
+import { Link } from '@fluentui/react/lib/Link';
 import { TextField } from '@bfc/ui-shared';
 
 import { botDisplayNameState, dispatcherState, settingsState } from '../../../../recoilModel';

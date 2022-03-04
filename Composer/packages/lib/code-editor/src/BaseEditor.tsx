@@ -5,9 +5,9 @@
 import { jsx, css, SerializedStyles } from '@emotion/core';
 import React, { useState, useEffect, useMemo, useRef } from 'react';
 import Editor, { EditorDidMount, EditorProps, Monaco, monaco } from '@monaco-editor/react';
-import { NeutralColors, SharedColors } from '@uifabric/fluent-theme';
-import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
-import { Link } from 'office-ui-fabric-react/lib/Link';
+import { NeutralColors, SharedColors } from '@fluentui/theme';
+import { MessageBar, MessageBarType } from '@fluentui/react/lib/MessageBar';
+import { Link } from '@fluentui/react/lib/Link';
 import formatMessage from 'format-message';
 import { Diagnostic } from '@bfc/shared';
 import { findErrors, combineSimpleMessage, findWarnings } from '@bfc/indexers';

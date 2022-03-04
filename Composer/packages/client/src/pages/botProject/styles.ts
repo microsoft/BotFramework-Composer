@@ -2,8 +2,8 @@
 // Licensed under the MIT License.
 
 import { css } from '@emotion/core';
-import { NeutralColors, SharedColors } from '@uifabric/fluent-theme';
-import { FontSizes, FontWeights, mergeStyleSets } from 'office-ui-fabric-react/lib/Styling';
+import { NeutralColors, SharedColors } from '@fluentui/theme';
+import { FontSizes, FontWeights, mergeStyleSets } from '@fluentui/react/lib/Styling';
 
 import { customFieldLabel } from '../../styles';
 

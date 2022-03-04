@@ -6,16 +6,16 @@ import React, { useState, useEffect, useRef, Fragment } from 'react';
 import { jsx, keyframes } from '@emotion/core';
 import { BotIndexer } from '@bfc/indexers';
 import { useRecoilValue } from 'recoil';
-import { IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
-import { Icon } from 'office-ui-fabric-react/lib/Icon';
+import { IDropdownOption } from '@fluentui/react/lib/Dropdown';
+import { Icon } from '@fluentui/react/lib/Icon';
 import formatMessage from 'format-message';
 import get from 'lodash/get';
 import { css } from '@emotion/core';
-import { FontSizes } from 'office-ui-fabric-react/lib/Styling';
-import { NeutralColors } from '@uifabric/fluent-theme';
-import { PrimaryButton } from 'office-ui-fabric-react/lib/Button';
-import { Link } from 'office-ui-fabric-react/lib/Link';
-import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
+import { FontSizes } from '@fluentui/react/lib/Styling';
+import { NeutralColors } from '@fluentui/theme';
+import { PrimaryButton } from '@fluentui/react/lib/Button';
+import { Link } from '@fluentui/react/lib/Link';
+import { MessageBar, MessageBarType } from '@fluentui/react/lib/MessageBar';
 import { TextField, DropdownField } from '@bfc/ui-shared';
 
 import {

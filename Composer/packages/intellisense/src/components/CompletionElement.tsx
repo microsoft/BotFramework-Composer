@@ -4,10 +4,11 @@
 /** @jsx jsx */
 import { css, jsx } from '@emotion/core';
 import { CompletionItemKind } from 'monaco-languageclient';
-import { FontIcon } from 'office-ui-fabric-react/lib/Icon';
-import { DirectionalHint, TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
+import { FontIcon } from '@fluentui/react/lib/Icon';
+import { TooltipHost } from '@fluentui/react/lib/Tooltip';
 import React from 'react';
 import { CompletionItem, MarkupContent } from 'vscode-languageserver-types';
+import { DirectionalHint } from '@fluentui/react';
 
 type FuseJsMatch = { indices: number[][]; value: string; key: string };
 

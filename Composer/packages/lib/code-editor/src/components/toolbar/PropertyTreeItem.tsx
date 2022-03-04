@@ -2,9 +2,9 @@
 // Licensed under the MIT License.
 
 import styled from '@emotion/styled';
-import { NeutralColors } from '@uifabric/fluent-theme';
-import { Icon, IIconStyles } from 'office-ui-fabric-react/lib/Icon';
-import { Stack } from 'office-ui-fabric-react/lib/Stack';
+import { NeutralColors } from '@fluentui/theme';
+import { Icon, IIconStyles } from '@fluentui/react/lib/Icon';
+import { Stack } from '@fluentui/react/lib/Stack';
 import * as React from 'react';
 
 import { PropertyItem } from '../../types';

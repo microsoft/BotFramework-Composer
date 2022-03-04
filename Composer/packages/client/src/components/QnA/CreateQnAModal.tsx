@@ -6,10 +6,10 @@ import { jsx } from '@emotion/core';
 import React, { Fragment, useEffect, useMemo, useState } from 'react';
 import { useRecoilValue } from 'recoil';
 import formatMessage from 'format-message';
-import { Dialog, DialogType, DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
-import { ChoiceGroup, IChoiceGroupOption } from 'office-ui-fabric-react/lib/ChoiceGroup';
-import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button';
-import { Link } from 'office-ui-fabric-react/lib/Link';
+import { Dialog, DialogType, DialogFooter } from '@fluentui/react/lib/Dialog';
+import { ChoiceGroup, IChoiceGroupOption } from '@fluentui/react/lib/ChoiceGroup';
+import { PrimaryButton, DefaultButton } from '@fluentui/react/lib/Button';
+import { Link } from '@fluentui/react/lib/Link';
 import {
   DetailsList,
   SelectionMode,
@@ -19,9 +19,9 @@ import {
   DetailsRow,
   IDetailsRowProps,
   CheckboxVisibility,
-} from 'office-ui-fabric-react/lib/DetailsList';
-import { Spinner } from 'office-ui-fabric-react/lib/Spinner';
-import { Dropdown } from 'office-ui-fabric-react/lib/Dropdown';
+} from '@fluentui/react/lib/DetailsList';
+import { Spinner } from '@fluentui/react/lib/Spinner';
+import { Dropdown } from '@fluentui/react/lib/Dropdown';
 import { SubscriptionClient } from '@azure/arm-subscriptions';
 import { Subscription } from '@azure/arm-subscriptions/esm/models';
 import { TokenCredentials } from '@azure/ms-rest-js';
@@ -30,8 +30,8 @@ import { CognitiveServicesCredentials } from '@azure/ms-rest-azure-js';
 import { QnAMakerClient } from '@azure/cognitiveservices-qnamaker';
 import sortBy from 'lodash/sortBy';
 import uniq from 'lodash/uniq';
-import { NeutralColors } from '@uifabric/fluent-theme';
-import { IRenderFunction } from '@uifabric/utilities';
+import { NeutralColors } from '@fluentui/theme';
+import { IRenderFunction } from '@fluentui/utilities';
 
 import TelemetryClient from '../../telemetry/TelemetryClient';
 import {

@@ -55,7 +55,7 @@ describe('<TriggerCreationModal/>', () => {
     const triggerType = component.getByTestId('triggerTypeDropDown');
     fireEvent.click(triggerType);
 
-    const luisOption = component.getByTitle('Intent recognized');
+    const luisOption = component.getByText('Intent recognized');
     fireEvent.click(luisOption);
     const node = await waitFor(() => component.getByTestId('triggerFormSubmit'));
     expect(node).toBeDisabled();
@@ -66,7 +66,7 @@ describe('<TriggerCreationModal/>', () => {
     const triggerType = component.getByTestId('triggerTypeDropDown');
     fireEvent.click(triggerType);
 
-    const qnaOption = component.getByTitle('QnA Intent recognized');
+    const qnaOption = component.getByText('QnA Intent recognized');
     fireEvent.click(qnaOption);
 
     const node = await waitFor(() => component.getByTestId('triggerFormSubmit'));

@@ -5,12 +5,13 @@
 
 import { FieldProps, useFormConfig } from '@bfc/extension-client';
 import { jsx } from '@emotion/core';
-import { FluentTheme } from '@uifabric/fluent-theme/lib/fluent';
+import { FluentTheme } from '@fluentui/theme';
 import formatMessage from 'format-message';
-import { Dropdown, IDropdownOption, ResponsiveMode } from 'office-ui-fabric-react/lib/Dropdown';
-import { Icon } from 'office-ui-fabric-react/lib/Icon';
+import { Dropdown, IDropdownOption } from '@fluentui/react/lib/Dropdown';
+import { Icon } from '@fluentui/react/lib/Icon';
 import React, { useMemo, useState } from 'react';
 import { css } from '@emotion/core';
+import { ResponsiveMode } from '@fluentui/react';
 
 import { getUiPlaceholder, resolveFieldWidget } from '../../../utils';
 import { FieldLabel } from '../../FieldLabel';

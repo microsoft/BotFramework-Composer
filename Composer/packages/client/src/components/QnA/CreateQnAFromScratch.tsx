@@ -5,8 +5,8 @@
 import { jsx } from '@emotion/core';
 import React, { Fragment, useEffect } from 'react';
 import formatMessage from 'format-message';
-import { Stack } from 'office-ui-fabric-react/lib/Stack';
-import { TextField } from 'office-ui-fabric-react/lib/TextField';
+import { Stack } from '@fluentui/react/lib/Stack';
+import { TextField } from '@fluentui/react/lib/TextField';
 
 import { FieldConfig, useForm } from '../../hooks/useForm';
 

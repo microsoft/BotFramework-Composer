@@ -3,12 +3,12 @@
 /** @jsx jsx */
 import { jsx, css, SerializedStyles } from '@emotion/core';
 import React, { useState, useEffect, useRef, Fragment } from 'react';
-import { TextField, ITextFieldStyles, ITextFieldProps, ITextField } from 'office-ui-fabric-react/lib/TextField';
-import { NeutralColors, SharedColors } from '@uifabric/fluent-theme';
-import { mergeStyleSets } from '@uifabric/styling';
-import { IconButton } from 'office-ui-fabric-react/lib/Button';
-import { IIconProps } from 'office-ui-fabric-react/lib/Icon';
-import { Announced } from 'office-ui-fabric-react/lib/Announced';
+import { TextField, ITextFieldStyles, ITextFieldProps, ITextField } from '@fluentui/react/lib/TextField';
+import { NeutralColors, SharedColors } from '@fluentui/theme';
+import { mergeStyleSets } from '@fluentui/style-utilities';
+import { IconButton } from '@fluentui/react/lib/Button';
+import { IIconProps } from '@fluentui/react/lib/Icon';
+import { Announced } from '@fluentui/react/lib/Announced';
 
 import { FieldConfig, useForm } from '../hooks/useForm';
 import { useAfterRender } from '../hooks/useAfterRender';

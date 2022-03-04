@@ -71,17 +71,22 @@ describe('Root Bot External Service', () => {
         setQnASettings: setQnASettingsMock,
       });
     };
-    const { getByTestId } = renderWithRecoilAndCustomDispatchers(
+
+    const { getByTestId, findByText } = renderWithRecoilAndCustomDispatchers(
       <RootBotExternalService projectId={state.projectId} />,
       initRecoilState
     );
+
     const textFieldAuthoring = getByTestId('rootLUISAuthoringKey');
     await act(async () => {
-      await fireEvent.change(textFieldAuthoring, {
+      fireEvent.change(textFieldAuthoring, {
         target: { value: 'myRootLUISKey' },
       });
-      await fireEvent.blur(textFieldAuthoring);
     });
+    await act(async () => {
+      fireEvent.blur(textFieldAuthoring);
+    });
+
     expect(setSettingsMock).toBeCalledWith('test', {
       luis: {
         authoringKey: 'myRootLUISKey',
@@ -92,12 +97,15 @@ describe('Root Bot External Service', () => {
         subscriptionKey: '',
       },
     });
+
     const regionDropdown = getByTestId('rootLUISRegion');
     await act(async () => {
-      await fireEvent.focus(regionDropdown);
-      await fireEvent.keyDown(regionDropdown, { key: 'ArrowDown' });
-      await fireEvent.blur(regionDropdown);
+      fireEvent.click(regionDropdown);
+      const option = await findByText('West US');
+      fireEvent.click(option);
+      fireEvent.blur(regionDropdown);
     });
+
     expect(setSettingsMock).toBeCalledWith('test', {
       luis: {
         authoringKey: '',
@@ -108,6 +116,7 @@ describe('Root Bot External Service', () => {
         subscriptionKey: '',
       },
     });
+
     const textFieldSubscription = getByTestId('QnASubscriptionKey');
     await act(async () => {
       await fireEvent.change(textFieldSubscription, {
@@ -115,6 +124,7 @@ describe('Root Bot External Service', () => {
       });
       await fireEvent.blur(textFieldSubscription);
     });
+
     expect(setSettingsMock).toBeCalledWith('test', {
       luis: {
         authoringKey: '',
@@ -125,6 +135,7 @@ describe('Root Bot External Service', () => {
         subscriptionKey: 'myQnASubscriptionKey',
       },
     });
+
     expect(setQnASettingsMock).toBeCalledWith('test', 'myQnASubscriptionKey');
   });
 });

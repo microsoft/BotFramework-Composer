@@ -4,13 +4,13 @@
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core';
 import { useEffect, useRef, useState } from 'react';
-import { FontSizes, NeutralColors } from '@uifabric/fluent-theme';
+import { FontSizes, NeutralColors } from '@fluentui/theme';
 import formatMessage from 'format-message';
-import { CommandButton, IButton } from 'office-ui-fabric-react/lib/Button';
-import { IOverflowSetItemProps } from 'office-ui-fabric-react/lib/OverflowSet';
-import { ISearchBox, ISearchBoxStyles, SearchBox } from 'office-ui-fabric-react/lib/SearchBox';
+import { CommandButton, IButton } from '@fluentui/react/lib/Button';
+import { IOverflowSetItemProps } from '@fluentui/react/lib/OverflowSet';
+import { ISearchBox, ISearchBoxStyles, SearchBox } from '@fluentui/react/lib/SearchBox';
 import { useRecoilValue } from 'recoil';
-import { usePrevious } from '@uifabric/react-hooks';
+import { usePrevious } from '@fluentui/react-hooks';
 
 import { DisableFeatureToolTip } from '../DisableFeatureToolTip';
 import { usePVACheck } from '../../hooks/usePVACheck';

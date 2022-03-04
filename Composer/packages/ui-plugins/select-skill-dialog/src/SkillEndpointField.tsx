@@ -2,11 +2,11 @@
 // Licensed under the MIT License.
 
 import React, { useMemo } from 'react';
-import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
+import { Dropdown, IDropdownOption } from '@fluentui/react/lib/Dropdown';
 import { FieldProps, useShellApi } from '@bfc/extension-client';
 import { FieldLabel } from '@bfc/adaptive-form';
 import { getSkillNameFromSetting, Skill, VIRTUAL_LOCAL_ENDPOINT } from '@bfc/shared';
-import { SelectableOptionMenuItemType } from 'office-ui-fabric-react/lib/ComboBox';
+import { SelectableOptionMenuItemType } from '@fluentui/react/lib/utilities/selectableOption';
 
 export const SkillEndpointField: React.FC<FieldProps> = (props) => {
   const { description, label, required, uiOptions, value } = props;

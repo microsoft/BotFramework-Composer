@@ -32,8 +32,8 @@ jest.mock('../modalityEditors/SuggestedActionsModalityEditor', () => {
   };
 });
 
-jest.mock('office-ui-fabric-react/lib/Button', () => {
-  const MockButtons = jest.requireActual('office-ui-fabric-react/lib/Button');
+jest.mock('@fluentui/react/lib/Button', () => {
+  const MockButtons = jest.requireActual('@fluentui/react/lib/Button');
 
   return {
     ...MockButtons,

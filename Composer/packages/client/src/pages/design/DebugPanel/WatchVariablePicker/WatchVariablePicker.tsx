@@ -5,15 +5,15 @@
 import { css, jsx } from '@emotion/core';
 import formatMessage from 'format-message';
 import React, { useMemo, useCallback, useEffect, useRef, FocusEvent, KeyboardEvent, useState, FormEvent } from 'react';
-import { TextField, ITextField, ITextFieldStyles } from 'office-ui-fabric-react/lib/TextField';
+import { TextField, ITextField, ITextFieldStyles } from '@fluentui/react/lib/TextField';
 import debounce from 'lodash/debounce';
 import {
   IContextualMenuItem,
   ContextualMenu,
   DirectionalHint,
   IContextualMenuStyles,
-} from 'office-ui-fabric-react/lib/ContextualMenu';
-import { SharedColors } from '@uifabric/fluent-theme';
+} from '@fluentui/react/lib/ContextualMenu';
+import { SharedColors } from '@fluentui/theme';
 import { useRecoilValue } from 'recoil';
 import { UserSettings } from '@botframework-composer/types';
 

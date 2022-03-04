@@ -4,9 +4,9 @@
 /** @jsx jsx */
 import { jsx, SerializedStyles } from '@emotion/core';
 import React, { useState } from 'react';
-import { Image, ImageFit, ImageLoadState } from 'office-ui-fabric-react/lib/Image';
-import { Link } from 'office-ui-fabric-react/lib/Link';
-import { useId } from '@uifabric/react-hooks';
+import { Image, ImageFit, ImageLoadState } from '@fluentui/react/lib/Image';
+import { Link } from '@fluentui/react/lib/Link';
+import { useId } from '@fluentui/react-hooks';
 
 import defaultArticleCardCover from '../../images/defaultArticleCardCover.svg';
 import defaultVideoCardCover from '../../images/defaultVideoCardCover.svg';

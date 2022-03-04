@@ -7,11 +7,11 @@ import cloneDeep from 'lodash/cloneDeep';
 import { jsx } from '@emotion/core';
 import React, { useState, useCallback } from 'react';
 import formatMessage from 'format-message';
-import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button';
-import { ScrollablePane, IScrollablePaneStyles } from 'office-ui-fabric-react/lib/ScrollablePane';
-import { Stack, StackItem } from 'office-ui-fabric-react/lib/Stack';
-import { Checkbox } from 'office-ui-fabric-react/lib/Checkbox';
-import { Label } from 'office-ui-fabric-react/lib/Label';
+import { PrimaryButton, DefaultButton } from '@fluentui/react/lib/Button';
+import { ScrollablePane, IScrollablePaneStyles } from '@fluentui/react/lib/ScrollablePane';
+import { Stack, StackItem } from '@fluentui/react/lib/Stack';
+import { Checkbox } from '@fluentui/react/lib/Checkbox';
+import { Label } from '@fluentui/react/lib/Label';
 import { DialogWrapper, DialogTypes } from '@bfc/ui-shared';
 
 import { MultiLanguagesDialog } from '../../constants';

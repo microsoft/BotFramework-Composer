@@ -55,7 +55,7 @@ describe('<Comment />', () => {
 
   it('can delete a comment', async () => {
     const comment = faker.lorem.paragraph();
-    const { findByLabelText, findByPlaceholderText, findByText, queryByTestId } = render(
+    const { findByLabelText, findByPlaceholderText, queryByTestId, findByRole } = render(
       <Comment comment={comment} onChange={onChange} />
     );
 
@@ -68,7 +68,7 @@ describe('<Comment />', () => {
       userEvent.click(menu);
     });
 
-    const deleteBtn = await findByText('Delete');
+    const deleteBtn = await findByRole('menuitem', { name: 'Delete' });
     act(() => {
       userEvent.click(deleteBtn);
     });

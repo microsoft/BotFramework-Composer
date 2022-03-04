@@ -5,11 +5,11 @@
 import { jsx, css } from '@emotion/core';
 import { useCallback, useEffect, useMemo, useRef } from 'react';
 import formatMessage from 'format-message';
-import { IconButton } from 'office-ui-fabric-react/lib/Button';
-import { IPivot, Pivot, PivotItem } from 'office-ui-fabric-react/lib/Pivot';
-import { FontSizes } from '@uifabric/fluent-theme';
+import { IconButton } from '@fluentui/react/lib/Button';
+import { IPivot, Pivot, PivotItem } from '@fluentui/react/lib/Pivot';
+import { FontSizes } from '@fluentui/theme';
 import { Resizable } from 're-resizable';
-import { Label } from 'office-ui-fabric-react/lib/Label';
+import { Label } from '@fluentui/react/lib/Label';
 import { useRecoilValue } from 'recoil';
 
 import TelemetryClient from '../../../telemetry/TelemetryClient';

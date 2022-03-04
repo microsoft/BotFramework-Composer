@@ -9,7 +9,7 @@ import { Notification } from '../../../recoilModel/types';
 import { NotificationPanel } from '../NotificationPanel';
 
 jest.mock('../NotificationCard', () => ({ NotificationCard: () => <div data-testid="NotificationCard" /> }));
-jest.mock('office-ui-fabric-react/lib/Button', () => ({
+jest.mock('@fluentui/react/lib/Button', () => ({
   ActionButton: ({ onClick }) => (
     <button data-testid="ClearAll" onClick={onClick}>
       Clear all

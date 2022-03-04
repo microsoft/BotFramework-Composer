@@ -4,8 +4,8 @@
 /** @jsx jsx */
 import { css, jsx } from '@emotion/core';
 import React from 'react';
-import { Checkbox } from 'office-ui-fabric-react/lib/Checkbox';
-import { Link } from 'office-ui-fabric-react/lib/Link';
+import { Checkbox } from '@fluentui/react/lib/Checkbox';
+import { Link } from '@fluentui/react/lib/Link';
 import formatMessage from 'format-message';
 import { FeatureFlagKey } from '@botframework-composer/types';
 

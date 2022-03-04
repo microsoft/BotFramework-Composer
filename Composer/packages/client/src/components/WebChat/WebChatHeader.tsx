@@ -4,10 +4,10 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import React from 'react';
-import { ActionButton, DefaultButton, IButtonStyles, IconButton } from 'office-ui-fabric-react/lib/Button';
-import { IContextualMenuProps } from 'office-ui-fabric-react/lib/ContextualMenu';
+import { ActionButton, DefaultButton, IButtonStyles, IconButton } from '@fluentui/react/lib/Button';
+import { IContextualMenuProps } from '@fluentui/react/lib/ContextualMenu';
 import formatMessage from 'format-message';
-import { CommunicationColors, NeutralColors } from '@uifabric/fluent-theme';
+import { CommunicationColors, NeutralColors } from '@fluentui/theme';
 
 import { RestartOption } from './types';
 

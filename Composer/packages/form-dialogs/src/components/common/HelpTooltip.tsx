@@ -1,10 +1,10 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { FluentTheme } from '@uifabric/fluent-theme';
+import { FluentTheme } from '@fluentui/theme';
 import * as React from 'react';
 import { HelpTooltip as SharedHelpTooltip } from '@bfc/ui-shared';
-import { FontSizes } from 'office-ui-fabric-react/lib/Styling';
+import { FontSizes } from '@fluentui/react/lib/Styling';
 
 const iconStyles = {
   helpIcon: {

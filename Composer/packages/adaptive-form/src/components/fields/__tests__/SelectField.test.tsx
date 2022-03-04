@@ -30,7 +30,7 @@ describe('<SelectField />', () => {
     fireEvent.click(dropdown);
 
     // remove the first option because it is the one shown as selected
-    const options = screen.getAllByRole('option').slice(1);
+    const options = screen.getAllByRole('option');
     expect(options).toHaveLength(4);
     expect(options[0]).toHaveTextContent('');
     expect(options[1]).toHaveTextContent(/option 1/);

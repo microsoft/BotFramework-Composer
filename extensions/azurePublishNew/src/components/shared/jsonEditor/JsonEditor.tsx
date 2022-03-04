@@ -4,8 +4,8 @@
 import { jsx, css, SerializedStyles } from '@emotion/core';
 import React, { useRef } from 'react';
 import MonacoEditor, { EditorDidMount, EditorProps } from '@monaco-editor/react';
-import { NeutralColors, SharedColors } from '@uifabric/fluent-theme';
-import { MessageBar, MessageBarType, Link } from 'office-ui-fabric-react';
+import { NeutralColors, SharedColors } from '@fluentui/theme';
+import { MessageBar, MessageBarType, Link } from '@fluentui/react';
 import formatMessage from 'format-message';
 import styled from '@emotion/styled';
 import { useShellApi } from '@bfc/extension-client';

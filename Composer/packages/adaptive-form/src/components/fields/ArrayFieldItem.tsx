@@ -4,10 +4,10 @@
 import { jsx } from '@emotion/core';
 import React, { useEffect, useRef } from 'react';
 import { FieldProps } from '@bfc/extension-client';
-import { NeutralColors } from '@uifabric/fluent-theme';
-import { IconButton } from 'office-ui-fabric-react/lib/Button';
-import { FontSizes } from '@uifabric/styling';
-import { IContextualMenuItem } from 'office-ui-fabric-react/lib/ContextualMenu';
+import { NeutralColors } from '@fluentui/theme';
+import { IconButton } from '@fluentui/react/lib/Button';
+import { FontSizes } from '@fluentui/style-utilities';
+import { IContextualMenuItem } from '@fluentui/react/lib/ContextualMenu';
 import formatMessage from 'format-message';
 
 import { SchemaField } from '../SchemaField';

@@ -2,8 +2,8 @@
 // Licensed under the MIT License.
 
 import { css } from '@emotion/core';
-import { FontWeights } from '@uifabric/styling';
-import { FontSizes } from '@uifabric/fluent-theme';
+import { FontWeights } from '@fluentui/style-utilities';
+import { FontSizes } from '@fluentui/theme';
 
 export const dialogContentStyles = {
   title: {

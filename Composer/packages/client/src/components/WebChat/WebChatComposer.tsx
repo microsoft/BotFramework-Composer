@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 import React from 'react';
 import { createStyleSet, Components } from 'botframework-webchat';
-import { CommunicationColors, NeutralColors } from '@uifabric/fluent-theme';
+import { CommunicationColors, NeutralColors } from '@fluentui/theme';
 
 import { ConversationService } from './utils/conversationService';
 import webChatStyleOptions from './utils/webChatTheme';

@@ -4,10 +4,10 @@
 /** @jsx jsx */
 import { css, jsx } from '@emotion/core';
 import { Fragment, useState, useEffect, useLayoutEffect, useRef } from 'react';
-import { FontSizes, FontWeights } from 'office-ui-fabric-react/lib/Styling';
-import { IconButton } from 'office-ui-fabric-react/lib/Button';
-import { Label } from 'office-ui-fabric-react/lib/Label';
-import { NeutralColors } from '@uifabric/fluent-theme';
+import { FontSizes, FontWeights } from '@fluentui/react/lib/Styling';
+import { IconButton } from '@fluentui/react/lib/Button';
+import { Label } from '@fluentui/react/lib/Label';
+import { NeutralColors } from '@fluentui/theme';
 import formatMessage from 'format-message';
 
 const styles = {

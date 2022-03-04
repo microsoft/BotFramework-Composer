@@ -2,7 +2,8 @@
 // Licensed under the MIT License.
 
 import React from 'react';
-import { TooltipHost, DirectionalHint } from 'office-ui-fabric-react/lib/Tooltip';
+import { TooltipHost } from '@fluentui/react/lib/Tooltip';
+import { DirectionalHint } from '@fluentui/react';
 
 type TreeItemContentProps = {
   tooltip?: string | JSX.Element | JSX.Element[];

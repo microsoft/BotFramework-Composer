@@ -3,16 +3,17 @@
 
 import { OpenConfirmModal } from '@bfc/ui-shared';
 import styled from '@emotion/styled';
-import { FluentTheme } from '@uifabric/fluent-theme';
-import { useId } from '@uifabric/react-hooks';
+import { FluentTheme } from '@fluentui/theme';
+import { useId } from '@fluentui/react-hooks';
 import formatMessage from 'format-message';
-import { Icon } from 'office-ui-fabric-react/lib/Icon';
-import { Stack } from 'office-ui-fabric-react/lib/Stack';
-import { Text } from 'office-ui-fabric-react/lib/Text';
-import { DirectionalHint, TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
+import { Icon } from '@fluentui/react/lib/Icon';
+import { Stack } from '@fluentui/react/lib/Stack';
+import { Text } from '@fluentui/react/lib/Text';
+import { TooltipHost } from '@fluentui/react/lib/Tooltip';
 import * as React from 'react';
 import { Draggable, DraggableProvidedDragHandleProps } from 'react-beautiful-dnd';
 import { useRecoilValue } from 'recoil';
+import { DirectionalHint } from '@fluentui/react';
 
 import {
   activePropertyIdAtom,

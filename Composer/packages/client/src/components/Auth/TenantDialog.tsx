@@ -4,12 +4,12 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import { DialogWrapper, DialogTypes } from '@bfc/ui-shared';
-import { FontSizes } from '@uifabric/fluent-theme';
-import { FontWeights } from 'office-ui-fabric-react/lib/Styling';
+import { FontSizes } from '@fluentui/theme';
+import { FontWeights } from '@fluentui/react/lib/Styling';
 import formatMessage from 'format-message';
-import { DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
-import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button';
-import { ChoiceGroup } from 'office-ui-fabric-react/lib/ChoiceGroup';
+import { DialogFooter } from '@fluentui/react/lib/Dialog';
+import { PrimaryButton, DefaultButton } from '@fluentui/react/lib/Button';
+import { ChoiceGroup } from '@fluentui/react/lib/ChoiceGroup';
 import { useState } from 'react';
 import { useRecoilValue } from 'recoil';
 

@@ -14,7 +14,7 @@ const mockStop = jest.fn();
 const mockSingleStop = jest.fn();
 const mockSingleStart = jest.fn();
 
-jest.mock('office-ui-fabric-react/lib/Button', () => ({
+jest.mock('@fluentui/react/lib/Button', () => ({
   DefaultButton: ({ children, onClick }) => (
     <button data-testid="button" onClick={onClick}>
       {children}

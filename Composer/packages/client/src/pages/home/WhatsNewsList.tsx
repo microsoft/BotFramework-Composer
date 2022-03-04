@@ -3,7 +3,7 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { Link } from 'office-ui-fabric-react/lib/Link';
+import { Link } from '@fluentui/react/lib/Link';
 import formatMessage from 'format-message';
 
 import * as home from './styles';

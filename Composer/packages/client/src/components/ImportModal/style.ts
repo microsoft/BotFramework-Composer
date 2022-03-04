@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import { css } from '@emotion/core';
-import { FontWeights } from 'office-ui-fabric-react/lib/Styling';
+import { FontWeights } from '@fluentui/react/lib/Styling';
 
 export const hidden = css`
   display: none;

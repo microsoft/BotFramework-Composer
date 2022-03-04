@@ -3,8 +3,8 @@
 
 import React from 'react';
 import styled from '@emotion/styled';
-import { ActionButton, IButtonStyles } from 'office-ui-fabric-react/lib/components/Button';
-import { FluentTheme } from '@uifabric/fluent-theme';
+import { ActionButton, IButtonStyles } from '@fluentui/react/lib/components/Button';
+import { FluentTheme } from '@fluentui/theme';
 import formatMessage from 'format-message';
 
 export const ButtonContainer = styled.div({

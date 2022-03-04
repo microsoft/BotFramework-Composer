@@ -2,13 +2,13 @@
 // Licensed under the MIT License.
 
 import styled from '@emotion/styled';
-import { FluentTheme, NeutralColors } from '@uifabric/fluent-theme';
+import { FluentTheme, NeutralColors } from '@fluentui/theme';
 import formatMessage from 'format-message';
-import { DefaultButton } from 'office-ui-fabric-react/lib/Button';
-import { CommandBar, ICommandBarItemProps } from 'office-ui-fabric-react/lib/CommandBar';
-import { ProgressIndicator } from 'office-ui-fabric-react/lib/ProgressIndicator';
-import { Stack } from 'office-ui-fabric-react/lib/Stack';
-import { Text } from 'office-ui-fabric-react/lib/Text';
+import { DefaultButton } from '@fluentui/react/lib/Button';
+import { CommandBar, ICommandBarItemProps } from '@fluentui/react/lib/CommandBar';
+import { ProgressIndicator } from '@fluentui/react/lib/ProgressIndicator';
+import { Stack } from '@fluentui/react/lib/Stack';
+import { Text } from '@fluentui/react/lib/Text';
 import * as React from 'react';
 import { useRecoilValue } from 'recoil';
 import { OpenConfirmModal } from '@bfc/ui-shared';

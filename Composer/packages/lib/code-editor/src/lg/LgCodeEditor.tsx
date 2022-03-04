@@ -3,15 +3,15 @@
 
 import styled from '@emotion/styled';
 import { EditorDidMount } from '@monaco-editor/react';
-import { FluentTheme, NeutralColors } from '@uifabric/fluent-theme';
+import { FluentTheme, NeutralColors } from '@fluentui/theme';
 import formatMessage from 'format-message';
 import get from 'lodash/get';
 import omit from 'lodash/omit';
 import { MonacoLanguageClient, MonacoServices } from 'monaco-languageclient';
-import { Icon } from 'office-ui-fabric-react/lib/Icon';
-import { Link } from 'office-ui-fabric-react/lib/Link';
-import { Stack } from 'office-ui-fabric-react/lib/Stack';
-import { Text } from 'office-ui-fabric-react/lib/Text';
+import { Icon } from '@fluentui/react/lib/Icon';
+import { Link } from '@fluentui/react/lib/Link';
+import { Stack } from '@fluentui/react/lib/Stack';
+import { Text } from '@fluentui/react/lib/Text';
 import React, { useEffect, useState } from 'react';
 import { listen, MessageConnection } from 'vscode-ws-jsonrpc';
 

@@ -1,9 +1,9 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { useId } from '@uifabric/react-hooks';
+import { useId } from '@fluentui/react-hooks';
 import formatMessage from 'format-message';
-import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
+import { TooltipHost } from '@fluentui/react/lib/Tooltip';
 import React from 'react';
 
 const calloutProps = { gapSpace: 0 };

@@ -10,18 +10,18 @@ import {
   IColumn,
   CheckboxVisibility,
   ConstrainMode,
-} from 'office-ui-fabric-react/lib/DetailsList';
-import { Sticky, StickyPositionType } from 'office-ui-fabric-react/lib/Sticky';
-import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
-import { FontIcon } from 'office-ui-fabric-react/lib/Icon';
+} from '@fluentui/react/lib/DetailsList';
+import { Sticky, StickyPositionType } from '@fluentui/react/lib/Sticky';
+import { TooltipHost } from '@fluentui/react/lib/Tooltip';
+import { FontIcon } from '@fluentui/react/lib/Icon';
 import formatMessage from 'format-message';
-import { mergeStyleSets } from 'office-ui-fabric-react/lib/Styling';
-import { FontSizes, SharedColors, FluentTheme } from '@uifabric/fluent-theme';
+import { mergeStyleSets } from '@fluentui/react/lib/Styling';
+import { FontSizes, SharedColors, FluentTheme } from '@fluentui/theme';
 import { css } from '@emotion/core';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
-import { Link } from 'office-ui-fabric-react/lib/Link';
+import { Link } from '@fluentui/react/lib/Link';
 import { useEffect, useState, useMemo } from 'react';
-import { ScrollablePane } from 'office-ui-fabric-react/lib/ScrollablePane';
+import { ScrollablePane } from '@fluentui/react/lib/ScrollablePane';
 
 import {
   botDisplayNameState,
@@ -178,7 +178,7 @@ export const DiagnosticList: React.FC<IDiagnosticListProps> = ({ diagnosticItems
           <div css={[tableCell, textWrapStyle]}>
             <Link
               css={content}
-              underline="true"
+              underline
               onClick={() => {
                 navigateTo(item.getUrl(item.dialogPath));
                 if (item.location === 'manifest.json') {

@@ -4,11 +4,11 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import React from 'react';
-import { Label } from 'office-ui-fabric-react/lib/Label';
-import { useId } from '@uifabric/react-hooks';
+import { Label } from '@fluentui/react/lib/Label';
+import { useId } from '@fluentui/react-hooks';
 import kebabCase from 'lodash/kebabCase';
-import { TextField } from 'office-ui-fabric-react/lib/TextField';
-import { Stack } from 'office-ui-fabric-react/lib/Stack';
+import { TextField } from '@fluentui/react/lib/TextField';
+import { Stack } from '@fluentui/react/lib/Stack';
 import formatMessage from 'format-message';
 
 import { getDefaultFontSettings } from '../../../recoilModel/utils/fontUtil';

@@ -2,10 +2,10 @@
 // Licensed under the MIT License.
 import React, { useCallback } from 'react';
 import formatMessage from 'format-message';
-import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button';
-import { DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
-import { Stack, StackItem } from 'office-ui-fabric-react/lib/Stack';
-import { TextField } from 'office-ui-fabric-react/lib/TextField';
+import { PrimaryButton, DefaultButton } from '@fluentui/react/lib/Button';
+import { DialogFooter } from '@fluentui/react/lib/Dialog';
+import { Stack, StackItem } from '@fluentui/react/lib/Stack';
+import { TextField } from '@fluentui/react/lib/TextField';
 import { useRecoilValue } from 'recoil';
 import { RecognizerSchema, useRecognizerConfig, useShellApi } from '@bfc/extension-client';
 import { DialogFactory, SDKKinds, DialogUtils } from '@bfc/shared';

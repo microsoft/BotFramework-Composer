@@ -4,22 +4,22 @@
 import { buildInFunctionsMap, getBuiltInFunctionInsertText } from '@bfc/built-in-functions';
 import styled from '@emotion/styled';
 import { createSvgIcon } from '@fluentui/react-icons';
-import { FluentTheme } from '@uifabric/fluent-theme';
+import { FluentTheme } from '@fluentui/theme';
 import formatMessage from 'format-message';
-import { IconButton } from 'office-ui-fabric-react/lib/Button';
+import { IconButton } from '@fluentui/react/lib/Button';
 import {
   ContextualMenuItem,
   IContextualMenuItem,
   IContextualMenuItemProps,
   IContextualMenuProps,
-} from 'office-ui-fabric-react/lib/ContextualMenu';
-import { Icon } from 'office-ui-fabric-react/lib/Icon';
-import { Label } from 'office-ui-fabric-react/lib/Label';
-import { IStackStyles, Stack } from 'office-ui-fabric-react/lib/Stack';
-import { Text } from 'office-ui-fabric-react/lib/Text';
-import { DirectionalHint } from 'office-ui-fabric-react/lib/Tooltip';
+} from '@fluentui/react/lib/ContextualMenu';
+import { Icon } from '@fluentui/react/lib/Icon';
+import { Label } from '@fluentui/react/lib/Label';
+import { IStackStyles, Stack } from '@fluentui/react/lib/Stack';
+import { Text } from '@fluentui/react/lib/Text';
+import { DirectionalHint } from '@fluentui/react';
 import * as React from 'react';
-import { FontWeights } from 'office-ui-fabric-react/lib/Styling';
+import { FontWeights } from '@fluentui/react/lib/Styling';
 
 import { useNoSearchResultMenuItem } from '../../hooks/useNoSearchResultMenuItem';
 import { useSearchableMenuListCallback } from '../../hooks/useSearchableMenuListCallback';

@@ -19,7 +19,7 @@ const uiDeps = {
   '@bfc/extension-client': 'file:../../Composer/packages/extension-client',
   react: '^16.13.0',
   'react-dom': '^16.13.0',
-  'office-ui-fabric-react': '7.71.0',
+  '@fluentui/react': '8.57.1',
 };
 
 const uiDevDeps = {

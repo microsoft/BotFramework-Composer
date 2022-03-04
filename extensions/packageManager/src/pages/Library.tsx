@@ -23,7 +23,7 @@ import {
   SearchBox,
   IContextualMenuProps,
   IDropdownOption,
-} from 'office-ui-fabric-react';
+} from '@fluentui/react';
 import {
   render,
   useHttpClient,

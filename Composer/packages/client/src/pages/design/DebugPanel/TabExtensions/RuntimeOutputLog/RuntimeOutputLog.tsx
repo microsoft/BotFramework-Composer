@@ -3,7 +3,7 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { NeutralColors, FontSizes } from '@uifabric/fluent-theme';
+import { NeutralColors, FontSizes } from '@fluentui/theme';
 import { useRecoilValue } from 'recoil';
 import { default as AnsiUp } from 'ansi_up';
 import { useEffect, useRef } from 'react';

@@ -3,7 +3,7 @@
 
 import React from 'react';
 import formatMessage from 'format-message';
-import { NeutralColors } from '@uifabric/fluent-theme';
+import { NeutralColors } from '@fluentui/theme';
 import styled from '@emotion/styled';
 import {
   ScrollablePane,
@@ -12,7 +12,7 @@ import {
   DetailsListLayoutMode,
   SelectionMode,
   IColumn,
-} from 'office-ui-fabric-react';
+} from '@fluentui/react';
 import { useRecoilValue } from 'recoil';
 
 import { ResourcesItem } from '../../../types';

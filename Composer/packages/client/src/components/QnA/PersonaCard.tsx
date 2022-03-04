@@ -3,10 +3,10 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import formatMessage from 'format-message';
-import { Persona, IPersonaProps, PersonaSize } from 'office-ui-fabric-react/lib/Persona';
+import { Persona, IPersonaProps, PersonaSize } from '@fluentui/react/lib/Persona';
 import { useRecoilValue } from 'recoil';
 import { OpenConfirmModal } from '@bfc/ui-shared';
-import { IRenderFunction } from '@uifabric/utilities';
+import { IRenderFunction } from '@fluentui/utilities';
 
 import { currentUserState, isAuthenticatedState, dispatcherState } from '../../recoilModel';
 

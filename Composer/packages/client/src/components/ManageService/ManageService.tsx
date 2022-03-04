@@ -4,24 +4,24 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import { useState, useEffect, Fragment } from 'react';
-import { Dialog, DialogType, DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
-import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button';
+import { Dialog, DialogType, DialogFooter } from '@fluentui/react/lib/Dialog';
+import { PrimaryButton, DefaultButton } from '@fluentui/react/lib/Button';
 import formatMessage from 'format-message';
-import { Link } from 'office-ui-fabric-react/lib/Link';
-import { Icon } from 'office-ui-fabric-react/lib/Icon';
-import { TextField } from 'office-ui-fabric-react/lib/TextField';
-import { Spinner } from 'office-ui-fabric-react/lib/Spinner';
+import { Link } from '@fluentui/react/lib/Link';
+import { Icon } from '@fluentui/react/lib/Icon';
+import { TextField } from '@fluentui/react/lib/TextField';
+import { Spinner } from '@fluentui/react/lib/Spinner';
 import { useRecoilValue } from 'recoil';
-import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
+import { Dropdown, IDropdownOption } from '@fluentui/react/lib/Dropdown';
 import { SubscriptionClient } from '@azure/arm-subscriptions';
 import { Subscription } from '@azure/arm-subscriptions/esm/models';
 import { TokenCredentials } from '@azure/ms-rest-js';
 import { CognitiveServicesManagementClient } from '@azure/arm-cognitiveservices';
 import { ResourceManagementClient } from '@azure/arm-resources';
-import { ChoiceGroup, IChoiceGroupOption } from 'office-ui-fabric-react/lib/ChoiceGroup';
+import { ChoiceGroup, IChoiceGroupOption } from '@fluentui/react/lib/ChoiceGroup';
 import { ProvisionHandoff } from '@bfc/ui-shared';
 import sortBy from 'lodash/sortBy';
-import { NeutralColors } from '@uifabric/fluent-theme';
+import { NeutralColors } from '@fluentui/theme';
 
 import TelemetryClient from '../../telemetry/TelemetryClient';
 import { dispatcherState, currentUserState, isAuthenticatedState, showAuthDialogState } from '../../recoilModel/atoms';

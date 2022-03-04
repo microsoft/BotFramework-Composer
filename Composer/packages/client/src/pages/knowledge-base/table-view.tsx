@@ -15,15 +15,15 @@ import {
   IDetailsGroupRenderProps,
   IGroup,
   IDetailsList,
-} from 'office-ui-fabric-react/lib/DetailsList';
-import { GroupHeader, CollapseAllVisibility } from 'office-ui-fabric-react/lib/GroupedList';
-import { IOverflowSetItemProps, OverflowSet } from 'office-ui-fabric-react/lib/OverflowSet';
-import { IContextualMenuItem } from 'office-ui-fabric-react/lib/ContextualMenu';
-import { Link } from 'office-ui-fabric-react/lib/Link';
-import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
-import { IconButton, ActionButton, PrimaryButton } from 'office-ui-fabric-react/lib/Button';
-import { ScrollablePane, ScrollbarVisibility } from 'office-ui-fabric-react/lib/ScrollablePane';
-import { Sticky, StickyPositionType } from 'office-ui-fabric-react/lib/Sticky';
+} from '@fluentui/react/lib/DetailsList';
+import { GroupHeader, CollapseAllVisibility } from '@fluentui/react/lib/GroupedList';
+import { IOverflowSetItemProps, OverflowSet } from '@fluentui/react/lib/OverflowSet';
+import { IContextualMenuItem } from '@fluentui/react/lib/ContextualMenu';
+import { Link } from '@fluentui/react/lib/Link';
+import { TooltipHost } from '@fluentui/react/lib/Tooltip';
+import { IconButton, ActionButton, PrimaryButton } from '@fluentui/react/lib/Button';
+import { ScrollablePane, ScrollbarVisibility } from '@fluentui/react/lib/ScrollablePane';
+import { Sticky, StickyPositionType } from '@fluentui/react/lib/Sticky';
 import formatMessage from 'format-message';
 import { RouteComponentProps } from '@reach/router';
 import isEqual from 'lodash/isEqual';
@@ -31,7 +31,7 @@ import isEmpty from 'lodash/isEmpty';
 import flatMap from 'lodash/flatMap';
 import { QnASection, QnAFile } from '@bfc/shared';
 import { qnaUtil } from '@bfc/indexers';
-import { NeutralColors } from '@uifabric/fluent-theme';
+import { NeutralColors } from '@fluentui/theme';
 
 import emptyQnAIcon from '../../images/emptyQnAIcon.svg';
 import { navigateTo } from '../../utils/navigation';

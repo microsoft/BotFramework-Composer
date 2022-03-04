@@ -5,7 +5,7 @@
 import { jsx } from '@emotion/core';
 import React, { useCallback, useState, useEffect, useMemo } from 'react';
 import formatMessage from 'format-message';
-import { ActionButton } from 'office-ui-fabric-react/lib/Button';
+import { ActionButton } from '@fluentui/react/lib/Button';
 import get from 'lodash/get';
 import VisualDesigner from '@bfc/adaptive-flow';
 import { useRecoilValue } from 'recoil';

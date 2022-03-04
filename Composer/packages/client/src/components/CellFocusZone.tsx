@@ -3,8 +3,8 @@
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core';
 import React, { useCallback } from 'react';
-import { FocusZone, FocusZoneTabbableElements, IFocusZoneProps } from 'office-ui-fabric-react/lib/FocusZone';
-import { getFocusStyle, getTheme, mergeStyles } from 'office-ui-fabric-react/lib/Styling';
+import { FocusZone, FocusZoneTabbableElements, IFocusZoneProps } from '@fluentui/react/lib/FocusZone';
+import { getFocusStyle, getTheme, mergeStyles } from '@fluentui/react/lib/Styling';
 
 import { useAfterRender } from '../hooks/useAfterRender';
 

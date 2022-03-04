@@ -3,18 +3,18 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { DetailsList, CheckboxVisibility } from 'office-ui-fabric-react/lib/DetailsList';
-import { Sticky, StickyPositionType } from 'office-ui-fabric-react/lib/Sticky';
-import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
-import { Icon } from 'office-ui-fabric-react/lib/Icon';
-import { Link } from 'office-ui-fabric-react/lib/Link';
-import { Spinner, SpinnerSize } from 'office-ui-fabric-react/lib/Spinner';
+import { DetailsList, CheckboxVisibility } from '@fluentui/react/lib/DetailsList';
+import { Sticky, StickyPositionType } from '@fluentui/react/lib/Sticky';
+import { TooltipHost } from '@fluentui/react/lib/Tooltip';
+import { Icon } from '@fluentui/react/lib/Icon';
+import { Link } from '@fluentui/react/lib/Link';
+import { Spinner, SpinnerSize } from '@fluentui/react/lib/Spinner';
 import moment from 'moment';
 import { useMemo, useState } from 'react';
 import formatMessage from 'format-message';
 import { PublishResult } from '@botframework-composer/types';
-import { ActionButton } from 'office-ui-fabric-react/lib/Button';
-import { SharedColors } from '@uifabric/fluent-theme';
+import { ActionButton } from '@fluentui/react/lib/Button';
+import { SharedColors } from '@fluentui/theme';
 
 import { ApiStatus } from '../../utils/publishStatusPollingUpdater';
 

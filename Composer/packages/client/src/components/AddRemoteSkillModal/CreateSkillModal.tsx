@@ -3,18 +3,19 @@
 
 import React, { Fragment, useRef, useState, useCallback, useEffect, useMemo } from 'react';
 import formatMessage from 'format-message';
-import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button';
-import { Stack, StackItem } from 'office-ui-fabric-react/lib/Stack';
-import { TextField } from 'office-ui-fabric-react/lib/TextField';
-import { FontSizes } from '@uifabric/fluent-theme';
+import { PrimaryButton, DefaultButton } from '@fluentui/react/lib/Button';
+import { Stack, StackItem } from '@fluentui/react/lib/Stack';
+import { TextField } from '@fluentui/react/lib/TextField';
+import { FontSizes } from '@fluentui/theme';
 import { useRecoilValue } from 'recoil';
 import debounce from 'lodash/debounce';
 import { isUsingAdaptiveRuntime, SDKKinds, isManifestJson } from '@bfc/shared';
 import { DialogWrapper, DialogTypes } from '@bfc/ui-shared';
-import { Separator } from 'office-ui-fabric-react/lib/Separator';
-import { Dropdown, IDropdownOption, ResponsiveMode } from 'office-ui-fabric-react/lib/Dropdown';
-import { FontWeights } from 'office-ui-fabric-react/lib/Styling';
+import { Separator } from '@fluentui/react/lib/Separator';
+import { Dropdown, IDropdownOption } from '@fluentui/react/lib/Dropdown';
+import { FontWeights } from '@fluentui/react/lib/Styling';
 import { JSZipObject } from 'jszip';
+import { ResponsiveMode } from '@fluentui/react';
 
 import { LoadingSpinner } from '../../components/LoadingSpinner';
 import {

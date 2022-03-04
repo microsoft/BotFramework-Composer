@@ -4,13 +4,13 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import formatMessage from 'format-message';
-import { DefaultButton } from 'office-ui-fabric-react/lib/Button';
+import { DefaultButton } from '@fluentui/react/lib/Button';
 import React, { useEffect, useMemo } from 'react';
 import { useRecoilValue } from 'recoil';
-import { FontSizes, SharedColors, NeutralColors, FluentTheme } from '@uifabric/fluent-theme';
+import { FontSizes, SharedColors, NeutralColors, FluentTheme } from '@fluentui/theme';
 import { DiagnosticSeverity } from '@bfc/shared';
-import { FontWeights } from '@uifabric/styling';
-import { Stack } from 'office-ui-fabric-react/lib/Stack';
+import { FontWeights } from '@fluentui/style-utilities';
+import { Stack } from '@fluentui/react/lib/Stack';
 
 import { outputsDebugPanelSelector, rootBotProjectIdSelector } from '../../../../../recoilModel';
 import { DropdownWithAllOption } from '../../../../../components/DropdownWithAllOption/DropdownWithAllOption';

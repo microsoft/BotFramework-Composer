@@ -15,7 +15,7 @@ import {
   Stack,
   Separator,
   Icon,
-} from 'office-ui-fabric-react';
+} from '@fluentui/react';
 import formatMessage from 'format-message';
 
 import { buttonBar as buttonBarStyles, root } from './styles';
