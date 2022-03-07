@@ -15,7 +15,7 @@ import { useRecoilValue } from 'recoil';
 import { IConfig, IPublishConfig, IQnAConfig } from '@bfc/shared';
 import { Dropdown } from '@fluentui/react/lib/Dropdown';
 import { TextField } from '@bfc/ui-shared';
-import { ResponsiveMode } from '@fluentui/react';
+import { ResponsiveMode } from '@fluentui/react/lib/utilities/decorators/withResponsiveMode';
 
 import { Text, Tips, Links, nameRegex, LUIS_REGIONS } from '../../constants';
 import { FieldConfig, useForm } from '../../hooks/useForm';

@@ -6,7 +6,7 @@ import React from 'react';
 import { FieldProps } from '@bfc/extension-client';
 import { Dropdown, IDropdownOption } from '@fluentui/react/lib/Dropdown';
 import formatMessage from 'format-message';
-import { ResponsiveMode } from '@fluentui/react';
+import { ResponsiveMode } from '@fluentui/react/lib/utilities/decorators/withResponsiveMode';
 
 import { FieldLabel } from '../FieldLabel';
 

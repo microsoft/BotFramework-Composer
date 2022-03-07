@@ -10,7 +10,7 @@ import { NeutralColors, SharedColors } from '@fluentui/theme';
 import { TooltipHost } from '@fluentui/react/lib/Tooltip';
 import { useRecoilValue } from 'recoil';
 import formatMessage from 'format-message';
-import { DirectionalHint } from '@fluentui/react';
+import { DirectionalHint } from '@fluentui/react/lib/common/DirectionalHint';
 
 import { notificationsSelector } from '../../recoilModel/selectors/notifications';
 import { dispatcherState } from '../../recoilModel';

@@ -13,7 +13,7 @@ import { css } from '@emotion/core';
 import { NeutralColors, CommunicationColors } from '@fluentui/theme';
 import { Spinner, SpinnerSize } from '@fluentui/react/lib/Spinner';
 import { DiagnosticSeverity } from '@botframework-composer/types';
-import { DirectionalHint } from '@fluentui/react';
+import { DirectionalHint } from '@fluentui/react/lib/common/DirectionalHint';
 
 import { DisableFeatureToolTip } from '../DisableFeatureToolTip';
 import TelemetryClient from '../../telemetry/TelemetryClient';

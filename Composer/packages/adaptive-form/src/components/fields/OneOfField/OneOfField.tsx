@@ -11,7 +11,7 @@ import { Dropdown, IDropdownOption } from '@fluentui/react/lib/Dropdown';
 import { Icon } from '@fluentui/react/lib/Icon';
 import React, { useMemo, useState } from 'react';
 import { css } from '@emotion/core';
-import { ResponsiveMode } from '@fluentui/react';
+import { ResponsiveMode } from '@fluentui/react/lib/utilities/decorators/withResponsiveMode';
 
 import { getUiPlaceholder, resolveFieldWidget } from '../../../utils';
 import { FieldLabel } from '../../FieldLabel';

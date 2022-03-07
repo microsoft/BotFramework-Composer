@@ -6,7 +6,7 @@ import { Dropdown, IDropdownOption } from '@fluentui/react/lib/Dropdown';
 import { FieldLabel } from '@bfc/adaptive-form';
 import { FieldProps } from '@bfc/extension-client';
 import startCase from 'lodash/startCase';
-import { ResponsiveMode } from '@fluentui/react';
+import { ResponsiveMode } from '@fluentui/react/lib/utilities/decorators/withResponsiveMode';
 
 import { valueTypeDefinitions } from '../schema';
 import { SCHEMA_URI } from '../contants';

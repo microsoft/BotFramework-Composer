@@ -9,7 +9,7 @@ import { DefinitionSummary } from '@bfc/shared';
 import { TooltipHost } from '@fluentui/react/lib/Tooltip';
 import { useMenuConfig } from '@bfc/extension-client';
 import { IconMenu } from '@bfc/ui-shared';
-import { DirectionalHint } from '@fluentui/react';
+import { DirectionalHint } from '@fluentui/react/lib/common/DirectionalHint';
 
 // TODO: leak of visual-sdk domain (EdgeAddButtonSize)
 import { EdgeAddButtonSize } from '../../../adaptive-flow-renderer/constants/ElementSizes';

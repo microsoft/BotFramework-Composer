@@ -11,7 +11,7 @@ import { FocusZone } from '@fluentui/react/lib/FocusZone';
 import { TooltipHost } from '@fluentui/react/lib/Tooltip';
 import { RouteComponentProps } from '@reach/router';
 import { useRecoilValue } from 'recoil';
-import { DirectionalHint } from '@fluentui/react';
+import { DirectionalHint } from '@fluentui/react/lib/common/DirectionalHint';
 
 import { resolveToBasePath } from '../../utils/fileUtil';
 import { BASEPATH } from '../../constants';

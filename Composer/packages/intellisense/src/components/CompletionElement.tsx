@@ -8,7 +8,7 @@ import { FontIcon } from '@fluentui/react/lib/Icon';
 import { TooltipHost } from '@fluentui/react/lib/Tooltip';
 import React from 'react';
 import { CompletionItem, MarkupContent } from 'vscode-languageserver-types';
-import { DirectionalHint } from '@fluentui/react';
+import { DirectionalHint } from '@fluentui/react/lib/common/DirectionalHint';
 
 type FuseJsMatch = { indices: number[][]; value: string; key: string };
 

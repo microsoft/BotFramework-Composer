@@ -20,7 +20,7 @@ import { ICalloutContentStyles, Callout } from '@fluentui/react/lib/Callout';
 import { DiagnosticSeverity, Diagnostic, Icons } from '@bfc/shared';
 import isEmpty from 'lodash/isEmpty';
 import uniqueId from 'lodash/uniqueId';
-import { DirectionalHint } from '@fluentui/react';
+import { DirectionalHint } from '@fluentui/react/lib/common/DirectionalHint';
 
 import { THREE_DOTS_ICON_WIDTH } from './constants';
 import { TreeLink, TreeMenuItem } from './types';

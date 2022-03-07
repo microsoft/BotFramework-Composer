@@ -177,8 +177,8 @@ export const DiagnosticList: React.FC<IDiagnosticListProps> = ({ diagnosticItems
         return (
           <div css={[tableCell, textWrapStyle]}>
             <Link
-              css={content}
               underline
+              css={content}
               onClick={() => {
                 navigateTo(item.getUrl(item.dialogPath));
                 if (item.location === 'manifest.json') {

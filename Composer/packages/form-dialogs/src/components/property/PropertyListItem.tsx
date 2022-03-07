@@ -13,7 +13,7 @@ import { TooltipHost } from '@fluentui/react/lib/Tooltip';
 import * as React from 'react';
 import { Draggable, DraggableProvidedDragHandleProps } from 'react-beautiful-dnd';
 import { useRecoilValue } from 'recoil';
-import { DirectionalHint } from '@fluentui/react';
+import { DirectionalHint } from '@fluentui/react/lib/common/DirectionalHint';
 
 import {
   activePropertyIdAtom,

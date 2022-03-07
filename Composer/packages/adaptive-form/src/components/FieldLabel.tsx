@@ -9,7 +9,7 @@ import formatMessage from 'format-message';
 import { useShellApi } from '@bfc/extension-client';
 import { HelpTooltip } from '@bfc/ui-shared';
 import { FontSizes } from '@fluentui/react/lib/Styling';
-import { DirectionalHint } from '@fluentui/react';
+import { DirectionalHint } from '@fluentui/react/lib/common/DirectionalHint';
 
 import { useAdaptiveFormContext } from '../AdaptiveFormContext';
 

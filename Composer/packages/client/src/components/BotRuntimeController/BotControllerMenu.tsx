@@ -11,7 +11,7 @@ import { SelectionMode } from '@fluentui/react/lib/Utilities';
 import { FontWeights } from '@fluentui/style-utilities';
 import { FontSizes } from '@fluentui/theme';
 import formatMessage from 'format-message';
-import { DirectionalHint } from '@fluentui/react';
+import { DirectionalHint } from '@fluentui/react/lib/common/DirectionalHint';
 
 import { BotRuntimeOperations } from './BotRuntimeOperations';
 import { BotStatusIndicator } from './BotStatusIndicator';

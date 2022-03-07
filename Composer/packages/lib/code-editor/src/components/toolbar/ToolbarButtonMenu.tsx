@@ -17,7 +17,7 @@ import { Icon } from '@fluentui/react/lib/Icon';
 import { Label } from '@fluentui/react/lib/Label';
 import { IStackStyles, Stack } from '@fluentui/react/lib/Stack';
 import { Text } from '@fluentui/react/lib/Text';
-import { DirectionalHint } from '@fluentui/react';
+import { DirectionalHint } from '@fluentui/react/lib/common/DirectionalHint';
 import * as React from 'react';
 import { FontWeights } from '@fluentui/react/lib/Styling';
 

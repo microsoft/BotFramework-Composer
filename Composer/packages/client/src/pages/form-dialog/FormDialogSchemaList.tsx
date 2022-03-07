@@ -15,7 +15,7 @@ import { TooltipHost } from '@fluentui/react/lib/Tooltip';
 import { classNamesFunction } from '@fluentui/react/lib/Utilities';
 import * as React from 'react';
 import { useRecoilValue } from 'recoil';
-import { DirectionalHint } from '@fluentui/react';
+import { DirectionalHint } from '@fluentui/react/lib/common/DirectionalHint';
 
 import { formDialogSchemaDialogExistsSelector, formDialogSchemaState } from '../../recoilModel';
 

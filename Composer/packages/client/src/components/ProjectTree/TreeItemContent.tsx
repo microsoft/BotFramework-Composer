@@ -3,7 +3,7 @@
 
 import React from 'react';
 import { TooltipHost } from '@fluentui/react/lib/Tooltip';
-import { DirectionalHint } from '@fluentui/react';
+import { DirectionalHint } from '@fluentui/react/lib/common/DirectionalHint';
 
 type TreeItemContentProps = {
   tooltip?: string | JSX.Element | JSX.Element[];

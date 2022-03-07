@@ -15,7 +15,7 @@ import { Separator } from '@fluentui/react/lib/Separator';
 import { Dropdown, IDropdownOption } from '@fluentui/react/lib/Dropdown';
 import { FontWeights } from '@fluentui/react/lib/Styling';
 import { JSZipObject } from 'jszip';
-import { ResponsiveMode } from '@fluentui/react';
+import { ResponsiveMode } from '@fluentui/react/lib/utilities/decorators/withResponsiveMode';
 
 import { LoadingSpinner } from '../../components/LoadingSpinner';
 import {

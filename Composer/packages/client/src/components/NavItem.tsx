@@ -11,7 +11,7 @@ import { FontSizes } from '@fluentui/theme';
 import { NeutralColors, CommunicationColors } from '@fluentui/theme';
 import { IButtonStyles } from '@fluentui/react/lib/Button';
 import { useRecoilValue } from 'recoil';
-import { DirectionalHint } from '@fluentui/react';
+import { DirectionalHint } from '@fluentui/react/lib/common/DirectionalHint';
 
 import { useLocation, useRouterCache } from '../utils/hooks';
 import { dispatcherState } from '../recoilModel';
