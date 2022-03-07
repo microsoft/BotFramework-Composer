@@ -18,18 +18,18 @@
   },
   "license": "MIT",
   "peerDependencies": {
-    "@fluentui/theme": "2.5.0",
-    "@fluentui/style-utilities": "^8.6.0",
-    "format-message": "^6.2.3",
     "@fluentui/react": "^8.57.1",
+    "@fluentui/style-utilities": "^8.6.0",
+    "@fluentui/theme": "2.5.0",
+    "format-message": "^6.2.3",
     "react": "16.13.1",
     "react-dom": "16.13.1"
   },
   "devDependencies": {
     "@botframework-composer/test-utils": "*",
+    "@fluentui/react": "^8.57.1",
     "@types/lodash": "^4.14.149",
-    "@types/react": "16.9.23",
-    "@fluentui/react": "^8.57.1"
+    "@types/react": "16.9.23"
   },
   "dependencies": {
     "@bfc/built-in-functions": "*",

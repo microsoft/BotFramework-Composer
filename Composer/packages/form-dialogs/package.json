@@ -28,11 +28,11 @@
   "peerDependencies": {
     "@emotion/core": "^10.0.27",
     "@emotion/styled": "^10.0.27",
-    "@fluentui/theme": "2.5.0",
+    "@fluentui/react": "^8.57.1",
     "@fluentui/react-hooks": "^8.5.0",
+    "@fluentui/theme": "2.5.0",
     "format-message": "^6.2.3",
     "lodash": "^4.17.19",
-    "@fluentui/react": "^8.57.1",
     "react": "16.13.1",
     "react-dom": "16.13.1",
     "recoil": "^0.0.13"

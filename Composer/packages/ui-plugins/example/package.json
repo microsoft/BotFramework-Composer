@@ -19,9 +19,9 @@
     "@bfc/adaptive-form": "*",
     "@bfc/extension-client": "*",
     "@emotion/core": "^10.0.27",
-    "@fluentui/theme": "2.5.0",
-    "@fluentui/style-utilities": "^8.6.0",
     "@fluentui/react": "^8.57.1",
+    "@fluentui/style-utilities": "^8.6.0",
+    "@fluentui/theme": "2.5.0",
     "react": "16.13.1",
     "react-dom": "16.13.1"
   },

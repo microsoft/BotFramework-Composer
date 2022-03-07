@@ -31,6 +31,7 @@
   "dependencies": {
     "@bfc/extension-client": "file:../../Composer/packages/extension-client",
     "@botframework-composer/types": "file:../../Composer/packages/types",
+    "@fluentui/react": "^8.57.1",
     "@fluentui/react-hooks": "^8.5.0",
     "debug": "^4.2.0",
     "encoding": "^0.1.13",
@@ -38,7 +39,6 @@
     "fs-extra": "^9.0.1",
     "https-proxy-agent": "^5.0.0",
     "node-fetch": "2.6.1",
-    "@fluentui/react": "^8.57.1",
     "react": "^16.13.0",
     "react-dom": "^16.13.0"
   },
