@@ -4,14 +4,14 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import formatMessage from 'format-message';
-import { DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
+import { DialogFooter } from '@fluentui/react/lib/Dialog';
 import { useState, useMemo, useCallback, Fragment } from 'react';
-import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button';
-import { Separator } from 'office-ui-fabric-react/lib/Separator';
-import { IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
+import { PrimaryButton, DefaultButton } from '@fluentui/react/lib/Button';
+import { Separator } from '@fluentui/react/lib/Separator';
+import { IDropdownOption } from '@fluentui/react/lib/Dropdown';
 import { PublishTarget } from '@bfc/shared';
 import { DropdownField, TextField } from '@bfc/ui-shared';
-import { mergeStyleSets } from 'office-ui-fabric-react/lib/Styling';
+import { mergeStyleSets } from '@fluentui/react/lib/Styling';
 
 import { separator } from '../../publish/styles';
 import { PublishType } from '../../../recoilModel/types';

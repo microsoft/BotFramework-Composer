@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import React, { useCallback, useState, useMemo } from 'react';
-import { IContextualMenuItem } from 'office-ui-fabric-react/lib/ContextualMenu';
+import { IContextualMenuItem } from '@fluentui/react/lib/ContextualMenu';
 import { FieldProps, useShellApi } from '@bfc/extension-client';
 import formatMessage from 'format-message';
 import { IntellisenseTextField, WithTypeIcons } from '@bfc/adaptive-form';

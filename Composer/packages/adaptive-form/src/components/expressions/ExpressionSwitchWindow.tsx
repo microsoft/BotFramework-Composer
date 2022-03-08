@@ -3,10 +3,10 @@
 
 /** @jsx jsx */
 import { css, jsx } from '@emotion/core';
-import { FontIcon } from 'office-ui-fabric-react/lib/Icon';
+import { FontIcon } from '@fluentui/react/lib/Icon';
 import React from 'react';
 import formatMessage from 'format-message';
-import { FluentTheme, SharedColors } from '@uifabric/fluent-theme';
+import { FluentTheme, SharedColors } from '@fluentui/theme';
 
 const styles = {
   fieldTypeText: css`

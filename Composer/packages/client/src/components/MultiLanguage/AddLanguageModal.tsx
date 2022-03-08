@@ -7,17 +7,17 @@ import cloneDeep from 'lodash/cloneDeep';
 import { jsx } from '@emotion/core';
 import React, { useState, useCallback, useMemo, useEffect } from 'react';
 import formatMessage from 'format-message';
-import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button';
-import { SearchBox } from 'office-ui-fabric-react/lib/SearchBox';
-import { ScrollablePane, IScrollablePaneStyles } from 'office-ui-fabric-react/lib/ScrollablePane';
-import { Stack, StackItem } from 'office-ui-fabric-react/lib/Stack';
-import { Checkbox } from 'office-ui-fabric-react/lib/Checkbox';
-import { Label } from 'office-ui-fabric-react/lib/Label';
-import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
+import { PrimaryButton, DefaultButton } from '@fluentui/react/lib/Button';
+import { SearchBox } from '@fluentui/react/lib/SearchBox';
+import { ScrollablePane, IScrollablePaneStyles } from '@fluentui/react/lib/ScrollablePane';
+import { Stack, StackItem } from '@fluentui/react/lib/Stack';
+import { Checkbox } from '@fluentui/react/lib/Checkbox';
+import { Label } from '@fluentui/react/lib/Label';
+import { Dropdown, IDropdownOption } from '@fluentui/react/lib/Dropdown';
 import { DialogWrapper, DialogTypes } from '@bfc/ui-shared';
-import { hiddenContentStyle, mergeStyles } from 'office-ui-fabric-react/lib/Styling';
-import { Announced } from 'office-ui-fabric-react/lib/Announced';
-import { useId } from '@uifabric/react-hooks';
+import { hiddenContentStyle, mergeStyles } from '@fluentui/react/lib/Styling';
+import { Announced } from '@fluentui/react/lib/Announced';
+import { useId } from '@fluentui/react-hooks';
 
 import { MultiLanguagesDialog } from '../../constants';
 

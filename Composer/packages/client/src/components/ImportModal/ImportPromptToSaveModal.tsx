@@ -3,9 +3,9 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { Dialog, DialogFooter, DialogType } from 'office-ui-fabric-react/lib/Dialog';
-import { DefaultButton, PrimaryButton } from 'office-ui-fabric-react/lib/Button';
-import { Spinner, SpinnerSize } from 'office-ui-fabric-react/lib/Spinner';
+import { Dialog, DialogFooter, DialogType } from '@fluentui/react/lib/Dialog';
+import { DefaultButton, PrimaryButton } from '@fluentui/react/lib/Button';
+import { Spinner, SpinnerSize } from '@fluentui/react/lib/Spinner';
 import React from 'react';
 import formatMessage from 'format-message';
 import { generateUniqueId } from '@bfc/shared';

@@ -4,14 +4,14 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import formatMessage from 'format-message';
-import { Dialog, DialogType, DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
-import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button';
-import { TextField } from 'office-ui-fabric-react/lib/TextField';
+import { Dialog, DialogType, DialogFooter } from '@fluentui/react/lib/Dialog';
+import { PrimaryButton, DefaultButton } from '@fluentui/react/lib/Button';
+import { TextField } from '@fluentui/react/lib/TextField';
 import { useCallback, useState } from 'react';
 import { useRecoilValue } from 'recoil';
-import { FontWeights } from 'office-ui-fabric-react/lib/Styling';
-import { FontSizes } from '@uifabric/fluent-theme';
-import { Stack } from 'office-ui-fabric-react/lib/Stack';
+import { FontWeights } from '@fluentui/react/lib/Styling';
+import { FontSizes } from '@fluentui/theme';
+import { Stack } from '@fluentui/react/lib/Stack';
 import { CopyableText } from '@bfc/ui-shared';
 
 import { dispatcherState } from '../../recoilModel/atoms';

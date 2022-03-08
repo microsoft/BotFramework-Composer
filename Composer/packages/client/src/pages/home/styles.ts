@@ -2,10 +2,10 @@
 // Licensed under the MIT License.
 
 import { css } from '@emotion/core';
-import { ITheme, getTheme } from 'office-ui-fabric-react/lib/Styling';
-import { Depths, MotionTimings, MotionDurations, NeutralColors } from '@uifabric/fluent-theme';
-import { FontWeights, FontSizes } from 'office-ui-fabric-react/lib/Styling';
-import { IButtonStyles } from 'office-ui-fabric-react/lib/Button';
+import { ITheme, getTheme } from '@fluentui/react/lib/Styling';
+import { Depths, MotionTimings, MotionDurations, NeutralColors } from '@fluentui/theme';
+import { FontWeights, FontSizes } from '@fluentui/react/lib/Styling';
+import { IButtonStyles } from '@fluentui/react/lib/Button';
 const theme: ITheme = getTheme();
 const { fonts } = theme;
 

@@ -3,8 +3,8 @@
 
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core';
-import { FluentTheme } from '@uifabric/fluent-theme';
-import { Text } from 'office-ui-fabric-react/lib/Text';
+import { FluentTheme } from '@fluentui/theme';
+import { Text } from '@fluentui/react/lib/Text';
 
 interface SectionTitleProps {
   level: 1 | 2 | 3 | 4 | 5 | 6;

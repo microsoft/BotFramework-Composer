@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import styled from '@emotion/styled';
-import { FluentTheme } from '@uifabric/fluent-theme';
+import { FluentTheme } from '@fluentui/theme';
 import formatMessage from 'format-message';
 import * as React from 'react';
 

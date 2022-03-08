@@ -17,7 +17,7 @@ import {
   TextField,
   Toggle,
   Dropdown,
-} from 'office-ui-fabric-react';
+} from '@fluentui/react';
 import { useState, useEffect, Fragment } from 'react';
 import { useApplicationApi, useTelemetryClient, TelemetryClient } from '@bfc/extension-client';
 import { DialogWrapper, DialogTypes } from '@bfc/ui-shared';

@@ -2,12 +2,12 @@
 // Licensed under the MIT License.
 
 import React from 'react';
-import { ComboBox, IComboBoxOption } from 'office-ui-fabric-react/lib/ComboBox';
+import { ComboBox, IComboBoxOption } from '@fluentui/react/lib/ComboBox';
 import { FieldLabel } from '@bfc/adaptive-form';
-import { Icon } from 'office-ui-fabric-react/lib/Icon';
-import { ISelectableOption } from 'office-ui-fabric-react/lib/utilities/selectableOption';
-import { IRenderFunction } from 'office-ui-fabric-react/lib/Utilities';
-import { SharedColors } from '@uifabric/fluent-theme';
+import { Icon } from '@fluentui/react/lib/Icon';
+import { ISelectableOption } from '@fluentui/react/lib/utilities/selectableOption';
+import { IRenderFunction } from '@fluentui/react/lib/Utilities';
+import { SharedColors } from '@fluentui/theme';
 
 export const ADD_DIALOG = 'ADD_DIALOG';
 

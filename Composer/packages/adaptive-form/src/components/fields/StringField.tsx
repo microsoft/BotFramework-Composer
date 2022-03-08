@@ -3,7 +3,7 @@
 
 import React, { useEffect } from 'react';
 import { FieldProps } from '@bfc/extension-client';
-import { ITextField, TextField } from 'office-ui-fabric-react/lib/TextField';
+import { ITextField, TextField } from '@fluentui/react/lib/TextField';
 import formatMessage from 'format-message';
 
 import { FieldLabel } from '../FieldLabel';

@@ -1,17 +1,17 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { FluentTheme } from '@uifabric/fluent-theme';
+import { FluentTheme } from '@fluentui/theme';
 import formatMessage from 'format-message';
-import { CommandBarButton as DefaultCommandBarButton } from 'office-ui-fabric-react/lib/Button';
-import { Link } from 'office-ui-fabric-react/lib/Link';
+import { CommandBarButton as DefaultCommandBarButton } from '@fluentui/react/lib/Button';
+import { Link } from '@fluentui/react/lib/Link';
 import {
   ContextualMenuItemType,
   IContextualMenuItem,
   IContextualMenuProps,
   IContextualMenuItemProps,
   IContextualMenuItemRenderFunctions,
-} from 'office-ui-fabric-react/lib/ContextualMenu';
+} from '@fluentui/react/lib/ContextualMenu';
 import * as React from 'react';
 import { LuFile } from '@bfc/shared';
 

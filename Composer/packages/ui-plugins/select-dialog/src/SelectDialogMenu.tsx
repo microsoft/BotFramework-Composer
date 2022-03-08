@@ -7,12 +7,12 @@ import {
   IContextualMenuItem,
   ContextualMenuItemType,
   IContextualMenuListProps,
-} from 'office-ui-fabric-react/lib/ContextualMenu';
-import { Stack } from 'office-ui-fabric-react/lib/Stack';
-import { SearchBox, ISearchBoxStyles } from 'office-ui-fabric-react/lib/SearchBox';
-import { DefaultButton, IButtonStyles } from 'office-ui-fabric-react/lib/Button';
-import { IRenderFunction, getId } from 'office-ui-fabric-react/lib/Utilities';
-import { NeutralColors, SharedColors } from '@uifabric/fluent-theme';
+} from '@fluentui/react/lib/ContextualMenu';
+import { Stack } from '@fluentui/react/lib/Stack';
+import { SearchBox, ISearchBoxStyles } from '@fluentui/react/lib/SearchBox';
+import { DefaultButton, IButtonStyles } from '@fluentui/react/lib/Button';
+import { IRenderFunction, getId } from '@fluentui/react/lib/Utilities';
+import { NeutralColors, SharedColors } from '@fluentui/theme';
 import { FieldLabel } from '@bfc/adaptive-form';
 import { FieldProps, DialogInfo } from '@bfc/extension-client';
 import { Icons } from '@bfc/shared';

@@ -6,8 +6,8 @@ import { jsx, css } from '@emotion/core';
 import React, { useState, useCallback, useRef, useEffect } from 'react';
 import formatMessage from 'format-message';
 import { IconMenu } from '@bfc/ui-shared';
-import { TextField, ITextField } from 'office-ui-fabric-react/lib/TextField';
-import { IContextualMenuItem } from 'office-ui-fabric-react/lib/ContextualMenu';
+import { TextField, ITextField } from '@fluentui/react/lib/TextField';
+import { IContextualMenuItem } from '@fluentui/react/lib/ContextualMenu';
 
 import { ExpandableText } from './ExpandableText';
 

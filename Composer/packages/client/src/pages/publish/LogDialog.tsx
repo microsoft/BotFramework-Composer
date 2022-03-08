@@ -3,8 +3,8 @@
 
 import React from 'react';
 import formatMessage from 'format-message';
-import { Dialog } from 'office-ui-fabric-react/lib/Dialog';
-import { TextField } from 'office-ui-fabric-react/lib/TextField';
+import { Dialog } from '@fluentui/react/lib/Dialog';
+import { TextField } from '@fluentui/react/lib/TextField';
 
 export type LogDialogProps = {
   value: string;

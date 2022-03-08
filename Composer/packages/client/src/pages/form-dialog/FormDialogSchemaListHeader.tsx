@@ -2,17 +2,17 @@
 // Licensed under the MIT License.
 
 import styled from '@emotion/styled';
-import { FontSizes, NeutralColors } from '@uifabric/fluent-theme';
+import { FontSizes, NeutralColors } from '@fluentui/theme';
 import formatMessage from 'format-message';
-import { IconButton } from 'office-ui-fabric-react/lib/Button';
-import { Icon, IIconStyleProps, IIconStyles } from 'office-ui-fabric-react/lib/Icon';
-import { Label } from 'office-ui-fabric-react/lib/Label';
-import { Link } from 'office-ui-fabric-react/lib/Link';
-import { ProgressIndicator } from 'office-ui-fabric-react/lib/ProgressIndicator';
-import { ISearchBoxProps, ISearchBoxStyles, SearchBox } from 'office-ui-fabric-react/lib/SearchBox';
-import { Stack } from 'office-ui-fabric-react/lib/Stack';
-import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
-import { classNamesFunction } from 'office-ui-fabric-react/lib/Utilities';
+import { IconButton } from '@fluentui/react/lib/Button';
+import { Icon, IIconStyleProps, IIconStyles } from '@fluentui/react/lib/Icon';
+import { Label } from '@fluentui/react/lib/Label';
+import { Link } from '@fluentui/react/lib/Link';
+import { ProgressIndicator } from '@fluentui/react/lib/ProgressIndicator';
+import { ISearchBoxProps, ISearchBoxStyles, SearchBox } from '@fluentui/react/lib/SearchBox';
+import { Stack } from '@fluentui/react/lib/Stack';
+import { TooltipHost } from '@fluentui/react/lib/Tooltip';
+import { classNamesFunction } from '@fluentui/react/lib/Utilities';
 import * as React from 'react';
 
 const TitleBar = styled(Stack)({

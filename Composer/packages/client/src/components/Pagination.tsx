@@ -3,12 +3,12 @@
 
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core';
-import { DefaultButton } from 'office-ui-fabric-react/lib/Button';
-import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
+import { DefaultButton } from '@fluentui/react/lib/Button';
+import { Dropdown, IDropdownOption } from '@fluentui/react/lib/Dropdown';
 import { useState, useEffect } from 'react';
 import formatMessage from 'format-message';
 import range from 'lodash/range';
-import { IDropdownStyles } from 'office-ui-fabric-react/lib/Dropdown';
+import { IDropdownStyles } from '@fluentui/react/lib/Dropdown';
 
 // -------------------- Styles -------------------- //
 

@@ -4,8 +4,8 @@
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core';
 import { useRecoilValue } from 'recoil';
-import { IconButton } from 'office-ui-fabric-react/lib/Button';
-import { Spinner } from 'office-ui-fabric-react/lib/Spinner';
+import { IconButton } from '@fluentui/react/lib/Button';
+import { Spinner } from '@fluentui/react/lib/Spinner';
 import formatMessage from 'format-message';
 
 import { botStatusState } from '../../recoilModel';

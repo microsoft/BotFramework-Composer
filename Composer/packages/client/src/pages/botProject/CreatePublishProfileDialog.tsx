@@ -5,11 +5,11 @@
 import React, { Fragment } from 'react';
 import { jsx } from '@emotion/core';
 import formatMessage from 'format-message';
-import { ActionButton, DefaultButton } from 'office-ui-fabric-react/lib/Button';
-import { useBoolean } from '@uifabric/react-hooks';
-import Dialog, { DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
-import { SharedColors } from '@uifabric/fluent-theme';
-import { FontWeights } from 'office-ui-fabric-react/lib/Styling';
+import { ActionButton, DefaultButton } from '@fluentui/react/lib/Button';
+import { useBoolean } from '@fluentui/react-hooks';
+import Dialog, { DialogFooter } from '@fluentui/react/lib/Dialog';
+import { SharedColors } from '@fluentui/theme';
+import { FontWeights } from '@fluentui/react/lib/Styling';
 
 // -------------------- CreatePublishProfileDialog -------------------- //
 

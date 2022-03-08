@@ -6,7 +6,7 @@ import { css, jsx } from '@emotion/core';
 import React, { useMemo, useEffect, Fragment, useState } from 'react';
 import AdaptiveForm, { FieldLabel } from '@bfc/adaptive-form';
 import { FieldProps, JSONSchema7, UIOptions } from '@bfc/extension-client';
-import { TextField } from 'office-ui-fabric-react/lib/TextField';
+import { TextField } from '@fluentui/react/lib/TextField';
 import { useRecoilValue } from 'recoil';
 import { v4 as uuid } from 'uuid';
 import { LoadingSpinner } from '@bfc/ui-shared/lib/components/LoadingSpinner';

@@ -4,8 +4,8 @@
 import { WidgetContainerProps } from '@bfc/extension-client';
 import styled from '@emotion/styled';
 import get from 'lodash/get';
-import { Stack } from 'office-ui-fabric-react/lib/Stack';
-import { Text } from 'office-ui-fabric-react/lib/Text';
+import { Stack } from '@fluentui/react/lib/Stack';
+import { Text } from '@fluentui/react/lib/Text';
 import React from 'react';
 
 import { useLgTemplate } from './useLgTemplate';

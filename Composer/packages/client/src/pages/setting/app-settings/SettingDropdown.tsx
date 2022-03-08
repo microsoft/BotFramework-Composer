@@ -4,10 +4,10 @@
 /** @jsx jsx */
 import { DropdownField } from '@bfc/ui-shared';
 import { jsx } from '@emotion/core';
-import { useId } from '@uifabric/react-hooks';
+import { useId } from '@fluentui/react-hooks';
 import kebabCase from 'lodash/kebabCase';
-import { FontSizes, mergeStyleSets } from 'office-ui-fabric-react/lib/Styling';
-import { IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
+import { FontSizes, mergeStyleSets } from '@fluentui/react/lib/Styling';
+import { IDropdownOption } from '@fluentui/react/lib/Dropdown';
 import React from 'react';
 
 import { customFieldLabel } from '../../../styles';

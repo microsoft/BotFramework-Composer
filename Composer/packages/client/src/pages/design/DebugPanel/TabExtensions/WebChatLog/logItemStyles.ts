@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import { css } from '@emotion/core';
-import { NeutralColors, SharedColors } from '@uifabric/fluent-theme';
+import { NeutralColors, SharedColors } from '@fluentui/theme';
 
 import { getDefaultFontSettings } from '../../../../../recoilModel/utils/fontUtil';
 

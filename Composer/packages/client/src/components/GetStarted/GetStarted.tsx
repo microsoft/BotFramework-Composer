@@ -5,9 +5,9 @@
 import { jsx } from '@emotion/core';
 import React from 'react';
 import formatMessage from 'format-message';
-import { Panel, IPanelStyles, PanelType } from 'office-ui-fabric-react/lib/Panel';
-import { Pivot, PivotItem } from 'office-ui-fabric-react/lib/Pivot';
-import { Stack } from 'office-ui-fabric-react/lib/Stack';
+import { Panel, IPanelStyles, PanelType } from '@fluentui/react/lib/Panel';
+import { Pivot, PivotItem } from '@fluentui/react/lib/Pivot';
+import { Stack } from '@fluentui/react/lib/Stack';
 
 import { GetStartedNextSteps } from './GetStartedNextSteps';
 import { GetStartedLearn } from './GetStartedLearn';

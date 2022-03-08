@@ -5,10 +5,10 @@
 import { jsx } from '@emotion/core';
 import React from 'react';
 import formatMessage from 'format-message';
-import { Link } from 'office-ui-fabric-react/lib/Link';
-import { Image, ImageFit } from 'office-ui-fabric-react/lib/Image';
-import { Pivot, PivotItem, PivotLinkSize } from 'office-ui-fabric-react/lib/Pivot';
-import { Icon } from 'office-ui-fabric-react/lib/Icon';
+import { Link } from '@fluentui/react/lib/Link';
+import { Image, ImageFit } from '@fluentui/react/lib/Image';
+import { Pivot, PivotItem, PivotLinkSize } from '@fluentui/react/lib/Pivot';
+import { Icon } from '@fluentui/react/lib/Icon';
 import { RouteComponentProps } from '@reach/router';
 import { navigate } from '@reach/router';
 import { useRecoilValue } from 'recoil';

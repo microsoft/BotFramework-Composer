@@ -3,8 +3,8 @@
 
 import * as React from 'react';
 import styled from '@emotion/styled';
-import { FluentTheme } from '@uifabric/fluent-theme';
-import { IconButton } from 'office-ui-fabric-react/lib/Button';
+import { FluentTheme } from '@fluentui/theme';
+import { IconButton } from '@fluentui/react/lib/Button';
 
 import { ContentEditable } from './ContentEditable';
 

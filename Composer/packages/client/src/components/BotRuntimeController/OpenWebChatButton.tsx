@@ -4,7 +4,7 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import formatMessage from 'format-message';
-import { ActionButton } from 'office-ui-fabric-react/lib/Button';
+import { ActionButton } from '@fluentui/react/lib/Button';
 import { useRecoilValue } from 'recoil';
 
 import { BotStatus } from '../../constants';

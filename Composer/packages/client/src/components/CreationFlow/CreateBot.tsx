@@ -5,25 +5,25 @@
 import { jsx, css } from '@emotion/core';
 import { useState, Fragment, useEffect, useMemo } from 'react';
 import formatMessage from 'format-message';
-import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button';
-import { DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
-import { ScrollablePane, ScrollbarVisibility } from 'office-ui-fabric-react/lib/ScrollablePane';
-import { Selection } from 'office-ui-fabric-react/lib/DetailsList';
-import { Text } from 'office-ui-fabric-react/lib/Text';
+import { PrimaryButton, DefaultButton } from '@fluentui/react/lib/Button';
+import { DialogFooter } from '@fluentui/react/lib/Dialog';
+import { ScrollablePane, ScrollbarVisibility } from '@fluentui/react/lib/ScrollablePane';
+import { Selection } from '@fluentui/react/lib/DetailsList';
+import { Text } from '@fluentui/react/lib/Text';
 import {
   DetailsList,
   DetailsListLayoutMode,
   SelectionMode,
   CheckboxVisibility,
   DetailsRow,
-} from 'office-ui-fabric-react/lib/DetailsList';
+} from '@fluentui/react/lib/DetailsList';
 import { BotTemplate, localTemplateId } from '@bfc/shared';
 import { DialogWrapper, DialogTypes, LoadingSpinner } from '@bfc/ui-shared';
-import { NeutralColors, SharedColors } from '@uifabric/fluent-theme';
+import { NeutralColors, SharedColors } from '@fluentui/theme';
 import { WindowLocation } from '@reach/router';
-import { IPivotItemProps, Pivot, PivotItem } from 'office-ui-fabric-react/lib/Pivot';
-import { Link } from 'office-ui-fabric-react/lib/Link';
-import { FontIcon } from 'office-ui-fabric-react/lib/Icon';
+import { IPivotItemProps, Pivot, PivotItem } from '@fluentui/react/lib/Pivot';
+import { Link } from '@fluentui/react/lib/Link';
+import { FontIcon } from '@fluentui/react/lib/Icon';
 import { csharpFeedKey, nodeFeedKey } from '@botframework-composer/types';
 import { useRecoilState, useRecoilValue } from 'recoil';
 

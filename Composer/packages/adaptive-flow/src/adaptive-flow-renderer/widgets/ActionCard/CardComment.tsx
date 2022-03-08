@@ -5,7 +5,7 @@
 import { jsx, css } from '@emotion/core';
 import React from 'react';
 import { TruncatedText } from '@bfc/ui-shared';
-import { NeutralColors } from '@uifabric/fluent-theme';
+import { NeutralColors } from '@fluentui/theme';
 
 type CardCommentProps = {
   comment?: string;

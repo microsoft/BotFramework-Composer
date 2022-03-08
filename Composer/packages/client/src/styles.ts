@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import { css } from '@emotion/core';
-import { FontSizes, FontWeights } from 'office-ui-fabric-react/lib/Styling';
+import { FontSizes, FontWeights } from '@fluentui/react/lib/Styling';
 
 export const customFieldLabel = {
   subComponentStyles: {

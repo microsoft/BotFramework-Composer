@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { IPersonaProps, Persona } from 'office-ui-fabric-react';
+import { IPersonaProps, Persona } from '@fluentui/react';
 import formatMessage from 'format-message';
 import * as React from 'react';
 import { Notification } from '@botframework-composer/types';

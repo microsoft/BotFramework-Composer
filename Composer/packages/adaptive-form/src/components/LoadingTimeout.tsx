@@ -6,7 +6,7 @@ import { jsx } from '@emotion/core';
 import React, { useState, useEffect } from 'react';
 import { css } from '@emotion/core';
 import formatMessage from 'format-message';
-import { Spinner } from 'office-ui-fabric-react/lib/Spinner';
+import { Spinner } from '@fluentui/react/lib/Spinner';
 
 const container = css`
   height: 100%;

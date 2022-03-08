@@ -5,10 +5,10 @@
 import { jsx, css } from '@emotion/core';
 import React, { lazy, useCallback, useState, Suspense } from 'react';
 import formatMessage from 'format-message';
-import { TeachingBubble } from 'office-ui-fabric-react/lib/TeachingBubble';
-import { FontIcon } from 'office-ui-fabric-react/lib/Icon';
-import { DirectionalHint } from 'office-ui-fabric-react/lib/common/DirectionalHint';
-import { NeutralColors } from '@uifabric/fluent-theme';
+import { TeachingBubble } from '@fluentui/react/lib/TeachingBubble';
+import { FontIcon } from '@fluentui/react/lib/Icon';
+import { DirectionalHint } from '@fluentui/react/lib/common/DirectionalHint';
+import { NeutralColors } from '@fluentui/theme';
 import { RouteComponentProps } from '@reach/router';
 import { useRecoilValue } from 'recoil';
 

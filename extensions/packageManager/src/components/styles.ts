@@ -1,8 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 import { css } from '@emotion/core';
-import { FontWeights, FontSizes } from 'office-ui-fabric-react';
-import { NeutralColors } from '@uifabric/fluent-theme';
+import { FontWeights, FontSizes } from '@fluentui/react';
+import { NeutralColors } from '@fluentui/theme';
 
 export const packageScrollContainerStyle = {
   root: { borderTop: '1px solid #CCC', height: 'calc(100% - 150px)' },

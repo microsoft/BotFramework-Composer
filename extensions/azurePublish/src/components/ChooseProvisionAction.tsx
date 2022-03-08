@@ -4,11 +4,11 @@
 import * as React from 'react';
 import formatMessage from 'format-message';
 import styled from '@emotion/styled';
-import { ChoiceGroup, IChoiceGroupOption } from 'office-ui-fabric-react/lib/ChoiceGroup';
-import { Stack } from 'office-ui-fabric-react/lib/Stack';
-import { Text } from 'office-ui-fabric-react/lib/Text';
-import { FluentTheme, NeutralColors } from '@uifabric/fluent-theme';
-import { Link } from 'office-ui-fabric-react/lib/Link';
+import { ChoiceGroup, IChoiceGroupOption } from '@fluentui/react/lib/ChoiceGroup';
+import { Stack } from '@fluentui/react/lib/Stack';
+import { Text } from '@fluentui/react/lib/Text';
+import { FluentTheme, NeutralColors } from '@fluentui/theme';
+import { Link } from '@fluentui/react/lib/Link';
 import { SectionTitle } from '@bfc/ui-shared';
 
 // ---------- Styles ---------- //

@@ -4,15 +4,16 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { DefaultButton, IconButton } from 'office-ui-fabric-react/lib/Button';
-import { TooltipHost, DirectionalHint } from 'office-ui-fabric-react/lib/Tooltip';
-import { IContextualMenuItem } from 'office-ui-fabric-react/lib/ContextualMenu';
+import { DefaultButton, IconButton } from '@fluentui/react/lib/Button';
+import { TooltipHost } from '@fluentui/react/lib/Tooltip';
+import { IContextualMenuItem } from '@fluentui/react/lib/ContextualMenu';
 import { useRecoilValue } from 'recoil';
 import formatMessage from 'format-message';
 import { css } from '@emotion/core';
-import { NeutralColors, CommunicationColors } from '@uifabric/fluent-theme';
-import { Spinner, SpinnerSize } from 'office-ui-fabric-react/lib/Spinner';
+import { NeutralColors, CommunicationColors } from '@fluentui/theme';
+import { Spinner, SpinnerSize } from '@fluentui/react/lib/Spinner';
 import { DiagnosticSeverity } from '@botframework-composer/types';
+import { DirectionalHint } from '@fluentui/react/lib/common/DirectionalHint';
 
 import { DisableFeatureToolTip } from '../DisableFeatureToolTip';
 import TelemetryClient from '../../telemetry/TelemetryClient';

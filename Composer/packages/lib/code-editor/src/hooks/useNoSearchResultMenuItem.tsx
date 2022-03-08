@@ -2,10 +2,10 @@
 // Licensed under the MIT License.
 
 import formatMessage from 'format-message';
-import { IContextualMenuItem } from 'office-ui-fabric-react/lib/ContextualMenu';
-import { Icon } from 'office-ui-fabric-react/lib/Icon';
-import { Stack } from 'office-ui-fabric-react/lib/Stack';
-import { Text } from 'office-ui-fabric-react/lib/Text';
+import { IContextualMenuItem } from '@fluentui/react/lib/ContextualMenu';
+import { Icon } from '@fluentui/react/lib/Icon';
+import { Stack } from '@fluentui/react/lib/Stack';
+import { Text } from '@fluentui/react/lib/Text';
 import * as React from 'react';
 
 const searchEmptyMessageStyles = { root: { height: 32 } };

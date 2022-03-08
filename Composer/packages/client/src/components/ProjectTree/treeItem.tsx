@@ -4,22 +4,23 @@
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core';
 import React, { useState, useCallback } from 'react';
-import { FontSizes, FluentTheme } from '@uifabric/fluent-theme';
-import { DefaultPalette, getFocusStyle, getTheme, mergeStyles } from '@uifabric/styling';
-import { OverflowSet, IOverflowSetItemProps } from 'office-ui-fabric-react/lib/OverflowSet';
-import { TooltipHost, DirectionalHint } from 'office-ui-fabric-react/lib/Tooltip';
-import { ContextualMenuItemType, IContextualMenuItem } from 'office-ui-fabric-react/lib/ContextualMenu';
-import { IconButton } from 'office-ui-fabric-react/lib/Button';
-import { Link } from 'office-ui-fabric-react/lib/Link';
-import { Icon } from 'office-ui-fabric-react/lib/Icon';
+import { FontSizes, FluentTheme } from '@fluentui/theme';
+import { DefaultPalette, getFocusStyle, getTheme, mergeStyles } from '@fluentui/style-utilities';
+import { OverflowSet, IOverflowSetItemProps } from '@fluentui/react/lib/OverflowSet';
+import { TooltipHost } from '@fluentui/react/lib/Tooltip';
+import { ContextualMenuItemType, IContextualMenuItem } from '@fluentui/react/lib/ContextualMenu';
+import { IconButton } from '@fluentui/react/lib/Button';
+import { Link } from '@fluentui/react/lib/Link';
+import { Icon } from '@fluentui/react/lib/Icon';
 import formatMessage from 'format-message';
-import { NeutralColors, SharedColors } from '@uifabric/fluent-theme';
-import { IButtonStyles } from 'office-ui-fabric-react/lib/Button';
-import { IContextualMenuStyles } from 'office-ui-fabric-react/lib/ContextualMenu';
-import { ICalloutContentStyles, Callout } from 'office-ui-fabric-react/lib/Callout';
+import { NeutralColors, SharedColors } from '@fluentui/theme';
+import { IButtonStyles } from '@fluentui/react/lib/Button';
+import { IContextualMenuStyles } from '@fluentui/react/lib/ContextualMenu';
+import { ICalloutContentStyles, Callout } from '@fluentui/react/lib/Callout';
 import { DiagnosticSeverity, Diagnostic, Icons } from '@bfc/shared';
 import isEmpty from 'lodash/isEmpty';
 import uniqueId from 'lodash/uniqueId';
+import { DirectionalHint } from '@fluentui/react/lib/common/DirectionalHint';
 
 import { THREE_DOTS_ICON_WIDTH } from './constants';
 import { TreeLink, TreeMenuItem } from './types';
@@ -587,9 +588,6 @@ export const TreeItem: React.FC<ITreeItemProps> = ({
       }
     >
       <OverflowSet
-        //In 8.0 the OverflowSet will no longer be wrapped in a FocusZone
-        //remove this at that time
-        doNotContainWithinFocusZone
         css={overflowSet(isBroken)}
         data-testid={linkString}
         items={[

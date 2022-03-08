@@ -4,12 +4,13 @@
 /** @jsx jsx */
 import { css, jsx } from '@emotion/core';
 import React, { useState } from 'react';
-import { FontWeights } from '@uifabric/styling';
-import { IButtonStyles, IconButton } from 'office-ui-fabric-react/lib/Button';
-import { NeutralColors, SharedColors } from '@uifabric/fluent-theme';
-import { TooltipHost, DirectionalHint } from 'office-ui-fabric-react/lib/Tooltip';
+import { FontWeights } from '@fluentui/style-utilities';
+import { IButtonStyles, IconButton } from '@fluentui/react/lib/Button';
+import { NeutralColors, SharedColors } from '@fluentui/theme';
+import { TooltipHost } from '@fluentui/react/lib/Tooltip';
 import { useRecoilValue } from 'recoil';
 import formatMessage from 'format-message';
+import { DirectionalHint } from '@fluentui/react/lib/common/DirectionalHint';
 
 import { notificationsSelector } from '../../recoilModel/selectors/notifications';
 import { dispatcherState } from '../../recoilModel';

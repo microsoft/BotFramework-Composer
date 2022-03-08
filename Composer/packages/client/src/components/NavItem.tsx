@@ -5,12 +5,13 @@
 import { jsx, css } from '@emotion/core';
 import { useCallback } from 'react';
 import { Link } from '@reach/router';
-import { Icon } from 'office-ui-fabric-react/lib/Icon';
-import { TooltipHost, DirectionalHint } from 'office-ui-fabric-react/lib/Tooltip';
-import { FontSizes } from '@uifabric/fluent-theme';
-import { NeutralColors, CommunicationColors } from '@uifabric/fluent-theme';
-import { IButtonStyles } from 'office-ui-fabric-react/lib/Button';
+import { Icon } from '@fluentui/react/lib/Icon';
+import { TooltipHost } from '@fluentui/react/lib/Tooltip';
+import { FontSizes } from '@fluentui/theme';
+import { NeutralColors, CommunicationColors } from '@fluentui/theme';
+import { IButtonStyles } from '@fluentui/react/lib/Button';
 import { useRecoilValue } from 'recoil';
+import { DirectionalHint } from '@fluentui/react/lib/common/DirectionalHint';
 
 import { useLocation, useRouterCache } from '../utils/hooks';
 import { dispatcherState } from '../recoilModel';

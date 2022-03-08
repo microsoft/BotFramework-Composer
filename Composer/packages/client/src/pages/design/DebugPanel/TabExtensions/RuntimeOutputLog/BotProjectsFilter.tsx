@@ -3,8 +3,8 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { DefaultButton } from 'office-ui-fabric-react/lib/Button';
-import { NeutralColors } from '@uifabric/fluent-theme';
+import { DefaultButton } from '@fluentui/react/lib/Button';
+import { NeutralColors } from '@fluentui/theme';
 import { useRecoilValue } from 'recoil';
 
 import { outputsDebugPanelSelector } from '../../../../../recoilModel';

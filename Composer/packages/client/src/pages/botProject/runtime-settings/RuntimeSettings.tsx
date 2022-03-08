@@ -5,8 +5,8 @@
 import { jsx } from '@emotion/core';
 import { useState, useEffect } from 'react';
 import formatMessage from 'format-message';
-import { TextField } from 'office-ui-fabric-react/lib/TextField';
-import { Icon } from 'office-ui-fabric-react/lib/Icon';
+import { TextField } from '@fluentui/react/lib/TextField';
+import { Icon } from '@fluentui/react/lib/Icon';
 import { RouteComponentProps } from '@reach/router';
 import { useRecoilValue } from 'recoil';
 

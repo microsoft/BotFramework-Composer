@@ -2,10 +2,10 @@
 // Licensed under the MIT License.
 
 import { LgTemplate, TelemetryClient, TemplateBodyItem } from '@bfc/shared';
-import { FluentTheme } from '@uifabric/fluent-theme';
+import { FluentTheme } from '@fluentui/theme';
 import formatMessage from 'format-message';
-import { Callout, DirectionalHint } from 'office-ui-fabric-react/lib/Callout';
-import { ILinkStyles, Link } from 'office-ui-fabric-react/lib/Link';
+import { Callout, DirectionalHint } from '@fluentui/react/lib/Callout';
+import { ILinkStyles, Link } from '@fluentui/react/lib/Link';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 
 import { LGOption } from '../../utils';

@@ -5,11 +5,11 @@
 import { jsx } from '@emotion/core';
 import React, { useState, useMemo, Fragment, useEffect } from 'react';
 import formatMessage from 'format-message';
-import { Stack } from 'office-ui-fabric-react/lib/Stack';
-import { TextField } from 'office-ui-fabric-react/lib/TextField';
-import { Text } from 'office-ui-fabric-react/lib/Text';
-import { Checkbox } from 'office-ui-fabric-react/lib/Checkbox';
-import { Dropdown } from 'office-ui-fabric-react/lib/Dropdown';
+import { Stack } from '@fluentui/react/lib/Stack';
+import { TextField } from '@fluentui/react/lib/TextField';
+import { Text } from '@fluentui/react/lib/Text';
+import { Checkbox } from '@fluentui/react/lib/Checkbox';
+import { Dropdown } from '@fluentui/react/lib/Dropdown';
 
 import { Locales } from '../../locales';
 

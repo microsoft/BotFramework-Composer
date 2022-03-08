@@ -4,12 +4,12 @@
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core';
 import * as React from 'react';
-import { Dialog, DialogType, DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
-import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button';
-import { Checkbox, ICheckboxProps } from 'office-ui-fabric-react/lib/Checkbox';
-import { Stack } from 'office-ui-fabric-react/lib/Stack';
+import { Dialog, DialogType, DialogFooter } from '@fluentui/react/lib/Dialog';
+import { PrimaryButton, DefaultButton } from '@fluentui/react/lib/Button';
+import { Checkbox, ICheckboxProps } from '@fluentui/react/lib/Checkbox';
+import { Stack } from '@fluentui/react/lib/Stack';
 import ReactDOM from 'react-dom';
-import { FontWeights } from 'office-ui-fabric-react/lib/Styling';
+import { FontWeights } from '@fluentui/react/lib/Styling';
 import formatMessage from 'format-message';
 
 export const dialogStyle = {

@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import React from 'react';
-import { ChoiceGroup, IChoiceGroupOption, IChoiceGroupProps } from 'office-ui-fabric-react';
+import { ChoiceGroup, IChoiceGroupOption, IChoiceGroupProps } from '@fluentui/react';
 import formatMessage from 'format-message';
 
 import { usePreferredAppServiceOS } from '../../hooks/usePreferredAppServiceOS';

@@ -6,7 +6,7 @@ import React, { Fragment, useState } from 'react';
 import { jsx } from '@emotion/core';
 import { useRecoilValue } from 'recoil';
 import formatMessage from 'format-message';
-import { Link } from 'office-ui-fabric-react/lib/components/Link';
+import { Link } from '@fluentui/react/lib/components/Link';
 import { TextField } from '@bfc/ui-shared';
 
 import { dispatcherState, settingsState } from '../../recoilModel';

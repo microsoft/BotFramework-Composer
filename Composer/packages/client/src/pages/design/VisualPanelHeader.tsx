@@ -5,8 +5,8 @@
 import { jsx } from '@emotion/core';
 import React, { useMemo } from 'react';
 import formatMessage from 'format-message';
-import { Breadcrumb, IBreadcrumbItem } from 'office-ui-fabric-react/lib/Breadcrumb';
-import { ActionButton } from 'office-ui-fabric-react/lib/Button';
+import { Breadcrumb, IBreadcrumbItem } from '@fluentui/react/lib/Breadcrumb';
+import { ActionButton } from '@fluentui/react/lib/Button';
 import { useRecoilValue } from 'recoil';
 import { PluginConfig } from '@bfc/extension-client';
 import { DialogInfo, getFriendlyName } from '@bfc/shared';

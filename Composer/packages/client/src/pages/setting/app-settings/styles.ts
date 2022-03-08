@@ -2,9 +2,9 @@
 // Licensed under the MIT License.
 
 import { css } from '@emotion/core';
-import { FontSizes, NeutralColors } from '@uifabric/fluent-theme';
-import { ILinkStyles } from 'office-ui-fabric-react/lib/Link';
-import { FontWeights } from '@uifabric/styling';
+import { FontSizes, NeutralColors } from '@fluentui/theme';
+import { ILinkStyles } from '@fluentui/react/lib/Link';
+import { FontWeights } from '@fluentui/style-utilities';
 
 export const container = css`
   label: SettingsContainer;

@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import React, { useState, ReactNode, useMemo } from 'react';
-import { Pivot, PivotItem } from 'office-ui-fabric-react/lib/Pivot';
+import { Pivot, PivotItem } from '@fluentui/react/lib/Pivot';
 
 import { languageListTemplates, LanguageTemplate } from '../../components/MultiLanguage';
 

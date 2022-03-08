@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import { HelpTooltip, HelpTooltipProps } from '@bfc/ui-shared';
-import { FluentTheme, NeutralColors } from '@uifabric/fluent-theme';
+import { FluentTheme, NeutralColors } from '@fluentui/theme';
 import * as React from 'react';
 
 const tooltipStyles = {

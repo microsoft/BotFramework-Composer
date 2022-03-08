@@ -4,13 +4,14 @@
 /** @jsx jsx */
 import { css, jsx } from '@emotion/core';
 import React from 'react';
-import { FocusTrapCallout, DirectionalHint } from 'office-ui-fabric-react/lib/Callout';
-import { DetailsList, DetailsListLayoutMode, IColumn } from 'office-ui-fabric-react/lib/DetailsList';
-import { IContextualMenuProps } from 'office-ui-fabric-react/lib/ContextualMenu';
-import { SelectionMode } from 'office-ui-fabric-react/lib/Utilities';
-import { FontWeights } from '@uifabric/styling';
-import { FontSizes } from '@uifabric/fluent-theme/lib/fluent';
+import { FocusTrapCallout } from '@fluentui/react/lib/Callout';
+import { DetailsList, DetailsListLayoutMode, IColumn } from '@fluentui/react/lib/DetailsList';
+import { IContextualMenuProps } from '@fluentui/react/lib/ContextualMenu';
+import { SelectionMode } from '@fluentui/react/lib/Utilities';
+import { FontWeights } from '@fluentui/style-utilities';
+import { FontSizes } from '@fluentui/theme';
 import formatMessage from 'format-message';
+import { DirectionalHint } from '@fluentui/react/lib/common/DirectionalHint';
 
 import { BotRuntimeOperations } from './BotRuntimeOperations';
 import { BotStatusIndicator } from './BotStatusIndicator';

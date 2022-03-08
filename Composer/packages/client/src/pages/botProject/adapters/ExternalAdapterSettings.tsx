@@ -7,8 +7,8 @@ import { useState, Fragment } from 'react';
 import formatMessage from 'format-message';
 import { useRecoilValue } from 'recoil';
 import { BotSchemas, DialogSetting } from '@bfc/shared';
-import { Link } from 'office-ui-fabric-react/lib/Link';
-import { Toggle } from 'office-ui-fabric-react/lib/Toggle';
+import { Link } from '@fluentui/react/lib/Link';
+import { Toggle } from '@fluentui/react/lib/Toggle';
 import { JSONSchema7 } from '@botframework-composer/types';
 import { AdapterRecord } from '@botframework-composer/types/src';
 

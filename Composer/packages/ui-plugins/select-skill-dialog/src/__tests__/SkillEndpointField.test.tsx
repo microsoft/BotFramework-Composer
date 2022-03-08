@@ -45,7 +45,7 @@ describe('Begin Skill Dialog', () => {
       value: { skillEndpoint: `=settings.skill['${keys[selectedKeyIndex]}'].endpointUrl` },
     });
 
-    const listbox = await findByRole('listbox');
+    const listbox = await findByRole('combobox');
     act(() => {
       fireEvent.click(listbox);
     });
@@ -75,7 +75,7 @@ describe('Begin Skill Dialog', () => {
       value: { skillEndpoint: `=settings.skill['${keys[selectedKeyIndex]}'].endpointUrl` },
     });
 
-    const listbox = await findByRole('listbox');
+    const listbox = await findByRole('combobox');
     act(() => {
       fireEvent.click(listbox);
     });
@@ -83,13 +83,13 @@ describe('Begin Skill Dialog', () => {
     const endpoints = getAllByRole(baseElement, 'option');
 
     act(() => {
-      fireEvent.click(endpoints[1]);
+      fireEvent.click(endpoints[2]);
     });
 
     expect(updateSkill).toHaveBeenCalledWith(
       keys[selectedKeyIndex],
       expect.objectContaining({
-        selectedEndpointIndex: -1,
+        selectedEndpointIndex: selectedKeyIndex,
         skill: selectedSkill,
       })
     );
@@ -106,13 +106,13 @@ describe('Begin Skill Dialog', () => {
       value: { skillEndpoint: `=settings.skill['${keys[selectedKeyIndex]}'].endpointUrl` },
     });
 
-    const listbox = await findByRole('listbox');
+    const listbox = await findByRole('combobox');
     act(() => {
       fireEvent.click(listbox);
     });
 
     const endpoints = getAllByRole(baseElement, 'option').filter((endpoint) => {
-      return !!endpoint.title;
+      return !!endpoint;
     });
 
     expect(endpoints.length).toBe(1);

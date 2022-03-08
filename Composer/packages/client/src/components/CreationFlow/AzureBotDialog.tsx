@@ -3,12 +3,12 @@
 
 import React, { useState } from 'react';
 import formatMessage from 'format-message';
-import { FontWeights } from 'office-ui-fabric-react/lib/Styling';
-import { FontSizes } from '@uifabric/fluent-theme';
-import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button';
-import { Link } from 'office-ui-fabric-react/lib/Link';
-import { ChoiceGroup, IChoiceGroupOption } from 'office-ui-fabric-react/lib/ChoiceGroup';
-import { DialogFooter, IDialogContentStyles } from 'office-ui-fabric-react/lib/Dialog';
+import { FontWeights } from '@fluentui/react/lib/Styling';
+import { FontSizes } from '@fluentui/theme';
+import { PrimaryButton, DefaultButton } from '@fluentui/react/lib/Button';
+import { Link } from '@fluentui/react/lib/Link';
+import { ChoiceGroup, IChoiceGroupOption } from '@fluentui/react/lib/ChoiceGroup';
+import { DialogFooter, IDialogContentStyles } from '@fluentui/react/lib/Dialog';
 import { DialogWrapper, DialogTypes } from '@bfc/ui-shared';
 import { RouteComponentProps } from '@reach/router';
 
@@ -90,7 +90,7 @@ export const AzureBotDialog = (props: Props) => {
         defaultSelectedKey="Create"
         options={options}
         styles={{
-          applicationRole: {
+          root: {
             marginTop: '24px',
           },
         }}
