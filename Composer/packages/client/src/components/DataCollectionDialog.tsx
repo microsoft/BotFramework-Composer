@@ -2,9 +2,9 @@
 // Licensed under the MIT License.
 
 import formatMessage from 'format-message';
-import { DefaultButton, PrimaryButton } from 'office-ui-fabric-react/lib/Button';
-import { Dialog, DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
-import { Link } from 'office-ui-fabric-react/lib/Link';
+import { DefaultButton, PrimaryButton } from '@fluentui/react/lib/Button';
+import { Dialog, DialogFooter } from '@fluentui/react/lib/Dialog';
+import { Link } from '@fluentui/react/lib/Link';
 import React from 'react';
 import { useRecoilValue } from 'recoil';
 

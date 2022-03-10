@@ -4,11 +4,11 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import React, { useState, useCallback, useMemo } from 'react';
-import { FontSizes, NeutralColors } from '@uifabric/fluent-theme';
-import { IconButton } from 'office-ui-fabric-react/lib/Button';
+import { FontSizes, NeutralColors } from '@fluentui/theme';
+import { IconButton } from '@fluentui/react/lib/Button';
 import { FieldProps } from '@bfc/extension-client';
-import { IContextualMenuItem } from 'office-ui-fabric-react/lib/ContextualMenu';
-import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
+import { IContextualMenuItem } from '@fluentui/react/lib/ContextualMenu';
+import { TooltipHost } from '@fluentui/react/lib/Tooltip';
 import formatMessage from 'format-message';
 
 import { StringField } from '../StringField';

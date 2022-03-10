@@ -2,19 +2,20 @@
 // Licensed under the MIT License.
 
 import styled from '@emotion/styled';
-import { NeutralColors } from '@uifabric/fluent-theme';
-import { DefaultPalette } from '@uifabric/styling';
+import { NeutralColors } from '@fluentui/theme';
+import { DefaultPalette } from '@fluentui/style-utilities';
 import formatMessage from 'format-message';
 import get from 'lodash/get';
 import debounce from 'lodash/debounce';
-import { CommandBarButton, IconButton } from 'office-ui-fabric-react/lib/Button';
-import { FocusZone, FocusZoneDirection } from 'office-ui-fabric-react/lib/FocusZone';
-import { IOverflowSetItemProps, OverflowSet } from 'office-ui-fabric-react/lib/OverflowSet';
-import { IStackItemProps, IStackItemStyles, Stack } from 'office-ui-fabric-react/lib/Stack';
-import { DirectionalHint, TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
-import { classNamesFunction } from 'office-ui-fabric-react/lib/Utilities';
+import { CommandBarButton, IconButton } from '@fluentui/react/lib/Button';
+import { FocusZone, FocusZoneDirection } from '@fluentui/react/lib/FocusZone';
+import { IOverflowSetItemProps, OverflowSet } from '@fluentui/react/lib/OverflowSet';
+import { IStackItemProps, IStackItemStyles, Stack } from '@fluentui/react/lib/Stack';
+import { TooltipHost } from '@fluentui/react/lib/Tooltip';
+import { classNamesFunction } from '@fluentui/react/lib/Utilities';
 import * as React from 'react';
 import { useRecoilValue } from 'recoil';
+import { DirectionalHint } from '@fluentui/react/lib/common/DirectionalHint';
 
 import { formDialogSchemaDialogExistsSelector, formDialogSchemaState } from '../../recoilModel';
 

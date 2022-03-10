@@ -3,9 +3,9 @@
 
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core';
-import { SharedColors } from '@uifabric/fluent-theme';
-import { Link } from 'office-ui-fabric-react/lib/Link';
-import { FontWeights } from 'office-ui-fabric-react/lib/Styling';
+import { SharedColors } from '@fluentui/theme';
+import { Link } from '@fluentui/react/lib/Link';
+import { FontWeights } from '@fluentui/react/lib/Styling';
 
 // -------------------- Styles -------------------- //
 

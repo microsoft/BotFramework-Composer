@@ -1,9 +1,9 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 import { css } from '@emotion/core';
-import { FontWeights } from '@uifabric/styling';
-import { FontSizes, SharedColors, NeutralColors } from '@uifabric/fluent-theme';
-import { IDropdownStyles } from 'office-ui-fabric-react/lib/Dropdown';
+import { FontWeights } from '@fluentui/style-utilities';
+import { FontSizes, SharedColors, NeutralColors } from '@fluentui/theme';
+import { IDropdownStyles } from '@fluentui/react/lib/Dropdown';
 
 export const styles = {
   dialog: {

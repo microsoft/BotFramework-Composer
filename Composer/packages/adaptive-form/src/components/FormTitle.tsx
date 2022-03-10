@@ -4,8 +4,8 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import React, { useMemo, useRef } from 'react';
-import { FontWeights } from '@uifabric/styling';
-import { FontSizes } from '@uifabric/fluent-theme';
+import { FontWeights } from '@fluentui/style-utilities';
+import { FontSizes } from '@fluentui/theme';
 import formatMessage from 'format-message';
 import { UIOptions, JSONSchema7, useShellApi, useRecognizerConfig } from '@bfc/extension-client';
 import { css } from '@emotion/core';

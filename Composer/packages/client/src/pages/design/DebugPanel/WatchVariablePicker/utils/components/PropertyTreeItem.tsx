@@ -2,10 +2,10 @@
 // Licensed under the MIT License.
 
 import styled from '@emotion/styled';
-import { NeutralColors } from '@uifabric/fluent-theme';
+import { NeutralColors } from '@fluentui/theme';
 import formatMessage from 'format-message';
-import { IconButton, IButtonStyles } from 'office-ui-fabric-react/lib/Button';
-import { Stack } from 'office-ui-fabric-react/lib/Stack';
+import { IconButton, IButtonStyles } from '@fluentui/react/lib/Button';
+import { Stack } from '@fluentui/react/lib/Stack';
 import * as React from 'react';
 
 import { DEFAULT_TREE_ITEM_HEIGHT } from './constants';

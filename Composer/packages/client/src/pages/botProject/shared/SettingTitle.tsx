@@ -3,7 +3,7 @@
 
 /** @jsx jsx */
 import { css, jsx } from '@emotion/core';
-import { FontSizes, FontWeights } from 'office-ui-fabric-react/lib/Styling';
+import { FontSizes, FontWeights } from '@fluentui/react/lib/Styling';
 import { SectionTitle } from '@bfc/ui-shared';
 
 export const SettingTitle: React.FC = (props) => (

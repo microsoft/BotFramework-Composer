@@ -4,12 +4,12 @@
 /** @jsx jsx */
 import { jsx, css, keyframes } from '@emotion/core';
 import React, { useState } from 'react';
-import { IconButton, ActionButton } from 'office-ui-fabric-react/lib/Button';
+import { IconButton, ActionButton } from '@fluentui/react/lib/Button';
 import { useRef } from 'react';
-import { FontSizes, SharedColors } from '@uifabric/fluent-theme';
-import { Shimmer, ShimmerElementType } from 'office-ui-fabric-react/lib/Shimmer';
-import { Icon } from 'office-ui-fabric-react/lib/Icon';
-import { Stack, IStackProps } from 'office-ui-fabric-react/lib/Stack';
+import { FontSizes, SharedColors } from '@fluentui/theme';
+import { Shimmer, ShimmerElementType } from '@fluentui/react/lib/Shimmer';
+import { Icon } from '@fluentui/react/lib/Icon';
+import { Stack, IStackProps } from '@fluentui/react/lib/Stack';
 import formatMessage from 'format-message';
 import { Notification, NotificationLink } from '@botframework-composer/types';
 

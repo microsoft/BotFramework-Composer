@@ -4,11 +4,11 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import React from 'react';
-import { Label } from 'office-ui-fabric-react/lib/Label';
-import { useId } from '@uifabric/react-hooks';
+import { Label } from '@fluentui/react/lib/Label';
+import { useId } from '@fluentui/react-hooks';
 import kebabCase from 'lodash/kebabCase';
 import formatMessage from 'format-message';
-import { Toggle } from 'office-ui-fabric-react/lib/Toggle';
+import { Toggle } from '@fluentui/react/lib/Toggle';
 
 import * as styles from './styles';
 

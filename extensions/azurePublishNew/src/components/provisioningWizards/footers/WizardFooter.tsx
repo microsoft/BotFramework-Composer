@@ -4,7 +4,7 @@
 import * as React from 'react';
 import formatMessage from 'format-message';
 import styled from '@emotion/styled';
-import { DefaultButton, PersonaSize } from 'office-ui-fabric-react';
+import { DefaultButton, PersonaSize } from '@fluentui/react';
 import { CurrentUser } from '@bfc/shared';
 
 import { UserPersona } from '../../shared/userPersona/UserPersona';

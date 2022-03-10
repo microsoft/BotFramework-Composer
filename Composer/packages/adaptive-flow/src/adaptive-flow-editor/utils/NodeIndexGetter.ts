@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { IObjectWithKey } from 'office-ui-fabric-react/lib/MarqueeSelection';
+import { IObjectWithKey } from '@fluentui/react/lib/MarqueeSelection';
 
 export class NodeIndexGenerator {
   private _id = 0;

@@ -5,8 +5,8 @@ import React, { FormEvent } from 'react';
 import { FieldProps, useShellApi } from '@bfc/extension-client';
 import formatMessage from 'format-message';
 import { getSkillNameFromSetting, Skill } from '@bfc/shared';
-import { Link } from 'office-ui-fabric-react/lib/components/Link/Link';
-import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
+import { Link } from '@fluentui/react/lib/components/Link/Link';
+import { Dropdown, IDropdownOption } from '@fluentui/react/lib/Dropdown';
 import { FieldLabel } from '@bfc/adaptive-form';
 
 const referBySettings = (skillName: string, property: string) => {

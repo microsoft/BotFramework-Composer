@@ -4,8 +4,8 @@
 import { jsx } from '@emotion/core';
 import { useEffect, useRef } from 'react';
 import formatMessage from 'format-message';
-import { Stack } from 'office-ui-fabric-react/lib/Stack';
-import { Link } from 'office-ui-fabric-react/lib/Link';
+import { Stack } from '@fluentui/react/lib/Stack';
+import { Link } from '@fluentui/react/lib/Link';
 
 import { subtitle, subtext, headerText } from '../styles';
 import { SettingTitle } from '../shared/SettingTitle';

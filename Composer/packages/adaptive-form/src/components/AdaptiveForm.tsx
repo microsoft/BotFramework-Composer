@@ -7,7 +7,7 @@ import React from 'react';
 import { FormErrors, JSONSchema7, UIOptions } from '@bfc/extension-client';
 import ErrorBoundary from 'react-error-boundary';
 import formatMessage from 'format-message';
-import { FontSizes } from '@uifabric/fluent-theme';
+import { FontSizes } from '@fluentui/theme';
 
 import AdaptiveFormContext from '../AdaptiveFormContext';
 

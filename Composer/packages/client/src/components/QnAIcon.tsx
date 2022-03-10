@@ -3,7 +3,7 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { FontSizes } from '@uifabric/fluent-theme';
+import { FontSizes } from '@fluentui/theme';
 
 interface QnAIconProps {
   active: boolean;

@@ -24,8 +24,8 @@
   "peerDependencies": {
     "@bfc/adaptive-form": "*",
     "@bfc/extension-client": "*",
+    "@fluentui/react": "^8.57.1",
     "format-message": "^6.2.3",
-    "office-ui-fabric-react": "^7.121.11",
     "react": "16.13.1",
     "react-dom": "16.13.1"
   },

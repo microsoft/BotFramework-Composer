@@ -4,17 +4,18 @@
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core';
 import React, { useCallback, Fragment } from 'react';
-import { Dialog, DialogType } from 'office-ui-fabric-react/lib/Dialog';
-import { FontWeights, FontSizes } from 'office-ui-fabric-react/lib/Styling';
-import { DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
-import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button';
-import { Link } from 'office-ui-fabric-react/lib/Link';
-import { Stack } from 'office-ui-fabric-react/lib/Stack';
+import { Dialog, DialogType } from '@fluentui/react/lib/Dialog';
+import { FontWeights, FontSizes } from '@fluentui/react/lib/Styling';
+import { DialogFooter } from '@fluentui/react/lib/Dialog';
+import { PrimaryButton, DefaultButton } from '@fluentui/react/lib/Button';
+import { Link } from '@fluentui/react/lib/Link';
+import { Stack } from '@fluentui/react/lib/Stack';
 import formatMessage from 'format-message';
 import { useRecoilValue } from 'recoil';
 import { IConfig, IPublishConfig, IQnAConfig } from '@bfc/shared';
-import { Dropdown, ResponsiveMode } from 'office-ui-fabric-react/lib/Dropdown';
+import { Dropdown } from '@fluentui/react/lib/Dropdown';
 import { TextField } from '@bfc/ui-shared';
+import { ResponsiveMode } from '@fluentui/react/lib/utilities/decorators/withResponsiveMode';
 
 import { Text, Tips, Links, nameRegex, LUIS_REGIONS } from '../../constants';
 import { FieldConfig, useForm } from '../../hooks/useForm';

@@ -5,7 +5,7 @@
 import { jsx } from '@emotion/core';
 import React, { useEffect, useMemo, useRef } from 'react';
 import { DialogInfo, ITrigger, getFriendlyName, SDKKinds } from '@bfc/shared';
-import { Selection } from 'office-ui-fabric-react/lib/DetailsList';
+import { Selection } from '@fluentui/react/lib/DetailsList';
 import { useRecoilValue } from 'recoil';
 import formatMessage from 'format-message';
 

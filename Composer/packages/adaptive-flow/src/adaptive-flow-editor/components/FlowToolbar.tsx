@@ -5,14 +5,14 @@
 import { jsx, css } from '@emotion/core';
 import { useRef, useEffect, ReactNode } from 'react';
 import { ZoomInfo } from '@bfc/shared';
-import { IconButton, IButtonStyles } from 'office-ui-fabric-react/lib/Button';
-import { IIconProps } from 'office-ui-fabric-react/lib/Icon';
+import { IconButton, IButtonStyles } from '@fluentui/react/lib/Button';
+import { IIconProps } from '@fluentui/react/lib/Icon';
 import formatMessage from 'format-message';
-import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
-import { DirectionalHint } from 'office-ui-fabric-react/lib/Callout';
-import { NeutralColors } from '@uifabric/fluent-theme';
-import { FocusZone } from 'office-ui-fabric-react/lib/FocusZone';
-import { FocusZoneTabbableElements } from 'office-ui-fabric-react/lib/FocusZone';
+import { TooltipHost } from '@fluentui/react/lib/Tooltip';
+import { DirectionalHint } from '@fluentui/react/lib/Callout';
+import { NeutralColors } from '@fluentui/theme';
+import { FocusZone } from '@fluentui/react/lib/FocusZone';
+import { FocusZoneTabbableElements } from '@fluentui/react/lib/FocusZone';
 
 import { scrollNodeIntoView } from '../utils/scrollNodeIntoView';
 import { AttrNames } from '../constants/ElementAttributes';

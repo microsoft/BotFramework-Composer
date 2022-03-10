@@ -1,6 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-import { NeutralColors, CommunicationColors, SharedColors } from '@uifabric/fluent-theme';
+import { NeutralColors, CommunicationColors, SharedColors } from '@fluentui/theme';
 
 export default {
   backgroundColor: `${NeutralColors.white}`,

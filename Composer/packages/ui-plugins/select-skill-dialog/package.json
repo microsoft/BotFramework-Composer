@@ -23,11 +23,10 @@
   "peerDependencies": {
     "@bfc/adaptive-form": "*",
     "@bfc/extension-client": "*",
-    "@uifabric/fluent-theme": "^7.1.4",
-    "@uifabric/icons": "^7.3.0",
-    "@uifabric/styling": "^7.7.4",
+    "@fluentui/react": "^8.57.1",
+    "@fluentui/style-utilities": "^8.6.0",
+    "@fluentui/theme": "2.5.0",
     "format-message": "^6.2.3",
-    "office-ui-fabric-react": "^7.71.0",
     "react": "16.13.1",
     "react-dom": "16.13.1"
   },

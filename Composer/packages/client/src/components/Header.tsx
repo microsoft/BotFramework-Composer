@@ -4,15 +4,15 @@
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core';
 import formatMessage from 'format-message';
-import { IconButton, IButtonStyles } from 'office-ui-fabric-react/lib/Button';
-import { Callout, DirectionalHint } from 'office-ui-fabric-react/lib/Callout';
-import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
-import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
-import { FocusTrapZone } from 'office-ui-fabric-react/lib/FocusTrapZone';
+import { IconButton, IButtonStyles } from '@fluentui/react/lib/Button';
+import { Callout, DirectionalHint } from '@fluentui/react/lib/Callout';
+import { Dropdown, IDropdownOption } from '@fluentui/react/lib/Dropdown';
+import { TooltipHost } from '@fluentui/react/lib/Tooltip';
+import { FocusTrapZone } from '@fluentui/react/lib/FocusTrapZone';
 import { useCallback, useState, Fragment, useMemo, useEffect } from 'react';
-import { NeutralColors, SharedColors, FontSizes, CommunicationColors } from '@uifabric/fluent-theme';
+import { NeutralColors, SharedColors, FontSizes, CommunicationColors } from '@fluentui/theme';
 import { useRecoilValue } from 'recoil';
-import { TeachingBubble } from 'office-ui-fabric-react/lib/TeachingBubble';
+import { TeachingBubble } from '@fluentui/react/lib/TeachingBubble';
 
 import {
   dispatcherState,

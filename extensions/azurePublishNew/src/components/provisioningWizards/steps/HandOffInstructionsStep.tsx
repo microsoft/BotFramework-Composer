@@ -4,8 +4,8 @@
 import * as React from 'react';
 import formatMessage from 'format-message';
 import styled from '@emotion/styled';
-import { FluentTheme } from '@uifabric/fluent-theme';
-import { Link, Stack, Text } from 'office-ui-fabric-react';
+import { FluentTheme } from '@fluentui/theme';
+import { Link, Stack, Text } from '@fluentui/react';
 import { SectionTitle } from '@bfc/ui-shared';
 
 const Content = styled(Stack)`

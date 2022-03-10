@@ -61,7 +61,7 @@
   "dependencies": {
     "@bfc/extension-client": "file:../../Composer/packages/extension-client",
     "@botframework-composer/types": "file:../../Composer/packages/types",
-    "@fluentui/react": "^7.145.0",
+    "@fluentui/react": "^8.57.1",
     "emotion": "^10.0.27",
     "react": "^16.13.0",
     "react-dom": "^16.13.0"

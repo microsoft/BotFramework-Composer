@@ -4,7 +4,7 @@
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core';
 import React, { useState } from 'react';
-import { Dialog, DialogType } from 'office-ui-fabric-react/lib/Dialog';
+import { Dialog, DialogType } from '@fluentui/react/lib/Dialog';
 import formatMessage from 'format-message';
 import { JsonEditor } from '@bfc/code-editor';
 import { ExtensionSettings } from '@botframework-composer/types';

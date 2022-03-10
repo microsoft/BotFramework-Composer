@@ -2,8 +2,8 @@
 // Licensed under the MIT License.
 
 import { css } from '@emotion/core';
-import { FontWeights, FontSizes } from 'office-ui-fabric-react/lib/Styling';
-import { NeutralColors, SharedColors } from '@uifabric/fluent-theme';
+import { FontWeights, FontSizes } from '@fluentui/react/lib/Styling';
+import { NeutralColors, SharedColors } from '@fluentui/theme';
 
 export const consoleStyle = css`
   background: ${NeutralColors.gray20};

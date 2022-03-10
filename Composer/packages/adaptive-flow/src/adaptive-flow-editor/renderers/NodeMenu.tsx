@@ -5,10 +5,10 @@
 import { jsx } from '@emotion/core';
 import { useContext } from 'react';
 import formatMessage from 'format-message';
-import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
+import { TooltipHost } from '@fluentui/react/lib/Tooltip';
 import { IconMenu } from '@bfc/ui-shared';
-import { getFocusStyle, getTheme } from 'office-ui-fabric-react/lib/Styling';
-import { FluentTheme } from '@uifabric/fluent-theme';
+import { getFocusStyle, getTheme } from '@fluentui/react/lib/Styling';
+import { FluentTheme } from '@fluentui/theme';
 
 import { NodeEventTypes, EditorEventHandler } from '../../adaptive-flow-renderer/constants/NodeEventTypes';
 import { MenuTypes } from '../constants/MenuTypes';

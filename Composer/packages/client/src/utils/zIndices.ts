@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { ZIndexes } from 'office-ui-fabric-react/lib/Styling';
+import { ZIndexes } from '@fluentui/react/lib/Styling';
 
 /**
  * This object keeps track of zIndices use in the app.

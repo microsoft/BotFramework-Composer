@@ -3,7 +3,7 @@
 
 import React from 'react';
 import { FieldProps } from '@bfc/extension-client';
-import { IPivotStyles, Pivot, PivotItem, PivotLinkSize } from 'office-ui-fabric-react/lib/components/Pivot';
+import { IPivotStyles, Pivot, PivotItem, PivotLinkSize } from '@fluentui/react/lib/components/Pivot';
 
 import { getFieldsets, resolveFieldWidget } from '../../utils';
 import { useAdaptiveFormContext } from '../../AdaptiveFormContext';

@@ -2,9 +2,9 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 import { FormDialogSchemaTemplate } from '@bfc/shared';
-import { ComboBox } from 'office-ui-fabric-react/lib/ComboBox';
-import { Stack } from 'office-ui-fabric-react/lib/Stack';
-import { TextField } from 'office-ui-fabric-react/lib/TextField';
+import { ComboBox } from '@fluentui/react/lib/ComboBox';
+import { Stack } from '@fluentui/react/lib/Stack';
+import { TextField } from '@fluentui/react/lib/TextField';
 import * as React from 'react';
 import { useRecoilValue } from 'recoil';
 

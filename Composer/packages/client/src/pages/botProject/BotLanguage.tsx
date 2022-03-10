@@ -5,11 +5,11 @@
 import React, { Fragment, useMemo } from 'react';
 import { jsx, css } from '@emotion/core';
 import { useRecoilValue } from 'recoil';
-import { ActionButton } from 'office-ui-fabric-react/lib/Button';
+import { ActionButton } from '@fluentui/react/lib/Button';
 import formatMessage from 'format-message';
 import cloneDeep from 'lodash/cloneDeep';
-import { FontSizes, FontWeights } from 'office-ui-fabric-react/lib/Styling';
-import { NeutralColors, SharedColors } from '@uifabric/fluent-theme';
+import { FontSizes, FontWeights } from '@fluentui/react/lib/Styling';
+import { NeutralColors, SharedColors } from '@fluentui/theme';
 
 import { dispatcherState, settingsState } from '../../recoilModel';
 import { languageListTemplates } from '../../components/MultiLanguage';

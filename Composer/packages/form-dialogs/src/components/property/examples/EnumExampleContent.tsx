@@ -2,11 +2,11 @@
 // Licensed under the MIT License.
 
 import * as React from 'react';
-import { Stack } from 'office-ui-fabric-react/lib/Stack';
-import { IconButton } from 'office-ui-fabric-react/lib/Button';
-import { Label } from 'office-ui-fabric-react/lib/Label';
+import { Stack } from '@fluentui/react/lib/Stack';
+import { IconButton } from '@fluentui/react/lib/Button';
+import { Label } from '@fluentui/react/lib/Label';
 import styled from '@emotion/styled';
-import { FluentTheme } from '@uifabric/fluent-theme';
+import { FluentTheme } from '@fluentui/theme';
 import formatMessage from 'format-message';
 
 import { FieldLabel } from '../../common/FieldLabel';

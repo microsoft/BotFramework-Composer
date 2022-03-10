@@ -2,9 +2,9 @@
 // Licensed under the MIT License.
 
 import React from 'react';
-import { Stack } from 'office-ui-fabric-react/lib/Stack';
-import { IconButton } from 'office-ui-fabric-react/lib/Button';
-import { FluentTheme } from '@uifabric/fluent-theme';
+import { Stack } from '@fluentui/react/lib/Stack';
+import { IconButton } from '@fluentui/react/lib/Button';
+import { FluentTheme } from '@fluentui/theme';
 
 const buttonIconProps = { iconName: 'Copy' };
 const rootStyles = {

@@ -3,8 +3,8 @@
 
 import React from 'react';
 import formatMessage from 'format-message';
-import { ITeachingBubbleProps } from 'office-ui-fabric-react/lib/TeachingBubble';
-import { DirectionalHint, ICalloutProps } from 'office-ui-fabric-react/lib/Callout';
+import { ITeachingBubbleProps } from '@fluentui/react/lib/TeachingBubble';
+import { DirectionalHint, ICalloutProps } from '@fluentui/react/lib/Callout';
 
 export interface IComposerTeachingBubble extends ITeachingBubbleProps {
   children?: any;

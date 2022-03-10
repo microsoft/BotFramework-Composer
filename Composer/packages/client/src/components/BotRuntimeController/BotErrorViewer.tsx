@@ -5,9 +5,9 @@
 import { jsx } from '@emotion/core';
 import { Fragment } from 'react';
 import { useRecoilValue } from 'recoil';
-import { ActionButton } from 'office-ui-fabric-react/lib/Button';
+import { ActionButton } from '@fluentui/react/lib/Button';
 import formatMessage from 'format-message';
-import { CommunicationColors } from '@uifabric/fluent-theme';
+import { CommunicationColors } from '@fluentui/theme';
 
 import { botBuildTimeErrorState, dispatcherState } from '../../recoilModel';
 

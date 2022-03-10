@@ -3,10 +3,10 @@
 
 import { DialogTypes, DialogWrapper } from '@bfc/ui-shared';
 import formatMessage from 'format-message';
-import { DefaultButton, PrimaryButton } from 'office-ui-fabric-react/lib/Button';
-import { DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
-import { Stack } from 'office-ui-fabric-react/lib/Stack';
-import { TextField } from 'office-ui-fabric-react/lib/TextField';
+import { DefaultButton, PrimaryButton } from '@fluentui/react/lib/Button';
+import { DialogFooter } from '@fluentui/react/lib/Dialog';
+import { Stack } from '@fluentui/react/lib/Stack';
+import { TextField } from '@fluentui/react/lib/TextField';
 import React, { useCallback } from 'react';
 import { useRecoilValue } from 'recoil';
 

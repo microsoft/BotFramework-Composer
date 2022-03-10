@@ -5,10 +5,10 @@ import React from 'react';
 import styled from '@emotion/styled';
 import { FieldProps, JSONSchema7, useShellApi } from '@bfc/extension-client';
 import { FieldLabel, IntellisenseTextField, OpenObjectField, WithTypeIcons, SchemaField } from '@bfc/adaptive-form';
-import Stack from 'office-ui-fabric-react/lib/components/Stack/Stack';
-import { FluentTheme, NeutralColors } from '@uifabric/fluent-theme';
+import Stack from '@fluentui/react/lib/components/Stack/Stack';
+import { FluentTheme, NeutralColors } from '@fluentui/theme';
 import formatMessage from 'format-message';
-import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
+import { Dropdown, IDropdownOption } from '@fluentui/react/lib/Dropdown';
 import Ajv, { AnySchemaObject, SchemaObject } from 'ajv';
 
 import { bundleSchema } from './bundleSchema';

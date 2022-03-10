@@ -5,8 +5,8 @@
 import { jsx } from '@emotion/core';
 import React, { useState } from 'react';
 import formatMessage from 'format-message';
-import { Dialog, DialogType, DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
-import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button';
+import { Dialog, DialogType, DialogFooter } from '@fluentui/react/lib/Dialog';
+import { PrimaryButton, DefaultButton } from '@fluentui/react/lib/Button';
 import { SDKKinds, RegexRecognizer } from '@bfc/shared';
 import { useRecoilValue } from 'recoil';
 import { useTriggerConfig, TriggerUISchema } from '@bfc/extension-client';

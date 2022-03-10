@@ -2,13 +2,13 @@
 // Licensed under the MIT License.
 
 import React, { useRef, useEffect } from 'react';
-import { IconButton, IButtonStyles, IButton } from 'office-ui-fabric-react/lib/Button';
-import { Link } from 'office-ui-fabric-react/lib/Link';
-import { IContextualMenuItem } from 'office-ui-fabric-react/lib/ContextualMenu';
-import { OverflowSet } from 'office-ui-fabric-react/lib/OverflowSet';
-import { IRenderFunction } from 'office-ui-fabric-react/lib/Utilities';
-import { ICalloutProps } from 'office-ui-fabric-react/lib/Callout';
-import { getFocusStyle, getTheme } from 'office-ui-fabric-react/lib/Styling';
+import { IconButton, IButtonStyles, IButton } from '@fluentui/react/lib/Button';
+import { Link } from '@fluentui/react/lib/Link';
+import { IContextualMenuItem } from '@fluentui/react/lib/ContextualMenu';
+import { OverflowSet } from '@fluentui/react/lib/OverflowSet';
+import { IRenderFunction } from '@fluentui/react/lib/Utilities';
+import { ICalloutProps } from '@fluentui/react/lib/Callout';
+import { getFocusStyle, getTheme } from '@fluentui/react/lib/Styling';
 
 interface IconMenuProps {
   autoFocus?: boolean;

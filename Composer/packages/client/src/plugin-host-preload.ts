@@ -4,7 +4,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 // eslint-disable-next-line @bfc/bfcomposer/office-ui-import-scope
-import * as Fabric from 'office-ui-fabric-react';
+import * as Fabric from '@fluentui/react';
 import * as ExtensionClient from '@bfc/extension-client';
 import * as CodeEditors from '@bfc/code-editor';
 import * as UIShared from '@bfc/ui-shared';

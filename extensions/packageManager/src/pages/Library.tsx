@@ -23,7 +23,7 @@ import {
   SearchBox,
   IContextualMenuProps,
   IDropdownOption,
-} from 'office-ui-fabric-react';
+} from '@fluentui/react';
 import {
   render,
   useHttpClient,
@@ -432,8 +432,8 @@ const Library: React.FC = () => {
 
       console.error(err);
       setApplicationLevelError({
-        status: err.response.status,
-        message: err.response && err.response.data.message ? err.response.data.message : err,
+        status: err?.response?.status,
+        message: err?.response?.data?.message || err,
         summary: strings.importError,
       });
     }

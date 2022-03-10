@@ -1,12 +1,12 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { FluentTheme } from '@uifabric/fluent-theme';
+import { FluentTheme } from '@fluentui/theme';
 import formatMessage from 'format-message';
-import { IContextualMenuListProps } from 'office-ui-fabric-react/lib/ContextualMenu';
-import { SearchBox } from 'office-ui-fabric-react/lib/SearchBox';
-import { Stack } from 'office-ui-fabric-react/lib/Stack';
-import { IRenderFunction } from 'office-ui-fabric-react/lib/Utilities';
+import { IContextualMenuListProps } from '@fluentui/react/lib/ContextualMenu';
+import { SearchBox } from '@fluentui/react/lib/SearchBox';
+import { Stack } from '@fluentui/react/lib/Stack';
+import { IRenderFunction } from '@fluentui/react/lib/Utilities';
 import * as React from 'react';
 
 import { useDebouncedSearchCallbacks } from './useDebouncedSearchCallbacks';

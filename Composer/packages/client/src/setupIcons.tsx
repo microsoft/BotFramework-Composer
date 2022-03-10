@@ -2,8 +2,8 @@
 // Licensed under the MIT License.
 
 import React from 'react';
-import { initializeIcons } from 'office-ui-fabric-react/lib/Icons';
-import { registerIcons } from 'office-ui-fabric-react/lib/Styling';
+import { initializeIcons } from '@fluentui/react/lib/Icons';
+import { registerIcons } from '@fluentui/react/lib/Styling';
 
 import { SystemTopicIcon } from './icons/SystemTopicIcon';
 import { HideCommentIcon } from './icons/HideCommentIcon';

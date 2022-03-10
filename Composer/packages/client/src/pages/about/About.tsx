@@ -3,8 +3,8 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { Icon } from 'office-ui-fabric-react/lib/Icon';
-import { Link } from 'office-ui-fabric-react/lib/Link';
+import { Icon } from '@fluentui/react/lib/Icon';
+import { Link } from '@fluentui/react/lib/Link';
 import formatMessage from 'format-message';
 import { RouteComponentProps } from '@reach/router';
 import { generateUniqueId } from '@bfc/shared';

@@ -3,13 +3,13 @@
 
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core';
-import { DefaultButton, CommandBarButton, IButtonStyles } from 'office-ui-fabric-react/lib/Button';
-import { FontWeights, FontSizes } from 'office-ui-fabric-react/lib/Styling';
-import { IContextualMenuItem } from 'office-ui-fabric-react/lib/ContextualMenu';
-import { OverflowSet, IOverflowSetItemProps } from 'office-ui-fabric-react/lib/OverflowSet';
-import { mergeStyleSets } from 'office-ui-fabric-react/lib/Styling';
-import { NeutralColors, SharedColors } from '@uifabric/fluent-theme';
-import { IIconProps } from 'office-ui-fabric-react/lib/Icon';
+import { DefaultButton, CommandBarButton, IButtonStyles } from '@fluentui/react/lib/Button';
+import { FontWeights, FontSizes } from '@fluentui/react/lib/Styling';
+import { IContextualMenuItem } from '@fluentui/react/lib/ContextualMenu';
+import { OverflowSet, IOverflowSetItemProps } from '@fluentui/react/lib/OverflowSet';
+import { mergeStyleSets } from '@fluentui/react/lib/Styling';
+import { NeutralColors, SharedColors } from '@fluentui/theme';
+import { IIconProps } from '@fluentui/react/lib/Icon';
 import formatMessage from 'format-message';
 
 import { navigateTo } from '../utils/navigation';

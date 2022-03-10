@@ -5,19 +5,19 @@
 import React, { useEffect, useState, Fragment } from 'react';
 import { jsx } from '@emotion/core';
 import formatMessage from 'format-message';
-import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
-import { Icon } from 'office-ui-fabric-react/lib/Icon';
-import { Link } from 'office-ui-fabric-react/lib/Link';
-import { Toggle } from 'office-ui-fabric-react/lib/Toggle';
+import { Dropdown, IDropdownOption } from '@fluentui/react/lib/Dropdown';
+import { Icon } from '@fluentui/react/lib/Icon';
+import { Link } from '@fluentui/react/lib/Link';
+import { Toggle } from '@fluentui/react/lib/Toggle';
 import { useRecoilValue } from 'recoil';
 import { SubscriptionClient } from '@azure/arm-subscriptions';
 import { Subscription } from '@azure/arm-subscriptions/esm/models';
 import { TokenCredentials } from '@azure/ms-rest-js';
-import { Spinner } from 'office-ui-fabric-react/lib/Spinner';
-import { Stack } from 'office-ui-fabric-react/lib/Stack';
+import { Spinner } from '@fluentui/react/lib/Spinner';
+import { Stack } from '@fluentui/react/lib/Stack';
 import { OpenConfirmModal } from '@bfc/ui-shared';
-import { Text } from 'office-ui-fabric-react/lib/Text';
-import { TeachingBubble } from 'office-ui-fabric-react/lib/TeachingBubble';
+import { Text } from '@fluentui/react/lib/Text';
+import { TeachingBubble } from '@fluentui/react/lib/TeachingBubble';
 
 import TelemetryClient from '../../../telemetry/TelemetryClient';
 import { LoadingSpinner } from '../../../components/LoadingSpinner';

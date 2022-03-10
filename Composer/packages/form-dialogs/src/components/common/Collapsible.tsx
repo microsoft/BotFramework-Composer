@@ -2,9 +2,9 @@
 // Licensed under the MIT License.
 
 import styled from '@emotion/styled';
-import { NeutralColors } from '@uifabric/fluent-theme';
-import { ActionButton } from 'office-ui-fabric-react/lib/Button';
-import { Stack } from 'office-ui-fabric-react/lib/Stack';
+import { NeutralColors } from '@fluentui/theme';
+import { ActionButton } from '@fluentui/react/lib/Button';
+import { Stack } from '@fluentui/react/lib/Stack';
 import * as React from 'react';
 
 const Title = styled(ActionButton)(({ isCollapsed }: { isCollapsed: boolean }) => ({

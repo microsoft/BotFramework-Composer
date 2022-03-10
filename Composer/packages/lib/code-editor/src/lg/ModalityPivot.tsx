@@ -2,19 +2,19 @@
 // Licensed under the MIT License.
 
 import { CodeEditorSettings, LgTemplate, TelemetryClient, extractTemplateNameFromExpression } from '@bfc/shared';
-import { FluentTheme, FontSizes } from '@uifabric/fluent-theme';
+import { FluentTheme, FontSizes } from '@fluentui/theme';
 import formatMessage from 'format-message';
-import { IconButton } from 'office-ui-fabric-react/lib/Button';
+import { IconButton } from '@fluentui/react/lib/Button';
 import {
   ContextualMenuItemType,
   IContextualMenuItem,
   IContextualMenuItemProps,
   IContextualMenuItemRenderFunctions,
   IContextualMenuProps,
-} from 'office-ui-fabric-react/lib/ContextualMenu';
-import { Link } from 'office-ui-fabric-react/lib/Link';
-import { IPivotStyles, Pivot, PivotItem } from 'office-ui-fabric-react/lib/Pivot';
-import { Stack } from 'office-ui-fabric-react/lib/Stack';
+} from '@fluentui/react/lib/ContextualMenu';
+import { Link } from '@fluentui/react/lib/Link';
+import { IPivotStyles, Pivot, PivotItem } from '@fluentui/react/lib/Pivot';
+import { Stack } from '@fluentui/react/lib/Stack';
 import React, { useCallback, useMemo, useRef, useState } from 'react';
 import mergeWith from 'lodash/mergeWith';
 

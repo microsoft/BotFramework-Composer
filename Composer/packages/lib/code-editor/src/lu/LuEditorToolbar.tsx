@@ -2,8 +2,8 @@
 // Licensed under the MIT License.
 
 import { LuFile } from '@botframework-composer/types';
-import { FluentTheme } from '@uifabric/fluent-theme';
-import { CommandBar, ICommandBarItemProps } from 'office-ui-fabric-react/lib/CommandBar';
+import { FluentTheme } from '@fluentui/theme';
+import { CommandBar, ICommandBarItemProps } from '@fluentui/react/lib/CommandBar';
 import * as React from 'react';
 
 import { canInsertEntityBySelection, canTagEntityBySelection } from '../utils/luUtils';

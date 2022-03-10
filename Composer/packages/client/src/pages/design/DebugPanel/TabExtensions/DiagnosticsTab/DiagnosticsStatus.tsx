@@ -3,10 +3,10 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { DefaultButton } from 'office-ui-fabric-react/lib/Button';
+import { DefaultButton } from '@fluentui/react/lib/Button';
 import { useSetRecoilState, useRecoilValue } from 'recoil';
-import { FontSizes, SharedColors, FluentTheme } from '@uifabric/fluent-theme';
-import { FontIcon } from 'office-ui-fabric-react/lib/Icon';
+import { FontSizes, SharedColors, FluentTheme } from '@fluentui/theme';
+import { FontIcon } from '@fluentui/react/lib/Icon';
 import formatMessage from 'format-message';
 
 import { debugPanelExpansionState, debugPanelActiveTabState, dispatcherState } from '../../../../../recoilModel';

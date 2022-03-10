@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import { css } from '@emotion/core';
-import { FontSizes, mergeStyles } from 'office-ui-fabric-react/lib/Styling';
+import { FontSizes, mergeStyles } from '@fluentui/react/lib/Styling';
 
 export const actionButton = css`
   font-size: 16px;
@@ -23,16 +23,6 @@ export const codeEditorContainer = css`
   width: 100%;
 `;
 
-export const formCell = css`
-  outline: none;
-  :focus {
-    outline: rgb(102, 102, 102) solid 1px;
-  }
-  white-space: pre-wrap;
-  font-size: 14px;
-  line-height: 28px;
-`;
-
 export const luPhraseCell = css`
   outline: none;
   :focus {
@@ -42,7 +32,7 @@ export const luPhraseCell = css`
   font-size: 14px;
 `;
 
-// styles override, should use '@uifabric/fluent-theme' later
+// styles override, should use '@fluentui/theme' later
 export const whiteButton = css`
   background: transparent;
   button {

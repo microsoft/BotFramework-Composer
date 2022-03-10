@@ -22,7 +22,7 @@
   "author": "zeye@microsoft.com",
   "license": "MIT",
   "peerDependencies": {
-    "@uifabric/fluent-theme": "^7.1.4",
+    "@fluentui/theme": "2.5.0",
     "format-message": "^6.2.3",
     "react": "16.13.1",
     "react-dom": "16.13.1"
@@ -30,7 +30,7 @@
   "dependencies": {
     "@emotion/core": "^10.0.27",
     "@emotion/styled": "^10.0.27",
-    "office-ui-fabric-react": "7.71.0",
+    "@fluentui/react": "^8.57.1",
     "react-markdown": "^5.0.3",
     "tslib": "2.0.3"
   },

@@ -117,8 +117,11 @@ describe('ExternalAdapterSettings', () => {
     });
 
     await act(async () => {
+      fireEvent.change(getByLabelText('Example Name'), { target: { value: 'test text 12345' } });
+    });
+
+    await act(async () => {
       const modal = getByTestId('adapterModal');
-      await userEvent.type(getByLabelText('Example Name'), 'test text 12345', { delay: 50 });
       userEvent.click(within(modal).getByText('Configure'));
     });
 

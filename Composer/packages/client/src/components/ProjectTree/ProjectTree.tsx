@@ -3,9 +3,9 @@
 
 /** @jsx jsx */
 import React, { useCallback, useState, useRef } from 'react';
-import { NeutralColors } from '@uifabric/fluent-theme';
+import { NeutralColors } from '@fluentui/theme';
 import { jsx, css } from '@emotion/core';
-import { FocusZone, FocusZoneDirection } from 'office-ui-fabric-react/lib/FocusZone';
+import { FocusZone, FocusZoneDirection } from '@fluentui/react/lib/FocusZone';
 import formatMessage from 'format-message';
 import { DialogInfo, ITrigger, Diagnostic, DiagnosticSeverity, LanguageFileImport, getFriendlyName } from '@bfc/shared';
 import debounce from 'lodash/debounce';
@@ -13,8 +13,8 @@ import throttle from 'lodash/throttle';
 import { useRecoilValue } from 'recoil';
 import { extractSchemaProperties, groupTriggersByPropertyReference, NoGroupingTriggerGroupName } from '@bfc/indexers';
 import isEqual from 'lodash/isEqual';
-import { Announced } from 'office-ui-fabric-react/lib/Announced';
-import { useId } from '@uifabric/react-hooks';
+import { Announced } from '@fluentui/react/lib/Announced';
+import { useId } from '@fluentui/react-hooks';
 
 import {
   dispatcherState,

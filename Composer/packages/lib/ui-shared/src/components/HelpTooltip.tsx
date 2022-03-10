@@ -3,18 +3,18 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { FluentTheme } from '@uifabric/fluent-theme';
-import { Icon } from 'office-ui-fabric-react/lib/Icon';
+import { FluentTheme } from '@fluentui/theme';
+import { Icon } from '@fluentui/react/lib/Icon';
 import {
   TooltipHost,
   ITooltipHostProps,
   ITooltipHostStyles,
   ITooltipHostStyleProps,
-} from 'office-ui-fabric-react/lib/Tooltip';
+} from '@fluentui/react/lib/Tooltip';
 import React, { useMemo } from 'react';
-import { mergeStyleSets, getFocusStyle, getTheme, ITheme, IStyle } from 'office-ui-fabric-react/lib/Styling';
-import { IStyleFunctionOrObject } from 'office-ui-fabric-react/lib/Utilities';
-import { IIconProps } from 'office-ui-fabric-react/lib/Icon';
+import { mergeStyleSets, getFocusStyle, getTheme, ITheme, IStyle } from '@fluentui/react/lib/Styling';
+import { IStyleFunctionOrObject } from '@fluentui/react/lib/Utilities';
+import { IIconProps } from '@fluentui/react/lib/Icon';
 
 const getClassNames = (theme: ITheme, props: Pick<HelpTooltipProps, 'styles'>) =>
   mergeStyleSets(

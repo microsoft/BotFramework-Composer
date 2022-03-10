@@ -3,8 +3,8 @@
 
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core';
-import { IconButton } from 'office-ui-fabric-react/lib/Button';
-import { SharedColors } from '@uifabric/fluent-theme';
+import { IconButton } from '@fluentui/react/lib/Button';
+import { SharedColors } from '@fluentui/theme';
 
 // -------------------- Styles -------------------- //
 

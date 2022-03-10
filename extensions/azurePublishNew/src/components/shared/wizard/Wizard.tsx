@@ -3,7 +3,7 @@
 
 import * as React from 'react';
 import styled from '@emotion/styled';
-import { DefaultButton } from 'office-ui-fabric-react';
+import { DefaultButton } from '@fluentui/react';
 import formatMessage from 'format-message';
 
 export type WizardNavigationState = {

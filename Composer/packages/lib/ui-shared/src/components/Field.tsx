@@ -3,12 +3,12 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { Dropdown, IDropdownProps, IDropdownStyles } from 'office-ui-fabric-react/lib/Dropdown';
+import { Dropdown, IDropdownProps, IDropdownStyles } from '@fluentui/react/lib/Dropdown';
 import React, { useCallback, useMemo } from 'react';
-import { TextField as FluentTextField, ITextFieldProps, ITextFieldStyles } from 'office-ui-fabric-react/lib/TextField';
-import { Stack } from 'office-ui-fabric-react/lib/Stack';
-import { IStyleFunctionOrObject, IRenderFunction } from 'office-ui-fabric-react/lib/Utilities';
-import { getTheme, mergeStyleSets, ITheme } from 'office-ui-fabric-react/lib/Styling';
+import { TextField as FluentTextField, ITextFieldProps, ITextFieldStyles } from '@fluentui/react/lib/TextField';
+import { Stack } from '@fluentui/react/lib/Stack';
+import { IStyleFunctionOrObject, IRenderFunction } from '@fluentui/react/lib/Utilities';
+import { getTheme, mergeStyleSets, ITheme } from '@fluentui/react/lib/Styling';
 
 import { HelpTooltip } from './HelpTooltip';
 

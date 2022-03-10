@@ -9,8 +9,8 @@ import { useRecoilValue } from 'recoil';
 import formatMessage from 'format-message';
 import get from 'lodash/get';
 import { css } from '@emotion/core';
-import { Link } from 'office-ui-fabric-react/lib/Link';
-import { mergeStyleSets } from 'office-ui-fabric-react/lib/Styling';
+import { Link } from '@fluentui/react/lib/Link';
+import { mergeStyleSets } from '@fluentui/react/lib/Styling';
 import { TextField } from '@bfc/ui-shared';
 
 import {

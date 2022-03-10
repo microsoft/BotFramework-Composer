@@ -3,7 +3,7 @@
 import React from 'react';
 import formatMessage from 'format-message';
 import { FallbackProps } from 'react-error-boundary';
-import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
+import { MessageBar, MessageBarType } from '@fluentui/react/lib/MessageBar';
 
 const ErrorInfo: React.FC<FallbackProps> = ({ componentStack, error }) => (
   <div style={{ marginRight: '20px' }}>

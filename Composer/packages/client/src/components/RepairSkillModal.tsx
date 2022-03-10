@@ -3,10 +3,10 @@
 
 import React, { useState } from 'react';
 import formatMessage from 'format-message';
-import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button';
+import { PrimaryButton, DefaultButton } from '@fluentui/react/lib/Button';
 import { DialogWrapper, DialogTypes } from '@bfc/ui-shared';
-import { ChoiceGroup } from 'office-ui-fabric-react/lib/ChoiceGroup';
-import { DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
+import { ChoiceGroup } from '@fluentui/react/lib/ChoiceGroup';
+import { DialogFooter } from '@fluentui/react/lib/Dialog';
 
 import { repairSkillDialog } from '../constants';
 

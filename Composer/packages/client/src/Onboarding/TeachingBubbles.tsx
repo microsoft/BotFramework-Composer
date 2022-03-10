@@ -4,11 +4,11 @@
 import React, { useEffect, useState, useRef } from 'react';
 import formatMessage from 'format-message';
 import debounce from 'lodash/debounce';
-import { TeachingBubble } from 'office-ui-fabric-react/lib/TeachingBubble';
+import { TeachingBubble } from '@fluentui/react/lib/TeachingBubble';
 import { useRecoilValue } from 'recoil';
-import { FluentTheme } from '@uifabric/fluent-theme';
-import { ITeachingBubbleStyles } from 'office-ui-fabric-react/lib/TeachingBubble';
-import { ILinkStyles, Link } from 'office-ui-fabric-react/lib/components/Link';
+import { FluentTheme } from '@fluentui/theme';
+import { ITeachingBubbleStyles } from '@fluentui/react/lib/TeachingBubble';
+import { ILinkStyles, Link } from '@fluentui/react/lib/components/Link';
 
 import TelemetryClient from '../telemetry/TelemetryClient';
 import { onboardingState } from '../recoilModel';

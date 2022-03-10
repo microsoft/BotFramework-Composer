@@ -3,7 +3,7 @@
 
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core';
-import { SharedColors } from '@uifabric/fluent-theme';
+import { SharedColors } from '@fluentui/theme';
 
 // -------------------- Styles -------------------- //
 
