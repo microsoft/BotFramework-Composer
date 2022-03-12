@@ -55,6 +55,10 @@ export const Locales = [
     language: 'Arabic',
   },
   {
+    locale: 'ar-ar',
+    language: 'Arabic (Preview - Modern Standard Arabic)',
+  },
+  {
     locale: 'ar-dz',
     language: 'Arabic (Algeria)',
   },
