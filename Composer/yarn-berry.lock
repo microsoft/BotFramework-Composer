@@ -2530,7 +2530,7 @@ __metadata:
     cross-env: 7.0.2
     crypto: ^1.0.1
     debug: 4.1.1
-    electron: 8.2.4
+    electron: 14.2.7
     electron-builder: ^22.6.0
     electron-updater: 4.2.5
     fix-path: ^3.0.0
@@ -2549,7 +2549,7 @@ __metadata:
     source-map-explorer: ^2.4.2
     ts-node: ^8.4.1
     tslib: 2.0.3
-    uuid: ^8.3.1
+    uuid: 7.0.0
   peerDependencies:
     oneauth-mac: 1.11.0
     oneauth-win64: 1.14.0
@@ -12208,16 +12208,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"electron@npm:8.2.4":
-  version: 8.2.4
-  resolution: "electron@npm:8.2.4"
+"electron@npm:14.2.7":
+  version: 14.2.7
+  resolution: "electron@npm:14.2.7"
   dependencies:
     "@electron/get": ^1.0.1
-    "@types/node": ^12.0.12
+    "@types/node": ^14.6.2
     extract-zip: ^1.0.3
   bin:
     electron: cli.js
-  checksum: 0adefca28eed9fe5a38fe89080ca79a5b29f0315716348f725c337cc4c82aad128da1579db2041f5a991a64b40b0409e2a06d0ba7a4bf9614de94b9b9c038253
+  checksum: b419960f800183630131b75bd4eace13bb1c800a0c3ace332e60892b9b133128d082703912da40c7d3826a20110c3ffffa52957ed369d8f7f2e62dac1ad0e9a1
   languageName: node
   linkType: hard
 
@@ -27282,7 +27282,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"uuid@npm:8.3.2, uuid@npm:^8.3.0, uuid@npm:^8.3.1, uuid@npm:^8.3.2":
+"uuid@npm:7.0.0":
+  version: 7.0.0
+  resolution: "uuid@npm:7.0.0"
+  bin:
+    uuid: dist/bin/uuid
+  checksum: ff663dd21aec8ca725b3bec22bbbabc21a2997a75ce49e839bf73420faf4b03cd919a7a8ad4e03c606485a695db56fb1e7bfd419742386df49145e98e8120e70
+  languageName: node
+  linkType: hard
+
+"uuid@npm:8.3.2, uuid@npm:^8.3.0, uuid@npm:^8.3.2":
   version: 8.3.2
   resolution: "uuid@npm:8.3.2"
   bin:
