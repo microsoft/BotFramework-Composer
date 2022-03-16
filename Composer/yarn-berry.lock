@@ -2530,7 +2530,7 @@ __metadata:
     cross-env: 7.0.2
     crypto: ^1.0.1
     debug: 4.1.1
-    electron: 14.2.7
+    electron: 14.2.6
     electron-builder: ^22.6.0
     electron-updater: 4.2.5
     fix-path: ^3.0.0
@@ -12208,16 +12208,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"electron@npm:14.2.7":
-  version: 14.2.7
-  resolution: "electron@npm:14.2.7"
+"electron@npm:14.2.6":
+  version: 14.2.6
+  resolution: "electron@npm:14.2.6"
   dependencies:
     "@electron/get": ^1.0.1
     "@types/node": ^14.6.2
     extract-zip: ^1.0.3
   bin:
     electron: cli.js
-  checksum: b419960f800183630131b75bd4eace13bb1c800a0c3ace332e60892b9b133128d082703912da40c7d3826a20110c3ffffa52957ed369d8f7f2e62dac1ad0e9a1
+  checksum: f0ce42459502f9f7d937374699eefbb56dacc03b21c7e7933f5a865c4f1f05aba00eafa3a217fa97d91559ffffe5f57ab17c2001a5e122118957932e360bb707
   languageName: node
   linkType: hard
 
