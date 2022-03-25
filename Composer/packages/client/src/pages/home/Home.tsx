@@ -5,10 +5,10 @@
 import { jsx } from '@emotion/core';
 import React from 'react';
 import formatMessage from 'format-message';
-import { Link } from 'office-ui-fabric-react/lib/Link';
-import { Image, ImageFit } from 'office-ui-fabric-react/lib/Image';
-import { Pivot, PivotItem, PivotLinkSize } from 'office-ui-fabric-react/lib/Pivot';
-import { Icon } from 'office-ui-fabric-react/lib/Icon';
+import { Link } from '@fluentui/react/lib/Link';
+import { Image, ImageFit } from '@fluentui/react/lib/Image';
+import { Pivot, PivotItem, PivotLinkSize } from '@fluentui/react/lib/Pivot';
+import { Icon } from '@fluentui/react/lib/Icon';
 import { RouteComponentProps } from '@reach/router';
 import { navigate } from '@reach/router';
 import { useRecoilValue } from 'recoil';
@@ -208,16 +208,16 @@ const Home: React.FC<RouteComponentProps> = () => {
           </div>
           <div css={home.resourcesContainer}>
             <h2 css={home.subtitle}>{formatMessage('Resources')}&nbsp;</h2>
-            <div css={home.rowContainer}>
+            <div css={home.rowContainer} role="list">
               {resources.map((item, index) => (
                 <CardWidget
                   key={index}
-                  ariaLabel={item.title}
                   cardType={'resource'}
                   content={item.description}
                   href={item.url}
                   imageCover={item.imageCover}
                   moreLinkText={item.moreText}
+                  role="listitem"
                   target="_blank"
                   title={item.title}
                 />
@@ -234,15 +234,15 @@ const Home: React.FC<RouteComponentProps> = () => {
                         {tab.viewAllLinkText} <Icon iconName={'OpenInNewWindow'}></Icon>{' '}
                       </Link>
                     )}
-                    <div css={home.tabRowContainer}>
+                    <div css={home.tabRowContainer} role="list">
                       {tab.cards.map((card, index) => (
                         <CardWidget
                           key={index}
-                          ariaLabel={card.title}
                           cardType={tab.title === 'Videos' ? 'video' : 'article'}
                           content={card.description}
                           href={card.url}
                           imageCover={card.image}
+                          role="listitem"
                           target="_blank"
                           title={card.title}
                         />

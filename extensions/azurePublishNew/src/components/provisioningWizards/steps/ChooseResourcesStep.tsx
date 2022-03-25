@@ -2,11 +2,11 @@
 // Licensed under the MIT License.
 
 import React, { FC } from 'react';
-import { ScrollablePane, ScrollbarVisibility, Stack } from 'office-ui-fabric-react';
+import { ScrollablePane, ScrollbarVisibility, Stack } from '@fluentui/react';
 import formatMessage from 'format-message';
-import { Text } from 'office-ui-fabric-react/lib/Text';
+import { Text } from '@fluentui/react/lib/Text';
 import styled from '@emotion/styled';
-import { FluentTheme } from '@uifabric/fluent-theme';
+import { FluentTheme } from '@fluentui/theme';
 import { usePublishApi } from '@bfc/extension-client';
 import { useRecoilValue } from 'recoil';
 

@@ -2,10 +2,9 @@
 // Licensed under the MIT License.
 
 import * as React from 'react';
-import { Text } from 'office-ui-fabric-react/lib/Text';
-import { Stack } from 'office-ui-fabric-react/lib/Stack';
-
-import { WithTooltipProps } from '../utils/withTooltip';
+import { Text } from '@fluentui/react/lib/Text';
+import { Stack } from '@fluentui/react/lib/Stack';
+import { HelpTooltipProps } from '@bfc/ui-shared';
 
 import { HelpIconTooltip } from './HelpIconTooltip';
 
@@ -15,7 +14,7 @@ type Props = {
   tooltipId: string;
   itemText: string | JSX.Element | JSX.Element[] | React.ReactNode;
   tooltipText: string | JSX.Element | JSX.Element[];
-  tooltipProps?: WithTooltipProps;
+  tooltipProps?: Partial<HelpTooltipProps>;
 };
 
 const defaultRender = (text: string) => <Text variant="small">{text}</Text>;

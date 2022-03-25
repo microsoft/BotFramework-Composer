@@ -3,8 +3,8 @@
 
 import { LuEntity, LuFile } from '@botframework-composer/types';
 import formatMessage from 'format-message';
-import { ContextualMenu, DirectionalHint, IContextualMenuItem } from 'office-ui-fabric-react/lib/ContextualMenu';
-import { ZIndexes } from 'office-ui-fabric-react/lib/Styling';
+import { ContextualMenu, DirectionalHint, IContextualMenuItem } from '@fluentui/react/lib/ContextualMenu';
+import { ZIndexes } from '@fluentui/react/lib/Styling';
 import React, { useCallback, useEffect, useState } from 'react';
 
 import { isSelectionWithinBrackets } from '../utils/luUtils';

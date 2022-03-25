@@ -4,11 +4,11 @@
 /** @jsx jsx */
 import { css, jsx } from '@emotion/core';
 import React from 'react';
-import { FluentTheme, SharedColors } from '@uifabric/fluent-theme';
-import { ActionButton } from 'office-ui-fabric-react/lib/Button';
-import { Link } from 'office-ui-fabric-react/lib/Link';
+import { FluentTheme, SharedColors } from '@fluentui/theme';
+import { ActionButton } from '@fluentui/react/lib/Button';
+import { Link } from '@fluentui/react/lib/Link';
 import formatMessage from 'format-message';
-import { NeutralColors } from '@uifabric/fluent-theme';
+import { NeutralColors } from '@fluentui/theme';
 
 import { NextStep } from './types';
 

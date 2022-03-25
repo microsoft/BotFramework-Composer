@@ -4,16 +4,17 @@
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core';
 import React, { useState, useRef, Fragment, useEffect } from 'react';
-import { TextField } from 'office-ui-fabric-react/lib/TextField';
-import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
-import { SharedColors } from '@uifabric/fluent-theme';
-import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
-import { Icon } from 'office-ui-fabric-react/lib/Icon';
-import { ActionButton } from 'office-ui-fabric-react/lib/Button';
-import { FontSizes, FontWeights } from 'office-ui-fabric-react/lib/Styling';
-import { NeutralColors } from '@uifabric/fluent-theme';
+import { IDropdownOption } from '@fluentui/react/lib/Dropdown';
+import { FluentTheme, SharedColors } from '@fluentui/theme';
+import { Icon } from '@fluentui/react/lib/Icon';
+import { ActionButton } from '@fluentui/react/lib/Button';
+import { FontWeights, mergeStyleSets } from '@fluentui/react/lib/Styling';
+import { NeutralColors } from '@fluentui/theme';
+import { TextField, DropdownField } from '@bfc/ui-shared';
 
-const disabledTextFieldStyle = {
+import { customFieldLabel } from '../styles';
+
+const disabledTextFieldStyle = mergeStyleSets(customFieldLabel, {
   root: {
     selectors: {
       '.ms-TextField-field': {
@@ -27,7 +28,14 @@ const disabledTextFieldStyle = {
       },
     },
   },
-};
+  subComponentStyles: {
+    label: {
+      root: {
+        color: FluentTheme.palette.neutralPrimary,
+      },
+    },
+  },
+});
 
 const actionButtonStyle = {
   root: {
@@ -62,33 +70,9 @@ const errorTextStyle = css`
   margin-bottom: 5px;
 `;
 
-const labelContainer = css`
-  display: flex;
-  flex-direction: row;
-`;
-
-const customerLabel = css`
-  font-size: ${FontSizes.small};
-  margin-right: 5px;
-`;
-
-const unknownIconStyle = (required) => {
-  return {
-    root: {
-      selectors: {
-        '&::before': {
-          content: required ? " '*'" : '',
-          color: SharedColors.red10,
-          paddingRight: 3,
-        },
-      },
-    },
-  };
-};
-
 type Props = {
   label: string;
-  ariaLabel: string;
+  ariaLabel?: string;
   buttonText: string;
   errorMessage?;
   placeholder: string;
@@ -101,6 +85,7 @@ type Props = {
   options?: IDropdownOption[];
   fieldDataTestId?: string;
   buttonDataTestId?: string;
+  tooltip?: string;
 };
 
 const errorElement = (errorText: string) => {
@@ -110,17 +95,6 @@ const errorElement = (errorText: string) => {
       <Icon iconName="ErrorBadge" styles={errorIcon} />
       <span css={errorTextStyle}>{errorText}</span>
     </span>
-  );
-};
-
-const onRenderLabel = (props) => {
-  return (
-    <div css={labelContainer}>
-      <div css={customerLabel}> {props.label} </div>
-      <TooltipHost content={props.label}>
-        <Icon iconName="Unknown" styles={unknownIconStyle(props.required)} />
-      </TooltipHost>
-    </div>
   );
 };
 
@@ -140,6 +114,7 @@ export const FieldWithCustomButton: React.FC<Props> = (props) => {
     options,
     fieldDataTestId = '',
     buttonDataTestId = '',
+    tooltip,
   } = props;
   const [isDisabled, setDisabled] = useState<boolean>(!value);
   const fieldComponentRef = useRef<any>(null);
@@ -161,13 +136,14 @@ export const FieldWithCustomButton: React.FC<Props> = (props) => {
     label,
     required,
     ariaLabel,
+    tooltip,
+    styles: customFieldLabel,
   };
   const commonDisabledProps = {
     disabled: true,
     componentRef: fieldComponentRef,
     placeholder: placeholderOnDisable,
     styles: disabledTextFieldStyle,
-    onRenderLabel,
   };
   const commonEnabledProps = {
     disabled: false,
@@ -189,7 +165,7 @@ export const FieldWithCustomButton: React.FC<Props> = (props) => {
         errorMessage={required ? errorElement(errorMessage) : ''}
       />
     ) : (
-      <Dropdown
+      <DropdownField
         {...commonProps}
         {...commonDisabledProps}
         data-testid={fieldDataTestId}
@@ -211,7 +187,7 @@ export const FieldWithCustomButton: React.FC<Props> = (props) => {
         }}
       />
     ) : (
-      <Dropdown
+      <DropdownField
         {...commonProps}
         {...commonEnabledProps}
         data-testid={fieldDataTestId}

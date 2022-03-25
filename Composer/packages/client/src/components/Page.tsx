@@ -4,8 +4,8 @@
 /** @jsx jsx */
 import { jsx, css, SerializedStyles } from '@emotion/core';
 import React, { useMemo } from 'react';
-import { FontWeights, FontSizes } from 'office-ui-fabric-react/lib/Styling';
-import { NeutralColors } from '@uifabric/fluent-theme';
+import { FontWeights, FontSizes } from '@fluentui/react/lib/Styling';
+import { NeutralColors } from '@fluentui/theme';
 import { Toolbar, IToolbarItem } from '@bfc/ui-shared';
 import { useRecoilValue } from 'recoil';
 import { Split, SplitMeasuredSizes } from '@geoffcox/react-splitter';

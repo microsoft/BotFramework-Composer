@@ -9,8 +9,8 @@ module.exports = {
   preset: 'ts-jest/presets/js-with-ts',
   moduleNameMapper: {
     // use commonjs modules for test so they do not need to be compiled
-    'office-ui-fabric-react/lib/(.*)$': 'office-ui-fabric-react/lib-commonjs/$1',
-    '@uifabric/fluent-theme/lib/(.*)$': '@uifabric/fluent-theme/lib-commonjs/$1',
+    '@sluentui/react/lib/(.*)$': '@sluentui/react/lib-commonjs/$1',
+    '@fluentui/theme/lib/(.*)$': '@fluentui/theme/lib-commonjs/$1',
   },
   globals: {
     'ts-jest': {

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { render } from 'react-dom';
-import { Nav } from 'office-ui-fabric-react';
-import { initializeIcons } from 'office-ui-fabric-react/lib/Icons';
+import { Nav } from '@fluentui/react';
+import { initializeIcons } from '@fluentui/react/lib/Icons';
 
 import { EditorConfig } from '../../src/editors/editorConfig';
 

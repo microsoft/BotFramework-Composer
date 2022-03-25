@@ -21,19 +21,18 @@
   "author": "v-thdurn@microsoft.com",
   "license": "MIT",
   "peerDependencies": {
-    "@bfc/extension-client": "*",
     "@bfc/adaptive-form": "*",
-    "@uifabric/fluent-theme": "^7.1.4",
-    "@uifabric/icons": "^7.3.0",
-    "@uifabric/styling": "^7.7.4",
+    "@bfc/extension-client": "*",
+    "@fluentui/react": "^8.57.1",
+    "@fluentui/style-utilities": "^8.6.0",
+    "@fluentui/theme": "2.5.0",
     "format-message": "^6.2.3",
-    "office-ui-fabric-react": "^7.71.0",
     "react": "16.13.1",
     "react-dom": "16.13.1"
   },
   "devDependencies": {
-    "@bfc/extension-client": "*",
     "@bfc/adaptive-form": "*",
+    "@bfc/extension-client": "*",
     "@botframework-composer/test-utils": "*",
     "@types/react": "16.9.23",
     "@types/react-dom": "16.9.5",
@@ -44,6 +43,7 @@
   },
   "dependencies": {
     "@emotion/core": "^10.0.27",
-    "ajv": "7.2.3"
+    "ajv": "7.2.3",
+    "tslib": "2.0.3"
   }
 }

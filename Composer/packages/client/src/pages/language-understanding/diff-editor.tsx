@@ -5,7 +5,7 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import React, { useMemo } from 'react';
-import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
+import { Dropdown, IDropdownOption } from '@fluentui/react/lib/Dropdown';
 
 import { languageListTemplates } from '../../components/MultiLanguage';
 

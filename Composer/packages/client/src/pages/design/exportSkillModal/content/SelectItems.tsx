@@ -12,11 +12,11 @@ import {
   SelectionMode,
   IColumn,
   SelectAllVisibility,
-} from 'office-ui-fabric-react/lib/DetailsList';
-import { IRenderFunction, ISelection, IObjectWithKey } from 'office-ui-fabric-react/lib/Utilities';
-import { Sticky, StickyPositionType } from 'office-ui-fabric-react/lib/Sticky';
-import { ScrollablePane, ScrollbarVisibility } from 'office-ui-fabric-react/lib/ScrollablePane';
-import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
+} from '@fluentui/react/lib/DetailsList';
+import { IRenderFunction, ISelection, IObjectWithKey } from '@fluentui/react/lib/Utilities';
+import { Sticky, StickyPositionType } from '@fluentui/react/lib/Sticky';
+import { ScrollablePane, ScrollbarVisibility } from '@fluentui/react/lib/ScrollablePane';
+import { TooltipHost } from '@fluentui/react/lib/Tooltip';
 
 const styles = {
   detailListContainer: css`

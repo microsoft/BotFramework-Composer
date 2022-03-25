@@ -3,15 +3,15 @@
 
 import { CodeEditorSettings, LgTemplate, TelemetryClient } from '@bfc/shared';
 import formatMessage from 'format-message';
-import { CommandButton, IButtonStyles } from 'office-ui-fabric-react/lib/Button';
-import { FluentTheme } from '@uifabric/fluent-theme';
+import { CommandButton, IButtonStyles } from '@fluentui/react/lib/Button';
+import { FluentTheme } from '@fluentui/theme';
 import {
   IContextualMenuItem,
   IContextualMenuProps,
   IContextualMenuItemProps,
-} from 'office-ui-fabric-react/lib/ContextualMenu';
-import { Text } from 'office-ui-fabric-react/lib/Text';
-import { Stack } from 'office-ui-fabric-react/lib/Stack';
+} from '@fluentui/react/lib/ContextualMenu';
+import { Text } from '@fluentui/react/lib/Text';
+import { Stack } from '@fluentui/react/lib/Stack';
 import React from 'react';
 import debounce from 'lodash/debounce';
 

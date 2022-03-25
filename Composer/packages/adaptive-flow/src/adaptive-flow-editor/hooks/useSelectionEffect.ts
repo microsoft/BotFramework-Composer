@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import { useRef, useState, useEffect } from 'react';
-import { Selection } from 'office-ui-fabric-react/lib/MarqueeSelection';
+import { Selection } from '@fluentui/react/lib/MarqueeSelection';
 import { ShellApi } from '@bfc/shared';
 import isEqual from 'lodash/isEqual';
 

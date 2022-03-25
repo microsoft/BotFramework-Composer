@@ -1,17 +1,17 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { FluentTheme } from '@uifabric/fluent-theme';
+import { FluentTheme } from '@fluentui/theme';
 import formatMessage from 'format-message';
-import { CommandBarButton as DefaultCommandBarButton } from 'office-ui-fabric-react/lib/Button';
-import { Link } from 'office-ui-fabric-react/lib/Link';
+import { CommandBarButton as DefaultCommandBarButton } from '@fluentui/react/lib/Button';
+import { Link } from '@fluentui/react/lib/Link';
 import {
   ContextualMenuItemType,
   IContextualMenuItem,
   IContextualMenuProps,
   IContextualMenuItemProps,
   IContextualMenuItemRenderFunctions,
-} from 'office-ui-fabric-react/lib/ContextualMenu';
+} from '@fluentui/react/lib/ContextualMenu';
 import * as React from 'react';
 import { LuFile } from '@bfc/shared';
 
@@ -68,9 +68,7 @@ export const DefineEntityButton = React.memo((props: Props) => {
 
   const [showListEntityCreationDialog, setShowListEntityCreationDialog] = React.useState(false);
   const { iconName, text } = React.useMemo(() => getLuToolbarItemTextAndIcon('defineEntity'), []);
-  const { onRenderMenuList, query, setQuery } = useSearchableMenuListCallback(
-    formatMessage('Search prebuilt entities')
-  );
+  const { onRenderMenuList, query, onReset } = useSearchableMenuListCallback(formatMessage('Search prebuilt entities'));
 
   const noSearchResultsMenuItem = useNoSearchResultMenuItem(formatMessage('no prebuilt entities found'));
 
@@ -110,18 +108,14 @@ export const DefineEntityButton = React.memo((props: Props) => {
     }));
   }, [onDefineEntity, noSearchResultsMenuItem, query]);
 
-  const onDismiss = React.useCallback(() => {
-    setQuery('');
-  }, []);
-
   const prebuiltSubMenuProps = React.useMemo<IContextualMenuProps>(
     () => ({
       calloutProps: { calloutMaxHeight: 216 },
       items: filteredPrebuiltEntities,
       onRenderMenuList,
-      onDismiss,
+      onMenuDismissed: onReset,
     }),
-    [filteredPrebuiltEntities, onDismiss, onRenderMenuList]
+    [filteredPrebuiltEntities, onReset, onRenderMenuList]
   );
 
   const renderMenuItemHeader = React.useCallback(

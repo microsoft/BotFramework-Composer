@@ -16,7 +16,7 @@ jest.mock('../../../src/utils/navigation', () => {
   };
 });
 
-jest.mock('office-ui-fabric-react/lib/Button', () => ({
+jest.mock('@fluentui/react/lib/Button', () => ({
   ActionButton: ({ onClick, children }) => (
     <button data-testid="button" onClick={onClick}>
       {children}
@@ -29,7 +29,7 @@ jest.mock('office-ui-fabric-react/lib/Button', () => ({
   ),
 }));
 
-jest.mock('office-ui-fabric-react/lib/Tooltip', () => ({
+jest.mock('@fluentui/react/lib/Tooltip', () => ({
   TooltipHost: ({ children }) => <div>{children}</div>,
 }));
 

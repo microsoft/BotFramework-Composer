@@ -5,7 +5,7 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import React from 'react';
-import { Link as FluentLink, ILinkProps } from 'office-ui-fabric-react/lib/Link';
+import { Link as FluentLink, ILinkProps } from '@fluentui/react/lib/Link';
 
 import { focusBorder } from './sharedStyles';
 

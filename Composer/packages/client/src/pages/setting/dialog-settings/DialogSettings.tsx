@@ -5,14 +5,14 @@
 import { jsx } from '@emotion/core';
 import { JsonEditor } from '@bfc/code-editor';
 import formatMessage from 'format-message';
-import { Link } from 'office-ui-fabric-react/lib/Link';
+import { Link } from '@fluentui/react/lib/Link';
 import { RouteComponentProps } from '@reach/router';
 import { useRecoilValue } from 'recoil';
 import React, { useMemo } from 'react';
-import { Stack, StackItem } from 'office-ui-fabric-react/lib/Stack';
-import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
+import { Stack, StackItem } from '@fluentui/react/lib/Stack';
+import { Dropdown, IDropdownOption } from '@fluentui/react/lib/Dropdown';
 import cloneDeep from 'lodash/cloneDeep';
-import { Label } from 'office-ui-fabric-react/lib/Label';
+import { Label } from '@fluentui/react/lib/Label';
 
 import {
   dispatcherState,

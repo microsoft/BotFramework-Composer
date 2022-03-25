@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { isMac } from 'office-ui-fabric-react/lib/Utilities';
+import { isMac } from '@fluentui/react/lib/Utilities';
 import * as React from 'react';
 
 import { useUndo } from '../../undo/useUndo';

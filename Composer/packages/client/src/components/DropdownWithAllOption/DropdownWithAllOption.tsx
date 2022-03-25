@@ -3,7 +3,7 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { Dropdown, IDropdownOption, IDropdownStyles, IDropdownProps } from 'office-ui-fabric-react/lib/Dropdown';
+import { Dropdown, IDropdownOption, IDropdownStyles, IDropdownProps } from '@fluentui/react/lib/Dropdown';
 import React, { useMemo } from 'react';
 
 const dropdownStyles: Partial<IDropdownStyles> = {

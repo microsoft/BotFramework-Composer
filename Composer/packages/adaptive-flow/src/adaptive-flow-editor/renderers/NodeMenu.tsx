@@ -5,8 +5,10 @@
 import { jsx } from '@emotion/core';
 import { useContext } from 'react';
 import formatMessage from 'format-message';
-import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
+import { TooltipHost } from '@fluentui/react/lib/Tooltip';
 import { IconMenu } from '@bfc/ui-shared';
+import { getFocusStyle, getTheme } from '@fluentui/react/lib/Styling';
+import { FluentTheme } from '@fluentui/theme';
 
 import { NodeEventTypes, EditorEventHandler } from '../../adaptive-flow-renderer/constants/NodeEventTypes';
 import { MenuTypes } from '../constants/MenuTypes';
@@ -26,6 +28,11 @@ interface NodeMenuProps {
   onEvent: EditorEventHandler;
   colors: ElementColor;
 }
+
+const focusStyles = getFocusStyle(getTheme(), {
+  borderColor: FluentTheme.palette.themePrimary,
+});
+
 export const NodeMenu: React.FC<NodeMenuProps> = ({ colors = { color: 'black' }, id, onEvent }) => {
   const menuItems = [
     {
@@ -57,20 +64,10 @@ export const NodeMenu: React.FC<NodeMenuProps> = ({ colors = { color: 'black' },
           iconSize={12}
           iconStyles={{
             color: `${colors.color}`,
-            selectors: {
-              ':focus': {
-                outline: 'none',
-                selectors: {
-                  '::after': {
-                    outline: '1px solid #0078d4 !important',
-                  },
-                },
-              },
-            },
+            ...focusStyles,
           }}
           label={moreLabel}
           menuItems={menuItems}
-          menuWidth={100}
         />
       </TooltipHost>
     </div>

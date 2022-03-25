@@ -5,7 +5,7 @@
 import { jsx } from '@emotion/core';
 import React, { Fragment, useState } from 'react';
 import formatMessage from 'format-message';
-import { TextField, DialogFooter, PrimaryButton, DefaultButton } from 'office-ui-fabric-react';
+import { TextField, DialogFooter, PrimaryButton, DefaultButton } from '@fluentui/react';
 
 interface ImportDialogProps {
   closeDialog: () => void;

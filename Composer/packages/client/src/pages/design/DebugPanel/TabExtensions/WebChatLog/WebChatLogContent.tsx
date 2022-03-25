@@ -8,9 +8,9 @@ import { useRecoilValue } from 'recoil';
 import { ConversationTrafficItem, DiagnosticSeverity } from '@botframework-composer/types';
 import formatMessage from 'format-message';
 import debounce from 'lodash/debounce';
-import { ActionButton } from 'office-ui-fabric-react/lib/Button';
-import { FontWeights } from 'office-ui-fabric-react/lib/Styling';
-import { SharedColors } from '@uifabric/fluent-theme';
+import { ActionButton } from '@fluentui/react/lib/Button';
+import { FontWeights } from '@fluentui/react/lib/Styling';
+import { SharedColors } from '@fluentui/theme';
 
 import {
   dispatcherState,

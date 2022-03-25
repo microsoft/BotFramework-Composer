@@ -5,19 +5,19 @@
 import { jsx } from '@emotion/core';
 import moment from 'moment';
 import formatMessage from 'format-message';
-import { Checkbox } from 'office-ui-fabric-react/lib/Checkbox';
-import { Icon } from 'office-ui-fabric-react/lib/Icon';
+import { Checkbox } from '@fluentui/react/lib/Checkbox';
+import { Icon } from '@fluentui/react/lib/Icon';
 import React, { useState, Fragment, useMemo, useRef } from 'react';
-import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
-import { Spinner, SpinnerSize } from 'office-ui-fabric-react/lib/Spinner';
+import { Dropdown, IDropdownOption } from '@fluentui/react/lib/Dropdown';
+import { Spinner, SpinnerSize } from '@fluentui/react/lib/Spinner';
 import { PublishResult } from '@bfc/shared';
-import { CheckboxVisibility, DetailsList } from 'office-ui-fabric-react/lib/DetailsList';
-import { ActionButton, IconButton } from 'office-ui-fabric-react/lib/Button';
-import { SharedColors } from '@uifabric/fluent-theme';
-import { FontSizes } from '@uifabric/styling';
+import { CheckboxVisibility, DetailsList } from '@fluentui/react/lib/DetailsList';
+import { ActionButton, IconButton } from '@fluentui/react/lib/Button';
+import { SharedColors } from '@fluentui/theme';
+import { FontSizes } from '@fluentui/style-utilities';
 import get from 'lodash/get';
 import { useCopyToClipboard } from '@bfc/ui-shared';
-import { Callout } from 'office-ui-fabric-react/lib/Callout';
+import { Callout } from '@fluentui/react/lib/Callout';
 
 import { ApiStatus } from '../../utils/publishStatusPollingUpdater';
 

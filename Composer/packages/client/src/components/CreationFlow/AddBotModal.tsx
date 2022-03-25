@@ -4,9 +4,9 @@
 import React, { useState } from 'react';
 import { DialogTypes, DialogWrapper } from '@bfc/ui-shared';
 import formatMessage from 'format-message';
-import { ChoiceGroup, IChoiceGroupOption } from 'office-ui-fabric-react/lib/ChoiceGroup';
-import { DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
-import { DefaultButton, PrimaryButton } from 'office-ui-fabric-react/lib/Button';
+import { ChoiceGroup, IChoiceGroupOption } from '@fluentui/react/lib/ChoiceGroup';
+import { DialogFooter } from '@fluentui/react/lib/Dialog';
+import { DefaultButton, PrimaryButton } from '@fluentui/react/lib/Button';
 import { useRecoilValue } from 'recoil';
 
 import { dispatcherState } from '../../recoilModel';

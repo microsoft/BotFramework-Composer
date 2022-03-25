@@ -2,11 +2,11 @@
 // Licensed under the MIT License.
 
 import { LgTemplate } from '@botframework-composer/types';
-import { FluentTheme, NeutralColors } from '@uifabric/fluent-theme';
+import { FluentTheme, NeutralColors } from '@fluentui/theme';
 import formatMessage from 'format-message';
-import { CommandBar, ICommandBarItemProps } from 'office-ui-fabric-react/lib/CommandBar';
-import { IContextualMenuProps } from 'office-ui-fabric-react/lib/ContextualMenu';
-import { VerticalDivider } from 'office-ui-fabric-react/lib/Divider';
+import { CommandBar, ICommandBarItemProps } from '@fluentui/react/lib/CommandBar';
+import { IContextualMenuProps } from '@fluentui/react/lib/ContextualMenu';
+import { VerticalDivider } from '@fluentui/react/lib/Divider';
 import * as React from 'react';
 
 import { useEditorToolbarItems } from '../../hooks/useEditorToolbarItems';

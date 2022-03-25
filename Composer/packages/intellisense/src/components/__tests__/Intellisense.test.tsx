@@ -3,7 +3,7 @@
 
 import React from 'react';
 import { render } from '@botframework-composer/test-utils';
-import { TextField } from 'office-ui-fabric-react/lib/TextField';
+import { TextField } from '@fluentui/react/lib/TextField';
 import { CompletionItem } from 'vscode-languageserver-types';
 
 import { Intellisense } from '../Intellisense';

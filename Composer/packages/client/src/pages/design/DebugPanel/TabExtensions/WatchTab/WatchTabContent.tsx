@@ -7,8 +7,8 @@ import React, { useMemo, useCallback, useState, useEffect, useRef } from 'react'
 import { useRecoilValue } from 'recoil';
 import { v4 as uuidv4 } from 'uuid';
 import { ConversationActivityTrafficItem, Activity, UserSettings } from '@botframework-composer/types';
-import { Stack } from 'office-ui-fabric-react/lib/Stack';
-import { CommandBar, ICommandBarStyles } from 'office-ui-fabric-react/lib/CommandBar';
+import { Stack } from '@fluentui/react/lib/Stack';
+import { CommandBar, ICommandBarStyles } from '@fluentui/react/lib/CommandBar';
 import {
   DetailsList,
   DetailsListLayoutMode,
@@ -21,15 +21,15 @@ import {
   IDetailsListStyles,
   IDetailsRowStyles,
   IDetailsHeaderStyles,
-} from 'office-ui-fabric-react/lib/DetailsList';
+} from '@fluentui/react/lib/DetailsList';
 import formatMessage from 'format-message';
 import get from 'lodash/get';
-import { IScrollablePaneStyles, ScrollablePane } from 'office-ui-fabric-react/lib/ScrollablePane';
-import { Sticky, StickyPositionType } from 'office-ui-fabric-react/lib/Sticky';
-import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
-import { CommunicationColors, FluentTheme } from '@uifabric/fluent-theme';
-import { Link } from 'office-ui-fabric-react/lib/Link';
-import { IButtonStyles } from 'office-ui-fabric-react/lib/Button';
+import { IScrollablePaneStyles, ScrollablePane } from '@fluentui/react/lib/ScrollablePane';
+import { Sticky, StickyPositionType } from '@fluentui/react/lib/Sticky';
+import { TooltipHost } from '@fluentui/react/lib/Tooltip';
+import { CommunicationColors, FluentTheme } from '@fluentui/theme';
+import { Link } from '@fluentui/react/lib/Link';
+import { IButtonStyles } from '@fluentui/react/lib/Button';
 
 import { DebugPanelTabHeaderProps } from '../types';
 import {
@@ -360,7 +360,14 @@ export const WatchTabContent: React.FC<DebugPanelTabHeaderProps> = ({ isActive }
                 'Add properties to watch while testing your bot in the Web Chat pane. <a>Learn more.</a>',
                 {
                   a: ({ children }) => (
-                    <Link key="watch-table-empty-state-link" href="https://aka.ms/bfcomposer-2-watch" target="_blank">
+                    <Link
+                      key="watch-table-empty-state-link"
+                      aria-label={formatMessage(
+                        'Learn more on how to test your bot in Bot Framework Composer Documentation'
+                      )}
+                      href="https://aka.ms/bfcomposer-2-watch"
+                      target="_blank"
+                    >
                       {children}
                     </Link>
                   ),

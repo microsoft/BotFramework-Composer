@@ -3,16 +3,16 @@
 
 import { LuFile } from '@botframework-composer/types';
 import styled from '@emotion/styled';
-import { FluentTheme, NeutralColors } from '@uifabric/fluent-theme';
+import { FluentTheme, NeutralColors } from '@fluentui/theme';
 import formatMessage from 'format-message';
 import {
   IContextualMenuItem,
   IContextualMenuItemProps,
   IContextualMenuProps,
-} from 'office-ui-fabric-react/lib/ContextualMenu';
-import { Label } from 'office-ui-fabric-react/lib/Label';
-import { Stack } from 'office-ui-fabric-react/lib/Stack';
-import { Text } from 'office-ui-fabric-react/lib/Text';
+} from '@fluentui/react/lib/ContextualMenu';
+import { Label } from '@fluentui/react/lib/Label';
+import { Stack } from '@fluentui/react/lib/Stack';
+import { Text } from '@fluentui/react/lib/Text';
 import * as React from 'react';
 
 import { useNoSearchResultMenuItem } from '../../hooks/useNoSearchResultMenuItem';
@@ -71,7 +71,7 @@ export const useLabelingMenuProps = (
     [menuHeaderText]
   );
 
-  const { onRenderMenuList, query, setQuery } = useSearchableMenuListCallback(
+  const { onRenderMenuList, query, onReset } = useSearchableMenuListCallback(
     formatMessage('Search entities'),
     searchHeaderRenderer
   );
@@ -109,12 +109,8 @@ export const useLabelingMenuProps = (
     );
   }, []);
 
-  const onDismiss = React.useCallback(() => {
-    setQuery('');
-  }, []);
-
   return {
     noEntities: !entities.length,
-    menuProps: { items, onRenderMenuList, contextualMenuItemAs, onDismiss },
+    menuProps: { items, onRenderMenuList, contextualMenuItemAs, onMenuDismissed: onReset },
   };
 };

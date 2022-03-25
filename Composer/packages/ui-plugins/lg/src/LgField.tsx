@@ -10,10 +10,10 @@ import { CodeEditorSettings, LgMetaData, LgTemplateRef, LgType } from '@bfc/shar
 import { OpenConfirmModal } from '@bfc/ui-shared';
 import { jsx } from '@emotion/core';
 import formatMessage from 'format-message';
-import { Link } from 'office-ui-fabric-react/lib/Link';
-import { Stack } from 'office-ui-fabric-react/lib/Stack';
-import { Text } from 'office-ui-fabric-react/lib/Text';
-import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
+import { Link } from '@fluentui/react/lib/Link';
+import { Stack } from '@fluentui/react/lib/Stack';
+import { Text } from '@fluentui/react/lib/Text';
+import { TooltipHost } from '@fluentui/react/lib/Tooltip';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { locateLgTemplatePosition } from './locateLgTemplatePosition';

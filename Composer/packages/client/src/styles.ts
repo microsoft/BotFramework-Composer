@@ -2,6 +2,18 @@
 // Licensed under the MIT License.
 
 import { css } from '@emotion/core';
+import { FontSizes, FontWeights } from '@fluentui/react/lib/Styling';
+
+export const customFieldLabel = {
+  subComponentStyles: {
+    label: {
+      root: {
+        fontWeight: FontWeights.regular,
+        fontSize: FontSizes.small,
+      },
+    },
+  },
+};
 
 export const showDesign = (show) => css`
   display: ${show ? 'block' : 'none'} !important;

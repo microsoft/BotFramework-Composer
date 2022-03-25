@@ -4,18 +4,18 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import formatMessage from 'format-message';
-import { FontIcon } from 'office-ui-fabric-react/lib/Icon';
-import { Link } from 'office-ui-fabric-react/lib/Link';
+import { FontIcon } from '@fluentui/react/lib/Icon';
+import { Link } from '@fluentui/react/lib/Link';
 import { useRecoilValue } from 'recoil';
 import { Fragment, useEffect, useMemo, useState } from 'react';
-import { CommunicationColors, NeutralColors, SharedColors } from '@uifabric/fluent-theme';
-import { IDropdownOption, Dropdown } from 'office-ui-fabric-react/lib/Dropdown';
-import { Stack, StackItem } from 'office-ui-fabric-react/lib/Stack';
-import { Label } from 'office-ui-fabric-react/lib/Label';
-import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
-import { FontSizes } from '@uifabric/fluent-theme';
-import { DefaultButton, IconButton, PrimaryButton } from 'office-ui-fabric-react/lib/Button';
-import { Separator } from 'office-ui-fabric-react/lib/Separator';
+import { CommunicationColors, NeutralColors, SharedColors } from '@fluentui/theme';
+import { IDropdownOption, Dropdown } from '@fluentui/react/lib/Dropdown';
+import { Stack, StackItem } from '@fluentui/react/lib/Stack';
+import { Label } from '@fluentui/react/lib/Label';
+import { TooltipHost } from '@fluentui/react/lib/Tooltip';
+import { FontSizes } from '@fluentui/theme';
+import { DefaultButton, IconButton, PrimaryButton } from '@fluentui/react/lib/Button';
+import { Separator } from '@fluentui/react/lib/Separator';
 import { navigate } from '@reach/router';
 
 import { settingsState, botDisplayNameState } from '../../recoilModel';

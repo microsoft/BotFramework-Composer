@@ -4,7 +4,7 @@
 import React, { useRef } from 'react';
 import formatMessage from 'format-message';
 import JSZip from 'jszip';
-import { DefaultButton } from 'office-ui-fabric-react/lib/Button';
+import { DefaultButton } from '@fluentui/react/lib/Button';
 
 const FILE_SIZE_LIMIT = 1024 * 1024; // file size limit 1MB
 export const BrowserModal = (props) => {

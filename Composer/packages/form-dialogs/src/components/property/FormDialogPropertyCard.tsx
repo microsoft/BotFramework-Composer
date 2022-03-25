@@ -2,15 +2,15 @@
 // Licensed under the MIT License.
 
 import styled from '@emotion/styled';
-import { FluentTheme, NeutralColors } from '@uifabric/fluent-theme';
-import { useId } from '@uifabric/react-hooks';
+import { FluentTheme, NeutralColors } from '@fluentui/theme';
+import { useId } from '@fluentui/react-hooks';
 import formatMessage from 'format-message';
-import { CommandBarButton, IconButton } from 'office-ui-fabric-react/lib/Button';
-import { Checkbox } from 'office-ui-fabric-react/lib/Checkbox';
-import { FocusZone } from 'office-ui-fabric-react/lib/FocusZone';
-import { IOverflowSetItemProps, OverflowSet } from 'office-ui-fabric-react/lib/OverflowSet';
-import { Stack } from 'office-ui-fabric-react/lib/Stack';
-import { TextField } from 'office-ui-fabric-react/lib/TextField';
+import { CommandBarButton, IconButton } from '@fluentui/react/lib/Button';
+import { Checkbox } from '@fluentui/react/lib/Checkbox';
+import { FocusZone } from '@fluentui/react/lib/FocusZone';
+import { IOverflowSetItemProps, OverflowSet } from '@fluentui/react/lib/OverflowSet';
+import { Stack } from '@fluentui/react/lib/Stack';
+import { TextField } from '@fluentui/react/lib/TextField';
 import * as React from 'react';
 import { DraggableProvidedDragHandleProps } from 'react-beautiful-dnd';
 import { useRecoilValue } from 'recoil';

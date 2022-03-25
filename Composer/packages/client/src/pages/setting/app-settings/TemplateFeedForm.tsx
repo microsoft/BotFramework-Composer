@@ -3,19 +3,18 @@
 
 /** @jsx jsx */
 import { css, jsx } from '@emotion/core';
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState } from 'react';
 import formatMessage from 'format-message';
-import { TextField } from 'office-ui-fabric-react/lib/TextField';
+import { TextField } from '@fluentui/react/lib/TextField';
 import { firstPartyTemplateFeed } from '@bfc/shared';
-import { Link } from 'office-ui-fabric-react/lib/components/Link';
+import { Link } from '@fluentui/react/lib/components/Link';
 import { useRecoilValue } from 'recoil';
-import { NeutralColors } from '@uifabric/fluent-theme/lib/fluent/FluentColors';
-import { Text } from 'office-ui-fabric-react/lib/Text';
+import { NeutralColors } from '@fluentui/theme';
+import { Text } from '@fluentui/react/lib/Text';
 
 import { dispatcherState, templateFeedUrlState, templateProjectsState } from '../../../recoilModel/atoms/appState';
 import TelemetryClient from '../../../telemetry/TelemetryClient';
-
-import * as styles from './styles';
+import { customFieldLabel } from '../../../styles';
 
 const settingsContainer = css`
   border-top: 1px solid ${NeutralColors.gray20};
@@ -46,14 +45,6 @@ export const TemplateFeedForm = () => {
       setTemplateFeedUrl(urlValue);
     }
   };
-
-  const renderLabel = useCallback(({ label: dropdownLabel }) => {
-    return (
-      <div css={styles.labelContainer}>
-        <div css={styles.customerLabel}>{dropdownLabel}</div>
-      </div>
-    );
-  }, []);
 
   useEffect(() => {
     setFieldDisabled(true);
@@ -86,6 +77,7 @@ export const TemplateFeedForm = () => {
         disabled={fieldDisabled}
         errorMessage={errorMessage}
         label={formatMessage('Template Feed Url')}
+        styles={customFieldLabel}
         value={urlValue}
         onBlur={(ev) => {
           savePendingEdits();
@@ -97,7 +89,6 @@ export const TemplateFeedForm = () => {
             setUrlValue('');
           }
         }}
-        onRenderLabel={renderLabel}
       />
       <Link
         data-testid={'default-feed-link'}

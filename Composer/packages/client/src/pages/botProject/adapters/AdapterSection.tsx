@@ -4,8 +4,8 @@
 import { jsx } from '@emotion/core';
 import { useEffect, useRef } from 'react';
 import formatMessage from 'format-message';
-import { Stack } from 'office-ui-fabric-react/lib/Stack';
-import { Link } from 'office-ui-fabric-react/lib/Link';
+import { Stack } from '@fluentui/react/lib/Stack';
+import { Link } from '@fluentui/react/lib/Link';
 
 import { subtitle, subtext, headerText } from '../styles';
 import { SettingTitle } from '../shared/SettingTitle';
@@ -34,7 +34,12 @@ const AdapterSection = ({ projectId, scrollToSectionId }: Props) => {
           'Add connections to make your bot available in Webchat, Direct Line Speech, Microsoft Teams and more. <a>Learn more.</a>',
           {
             a: ({ children }) => (
-              <Link key="adapters-settings-page" href={'https://aka.ms/composer-connections-learnmore'} target="_blank">
+              <Link
+                key="adapters-settings-page"
+                aria-label={formatMessage('Learn more on how to connect a bot to channels')}
+                href={'https://aka.ms/composer-connections-learnmore'}
+                target="_blank"
+              >
                 {children}
               </Link>
             ),

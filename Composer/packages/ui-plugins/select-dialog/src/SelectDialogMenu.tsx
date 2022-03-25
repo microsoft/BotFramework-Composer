@@ -7,12 +7,12 @@ import {
   IContextualMenuItem,
   ContextualMenuItemType,
   IContextualMenuListProps,
-} from 'office-ui-fabric-react/lib/ContextualMenu';
-import { Stack } from 'office-ui-fabric-react/lib/Stack';
-import { SearchBox, ISearchBoxStyles } from 'office-ui-fabric-react/lib/SearchBox';
-import { DefaultButton, IButtonStyles } from 'office-ui-fabric-react/lib/Button';
-import { IRenderFunction, getId } from 'office-ui-fabric-react/lib/Utilities';
-import { NeutralColors, SharedColors } from '@uifabric/fluent-theme';
+} from '@fluentui/react/lib/ContextualMenu';
+import { Stack } from '@fluentui/react/lib/Stack';
+import { SearchBox, ISearchBoxStyles } from '@fluentui/react/lib/SearchBox';
+import { DefaultButton, IButtonStyles } from '@fluentui/react/lib/Button';
+import { IRenderFunction, getId } from '@fluentui/react/lib/Utilities';
+import { NeutralColors, SharedColors } from '@fluentui/theme';
 import { FieldLabel } from '@bfc/adaptive-form';
 import { FieldProps, DialogInfo } from '@bfc/extension-client';
 import { Icons } from '@bfc/shared';
@@ -121,6 +121,7 @@ export const SelectDialogMenu: React.FC<SelectDialogMenuProps> = (props) => {
       text: d.displayName,
       isSelected: value === d.displayName,
       data: d,
+      role: 'option',
       iconProps: {
         iconName: getIconName(d),
         styles: {
@@ -141,6 +142,7 @@ export const SelectDialogMenu: React.FC<SelectDialogMenuProps> = (props) => {
         sectionProps: {
           items: dialogItems,
         },
+        role: 'option',
       },
       {
         key: 'actions',
@@ -154,6 +156,7 @@ export const SelectDialogMenu: React.FC<SelectDialogMenuProps> = (props) => {
               iconProps: {
                 iconName: Icons.EXPRESSION,
               },
+              role: 'option',
             },
             {
               key: ADD_DIALOG,
@@ -161,6 +164,7 @@ export const SelectDialogMenu: React.FC<SelectDialogMenuProps> = (props) => {
               iconProps: {
                 iconName: 'Add',
               },
+              role: 'option',
             },
           ],
         },
@@ -266,6 +270,7 @@ export const SelectDialogMenu: React.FC<SelectDialogMenuProps> = (props) => {
                 }
               `,
             }}
+            role="listbox"
             styles={buttonStyles}
             text={selectedLabel || ' '}
             onBlur={() => onBlur?.(id, value)}

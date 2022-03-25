@@ -9,8 +9,9 @@ import { useRecoilValue } from 'recoil';
 import formatMessage from 'format-message';
 import get from 'lodash/get';
 import { css } from '@emotion/core';
-import { TextField } from 'office-ui-fabric-react/lib/TextField';
-import { Link } from 'office-ui-fabric-react/lib/Link';
+import { Link } from '@fluentui/react/lib/Link';
+import { mergeStyleSets } from '@fluentui/react/lib/Styling';
+import { TextField } from '@bfc/ui-shared';
 
 import {
   dispatcherState,
@@ -25,6 +26,7 @@ import { rootBotProjectIdSelector } from '../../recoilModel/selectors/project';
 import { FieldWithCustomButton } from '../../components/FieldWithCustomButton';
 import { mergePropertiesManagedByRootBot } from '../../recoilModel/dispatchers/utils/project';
 import { LUIS_REGIONS } from '../../constants';
+import { customFieldLabel } from '../../styles';
 
 import { subtext } from './styles';
 import { SettingTitle } from './shared/SettingTitle';
@@ -147,12 +149,22 @@ export const SkillBotExternalService: React.FC<SkillBotExternalServiceProps> = (
           'Language Understanding (LUIS) is an Azure Cognitive Service that uses machine learning to understand natural language input and direct the conversation flow. <a>Learn more.</a> Use an existing Language Understanding (LUIS) key from Azure or create a new key. <a2>Learn more</a2>',
           {
             a: ({ children }) => (
-              <Link key="luis-skill-settings-page" href={'https://www.luis.ai/'} target="_blank">
+              <Link
+                key="luis-skill-settings-page"
+                aria-label={formatMessage('Learn more about Language Understanding (LUIS)')}
+                href={'https://www.luis.ai/'}
+                target="_blank"
+              >
                 {children}
               </Link>
             ),
             a2: ({ children }) => (
-              <Link key="luis-skill-settings-page-2" href={'https://aka.ms/composer-luis-learnmore'} target="_blank">
+              <Link
+                key="luis-skill-settings-page-2"
+                aria-label={formatMessage('Learn more on how to add Language Understanding to your bot')}
+                href={'https://aka.ms/composer-luis-learnmore'}
+                target="_blank"
+              >
                 {children}
               </Link>
             ),
@@ -161,19 +173,17 @@ export const SkillBotExternalService: React.FC<SkillBotExternalServiceProps> = (
       </div>
       <div css={externalServiceContainerStyle}>
         <TextField
-          ariaLabel={formatMessage('Application name')}
           data-testid={'skillLUISApplicationName'}
           id={'luisName'}
           label={formatMessage('Application name')}
           placeholder={formatMessage('Type application name')}
-          styles={{ root: { marginBottom: 10 } }}
+          styles={mergeStyleSets(customFieldLabel, { root: { marginBottom: 10 } })}
           value={localSkillLuisName}
           onBlur={handleSkillLUISNameOnBlur}
           onChange={handleSkillLUISNameOnChange}
         />
         <div ref={luisKeyFieldRef}>
           <FieldWithCustomButton
-            ariaLabel={formatMessage('Language Understanding authoring key')}
             buttonDataTestId="skillLUISAuthoringKeyBtn"
             buttonText={formatMessage('Use custom LUIS authoring key')}
             errorMessage={!rootLuisKey ? formatMessage('Root Bot LUIS authoring key is empty') : ''}
@@ -183,13 +193,13 @@ export const SkillBotExternalService: React.FC<SkillBotExternalServiceProps> = (
             placeholder={formatMessage('Type Language Understanding authoring key')}
             placeholderOnDisable={rootLuisKey}
             required={isLUISKeyNeeded}
+            tooltip={formatMessage('Language Understanding authoring key')}
             value={skillLuisKey}
             onBlur={handleLUISKeyOnBlur}
           />
         </div>
         <div ref={luisRegionFieldRef}>
           <FieldWithCustomButton
-            ariaLabel={formatMessage('Language Understanding region')}
             buttonDataTestId="skillLUISAuthoringRegionBtn"
             buttonText={formatMessage('Use custom LUIS region')}
             errorMessage={!rootLuisRegion ? formatMessage('Root Bot LUIS region is empty') : ''}
@@ -199,6 +209,7 @@ export const SkillBotExternalService: React.FC<SkillBotExternalServiceProps> = (
             placeholder={formatMessage('Select region')}
             placeholderOnDisable={rootLuisRegion}
             required={isLUISKeyNeeded}
+            tooltip={formatMessage('Language Understanding region')}
             value={skillLuisRegion}
             onBlur={handleLUISRegionOnBlur}
           />
@@ -209,13 +220,21 @@ export const SkillBotExternalService: React.FC<SkillBotExternalServiceProps> = (
             'QnA Maker is an Azure Cognitive services that can extract question-and-answer pairs from a website FAQ. <a>Learn more.</a> Use an existing key from Azure or create a new key. <a2>Learn more</a2>',
             {
               a: ({ children }) => (
-                <Link key="qna-skill-settings-page" href={'https://www.qnamaker.ai/'} target="_blank">
+                <Link
+                  key="qna-skill-settings-page"
+                  aria-label={formatMessage(
+                    'Learn more about configuring Azure publishing on the "Publishing Profiles" page'
+                  )}
+                  href={'https://www.qnamaker.ai/'}
+                  target="_blank"
+                >
                   {children}
                 </Link>
               ),
               a2: ({ children }) => (
                 <Link
                   key="qna-skill-settings-page-2"
+                  aria-label={formatMessage('Learn more about LUIS usage limits')}
                   href={'https://aka.ms/composer-addqnamaker-learnmore'}
                   target="_blank"
                 >
@@ -227,7 +246,6 @@ export const SkillBotExternalService: React.FC<SkillBotExternalServiceProps> = (
         </div>
         <div ref={qnaKeyFieldRef}>
           <FieldWithCustomButton
-            ariaLabel={formatMessage('QnA Maker Subscription key')}
             buttonDataTestId="skillQnaAuthoringBtn"
             buttonText={formatMessage('Use custom QnA Maker Subscription key')}
             errorMessage={!rootQnAKey ? formatMessage('Root Bot QnA Maker Subscription key is empty') : ''}
@@ -237,6 +255,7 @@ export const SkillBotExternalService: React.FC<SkillBotExternalServiceProps> = (
             placeholder={formatMessage('Enter QnA Maker Subscription key')}
             placeholderOnDisable={rootQnAKey}
             required={isQnAKeyNeeded}
+            tooltip={formatMessage('QnA Maker Subscription key')}
             value={skillQnAKey}
             onBlur={handleSkillQnAKeyOnBlur}
           />

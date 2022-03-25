@@ -3,7 +3,7 @@
 
 import { DialogTypes, DialogWrapper } from '@bfc/ui-shared/lib/components/DialogWrapper';
 import { SDKKinds } from '@botframework-composer/types';
-import { Button } from 'office-ui-fabric-react/lib/components/Button/Button';
+import { Button } from '@fluentui/react/lib/components/Button/Button';
 import React, { useMemo, useEffect } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
 

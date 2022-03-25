@@ -2,8 +2,8 @@
 // Licensed under the MIT License.
 
 import formatMessage from 'format-message';
-import { Link } from 'office-ui-fabric-react/lib/Link';
-import { IDropdownOption, DropdownMenuItemType } from 'office-ui-fabric-react/lib/Dropdown';
+import { Link } from '@fluentui/react/lib/Link';
+import { IDropdownOption, DropdownMenuItemType } from '@fluentui/react/lib/Dropdown';
 import React from 'react';
 
 import { useStringArray } from '../hooks/useStringArray';

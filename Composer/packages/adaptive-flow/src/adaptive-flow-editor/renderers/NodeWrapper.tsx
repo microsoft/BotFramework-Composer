@@ -8,9 +8,9 @@ import { jsx, css } from '@emotion/core';
 import { useContext, useCallback, useEffect } from 'react';
 import { generateActionTitle, PromptTab } from '@bfc/shared';
 import { useShellApi } from '@bfc/extension-client';
-import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
-import { DirectionalHint } from 'office-ui-fabric-react/lib/Callout';
-import { Icon } from 'office-ui-fabric-react/lib/Icon';
+import { TooltipHost } from '@fluentui/react/lib/Tooltip';
+import { DirectionalHint } from '@fluentui/react/lib/Callout';
+import { Icon } from '@fluentui/react/lib/Icon';
 
 import { AttrNames } from '../constants/ElementAttributes';
 import { NodeRendererContext } from '../contexts/NodeRendererContext';

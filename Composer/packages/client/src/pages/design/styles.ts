@@ -2,8 +2,8 @@
 // Licensed under the MIT License.
 
 import { css } from '@emotion/core';
-import { mergeStyleSets, FontWeights } from 'office-ui-fabric-react/lib/Styling';
-import { NeutralColors, FontSizes } from '@uifabric/fluent-theme';
+import { mergeStyleSets, FontWeights } from '@fluentui/react/lib/Styling';
+import { NeutralColors, FontSizes } from '@fluentui/theme';
 
 export const pageRoot = css`
   height: 100%;

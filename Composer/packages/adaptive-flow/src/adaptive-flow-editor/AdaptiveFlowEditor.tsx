@@ -9,7 +9,7 @@ import isEqual from 'lodash/isEqual';
 import formatMessage from 'format-message';
 import { DialogFactory, MicrosoftIDialog, SchemaDefinitions } from '@bfc/shared';
 import { useShellApi, JSONSchema7, FlowUISchema, FlowWidget } from '@bfc/extension-client';
-import { MarqueeSelection } from 'office-ui-fabric-react/lib/MarqueeSelection';
+import { MarqueeSelection } from '@fluentui/react/lib/MarqueeSelection';
 
 import { NodeEventTypes } from '../adaptive-flow-renderer/constants/NodeEventTypes';
 import { AdaptiveDialog } from '../adaptive-flow-renderer/adaptive/AdaptiveDialog';

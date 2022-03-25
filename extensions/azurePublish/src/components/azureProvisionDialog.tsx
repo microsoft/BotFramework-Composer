@@ -4,8 +4,8 @@ import * as React from 'react';
 import formatMessage from 'format-message';
 import styled from '@emotion/styled';
 import { useState, useMemo, useEffect, Fragment, useCallback, useRef } from 'react';
-import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
-import { DefaultButton, PrimaryButton } from 'office-ui-fabric-react/lib/Button';
+import { Dropdown, IDropdownOption } from '@fluentui/react/lib/Dropdown';
+import { DefaultButton, PrimaryButton } from '@fluentui/react/lib/Button';
 import {
   logOut,
   useAuthApi,
@@ -17,7 +17,7 @@ import {
 } from '@bfc/extension-client';
 import { Subscription } from '@azure/arm-subscriptions/esm/models';
 import { DeployLocation, Notification } from '@botframework-composer/types';
-import { FluentTheme, NeutralColors } from '@uifabric/fluent-theme';
+import { FluentTheme, NeutralColors } from '@fluentui/theme';
 import { LoadingSpinner, OpenConfirmModal, ProvisionHandoff } from '@bfc/ui-shared';
 import {
   ScrollablePane,
@@ -42,8 +42,8 @@ import {
   Link,
   ChoiceGroup,
   IChoiceGroupOption,
-} from 'office-ui-fabric-react';
-import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
+} from '@fluentui/react';
+import { MessageBar, MessageBarType } from '@fluentui/react/lib/MessageBar';
 import { JsonEditor } from '@bfc/code-editor';
 import { ResourceGroup } from '@azure/arm-resources/esm/models';
 import sortBy from 'lodash/sortBy';
@@ -162,6 +162,7 @@ const DialogTitle = {
         a: ({ children }) => (
           <a
             key="add-resource-learn-more"
+            aria-label={formatMessage('Learn more on how to add more Azure resources')}
             href={'https://aka.ms/composer-publish-bot#create-new-azure-resources'}
             rel="noopener noreferrer"
             target="_blank"

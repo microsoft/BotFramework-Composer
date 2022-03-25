@@ -5,10 +5,10 @@
 import { jsx } from '@emotion/core';
 import React, { useMemo } from 'react';
 import { css } from '@emotion/core';
-import { FontSizes, NeutralColors } from '@uifabric/fluent-theme';
+import { FontSizes, NeutralColors } from '@fluentui/theme';
 import formatMessage from 'format-message';
-import { Link } from 'office-ui-fabric-react/lib/Link';
-import { FontWeights } from '@uifabric/styling';
+import { Link } from '@fluentui/react/lib/Link';
+import { FontWeights } from '@fluentui/style-utilities';
 
 const styles = {
   errorLoading: css`

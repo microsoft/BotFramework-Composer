@@ -2,12 +2,12 @@
 // Licensed under the MIT License.
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { FieldProps } from '@bfc/extension-client';
-import { NeutralColors } from '@uifabric/fluent-theme';
-import { IconButton } from 'office-ui-fabric-react/lib/Button';
-import { FontSizes } from '@uifabric/styling';
-import { IContextualMenuItem } from 'office-ui-fabric-react/lib/ContextualMenu';
+import { NeutralColors } from '@fluentui/theme';
+import { IconButton } from '@fluentui/react/lib/Button';
+import { FontSizes } from '@fluentui/style-utilities';
+import { IContextualMenuItem } from '@fluentui/react/lib/ContextualMenu';
 import formatMessage from 'format-message';
 
 import { SchemaField } from '../SchemaField';
@@ -22,6 +22,8 @@ interface ArrayFieldItemProps extends FieldProps {
   stackArrayItems?: boolean;
   onReorder: (aIdx: number) => void;
   onRemove: () => void;
+  ariaLabel?: string;
+  autofocus?: boolean;
 }
 
 const ArrayFieldItem: React.FC<ArrayFieldItemProps> = (props) => {
@@ -38,6 +40,8 @@ const ArrayFieldItem: React.FC<ArrayFieldItemProps> = (props) => {
     value,
     className,
     rawErrors,
+    ariaLabel,
+    autofocus,
     ...rest
   } = props;
 
@@ -71,18 +75,30 @@ const ArrayFieldItem: React.FC<ArrayFieldItemProps> = (props) => {
     },
   ];
 
-  const handleBlur = () => {
-    if (!value || (typeof value === 'object' && !Object.values(value).some(Boolean))) {
-      onRemove();
-    }
+  const fieldRowRootRef = useRef<HTMLDivElement>(null);
 
+  useEffect(() => {
+    if (autofocus && fieldRowRootRef.current) {
+      fieldRowRootRef.current.focus();
+    }
+  }, [autofocus]);
+
+  const handleBlur = () => {
     if (typeof onBlur === 'function') {
       onBlur(rest.id, value);
     }
   };
 
   return (
-    <div className={className} css={arrayItem.container} data-testid="ArrayFieldItem">
+    <div
+      ref={fieldRowRootRef}
+      aria-label={ariaLabel}
+      className={`${className} ${arrayItem.contaInerFocus}`}
+      css={arrayItem.container}
+      data-testid="ArrayFieldItem"
+      role="region"
+      tabIndex={-1}
+    >
       <div css={arrayItem.field}>
         <SchemaField
           {...rest}

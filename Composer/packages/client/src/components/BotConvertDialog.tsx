@@ -4,7 +4,7 @@
 import { jsx, css } from '@emotion/core';
 import { OpenConfirmModal } from '@bfc/ui-shared';
 import formatMessage from 'format-message';
-import { Link } from 'office-ui-fabric-react/lib/Link';
+import { Link } from '@fluentui/react/lib/Link';
 
 const contentContainer = css`
   max-width: 444px;

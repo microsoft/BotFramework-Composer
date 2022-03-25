@@ -4,10 +4,10 @@
 /** @jsx jsx */
 import { CopyableText } from '@bfc/ui-shared';
 import { css, jsx } from '@emotion/core';
-import { FontSizes } from '@uifabric/fluent-theme';
-import { FontWeights } from '@uifabric/styling';
+import { FontSizes } from '@fluentui/theme';
+import { FontWeights } from '@fluentui/style-utilities';
 import formatMessage from 'format-message';
-import { Link } from 'office-ui-fabric-react/lib/Link';
+import { Link } from '@fluentui/react/lib/Link';
 import React from 'react';
 
 import { OS, platform } from '../../utils/os';

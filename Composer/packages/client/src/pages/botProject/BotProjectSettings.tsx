@@ -8,7 +8,7 @@ import React, { useMemo, useState, Suspense } from 'react';
 import formatMessage from 'format-message';
 import { RouteComponentProps } from '@reach/router';
 import { JsonEditor } from '@bfc/code-editor';
-import { Toggle } from 'office-ui-fabric-react/lib/Toggle';
+import { Toggle } from '@fluentui/react/lib/Toggle';
 import { defaultToolbarButtonStyles } from '@bfc/ui-shared';
 import { DialogSetting } from '@botframework-composer/types';
 

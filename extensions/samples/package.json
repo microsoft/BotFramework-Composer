@@ -9,7 +9,6 @@
     "build": "node ../scripts/build.js",
     "watch": "yarn build --watch"
   },
-  "dependencies": {},
   "devDependencies": {
     "@types/node": "^14.11.8",
     "ts-loader": "^8.0.9",

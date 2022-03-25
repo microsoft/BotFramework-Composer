@@ -9,7 +9,7 @@ import { LinkBtn, FixedInfo } from '@bfc/ui-shared';
 import { useContext, useMemo } from 'react';
 import formatMessage from 'format-message';
 import { WidgetContainerProps, WidgetComponent } from '@bfc/extension-client';
-import { Icon } from 'office-ui-fabric-react/lib/Icon';
+import { Icon } from '@fluentui/react/lib/Icon';
 
 import { NodeEventTypes } from '../constants/NodeEventTypes';
 import { RendererContext } from '../contexts/RendererContext';

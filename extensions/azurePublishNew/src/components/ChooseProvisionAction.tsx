@@ -3,7 +3,7 @@
 
 import React from 'react';
 import styled from '@emotion/styled';
-import { ChoiceGroup } from 'office-ui-fabric-react/lib/ChoiceGroup';
+import { ChoiceGroup } from '@fluentui/react/lib/ChoiceGroup';
 import formatMessage from 'format-message';
 
 import { ProvisionAction } from '../types';

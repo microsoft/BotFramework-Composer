@@ -1,8 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { FluentTheme } from '@uifabric/fluent-theme';
-import { Label } from 'office-ui-fabric-react/lib/Label';
+import { FluentTheme } from '@fluentui/theme';
+import { Label } from '@fluentui/react/lib/Label';
 import React from 'react';
 
 import { ItemWithTooltip } from '../../components/ItemWithTooltip';

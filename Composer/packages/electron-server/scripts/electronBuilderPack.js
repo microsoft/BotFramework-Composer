@@ -13,7 +13,9 @@ const { log } = require('./common');
  * will be packaged inside of the OS-specific distributable application
  */
 try {
-  const electronBuilderBinary = resolve(__dirname, '../node_modules/.bin/electron-builder');
+  const electronBuilderBinary = process.env.BERRY_ENABLED
+    ? resolve(__dirname, '../../../node_modules/.bin/electron-builder')
+    : resolve(__dirname, '../node_modules/.bin/electron-builder');
   const electronServerDir = resolve(__dirname, '..');
   let platform;
   switch (process.platform) {

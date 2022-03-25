@@ -3,7 +3,7 @@
 
 import React, { useMemo, useRef, useEffect } from 'react';
 import { DialogInfo } from '@bfc/shared';
-import { Selection } from 'office-ui-fabric-react/lib/DetailsList';
+import { Selection } from '@fluentui/react/lib/DetailsList';
 import { useRecoilValue } from 'recoil';
 import formatMessage from 'format-message';
 

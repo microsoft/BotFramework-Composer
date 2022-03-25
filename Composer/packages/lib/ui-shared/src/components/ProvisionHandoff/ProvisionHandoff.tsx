@@ -3,15 +3,15 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
-import { PrimaryButton } from 'office-ui-fabric-react/lib/Button';
+import { DialogFooter } from '@fluentui/react/lib/Dialog';
+import { PrimaryButton } from '@fluentui/react/lib/Button';
 import formatMessage from 'format-message';
-import { Text } from 'office-ui-fabric-react/lib/Text';
-import { DefaultButton, IconButton } from 'office-ui-fabric-react/lib/components/Button';
-import { FontSizes, NeutralColors } from '@uifabric/fluent-theme/lib/fluent';
+import { Text } from '@fluentui/react/lib/Text';
+import { DefaultButton, IconButton } from '@fluentui/react/lib/components/Button';
+import { FontSizes, NeutralColors } from '@fluentui/theme';
 import { useRef } from 'react';
-import { ITextField, TextField } from 'office-ui-fabric-react/lib/components/TextField';
-import { Link } from 'office-ui-fabric-react/lib/Link';
+import { ITextField, TextField } from '@fluentui/react/lib/components/TextField';
+import { Link } from '@fluentui/react/lib/Link';
 
 import { DialogTypes, DialogWrapper } from '../DialogWrapper';
 

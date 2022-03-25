@@ -5,15 +5,15 @@
 import { jsx } from '@emotion/core';
 import React, { useRef, useEffect, useState, useCallback, useMemo } from 'react';
 import isEmpty from 'lodash/isEmpty';
-import { DetailsList, DetailsListLayoutMode, SelectionMode, IColumn } from 'office-ui-fabric-react/lib/DetailsList';
-import { ActionButton } from 'office-ui-fabric-react/lib/Button';
-import { IconButton } from 'office-ui-fabric-react/lib/Button';
-import { Icon } from 'office-ui-fabric-react/lib/Icon';
-import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
-import { ScrollablePane, ScrollbarVisibility } from 'office-ui-fabric-react/lib/ScrollablePane';
-import { Sticky, StickyPositionType } from 'office-ui-fabric-react/lib/Sticky';
+import { DetailsList, DetailsListLayoutMode, SelectionMode, IColumn } from '@fluentui/react/lib/DetailsList';
+import { ActionButton } from '@fluentui/react/lib/Button';
+import { IconButton } from '@fluentui/react/lib/Button';
+import { Icon } from '@fluentui/react/lib/Icon';
+import { TooltipHost } from '@fluentui/react/lib/Tooltip';
+import { ScrollablePane, ScrollbarVisibility } from '@fluentui/react/lib/ScrollablePane';
+import { Sticky, StickyPositionType } from '@fluentui/react/lib/Sticky';
 import formatMessage from 'format-message';
-import { NeutralColors, FontSizes } from '@uifabric/fluent-theme';
+import { NeutralColors, FontSizes } from '@fluentui/theme';
 import { RouteComponentProps } from '@reach/router';
 import { LgTemplate } from '@bfc/shared';
 import { useRecoilValue } from 'recoil';
@@ -22,11 +22,12 @@ import { LgFile } from '@botframework-composer/types/src';
 
 import { EditableField } from '../../components/EditableField';
 import { navigateTo } from '../../utils/navigation';
-import { actionButton, formCell, editableFieldContainer } from '../language-understanding/styles';
+import { actionButton, editableFieldContainer } from '../language-understanding/styles';
 import { dispatcherState, localeState, settingsState, dialogsSelectorFamily } from '../../recoilModel';
 import { languageListTemplates } from '../../components/MultiLanguage';
 import TelemetryClient from '../../telemetry/TelemetryClient';
 import { lgFilesSelectorFamily } from '../../recoilModel/selectors/lg';
+import { CellFocusZone } from '../../components/CellFocusZone';
 
 interface TableViewProps extends RouteComponentProps<{ dialogId: string; skillId: string; projectId: string }> {
   projectId: string;
@@ -59,8 +60,6 @@ const TableView: React.FC<TableViewProps> = (props) => {
   const listRef = useRef(null);
 
   const activeDialog = dialogs.find(({ id }) => id === dialogId);
-
-  //const [focusedIndex, setFocusedIndex] = useState(0);
 
   useEffect(() => {
     if (!file || isEmpty(file)) return;
@@ -207,7 +206,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
         onRender: (item) => {
           const displayName = `#${item.name}`;
           return (
-            <div data-is-focusable css={formCell}>
+            <CellFocusZone>
               <EditableField
                 ariaLabel={formatMessage(`Name is {name}`, { name: displayName })}
                 containerStyles={editableFieldContainer}
@@ -224,7 +223,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
                 }}
                 onChange={() => {}}
               />
-            </div>
+            </CellFocusZone>
           );
         },
       },
@@ -238,7 +237,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
         onRender: (item) => {
           const text = item.body;
           return (
-            <div data-is-focusable css={formCell}>
+            <CellFocusZone>
               <EditableField
                 multiline
                 ariaLabel={formatMessage(`Response is {response}`, { response: text })}
@@ -259,7 +258,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
                 }}
                 onChange={() => {}}
               />
-            </div>
+            </CellFocusZone>
           );
         },
       },
@@ -274,7 +273,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
         onRender: (item) => {
           const text = item.body;
           return (
-            <div data-is-focusable css={formCell}>
+            <CellFocusZone>
               <EditableField
                 multiline
                 ariaLabel={formatMessage(`Response is {response}`, { response: text })}
@@ -295,7 +294,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
                 }}
                 onChange={() => {}}
               />
-            </div>
+            </CellFocusZone>
           );
         },
       },
@@ -309,7 +308,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
         onRender: (item) => {
           const text = item[`body-${defaultLanguage}`];
           return (
-            <div data-is-focusable css={formCell}>
+            <CellFocusZone>
               <EditableField
                 multiline
                 ariaLabel={formatMessage(`Response is {response}`, { response: text })}
@@ -330,7 +329,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
                 }}
                 onChange={() => {}}
               />
-            </div>
+            </CellFocusZone>
           );
         },
       },

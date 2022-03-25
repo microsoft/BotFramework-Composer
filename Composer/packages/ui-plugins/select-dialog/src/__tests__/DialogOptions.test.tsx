@@ -20,8 +20,8 @@ jest.mock('@bfc/adaptive-form', () => {
   };
 });
 
-jest.mock('office-ui-fabric-react/lib/Dropdown', () => {
-  const MockDropdown = jest.requireActual('office-ui-fabric-react/lib/Dropdown');
+jest.mock('@fluentui/react/lib/Dropdown', () => {
+  const MockDropdown = jest.requireActual('@fluentui/react/lib/Dropdown');
 
   return {
     ...MockDropdown,
