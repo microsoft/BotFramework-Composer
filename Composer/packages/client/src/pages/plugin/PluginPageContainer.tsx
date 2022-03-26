@@ -15,7 +15,7 @@ const PluginPageContainer: React.FC<RouteComponentProps<{ pluginId: string; bund
     return null;
   }
 
-  return <PluginHost bundleId={bundleId} pluginName={pluginId} pluginType="page" projectId={projectId} />;
+  return <PluginHost bundleId={bundleId} pluginName={pluginId} pluginType="page" role="main" projectId={projectId} />;
 };
 
 export { PluginPageContainer };

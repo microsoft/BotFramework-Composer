@@ -55,7 +55,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
           </div>
         </div>
 
-        <div css={contentWrapper} role="main">
+        <div css={contentWrapper}>
           <CommandBar projectId={activeBot} />
           <Conversation css={splitPaneContainer}>
             <div css={splitPaneWrapper}>

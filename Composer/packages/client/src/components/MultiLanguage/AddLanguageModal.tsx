@@ -140,6 +140,7 @@ const AddLanguageModal: React.FC<IAddLanguageModalProps> = (props) => {
   }, [currentLanguages]);
 
   const searchBoxLabelId = useId('search-box-label');
+  const searchBoxId = useId('search-box');
   const translationsLabelId = useId('translations-label');
 
   const onSearch = (_e, newValue) => {
@@ -196,8 +197,11 @@ const AddLanguageModal: React.FC<IAddLanguageModalProps> = (props) => {
                 )}
               />
             </div>
-            <Label id={searchBoxLabelId}>{MultiLanguagesDialog.ADD_DIALOG.selectionTitle}</Label>
+            <Label id={searchBoxLabelId} htmlFor={searchBoxId}>
+              {MultiLanguagesDialog.ADD_DIALOG.selectionTitle}
+            </Label>
             <SearchBox
+              id={searchBoxId}
               disableAnimation
               aria-labelledBy={searchBoxLabelId}
               placeholder={MultiLanguagesDialog.ADD_DIALOG.searchPlaceHolder}
