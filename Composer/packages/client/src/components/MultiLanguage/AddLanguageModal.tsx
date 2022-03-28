@@ -197,13 +197,13 @@ const AddLanguageModal: React.FC<IAddLanguageModalProps> = (props) => {
                 )}
               />
             </div>
-            <Label id={searchBoxLabelId} htmlFor={searchBoxId}>
+            <Label htmlFor={searchBoxId} id={searchBoxLabelId}>
               {MultiLanguagesDialog.ADD_DIALOG.selectionTitle}
             </Label>
             <SearchBox
-              id={searchBoxId}
               disableAnimation
               aria-labelledBy={searchBoxLabelId}
+              id={searchBoxId}
               placeholder={MultiLanguagesDialog.ADD_DIALOG.searchPlaceHolder}
               styles={{ root: { width: 300 } }}
               onChange={onSearch}
