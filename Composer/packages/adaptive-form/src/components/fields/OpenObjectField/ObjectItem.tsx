@@ -76,6 +76,7 @@ const ObjectItem: React.FC<ObjectItemProps> = ({
           label={formatMessage('Key')}
           name="key"
           placeholder={initialName || formatMessage('Add a new key')}
+          required={rest.required}
           schema={{ type: 'string' }}
           uiOptions={{}}
           value={name}

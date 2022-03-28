@@ -43,6 +43,7 @@ const OpenObjectField: React.FC<FieldProps<{
             formData={value}
             id={`${id}.value`}
             name={propertyName}
+            required={props.required}
             schema={typeof additionalProperties === 'object' ? additionalProperties : {}}
             uiOptions={uiOptions.properties?.additionalProperties || {}}
             value={propertyValue}
