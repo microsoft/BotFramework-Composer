@@ -72,6 +72,7 @@ const BooleanField: React.FC<FieldProps> = function CheckboxWidget(props) {
         required={required}
       />
       <Dropdown
+        aria-required={required}
         ariaLabel={label || formatMessage('boolean field')}
         id={id}
         options={options}

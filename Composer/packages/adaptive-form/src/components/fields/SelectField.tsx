@@ -62,6 +62,7 @@ export const SelectField: React.FC<FieldProps<string | number>> = function Selec
     <>
       <FieldLabel description={description} helpLink={uiOptions?.helpLink} id={id} label={label} required={required} />
       <Dropdown
+        aria-required={required}
         ariaLabel={label || formatMessage('selection field')}
         data-testid="SelectFieldDropdown"
         errorMessage={error as string}
