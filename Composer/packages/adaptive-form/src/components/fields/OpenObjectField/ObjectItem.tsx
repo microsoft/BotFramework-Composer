@@ -34,6 +34,7 @@ const ObjectItem: React.FC<ObjectItemProps> = ({
   onChange,
   onNameChange,
   onDelete,
+  required,
   ...rest
 }) => {
   const initialName = useMemo(() => originalName, []);
@@ -76,7 +77,7 @@ const ObjectItem: React.FC<ObjectItemProps> = ({
           label={formatMessage('Key')}
           name="key"
           placeholder={initialName || formatMessage('Add a new key')}
-          required={rest.required}
+          required={required}
           schema={{ type: 'string' }}
           uiOptions={{}}
           value={name}
@@ -90,6 +91,7 @@ const ObjectItem: React.FC<ObjectItemProps> = ({
           label={formatMessage('Value')}
           name="value"
           placeholder={placeholder}
+          required={required}
           schema={schema}
           value={value}
           onChange={onChange}
