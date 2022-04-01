@@ -47,9 +47,11 @@ export const IntellisenseTextField: React.FC<FieldProps<string>> = (props) => {
         onKeyDownTextField,
         onKeyUpTextField,
         onClickTextField,
+        aria,
       }) => (
         <StringField
           {...props}
+          aria={aria}
           cursorPosition={cursorPosition}
           focused={focused}
           id={id}
@@ -109,10 +111,12 @@ export const IntellisenseExpressionField: React.FC<FieldProps<string>> = (props)
         onKeyDownTextField,
         onKeyUpTextField,
         onClickTextField,
+        aria,
       }) => (
         <div ref={setContainerElm}>
           <StringField
             {...props}
+            aria={aria}
             cursorPosition={cursorPosition}
             focused={focused}
             id={id}
@@ -161,9 +165,10 @@ export const IntellisenseNumberField: React.FC<FieldProps<string>> = (props) => 
       onBlur={props.onBlur}
       onChange={onChange}
     >
-      {({ textFieldValue, focused, onValueChanged, onKeyDownTextField, onKeyUpTextField, onClickTextField }) => (
+      {({ textFieldValue, focused, onValueChanged, onKeyDownTextField, onKeyUpTextField, onClickTextField, aria }) => (
         <NumberField
           {...props}
+          aria={aria}
           focused={focused}
           id={id}
           value={textFieldValue}

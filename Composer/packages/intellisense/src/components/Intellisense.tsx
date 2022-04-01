@@ -1,12 +1,20 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import React from 'react';
+import { Announced } from '@fluentui/react';
+import React, { AriaAttributes, useCallback, useEffect, useState } from 'react';
+import formatMessage from 'format-message';
 
 import { useLanguageServer } from '../hooks/useLanguageServer';
 import { checkIsOutside } from '../utils/uiUtils';
 
 import { CompletionList } from './CompletionList';
+import { useId } from '@fluentui/react-hooks';
+
+type AriaState = Pick<AriaAttributes, 'aria-autocomplete' | 'aria-expanded' | 'aria-activedescendant' | 'aria-owns'> & {
+  role: string;
+  'aria-description': string;
+};
 
 export const Intellisense = React.memo(
   (props: {
@@ -28,6 +36,7 @@ export const Intellisense = React.memo(
       onKeyDownTextField: (event: React.KeyboardEvent<HTMLInputElement>) => void;
       onKeyUpTextField: (event: React.KeyboardEvent<HTMLInputElement>) => void;
       onClickTextField: (event: React.MouseEvent<HTMLInputElement, MouseEvent>) => void;
+      aria: AriaState;
     }) => JSX.Element;
   }) => {
     const {
@@ -52,6 +61,34 @@ export const Intellisense = React.memo(
     const didComplete = React.useRef<boolean>(false);
     const mainContainerRef = React.useRef<HTMLDivElement>(null);
     const completionListRef = React.useRef<HTMLDivElement>(null);
+
+    const itemIdPrefix = useId('suggestion-item');
+    const suggestionsContainerId = useId('suggestion-items');
+    const getItemId = useCallback((index: number) => `${itemIdPrefix}-${index}`, []);
+    const [aria, setAria] = useState<AriaState>(() => ({
+      role: 'combobox',
+      'aria-owns': suggestionsContainerId,
+      'aria-autocomplete': 'list',
+      'aria-expanded': 'false',
+      'aria-activedescendant': '',
+      'aria-description': formatMessage("Start typing to get suggestions or type '=' to write an expression"),
+    }));
+
+    useEffect(() => {
+      if (showCompletionList && selectedCompletionItem >= 0) {
+        setAria({
+          ...aria,
+          'aria-expanded': 'true',
+          'aria-activedescendant': getItemId(selectedCompletionItem),
+        });
+      } else {
+        setAria({
+          ...aria,
+          'aria-expanded': 'false',
+          'aria-activedescendant': '',
+        });
+      }
+    }, [selectedCompletionItem, showCompletionList]);
 
     const completionItems = useLanguageServer(url, scopes, id, textFieldValue, cursorPosition, projectId);
     const completionListOverride =
@@ -194,6 +231,18 @@ export const Intellisense = React.memo(
       setCursorPosition((event.target as HTMLInputElement).selectionStart || 0);
     };
 
+    const resultsMessage = showCompletionList
+      ? formatMessage(
+          `{
+        suggestionsCount, plural,
+          =1 {One suggestion found}
+          =0 {No suggestions found}
+          other {# suggestions found}
+      }`,
+          { suggestionsCount: completionListOverride ? 0 : completionItems.length }
+        )
+      : '';
+
     return (
       <div onKeyUp={onKeyUpMainComponent} ref={mainContainerRef} style={{ position: 'relative' }}>
         {children({
@@ -204,10 +253,14 @@ export const Intellisense = React.memo(
           onKeyDownTextField,
           onKeyUpTextField,
           onClickTextField,
+          aria,
         })}
-
+        <Announced aria-live={resultsMessage ? 'assertive' : 'off'} message={resultsMessage} />
         {completionListOverride || showCompletionList ? (
           <CompletionList
+            aria-label={formatMessage('Suggestions list')}
+            id={suggestionsContainerId}
+            getItemId={getItemId}
             ref={completionListRef}
             completionItems={completionItems}
             selectedItem={selectedCompletionItem}
