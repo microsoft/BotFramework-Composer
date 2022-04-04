@@ -101,7 +101,7 @@ export const ProfileFormDialog: React.FC<ProfileFormDialogProps> = (props) => {
             />
             <DropdownField
               required
-              ariaLabel={formatMessage('The target where you publish your bot')}
+              ariaLabel={formatMessage('Publishing target: the target where you publish your bot')}
               defaultSelectedKey={targetType}
               label={formatMessage('Publishing target')}
               options={targetTypes}
