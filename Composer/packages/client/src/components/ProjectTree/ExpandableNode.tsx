@@ -76,7 +76,7 @@ export const ExpandableNode = ({
       onKeyDown={handleKey}
     >
       {/* eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions, jsx-a11y/no-noninteractive-tabindex */}
-      <li css={listItemStyle(isActive, isExpanded, children != null)} data-testid={'summaryTag'}>
+      <li css={listItemStyle(isActive, isExpanded, children != null)} data-testid={'summaryTag'} role="treeitem">
         {summary}
       </li>
       {children != null && isExpanded && <div role="group">{children}</div>}
