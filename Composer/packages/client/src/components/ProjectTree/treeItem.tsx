@@ -427,7 +427,7 @@ export const TreeItem: React.FC<ITreeItemProps> = ({
 }) => {
   const [thisItemSelected, setThisItemSelected] = useState<boolean>(false);
 
-  const ariaLabel = `${objectNames[itemType]()} ${link.displayName}`;
+  const ariaLabel = `${link.displayName} ${objectNames[itemType]()}`;
   const dataTestId = `${dialogName ?? '$Root'}_${link.displayName}`;
   const isExternal = Boolean(link.href);
 
@@ -470,8 +470,18 @@ export const TreeItem: React.FC<ITreeItemProps> = ({
             tabIndex={0}
             onBlur={item.onBlur}
             onFocus={item.onFocus}
+            onKeyDown={
+              onSelect
+                ? (e) => {
+                    if (e.key === 'Enter') {
+                      onSelect(link);
+                      e.stopPropagation();
+                    }
+                  }
+                : undefined
+            }
           >
-            <div css={projectTreeItem} role="presentation" tabIndex={-1}>
+            <div css={projectTreeItem} role="presentation">
               {item.itemType != null && TreeIcons[item.itemType] != null && (
                 <Icon
                   iconName={TreeIcons[item.itemType]}
@@ -482,7 +492,6 @@ export const TreeItem: React.FC<ITreeItemProps> = ({
                       outline: 'none',
                     },
                   }}
-                  tabIndex={-1}
                 />
               )}
               <span className={'treeItem-text'} css={itemName(maxTextWidth)}>
@@ -564,25 +573,12 @@ export const TreeItem: React.FC<ITreeItemProps> = ({
 
   return (
     <div
-      aria-label={ariaLabel}
       css={navContainer(isMenuOpen, isActive, thisItemSelected, textWidth - overflowIconWidthOnHover, isBroken)}
       data-testid={dataTestId}
-      role={role}
-      tabIndex={0}
       onClick={
         onSelect
           ? () => {
               onSelect(link);
-            }
-          : undefined
-      }
-      onKeyDown={
-        onSelect
-          ? (e) => {
-              if (e.key === 'Enter') {
-                onSelect(link);
-                e.stopPropagation();
-              }
             }
           : undefined
       }
