@@ -234,11 +234,11 @@ export const Intellisense = React.memo(
     const resultsMessage = showCompletionList
       ? formatMessage(
           `{
-        suggestionsCount, plural,
-          =1 {One suggestion found}
-          =0 {No suggestions found}
-          other {# suggestions found}
-      }`,
+            suggestionsCount, plural,
+              =1 {One suggestion found}
+              =0 {No suggestions found}
+              other {# suggestions found}
+          }`,
           { suggestionsCount: completionListOverride ? 0 : completionItems.length }
         )
       : '';
