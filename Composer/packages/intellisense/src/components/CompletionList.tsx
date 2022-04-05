@@ -27,18 +27,22 @@ export const CompletionList = React.forwardRef<
   HTMLDivElement,
   {
     completionItems: CompletionItem[];
+    getItemId: (index: number) => string;
     selectedItem: number;
     completionListOverride?: JSX.Element | null;
     onClickCompletionItem: (index: number) => void;
+    'aria-label': string;
+    id: string;
   }
 >((props, ref) => {
-  const { completionItems, selectedItem, completionListOverride, onClickCompletionItem } = props;
+  const { completionItems, selectedItem, completionListOverride, onClickCompletionItem, getItemId, ...rest } = props;
 
   return (
-    <div ref={ref} css={styles.completionList}>
+    <div {...rest} ref={ref} css={styles.completionList} role={completionListOverride ? 'none' : 'listbox'}>
       {completionListOverride ??
         completionItems.map((completionItem, index) => (
           <CompletionElement
+            id={getItemId(index)}
             key={index}
             completionItem={completionItem}
             isSelected={selectedItem === index}
