@@ -88,8 +88,8 @@ export const CompletionElement = (props: {
   const additionalStyles = isSelected ? styles.selectedElement : {};
 
   useLayoutEffect(() => {
-    if (isSelected && rootRef.current) {
-      rootRef.current.scrollIntoView?.();
+    if (isSelected) {
+      rootRef.current?.scrollIntoView?.();
     }
   }, [isSelected]);
 
