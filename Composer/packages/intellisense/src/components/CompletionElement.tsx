@@ -6,7 +6,7 @@ import { css, jsx } from '@emotion/core';
 import { CompletionItemKind } from 'monaco-languageclient';
 import { FontIcon } from '@fluentui/react/lib/Icon';
 import { TooltipHost } from '@fluentui/react/lib/Tooltip';
-import React from 'react';
+import React, { useLayoutEffect, useRef } from 'react';
 import { CompletionItem, MarkupContent } from 'vscode-languageserver-types';
 import { DirectionalHint } from '@fluentui/react/lib/common/DirectionalHint';
 
@@ -78,17 +78,31 @@ const renderDocumentation = (documentation: string | MarkupContent | undefined) 
 };
 
 export const CompletionElement = (props: {
+  id: string;
   completionItem: CompletionItem;
   isSelected: boolean;
   onClickCompletionItem: () => void;
 }) => {
-  const { completionItem, isSelected, onClickCompletionItem } = props;
-
+  const { completionItem, isSelected, onClickCompletionItem, id } = props;
+  const rootRef = useRef<HTMLDivElement>(null);
   const additionalStyles = isSelected ? styles.selectedElement : {};
+
+  useLayoutEffect(() => {
+    if (isSelected) {
+      rootRef.current?.scrollIntoView?.();
+    }
+  }, [isSelected]);
 
   const renderItem = () => {
     return (
-      <div css={[styles.completionElement, additionalStyles]} onClick={onClickCompletionItem}>
+      <div
+        id={id}
+        ref={rootRef}
+        aria-selected={isSelected}
+        css={[styles.completionElement, additionalStyles]}
+        onClick={onClickCompletionItem}
+        role="option"
+      >
         <FontIcon iconName={getIconName(completionItem.kind)} css={styles.icon} />
         <div css={styles.text}>
           {completionItem.data?.matches

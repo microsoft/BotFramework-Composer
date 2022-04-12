@@ -26,6 +26,7 @@ export const StringField: React.FC<FieldProps<string>> = function StringField(pr
     focused,
     cursorPosition,
     hasIcon,
+    aria,
   } = props;
 
   const textFieldRef = React.createRef<ITextField>();
@@ -64,6 +65,7 @@ export const StringField: React.FC<FieldProps<string>> = function StringField(pr
     <>
       <FieldLabel description={description} helpLink={uiOptions?.helpLink} id={id} label={label} required={required} />
       <TextField
+        {...aria}
         aria-required={required}
         ariaLabel={label || formatMessage('string field')}
         autoAdjustHeight={!!uiOptions?.multiline}
