@@ -36,6 +36,7 @@ export const LgSpeechModalityToolbar = React.memo((props: Props) => {
   const renderHeaderContent = React.useCallback(
     (itemProps: IContextualMenuItemProps, defaultRenders: IContextualMenuItemRenderFunctions) => (
       <ItemWithTooltip
+        aria-label={formatMessage('Learn more about SSML Tags')}
         itemText={defaultRenders.renderItemName(itemProps)}
         tooltipId="ssml-menu-header"
         tooltipProps={ssmlHeaderTooltipProps}
