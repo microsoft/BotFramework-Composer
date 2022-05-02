@@ -112,7 +112,7 @@ export const FeedModal: React.FC<WorkingModalProps> = (props) => {
       },
     },
     {
-      key: 'column1',
+      key: 'column2',
       name: 'Type',
       fieldName: 'text',
       minWidth: 75,
@@ -123,6 +123,7 @@ export const FeedModal: React.FC<WorkingModalProps> = (props) => {
         if (!selectedItem || item.key !== selectedItem.key || !editRow) return <DisplayField text={item.type} />;
         return (
           <Dropdown
+            aria-label={formatMessage('Feed type')}
             disabled={!selectedItem || selectedItem.readonly}
             options={FEED_TYPES}
             selectedKey={selectedItem?.type}
@@ -134,7 +135,7 @@ export const FeedModal: React.FC<WorkingModalProps> = (props) => {
       },
     },
     {
-      key: 'column2',
+      key: 'column3',
       name: 'URL',
       fieldName: 'url',
       minWidth: 200,
@@ -154,7 +155,7 @@ export const FeedModal: React.FC<WorkingModalProps> = (props) => {
       },
     },
     {
-      key: 'column3',
+      key: 'column4',
       name: 'Filter',
       fieldName: 'defaultQuery.query',
       minWidth: 200,
@@ -174,7 +175,7 @@ export const FeedModal: React.FC<WorkingModalProps> = (props) => {
       },
     },
     {
-      key: 'column4',
+      key: 'column5',
       name: 'Prerelease',
       fieldName: 'defaultQuery.prerelease',
       minWidth: 90,
@@ -192,16 +193,20 @@ export const FeedModal: React.FC<WorkingModalProps> = (props) => {
       },
     },
     {
-      key: 'column5',
-      minWidth: 40,
-      maxWidth: 40,
+      key: 'column6',
+      name: 'Delete',
+      minWidth: 50,
       isResizable: false,
-      name: '',
       onRender: (item: PackageSourceFeed) => {
         if (item.key === selectedItem?.key)
           return (
             <Fragment>
-              <IconButton disabled={item.readonly} iconProps={{ iconName: 'Delete' }} onClick={removeSelected} />
+              <IconButton
+                aria-label={formatMessage('Delete feed')}
+                disabled={item.readonly}
+                iconProps={{ iconName: 'Delete' }}
+                onClick={removeSelected}
+              />
             </Fragment>
           );
       },
