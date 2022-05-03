@@ -51,6 +51,7 @@ export const RequiredPriorityIndicator = React.memo((props: Props) => {
               help: ({ children }) => (
                 <HelpTooltip
                   key={`${propertyId}-priority-tooltip`}
+                  aria-label={children}
                   helpMessage={children}
                   tooltipId={`${propertyId}-priority-tooltip`}
                 />

@@ -24,7 +24,7 @@ export const HelpIconTooltip = React.memo(
   }: {
     tooltipId: string;
     helpMessage: string | JSX.Element | JSX.Element[];
-    tooltipProps?: Partial<HelpTooltipProps>;
+    tooltipProps: HelpTooltipProps;
   }) => {
     return (
       <HelpTooltip

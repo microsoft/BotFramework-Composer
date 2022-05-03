@@ -224,6 +224,7 @@ export const BotStatusList: React.FC<BotStatusListProps> = ({
       onRender: (item: BotStatus) => {
         return (
           <Dropdown
+            aria-label={formatMessage('Publish target')}
             options={getPublishTargetOptions(item)}
             placeholder={formatMessage('Select a publish target')}
             selectedKey={item.publishTarget}
@@ -300,7 +301,7 @@ export const BotStatusList: React.FC<BotStatusListProps> = ({
     },
     {
       key: 'SkillManifest',
-      name: '',
+      name: formatMessage('Manifest'),
       className: 'skillManifest',
       fieldName: 'skillManifestUrl',
       minWidth: 134,
@@ -313,7 +314,7 @@ export const BotStatusList: React.FC<BotStatusListProps> = ({
     },
     {
       key: 'ShowPublishHistory',
-      name: '',
+      name: formatMessage('History'),
       className: 'showHistory',
       fieldName: 'showHistory',
       minWidth: 150,
@@ -325,6 +326,8 @@ export const BotStatusList: React.FC<BotStatusListProps> = ({
       onRender: (item: BotStatus) => {
         return (
           <IconButton
+            aria-expanded={expandedBotIds[item.id] ? 'true' : 'false'}
+            aria-label={formatMessage('Show {name} publish history', { name: item.name })}
             iconProps={{ iconName: expandedBotIds[item.id] ? 'ChevronDown' : 'ChevronRight' }}
             styles={{ root: { float: 'right' } }}
             onClick={() => onChangeShowHistoryBots(item)}

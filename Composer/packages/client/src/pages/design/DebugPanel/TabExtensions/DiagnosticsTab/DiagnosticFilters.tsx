@@ -149,6 +149,7 @@ export const DiagnosticsFilters: React.FC<DiagnosticsFiltersProps> = (props) => 
         }}
       >
         <DropdownWithAllOption
+          aria-label={formatMessage('Select bots to display problems for')}
           optionAll={optionAll}
           options={projectSelectorOptions}
           placeholder={formatMessage('Select bots')}
