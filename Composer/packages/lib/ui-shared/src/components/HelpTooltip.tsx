@@ -58,11 +58,11 @@ export const HelpTooltip: React.FC<HelpTooltipProps> = ({ iconProps, ...props })
   return (
     <TooltipHost {...props} styles={classNames}>
       <Icon
+        data-is-focusable
         aria-label={props['aria-label']}
         className={classNames.helpIcon}
         iconName="Unknown"
         tabIndex={0}
-        data-is-focusable
         {...iconProps}
       />
     </TooltipHost>
