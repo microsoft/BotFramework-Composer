@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx } from '@emotion/core';
+import { jsx } from '@emotion/react';
 import { useEffect } from 'react';
 import { Dialog, DialogType } from '@fluentui/react';
 import { LoadingSpinner } from '@bfc/ui-shared';

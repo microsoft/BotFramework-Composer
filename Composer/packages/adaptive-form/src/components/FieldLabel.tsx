@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 /** @jsx jsx */
-import { jsx } from '@emotion/core';
+import { jsx } from '@emotion/react';
 import React, { useRef } from 'react';
 import { TooltipDelay } from '@fluentui/react/lib/Tooltip';
 import { Label } from '@fluentui/react/lib/Label';

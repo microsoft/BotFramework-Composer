@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx, css } from '@emotion/core';
+import { jsx, css } from '@emotion/react';
 import { WidgetContainerProps, WidgetComponent, useShellApi } from '@bfc/extension-client';
 
 import { CardComment } from './CardComment';

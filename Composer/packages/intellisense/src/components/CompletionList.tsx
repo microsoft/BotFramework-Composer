@@ -4,7 +4,7 @@
 /** @jsx jsx */
 import React from 'react';
 import { CompletionItem } from 'vscode-languageserver-types';
-import { css, jsx } from '@emotion/core';
+import { css, jsx } from '@emotion/react';
 
 import { CompletionElement } from './CompletionElement';
 

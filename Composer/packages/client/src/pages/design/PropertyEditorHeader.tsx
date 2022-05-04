@@ -2,9 +2,9 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx } from '@emotion/core';
+import { jsx } from '@emotion/react';
 import React, { useMemo } from 'react';
-import { css } from '@emotion/core';
+import { css } from '@emotion/react';
 import { FontSizes, NeutralColors } from '@fluentui/theme';
 import formatMessage from 'format-message';
 import { Link } from '@fluentui/react/lib/Link';

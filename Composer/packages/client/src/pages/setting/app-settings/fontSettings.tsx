@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx } from '@emotion/core';
+import { jsx } from '@emotion/react';
 import React from 'react';
 import { Label } from '@fluentui/react/lib/Label';
 import { useId } from '@fluentui/react-hooks';

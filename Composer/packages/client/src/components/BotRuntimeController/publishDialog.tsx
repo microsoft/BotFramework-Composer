@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx, css } from '@emotion/core';
+import { jsx, css } from '@emotion/react';
 import React, { useCallback, Fragment } from 'react';
 import { Dialog, DialogType } from '@fluentui/react/lib/Dialog';
 import { FontWeights, FontSizes } from '@fluentui/react/lib/Styling';

@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx, css, CacheProvider } from '@emotion/core';
+import { jsx, css, CacheProvider } from '@emotion/react';
 import createCache from '@emotion/cache';
 import React, { useRef, useMemo, useEffect } from 'react';
 import isEqual from 'lodash/isEqual';
@@ -36,7 +36,8 @@ formatMessage.setup({
 });
 
 const emotionCache = createCache({
-  // @ts-ignore
+  key: 'adaptive-form-cache',
+  // @ts-expect-error
   nonce: window.__nonce__,
 });
 

@@ -3,7 +3,7 @@
 
 /** @jsx jsx */
 import React, { useState, useRef } from 'react';
-import { jsx, css } from '@emotion/core';
+import { jsx, css } from '@emotion/react';
 import { FocusZone, FocusZoneDirection } from '@fluentui/react/lib/FocusZone';
 import formatMessage from 'format-message';
 

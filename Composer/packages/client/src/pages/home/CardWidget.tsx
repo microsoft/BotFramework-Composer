@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx, SerializedStyles } from '@emotion/core';
+import { jsx, SerializedStyles } from '@emotion/react';
 import React, { useState } from 'react';
 import { Image, ImageFit, ImageLoadState } from '@fluentui/react/lib/Image';
 import { Link } from '@fluentui/react/lib/Link';

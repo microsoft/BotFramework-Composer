@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 /** @jsx jsx */
-import { css, jsx, SerializedStyles } from '@emotion/core';
+import { css, jsx, SerializedStyles } from '@emotion/react';
 import React, { useState } from 'react';
 import { NeutralColors } from '@fluentui/theme';
 import { IconButton } from '@fluentui/react/lib/Button';

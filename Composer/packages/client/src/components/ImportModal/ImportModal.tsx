@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx } from '@emotion/core';
+import { jsx } from '@emotion/react';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { navigate, RouteComponentProps } from '@reach/router';
 import { Dialog, DialogType } from '@fluentui/react/lib/Dialog';

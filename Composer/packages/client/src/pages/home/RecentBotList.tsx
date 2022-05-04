@@ -3,7 +3,7 @@
 
 /* eslint-disable react/display-name */
 /** @jsx jsx */
-import { jsx } from '@emotion/core';
+import { jsx } from '@emotion/react';
 import { TooltipHost } from '@fluentui/react/lib/Tooltip';
 import { Link } from '@fluentui/react/lib/Link';
 import { Sticky, StickyPositionType } from '@fluentui/react/lib/Sticky';

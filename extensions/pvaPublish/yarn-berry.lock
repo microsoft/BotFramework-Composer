@@ -1411,7 +1411,7 @@ __metadata:
 
 "@bfc/extension-client@file:../../Composer/packages/extension-client::locator=pva-publish-composer%40workspace%3A.":
   version: 1.0.0
-  resolution: "@bfc/extension-client@file:../../Composer/packages/extension-client#../../Composer/packages/extension-client::hash=4d0d7c&locator=pva-publish-composer%40workspace%3A."
+  resolution: "@bfc/extension-client@file:../../Composer/packages/extension-client#../../Composer/packages/extension-client::hash=71e731&locator=pva-publish-composer%40workspace%3A."
   dependencies:
     debug: ^4.1.1
     lodash: ^4.17.19
@@ -1420,7 +1420,7 @@ __metadata:
     "@botframework-composer/types": "*"
     react: 16.13.1
     react-dom: 16.13.1
-  checksum: 9e0ae4a7ccbc2ab670cd84b19cbf8398542e75fbc1664c0c1c615f48fde2d8ba9a1a0ec31ca2e11c46900731e63bb99c26db19dcd885d3058d12fda49db34da8
+  checksum: e44da46ff0937343723a398d49c46074ccfb1eac67f81dc29e8abea5e886d85d2d85ecb1b520894bc6954ad1cd9d8b273d605ecd5a55d5443442416ab898c628
   languageName: node
   linkType: hard
 

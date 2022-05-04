@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx } from '@emotion/core';
+import { jsx } from '@emotion/react';
 import React, { useMemo, useCallback, useEffect } from 'react';
 import formatMessage from 'format-message';
 import get from 'lodash/get';

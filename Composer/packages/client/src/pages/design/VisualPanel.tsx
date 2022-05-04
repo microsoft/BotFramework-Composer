@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx } from '@emotion/core';
+import { jsx } from '@emotion/react';
 import React, { useEffect, useMemo, useState } from 'react';
 import formatMessage from 'format-message';
 import { JsonEditor } from '@bfc/code-editor';

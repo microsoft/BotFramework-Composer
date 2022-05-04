@@ -5,7 +5,7 @@
 import path from 'path';
 
 import { useMemo, useState, useRef, useEffect } from 'react';
-import { jsx, css } from '@emotion/core';
+import { jsx, css } from '@emotion/react';
 import { Icon } from '@fluentui/react/lib/Icon';
 import { IconButton } from '@fluentui/react/lib/Button';
 import { Link } from '@fluentui/react/lib/Link';

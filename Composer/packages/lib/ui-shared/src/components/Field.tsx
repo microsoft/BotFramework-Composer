@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx } from '@emotion/core';
+import { jsx } from '@emotion/react';
 import { Dropdown, IDropdownProps, IDropdownStyles } from '@fluentui/react/lib/Dropdown';
 import React, { useCallback, useMemo } from 'react';
 import { TextField as FluentTextField, ITextFieldProps, ITextFieldStyles } from '@fluentui/react/lib/TextField';

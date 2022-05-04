@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx } from '@emotion/core';
+import { jsx } from '@emotion/react';
 import formatMessage from 'format-message';
 import { FontIcon } from '@fluentui/react/lib/Icon';
 import { Link } from '@fluentui/react/lib/Link';

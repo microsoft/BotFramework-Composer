@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx } from '@emotion/core';
+import { jsx } from '@emotion/react';
 import { FunctionComponent, useMemo, useContext } from 'react';
 import { WidgetContainerProps } from '@bfc/extension-client';
 
@@ -98,7 +98,7 @@ export const SwitchConditionWidget: FunctionComponent<SwitchConditionWidgetProps
           </ElementMeasurer>
         </NodeWrapper>
       </OffsetContainer>
-      <OffsetContainer css={{ zIndex: 100 }} offset={choiceNode.offset}>
+      <OffsetContainer offset={choiceNode.offset}>
         <Diamond
           data-testid="SwitchConditionDiamond"
           onClick={() => {

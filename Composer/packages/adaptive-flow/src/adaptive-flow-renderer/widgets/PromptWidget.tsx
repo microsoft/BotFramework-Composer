@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx } from '@emotion/core';
+import { jsx } from '@emotion/react';
 import { FC, useMemo, useContext } from 'react';
 import { PromptTab } from '@bfc/shared';
 import { WidgetContainerProps } from '@bfc/extension-client';

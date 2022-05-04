@@ -3,7 +3,7 @@
 
 /** @jsx jsx */
 import { FieldProps, UIOptions } from '@bfc/extension-client';
-import { css, jsx } from '@emotion/core';
+import { css, jsx } from '@emotion/react';
 import React from 'react';
 
 import { isPropertyHidden, resolvePropSchema } from '../utils';

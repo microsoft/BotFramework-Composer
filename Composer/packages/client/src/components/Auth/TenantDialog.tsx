@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx } from '@emotion/core';
+import { jsx } from '@emotion/react';
 import { DialogWrapper, DialogTypes } from '@bfc/ui-shared';
 import { FontSizes } from '@fluentui/theme';
 import { FontWeights } from '@fluentui/react/lib/Styling';

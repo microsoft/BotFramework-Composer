@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx, css } from '@emotion/core';
+import { jsx, css } from '@emotion/react';
 import formatMessage from 'format-message';
 import { ITextField, TextField } from '@fluentui/react/lib/TextField';
 import { IButtonStyles, IconButton } from '@fluentui/react/lib/Button';

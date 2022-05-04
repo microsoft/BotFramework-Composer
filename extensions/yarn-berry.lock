@@ -51,6 +51,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@emotion/eslint-plugin@npm:11.7.0":
+  version: 11.7.0
+  resolution: "@emotion/eslint-plugin@npm:11.7.0"
+  peerDependencies:
+    eslint: 6 || 7 || 8
+  checksum: 71bdeed3663e00af57631d810d615517051e8941799ef9177083e3d5db45aada21288383bcb7d150aaa29a6519b2cabe3dc9a2e61f1262290e4b5b3d5644f93a
+  languageName: node
+  linkType: hard
+
 "@types/eslint-visitor-keys@npm:^1.0.0":
   version: 1.0.0
   resolution: "@types/eslint-visitor-keys@npm:1.0.0"
@@ -460,6 +469,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "composer-extensions@workspace:."
   dependencies:
+    "@emotion/eslint-plugin": 11.7.0
     "@types/fs-extra": ^9.0.6
     "@typescript-eslint/eslint-plugin": 2.34.0
     "@typescript-eslint/parser": 2.34.0
@@ -468,7 +478,6 @@ __metadata:
     eslint: 7.0.0
     eslint-config-prettier: 6.11.0
     eslint-plugin-cypress: 2.11.1
-    eslint-plugin-emotion: 10.0.27
     eslint-plugin-format-message: 6.2.3
     eslint-plugin-import: 2.20.2
     eslint-plugin-jsx-a11y: 6.2.3
@@ -744,13 +753,6 @@ __metadata:
   peerDependencies:
     eslint: ">= 3.2.1"
   checksum: ea5d0ae4f5072e4f7b23f3c652f5f0bd061d514b04af532c8b7e0a3f813475823430908c02e0ca74dd7b23e77283b6a0f6d07364e2bf829a0f5cbf24d52ab39f
-  languageName: node
-  linkType: hard
-
-"eslint-plugin-emotion@npm:10.0.27":
-  version: 10.0.27
-  resolution: "eslint-plugin-emotion@npm:10.0.27"
-  checksum: ff0e311503b08cd9ee260d5ce9da70fed8bc57802149e14181fd3a4865c498f61c3e11ec5843bfd35c26b7128ecaca863408f30b7df513074a119ea9ae8e60d5
   languageName: node
   linkType: hard
 

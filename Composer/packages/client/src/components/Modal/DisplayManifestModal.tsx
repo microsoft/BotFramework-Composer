@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx, css } from '@emotion/core';
+import { jsx, css } from '@emotion/react';
 import { useEffect, useMemo } from 'react';
 import { ContextualMenu } from '@fluentui/react/lib/ContextualMenu';
 import { Dialog, DialogFooter, DialogType } from '@fluentui/react/lib/components/Dialog';

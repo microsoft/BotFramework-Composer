@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx, css } from '@emotion/core';
+import { jsx, css } from '@emotion/react';
 import { SharedColors } from '@fluentui/theme';
 import { Link } from '@fluentui/react/lib/Link';
 import { FontWeights } from '@fluentui/react/lib/Styling';

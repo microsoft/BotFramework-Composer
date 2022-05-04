@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx, css } from '@emotion/core';
+import { jsx, css } from '@emotion/react';
 import { DefaultButton, CommandBarButton, IButtonStyles } from '@fluentui/react/lib/Button';
 import { FontWeights, FontSizes } from '@fluentui/react/lib/Styling';
 import { IContextualMenuItem } from '@fluentui/react/lib/ContextualMenu';

@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { css, jsx } from '@emotion/core';
+import { css, jsx } from '@emotion/react';
 import React from 'react';
 import { Checkbox } from '@fluentui/react/lib/Checkbox';
 import { Link } from '@fluentui/react/lib/Link';
