@@ -353,6 +353,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
       const onRenderItem = (item: IOverflowSetItemProps): JSX.Element => {
         return (
           <IconButton
+            aria-Label={formatMessage('Edit knowledge base name')}
             menuIconProps={{ iconName: 'Edit' }}
             styles={{
               root: {

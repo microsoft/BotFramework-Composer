@@ -165,7 +165,13 @@ const TextViewItem = React.memo(
             {onRenderDisplayText?.() ?? value.replace(/\r?\n/g, '↵')}
           </Text>
         </Stack>
-        <RemoveIcon className={removeIconClassName} iconProps={{ iconName: 'Trash' }} tabIndex={-1} onClick={remove} />
+        <RemoveIcon
+          ariaLabel={formatMessage('Remove item')}
+          className={removeIconClassName}
+          iconProps={{ iconName: 'Trash' }}
+          tabIndex={-1}
+          onClick={remove}
+        />
       </TextViewItemRoot>
     );
   }
