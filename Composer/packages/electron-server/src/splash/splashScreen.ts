@@ -50,7 +50,6 @@ export const initSplashScreen = async ({
     webPreferences: {
       // This is necessary to enable loading local images in the url protocol (window.loadURL)
       webSecurity: false, // lgtm [js/disabling-electron-websecurity]
-      nativeWindowOpen: true,
     },
   });
 

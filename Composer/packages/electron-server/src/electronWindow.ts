@@ -35,7 +35,6 @@ export default class ElectronWindow {
         nodeIntegrationInWorker: false,
         nodeIntegration: false,
         preload: join(__dirname, 'preload.js'),
-        nativeWindowOpen: true,
       },
       show: false,
       title: `Bot Framework Composer (v${app.getVersion()})`,
