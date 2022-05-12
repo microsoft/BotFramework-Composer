@@ -205,6 +205,7 @@ export const ModalityPivot = React.memo((props: Props) => {
     (itemProps: IContextualMenuItemProps, defaultRenders: IContextualMenuItemRenderFunctions) =>
       itemProps.item.itemType === ContextualMenuItemType.Header ? (
         <ItemWithTooltip
+          aria-label={formatMessage('Learn more about adding more to this response')}
           itemText={defaultRenders.renderItemName(itemProps)}
           tooltipId="modality-add-menu-header"
           tooltipText={formatMessage.rich('To learn more, <a>visit this document</a>.', {
@@ -217,6 +218,7 @@ export const ModalityPivot = React.memo((props: Props) => {
         />
       ) : (
         <ItemWithTooltip
+          aria-label={formatMessage('Learn more about {item}', { item: itemProps.item.text })}
           itemText={defaultRenders.renderItemName(itemProps)}
           tooltipId={itemProps.item.key}
           tooltipText={getModalityTooltipText(itemProps.item.key as ModalityType)}
@@ -393,7 +395,12 @@ export const ModalityPivot = React.memo((props: Props) => {
           ))}
         </Pivot>
         {menuItems.filter((item) => item.itemType !== ContextualMenuItemType.Header).length && (
-          <IconButton iconProps={addButtonIconProps} menuProps={addMenuProps} onRenderMenuIcon={() => null} />
+          <IconButton
+            aria-label={formatMessage('Add more to this response')}
+            iconProps={addButtonIconProps}
+            menuProps={addMenuProps}
+            onRenderMenuIcon={() => null}
+          />
         )}
       </Stack>
 

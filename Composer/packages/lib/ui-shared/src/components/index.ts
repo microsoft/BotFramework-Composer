@@ -15,3 +15,4 @@ export * from './CopyableText';
 export * from './SectionTitle';
 export * from './HelpTooltip';
 export * from './Field';
+export * from './SplitButton';

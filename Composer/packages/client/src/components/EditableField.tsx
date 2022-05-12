@@ -9,6 +9,7 @@ import { mergeStyleSets } from '@fluentui/style-utilities';
 import { IconButton } from '@fluentui/react/lib/Button';
 import { IIconProps } from '@fluentui/react/lib/Icon';
 import { Announced } from '@fluentui/react/lib/Announced';
+import formatMessage from 'format-message';
 
 import { FieldConfig, useForm } from '../hooks/useForm';
 import { useAfterRender } from '../hooks/useAfterRender';
@@ -296,6 +297,7 @@ const EditableField: React.FC<EditableFieldProps> = (props) => {
         />
         {enableIcon && (
           <IconButton
+            aria-label={formatMessage('Remove item {name}', { name: formData.value })}
             iconProps={{
               iconName: iconProps?.iconName,
               styles: mergeStyleSets(

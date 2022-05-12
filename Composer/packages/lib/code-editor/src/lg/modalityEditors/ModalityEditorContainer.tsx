@@ -159,6 +159,7 @@ export const ModalityEditorContainer: React.FC<Props> = ({
     ): JSX.Element | null =>
       itemProps?.itemType === DropdownMenuItemType.Header ? (
         <ItemWithTooltip
+          aria-label={formatMessage('Learn more about {option}', { option: itemProps.text })}
           itemText={defaultRender?.(itemProps)}
           tooltipId={itemProps?.data?.tooltipId}
           tooltipText={itemProps?.data?.tooltipText}
@@ -193,6 +194,7 @@ export const ModalityEditorContainer: React.FC<Props> = ({
             <OverflowSet
               items={[]}
               overflowItems={overflowMenuItems}
+              role="menu"
               onRenderItem={() => null}
               onRenderOverflowButton={onRenderOverflowButton}
             />

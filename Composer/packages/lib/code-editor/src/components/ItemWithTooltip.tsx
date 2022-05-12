@@ -11,6 +11,7 @@ import { HelpIconTooltip } from './HelpIconTooltip';
 const containerTokens = { childrenGap: 4 };
 
 type Props = {
+  'aria-label': string;
   tooltipId: string;
   itemText: string | JSX.Element | JSX.Element[] | React.ReactNode;
   tooltipText: string | JSX.Element | JSX.Element[];
@@ -19,9 +20,18 @@ type Props = {
 
 const defaultRender = (text: string) => <Text variant="small">{text}</Text>;
 
-export const ItemWithTooltip = React.memo(({ tooltipId, itemText, tooltipText: helpMessage, tooltipProps }: Props) => (
-  <Stack horizontal tokens={containerTokens} verticalAlign="center">
-    {typeof itemText === 'string' ? defaultRender(itemText) : itemText}
-    <HelpIconTooltip helpMessage={helpMessage} tooltipId={tooltipId} tooltipProps={tooltipProps} />
-  </Stack>
-));
+export const ItemWithTooltip = React.memo(
+  ({ tooltipId, itemText, tooltipText: helpMessage, tooltipProps, ...props }: Props) => (
+    <Stack horizontal tokens={containerTokens} verticalAlign="center">
+      {typeof itemText === 'string' ? defaultRender(itemText) : itemText}
+      <HelpIconTooltip
+        helpMessage={helpMessage}
+        tooltipId={tooltipId}
+        tooltipProps={{
+          ...props,
+          ...tooltipProps,
+        }}
+      />
+    </Stack>
+  )
+);

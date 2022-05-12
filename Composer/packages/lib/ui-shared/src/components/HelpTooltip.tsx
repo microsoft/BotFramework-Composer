@@ -46,6 +46,7 @@ export type HelpTooltipStyles = IStyleFunctionOrObject<
 >;
 
 export type HelpTooltipProps = Omit<ITooltipHostProps, 'styles'> & {
+  'aria-label': string;
   iconProps?: IIconProps & { 'data-testid'?: string };
   styles?: HelpTooltipStyles;
 };
@@ -57,6 +58,7 @@ export const HelpTooltip: React.FC<HelpTooltipProps> = ({ iconProps, ...props })
   return (
     <TooltipHost {...props} styles={classNames}>
       <Icon
+        data-is-focusable
         aria-label={props['aria-label']}
         className={classNames.helpIcon}
         iconName="Unknown"
