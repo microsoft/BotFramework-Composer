@@ -20,7 +20,7 @@ export const FieldLabel = React.memo((props: Props) => {
     <Stack horizontal tokens={{ childrenGap: 4 }} verticalAlign="center">
       {props.defaultRender}
       {props.optional ? <Text styles={{ root: { fontStyle: 'italic' } }}>({formatMessage('optional')})</Text> : null}
-      <HelpTooltip helpMessage={props.helpText} tooltipId={props.tooltipId} />
+      <HelpTooltip aria-label={props.helpText} helpMessage={props.helpText} tooltipId={props.tooltipId} />
     </Stack>
   );
 });

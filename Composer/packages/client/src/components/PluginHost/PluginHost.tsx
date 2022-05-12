@@ -40,6 +40,7 @@ interface PluginHostProps {
   pluginType: PluginType;
   bundleId: string;
   projectId: string;
+  role?: string;
 }
 
 /** Binds closures around Composer client code to plugin iframe's window object */
@@ -136,7 +137,7 @@ export const PluginHost: React.FC<PluginHostProps> = (props) => {
   }, [shell]);
 
   return (
-    <div css={containerStyles}>
+    <div css={containerStyles} role={props.role}>
       <iframe
         key={`${pluginName}.${bundleId}.${pluginType}`}
         ref={targetRef}

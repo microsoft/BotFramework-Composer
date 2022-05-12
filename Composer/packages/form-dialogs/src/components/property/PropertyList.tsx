@@ -64,6 +64,12 @@ const InternalPropertyList = React.memo((props: Props) => (
 
 export const PropertyList = (props: Props) => {
   const { kind } = props;
+  const helpText =
+    kind === 'required'
+      ? formatMessage(
+          'Required properties are properties that your bot will ask the user to provide. The user must provide values for all required properties.'
+        )
+      : formatMessage('Optional properties are properties the bot accepts if given but does not ask for.');
 
   return (
     <Root horizontalAlign="center">
@@ -71,16 +77,7 @@ export const PropertyList = (props: Props) => {
         <HeaderText>
           {kind === 'required' ? formatMessage('Required properties') : formatMessage('Optional properties')}
         </HeaderText>
-        <HelpTooltip
-          helpMessage={
-            kind === 'required'
-              ? formatMessage(
-                  'Required properties are properties that your bot will ask the user to provide. The user must provide values for all required properties.'
-                )
-              : formatMessage('Optional properties are properties the bot accepts if given but does not ask for.')
-          }
-          tooltipId={`${kind}-tooltip`}
-        />
+        <HelpTooltip aria-label={helpText} helpMessage={helpText} tooltipId={`${kind}-tooltip`} />
       </Header>
       <Droppable direction="vertical" droppableId={kind}>
         {(provided, { isDraggingOver }) => (

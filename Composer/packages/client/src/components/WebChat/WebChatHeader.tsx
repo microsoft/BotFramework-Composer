@@ -4,10 +4,11 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import React from 'react';
-import { ActionButton, DefaultButton, IButtonStyles, IconButton } from '@fluentui/react/lib/Button';
+import { ActionButton, IButtonStyles, IconButton } from '@fluentui/react/lib/Button';
 import { IContextualMenuProps } from '@fluentui/react/lib/ContextualMenu';
 import formatMessage from 'format-message';
 import { CommunicationColors, NeutralColors } from '@fluentui/theme';
+import { SplitButton } from '@bfc/ui-shared';
 
 import { RestartOption } from './types';
 
@@ -27,7 +28,7 @@ const customButtonStyles: IButtonStyles = {
   splitButtonDivider: {
     backgroundColor: `${NeutralColors.gray50}`,
     width: 1,
-    right: 26,
+    right: 28,
     position: 'absolute',
     top: 4,
     bottom: 4,
@@ -112,8 +113,7 @@ export const WebChatHeader: React.FC<WebChatHeaderProps> = ({
           onClick={onCloseWebChat}
         />
       </h4>
-      <DefaultButton
-        split
+      <SplitButton
         aria-roledescription="split button"
         ariaLabel="restart-conversation"
         disabled={isRestartButtonDisabled}

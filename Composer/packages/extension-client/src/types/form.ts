@@ -13,6 +13,7 @@ export type ChangeHandler<T = any> = (newValue?: T) => void;
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export interface FieldProps<T = any> {
+  aria?: Record<string, unknown>;
   className?: string;
   definitions: SchemaDefinitions | undefined;
   description?: string;

@@ -121,6 +121,7 @@ export const DefineEntityButton = React.memo((props: Props) => {
   const renderMenuItemHeader = React.useCallback(
     (itemProps: IContextualMenuItemProps, defaultRenders: IContextualMenuItemRenderFunctions) => (
       <ItemWithTooltip
+        aria-label={formatMessage('Learn more about {item}', { item: itemProps.item.text })}
         itemText={defaultRenders.renderItemName(itemProps)}
         tooltipId="define-entity-menu-header"
         tooltipText={formatMessage.rich('Visit <a>this page</a> to learn more about entity definition.', {

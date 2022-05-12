@@ -48,6 +48,7 @@ export const GetStarted: React.FC<GetStartedProps> = (props) => {
 
   return (
     <Panel
+      closeButtonAriaLabel={formatMessage('Close Get Started panel')}
       customWidth="395px"
       isBlocking={false}
       isOpen={props.isOpen}

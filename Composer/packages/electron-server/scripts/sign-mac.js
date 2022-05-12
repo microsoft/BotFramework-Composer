@@ -111,8 +111,16 @@ try {
   for (const fw of frameworks) {
     const fwPath = path.join(baseBundlePath, 'Contents/Frameworks', fw, 'Versions/A');
     const dylibs = glob.sync('Libraries/*.dylib', { cwd: fwPath });
+    const helpers = glob.sync('Helpers/*', { cwd: fwPath });
 
     for (const lib of dylibs) {
+      log.info(`codesign -s ******* --timestamp=none --force "${path.join(fwPath, lib)}"`);
+      execSync(`codesign -s $DEV_CERT_ID --timestamp=none --force "${path.join(fwPath, lib)}"`, {
+        stdio: 'inherit',
+      });
+    }
+
+    for (const lib of helpers) {
       log.info(`codesign -s ******* --timestamp=none --force "${path.join(fwPath, lib)}"`);
       execSync(`codesign -s $DEV_CERT_ID --timestamp=none --force "${path.join(fwPath, lib)}"`, {
         stdio: 'inherit',
