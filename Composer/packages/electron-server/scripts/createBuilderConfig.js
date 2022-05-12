@@ -21,7 +21,7 @@ const createBuilderConfig = (platform) => {
       };
       break;
     case 'win':
-      builderConfig.electronDist = './customElectron';
+      builderConfig.electronDist = 'customElectron';
       break;
     default:
       throw new Error(
