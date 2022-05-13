@@ -61,10 +61,10 @@ const postRequestWithRetry = async (requestUri: string, requestOptions: AxiosReq
 };
 
 const appRegistrationProvisionMethod = (provisionConfig: ProvisionServiceConfig) => {
-  const { graphToken } = provisionConfig;
+  const { accessToken } = provisionConfig;
   const requestOptions: rp.RequestPromiseOptions = {
     json: true,
-    headers: { Authorization: `Bearer ${graphToken}` },
+    headers: { Authorization: `Bearer ${accessToken}` },
   } as rp.RequestPromiseOptions;
 
   const createApp = async (displayName: string) => {
