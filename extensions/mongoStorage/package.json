@@ -22,6 +22,7 @@
     "@types/mongoose": "^5.7.14"
   },
   "resolutions": {
-    "bl": "^4.0.3"
+    "bl": "^4.0.3",
+    "minimist": "1.2.6"
   }
 }
