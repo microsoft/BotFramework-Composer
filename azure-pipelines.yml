@@ -4,6 +4,7 @@ variables:
 jobs:
   - job: e2e
     displayName: End-to-End Tests
+    condition: ne(variables.SkipTests, 'true')
     # re-enable once we upgrade our subscription to cypress
     strategy:
       parallel: "4"
