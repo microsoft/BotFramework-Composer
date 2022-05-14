@@ -42,12 +42,6 @@
       }
     }
   },
-  "resolutions": {
-    "@botframework-composer/types": "file:../../Composer/packages/types",
-    "@microsoft/bf-cli-command": "4.14.0-dev.20210604.3f9ee15",
-    "json-ptr": "^2.1",
-    "minimist": "1.2.6"
-  },
   "dependencies": {
     "@bfc/extension": "file:../../Composer/packages/extension",
     "@bfc/extension-client": "file:../../Composer/packages/extension-client",
@@ -80,5 +74,12 @@
     "typescript": "^3.9.6",
     "webpack": "^4.43.0",
     "webpack-cli": "^3.3.12"
+  },
+  "resolutions": {
+    "@botframework-composer/types": "file:../../Composer/packages/types",
+    "@microsoft/bf-cli-command": "4.14.0-dev.20210604.3f9ee15",
+    "json-ptr": "^2.1",
+    "minimist": "1.2.6",
+    "tar": "6.1.11"
   }
 }

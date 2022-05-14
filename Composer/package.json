@@ -28,6 +28,7 @@
     "selfsigned": "1.10.8",
     "serialize-javascript": "^3.1.0",
     "set-value": "^3.0.2",
+    "tar": "^6.1.11",
     "terser-webpack-plugin": "^2.3.7",
     "underscore": "^1.12.1",
     "url-parse": "^1.5.10",
