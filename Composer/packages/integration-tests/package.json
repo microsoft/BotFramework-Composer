@@ -25,6 +25,7 @@
     "fs-extra": "^10.0.0"
   },
   "resolutions": {
+    "async": "3.2.3",
     "minimist": "1.2.6"
   }
 }
