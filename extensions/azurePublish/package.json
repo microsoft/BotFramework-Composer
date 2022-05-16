@@ -105,6 +105,7 @@
     "@botframework-composer/types": "file:../../Composer/packages/types",
     "async": "3.2.3",
     "bl": "^4.0.3",
+    "follow-redirects": "^1.15.0",
     "minimist": "1.2.6",
     "underscore": "^1.12.1"
   }

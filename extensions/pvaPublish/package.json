@@ -55,6 +55,7 @@
   },
   "resolutions": {
     "@botframework-composer/types": "file:../../Composer/packages/types",
+    "follow-redirects": "^1.15.0",
     "minimist": "1.2.6"
   }
 }

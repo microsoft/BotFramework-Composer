@@ -76,6 +76,7 @@
     "webpack-cli": "^3.3.12"
   },
   "resolutions": {
+    "follow-redirects": "^1.15.0",
     "minimist": "1.2.6"
   }
 }

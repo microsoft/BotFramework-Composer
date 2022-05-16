@@ -20,6 +20,7 @@
     "ejs": "^3.1.6",
     "elliptic": "^6.5.3",
     "express": "4.17.1",
+    "follow-redirects": "^1.15.0",
     "immer": "^9.0.6",
     "json-ptr": "^2.1",
     "kind-of": "^6.0.3",
