@@ -22,7 +22,7 @@
   },
   "resolutions": {
     "@botframework-composer/types": "file:../../Composer/packages/types",
-    "async": "3.2.2",
+    "async": "3.2.3",
     "minimist": "1.2.6",
     "bl": "^4.0.3"
   },
