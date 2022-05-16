@@ -11,6 +11,7 @@
   "author": "",
   "license": "ISC",
   "resolutions": {
+    "async": "3.2.2",
     "minimist": "1.2.6"
   },
   "dependencies": {
