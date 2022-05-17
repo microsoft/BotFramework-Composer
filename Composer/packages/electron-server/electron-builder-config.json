@@ -3,9 +3,6 @@
   "asar": true,
   "appId": "com.microsoft.botframework.composer",
   "copyright": "Copyright © 2020 Microsoft Corporation",
-  "electronDownload": {
-    "version": "8.2.4"
-  },
   "directories": {
     "buildResources": "resources",
     "output": "dist"
