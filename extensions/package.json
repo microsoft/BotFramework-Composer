@@ -12,6 +12,7 @@
   "license": "ISC",
   "resolutions": {
     "async": "3.2.3",
+    "ansi-regex": "6.0.1",
     "minimist": "1.2.6"
   },
   "dependencies": {
