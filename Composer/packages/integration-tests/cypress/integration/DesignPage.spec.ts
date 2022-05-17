@@ -94,7 +94,7 @@ context('breadcrumb', () => {
     });
     cy.findAllByText('Add new trigger').click({ force: true });
     cy.findByTestId('triggerTypeDropDown').click();
-    cy.get('[title="Intent recognized"]').click();
+    cy.findByText('Intent recognized').click();
     cy.findByTestId('TriggerName').type('myTrigger1');
     cy.findByTestId('RegExField').type('test');
     cy.findByTestId('triggerFormSubmit').click();
@@ -106,7 +106,7 @@ context('breadcrumb', () => {
     });
     cy.findAllByText('Add new trigger').click({ force: true });
     cy.findByTestId('triggerTypeDropDown').click();
-    cy.get('[title="Dialog events"]').click();
+    cy.findByText('Dialog events').click();
     cy.findByText('Select an event type').click();
     cy.findByText('Dialog started (Begin dialog event)').click();
     cy.findByTestId('triggerFormSubmit').click();
@@ -118,7 +118,7 @@ context('breadcrumb', () => {
     });
     cy.findAllByText('Add new trigger').click({ force: true });
     cy.findByTestId('triggerTypeDropDown').click();
-    cy.get('[title="Custom events"]').click();
+    cy.findByText('Custom events').click();
     cy.findByTestId('CustomEventName').type('myCustomEvent');
     cy.findByTestId('triggerFormSubmit').click();
     cy.findAllByText('myCustomEvent').should('exist');
@@ -129,7 +129,7 @@ context('breadcrumb', () => {
     });
     cy.findAllByText('Add new trigger').click({ force: true });
     cy.findByTestId('triggerTypeDropDown').click();
-    cy.get('[title="Activities"]').click();
+    cy.findByText('Activities').click();
     cy.findByText('Select an activity type').click();
     cy.findByText('Activities (Activity received)').click();
     cy.findByTestId('triggerFormSubmit').click();
