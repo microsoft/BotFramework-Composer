@@ -2,13 +2,12 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { Interpolation, jsx } from '@emotion/react';
+import { jsx } from '@emotion/react';
 import React, { ReactNode } from 'react';
 
-interface OffsetContainerProps {
+interface OffsetContainerProps extends React.HTMLAttributes<HTMLElement> {
   offset: { x: number; y: number };
   children: ReactNode;
-  css?: Interpolation<unknown>;
 }
 
 export class OffsetContainer extends React.Component<OffsetContainerProps, object> {
