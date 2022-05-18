@@ -98,7 +98,7 @@ export const SwitchConditionWidget: FunctionComponent<SwitchConditionWidgetProps
           </ElementMeasurer>
         </NodeWrapper>
       </OffsetContainer>
-      <OffsetContainer offset={choiceNode.offset}>
+      <OffsetContainer css={{ zIndex: 100 }} offset={choiceNode.offset}>
         <Diamond
           data-testid="SwitchConditionDiamond"
           onClick={() => {
