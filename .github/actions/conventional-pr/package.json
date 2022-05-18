@@ -15,5 +15,8 @@
   },
   "devDependencies": {
     "typescript": "3.9.2"
+  },
+  "overrides": {
+    "node-fetch": "2.6.7"
   }
 }

@@ -82,6 +82,7 @@
     "follow-redirects": "^1.15.0",
     "json-ptr": "^2.1",
     "minimist": "1.2.6",
+    "node-fetch": "2.6.7",
     "tar": "6.1.11"
   }
 }
