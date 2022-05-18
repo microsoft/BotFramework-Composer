@@ -25,7 +25,6 @@
     "fs-extra": "^10.0.0"
   },
   "resolutions": {
-    "ansi-regex": "6.0.1",
     "async": "3.2.3",
     "minimist": "1.2.6"
   }

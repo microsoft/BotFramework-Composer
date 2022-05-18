@@ -78,7 +78,6 @@
   "resolutions": {
     "@botframework-composer/types": "file:../../Composer/packages/types",
     "@microsoft/bf-cli-command": "4.14.0-dev.20210604.3f9ee15",
-    "ansi-regex": "6.0.1",
     "axios": "^0.21.4",
     "follow-redirects": "^1.15.0",
     "json-ptr": "^2.1",

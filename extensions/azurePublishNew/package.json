@@ -80,7 +80,6 @@
   },
   "resolutions": {
     "@botframework-composer/types": "file:../../Composer/packages/types",
-    "ansi-regex": "6.0.1",
     "async": "3.2.3",
     "axios": "^0.21.4",
     "bl": "^4.0.3",
