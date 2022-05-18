@@ -23,6 +23,7 @@
     "webpack-cli": "^4.2.0"
   },
   "resolutions": {
+    "axios": "^0.21.4",
     "follow-redirects": "^1.15.0",
     "minimist": "1.2.6"
   }

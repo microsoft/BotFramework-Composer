@@ -21,6 +21,7 @@
     "@types/uuid": "^7.0.2"
   },
   "resolutions": {
+    "axios": "^0.21.4",
     "follow-redirects": "^1.15.0"
   }
 }
