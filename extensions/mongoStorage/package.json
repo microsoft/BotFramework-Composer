@@ -23,6 +23,7 @@
   },
   "resolutions": {
     "bl": "^4.0.3",
-    "minimist": "1.2.6"
+    "minimist": "1.2.6",
+    "simple-get": "2.8.2"
   }
 }

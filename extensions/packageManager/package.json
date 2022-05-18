@@ -80,6 +80,7 @@
     "@microsoft/bf-cli-command": "4.14.0-dev.20210604.3f9ee15",
     "axios": "^0.21.4",
     "follow-redirects": "^1.15.0",
+    "glob-parent": "5.1.2",
     "json-ptr": "^2.1",
     "minimist": "1.2.6",
     "node-fetch": "2.6.7",

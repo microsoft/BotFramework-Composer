@@ -38,7 +38,7 @@
     "format-message": "6.2.3",
     "fs-extra": "^9.0.1",
     "https-proxy-agent": "^5.0.0",
-    "node-fetch": "2.6.1",
+    "node-fetch": "2.6.7",
     "react": "^16.13.0",
     "react-dom": "^16.13.0"
   },
@@ -58,6 +58,7 @@
     "axios": "^0.21.4",
     "follow-redirects": "^1.15.0",
     "minimist": "1.2.6",
-    "node-fetch": "2.6.7"
+    "node-fetch": "2.6.7",
+    "tmpl": "1.0.5"
   }
 }
