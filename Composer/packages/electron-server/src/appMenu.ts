@@ -257,10 +257,10 @@ export function initAppMenu(win?: Electron.BrowserWindow) {
         ['Cut', 'Copy', 'Delete'].forEach((label) => {
           const nativeModeId = label + '-native';
           const actionModeId = label;
-          menu.getMenuItemById(nativeModeId).visible = mode === 'native';
-          menu.getMenuItemById(actionModeId).visible = mode === 'action';
+          menu.getMenuItemById(nativeModeId)!.visible = mode === 'native';
+          menu.getMenuItemById(actionModeId)!.visible = mode === 'action';
         });
-        menu.getMenuItemById('Paste-native').visible = mode === 'native';
+        menu.getMenuItemById('Paste-native')!.visible = mode === 'native';
       };
 
       // Turn shortcuts to Action editing mode when Flow Editor is focused.
@@ -271,7 +271,7 @@ export function initAppMenu(win?: Electron.BrowserWindow) {
         // Let menu enable/disable status reflects action selection states.
         const actionSelected = !!state.actionSelected;
         ['Cut', 'Copy', 'Delete'].forEach((id) => {
-          menu.getMenuItemById(id).enabled = actionSelected;
+          menu.getMenuItemById(id)!.enabled = actionSelected;
         });
       } else {
         toggleEditingMode(menu, 'native');
@@ -279,9 +279,9 @@ export function initAppMenu(win?: Electron.BrowserWindow) {
 
       // Let menu undo/redo status reflects history status
       const canUndo = !!state.canUndo;
-      menu.getMenuItemById('Undo').enabled = canUndo;
+      menu.getMenuItemById('Undo')!.enabled = canUndo;
       const canRedo = !!state.canRedo;
-      menu.getMenuItemById('Redo').enabled = canRedo;
+      menu.getMenuItemById('Redo')!.enabled = canRedo;
 
       Menu.setApplicationMenu(menu);
     });

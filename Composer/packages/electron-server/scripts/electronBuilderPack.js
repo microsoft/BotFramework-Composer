@@ -7,6 +7,7 @@ const { resolve } = require('path');
 const { execSync } = require('child_process');
 
 const { log } = require('./common');
+const { createBuilderConfig } = require('./createBuilderConfig');
 
 /*
  * Calls electron-builder to pre-pack the app contents into what
@@ -35,8 +36,9 @@ try {
       throw new Error('Platform detected is not Mac, Linux, or Windows.');
   }
 
-  // call electron-builder . --dir --config electron-builder-config.json
-  const cmd = `"${electronBuilderBinary}" --projectDir "${electronServerDir}" --dir --${platform} --x64 --config electron-builder-config.json`;
+  const configName = createBuilderConfig(platform);
+  // call electron-builder . --prepackaged --config electron-builder-config-{platform}.json
+  const cmd = `"${electronBuilderBinary}" --projectDir "${electronServerDir}" --dir --${platform} --x64 --config ${configName}`;
   log.info('Executing command: ', cmd);
 
   execSync(cmd, { stdio: 'inherit' }); // lgtm [js/shell-command-injection-from-environment]
