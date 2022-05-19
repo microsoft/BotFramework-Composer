@@ -3,12 +3,12 @@
 
 /** @jsx jsx */
 import React, { useEffect, useState, useRef, Fragment } from 'react';
-import { jsx } from '@emotion/core';
+import { jsx } from '@emotion/react';
 import { BotIndexer } from '@bfc/indexers';
 import { useRecoilValue } from 'recoil';
 import formatMessage from 'format-message';
 import get from 'lodash/get';
-import { css } from '@emotion/core';
+import { css } from '@emotion/react';
 import { Link } from '@fluentui/react/lib/Link';
 import { mergeStyleSets } from '@fluentui/react/lib/Styling';
 import { TextField } from '@bfc/ui-shared';

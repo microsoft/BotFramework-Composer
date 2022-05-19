@@ -3,7 +3,7 @@
 /** @jsx jsx */
 import { join, isAbsolute } from 'path';
 
-import { jsx, css } from '@emotion/core';
+import { jsx, css } from '@emotion/react';
 import React, { Fragment, useState, useMemo, useEffect, useCallback } from 'react';
 import formatMessage from 'format-message';
 import { DetailsList, SelectionMode, CheckboxVisibility, IDetailsRowProps } from '@fluentui/react/lib/DetailsList';

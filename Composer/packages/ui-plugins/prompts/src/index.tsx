@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx } from '@emotion/core';
+import { jsx } from '@emotion/react';
 import React from 'react';
 import { FlowWidget, PluginConfig, UIOptions } from '@bfc/extension-client';
 import { SDKKinds, getInputType, PromptTab, PromptTabTitles } from '@bfc/shared';

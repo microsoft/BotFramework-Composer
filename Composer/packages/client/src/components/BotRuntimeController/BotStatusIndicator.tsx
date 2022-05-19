@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx } from '@emotion/core';
+import { jsx } from '@emotion/react';
 import { useRef, useState, useMemo } from 'react';
 import { useRecoilValue } from 'recoil';
 import { SharedColors } from '@fluentui/theme';

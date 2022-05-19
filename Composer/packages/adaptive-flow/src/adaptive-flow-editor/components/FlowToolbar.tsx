@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx, css } from '@emotion/core';
+import { jsx, css } from '@emotion/react';
 import { useRef, useEffect, ReactNode } from 'react';
 import { ZoomInfo } from '@bfc/shared';
 import { IconButton, IButtonStyles } from '@fluentui/react/lib/Button';

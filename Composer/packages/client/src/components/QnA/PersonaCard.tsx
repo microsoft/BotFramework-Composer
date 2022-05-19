@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 /** @jsx jsx */
-import { jsx } from '@emotion/core';
+import { jsx } from '@emotion/react';
 import formatMessage from 'format-message';
 import { Persona, IPersonaProps, PersonaSize } from '@fluentui/react/lib/Persona';
 import { useRecoilValue } from 'recoil';

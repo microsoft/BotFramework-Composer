@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { css, jsx } from '@emotion/core';
+import { css, jsx } from '@emotion/react';
 import React, { useMemo, useEffect, Fragment, useState } from 'react';
 import AdaptiveForm, { FieldLabel } from '@bfc/adaptive-form';
 import { FieldProps, JSONSchema7, UIOptions } from '@bfc/extension-client';

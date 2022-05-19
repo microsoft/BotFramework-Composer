@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx } from '@emotion/core';
+import { jsx } from '@emotion/react';
 import { JsonEditor } from '@bfc/code-editor';
 import formatMessage from 'format-message';
 import { Link } from '@fluentui/react/lib/Link';

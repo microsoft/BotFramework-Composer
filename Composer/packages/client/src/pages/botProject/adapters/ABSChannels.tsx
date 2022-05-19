@@ -3,7 +3,7 @@
 
 /** @jsx jsx */
 import React, { useEffect, useState, Fragment } from 'react';
-import { jsx } from '@emotion/core';
+import { jsx } from '@emotion/react';
 import formatMessage from 'format-message';
 import { Dropdown, IDropdownOption } from '@fluentui/react/lib/Dropdown';
 import { Icon } from '@fluentui/react/lib/Icon';

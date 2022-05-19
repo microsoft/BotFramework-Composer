@@ -3,7 +3,7 @@
 
 /** @jsx jsx */
 import { CopyableText } from '@bfc/ui-shared';
-import { css, jsx } from '@emotion/core';
+import { css, jsx } from '@emotion/react';
 import { FontSizes } from '@fluentui/theme';
 import { FontWeights } from '@fluentui/style-utilities';
 import formatMessage from 'format-message';

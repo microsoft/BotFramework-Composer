@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 /** @jsx jsx */
-import { jsx } from '@emotion/core';
+import { jsx } from '@emotion/react';
 import React, { useEffect, useRef } from 'react';
 import { FieldProps } from '@bfc/extension-client';
 import { NeutralColors } from '@fluentui/theme';

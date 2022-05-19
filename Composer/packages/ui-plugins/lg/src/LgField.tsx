@@ -8,7 +8,7 @@ import { DiagnosticSeverity, FieldProps, useShellApi } from '@bfc/extension-clie
 import { filterTemplateDiagnostics } from '@bfc/indexers';
 import { CodeEditorSettings, LgMetaData, LgTemplateRef, LgType } from '@bfc/shared';
 import { OpenConfirmModal } from '@bfc/ui-shared';
-import { jsx } from '@emotion/core';
+import { jsx } from '@emotion/react';
 import formatMessage from 'format-message';
 import { Link } from '@fluentui/react/lib/Link';
 import { Stack } from '@fluentui/react/lib/Stack';

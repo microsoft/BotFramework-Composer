@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { css } from '@emotion/core';
+import { css } from '@emotion/react';
 import { ColorlessFontCSS, TruncatedCSS } from '@bfc/ui-shared';
 
 import { StandardNodeWidth, HeaderHeight } from '../../constants/ElementSizes';

@@ -4,7 +4,7 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 
 /** @jsx jsx */
-import { jsx, css } from '@emotion/core';
+import { jsx, css } from '@emotion/react';
 import { useContext, useCallback, useEffect } from 'react';
 import { generateActionTitle, PromptTab } from '@bfc/shared';
 import { useShellApi } from '@bfc/extension-client';

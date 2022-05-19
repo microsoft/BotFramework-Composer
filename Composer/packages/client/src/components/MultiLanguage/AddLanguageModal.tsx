@@ -4,7 +4,7 @@
 /** @jsx jsx */
 import without from 'lodash/without';
 import cloneDeep from 'lodash/cloneDeep';
-import { jsx } from '@emotion/core';
+import { jsx } from '@emotion/react';
 import React, { useState, useCallback, useMemo, useEffect } from 'react';
 import formatMessage from 'format-message';
 import { PrimaryButton, DefaultButton } from '@fluentui/react/lib/Button';

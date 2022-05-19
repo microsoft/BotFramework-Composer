@@ -3,7 +3,7 @@
 
 /** @jsx jsx */
 import { DropdownField } from '@bfc/ui-shared';
-import { jsx } from '@emotion/core';
+import { jsx } from '@emotion/react';
 import { useId } from '@fluentui/react-hooks';
 import kebabCase from 'lodash/kebabCase';
 import { FontSizes, mergeStyleSets } from '@fluentui/react/lib/Styling';

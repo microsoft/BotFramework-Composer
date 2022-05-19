@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 /** @jsx jsx */
-import { jsx, css } from '@emotion/core';
+import { jsx, css } from '@emotion/react';
 import React, { useCallback } from 'react';
 import { FocusZone, FocusZoneTabbableElements, IFocusZoneProps } from '@fluentui/react/lib/FocusZone';
 import { getFocusStyle, getTheme, mergeStyles } from '@fluentui/react/lib/Styling';

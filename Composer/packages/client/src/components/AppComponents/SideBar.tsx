@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx, css } from '@emotion/core';
+import { jsx, css } from '@emotion/react';
 import { NeutralColors, FontSizes } from '@fluentui/theme';
 import { useState } from 'react';
 import formatMessage from 'format-message';

@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { css, jsx } from '@emotion/core';
+import { css, jsx } from '@emotion/react';
 import { Fragment, useState, useEffect, useLayoutEffect, useRef } from 'react';
 import { FontSizes, FontWeights } from '@fluentui/react/lib/Styling';
 import { IconButton } from '@fluentui/react/lib/Button';

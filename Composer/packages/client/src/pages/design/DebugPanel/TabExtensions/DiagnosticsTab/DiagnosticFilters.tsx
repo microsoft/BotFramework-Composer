@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx } from '@emotion/core';
+import { jsx } from '@emotion/react';
 import formatMessage from 'format-message';
 import { DefaultButton } from '@fluentui/react/lib/Button';
 import React, { useEffect, useMemo } from 'react';

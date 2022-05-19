@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx } from '@emotion/core';
+import { jsx } from '@emotion/react';
 import {
   DetailsList,
   DetailsListLayoutMode,
@@ -17,7 +17,7 @@ import { FontIcon } from '@fluentui/react/lib/Icon';
 import formatMessage from 'format-message';
 import { mergeStyleSets } from '@fluentui/react/lib/Styling';
 import { FontSizes, SharedColors, FluentTheme } from '@fluentui/theme';
-import { css } from '@emotion/core';
+import { css } from '@emotion/react';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { Link } from '@fluentui/react/lib/Link';
 import { useEffect, useState, useMemo } from 'react';

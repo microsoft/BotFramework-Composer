@@ -4,7 +4,7 @@
 
 /** @jsx jsx */
 import { BotTemplate, localTemplateId } from '@bfc/shared';
-import { css, jsx } from '@emotion/core';
+import { css, jsx } from '@emotion/react';
 import formatMessage from 'format-message';
 import { CommandButton } from '@fluentui/react/lib/components/Button';
 import { Stack } from '@fluentui/react/lib/Stack';

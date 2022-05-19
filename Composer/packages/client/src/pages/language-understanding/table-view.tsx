@@ -3,7 +3,7 @@
 
 /* eslint-disable react/display-name */
 /** @jsx jsx */
-import { jsx } from '@emotion/core';
+import { jsx } from '@emotion/react';
 import { useRef, useEffect, useState, useMemo, useCallback } from 'react';
 import isEmpty from 'lodash/isEmpty';
 import get from 'lodash/get';

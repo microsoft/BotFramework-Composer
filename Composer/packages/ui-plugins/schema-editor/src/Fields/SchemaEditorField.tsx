@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { css, jsx } from '@emotion/core';
+import { css, jsx } from '@emotion/react';
 import React, { useMemo } from 'react';
 import AdaptiveForm from '@bfc/adaptive-form';
 import { useShellApi, JSONSchema7 } from '@bfc/extension-client';

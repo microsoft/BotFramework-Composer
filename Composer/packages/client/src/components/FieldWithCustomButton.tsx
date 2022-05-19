@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx, css } from '@emotion/core';
+import { jsx, css } from '@emotion/react';
 import React, { useState, useRef, Fragment, useEffect } from 'react';
 import { IDropdownOption } from '@fluentui/react/lib/Dropdown';
 import { FluentTheme, SharedColors } from '@fluentui/theme';
