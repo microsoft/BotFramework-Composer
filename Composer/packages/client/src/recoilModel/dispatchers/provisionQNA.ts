@@ -6,7 +6,7 @@ import { CallbackInterface, useRecoilCallback } from 'recoil';
 import { CognitiveServicesManagementClient } from '@azure/arm-cognitiveservices';
 import { TokenCredentials } from '@azure/ms-rest-js';
 import { SearchManagementClient } from '@azure/arm-search';
-import { SkuName } from '@azure/arm-search/src/models';
+import { SkuName } from '@azure/arm-search/esm/models';
 import { WebSiteManagementClient } from '@azure/arm-appservice';
 import { ApplicationInsightsManagementClient } from '@azure/arm-appinsights';
 
