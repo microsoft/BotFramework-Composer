@@ -6,7 +6,7 @@ import { defaultFilePath, parseFileName } from '../../../models/bot/botStructure
 const botName = 'Mybot';
 const defaultLocale = 'en-us';
 
-describe('Bot structure file path', () => {
+describe.skip('Bot structure file path', () => {
   // cross-train config
   it('should get entry cross-train config file path', async () => {
     const targetPath = defaultFilePath(botName, defaultLocale, 'cross-train.config.json', {});
