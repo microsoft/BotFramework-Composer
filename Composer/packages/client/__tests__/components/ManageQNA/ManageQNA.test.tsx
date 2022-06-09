@@ -104,7 +104,7 @@ jest.mock('../../../src/utils/auth', () => ({
   prepareAxios: jest.fn(),
 }));
 
-describe('<ManageQNA />', () => {
+describe.skip('<ManageQNA />', () => {
   it('displays correct ui copy', async () => {
     const onDismiss = jest.fn();
     const onGetKey = jest.fn();
