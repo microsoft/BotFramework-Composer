@@ -24,7 +24,7 @@ jobs:
       - name: Set Node Version
         uses: actions/setup-node@v1
         with:
-          node-version: 14.15.5
+          node-version: 14.17.0
       - name: Get yarn cache directory path
         id: yarn-cache-dir-path
         run: echo "::set-output name=dir::$(yarn cache dir)"
@@ -42,6 +42,8 @@ jobs:
       - name: yarn lint
         run: yarn lint:ci && yarn lint:extensions
       - name: yarn test:ci
+        env:
+          NODE_OPTIONS: "--max-old-space-size=8192"
         run: yarn test:ci
       - name: Coveralls
         uses: coverallsapp/github-action@v1.1.1
