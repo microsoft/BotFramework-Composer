@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { css, jsx } from '@emotion/core';
+import { css, jsx } from '@emotion/react';
 import React, { useMemo, useEffect, useState, useRef, useCallback } from 'react';
 import { useRecoilValue } from 'recoil';
 import { ConversationTrafficItem, DiagnosticSeverity } from '@botframework-composer/types';

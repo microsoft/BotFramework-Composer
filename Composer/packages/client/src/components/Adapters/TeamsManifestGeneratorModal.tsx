@@ -3,7 +3,7 @@
 
 /** @jsx jsx */
 import { v4 as uuidv4 } from 'uuid';
-import { jsx } from '@emotion/core';
+import { jsx } from '@emotion/react';
 import { DialogFooter } from '@fluentui/react/lib/Dialog';
 import { PrimaryButton } from '@fluentui/react/lib/Button';
 import formatMessage from 'format-message';

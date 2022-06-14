@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 /** @jsx jsx */
-import { jsx, css } from '@emotion/core';
+import { jsx, css } from '@emotion/react';
 import { OpenConfirmModal } from '@bfc/ui-shared';
 import formatMessage from 'format-message';
 import { Link } from '@fluentui/react/lib/Link';

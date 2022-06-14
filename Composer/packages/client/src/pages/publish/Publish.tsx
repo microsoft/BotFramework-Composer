@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx } from '@emotion/core';
+import { jsx } from '@emotion/react';
 import { useState, useEffect, useMemo, Fragment, useRef } from 'react';
 import { navigate, RouteComponentProps } from '@reach/router';
 import formatMessage from 'format-message';

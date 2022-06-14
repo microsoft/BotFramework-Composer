@@ -3,7 +3,7 @@
 
 /** @jsx jsx */
 import React, { Fragment } from 'react';
-import { jsx } from '@emotion/core';
+import { jsx } from '@emotion/react';
 import formatMessage from 'format-message';
 import { ActionButton, DefaultButton } from '@fluentui/react/lib/Button';
 import { useBoolean } from '@fluentui/react-hooks';

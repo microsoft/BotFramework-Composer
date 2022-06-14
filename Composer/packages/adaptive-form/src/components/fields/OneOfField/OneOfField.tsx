@@ -4,13 +4,13 @@
 /** @jsx jsx */
 
 import { FieldProps, useFormConfig } from '@bfc/extension-client';
-import { jsx } from '@emotion/core';
+import { jsx } from '@emotion/react';
 import { FluentTheme } from '@fluentui/theme';
 import formatMessage from 'format-message';
 import { Dropdown, IDropdownOption } from '@fluentui/react/lib/Dropdown';
 import { Icon } from '@fluentui/react/lib/Icon';
 import React, { useMemo, useState } from 'react';
-import { css } from '@emotion/core';
+import { css } from '@emotion/react';
 import { ResponsiveMode } from '@fluentui/react/lib/utilities/decorators/withResponsiveMode';
 
 import { getUiPlaceholder, resolveFieldWidget } from '../../../utils';

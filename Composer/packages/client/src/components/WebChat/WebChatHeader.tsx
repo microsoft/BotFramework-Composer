@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx } from '@emotion/core';
+import { jsx } from '@emotion/react';
 import React from 'react';
 import { ActionButton, IButtonStyles, IconButton } from '@fluentui/react/lib/Button';
 import { IContextualMenuProps } from '@fluentui/react/lib/ContextualMenu';

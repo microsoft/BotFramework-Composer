@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx } from '@emotion/core';
+import { jsx } from '@emotion/react';
 import React, { useEffect, useMemo, useRef } from 'react';
 import { DialogInfo, ITrigger, getFriendlyName, SDKKinds } from '@bfc/shared';
 import { Selection } from '@fluentui/react/lib/DetailsList';

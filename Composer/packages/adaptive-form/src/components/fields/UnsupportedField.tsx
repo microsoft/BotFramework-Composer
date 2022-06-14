@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 /** @jsx jsx */
-import { jsx } from '@emotion/core';
+import { jsx } from '@emotion/react';
 import React, { useState } from 'react';
 import { Link } from '@fluentui/react/lib/Link';
 import { FieldProps } from '@bfc/extension-client';

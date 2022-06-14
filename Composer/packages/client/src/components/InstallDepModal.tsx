@@ -4,7 +4,7 @@
 
 /** @jsx jsx */
 import { DialogTypes, DialogWrapper } from '@bfc/ui-shared/lib/components/DialogWrapper';
-import { jsx } from '@emotion/core';
+import { jsx } from '@emotion/react';
 import formatMessage from 'format-message';
 import { DefaultButton, PrimaryButton } from '@fluentui/react/lib/components/Button';
 import { DialogFooter } from '@fluentui/react/lib/components/Dialog';

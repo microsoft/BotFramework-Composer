@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx } from '@emotion/core';
+import { jsx } from '@emotion/react';
 import { DialogFooter } from '@fluentui/react/lib/Dialog';
 import { PrimaryButton } from '@fluentui/react/lib/Button';
 import { ScrollablePane } from '@fluentui/react/lib/ScrollablePane';

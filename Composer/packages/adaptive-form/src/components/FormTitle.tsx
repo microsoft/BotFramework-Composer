@@ -2,13 +2,13 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx } from '@emotion/core';
+import { jsx } from '@emotion/react';
 import React, { useMemo, useRef } from 'react';
 import { FontWeights } from '@fluentui/style-utilities';
 import { FontSizes } from '@fluentui/theme';
 import formatMessage from 'format-message';
 import { UIOptions, JSONSchema7, useShellApi, useRecognizerConfig } from '@bfc/extension-client';
-import { css } from '@emotion/core';
+import { css } from '@emotion/react';
 import { SDKKinds } from '@bfc/shared';
 import debounce from 'lodash/debounce';
 

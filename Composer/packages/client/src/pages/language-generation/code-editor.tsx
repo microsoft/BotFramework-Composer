@@ -7,7 +7,7 @@ import { EditorDidMount, LgCodeEditor } from '@bfc/code-editor';
 import { LgFile } from '@bfc/extension-client';
 import { filterTemplateDiagnostics } from '@bfc/indexers';
 import { CodeEditorSettings } from '@bfc/shared';
-import { jsx } from '@emotion/core';
+import { jsx } from '@emotion/react';
 import { RouteComponentProps } from '@reach/router';
 import debounce from 'lodash/debounce';
 import get from 'lodash/get';

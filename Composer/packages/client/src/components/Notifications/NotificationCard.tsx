@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx, css, keyframes } from '@emotion/core';
+import { jsx, css, keyframes } from '@emotion/react';
 import React, { useState } from 'react';
 import { IconButton, ActionButton } from '@fluentui/react/lib/Button';
 import { useRef } from 'react';

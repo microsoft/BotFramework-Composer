@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx } from '@emotion/core';
+import { jsx } from '@emotion/react';
 import React, { useState, useEffect } from 'react';
 import { FieldProps, useShellApi, MicrosoftIDialog } from '@bfc/extension-client';
 import { RegexRecognizer } from '@bfc/shared';

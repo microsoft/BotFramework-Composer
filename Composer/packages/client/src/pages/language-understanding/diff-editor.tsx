@@ -3,7 +3,7 @@
 
 /* eslint-disable react/display-name */
 /** @jsx jsx */
-import { jsx } from '@emotion/core';
+import { jsx } from '@emotion/react';
 import React, { useMemo } from 'react';
 import { Dropdown, IDropdownOption } from '@fluentui/react/lib/Dropdown';
 

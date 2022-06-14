@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx, css } from '@emotion/core';
+import { jsx, css } from '@emotion/react';
 import formatMessage from 'format-message';
 import { IconButton, IButtonStyles } from '@fluentui/react/lib/Button';
 import { Callout, DirectionalHint } from '@fluentui/react/lib/Callout';

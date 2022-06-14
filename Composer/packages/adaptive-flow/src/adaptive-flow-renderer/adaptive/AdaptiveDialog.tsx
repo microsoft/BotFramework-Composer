@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx } from '@emotion/core';
+import { jsx } from '@emotion/react';
 import { FC, Fragment } from 'react';
 import get from 'lodash/get';
 import { FlowEditorWidgetMap, FlowUISchema, SchemaDefinitions } from '@bfc/extension-client';

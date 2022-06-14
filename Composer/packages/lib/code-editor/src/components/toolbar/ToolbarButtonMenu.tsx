@@ -86,6 +86,7 @@ const svgIconStyle = { fill: FluentTheme.palette.neutralPrimary, margin: '0 4px'
 const iconStyles = { root: { color: FluentTheme.palette.neutralPrimary, margin: '0 4px', width: 16, height: 16 } };
 
 type ToolbarButtonMenuProps = {
+  ariaLabel: string;
   payload: ToolbarButtonPayload;
   disabled?: boolean;
 
@@ -138,7 +139,7 @@ const TooltipItem = React.memo(({ text, tooltip }: { text?: string; tooltip?: st
 });
 
 export const ToolbarButtonMenu = React.memo((props: ToolbarButtonMenuProps) => {
-  const { payload, disabled = false, dismissHandlerClassName = jsLgToolbarMenuClassName } = props;
+  const { payload, disabled = false, dismissHandlerClassName = jsLgToolbarMenuClassName, ariaLabel } = props;
 
   const [propertyTreeExpanded, setPropertyTreeExpanded] = React.useState<Record<string, boolean>>({});
   const uiStrings = React.useMemo(() => getStrings(payload.kind), [payload.kind]);
@@ -444,6 +445,7 @@ export const ToolbarButtonMenu = React.memo((props: ToolbarButtonMenuProps) => {
 
   return (
     <IconButton
+      aria-label={ariaLabel}
       className={dismissHandlerClassName}
       data-testid="menuButton"
       disabled={disabled}

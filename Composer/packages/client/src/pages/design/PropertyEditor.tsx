@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx } from '@emotion/core';
+import { jsx } from '@emotion/react';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import AdaptiveForm, { resolveRef, getUIOptions } from '@bfc/adaptive-form';
 import { FormErrors, JSONSchema7, useFormConfig, useShellApi } from '@bfc/extension-client';
@@ -12,7 +12,7 @@ import debounce from 'lodash/debounce';
 import get from 'lodash/get';
 import { MicrosoftAdaptiveDialog } from '@bfc/shared';
 import { useRecoilValue } from 'recoil';
-import { css } from '@emotion/core';
+import { css } from '@emotion/react';
 
 import { botDisplayNameState, dialogDiagnosticsSelectorFamily, projectMetaDataState } from '../../recoilModel';
 

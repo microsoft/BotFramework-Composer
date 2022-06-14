@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx, css } from '@emotion/core';
+import { jsx, css } from '@emotion/react';
 import React, { useEffect, useState, useRef, useCallback } from 'react';
 import { RouteComponentProps } from '@reach/router';
 import {

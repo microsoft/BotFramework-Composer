@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { css, jsx } from '@emotion/core';
+import { css, jsx } from '@emotion/react';
 import { SharedColors } from '@fluentui/theme';
 import formatMessage from 'format-message';
 import { ActionButton } from '@fluentui/react/lib/Button';

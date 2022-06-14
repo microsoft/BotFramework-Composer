@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx } from '@emotion/core';
+import { jsx } from '@emotion/react';
 import { DefaultButton } from '@fluentui/react/lib/Button';
 import { useSetRecoilState, useRecoilValue } from 'recoil';
 import { FontSizes, SharedColors, FluentTheme } from '@fluentui/theme';

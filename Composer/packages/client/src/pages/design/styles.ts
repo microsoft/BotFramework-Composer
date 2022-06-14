@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { css } from '@emotion/core';
+import { css } from '@emotion/react';
 import { mergeStyleSets, FontWeights } from '@fluentui/react/lib/Styling';
 import { NeutralColors, FontSizes } from '@fluentui/theme';
 

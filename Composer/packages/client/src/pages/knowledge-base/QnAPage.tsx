@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { css, jsx } from '@emotion/core';
+import { css, jsx } from '@emotion/react';
 import { useRecoilValue } from 'recoil';
 import React, { Fragment, useCallback, Suspense, useEffect, useState, useMemo } from 'react';
 import formatMessage from 'format-message';

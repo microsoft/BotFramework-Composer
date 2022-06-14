@@ -3,7 +3,7 @@
 
 import { FontWeights } from '@fluentui/react/lib/Styling';
 import { FontSizes } from '@fluentui/theme';
-import { css } from '@emotion/core';
+import { css } from '@emotion/react';
 
 export const styles = {
   dialog: {

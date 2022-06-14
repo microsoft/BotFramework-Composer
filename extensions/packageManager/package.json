@@ -51,7 +51,7 @@
     "@bfc/extension": "file:../../Composer/packages/extension",
     "@bfc/extension-client": "file:../../Composer/packages/extension-client",
     "@bfc/ui-shared": "file:../../Composer/packages/lib/ui-shared",
-    "@emotion/core": "^10.0.35",
+    "@emotion/react": "^11.1.3",
     "@fluentui/react": "^8.57.1",
     "@fluentui/theme": "2.5.0",
     "@microsoft/bf-dialog": "4.14.0-dev.20210604.3f9ee15",

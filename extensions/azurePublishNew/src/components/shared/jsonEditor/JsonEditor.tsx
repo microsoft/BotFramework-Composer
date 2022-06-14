@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 /** @jsx jsx */
-import { jsx, css, SerializedStyles } from '@emotion/core';
+import { jsx, css, SerializedStyles } from '@emotion/react';
 import React, { useRef } from 'react';
 import MonacoEditor, { EditorDidMount, EditorProps } from '@monaco-editor/react';
 import { NeutralColors, SharedColors } from '@fluentui/theme';

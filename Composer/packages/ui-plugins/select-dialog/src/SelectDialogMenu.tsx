@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { ClassNames } from '@emotion/core';
+import { ClassNames } from '@emotion/react';
 import React, { useMemo, useCallback, useState } from 'react';
 import {
   IContextualMenuItem,

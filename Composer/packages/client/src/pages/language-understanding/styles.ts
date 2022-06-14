@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { css } from '@emotion/core';
+import { css } from '@emotion/react';
 import { FontSizes, mergeStyles } from '@fluentui/react/lib/Styling';
 
 export const actionButton = css`

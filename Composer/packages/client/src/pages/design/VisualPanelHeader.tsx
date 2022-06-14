@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx } from '@emotion/core';
+import { jsx } from '@emotion/react';
 import React, { useMemo } from 'react';
 import formatMessage from 'format-message';
 import { Breadcrumb, IBreadcrumbItem } from '@fluentui/react/lib/Breadcrumb';
