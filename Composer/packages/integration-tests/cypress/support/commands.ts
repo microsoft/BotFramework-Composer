@@ -3,6 +3,7 @@
 
 import '@testing-library/cypress/add-commands';
 
+const COMMAND_DELAY = 500;
 let TemplateBotProjectId = '';
 
 Cypress.Commands.add('createBot', (botName: string, callback?: (bot: any) => void) => {
@@ -89,3 +90,10 @@ Cypress.on('uncaught:exception', (err) => {
   console.log('uncaught exception', err);
   return false;
 });
+
+for (const command of ['visit', 'click', 'type', 'clear']) {
+  Cypress.Commands.overwrite(command, (originalFn, ...args) => {
+    const origVal = originalFn(...args);
+    return new Promise((resolve) => setTimeout(() => resolve(origVal), COMMAND_DELAY));
+  });
+}
