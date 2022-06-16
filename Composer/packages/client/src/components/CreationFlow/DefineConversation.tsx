@@ -5,7 +5,7 @@
 /** @jsx jsx */
 import Path from 'path';
 
-import { jsx } from '@emotion/core';
+import { jsx } from '@emotion/react';
 import { DialogFooter } from '@fluentui/react/lib/Dialog';
 import formatMessage from 'format-message';
 import { PrimaryButton, DefaultButton } from '@fluentui/react/lib/Button';

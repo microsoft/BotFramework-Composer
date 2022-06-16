@@ -3,14 +3,14 @@
 
 /** @jsx jsx */
 import React, { useState, useEffect, useRef, Fragment } from 'react';
-import { jsx, keyframes } from '@emotion/core';
+import { jsx, keyframes } from '@emotion/react';
 import { BotIndexer } from '@bfc/indexers';
 import { useRecoilValue } from 'recoil';
 import { IDropdownOption } from '@fluentui/react/lib/Dropdown';
 import { Icon } from '@fluentui/react/lib/Icon';
 import formatMessage from 'format-message';
 import get from 'lodash/get';
-import { css } from '@emotion/core';
+import { css } from '@emotion/react';
 import { FontSizes } from '@fluentui/react/lib/Styling';
 import { NeutralColors } from '@fluentui/theme';
 import { PrimaryButton } from '@fluentui/react/lib/Button';

@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { css, jsx } from '@emotion/core';
+import { css, jsx } from '@emotion/react';
 import React, { useMemo, useCallback, useState, useEffect, useRef } from 'react';
 import { useRecoilValue } from 'recoil';
 import { v4 as uuidv4 } from 'uuid';

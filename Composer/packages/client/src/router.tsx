@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx, css } from '@emotion/core';
+import { jsx, css } from '@emotion/react';
 import React, { useEffect, Suspense } from 'react';
 import { Router, Redirect, RouteComponentProps } from '@reach/router';
 import { useRecoilValue } from 'recoil';

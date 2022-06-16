@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 /** @jsx jsx */
-import { jsx, css, SerializedStyles } from '@emotion/core';
+import { jsx, css, SerializedStyles } from '@emotion/react';
 import React, { useState, useEffect, useRef, Fragment } from 'react';
 import { TextField, ITextFieldStyles, ITextFieldProps, ITextField } from '@fluentui/react/lib/TextField';
 import { NeutralColors, SharedColors } from '@fluentui/theme';

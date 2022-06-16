@@ -2,14 +2,14 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx } from '@emotion/core';
+import { jsx } from '@emotion/react';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { DefaultButton, IconButton } from '@fluentui/react/lib/Button';
 import { TooltipHost } from '@fluentui/react/lib/Tooltip';
 import { IContextualMenuItem } from '@fluentui/react/lib/ContextualMenu';
 import { useRecoilValue } from 'recoil';
 import formatMessage from 'format-message';
-import { css } from '@emotion/core';
+import { css } from '@emotion/react';
 import { NeutralColors, CommunicationColors } from '@fluentui/theme';
 import { Spinner, SpinnerSize } from '@fluentui/react/lib/Spinner';
 import { DiagnosticSeverity } from '@botframework-composer/types';

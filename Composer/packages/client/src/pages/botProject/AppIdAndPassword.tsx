@@ -3,7 +3,7 @@
 
 /** @jsx jsx */
 import React, { useState, useEffect, useCallback, Fragment } from 'react';
-import { jsx, css } from '@emotion/core';
+import { jsx, css } from '@emotion/react';
 import { useRecoilValue } from 'recoil';
 import formatMessage from 'format-message';
 import { Link } from '@fluentui/react/lib/Link';

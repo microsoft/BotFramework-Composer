@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx, css } from '@emotion/core';
+import { jsx, css } from '@emotion/react';
 import React, { useState, useCallback, useRef, useEffect } from 'react';
 import formatMessage from 'format-message';
 import { IconMenu } from '@bfc/ui-shared';

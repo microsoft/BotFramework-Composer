@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx } from '@emotion/core';
+import { jsx } from '@emotion/react';
 import { Fragment, useState, useEffect, useCallback } from 'react';
 import { PublishTarget } from '@bfc/shared';
 import formatMessage from 'format-message';

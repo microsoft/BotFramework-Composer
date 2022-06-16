@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx, css } from '@emotion/core';
+import { jsx, css } from '@emotion/react';
 import { FluentTheme } from '@fluentui/theme';
 import { Text } from '@fluentui/react/lib/Text';
 

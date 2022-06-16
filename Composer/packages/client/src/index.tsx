@@ -3,7 +3,7 @@
 
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { CacheProvider } from '@emotion/core';
+import { CacheProvider } from '@emotion/react';
 import createCache from '@emotion/cache';
 import { RecoilRoot } from 'recoil';
 
@@ -15,7 +15,8 @@ import { DispatcherWrapper } from './recoilModel';
 const appHostElm = document.getElementById('root');
 
 const emotionCache = createCache({
-  // @ts-ignore
+  key: 'client-cache',
+  // @ts-expect-error
   nonce: window.__nonce__,
 });
 

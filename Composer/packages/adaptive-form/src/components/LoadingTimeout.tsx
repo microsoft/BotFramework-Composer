@@ -2,9 +2,9 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx } from '@emotion/core';
+import { jsx } from '@emotion/react';
 import React, { useState, useEffect } from 'react';
-import { css } from '@emotion/core';
+import { css } from '@emotion/react';
 import formatMessage from 'format-message';
 import { Spinner } from '@fluentui/react/lib/Spinner';
 

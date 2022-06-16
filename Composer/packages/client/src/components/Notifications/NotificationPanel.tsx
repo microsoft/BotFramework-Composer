@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { css, jsx } from '@emotion/core';
+import { css, jsx } from '@emotion/react';
 import React, { useCallback } from 'react';
 import { ActionButton } from '@fluentui/react/lib/Button';
 import { IPanelProps, Panel, PanelType } from '@fluentui/react/lib/Panel';

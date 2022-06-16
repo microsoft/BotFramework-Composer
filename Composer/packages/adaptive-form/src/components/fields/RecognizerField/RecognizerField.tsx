@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 /** @jsx jsx */
-import { jsx, css } from '@emotion/core';
+import { jsx, css } from '@emotion/react';
 import React, { useCallback, useMemo, useState, useEffect } from 'react';
 import { FieldProps, useShellApi, useRecognizerConfig } from '@bfc/extension-client';
 import { MicrosoftIRecognizer } from '@bfc/shared';

@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { css } from 'emotion';
+import { css } from '@emotion/css';
 
 export const publishRoot = css`
   position: relative;

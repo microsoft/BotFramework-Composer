@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx } from '@emotion/core';
+import { jsx } from '@emotion/react';
 import { Dialog, DialogType, DialogFooter } from '@fluentui/react/lib/Dialog';
 import { DefaultButton, PrimaryButton } from '@fluentui/react/lib/Button';
 import { Fragment, useState, useEffect } from 'react';

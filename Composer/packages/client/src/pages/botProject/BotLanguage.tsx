@@ -3,7 +3,7 @@
 
 /** @jsx jsx */
 import React, { Fragment, useMemo } from 'react';
-import { jsx, css } from '@emotion/core';
+import { jsx, css } from '@emotion/react';
 import { useRecoilValue } from 'recoil';
 import { ActionButton } from '@fluentui/react/lib/Button';
 import formatMessage from 'format-message';

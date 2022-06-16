@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx, css, SerializedStyles } from '@emotion/core';
+import { jsx, css, SerializedStyles } from '@emotion/react';
 import React, { useMemo } from 'react';
 import { FontWeights, FontSizes } from '@fluentui/react/lib/Styling';
 import { NeutralColors } from '@fluentui/theme';

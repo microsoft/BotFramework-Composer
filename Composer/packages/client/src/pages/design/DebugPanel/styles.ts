@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { css } from '@emotion/core';
+import { css } from '@emotion/react';
 
 export const expandedPanelHeaderHeight = 36;
 export const collapsedPaneHeaderHeight = 32;

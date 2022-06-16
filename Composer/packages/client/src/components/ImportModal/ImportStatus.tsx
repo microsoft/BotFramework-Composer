@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { css, jsx } from '@emotion/core';
+import { css, jsx } from '@emotion/react';
 import * as React from 'react';
 import { RouteComponentProps } from '@reach/router';
 import { Dialog, DialogType, IDialogContentProps } from '@fluentui/react/lib/Dialog';

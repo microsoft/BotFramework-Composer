@@ -116,6 +116,14 @@ botframework-schema@^4.11.1:
     uuid "^8.3.2"
     zod "~1.11.17"
 
+botframework-schema@^4.11.1:
+  version "4.16.0"
+  resolved "https://registry.yarnpkg.com/botframework-schema/-/botframework-schema-4.16.0.tgz#c471782bfd7c388fb18823d2bd1c910d4aadaddf"
+  integrity sha512-WdjmaRalazO7PT8K0BmEaDbIM1rvgPLuRFepsO6Pk8NVztj/zdm2mR5E450NfaKFV7ASLLtMtiMC3Dte/QgD1w==
+  dependencies:
+    uuid "^8.3.2"
+    zod "~1.11.17"
+
 express-serve-static-core@0.1.1:
   version "0.1.1"
   resolved "https://registry.yarnpkg.com/express-serve-static-core/-/express-serve-static-core-0.1.1.tgz#222358112a79bc9fbe00838232e8cd2e3132ef37"

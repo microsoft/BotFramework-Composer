@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx } from '@emotion/core';
+import { jsx } from '@emotion/react';
 import { IconButton } from '@fluentui/react/lib/Button';
 import { Fragment } from 'react';
 import { OverflowSet, IOverflowSetItemProps } from '@fluentui/react/lib/OverflowSet';

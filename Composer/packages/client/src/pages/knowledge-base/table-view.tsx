@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx } from '@emotion/core';
+import { jsx } from '@emotion/react';
 import { useRecoilValue } from 'recoil';
 import { OpenConfirmModal, dialogStyle } from '@bfc/ui-shared';
 import React, { useEffect, useState, useCallback, Fragment, useRef } from 'react';

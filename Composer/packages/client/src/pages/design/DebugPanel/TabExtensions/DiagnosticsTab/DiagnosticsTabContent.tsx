@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx } from '@emotion/core';
+import { jsx } from '@emotion/react';
 import React, { useState, useMemo } from 'react';
 import { useRecoilValue } from 'recoil';
 import { DiagnosticSeverity } from '@bfc/shared';

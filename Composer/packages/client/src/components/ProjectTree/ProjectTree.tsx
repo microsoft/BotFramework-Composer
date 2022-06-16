@@ -4,7 +4,7 @@
 /** @jsx jsx */
 import React, { useCallback, useState, useRef } from 'react';
 import { NeutralColors } from '@fluentui/theme';
-import { jsx, css } from '@emotion/core';
+import { jsx, css } from '@emotion/react';
 import { FocusZone, FocusZoneDirection } from '@fluentui/react/lib/FocusZone';
 import formatMessage from 'format-message';
 import { DialogInfo, ITrigger, Diagnostic, DiagnosticSeverity, LanguageFileImport, getFriendlyName } from '@bfc/shared';

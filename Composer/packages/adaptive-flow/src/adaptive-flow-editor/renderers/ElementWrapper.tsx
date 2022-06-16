@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { css, jsx } from '@emotion/core';
+import { css, jsx } from '@emotion/react';
 import { useRef, useContext, useEffect } from 'react';
 
 import { SelectionContext } from '../contexts/SelectionContext';

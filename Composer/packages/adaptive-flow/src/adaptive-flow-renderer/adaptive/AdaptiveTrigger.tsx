@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx } from '@emotion/core';
+import { jsx } from '@emotion/react';
 import { useState, useContext, useMemo, useRef } from 'react';
 import isEqual from 'lodash/isEqual';
 

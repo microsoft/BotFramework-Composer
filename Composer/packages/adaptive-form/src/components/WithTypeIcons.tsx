@@ -2,10 +2,10 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx } from '@emotion/core';
+import { jsx } from '@emotion/react';
 import { FieldProps, FieldWidget } from '@bfc/extension-client';
 import React from 'react';
-import { css } from '@emotion/core';
+import { css } from '@emotion/react';
 
 import { getFieldIconText } from '../utils/getFieldIconText';
 

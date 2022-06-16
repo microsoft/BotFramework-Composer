@@ -2,10 +2,10 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx } from '@emotion/core';
+import { jsx } from '@emotion/react';
 import React, { ReactNode } from 'react';
 
-interface OffsetContainerProps {
+interface OffsetContainerProps extends React.HTMLAttributes<HTMLElement> {
   offset: { x: number; y: number };
   children: ReactNode;
 }

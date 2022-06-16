@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { css, jsx } from '@emotion/core';
+import { css, jsx } from '@emotion/react';
 import { CompletionItemKind } from 'monaco-languageclient';
 import { FontIcon } from '@fluentui/react/lib/Icon';
 import { TooltipHost } from '@fluentui/react/lib/Tooltip';

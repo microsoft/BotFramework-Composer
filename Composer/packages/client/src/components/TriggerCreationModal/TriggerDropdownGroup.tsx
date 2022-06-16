@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx } from '@emotion/core';
+import { jsx } from '@emotion/react';
 import { FC, ReactNode, useCallback, useMemo, useState } from 'react';
 import { Stack } from '@fluentui/react/lib/Stack';
 import { Dropdown } from '@fluentui/react/lib/Dropdown';

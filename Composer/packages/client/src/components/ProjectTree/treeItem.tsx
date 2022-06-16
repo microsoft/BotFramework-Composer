@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx, css } from '@emotion/core';
+import { jsx, css } from '@emotion/react';
 import React, { useState, useCallback } from 'react';
 import { FontSizes, FluentTheme } from '@fluentui/theme';
 import { DefaultPalette, getFocusStyle, getTheme, mergeStyles } from '@fluentui/style-utilities';
@@ -466,7 +466,7 @@ export const TreeItem: React.FC<ITreeItemProps> = ({
             data-is-focusable
             aria-label={`${ariaLabel} ${warningContent} ${errorContent}`}
             className={treeItemFocusClass}
-            css={projectTreeItemContainer}
+            css={projectTreeItemContainer(0)}
             tabIndex={0}
             onBlur={item.onBlur}
             onFocus={item.onFocus}

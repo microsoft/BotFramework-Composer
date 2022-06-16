@@ -4,7 +4,7 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx } from '@emotion/core';
+import { jsx } from '@emotion/react';
 import { Split } from '@geoffcox/react-splitter';
 import { useEffect, useRef, useState } from 'react';
 import { useRecoilValue } from 'recoil';

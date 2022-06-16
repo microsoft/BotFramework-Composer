@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx } from '@emotion/core';
+import { jsx } from '@emotion/react';
 import { act } from 'react-test-renderer';
 import { useRecoilValue, useSetRecoilState, useRecoilState } from 'recoil';
 import { RenderResult } from '@botframework-composer/test-utils/lib/hooks';
