@@ -111,6 +111,7 @@ export const FieldToolbar = React.memo((props: FieldToolbarProps) => {
         commandBarButtonAs: () => (
           <TooltipTemplateButton
             key="template"
+            ariaLabel={formatMessage('Insert a template reference')}
             disabled={!templateRefPayload?.data?.templates?.length}
             dismissHandlerClassName={dismissHandlerClassName}
             payload={templateRefPayload}
@@ -123,6 +124,7 @@ export const FieldToolbar = React.memo((props: FieldToolbarProps) => {
         commandBarButtonAs: () => (
           <TooltipPropertyButton
             key="property"
+            ariaLabel={formatMessage('Insert a property reference in memory')}
             disabled={!propertyRefPayload?.data?.properties?.length}
             dismissHandlerClassName={dismissHandlerClassName}
             payload={propertyRefPayload}
@@ -134,6 +136,7 @@ export const FieldToolbar = React.memo((props: FieldToolbarProps) => {
         commandBarButtonAs: () => (
           <TooltipFunctionButton
             key="function"
+            ariaLabel={formatMessage('Insert an adaptive expression pre-built function')}
             dismissHandlerClassName={dismissHandlerClassName}
             payload={functionRefPayload}
           />
