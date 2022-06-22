@@ -31,7 +31,7 @@ jobs:
       - task: Cache@2
         displayName: Cache Cypress binary
         inputs:
-          key: cypress | $(Agent.OS) | Composer/yarn.lock
+          key: cypress | $(Agent.OS) | Composer/yarn-berry.lock
           path: /home/vsts/.cache/Cypress
       - script: yarn --frozen-lock-file
         displayName: yarn install
