@@ -33,7 +33,7 @@ jobs:
         inputs:
           key: cypress | $(Agent.OS) | Composer/yarn-berry.lock
           path: /home/vsts/.cache/Cypress
-      - script: yarn --frozen-lock-file
+      - script: yarn --immutable
         displayName: yarn install
         workingDirectory: Composer
       - script: yarn build
