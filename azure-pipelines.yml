@@ -69,14 +69,22 @@ jobs:
       vmImage: ubuntu-latest
     steps:
       - powershell: |
+          $find = '@npm';
+          $replace = '';
+
           Get-ChildItem -Recurse -Path '**\yarn-berry.lock' | % {
             $source = $_.FullName;
             $dest = $_.DirectoryName + "\yarn.lock"
             Write-Host $source;
             Write-Host $dest;
             Copy-Item -Path $source -Destination $dest -Force
+
+            $content = Get-Content -Raw $dest;
+
+            $content -Replace "$find", "$replace" | Set-Content $dest;
+            '--------------------'; get-content $dest; '====================';
           }
-        displayName: Copy yarn-berry.lock files to yarn.lock
+        displayName: Generate "yarn.lock" files for CG Detection
         continueOnError: true
 
       - powershell: |
