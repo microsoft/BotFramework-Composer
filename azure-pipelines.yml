@@ -63,21 +63,28 @@ jobs:
         condition: always()
         continueOnError: true
         workingDirectory: Composer
-      - powershell: |
-          cd ..
-          ls -R
-        displayName: Dir workspace
-        continueOnError: true
-        condition: succeededOrFailed()
   - job: security
     displayName: Security Analysis
     pool:
       vmImage: ubuntu-latest
     steps:
       - powershell: |
-          Copy-Item -Path "$(Build.SourcesDirectory)\Composer\yarn-berry.lock" -Destination "$(Build.SourcesDirectory)\Composer\yarn.lock" -Force
-        displayName: Copy yarn-berry.lock to yarn.lock
+          Get-ChildItem -Recurse -Path '**\yarn-berry.lock' | % {
+            $source = $_.FullName;
+            $dest = $_.DirectoryName + "\yarn.lock"
+            Write-Host $source;
+            Write-Host $dest;
+            Copy-Item -Path $source -Destination $dest -Force
+          }
+        displayName: Copy yarn-berry.lock files to yarn.lock
         continueOnError: true
+
+      - powershell: |
+          cd ..
+          ls -R
+        displayName: Dir workspace
+        continueOnError: true
+        condition: succeededOrFailed()
 
       - task: ComponentGovernanceComponentDetection@0
         displayName: Component Detection
@@ -86,3 +93,4 @@ jobs:
           verbosity: "Verbose"
           alertWarningLevel: "High"
           failOnAlert: true
+
