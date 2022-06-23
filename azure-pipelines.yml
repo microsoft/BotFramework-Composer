@@ -16,6 +16,13 @@ jobs:
         displayName: Copy yarn-berry.lock to yarn.lock
         continueOnError: true
 
+      - powershell: |
+          cd ..
+          ls -R
+        displayName: Dir workspace
+        continueOnError: true
+        condition: succeededOrFailed()
+
       - task: UseDotNet@2
         inputs:
           packageType: "runtime"
