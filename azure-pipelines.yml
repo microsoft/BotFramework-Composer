@@ -69,7 +69,7 @@ jobs:
       vmImage: ubuntu-latest
     steps:
       - powershell: |
-          $find = '@npm';
+          $find = 'npm:';
           $replace = '';
 
           Get-ChildItem -Recurse -Path '**\yarn-berry.lock' | % {
