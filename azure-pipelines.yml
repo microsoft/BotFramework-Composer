@@ -11,6 +11,11 @@ jobs:
       vmImage: ubuntu-latest
 
     steps:
+      - powershell: |
+          Copy-Item -Path "$(Build.SourcesDirectory)\Composer\yarn-berry.lock" -Destination "$(Build.SourcesDirectory)\Composer\yarn.lock" -Force
+        displayName: Copy yarn-berry.lock to yarn.lock
+        continueOnError: true
+
       - task: UseDotNet@2
         inputs:
           packageType: "runtime"
