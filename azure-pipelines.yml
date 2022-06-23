@@ -71,6 +71,8 @@ jobs:
       - powershell: |
           $find = 'npm:';
           $replace = '';
+          $find2 = 'resolution:';
+          $replace2 = 'resolved:';
 
           Get-ChildItem -Recurse -Path '**\yarn-berry.lock' | % {
             $source = $_.FullName;
@@ -80,8 +82,8 @@ jobs:
             Copy-Item -Path $source -Destination $dest -Force
 
             $content = Get-Content -Raw $dest;
+            $content -Replace "$find", "$replace" -Replace "$find2", "$replace2" | Set-Content $dest;
 
-            $content -Replace "$find", "$replace" | Set-Content $dest;
             '--------------------'; get-content $dest; '====================';
           }
         displayName: Generate "yarn.lock" files for CG Detection
