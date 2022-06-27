@@ -11,9 +11,9 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
-    - run: cd Composer
-
-    - run: yarn up '*'
+    - run: |
+        cd Composer
+        yarn up '*'
 
     - name: Create pull request
       uses: peter-evans/create-pull-request@v3.1.0
