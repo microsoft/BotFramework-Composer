@@ -1,0 +1,24 @@
+name: Update dependencies
+
+on:
+  #schedule:
+  #- cron: '0 2 * * *'
+  workflow_dispatch:
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+
+    - run: yarn up '*'
+
+    - name: Create pull request
+      uses: peter-evans/create-pull-request@v3.1.0
+      with:
+        commit-message: Update all dependencies
+        branch: automatic_dependency_updates
+        title: Update all dependencies
+        body: An updated update of all NPM dependencies.
+        #labels: auto-merge
+        #reviewers: # optional
