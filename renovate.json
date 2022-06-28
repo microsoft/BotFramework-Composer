@@ -9,5 +9,11 @@
     ".github/**",
     "Composer/packages/**",
     "extensions/**"
+  ],
+  "packageRules": [
+    {
+      "matchUpdateTypes": ["patch", "minor"],
+      "groupName": "patch and minor updates)"
+    }
   ]
 }
