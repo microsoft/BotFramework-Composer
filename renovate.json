@@ -12,12 +12,12 @@
   ],
   "packageRules": [
     {
-      "matchUpdateTypes": ["patch", "minor"],
-      "groupName": "patch, minor dependencies"
+      "matchUpdateTypes": ["minor", "patch", "pin", "digest"],
+      "groupName": "minor, patch, pin, digest dependencies"
     },
     {
-      "matchUpdateTypes": ["major", "pin", "digest"],
-      "groupName": "major, pin, digest dependencies"
+      "matchUpdateTypes": ["major"],
+      "groupName": "major dependencies"
     }
   ]
 }
