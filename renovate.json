@@ -3,11 +3,8 @@
   "extends": [
     "config:base"
   ],
-  "ignorePaths": [
-    "docker-compose.yml",
-    "Dockerfile",
-    ".github/**",
-    "Composer/packages/**",
+  "includePaths": [
+    "Composer/**",
     "extensions/**"
   ],
   "packageRules": [
