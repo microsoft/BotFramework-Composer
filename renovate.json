@@ -5,7 +5,6 @@
   ],
   "ignorePaths": [
     "docker-compose.yml",
-    "docker-compose.yml",
     "Dockerfile",
     ".github/**",
     "Composer/packages/**",
