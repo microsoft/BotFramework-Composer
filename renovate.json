@@ -13,11 +13,11 @@
   "packageRules": [
     {
       "matchUpdateTypes": ["patch", "minor"],
-      "groupName": "patch and minor updates)"
+      "groupName": "patch and minor updates"
     },
     {
-      "matchUpdateTypes": ["major"],
-      "groupName": "major updates)"
+      "matchUpdateTypes": ["major", "pin"],
+      "groupName": "major and pin updates"
     }
   ]
 }
