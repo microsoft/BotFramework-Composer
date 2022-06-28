@@ -4,6 +4,8 @@
     "config:base"
   ],
   "ignorePaths": [
+    "docker-compose.yml",
+    "Dockerfile",
     ".github/**",
     "extensions/**"
   ]
