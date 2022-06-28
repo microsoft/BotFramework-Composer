@@ -14,6 +14,10 @@
     {
       "matchUpdateTypes": ["patch", "minor"],
       "groupName": "patch and minor updates)"
+    },
+    {
+      "matchUpdateTypes": ["major"],
+      "groupName": "major updates)"
     }
   ]
 }
