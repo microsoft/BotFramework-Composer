@@ -4,6 +4,7 @@
     "config:base"
   ],
   "ignorePaths": [
+    ".github/**",
     "extensions/**"
   ]
 }
