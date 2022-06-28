@@ -2,12 +2,12 @@
 # Manual changes might be lost - proceed with caution!
 
 __metadata:
-  version: 5
+  version 5
   cacheKey: 8
 
 "@botframework-composer/types@file:../../Composer/packages/types::locator=mockRemotePublish%40workspace%3A.":
-  version: 0.0.2
-  resolution: "@botframework-composer/types@file:../../Composer/packages/types#../../Composer/packages/types::hash=6d2fa9&locator=mockRemotePublish%40workspace%3A."
+  version 0.0.2
+  resolved "@botframework-composer/types@file:../../Composer/packages/types#../../Composer/packages/types::hash=6d2fa9&locator=mockRemotePublish%40workspace%3A."
   dependencies:
     "@types/express": 4.16.1
     "@types/passport": ^1.0.4
@@ -21,8 +21,8 @@ __metadata:
   linkType: hard
 
 "@types/body-parser@*":
-  version: 1.19.2
-  resolution: "@types/body-parser@1.19.2"
+  version 1.19.2
+  resolved "@types/body-parser@1.19.2"
   dependencies:
     "@types/connect": "*"
     "@types/node": "*"
@@ -31,8 +31,8 @@ __metadata:
   linkType: hard
 
 "@types/connect@*":
-  version: 3.4.35
-  resolution: "@types/connect@3.4.35"
+  version 3.4.35
+  resolved "@types/connect@3.4.35"
   dependencies:
     "@types/node": "*"
   checksum: fe81351470f2d3165e8b12ce33542eef89ea893e36dd62e8f7d72566dfb7e448376ae962f9f3ea888547ce8b55a40020ca0e01d637fab5d99567673084542641
@@ -40,8 +40,8 @@ __metadata:
   linkType: hard
 
 "@types/express-serve-static-core@*, @types/express-serve-static-core@^4.17.18":
-  version: 4.17.28
-  resolution: "@types/express-serve-static-core@4.17.28"
+  version 4.17.28
+  resolved "@types/express-serve-static-core@4.17.28"
   dependencies:
     "@types/node": "*"
     "@types/qs": "*"
@@ -51,8 +51,8 @@ __metadata:
   linkType: hard
 
 "@types/express@*":
-  version: 4.17.13
-  resolution: "@types/express@4.17.13"
+  version 4.17.13
+  resolved "@types/express@4.17.13"
   dependencies:
     "@types/body-parser": "*"
     "@types/express-serve-static-core": ^4.17.18
@@ -63,8 +63,8 @@ __metadata:
   linkType: hard
 
 "@types/express@4.16.1":
-  version: 4.16.1
-  resolution: "@types/express@4.16.1"
+  version 4.16.1
+  resolved "@types/express@4.16.1"
   dependencies:
     "@types/body-parser": "*"
     "@types/express-serve-static-core": "*"
@@ -74,29 +74,29 @@ __metadata:
   linkType: hard
 
 "@types/mime@^1":
-  version: 1.3.2
-  resolution: "@types/mime@1.3.2"
+  version 1.3.2
+  resolved "@types/mime@1.3.2"
   checksum: 0493368244cced1a69cb791b485a260a422e6fcc857782e1178d1e6f219f1b161793e9f87f5fae1b219af0f50bee24fcbe733a18b4be8fdd07a38a8fb91146fd
   languageName: node
   linkType: hard
 
 "@types/node@*":
-  version: 17.0.10
-  resolution: "@types/node@17.0.10"
+  version 17.0.10
+  resolved "@types/node@17.0.10"
   checksum: 979e83d642a2b4f18fa1a4233f884822c05abc7acd0836024aa964187f8446432b21f7913e72fe2b3927c4a811c27a0b6cd60ac7c4ac6a6762cfbab70782aa6a
   languageName: node
   linkType: hard
 
 "@types/node@^14.11.8":
-  version: 14.18.9
-  resolution: "@types/node@14.18.9"
+  version 14.18.9
+  resolved "@types/node@14.18.9"
   checksum: a85dae901b5c3b318747e66f2228c0f0778bcd73430a01d7c42814c04ba1070f2817b865d0c5f0c1813b89afeebb34d19cf2662252bae9dc0c18d3ad23fc98c3
   languageName: node
   linkType: hard
 
 "@types/passport@^1.0.4":
-  version: 1.0.7
-  resolution: "@types/passport@1.0.7"
+  version 1.0.7
+  resolved "@types/passport@1.0.7"
   dependencies:
     "@types/express": "*"
   checksum: 1b78fbbb589774a2d9794449e039d590c21fefd6b3f0a5cc911e2a79bac85f363121cfdc330d15840879abeb4fb2d68d521111e595bded0f5dc4356bf8dba3ec
@@ -104,22 +104,22 @@ __metadata:
   linkType: hard
 
 "@types/qs@*":
-  version: 6.9.7
-  resolution: "@types/qs@6.9.7"
+  version 6.9.7
+  resolved "@types/qs@6.9.7"
   checksum: 7fd6f9c25053e9b5bb6bc9f9f76c1d89e6c04f7707a7ba0e44cc01f17ef5284adb82f230f542c2d5557d69407c9a40f0f3515e8319afd14e1e16b5543ac6cdba
   languageName: node
   linkType: hard
 
 "@types/range-parser@*":
-  version: 1.2.4
-  resolution: "@types/range-parser@1.2.4"
+  version 1.2.4
+  resolved "@types/range-parser@1.2.4"
   checksum: b7c0dfd5080a989d6c8bb0b6750fc0933d9acabeb476da6fe71d8bdf1ab65e37c136169d84148034802f48378ab94e3c37bb4ef7656b2bec2cb9c0f8d4146a95
   languageName: node
   linkType: hard
 
 "@types/serve-static@*":
-  version: 1.13.10
-  resolution: "@types/serve-static@1.13.10"
+  version 1.13.10
+  resolved "@types/serve-static@1.13.10"
   dependencies:
     "@types/mime": ^1
     "@types/node": "*"
@@ -128,15 +128,15 @@ __metadata:
   linkType: hard
 
 "@types/uuid@^7.0.2":
-  version: 7.0.5
-  resolution: "@types/uuid@7.0.5"
+  version 7.0.5
+  resolved "@types/uuid@7.0.5"
   checksum: 30637d2cd40069ba8dfb2b70d3139b00ae576aa43f042d88039a7b0ce7dd5b3dbff1668844849a469cb00f7d42178dbb79c3ca74b62cf42629dca67952a2593d
   languageName: node
   linkType: hard
 
 "axios@^0.21.1":
-  version: 0.21.4
-  resolution: "axios@0.21.4"
+  version 0.21.4
+  resolved "axios@0.21.4"
   dependencies:
     follow-redirects: ^1.14.0
   checksum: 44245f24ac971e7458f3120c92f9d66d1fc695e8b97019139de5b0cc65d9b8104647db01e5f46917728edfc0cfd88eb30fc4c55e6053eef4ace76768ce95ff3c
@@ -144,8 +144,8 @@ __metadata:
   linkType: hard
 
 "botframework-schema@^4.11.1":
-  version: 4.15.0
-  resolution: "botframework-schema@4.15.0"
+  version 4.15.0
+  resolved "botframework-schema@4.15.0"
   dependencies:
     uuid: ^8.3.2
     zod: ~1.11.17
@@ -154,15 +154,15 @@ __metadata:
   linkType: hard
 
 "express-serve-static-core@0.1.1":
-  version: 0.1.1
-  resolution: "express-serve-static-core@0.1.1"
+  version 0.1.1
+  resolved "express-serve-static-core@0.1.1"
   checksum: 0f387ae5c12f51b9e843ade07bd412b4a0cbe23bbd5e95e047e45f4b3e1a6aa6bee53f765b039441f93110401221ec23a533844dce3e4f118e38cda5ed3dba0a
   languageName: node
   linkType: hard
 
 "follow-redirects@^1.14.0":
-  version: 1.14.7
-  resolution: "follow-redirects@1.14.7"
+  version 1.14.7
+  resolved "follow-redirects@1.14.7"
   peerDependenciesMeta:
     debug:
       optional: true
@@ -171,15 +171,15 @@ __metadata:
   linkType: hard
 
 "json-schema@^0.2.5":
-  version: 0.2.5
-  resolution: "json-schema@0.2.5"
+  version 0.2.5
+  resolved "json-schema@0.2.5"
   checksum: 54871525a19997c824d98916fbbef3cb190638c62e5945412785f3c6d90faae7bfff5a1935355a51b979497a7e059a2013eab4a6de144097b9fa80a5be920fb3
   languageName: node
   linkType: hard
 
 "mockRemotePublish@workspace:.":
-  version: 0.0.0-use.local
-  resolution: "mockRemotePublish@workspace:."
+  version 0.0.0-use.local
+  resolved "mockRemotePublish@workspace:."
   dependencies:
     "@botframework-composer/types": "file:../../Composer/packages/types"
     "@types/node": ^14.11.8
@@ -189,15 +189,15 @@ __metadata:
   linkType: soft
 
 "tslib@2.0.3":
-  version: 2.0.3
-  resolution: "tslib@2.0.3"
+  version 2.0.3
+  resolved "tslib@2.0.3"
   checksum: 00fcdd1f9995c9f8eb6a4a1ad03f55bc95946321b7f55434182dddac259d4e095fedf78a84f73b6e32dd3f881d9281f09cb583123d3159ed4bdac9ad7393ef8b
   languageName: node
   linkType: hard
 
 "uuid@^7.0.1":
-  version: 7.0.3
-  resolution: "uuid@7.0.3"
+  version 7.0.3
+  resolved "uuid@7.0.3"
   bin:
     uuid: dist/bin/uuid
   checksum: f5b7b5cc28accac68d5c083fd51cca64896639ebd4cca88c6cfb363801aaa83aa439c86dfc8446ea250a7a98d17afd2ad9e88d9d4958c79a412eccb93bae29de
@@ -205,8 +205,8 @@ __metadata:
   linkType: hard
 
 "uuid@^8.3.2":
-  version: 8.3.2
-  resolution: "uuid@8.3.2"
+  version 8.3.2
+  resolved "uuid@8.3.2"
   bin:
     uuid: ./dist/bin/uuid
   checksum: 5575a8a75c13120e2f10e6ddc801b2c7ed7d8f3c8ac22c7ed0c7b2ba6383ec0abda88c905085d630e251719e0777045ae3236f04c812184b7c765f63a70e58df
@@ -214,8 +214,8 @@ __metadata:
   linkType: hard
 
 "zod@~1.11.17":
-  version: 1.11.17
-  resolution: "zod@1.11.17"
+  version 1.11.17
+  resolved "zod@1.11.17"
   checksum: e07764a8a2fba195a4ec0ed9e66cee20e651ee1d9e533e5f48956de1ded6c6bcf80f63fed4a2bdb67de40a1300399edc9ee2095ee382c67d85745e3b0ccd14ca
   languageName: node
   linkType: hard
