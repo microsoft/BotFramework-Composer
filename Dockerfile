@@ -19,8 +19,10 @@ ARG YARN_ARGS
 WORKDIR /src/Composer
 COPY ./Composer .
 COPY ./extensions ../extensions
+COPY ./.yarn ../.yarn
+COPY .yarnrc.yml ../
 # run yarn install as a distinct layer
-RUN yarn install --frozen-lock-file $YARN_ARGS
+RUN yarn install --immutable $YARN_ARGS
 ENV NODE_OPTIONS "--max-old-space-size=6114"
 ENV NODE_ENV "production"
 ENV COMPOSER_BUILTIN_EXTENSIONS_DIR "/src/extensions"
@@ -36,13 +38,15 @@ FROM base as composerbasic
 ARG YARN_ARGS
 
 WORKDIR /app/Composer
-COPY --from=build /src/Composer/yarn.lock .
+COPY --from=build /src/.yarn ../.yarn
+COPY --from=build /src/.yarnrc.yml ../
+COPY --from=build /src/Composer/yarn-berry.lock .
 COPY --from=build /src/Composer/package.json .
 COPY --from=build /src/Composer/packages ./packages
 COPY --from=build /src/extensions ../extensions
 
 ENV NODE_ENV "production"
-RUN yarn --production --frozen-lockfile --force $YARN_ARGS && yarn cache clean
+RUN yarn --production --immutable --force $YARN_ARGS && yarn cache clean
 
 FROM base
 ENV NODE_ENV "production"

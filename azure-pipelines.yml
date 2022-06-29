@@ -31,9 +31,9 @@ jobs:
       - task: Cache@2
         displayName: Cache Cypress binary
         inputs:
-          key: cypress | $(Agent.OS) | Composer/yarn.lock
+          key: cypress | $(Agent.OS) | Composer/yarn-berry.lock
           path: /home/vsts/.cache/Cypress
-      - script: yarn --frozen-lock-file
+      - script: yarn --immutable
         displayName: yarn install
         workingDirectory: Composer
       - script: yarn build
@@ -68,6 +68,28 @@ jobs:
     pool:
       vmImage: ubuntu-latest
     steps:
+      - powershell: |
+          # Gin up imitation v1 yarn.lock files to aid Component Governance Detection analysis. The method:
+          # Find v3 yarn-berry.lock files. From each, generate a yarn.lock file, deleting all occurrences of 'npm:'.
+          # This allows CG to work with yarn v3.
+          $find = 'npm:';
+          $replace = '';
+
+          Get-ChildItem -Recurse -Path '**/yarn-berry.lock' | % {
+            $source = $_.FullName;
+            $dest = $_.DirectoryName + "/yarn.lock"
+            Write-Host $source;
+            Write-Host $dest;
+            Copy-Item -Path $source -Destination $dest -Force
+
+            $content = Get-Content -Raw $dest;
+            $content -Replace "$find", "$replace" | Set-Content $dest;
+
+            '--------------------'; get-content $dest; '====================';
+          }
+        displayName: Generate "yarn.lock" files for CG Detection
+        continueOnError: true
+
       - task: ComponentGovernanceComponentDetection@0
         displayName: Component Detection
         inputs:
@@ -75,3 +97,4 @@ jobs:
           verbosity: "Verbose"
           alertWarningLevel: "High"
           failOnAlert: true
+
