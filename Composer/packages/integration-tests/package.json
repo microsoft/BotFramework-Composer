@@ -15,13 +15,13 @@
   "license": "ISC",
   "dependencies": {
     "@testing-library/cypress": "7.0.6",
-    "chalk": "^4.0.0",
-    "cypress": "^7.5.0",
-    "eslint-plugin-cypress": "2.11.1",
-    "tslib": "2.0.3"
+    "chalk": "5.0.1",
+    "cypress": "10.3.0",
+    "eslint-plugin-cypress": "2.12.1",
+    "tslib": "2.4.0"
   },
   "devDependencies": {
     "@types/fs-extra": "^9.0.11",
-    "fs-extra": "^10.0.0"
+    "fs-extra": "10.1.0"
   }
 }

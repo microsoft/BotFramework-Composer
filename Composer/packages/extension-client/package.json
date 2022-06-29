@@ -19,14 +19,14 @@
     "@botframework-composer/test-utils": "*",
     "@botframework-composer/types": "*",
     "@types/react": "16.9.23",
-    "react": "16.13.1",
-    "react-dom": "16.13.1",
-    "rimraf": "^3.0.2",
-    "typescript": "3.9.2"
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "rimraf": "3.0.2",
+    "typescript": "4.7.4"
   },
   "dependencies": {
-    "debug": "^4.1.1",
-    "lodash": "^4.17.19",
-    "tslib": "2.0.3"
+    "debug": "4.3.4",
+    "lodash": "4.17.21",
+    "tslib": "2.4.0"
   }
 }
