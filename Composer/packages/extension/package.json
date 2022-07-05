@@ -19,8 +19,8 @@
     "@types/path-to-regexp": "^1.7.0",
     "@types/tar": "^4.0.3",
     "json-schema": "^0.2.5",
-    "rimraf": "^3.0.2",
-    "typescript": "^3.8.3"
+    "rimraf": "3.0.2",
+    "typescript": "4.7.4"
   },
   "dependencies": {
     "@botframework-composer/types": "*",
@@ -34,6 +34,6 @@
     "passport": "^0.4.1",
     "path-to-regexp": "^6.1.0",
     "tar": "^6.1.6",
-    "tslib": "2.0.3"
+    "tslib": "2.4.0"
   }
 }
