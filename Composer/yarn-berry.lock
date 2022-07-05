@@ -3951,7 +3951,7 @@ __metadata:
     "@botframework-composer/test-utils": "*"
     "@microsoft/bf-lu": 4.15.0-dev.20210702.cbf708d
     "@types/lodash": ^4.14.146
-    adaptive-expressions: 4.12.0-rc1
+    adaptive-expressions: ^4.16.0
     botbuilder-lg: 4.14.0-dev.391a2ab
     lodash: ^4.17.19
     rimraf: 3.0.2
@@ -8312,6 +8312,33 @@ __metadata:
     uuid: ^8.3.2
     xpath: ^0.0.32
   checksum: c8b4b9e8a632ae60a275178b9fd2e71e5b80a79be8451d7edc34703b6ab3fc0094f2affc698bd0883c08510da6fc0581f46d03e1ef58f43594bdc6b49566a8cb
+  languageName: node
+  linkType: hard
+
+"adaptive-expressions@npm:^4.16.0":
+  version: 4.16.0
+  resolution: "adaptive-expressions@npm:4.16.0"
+  dependencies:
+    "@microsoft/recognizers-text-data-types-timex-expression": 1.3.0
+    "@types/atob-lite": ^2.0.0
+    "@types/btoa-lite": ^1.0.0
+    "@types/lodash.isequal": ^4.5.5
+    "@types/lru-cache": ^5.1.0
+    "@types/xmldom": ^0.1.30
+    "@xmldom/xmldom": ^0.7.4
+    antlr4ts: 0.5.0-alpha.3
+    atob-lite: ^2.0.0
+    big-integer: ^1.6.48
+    btoa-lite: ^1.0.0
+    d3-format: ^1.4.4
+    dayjs: ^1.10.3
+    fast-xml-parser: ^3.19.0
+    jspath: ^0.4.0
+    lodash.isequal: ^4.5.0
+    lru-cache: ^5.1.1
+    uuid: ^8.3.2
+    xpath: ^0.0.32
+  checksum: 3b1e9f33e8bb652834818d6689e537f4ac20ceb3961b291b20f91ecc1959f1d5496791fe157ff7f6fdf08d3a9feaf3df3d8e06fa877152c251fafe6ae62bed2b
   languageName: node
   linkType: hard
 
