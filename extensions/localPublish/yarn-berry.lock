@@ -2,12 +2,12 @@
 # Manual changes might be lost - proceed with caution!
 
 __metadata:
-  version: 5
+  version: 6
   cacheKey: 8
 
 "@botframework-composer/types@file:../../Composer/packages/types::locator=localpublish%40workspace%3A.":
   version: 0.0.2
-  resolution: "@botframework-composer/types@file:../../Composer/packages/types#../../Composer/packages/types::hash=6d2fa9&locator=localpublish%40workspace%3A."
+  resolution: "@botframework-composer/types@file:../../Composer/packages/types#../../Composer/packages/types::hash=bcc35b&locator=localpublish%40workspace%3A."
   dependencies:
     "@types/express": 4.16.1
     "@types/passport": ^1.0.4
@@ -15,8 +15,8 @@ __metadata:
     botframework-schema: ^4.11.1
     express-serve-static-core: 0.1.1
     json-schema: ^0.2.5
-    tslib: 2.0.3
-  checksum: fc9272f49d2509f082a115b155eecd958033579189baf6c769e1441c14d7f339a6daabb2cea591ec621d73aac6f4bc2d5ede09df50d033cca077c46868579d1d
+    tslib: 2.4.0
+  checksum: 3acb867f0bf139e5195181c3752b7fc2f5b05ec8bdd6545449dce07c6d5ee5d15cb2afd2231fc80ca7c8bd83efa82735681345f1b85387dbb22acbe2d35eb94f
   languageName: node
   linkType: hard
 
@@ -824,10 +824,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tslib@npm:2.0.3":
-  version: 2.0.3
-  resolution: "tslib@npm:2.0.3"
-  checksum: 00fcdd1f9995c9f8eb6a4a1ad03f55bc95946321b7f55434182dddac259d4e095fedf78a84f73b6e32dd3f881d9281f09cb583123d3159ed4bdac9ad7393ef8b
+"tslib@npm:2.4.0":
+  version: 2.4.0
+  resolution: "tslib@npm:2.4.0"
+  checksum: 8c4aa6a3c5a754bf76aefc38026134180c053b7bd2f81338cb5e5ebf96fefa0f417bff221592bf801077f5bf990562f6264fecbc42cd3309b33872cb6fc3b113
   languageName: node
   linkType: hard
 
@@ -877,7 +877,7 @@ __metadata:
   version: 8.3.2
   resolution: "uuid@npm:8.3.2"
   bin:
-    uuid: ./dist/bin/uuid
+    uuid: dist/bin/uuid
   checksum: 5575a8a75c13120e2f10e6ddc801b2c7ed7d8f3c8ac22c7ed0c7b2ba6383ec0abda88c905085d630e251719e0777045ae3236f04c812184b7c765f63a70e58df
   languageName: node
   linkType: hard
