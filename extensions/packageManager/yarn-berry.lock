@@ -2,7 +2,7 @@
 # Manual changes might be lost - proceed with caution!
 
 __metadata:
-  version: 5
+  version: 6
   cacheKey: 8
 
 "@apidevtools/json-schema-ref-parser@npm:^9.0.1":
@@ -101,22 +101,22 @@ __metadata:
 
 "@bfc/extension-client@file:../../Composer/packages/extension-client::locator=package-manager%40workspace%3A.":
   version: 1.0.0
-  resolution: "@bfc/extension-client@file:../../Composer/packages/extension-client#../../Composer/packages/extension-client::hash=71e731&locator=package-manager%40workspace%3A."
+  resolution: "@bfc/extension-client@file:../../Composer/packages/extension-client#../../Composer/packages/extension-client::hash=0442d4&locator=package-manager%40workspace%3A."
   dependencies:
     debug: ^4.1.1
     lodash: ^4.17.19
-    tslib: 2.0.3
+    tslib: 2.4.0
   peerDependencies:
     "@botframework-composer/types": "*"
     react: 16.13.1
     react-dom: 16.13.1
-  checksum: e44da46ff0937343723a398d49c46074ccfb1eac67f81dc29e8abea5e886d85d2d85ecb1b520894bc6954ad1cd9d8b273d605ecd5a55d5443442416ab898c628
+  checksum: 81810b5ea7dd6a336b74aade91a4a613227b3d73f1132eb0c69defaae737ceabb5237b87e78a3220493e452bb1d89d0a801b9bd3fd44708695974b9c9dcc4a1b
   languageName: node
   linkType: hard
 
 "@bfc/extension@file:../../Composer/packages/extension::locator=package-manager%40workspace%3A.":
   version: 1.0.0
-  resolution: "@bfc/extension@file:../../Composer/packages/extension#../../Composer/packages/extension::hash=7fb2d7&locator=package-manager%40workspace%3A."
+  resolution: "@bfc/extension@file:../../Composer/packages/extension#../../Composer/packages/extension::hash=2d0152&locator=package-manager%40workspace%3A."
   dependencies:
     "@botframework-composer/types": "*"
     "@types/debug": ^4.1.5
@@ -129,32 +129,32 @@ __metadata:
     passport: ^0.4.1
     path-to-regexp: ^6.1.0
     tar: ^6.1.6
-    tslib: 2.0.3
-  checksum: cf125ee9b56a20a6a83b9fd9c9f88569ecc9ee73671d3ecd11f7edfbc91c62bdee9581952afb5e917631424143a9954a68da5f31b5db5a5487a4f3faf309d0e5
+    tslib: 2.4.0
+  checksum: 19afb516bfde47655881e3b8dcb6a560658202ed7409b33257466ca1d5d193b3eb4b33d3298449ed7eedae58b45eac64b936fc3d9dffc7ef1a15ccf9b9086a5e
   languageName: node
   linkType: hard
 
 "@bfc/ui-shared@file:../../Composer/packages/lib/ui-shared::locator=package-manager%40workspace%3A.":
   version: 0.0.0
-  resolution: "@bfc/ui-shared@file:../../Composer/packages/lib/ui-shared#../../Composer/packages/lib/ui-shared::hash=cc92d0&locator=package-manager%40workspace%3A."
+  resolution: "@bfc/ui-shared@file:../../Composer/packages/lib/ui-shared#../../Composer/packages/lib/ui-shared::hash=6cb512&locator=package-manager%40workspace%3A."
   dependencies:
     "@emotion/react": ^11.1.3
     "@emotion/styled": ^11.1.3
     "@fluentui/react": ^8.57.1
     react-markdown: ^5.0.3
-    tslib: 2.0.3
+    tslib: 2.4.0
   peerDependencies:
     "@fluentui/theme": 2.5.0
     format-message: ^6.2.3
     react: 16.13.1
     react-dom: 16.13.1
-  checksum: 8436a0d058328dc89eae94910c2868d0712f910acd403c29d5057ff87030d955b149e6094cb5940d35adfaf5ad8d3905464f12d74e566d2c35ab0991bc5a2b5e
+  checksum: b42d14d07beaa12cf5a0d15187147c800aed936d5dec5206d5033a0422ccb6188a5b1a95c7cbff42ed825028a7fa31539e86e93d019d6768f6b360e171b56599
   languageName: node
   linkType: hard
 
 "@botframework-composer/types@file:../../Composer/packages/types::locator=package-manager%40workspace%3A.":
   version: 0.0.2
-  resolution: "@botframework-composer/types@file:../../Composer/packages/types#../../Composer/packages/types::hash=6d2fa9&locator=package-manager%40workspace%3A."
+  resolution: "@botframework-composer/types@file:../../Composer/packages/types#../../Composer/packages/types::hash=bcc35b&locator=package-manager%40workspace%3A."
   dependencies:
     "@types/express": 4.16.1
     "@types/passport": ^1.0.4
@@ -162,8 +162,8 @@ __metadata:
     botframework-schema: ^4.11.1
     express-serve-static-core: 0.1.1
     json-schema: ^0.2.5
-    tslib: 2.0.3
-  checksum: fc9272f49d2509f082a115b155eecd958033579189baf6c769e1441c14d7f339a6daabb2cea591ec621d73aac6f4bc2d5ede09df50d033cca077c46868579d1d
+    tslib: 2.4.0
+  checksum: 3acb867f0bf139e5195181c3752b7fc2f5b05ec8bdd6545449dce07c6d5ee5d15cb2afd2231fc80ca7c8bd83efa82735681345f1b85387dbb22acbe2d35eb94f
   languageName: node
   linkType: hard
 
@@ -1183,8 +1183,17 @@ __metadata:
   version: 6.4.2
   resolution: "acorn@npm:6.4.2"
   bin:
-    acorn: ./bin/acorn
+    acorn: bin/acorn
   checksum: 44b07053729db7f44d28343eed32247ed56dc4a6ec6dff2b743141ecd6b861406bbc1c20bf9d4f143ea7dd08add5dc8c290582756539bc03a8db605050ce2fb4
+  languageName: node
+  linkType: hard
+
+"acorn@npm:^8.5.0":
+  version: 8.7.1
+  resolution: "acorn@npm:8.7.1"
+  bin:
+    acorn: bin/acorn
+  checksum: aca0aabf98826717920ac2583fdcad0a6fbe4e583fdb6e843af2594e907455aeafe30b1e14f1757cd83ce1776773cf8296ffc3a4acf13f0bd3dfebcf1db6ae80
   languageName: node
   linkType: hard
 
@@ -2665,7 +2674,7 @@ __metadata:
   dependencies:
     prr: ~1.0.1
   bin:
-    errno: ./cli.js
+    errno: cli.js
   checksum: 1271f7b9fbb3bcbec76ffde932485d1e3561856d21d847ec613a9722ee924cdd4e523a62dc71a44174d91e898fe21fdc8d5b50823f4b5e0ce8c35c8271e6ef4a
   languageName: node
   linkType: hard
@@ -4625,7 +4634,7 @@ __metadata:
     tar: ^6.1.2
     which: ^2.0.2
   bin:
-    node-gyp: ./bin/node-gyp.js
+    node-gyp: bin/node-gyp.js
   checksum: 341710b5da39d3660e6a886b37e210d33f8282047405c2e62c277bcc744c7552c5b8b972ebc3a7d5c2813794e60cc48c3ebd142c46d6e0321db4db6c92dd0355
   languageName: node
   linkType: hard
@@ -5431,7 +5440,7 @@ __metadata:
     path-parse: ^1.0.7
     supports-preserve-symlinks-flag: ^1.0.0
   bin:
-    resolve: ./bin/resolve
+    resolve: bin/resolve
   checksum: d7d9092a5c04a048bea16c7e5a2eb605ac3e8363a0cc5644de1fde17d5028e8d5f4343aab1d99bd327b98e91a66ea83e242718150c64dfedcb96e5e7aad6c4f5
   languageName: node
   linkType: hard
@@ -5444,7 +5453,7 @@ __metadata:
     path-parse: ^1.0.7
     supports-preserve-symlinks-flag: ^1.0.0
   bin:
-    resolve: ./bin/resolve
+    resolve: bin/resolve
   checksum: a0a4d1f7409e73190f31f901f8a619960bb3bd4ae38ba3a54c7ea7e1c87758d28a73256bb8d6a35996a903d1bf14f53883f0dcac6c571c063cb8162d813ad26e
   languageName: node
   linkType: hard
@@ -5487,7 +5496,7 @@ __metadata:
   dependencies:
     glob: ^7.1.3
   bin:
-    rimraf: ./bin.js
+    rimraf: bin.js
   checksum: 87f4164e396f0171b0a3386cc1877a817f572148ee13a7e113b238e48e8a9f2f31d009a92ec38a591ff1567d9662c6b67fd8818a2dbbaed74bc26a87a2a4a9a0
   languageName: node
   linkType: hard
@@ -6196,10 +6205,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tslib@npm:2.0.3":
-  version: 2.0.3
-  resolution: "tslib@npm:2.0.3"
-  checksum: 00fcdd1f9995c9f8eb6a4a1ad03f55bc95946321b7f55434182dddac259d4e095fedf78a84f73b6e32dd3f881d9281f09cb583123d3159ed4bdac9ad7393ef8b
+"tslib@npm:2.4.0":
+  version: 2.4.0
+  resolution: "tslib@npm:2.4.0"
+  checksum: 8c4aa6a3c5a754bf76aefc38026134180c053b7bd2f81338cb5e5ebf96fefa0f417bff221592bf801077f5bf990562f6264fecbc42cd3309b33872cb6fc3b113
   languageName: node
   linkType: hard
 
@@ -6235,18 +6244,18 @@ __metadata:
   version: 3.9.10
   resolution: "typescript@npm:3.9.10"
   bin:
-    tsc: ./bin/tsc
-    tsserver: ./bin/tsserver
+    tsc: bin/tsc
+    tsserver: bin/tsserver
   checksum: 46c842e2cd4797b88b66ef06c9c41dd21da48b95787072ccf39d5f2aa3124361bc4c966aa1c7f709fae0509614d76751455b5231b12dbb72eb97a31369e1ff92
   languageName: node
   linkType: hard
 
 "typescript@patch:typescript@^3.9.6#~builtin<compat/typescript>":
   version: 3.9.10
-  resolution: "typescript@patch:typescript@npm%3A3.9.10#~builtin<compat/typescript>::version=3.9.10&hash=493e53"
+  resolution: "typescript@patch:typescript@npm%3A3.9.10#~builtin<compat/typescript>::version=3.9.10&hash=7ad353"
   bin:
-    tsc: ./bin/tsc
-    tsserver: ./bin/tsserver
+    tsc: bin/tsc
+    tsserver: bin/tsserver
   checksum: dc7141ab555b23a8650a6787f98845fc11692063d02b75ff49433091b3af2fe3d773650dea18389d7c21f47d620fb3b110ea363dab4ab039417a6ccbbaf96fc2
   languageName: node
   linkType: hard
@@ -6441,7 +6450,7 @@ __metadata:
   version: 8.3.2
   resolution: "uuid@npm:8.3.2"
   bin:
-    uuid: ./dist/bin/uuid
+    uuid: dist/bin/uuid
   checksum: 5575a8a75c13120e2f10e6ddc801b2c7ed7d8f3c8ac22c7ed0c7b2ba6383ec0abda88c905085d630e251719e0777045ae3236f04c812184b7c765f63a70e58df
   languageName: node
   linkType: hard
@@ -6573,7 +6582,7 @@ __metadata:
   peerDependencies:
     webpack: 4.x.x
   bin:
-    webpack-cli: ./bin/cli.js
+    webpack-cli: bin/cli.js
   checksum: 3097084e7b141b63cb999dcd949703d4f7f88c7c78814645c05dbccdd0b0027805fe5b11eb9710d0fae9727fdf4543aa59e707a7be58960673983a6b7fdc8500
   languageName: node
   linkType: hard
@@ -6621,7 +6630,7 @@ __metadata:
     webpack-command:
       optional: true
   bin:
-    webpack: ./bin/webpack.js
+    webpack: bin/webpack.js
   checksum: 013fa24c00d4261e16ebca60353fa6f848e417b5a44bdf28c16ebebd67fa61e960420bb314c8df05cfe2dad9b90efabcf38fd6875f2361922769a0384085ef1e
   languageName: node
   linkType: hard
