@@ -134,7 +134,7 @@
     "coveralls": "3.1.1",
     "cross-env": "7.0.3",
     "eslint": "7.0.0",
-    "eslint-config-prettier": "8.5.0",
+    "eslint-config-prettier": "6.11.0",
     "eslint-formatter-github-actions": "1.1.0",
     "eslint-plugin-format-message": "6.2.4",
     "eslint-plugin-import": "2.26.0",
