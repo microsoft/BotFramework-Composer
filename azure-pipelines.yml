@@ -15,12 +15,14 @@ jobs:
         inputs:
           packageType: "runtime"
           version: "3.1.x"
+
       - task: NodeTool@0
-        displayName: "Use Node 14.15.5"
+        displayName: "Use Node 14.17.0"
         inputs:
-          versionSpec: 14.15.5
+          versionSpec: 14.17.0
+
       - task: Bash@3
-        displayName: "Adding myGet source"
+        displayName: "npm install generator-bot-empty"
         inputs:
           targetType: "inline"
           script:
@@ -28,17 +30,21 @@ jobs:
             dotnet nuget add source https://botbuilder.myget.org/F/botbuilder-v4-dotnet-daily/api/v3/index.json
 
             npm install -g @microsoft/generator-bot-empty
+
       - task: Cache@2
         displayName: Cache Cypress binary
         inputs:
           key: cypress | $(Agent.OS) | Composer/yarn-berry.lock
           path: /home/vsts/.cache/Cypress
+
       - script: yarn --immutable
         displayName: yarn install
         workingDirectory: Composer
+
       - script: yarn build
         displayName: yarn build
         workingDirectory: Composer
+
       - script: ./scripts/e2e-ci.sh --record --parallel --ci-build-id $(Build.BuildNumber) --group "Azure CI"
         displayName: Run E2E Tests
         workingDirectory: Composer/packages/integration-tests
@@ -51,6 +57,7 @@ jobs:
           TERM: xterm
           COMPOSER_BOTS_FOLDER: $(System.DefaultWorkingDirectory)/MyBots
           DEBUG: composer
+
       - task: PublishPipelineArtifact@1
         displayName: Publish Cypress Artifacts
         condition: failed()
@@ -58,6 +65,7 @@ jobs:
         inputs:
           targetPath: $(Build.ArtifactStagingDirectory)/cypress
           artifactName: e2e
+
       - script: cat e2e.log
         displayName: Server Logs
         condition: always()
