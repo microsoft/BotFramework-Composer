@@ -13,6 +13,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "passport-local": "^1.0.0"
+    "passport-local": "1.0.0"
   }
 }
