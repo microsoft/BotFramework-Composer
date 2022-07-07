@@ -1903,7 +1903,7 @@ __metadata:
 
 "@bfc/extension-client@file:../../Composer/packages/extension-client::locator=azure-publish-new%40workspace%3A.":
   version: 1.0.0
-  resolution: "@bfc/extension-client@file:../../Composer/packages/extension-client#../../Composer/packages/extension-client::hash=0442d4&locator=azure-publish-new%40workspace%3A."
+  resolution: "@bfc/extension-client@file:../../Composer/packages/extension-client#../../Composer/packages/extension-client::hash=c7d4e1&locator=azure-publish-new%40workspace%3A."
   dependencies:
     debug: ^4.1.1
     lodash: ^4.17.19
@@ -1912,13 +1912,13 @@ __metadata:
     "@botframework-composer/types": "*"
     react: 16.13.1
     react-dom: 16.13.1
-  checksum: 81810b5ea7dd6a336b74aade91a4a613227b3d73f1132eb0c69defaae737ceabb5237b87e78a3220493e452bb1d89d0a801b9bd3fd44708695974b9c9dcc4a1b
+  checksum: d1bcfbb1c8915c30772a27f9c9c1ab140b256f812f175275ccdd4c7a0541e3efbb62d408cc24a4d171815dcaa2fa3fb5478ec3a25c6996052c5ab173442439bd
   languageName: node
   linkType: hard
 
 "@bfc/indexers@file:../../Composer/packages/lib/indexers::locator=azure-publish-new%40workspace%3A.":
   version: 0.0.0
-  resolution: "@bfc/indexers@file:../../Composer/packages/lib/indexers#../../Composer/packages/lib/indexers::hash=8f9261&locator=azure-publish-new%40workspace%3A."
+  resolution: "@bfc/indexers@file:../../Composer/packages/lib/indexers#../../Composer/packages/lib/indexers::hash=1c354f&locator=azure-publish-new%40workspace%3A."
   dependencies:
     "@microsoft/bf-lu": 4.15.0-dev.20210702.cbf708d
     adaptive-expressions: 4.12.0-rc1
@@ -1927,13 +1927,13 @@ __metadata:
     tslib: 2.4.0
   peerDependencies:
     "@bfc/shared": "*"
-  checksum: 73d233bd7dfecc183dc2b46169a9ceea3ba6dcfd1a3f6b27440373aa90146771552bcc03ac59f11ef8979d8caafe01d1faa8b6b3c8ed4a348ebda7fa578b59b9
+  checksum: 059a316ca5387dad7e88cb56a18c00d4789dc8d930c5ee8e54067e1c46b45537ff10c470e2c34c721ea33f19a14fd8407e0bd4ae8504b0dff2f0806e912400b3
   languageName: node
   linkType: hard
 
 "@bfc/shared@file:../../Composer/packages/lib/shared::locator=azure-publish-new%40workspace%3A.":
   version: 0.0.0
-  resolution: "@bfc/shared@file:../../Composer/packages/lib/shared#../../Composer/packages/lib/shared::hash=d2bb60&locator=azure-publish-new%40workspace%3A."
+  resolution: "@bfc/shared@file:../../Composer/packages/lib/shared#../../Composer/packages/lib/shared::hash=deb112&locator=azure-publish-new%40workspace%3A."
   dependencies:
     "@botframework-composer/types": "*"
     format-message: 6.2.4
@@ -1946,13 +1946,13 @@ __metadata:
   peerDependencies:
     react: 16.13.1
     react-dom: 16.13.1
-  checksum: 8c6c30465102d6bdfc02250bdc1017c91cdf3144c2029409123cc3649a669f14ccdc7e09f17929795b3e57f4d6919360d953311f677c030e16031944ab6e2768
+  checksum: f0966dd65e2fc4b9a354587693bcc7e4d1226a1e562800c789e180bdba0817c144c8a80283a06df38fbebe79b8b55601f9eacc97df200cc3b77d40c7b3692d91
   languageName: node
   linkType: hard
 
 "@bfc/ui-shared@file:../../Composer/packages/lib/ui-shared::locator=azure-publish-new%40workspace%3A.":
   version: 0.0.0
-  resolution: "@bfc/ui-shared@file:../../Composer/packages/lib/ui-shared#../../Composer/packages/lib/ui-shared::hash=6cb512&locator=azure-publish-new%40workspace%3A."
+  resolution: "@bfc/ui-shared@file:../../Composer/packages/lib/ui-shared#../../Composer/packages/lib/ui-shared::hash=3d03b6&locator=azure-publish-new%40workspace%3A."
   dependencies:
     "@emotion/react": ^11.1.3
     "@emotion/styled": ^11.1.3
@@ -1964,7 +1964,7 @@ __metadata:
     format-message: ^6.2.3
     react: 16.13.1
     react-dom: 16.13.1
-  checksum: b42d14d07beaa12cf5a0d15187147c800aed936d5dec5206d5033a0422ccb6188a5b1a95c7cbff42ed825028a7fa31539e86e93d019d6768f6b360e171b56599
+  checksum: 64dd41b3a76c4cc5150226f75ab0e9fd0da1c2a37e6ce4bd2eed32a35ab1433e9ad4d93aa2b080d26056377a30e62fa94e8110abcd1545e6b2aaa8d2b5eeb635
   languageName: node
   linkType: hard
 
@@ -1991,7 +1991,7 @@ __metadata:
 
 "@botframework-composer/types@file:../../Composer/packages/types::locator=azure-publish-new%40workspace%3A.":
   version: 0.0.2
-  resolution: "@botframework-composer/types@file:../../Composer/packages/types#../../Composer/packages/types::hash=b16c70&locator=azure-publish-new%40workspace%3A."
+  resolution: "@botframework-composer/types@file:../../Composer/packages/types#../../Composer/packages/types::hash=3f8659&locator=azure-publish-new%40workspace%3A."
   dependencies:
     "@types/express": 4.16.1
     "@types/passport": ^1.0.4
@@ -2000,7 +2000,7 @@ __metadata:
     express-serve-static-core: 0.1.1
     json-schema: ^0.2.5
     tslib: 2.4.0
-  checksum: a421e7b665d25b06dad4702d6f1981d6a20681bedff9dd7e1ba9ccca6a394e3556cfff92d43fe679cfc23bf3c9c1d397f96dcb13d9a091f16c27450bc2555477
+  checksum: 2233c099b41585dc5fc1a433dc0d57f5c3c451cddb349a6da8414364e3b470be1768c7f4217714f0daea416755b28d625fdef42d197044064ea8aa7fb73858de
   languageName: node
   linkType: hard
 
