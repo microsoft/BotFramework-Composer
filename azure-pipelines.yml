@@ -27,10 +27,9 @@ jobs:
         inputs:
           targetType: "inline"
           script:
-            # Write your commands here
-            dotnet nuget add source https://botbuilder.myget.org/F/botbuilder-v4-dotnet-daily/api/v3/index.json
-
+            #dotnet nuget add source https://botbuilder.myget.org/F/botbuilder-v4-dotnet-daily/api/v3/index.json --name myget
             npm install -g @microsoft/generator-bot-empty
+            #dotnet nuget remove source myget
 
       - task: Cache@2
         displayName: Cache Cypress binary
