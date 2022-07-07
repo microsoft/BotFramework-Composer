@@ -1950,16 +1950,16 @@ __metadata:
 
 "@bfc/built-in-functions@file:../../Composer/packages/tools/built-in-functions::locator=azurePublish%40workspace%3A.":
   version: 1.0.0
-  resolution: "@bfc/built-in-functions@file:../../Composer/packages/tools/built-in-functions#../../Composer/packages/tools/built-in-functions::hash=8c932f&locator=azurePublish%40workspace%3A."
+  resolution: "@bfc/built-in-functions@file:../../Composer/packages/tools/built-in-functions#../../Composer/packages/tools/built-in-functions::hash=c66d95&locator=azurePublish%40workspace%3A."
   dependencies:
-    tslib: 2.0.3
-  checksum: f7406cf98d8bbc3ad7173aec93f0501e529e3d07e3a5a9f0f155f3607f88b9750c7295b463ffbbc1d7b7f54d04ce31cf3d74f4ad78a81706793856a732893b07
+    tslib: 2.4.0
+  checksum: 8c0f5eeef66cd3f45db8463da51edfdd4ba8041a11df662f95342c05c8b75702d4e61b8cb1c32a40709871273a102ebf7dd8b14614677d1192a6ce502a8fe4e1
   languageName: node
   linkType: hard
 
 "@bfc/code-editor@file:../../Composer/packages/lib/code-editor::locator=azurePublish%40workspace%3A.":
   version: 0.0.0
-  resolution: "@bfc/code-editor@file:../../Composer/packages/lib/code-editor#../../Composer/packages/lib/code-editor::hash=820f8e&locator=azurePublish%40workspace%3A."
+  resolution: "@bfc/code-editor@file:../../Composer/packages/lib/code-editor#../../Composer/packages/lib/code-editor::hash=be1420&locator=azurePublish%40workspace%3A."
   dependencies:
     "@emotion/react": ^11.1.3
     "@emotion/styled": ^11.1.3
@@ -1972,7 +1972,7 @@ __metadata:
     monaco-languageclient: 0.10.2
     normalize-url: ^4.5.1
     reconnecting-websocket: ^3.2.2
-    tslib: 2.0.3
+    tslib: 2.4.0
     vscode-ws-jsonrpc: ^0.1.1
   peerDependencies:
     "@bfc/built-in-functions": "*"
@@ -1982,74 +1982,74 @@ __metadata:
     "@bfc/ui-shared": "*"
     react: 16.13.1
     react-dom: 16.13.1
-  checksum: 47bef2a77709c4bcf813b0688279fbaf1c4ea4d0d863a234d4188aaacbdd435c8f1a3ba4f7d435f272d8031a87133744b3ff412c4242c3b4053e47e61b84246e
+  checksum: 969706c2a88d688d4c88d47ec15d67cf4fc930bba2852e8db365ac35bf7a734467e1cd09333a8da69f1e8789dce680980fefba9fe5922ce71999dd69e161fab6
   languageName: node
   linkType: hard
 
 "@bfc/extension-client@file:../../Composer/packages/extension-client::locator=azurePublish%40workspace%3A.":
   version: 1.0.0
-  resolution: "@bfc/extension-client@file:../../Composer/packages/extension-client#../../Composer/packages/extension-client::hash=ca1832&locator=azurePublish%40workspace%3A."
+  resolution: "@bfc/extension-client@file:../../Composer/packages/extension-client#../../Composer/packages/extension-client::hash=0442d4&locator=azurePublish%40workspace%3A."
   dependencies:
     debug: ^4.1.1
     lodash: ^4.17.19
-    tslib: 2.0.3
+    tslib: 2.4.0
   peerDependencies:
     "@botframework-composer/types": "*"
     react: 16.13.1
     react-dom: 16.13.1
-  checksum: 48908292350d2c91db0818105bf403582580f50eeaa37838c9763cd4a3e7bcfd5931b04c7f732c45be630e9ab68ed733074ca4695039b35fc506ca7ec924eaaa
+  checksum: 81810b5ea7dd6a336b74aade91a4a613227b3d73f1132eb0c69defaae737ceabb5237b87e78a3220493e452bb1d89d0a801b9bd3fd44708695974b9c9dcc4a1b
   languageName: node
   linkType: hard
 
 "@bfc/indexers@file:../../Composer/packages/lib/indexers::locator=azurePublish%40workspace%3A.":
   version: 0.0.0
-  resolution: "@bfc/indexers@file:../../Composer/packages/lib/indexers#../../Composer/packages/lib/indexers::hash=a00c75&locator=azurePublish%40workspace%3A."
+  resolution: "@bfc/indexers@file:../../Composer/packages/lib/indexers#../../Composer/packages/lib/indexers::hash=8f9261&locator=azurePublish%40workspace%3A."
   dependencies:
     "@microsoft/bf-lu": 4.15.0-dev.20210702.cbf708d
     adaptive-expressions: 4.12.0-rc1
     botbuilder-lg: 4.14.0-dev.391a2ab
     lodash: ^4.17.19
-    tslib: 2.0.3
+    tslib: 2.4.0
   peerDependencies:
     "@bfc/shared": "*"
-  checksum: ff937a9d0159dc39f23b6555e7567577d68cfce706d855eaa7c0e4fa18b0e14ceef56080f954f54bf5459372733e7a2c23a8fd92d0a7faf5250056a232dadcfd
+  checksum: 73d233bd7dfecc183dc2b46169a9ceea3ba6dcfd1a3f6b27440373aa90146771552bcc03ac59f11ef8979d8caafe01d1faa8b6b3c8ed4a348ebda7fa578b59b9
   languageName: node
   linkType: hard
 
 "@bfc/shared@file:../../Composer/packages/lib/shared::locator=azurePublish%40workspace%3A.":
   version: 0.0.0
-  resolution: "@bfc/shared@file:../../Composer/packages/lib/shared#../../Composer/packages/lib/shared::hash=e772a8&locator=azurePublish%40workspace%3A."
+  resolution: "@bfc/shared@file:../../Composer/packages/lib/shared#../../Composer/packages/lib/shared::hash=d2bb60&locator=azurePublish%40workspace%3A."
   dependencies:
     "@botframework-composer/types": "*"
-    format-message: 6.2.3
+    format-message: 6.2.4
     https-proxy-agent: ^5.0.0
     json-schema: ^0.2.5
     multimatch: ^5.0.0
     nanoid: ^3.1.3
     nanoid-dictionary: ^3.0.0
-    tslib: 2.0.3
+    tslib: 2.4.0
   peerDependencies:
     react: 16.13.1
     react-dom: 16.13.1
-  checksum: 49c1937976892ea97b40c25a65d8a09034eb8db67b8a78469baf84032eebdc9e8d23e1b16a82683236f5c906097da8d771e82b0384ecc7242ed672e5b441ea1e
+  checksum: 8c6c30465102d6bdfc02250bdc1017c91cdf3144c2029409123cc3649a669f14ccdc7e09f17929795b3e57f4d6919360d953311f677c030e16031944ab6e2768
   languageName: node
   linkType: hard
 
 "@bfc/ui-shared@file:../../Composer/packages/lib/ui-shared::locator=azurePublish%40workspace%3A.":
   version: 0.0.0
-  resolution: "@bfc/ui-shared@file:../../Composer/packages/lib/ui-shared#../../Composer/packages/lib/ui-shared::hash=979421&locator=azurePublish%40workspace%3A."
+  resolution: "@bfc/ui-shared@file:../../Composer/packages/lib/ui-shared#../../Composer/packages/lib/ui-shared::hash=6cb512&locator=azurePublish%40workspace%3A."
   dependencies:
     "@emotion/react": ^11.1.3
     "@emotion/styled": ^11.1.3
     "@fluentui/react": ^8.57.1
     react-markdown: ^5.0.3
-    tslib: 2.0.3
+    tslib: 2.4.0
   peerDependencies:
     "@fluentui/theme": 2.5.0
     format-message: ^6.2.3
     react: 16.13.1
     react-dom: 16.13.1
-  checksum: df3b505acb4618fcfa63169e4561675568c419501d46fadc5cff451e16f45ae9310fbcb32c88c3800ed44f9cf43e5fd546d95b4806aa6d3b00d28110759be5e7
+  checksum: b42d14d07beaa12cf5a0d15187147c800aed936d5dec5206d5033a0422ccb6188a5b1a95c7cbff42ed825028a7fa31539e86e93d019d6768f6b360e171b56599
   languageName: node
   linkType: hard
 
@@ -2076,7 +2076,7 @@ __metadata:
 
 "@botframework-composer/types@file:../../Composer/packages/types::locator=azurePublish%40workspace%3A.":
   version: 0.0.2
-  resolution: "@botframework-composer/types@file:../../Composer/packages/types#../../Composer/packages/types::hash=ab20a5&locator=azurePublish%40workspace%3A."
+  resolution: "@botframework-composer/types@file:../../Composer/packages/types#../../Composer/packages/types::hash=b16c70&locator=azurePublish%40workspace%3A."
   dependencies:
     "@types/express": 4.16.1
     "@types/passport": ^1.0.4
@@ -2084,8 +2084,8 @@ __metadata:
     botframework-schema: ^4.11.1
     express-serve-static-core: 0.1.1
     json-schema: ^0.2.5
-    tslib: 2.0.3
-  checksum: 1ac6aa5510b352ab696493c2b00bb2ffc9c737070303e24d94496c37bfb40f5790833d254dd9c1f5950868bc760c90e8a5d566a2302de83efc7899027880abb4
+    tslib: 2.4.0
+  checksum: a421e7b665d25b06dad4702d6f1981d6a20681bedff9dd7e1ba9ccca6a394e3556cfff92d43fe679cfc23bf3c9c1d397f96dcb13d9a091f16c27450bc2555477
   languageName: node
   linkType: hard
 
@@ -6379,39 +6379,39 @@ __metadata:
   languageName: node
   linkType: hard
 
-"format-message-formats@npm:^6.2.0":
-  version: 6.2.0
-  resolution: "format-message-formats@npm:6.2.0"
-  checksum: dc3732451f1523de11cf1e2ecd7e85afb845749a34f4bc4ab88f3cc05f44b93ff2c0562063f3b424ecdc23c4a1fd260f1631170dc1dd4a65e2f7d838c0474627
+"format-message-formats@npm:^6.2.4":
+  version: 6.2.4
+  resolution: "format-message-formats@npm:6.2.4"
+  checksum: 12e0c2cfd6763a58d50e0f12aceb617f744dad1923cea6ae0651b3af84ed67c91b38c19e5249da7e902e4af7d96089c4bd7040da76b79dcad0a82d7a4fc4e359
   languageName: node
   linkType: hard
 
-"format-message-interpret@npm:^6.2.3":
-  version: 6.2.3
-  resolution: "format-message-interpret@npm:6.2.3"
+"format-message-interpret@npm:^6.2.4":
+  version: 6.2.4
+  resolution: "format-message-interpret@npm:6.2.4"
   dependencies:
-    format-message-formats: ^6.2.0
+    format-message-formats: ^6.2.4
     lookup-closest-locale: ^6.2.0
-  checksum: 61f7fd58f1517b4ea9bbc1c64d48a1e1b04d7097d10bf88db2542191679ced801fe1e2aade1e7010367d01c7c98dc5157802144127b6486da9e49317cf888a19
+  checksum: 36f692e08c0935249d2835d04d56267b4718a3e758db2f00a230f9fd9735c37e007cf9f1cf5096860fd692120527533519a10a7c496a0ade7531269cb16c5422
   languageName: node
   linkType: hard
 
-"format-message-parse@npm:^6.2.3":
-  version: 6.2.3
-  resolution: "format-message-parse@npm:6.2.3"
-  checksum: f667791bfa90ebb4dfc3f8cca6022af18190d597433c1ac89927d3593791d03f12f43238a83ecacd0c5a2c31d28e2865d5b42a789ac0aefb3bdabbb37be8a72f
+"format-message-parse@npm:^6.2.4":
+  version: 6.2.4
+  resolution: "format-message-parse@npm:6.2.4"
+  checksum: 37527da34862a7209c9ceffc3cde04f5bec0b3876c8b2325fc9971a168a3067db90282c3d730276b1156570583ae06b92fef179131a81dba8b5a0c83cbc1a27b
   languageName: node
   linkType: hard
 
-"format-message@npm:6.2.3":
-  version: 6.2.3
-  resolution: "format-message@npm:6.2.3"
+"format-message@npm:6.2.4":
+  version: 6.2.4
+  resolution: "format-message@npm:6.2.4"
   dependencies:
-    format-message-formats: ^6.2.0
-    format-message-interpret: ^6.2.3
-    format-message-parse: ^6.2.3
+    format-message-formats: ^6.2.4
+    format-message-interpret: ^6.2.4
+    format-message-parse: ^6.2.4
     lookup-closest-locale: ^6.2.0
-  checksum: b06ea86581b9825185f88c4296b251a5711f1da77748922ac3eb522d6f34b1fb4711b6ace4551c6646dbfe2d6f16eb2613b73793165d42078d54ae13e5de7f3e
+  checksum: 8e040e66126fd00f998a1b225ada1b7e38795ad56db7d091beab6a885d138aee4cf8f925d287e48f10918319a67d6ebda7a0e0d7497083db6a1831c3b1109160
   languageName: node
   linkType: hard
 
@@ -10806,10 +10806,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tslib@npm:2.0.3":
-  version: 2.0.3
-  resolution: "tslib@npm:2.0.3"
-  checksum: 00fcdd1f9995c9f8eb6a4a1ad03f55bc95946321b7f55434182dddac259d4e095fedf78a84f73b6e32dd3f881d9281f09cb583123d3159ed4bdac9ad7393ef8b
+"tslib@npm:2.4.0":
+  version: 2.4.0
+  resolution: "tslib@npm:2.4.0"
+  checksum: 8c4aa6a3c5a754bf76aefc38026134180c053b7bd2f81338cb5e5ebf96fefa0f417bff221592bf801077f5bf990562f6264fecbc42cd3309b33872cb6fc3b113
   languageName: node
   linkType: hard
 
