@@ -12,6 +12,7 @@ jobs:
 
     steps:
       - task: UseDotNet@2
+        displayName: "Use .NET Core 3.1.x"
         inputs:
           packageType: "runtime"
           version: "3.1.x"
@@ -71,6 +72,14 @@ jobs:
         condition: always()
         continueOnError: true
         workingDirectory: Composer
+
+      - powershell: |
+          cd ..
+          ls -R
+        displayName: Dir workspace
+        continueOnError: true
+        condition: succeededOrFailed()
+
   - job: security
     displayName: Security Analysis
     pool:
