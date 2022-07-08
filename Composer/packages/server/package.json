@@ -60,7 +60,7 @@
     "fs-extra": "7.0.1",
     "mock-fs": "^4.10.1",
     "nodemon": "^2.0.3",
-    "prettier": "2.7.1",
+    "prettier": "2.0.5",
     "rimraf": "3.0.2",
     "source-map-explorer": "^2.4.2",
     "ts-node": "^8.4.1"

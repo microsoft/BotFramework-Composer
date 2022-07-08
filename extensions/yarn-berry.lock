@@ -551,7 +551,7 @@ __metadata:
     inquirer: 9.0.0
     lodash: 4.17.21
     merge-options: 3.0.4
-    prettier: 2.7.1
+    prettier: 2.0.5
     typescript: ^4.0.5
     validate-npm-package-name: 4.0.0
   languageName: unknown
@@ -2263,12 +2263,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prettier@npm:2.7.1":
-  version: 2.7.1
-  resolution: "prettier@npm:2.7.1"
+"prettier@npm:2.0.5":
+  version: 2.0.5
+  resolution: "prettier@npm:2.0.5"
   bin:
     prettier: bin-prettier.js
-  checksum: 55a4409182260866ab31284d929b3cb961e5fdb91fe0d2e099dac92eaecec890f36e524b4c19e6ceae839c99c6d7195817579cdffc8e2c80da0cb794463a748b
+  checksum: 7f89d2f5d1a1a15a7bf200556b8c5395913d0119fe52a3fba51ab116695d584652d37fdb7d86e0919bfe36b22649afcf222eaca00a1065eb486b7b4cf3062eff
   languageName: node
   linkType: hard
 

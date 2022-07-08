@@ -4096,7 +4096,7 @@ __metadata:
     jest: 27.4.7
     jest-cli: 27.4.7
     lint-staged: 13.0.3
-    prettier: 2.7.1
+    prettier: 2.0.5
     rimraf: 3.0.2
     ts-loader: 9.3.1
     tslib: 2.4.0
@@ -4204,7 +4204,7 @@ __metadata:
     passport: ^0.4.1
     path-to-regexp: ^6.1.0
     portfinder: ^1.0.28
-    prettier: 2.7.1
+    prettier: 2.0.5
     rimraf: 3.0.2
     rsa-pem-from-mod-exp: ^0.8.4
     source-map-explorer: ^2.4.2
@@ -23769,12 +23769,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prettier@npm:2.7.1":
-  version: 2.7.1
-  resolution: "prettier@npm:2.7.1"
+"prettier@npm:2.0.5":
+  version: 2.0.5
+  resolution: "prettier@npm:2.0.5"
   bin:
     prettier: bin-prettier.js
-  checksum: 55a4409182260866ab31284d929b3cb961e5fdb91fe0d2e099dac92eaecec890f36e524b4c19e6ceae839c99c6d7195817579cdffc8e2c80da0cb794463a748b
+  checksum: 7f89d2f5d1a1a15a7bf200556b8c5395913d0119fe52a3fba51ab116695d584652d37fdb7d86e0919bfe36b22649afcf222eaca00a1065eb486b7b4cf3062eff
   languageName: node
   linkType: hard
 

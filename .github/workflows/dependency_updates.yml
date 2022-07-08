@@ -13,7 +13,7 @@ jobs:
 
     - run: |
         cd Composer
-        yarn up-all --exclude "@bfc/built-in-functions @bfc/code-editor @bfc/extension @bfc/extension-client @bfc/indexers @bfc/shared @bfc/ui-shared @botframework-composer/types electron esbuild eslint eslint-config-prettier fluentui jest jest-cli node-fetch react react-dom @types/react typescript"
+        yarn up-all --exclude "@bfc/built-in-functions @bfc/code-editor @bfc/extension @bfc/extension-client @bfc/indexers @bfc/shared @bfc/ui-shared @botframework-composer/types @types/react @typescript-eslint/esline-plugin @typescript-eslint/parser electron esbuild eslint eslint-config-prettier eslint-plugin-prettier fluentui jest jest-cli node-fetch react react-dom typescript"
 
     - name: Create pull request
       uses: peter-evans/create-pull-request@v3.1.0
