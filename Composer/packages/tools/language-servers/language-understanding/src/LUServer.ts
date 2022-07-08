@@ -583,6 +583,7 @@ export class LUServer {
 
     //suggest a regex pattern for seperated line definition
     if (util.isSeperatedEntityDef(curLineContent)) {
+      // eslint-disable-next-line security/detect-unsafe-regex
       const seperatedEntityDef = /^\s*@\s*([\w._]+|"[\w._\s]+")+\s*=\s*$/; //lgtm [js/redos]
       let entityName = '';
       const matchGroup = curLineContent.match(seperatedEntityDef);
