@@ -13,8 +13,8 @@
   "dependencies": {
     "@emotion/eslint-plugin": "11.7.0",
     "@types/fs-extra": "9.0.13",
-    "@typescript-eslint/eslint-plugin": "5.30.5",
-    "@typescript-eslint/parser": "5.30.5",
+    "@typescript-eslint/eslint-plugin": "2.34.0",
+    "@typescript-eslint/parser": "2.34.0",
     "esbuild": "^0.8.44",
     "esbuild-plugin-globals": "0.1.1",
     "eslint": "7.0.0",
