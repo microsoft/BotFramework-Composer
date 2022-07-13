@@ -7,7 +7,7 @@ This is an alternative to using the in-app provisioning tool.
 
 - A subscription to [Microsoft Azure](https://azure.microsoft.com/free/).
 - [A basic bot built using Composer](https://aka.ms/composer-create-first-bot).
-- Latest version of the [Azure CLI](https://docs.microsoft.com/cli/azure/install-azure-cli).
+- [Azure CLI](https://docs.microsoft.com/cli/azure/install-azure-cli) version 2.36.0.
 - [Node.js](https://nodejs.org/). Use version 12.13.0 or later.
 - PowerShell version 6.0 and later.
 
