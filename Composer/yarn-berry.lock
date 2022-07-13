@@ -4177,7 +4177,7 @@ __metadata:
     debug: ^4.1.1
     dotenv: ^8.1.0
     download-npm-package: ^3.1.12
-    ejs: ^3.1.6
+    ejs: 3.1.8
     eslint: 7.0.0
     express: 4.16.1
     express-serve-static-core: 0.1.1
