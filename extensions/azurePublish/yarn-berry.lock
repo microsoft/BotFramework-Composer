@@ -8066,17 +8066,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"json-schema@npm:0.4.0":
+"json-schema@npm:^0.2.5, json-schema@npm:0.4.0":
   version: 0.4.0
   resolution: "json-schema@npm:0.4.0"
   checksum: 66389434c3469e698da0df2e7ac5a3281bcff75e797a5c127db7c5b56270e01ae13d9afa3c03344f76e32e81678337a8c912bdbb75101c62e487dc3778461d72
-  languageName: node
-  linkType: hard
-
-"json-schema@npm:^0.2.5":
-  version: 0.2.5
-  resolution: "json-schema@npm:0.2.5"
-  checksum: 54871525a19997c824d98916fbbef3cb190638c62e5945412785f3c6d90faae7bfff5a1935355a51b979497a7e059a2013eab4a6de144097b9fa80a5be920fb3
   languageName: node
   linkType: hard
 
