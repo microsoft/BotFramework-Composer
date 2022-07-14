@@ -25892,11 +25892,11 @@ __metadata:
   linkType: hard
 
 "set-value@npm:^3.0.2":
-  version: 3.0.2
-  resolution: "set-value@npm:3.0.2"
+  version: 4.0.1
+  resolution: "set-value@npm:4.0.1"
   dependencies:
     is-plain-object: ^2.0.4
-  checksum: cb7a36004f7f0ec3ab654612fecb2ce706f381322e9dad54d2ebae40aa8e00653b46fca476489b6872b34707f496d48373c3420adba5f58bbb58c1fb231c1c0b
+  checksum: a76ddedb3a5d1b92b28452ef81cb25b0c684b7d921bf0a73daf42cb0bfdba661a5ca8c05989cbb0dfaddd7b6bb2d4ff93dd49a3528bc4c821653e163aab882a0
   languageName: node
   linkType: hard
 
