@@ -2,12 +2,12 @@
 # Manual changes might be lost - proceed with caution!
 
 __metadata:
-  version: 5
+  version: 6
   cacheKey: 8
 
 "@botframework-composer/types@file:../../Composer/packages/types::locator=mockRemotePublish%40workspace%3A.":
   version: 0.0.2
-  resolution: "@botframework-composer/types@file:../../Composer/packages/types#../../Composer/packages/types::hash=6d2fa9&locator=mockRemotePublish%40workspace%3A."
+  resolution: "@botframework-composer/types@file:../../Composer/packages/types#../../Composer/packages/types::hash=a09085&locator=mockRemotePublish%40workspace%3A."
   dependencies:
     "@types/express": 4.16.1
     "@types/passport": ^1.0.4
@@ -15,8 +15,7 @@ __metadata:
     botframework-schema: ^4.11.1
     express-serve-static-core: 0.1.1
     json-schema: ^0.2.5
-    tslib: 2.0.3
-  checksum: fc9272f49d2509f082a115b155eecd958033579189baf6c769e1441c14d7f339a6daabb2cea591ec621d73aac6f4bc2d5ede09df50d033cca077c46868579d1d
+    tslib: 2.4.0
   languageName: node
   linkType: hard
 
@@ -87,10 +86,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:^14.11.8":
-  version: 14.18.9
-  resolution: "@types/node@npm:14.18.9"
-  checksum: a85dae901b5c3b318747e66f2228c0f0778bcd73430a01d7c42814c04ba1070f2817b865d0c5f0c1813b89afeebb34d19cf2662252bae9dc0c18d3ad23fc98c3
+"@types/node@npm:18.0.3":
+  version: 18.0.3
+  resolution: "@types/node@npm:18.0.3"
+  checksum: 5dec59fbbc1186c808b53df1ca717dad034dbd6a901c75f5b052c845618b531b05f27217122c6254db99529a68618e4cfc534ae3dbf4e88754e9e572df80defa
   languageName: node
   linkType: hard
 
@@ -127,10 +126,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/uuid@npm:^7.0.2":
-  version: 7.0.5
-  resolution: "@types/uuid@npm:7.0.5"
-  checksum: 30637d2cd40069ba8dfb2b70d3139b00ae576aa43f042d88039a7b0ce7dd5b3dbff1668844849a469cb00f7d42178dbb79c3ca74b62cf42629dca67952a2593d
+"@types/uuid@npm:8.3.4":
+  version: 8.3.4
+  resolution: "@types/uuid@npm:8.3.4"
+  checksum: 6f11f3ff70f30210edaa8071422d405e9c1d4e53abbe50fdce365150d3c698fe7bbff65c1e71ae080cbfb8fded860dbb5e174da96fdbbdfcaa3fb3daa474d20f
   languageName: node
   linkType: hard
 
@@ -182,33 +181,24 @@ __metadata:
   resolution: "mockRemotePublish@workspace:."
   dependencies:
     "@botframework-composer/types": "file:../../Composer/packages/types"
-    "@types/node": ^14.11.8
-    "@types/uuid": ^7.0.2
-    uuid: ^7.0.1
+    "@types/node": 18.0.3
+    "@types/uuid": 8.3.4
+    uuid: 8.3.2
   languageName: unknown
   linkType: soft
 
-"tslib@npm:2.0.3":
-  version: 2.0.3
-  resolution: "tslib@npm:2.0.3"
-  checksum: 00fcdd1f9995c9f8eb6a4a1ad03f55bc95946321b7f55434182dddac259d4e095fedf78a84f73b6e32dd3f881d9281f09cb583123d3159ed4bdac9ad7393ef8b
+"tslib@npm:2.4.0":
+  version: 2.4.0
+  resolution: "tslib@npm:2.4.0"
+  checksum: 8c4aa6a3c5a754bf76aefc38026134180c053b7bd2f81338cb5e5ebf96fefa0f417bff221592bf801077f5bf990562f6264fecbc42cd3309b33872cb6fc3b113
   languageName: node
   linkType: hard
 
-"uuid@npm:^7.0.1":
-  version: 7.0.3
-  resolution: "uuid@npm:7.0.3"
-  bin:
-    uuid: dist/bin/uuid
-  checksum: f5b7b5cc28accac68d5c083fd51cca64896639ebd4cca88c6cfb363801aaa83aa439c86dfc8446ea250a7a98d17afd2ad9e88d9d4958c79a412eccb93bae29de
-  languageName: node
-  linkType: hard
-
-"uuid@npm:^8.3.2":
+"uuid@npm:8.3.2, uuid@npm:^8.3.2":
   version: 8.3.2
   resolution: "uuid@npm:8.3.2"
   bin:
-    uuid: ./dist/bin/uuid
+    uuid: dist/bin/uuid
   checksum: 5575a8a75c13120e2f10e6ddc801b2c7ed7d8f3c8ac22c7ed0c7b2ba6383ec0abda88c905085d630e251719e0777045ae3236f04c812184b7c765f63a70e58df
   languageName: node
   linkType: hard
