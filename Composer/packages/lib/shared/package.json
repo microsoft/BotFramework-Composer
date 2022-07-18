@@ -33,16 +33,16 @@
     "copyfiles": "^2.1.0",
     "react": "16.13.1",
     "react-dom": "16.13.1",
-    "rimraf": "^2.6.3"
+    "rimraf": "3.0.2"
   },
   "dependencies": {
     "@botframework-composer/types": "*",
-    "format-message": "6.2.3",
+    "format-message": "6.2.4",
     "https-proxy-agent": "^5.0.0",
-    "json-schema": "^0.2.5",
+    "json-schema": "0.4.0",
     "multimatch": "^5.0.0",
     "nanoid": "^3.1.3",
     "nanoid-dictionary": "^3.0.0",
-    "tslib": "2.0.3"
+    "tslib": "2.4.0"
   }
 }
