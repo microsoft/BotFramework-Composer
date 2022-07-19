@@ -36,6 +36,6 @@
     "react-dom": "16.13.1"
   },
   "dependencies": {
-    "tslib": "2.0.3"
+    "tslib": "2.4.0"
   }
 }
