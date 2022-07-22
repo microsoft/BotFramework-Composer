@@ -1958,7 +1958,7 @@ __metadata:
 
 "@bfc/code-editor@file:../../Composer/packages/lib/code-editor::locator=azurePublish%40workspace%3A.":
   version: 0.0.0
-  resolution: "@bfc/code-editor@file:../../Composer/packages/lib/code-editor#../../Composer/packages/lib/code-editor::hash=2d7ddc&locator=azurePublish%40workspace%3A."
+  resolution: "@bfc/code-editor@file:../../Composer/packages/lib/code-editor#../../Composer/packages/lib/code-editor::hash=8565c4&locator=azurePublish%40workspace%3A."
   dependencies:
     "@emotion/react": ^11.1.3
     "@emotion/styled": ^11.1.3
@@ -2014,12 +2014,12 @@ __metadata:
 
 "@bfc/shared@file:../../Composer/packages/lib/shared::locator=azurePublish%40workspace%3A.":
   version: 0.0.0
-  resolution: "@bfc/shared@file:../../Composer/packages/lib/shared#../../Composer/packages/lib/shared::hash=09c596&locator=azurePublish%40workspace%3A."
+  resolution: "@bfc/shared@file:../../Composer/packages/lib/shared#../../Composer/packages/lib/shared::hash=fbda67&locator=azurePublish%40workspace%3A."
   dependencies:
     "@botframework-composer/types": "*"
     format-message: 6.2.4
     https-proxy-agent: ^5.0.0
-    json-schema: ^0.2.5
+    json-schema: 0.4.0
     multimatch: ^5.0.0
     nanoid: ^3.1.3
     nanoid-dictionary: ^3.0.0
@@ -2070,14 +2070,14 @@ __metadata:
 
 "@botframework-composer/types@file:../../Composer/packages/types::locator=azurePublish%40workspace%3A.":
   version: 0.0.2
-  resolution: "@botframework-composer/types@file:../../Composer/packages/types#../../Composer/packages/types::hash=a09085&locator=azurePublish%40workspace%3A."
+  resolution: "@botframework-composer/types@file:../../Composer/packages/types#../../Composer/packages/types::hash=33ce41&locator=azurePublish%40workspace%3A."
   dependencies:
     "@types/express": 4.16.1
     "@types/passport": ^1.0.4
     axios: ^0.21.1
     botframework-schema: ^4.11.1
     express-serve-static-core: 0.1.1
-    json-schema: ^0.2.5
+    json-schema: 0.4.0
     tslib: 2.4.0
   languageName: node
   linkType: hard
@@ -4422,11 +4422,11 @@ __metadata:
   linkType: hard
 
 "async@npm:^2.6.3":
-  version: 2.6.3
-  resolution: "async@npm:2.6.3"
+  version: 2.6.4
+  resolution: "async@npm:2.6.4"
   dependencies:
     lodash: ^4.17.14
-  checksum: 5e5561ff8fca807e88738533d620488ac03a5c43fce6c937451f7e35f943d33ad06c24af3f681a48cca3d2b0002b3118faff0a128dc89438a9bf0226f712c499
+  checksum: a52083fb32e1ebe1d63e5c5624038bb30be68ff07a6c8d7dfe35e47c93fc144bd8652cbec869e0ac07d57dde387aa5f1386be3559cdee799cb1f789678d88e19
   languageName: node
   linkType: hard
 
@@ -8073,13 +8073,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"json-schema@npm:^0.2.5":
-  version: 0.2.5
-  resolution: "json-schema@npm:0.2.5"
-  checksum: 54871525a19997c824d98916fbbef3cb190638c62e5945412785f3c6d90faae7bfff5a1935355a51b979497a7e059a2013eab4a6de144097b9fa80a5be920fb3
-  languageName: node
-  linkType: hard
-
 "json-stringify-safe@npm:~5.0.1":
   version: 5.0.1
   resolution: "json-stringify-safe@npm:5.0.1"
@@ -8635,17 +8628,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"minimist@npm:1.2.6":
+"minimist@npm:1.2.6, minimist@npm:^1.1.1, minimist@npm:^1.2.0, minimist@npm:^1.2.5":
   version: 1.2.6
   resolution: "minimist@npm:1.2.6"
   checksum: d15428cd1e11eb14e1233bcfb88ae07ed7a147de251441d61158619dfb32c4d7e9061d09cab4825fdee18ecd6fce323228c8c47b5ba7cd20af378ca4048fb3fb
-  languageName: node
-  linkType: hard
-
-"minimist@npm:^1.1.1, minimist@npm:^1.2.0, minimist@npm:^1.2.5":
-  version: 1.2.5
-  resolution: "minimist@npm:1.2.5"
-  checksum: 86706ce5b36c16bfc35c5fe3dbb01d5acdc9a22f2b6cc810b6680656a1d2c0e44a0159c9a3ba51fb072bb5c203e49e10b51dcd0eec39c481f4c42086719bae52
   languageName: node
   linkType: hard
 

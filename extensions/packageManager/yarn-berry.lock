@@ -115,7 +115,7 @@ __metadata:
 
 "@bfc/extension@file:../../Composer/packages/extension::locator=package-manager%40workspace%3A.":
   version: 1.0.0
-  resolution: "@bfc/extension@file:../../Composer/packages/extension#../../Composer/packages/extension::hash=ee4b39&locator=package-manager%40workspace%3A."
+  resolution: "@bfc/extension@file:../../Composer/packages/extension#../../Composer/packages/extension::hash=904520&locator=package-manager%40workspace%3A."
   dependencies:
     "@botframework-composer/types": "*"
     "@types/debug": ^4.1.5
@@ -151,14 +151,14 @@ __metadata:
 
 "@botframework-composer/types@file:../../Composer/packages/types::locator=package-manager%40workspace%3A.":
   version: 0.0.2
-  resolution: "@botframework-composer/types@file:../../Composer/packages/types#../../Composer/packages/types::hash=a09085&locator=package-manager%40workspace%3A."
+  resolution: "@botframework-composer/types@file:../../Composer/packages/types#../../Composer/packages/types::hash=33ce41&locator=package-manager%40workspace%3A."
   dependencies:
     "@types/express": 4.16.1
     "@types/passport": ^1.0.4
     axios: ^0.21.1
     botframework-schema: ^4.11.1
     express-serve-static-core: 0.1.1
-    json-schema: ^0.2.5
+    json-schema: 0.4.0
     tslib: 2.4.0
   languageName: node
   linkType: hard
@@ -1625,16 +1625,16 @@ __metadata:
   linkType: hard
 
 "ansi-regex@npm:^3.0.0":
-  version: 3.0.0
-  resolution: "ansi-regex@npm:3.0.0"
-  checksum: 2ad11c416f81c39f5c65eafc88cf1d71aa91d76a2f766e75e457c2a3c43e8a003aadbf2966b61c497aa6a6940a36412486c975b3270cdfc3f413b69826189ec3
+  version: 3.0.1
+  resolution: "ansi-regex@npm:3.0.1"
+  checksum: 09daf180c5f59af9850c7ac1bd7fda85ba596cc8cbeb210826e90755f06c818af86d9fa1e6e8322fab2c3b9e9b03f56c537b42241139f824dd75066a1e7257cc
   languageName: node
   linkType: hard
 
 "ansi-regex@npm:^4.1.0":
-  version: 4.1.0
-  resolution: "ansi-regex@npm:4.1.0"
-  checksum: 97aa4659538d53e5e441f5ef2949a3cffcb838e57aeaad42c4194e9d7ddb37246a6526c4ca85d3940a9d1e19b11cc2e114530b54c9d700c8baf163c31779baf8
+  version: 4.1.1
+  resolution: "ansi-regex@npm:4.1.1"
+  checksum: b1a6ee44cb6ecdabaa770b2ed500542714d4395d71c7e5c25baa631f680fb2ad322eb9ba697548d498a6fd366949fc8b5bfcf48d49a32803611f648005b01888
   languageName: node
   linkType: hard
 
@@ -3176,10 +3176,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"json-schema@npm:^0.2.5":
-  version: 0.2.5
-  resolution: "json-schema@npm:0.2.5"
-  checksum: 54871525a19997c824d98916fbbef3cb190638c62e5945412785f3c6d90faae7bfff5a1935355a51b979497a7e059a2013eab4a6de144097b9fa80a5be920fb3
+"json-schema@npm:0.4.0":
+  version: 0.4.0
+  resolution: "json-schema@npm:0.4.0"
+  checksum: 66389434c3469e698da0df2e7ac5a3281bcff75e797a5c127db7c5b56270e01ae13d9afa3c03344f76e32e81678337a8c912bdbb75101c62e487dc3778461d72
   languageName: node
   linkType: hard
 
