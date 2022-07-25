@@ -152,6 +152,8 @@ export const DiagnosticList: React.FC<IDiagnosticListProps> = ({ diagnosticItems
       isPadded: true,
       isSorted: true,
       isSortedDescending: false,
+      sortAscendingAriaLabel: formatMessage('Sorted A to Z'),
+      sortDescendingAriaLabel: formatMessage('Sorted Z to A'),
       onColumnClick: (event) => {
         const newColumns = columns.slice();
         newColumns[1].isSorted = true;
@@ -169,6 +171,8 @@ export const DiagnosticList: React.FC<IDiagnosticListProps> = ({ diagnosticItems
       maxWidth: 180,
       isResizable: true,
       data: 'string',
+      sortAscendingAriaLabel: formatMessage('Sorted A to Z'),
+      sortDescendingAriaLabel: formatMessage('Sorted Z to A'),
       onRender: (item: IDiagnosticInfo) => {
         let locationPath = item.location;
         if (item.friendlyLocationBreadcrumbItems) {
@@ -204,6 +208,8 @@ export const DiagnosticList: React.FC<IDiagnosticListProps> = ({ diagnosticItems
       isCollapsible: true,
       isMultiline: true,
       data: 'string',
+      sortAscendingAriaLabel: formatMessage('Sorted A to Z'),
+      sortDescendingAriaLabel: formatMessage('Sorted Z to A'),
       onRender: (item: IDiagnosticInfo) => {
         return (
           <div data-is-focusable css={tableCell}>
