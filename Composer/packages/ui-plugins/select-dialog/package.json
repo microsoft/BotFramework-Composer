@@ -23,7 +23,7 @@
   "peerDependencies": {
     "@bfc/adaptive-form": "*",
     "@bfc/extension-client": "*",
-    "@fluentui/react": "^8.57.1",
+    "@fluentui/react": "^8.83.1",
     "@fluentui/style-utilities": "^8.6.0",
     "@fluentui/theme": "2.5.0",
     "format-message": "^6.2.3",

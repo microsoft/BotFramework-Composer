@@ -9,7 +9,7 @@
     "clean": "rimraf lib demo/dist"
   },
   "peerDependencies": {
-    "@fluentui/react": "^8.57.1",
+    "@fluentui/react": "^8.83.1",
     "react": "16.13.1",
     "react-dom": "16.13.1"
   },
