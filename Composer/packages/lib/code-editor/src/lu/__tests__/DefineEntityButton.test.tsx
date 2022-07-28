@@ -33,8 +33,7 @@ describe('<DefineEntityButton />', () => {
     act(() => {
       jest.runAllTimers();
     });
-
-    expect((await screen.findAllByText(/.*age.*/)).length).toBe(2);
+    expect(await screen.findByText('age')).toBeInTheDocument();
   });
 
   it('prebuilt: Should call onDefineEntity callback when a menu item is clicked', async () => {
@@ -64,6 +63,8 @@ describe('<DefineEntityButton />', () => {
       jest.runAllTimers();
     });
 
-    expect(screen.getByText('this page')).toBeInTheDocument();
+    expect(
+      screen.getByLabelText('Learn more about Define new entity', { selector: '.ms-Tooltip' })
+    ).toBeInTheDocument();
   });
 });
