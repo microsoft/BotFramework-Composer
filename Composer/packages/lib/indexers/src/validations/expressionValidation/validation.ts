@@ -23,22 +23,18 @@ export const addReturnType = (currentType: number, newType: number) => {
 export const trimExpression = (expression: string): string => {
   let result = expression.trim();
   if (result.startsWith('=')) {
-    result = result.substring(1);
+    result = result.substring(1).trim();
   }
-
-  result = result.trim();
 
   if (result.startsWith('$')) {
-    result = result.substring(1);
+    result = result.substring(1).trim();
   }
-
-  result = result.trim();
 
   if (result.startsWith('{') && result.endsWith('}')) {
-    result = result.substring(1, result.length - 1);
+    result = result.substring(1, result.length - 1).trim();
   }
 
-  return result.trim();
+  return result;
 };
 
 export const checkStringExpression = (exp: string, isStringType: boolean): number => {
