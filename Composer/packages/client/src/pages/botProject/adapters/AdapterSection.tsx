@@ -72,7 +72,7 @@ const AdapterSection = ({ projectId, scrollToSectionId }: Props) => {
               a2: ({ children }) => (
                 <Link
                   key="package-adapter-settings-page-learn-more"
-                  href={'https://aka.ms/composer-packagmanageraddconnection-learnmore'}
+                  href={'https://docs.microsoft.com/en-us/composer/how-to-manage-packages?tabs=dotnet'}
                   target="_blank"
                 >
                   {children}
