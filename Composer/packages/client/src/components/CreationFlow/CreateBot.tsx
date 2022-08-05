@@ -8,7 +8,7 @@ import formatMessage from 'format-message';
 import { PrimaryButton, DefaultButton } from '@fluentui/react/lib/Button';
 import { DialogFooter } from '@fluentui/react/lib/Dialog';
 import { ScrollablePane, ScrollbarVisibility } from '@fluentui/react/lib/ScrollablePane';
-import { Selection } from '@fluentui/react/lib/DetailsList';
+import { IColumn, Selection } from '@fluentui/react/lib/DetailsList';
 import { Text } from '@fluentui/react/lib/Text';
 import {
   DetailsList,
@@ -197,7 +197,7 @@ export function CreateBot(props: CreateBotProps) {
     }
   };
 
-  const tableColumns = [
+  const tableColumns: IColumn[] = [
     {
       key: 'name',
       name: formatMessage('Name'),

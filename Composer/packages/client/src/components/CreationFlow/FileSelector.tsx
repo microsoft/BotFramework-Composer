@@ -18,6 +18,7 @@ import {
   Selection,
   SelectionMode,
   CheckboxVisibility,
+  IColumn,
 } from '@fluentui/react/lib/DetailsList';
 import formatMessage from 'format-message';
 import { Fragment } from 'react';
@@ -296,7 +297,7 @@ export const FileSelector: React.FC<FileSelectorProps> = (props) => {
     );
   };
 
-  const tableColumns = [
+  const tableColumns: IColumn[] = [
     {
       key: 'type',
       name: formatMessage('File Type'),
@@ -308,6 +309,8 @@ export const FileSelector: React.FC<FileSelectorProps> = (props) => {
       fieldName: 'name',
       minWidth: 16,
       maxWidth: 16,
+      sortAscendingAriaLabel: formatMessage('Sorted A to Z'),
+      sortDescendingAriaLabel: formatMessage('Sorted Z to A'),
       onRender: renderIcon,
     },
     {
@@ -332,6 +335,8 @@ export const FileSelector: React.FC<FileSelectorProps> = (props) => {
       maxWidth: 500,
       isResizable: true,
       data: 'number',
+      sortAscendingAriaLabel: formatMessage('Sorted ascending'),
+      sortDescendingAriaLabel: formatMessage('Sorted descending'),
       onRender: (item: File) => {
         return (
           <div data-is-focusable css={tableCell}>

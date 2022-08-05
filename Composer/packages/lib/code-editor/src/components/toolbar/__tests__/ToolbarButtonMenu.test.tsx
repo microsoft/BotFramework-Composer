@@ -63,7 +63,7 @@ describe('<ToolbarButtonMenu />', () => {
 
     fireEvent.click(screen.getByTestId('menuButton'));
 
-    expect((await screen.findAllByText(/t-/)).length).toBe(5);
+    expect((await screen.findAllByText(/-\s+t-/)).length).toBe(5);
   });
 
   it('template: Should filter templates when passed query', async () => {
@@ -76,7 +76,7 @@ describe('<ToolbarButtonMenu />', () => {
       jest.runAllTimers();
     });
 
-    expect((await screen.findAllByText(/t-/)).length).toBe(3);
+    expect((await screen.findAllByText(/-\s+t-/)).length).toBe(3);
   });
 
   it('template: Should call onSelectCallback when a template is selected', async () => {

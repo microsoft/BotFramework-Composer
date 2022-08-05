@@ -33,7 +33,7 @@ const renderSelectSkillDialog = ({ onChange = jest.fn() } = {}) => {
 describe('Select Skill Dialog', () => {
   it('should display label', async () => {
     const { findByText } = renderSelectSkillDialog();
-    await findByText('Skill Dialog Name');
+    await findByText('Skill Dialog Name', { selector: '[for]' });
   });
 
   it('should update the dialog file with the selected skill', async () => {
