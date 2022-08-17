@@ -145,7 +145,7 @@ describe('<ManageService />', () => {
     const onNext = jest.fn();
     const onToggleVisibility = jest.fn();
 
-    const { baseElement, findByText, findByTestId, findByRole } = renderWithRecoil(
+    const { baseElement, findByText, findByTestId } = renderWithRecoil(
       <ManageService
         createService={createService}
         handoffInstructions={handoffInstructions}
@@ -164,7 +164,7 @@ describe('<ManageService />', () => {
 
     // test the default option (choose existing)
     // click the next button, ensure the title changes
-    const nextButton = await findByRole('button', { name: 'Next' });
+    const nextButton = (await findByText('Next')).closest('button')!;
     expect(nextButton).toBeDefined();
     await act(async () => {
       await fireEvent.click(nextButton);
@@ -181,7 +181,7 @@ describe('<ManageService />', () => {
 
     // ensure that since a subscription hasn't been selected
     // this button is disabled
-    const nextButton2 = await findByRole('button', { name: 'Next' });
+    const nextButton2 = (await findByText('Next')).closest('button')!;
     expect(nextButton2).toBeDefined();
     expect(nextButton2).toBeDisabled();
 
@@ -237,7 +237,7 @@ describe('<ManageService />', () => {
     const onNext = jest.fn();
     const onToggleVisibility = jest.fn();
 
-    const { baseElement, findByText, findByTestId, findByRole } = renderWithRecoil(
+    const { baseElement, findByText, findByTestId } = renderWithRecoil(
       <ManageService
         createService={createService}
         handoffInstructions={handoffInstructions}
@@ -262,7 +262,7 @@ describe('<ManageService />', () => {
     });
 
     // click the next button, ensure the title changes
-    const nextButton = await findByRole('button', { name: 'Next' });
+    const nextButton = (await findByText('Next')).closest('button')!;
     expect(nextButton).toBeDefined();
     await act(async () => {
       await fireEvent.click(nextButton);
@@ -271,7 +271,7 @@ describe('<ManageService />', () => {
 
     // ensure that since a subscription hasn't been selected
     // this button is disabled
-    const nextButton2 = await findByRole('button', { name: 'Next' });
+    const nextButton2 = (await findByText('Next')).closest('button')!;
     expect(nextButton2).toBeDefined();
     expect(nextButton2).toBeDisabled();
 
@@ -298,7 +298,7 @@ describe('<ManageService />', () => {
       await fireEvent.click(nextButton2);
     });
 
-    const nextButton3 = await findByRole('button', { name: 'Next' });
+    const nextButton3 = (await findByText('Next')).closest('button')!;
     expect(nextButton3).toBeDefined();
     expect(nextButton3).toBeDisabled();
 
@@ -310,33 +310,25 @@ describe('<ManageService />', () => {
     expect(resourceName).toBeDefined();
     expect(resourceName).toBeEnabled();
 
-    // choose subscription
+    // select group
     await act(async () => {
-      await fireEvent.click(resourceOption);
+      fireEvent.click(resourceOption);
     });
-
-    const myGroup = await findByText('mockedGroup');
-    expect(myGroup).toBeDefined();
-
     await act(async () => {
-      await fireEvent.click(myGroup);
-      await fireEvent.change(resourceName, { target: { value: 'mockedResource' } });
+      fireEvent.click(resourceOption);
+      const myGroup = await findByText('mockedGroup');
+      fireEvent.click(myGroup);
+      fireEvent.change(resourceName, { target: { value: 'mockedResource' } });
     });
 
     // select region
     const regionOption = await findByTestId('rootRegion');
     expect(regionOption).toBeDefined();
     expect(regionOption).toBeEnabled();
-    // choose subscription
     await act(async () => {
-      await fireEvent.keyDown(regionOption, DOWN_ARROW);
-    });
-
-    const myRegion = await findByText('West US');
-    expect(myRegion).toBeDefined();
-
-    await act(async () => {
-      await fireEvent.click(myRegion);
+      fireEvent.keyDown(regionOption, DOWN_ARROW);
+      const myRegion = await findByText('West US');
+      fireEvent.click(myRegion);
     });
 
     expect(nextButton3).toBeEnabled();
@@ -370,7 +362,7 @@ describe('<ManageService />', () => {
     const onNext = jest.fn();
     const onToggleVisibility = jest.fn();
 
-    const { baseElement, findByText, findByTestId, findByRole } = renderWithRecoil(
+    const { baseElement, findByText, findByTestId } = renderWithRecoil(
       <ManageService
         createService={createService}
         handoffInstructions={handoffInstructions}
@@ -396,7 +388,7 @@ describe('<ManageService />', () => {
     });
 
     // click the next button, ensure the title changes
-    const nextButton = await findByRole('button', { name: 'Next' });
+    const nextButton = (await findByText('Next')).closest('button')!;
     expect(nextButton).toBeDefined();
     await act(async () => {
       await fireEvent.click(nextButton);
@@ -405,7 +397,7 @@ describe('<ManageService />', () => {
 
     // ensure that since a subscription hasn't been selected
     // this button is disabled
-    const nextButton2 = await findByRole('button', { name: 'Next' });
+    const nextButton2 = (await findByText('Next')).closest('button')!;
     expect(nextButton2).toBeDefined();
     expect(nextButton2).toBeDisabled();
 
@@ -432,7 +424,7 @@ describe('<ManageService />', () => {
       await fireEvent.click(nextButton2);
     });
 
-    const nextButton3 = await findByRole('button', { name: 'Next' });
+    const nextButton3 = (await findByText('Next')).closest('button')!;
     expect(nextButton3).toBeDefined();
     expect(nextButton3).toBeDisabled();
 
@@ -444,24 +436,25 @@ describe('<ManageService />', () => {
     expect(resourceName).toBeDefined();
     expect(resourceName).toBeEnabled();
 
-    // choose subscription
+    // select group
     await act(async () => {
-      await fireEvent.click(resourceOption);
+      fireEvent.click(resourceOption);
+    });
+    await act(async () => {
+      fireEvent.click(resourceOption);
+      const myGroup = await findByText('mockedGroup');
+      fireEvent.click(myGroup);
+      fireEvent.blur(resourceOption);
     });
 
-    const myGroup = await findByText('mockedGroup');
-    expect(myGroup).toBeDefined();
-
     await act(async () => {
-      await fireEvent.click(myGroup);
-      await fireEvent.change(resourceName, { target: { value: 'mockedResource' } });
+      fireEvent.change(resourceName, { target: { value: 'mockedResource' } });
     });
 
     // select region
     const regionOption = await findByTestId('rootRegion');
     expect(regionOption).toBeDefined();
     expect(regionOption).toBeEnabled();
-    // choose subscription
     await act(async () => {
       await fireEvent.keyDown(regionOption, DOWN_ARROW);
     });
@@ -479,7 +472,6 @@ describe('<ManageService />', () => {
     const tierOption = await findByTestId('tier');
     expect(tierOption).toBeDefined();
     expect(tierOption).toBeEnabled();
-    // choose subscription
     await act(async () => {
       await fireEvent.keyDown(tierOption, DOWN_ARROW);
     });
@@ -524,7 +516,7 @@ describe('<ManageService />', () => {
     const onNext = jest.fn();
     const onToggleVisibility = jest.fn();
 
-    const { baseElement, findByText, findByTestId, findByRole } = renderWithRecoil(
+    const { baseElement, findByText, findByTestId } = renderWithRecoil(
       <ManageService
         createService={createService}
         handoffInstructions={handoffInstructions}
@@ -545,20 +537,20 @@ describe('<ManageService />', () => {
     // change selection
     const createOption = await findByText('Create and configure new Azure resources');
     await act(async () => {
-      await fireEvent.click(createOption);
+      fireEvent.click(createOption);
     });
 
     // click the next button, ensure the title changes
-    const nextButton = await findByRole('button', { name: 'Next' });
+    const nextButton = (await findByText('Next')).closest('button')!;
     expect(nextButton).toBeDefined();
     await act(async () => {
-      await fireEvent.click(nextButton);
+      fireEvent.click(nextButton);
     });
     expect(baseElement).toHaveTextContent(`Create ${serviceName} resources`);
 
     // ensure that since a subscription hasn't been selected
     // this button is disabled
-    const nextButton2 = await findByRole('button', { name: 'Next' });
+    const nextButton2 = (await findByText('Next')).closest('button')!;
     expect(nextButton2).toBeDefined();
     expect(nextButton2).toBeDisabled();
 
@@ -568,24 +560,24 @@ describe('<ManageService />', () => {
 
     // choose subscription
     await act(async () => {
-      await fireEvent.keyDown(subscriptionOption, DOWN_ARROW);
+      fireEvent.keyDown(subscriptionOption, DOWN_ARROW);
     });
 
     const mySub = await findByText('mockSubscription');
     expect(mySub).toBeDefined();
 
     await act(async () => {
-      await fireEvent.click(mySub);
+      fireEvent.click(mySub);
     });
 
     // next button should now be enabled
     expect(nextButton2).toBeEnabled();
 
     await act(async () => {
-      await fireEvent.click(nextButton2);
+      fireEvent.click(nextButton2);
     });
 
-    const nextButton3 = await findByRole('button', { name: 'Next' });
+    const nextButton3 = (await findByText('Next')).closest('button')!;
     expect(nextButton3).toBeDefined();
     expect(nextButton3).toBeDisabled();
 
@@ -597,33 +589,32 @@ describe('<ManageService />', () => {
     expect(resourceName).toBeDefined();
     expect(resourceName).toBeEnabled();
 
-    // choose subscription
+    // select group
     await act(async () => {
-      await fireEvent.click(resourceOption);
+      fireEvent.click(resourceOption);
     });
-
-    const myGroup = await findByText('mockedGroup');
-    expect(myGroup).toBeDefined();
-
     await act(async () => {
-      await fireEvent.click(myGroup);
-      await fireEvent.change(resourceName, { target: { value: 'mockedResource' } });
+      fireEvent.click(resourceOption);
+      const myGroup = await findByText('mockedGroup');
+      fireEvent.click(myGroup);
+      fireEvent.blur(resourceOption);
     });
 
     // select region
     const regionOption = await findByTestId('rootRegion');
     expect(regionOption).toBeDefined();
     expect(regionOption).toBeEnabled();
-    // choose subscription
+
     await act(async () => {
-      await fireEvent.keyDown(regionOption, DOWN_ARROW);
+      fireEvent.click(regionOption);
+      const option = await findByText('West US');
+      fireEvent.click(option);
+      fireEvent.blur(regionOption);
     });
 
-    const myRegion = await findByText('West US');
-    expect(myRegion).toBeDefined();
-
+    // set resource name
     await act(async () => {
-      await fireEvent.click(myRegion);
+      fireEvent.change(resourceName, { target: { value: 'mockedResource' } });
     });
 
     // NEXT BUTTON SHOULD STILL BE DISABLED! need to do tier selection!
@@ -632,16 +623,13 @@ describe('<ManageService />', () => {
     const tierOption = await findByTestId('tier');
     expect(tierOption).toBeDefined();
     expect(tierOption).toBeEnabled();
-    // choose subscription
-    await act(async () => {
-      await fireEvent.keyDown(tierOption, DOWN_ARROW);
-    });
 
-    const myTier = await findByText('mockedTier');
-    expect(myTier).toBeDefined();
-
+    // select tier
     await act(async () => {
-      await fireEvent.click(myTier);
+      fireEvent.click(tierOption);
+      const myTier = await findByText('mockedTier');
+      fireEvent.click(myTier);
+      fireEvent.blur(tierOption);
     });
 
     // finally the button should now be enabled
@@ -677,7 +665,7 @@ describe('<ManageService />', () => {
     const onNext = jest.fn();
     const onToggleVisibility = jest.fn();
 
-    const { baseElement, findByText, findByRole } = renderWithRecoil(
+    const { baseElement, findByText } = renderWithRecoil(
       <ManageService
         createService={createService}
         handoffInstructions={handoffInstructions}
@@ -702,7 +690,7 @@ describe('<ManageService />', () => {
     });
 
     // click the next button, ensure the title changes
-    const nextButton = await findByRole('button', { name: 'Next' });
+    const nextButton = (await findByText('Next')).closest('button')!;
     expect(nextButton).toBeDefined();
     await act(async () => {
       await fireEvent.click(nextButton);

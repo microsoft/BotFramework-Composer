@@ -119,7 +119,7 @@ describe('<ManageSpeech />', () => {
     const onNext = jest.fn();
     const onToggleVisibility = jest.fn();
 
-    const { baseElement, findByText, findByTestId, findByRole } = renderWithRecoil(
+    const { baseElement, findByText, findByTestId } = renderWithRecoil(
       <ManageSpeech
         hidden={false}
         onDismiss={onDismiss}
@@ -131,7 +131,7 @@ describe('<ManageSpeech />', () => {
 
     // test the default option (choose existing)
     // click the next button, ensure the title changes
-    const nextButton = await findByRole('button', { name: 'Next' });
+    const nextButton = (await findByText('Next')).closest('button')!;
     expect(nextButton).toBeDefined();
     act(() => {
       fireEvent.click(nextButton);
@@ -148,7 +148,7 @@ describe('<ManageSpeech />', () => {
 
     // ensure that since a subscription hasn't been selected
     // this button is disabled
-    const nextButton2 = await findByRole('button', { name: 'Next' });
+    const nextButton2 = (await findByText('Next')).closest('button')!;
     expect(nextButton2).toBeDefined();
     expect(nextButton2).toBeDisabled();
 
@@ -200,7 +200,7 @@ describe('<ManageSpeech />', () => {
     const onNext = jest.fn();
     const onToggleVisibility = jest.fn();
 
-    const { baseElement, findByText, findByTestId, findByRole } = renderWithRecoil(
+    const { baseElement, findByText, findByTestId } = renderWithRecoil(
       <ManageSpeech
         hidden={false}
         onDismiss={onDismiss}
@@ -216,7 +216,7 @@ describe('<ManageSpeech />', () => {
     fireEvent.click(createOption);
 
     // click the next button, ensure the title changes
-    const nextButton = await findByRole('button', { name: 'Next' });
+    const nextButton = (await findByText('Next')).closest('button')!;
     expect(nextButton).toBeDefined();
     await act(async () => {
       await fireEvent.click(nextButton);
@@ -225,7 +225,7 @@ describe('<ManageSpeech />', () => {
 
     // ensure that since a subscription hasn't been selected
     // this button is disabled
-    const nextButton2 = await findByRole('button', { name: 'Next' });
+    const nextButton2 = (await findByText('Next')).closest('button')!;
     expect(nextButton2).toBeDefined();
     expect(nextButton2).toBeDisabled();
 
@@ -252,7 +252,7 @@ describe('<ManageSpeech />', () => {
       await fireEvent.click(nextButton2);
     });
 
-    const nextButton3 = await findByRole('button', { name: 'Next' });
+    const nextButton3 = (await findByText('Next')).closest('button')!;
     expect(nextButton3).toBeDefined();
     expect(nextButton3).toBeDisabled();
 
@@ -264,24 +264,25 @@ describe('<ManageSpeech />', () => {
     expect(resourceName).toBeDefined();
     expect(resourceName).toBeEnabled();
 
-    // choose subscription
+    // select group
     await act(async () => {
-      await fireEvent.click(resourceOption);
+      fireEvent.click(resourceOption);
+    });
+    await act(async () => {
+      fireEvent.click(resourceOption);
+      const myGroup = await findByText('mockedGroup');
+      await fireEvent.click(myGroup);
+      fireEvent.blur(resourceOption);
     });
 
-    const myGroup = await findByText('mockedGroup');
-    expect(myGroup).toBeDefined();
-
     await act(async () => {
-      await fireEvent.click(myGroup);
-      await fireEvent.change(resourceName, { target: { value: 'mockedResource' } });
+      fireEvent.change(resourceName, { target: { value: 'mockedResource' } });
     });
 
     // select region
     const regionOption = await findByTestId('rootRegion');
     expect(regionOption).toBeDefined();
     expect(regionOption).toBeEnabled();
-    // choose subscription
     await act(async () => {
       // await fireEvent.keyDown(regionOption, DOWN_ARROW);
       await fireEvent.click(regionOption);
@@ -312,7 +313,7 @@ describe('<ManageSpeech />', () => {
     const onNext = jest.fn();
     const onToggleVisibility = jest.fn();
 
-    const { baseElement, findByText, findByRole } = renderWithRecoil(
+    const { baseElement, findByText } = renderWithRecoil(
       <ManageSpeech
         hidden={false}
         onDismiss={onDismiss}
@@ -328,7 +329,7 @@ describe('<ManageSpeech />', () => {
     fireEvent.click(generateOption);
 
     // click the next button, ensure the title changes
-    const nextButton = await findByRole('button', { name: 'Next' });
+    const nextButton = (await findByText('Next')).closest('button')!;
     expect(nextButton).toBeDefined();
     await act(async () => {
       await fireEvent.click(nextButton);

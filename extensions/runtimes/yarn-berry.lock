@@ -16,6 +16,7 @@ __metadata:
     express-serve-static-core: 0.1.1
     json-schema: 0.4.0
     tslib: 2.4.0
+  checksum: ca240110a807681973dcb661819b8979d4b05ad08763a171c17a10ba25aad32e3f0ec5125cb6b2462d0a6e1afa5b13b2c4dc336c1529a15ea4ac1c47654e0e31
   languageName: node
   linkType: hard
 

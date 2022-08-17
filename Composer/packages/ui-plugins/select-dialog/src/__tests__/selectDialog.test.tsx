@@ -90,6 +90,6 @@ describe('Select Dialog', () => {
 
   it('should display label', async () => {
     const { findByText } = renderSelectDialog();
-    await findByText('Dialog name');
+    await findByText('Dialog name', { selector: '[for]' });
   });
 });
