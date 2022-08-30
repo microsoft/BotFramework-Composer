@@ -6,6 +6,7 @@ import http from 'http';
 import portfinder from 'portfinder';
 import express, { Request, Response } from 'express';
 import { Server as WSServer } from 'ws';
+import { Debugger } from 'debug';
 
 interface WebSocket {
   close(): void;
@@ -22,7 +23,7 @@ export class RuntimeLogServer {
     return `ws://localhost:${this.port}/ws/runtimeLog/${projectId}`;
   }
 
-  public static async init(): Promise<number | void> {
+  public static async init({ log }: { log: Debugger }): Promise<number | void> {
     if (!this.restServer) {
       const app = express();
       this.restServer = http.createServer(app);
@@ -35,7 +36,12 @@ export class RuntimeLogServer {
         const res: any = new http.ServerResponse(req);
         return app(req, res);
       });
-      const port = await portfinder.getPortPromise();
+      const preferredPort = 8001;
+      const port = await portfinder.getPortPromise({ port: preferredPort }).catch((err) => {
+        log(`Unable to find an open port for runtime-log (wanted ${preferredPort}): ${err}`);
+        return preferredPort;
+      });
+      log(`Using ${port} port for runtime-log`);
       this.restServer.listen(port);
 
       app.use('/ws/runtimeLog/:projectId', (req: Request, res: Response) => {
