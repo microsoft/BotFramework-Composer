@@ -248,14 +248,22 @@ export class BotProjectDeploy {
         try {
           const statusResponse = await axios.get(statusUrl, { headers: { Authorization: `Bearer ${token}` } });
 
-          if (statusResponse.data.provisioningState === 'Succeeded') {
+          /* We use the 'statusEnum' property to map the states of Windows and Linux bots.
+          The 'provisioningState' property was previously being used, but Linux bots don't have it.
+          Visit https://github.com/projectkudu/kudu/blob/master/Kudu.Contracts/Deployment/DeployStatus.cs for more information. */
+          const statusEnum = {
+            3: 'Failed',
+            4: 'Succeeded',
+          }[statusResponse.data.status];
+
+          if (statusEnum === 'Succeeded') {
             this.logger({
               status: BotProjectDeployLoggerType.DEPLOY_INFO,
               message: 'Zip upload processed successfully.',
             });
             clearInterval(timerId);
             resolve();
-          } else if (statusResponse.data.provisioningState === 'Failed') {
+          } else if (statusEnum === 'Failed') {
             clearInterval(timerId);
             reject(`Zip upload processing failed. ${statusResponse.data.status_text}`);
           } else {
