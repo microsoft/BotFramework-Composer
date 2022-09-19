@@ -141,8 +141,12 @@ export async function start(electronContext?: ElectronContext): Promise<number |
     // Dynamically search for an open PORT starting with PORT or 5000, so that
     // the app doesn't crash if the port is already being used.
     // (disabled in dev in order to avoid breaking the webpack dev server proxy)
-    port = await portfinder.getPortPromise({ port: preferredPort });
+    port = await portfinder.getPortPromise({ port: preferredPort }).catch((err) => {
+      log(`Unable to find an open port for server (wanted ${preferredPort}): ${err}`);
+      return preferredPort;
+    });
   }
+  log(`Using ${port} port for server`);
 
   // Setup directline and conversation routes for v3 bots
   const DLServerState = DLServerContext.getInstance(port);

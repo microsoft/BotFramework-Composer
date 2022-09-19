@@ -3686,6 +3686,12 @@
   "sorted_a_to_z_915b2ed3": {
     "message": "Sorted A to Z"
   },
+  "sorted_ascending_a1e96e3a": {
+    "message": "Sorted ascending"
+  },
+  "sorted_descending_3093c22f": {
+    "message": "Sorted descending"
+  },
   "sorted_z_to_a_722f1567": {
     "message": "Sorted Z to A"
   },
