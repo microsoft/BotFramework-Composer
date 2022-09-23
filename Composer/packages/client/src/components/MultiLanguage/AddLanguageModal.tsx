@@ -18,6 +18,7 @@ import { DialogWrapper, DialogTypes } from '@bfc/ui-shared';
 import { hiddenContentStyle, mergeStyles } from '@fluentui/react/lib/Styling';
 import { Announced } from '@fluentui/react/lib/Announced';
 import { useId } from '@fluentui/react-hooks';
+import { FocusZoneDirection, FocusZone } from '@fluentui/react/lib/FocusZone';
 
 import { MultiLanguagesDialog } from '../../constants';
 
@@ -166,7 +167,7 @@ const AddLanguageModal: React.FC<IAddLanguageModalProps> = (props) => {
               onChange={onDefaultLanguageChange}
             />
           </StackItem>
-          <StackItem aria-labelledBy={translationsLabelId} grow={0}>
+          <StackItem aria-labelledby={translationsLabelId} grow={0}>
             <div id={translationsLabelId}>
               <div className={screenReaderOnly}>{formatMessage('Bot language translations')}</div>
               <Announced
@@ -196,21 +197,26 @@ const AddLanguageModal: React.FC<IAddLanguageModalProps> = (props) => {
                   { languagesCount: formData.languages.length }
                 )}
               />
+              <div className={screenReaderOnly}>
+                {formatMessage('Press tab then up and down arrow keys to navigate the search results')}
+              </div>
             </div>
             <Label htmlFor={searchBoxId} id={searchBoxLabelId}>
               {MultiLanguagesDialog.ADD_DIALOG.selectionTitle}
             </Label>
             <SearchBox
               disableAnimation
-              aria-labelledBy={searchBoxLabelId}
+              aria-labelledby={searchBoxLabelId}
               id={searchBoxId}
               placeholder={MultiLanguagesDialog.ADD_DIALOG.searchPlaceHolder}
               styles={{ root: { width: 300 } }}
               onChange={onSearch}
             />
-            <ScrollablePane styles={scrollablePaneStyles}>
-              <div role="list">{languageCheckBoxList}</div>
-            </ScrollablePane>
+            <FocusZone direction={FocusZoneDirection.vertical}>
+              <ScrollablePane styles={scrollablePaneStyles}>
+                <div role="list">{languageCheckBoxList}</div>
+              </ScrollablePane>
+            </FocusZone>
           </StackItem>
           <StackItem>
             <Checkbox
