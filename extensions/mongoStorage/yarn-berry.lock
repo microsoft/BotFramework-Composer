@@ -779,7 +779,7 @@ __metadata:
     "@types/mongoose": 5.11.97
     glob-to-regexp: 0.4.1
     mongodb-client-encryption: 2.1.0
-    mongoose: 6.4.3
+    mongoose: 6.4.6
   languageName: unknown
   linkType: soft
 
@@ -867,9 +867,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"mongoose@npm:6.4.3":
-  version: 6.4.3
-  resolution: "mongoose@npm:6.4.3"
+"mongoose@npm:6.4.6":
+  version: 6.4.6
+  resolution: "mongoose@npm:6.4.6"
   dependencies:
     bson: ^4.6.2
     kareem: 2.4.1
@@ -878,7 +878,7 @@ __metadata:
     mquery: 4.0.3
     ms: 2.1.3
     sift: 16.0.0
-  checksum: 016bfaf417cf423d801415a7bbb82bca5d721732ed7938d6a8e5c856cd14fc8b95cfa490fd0cca65363c22790b5c6bd961ec42f65f8377e8bf1a1e00a59caf86
+  checksum: afe568aca87fcd89b0b2fc2c9539825ceac97b3e49910bd4209a72a4628a871155724c15d420874f867985708c4c081aa0c40da97b783de6ae03661cedc87efe
   languageName: node
   linkType: hard
 
