@@ -253,7 +253,7 @@ export const FileSelector: React.FC<FileSelectorProps> = (props) => {
   const renderNameColumn = (file: File, index: number | undefined) => {
     const iconName = getFileIconName(file);
     return (
-      <div data-is-focusable css={tableCell}>
+      <div css={tableCell}>
         {index == selectedIndex && editMode !== EditMode.NONE ? (
           <TextField
             autoFocus
@@ -366,8 +366,8 @@ export const FileSelector: React.FC<FileSelectorProps> = (props) => {
           !focusedStorageFolder.writable ||
           item.type !== FileTypes.FOLDER ||
           index !== selectedIndex ? null : (
-          <div data-is-focusable css={tableCell}>
-            <div css={content} tabIndex={-1}>
+          <div css={tableCell}>
+            <div css={content}>
               <IconButton
                 ariaLabel={formatMessage('Edit')}
                 iconProps={{ iconName: 'Edit' }}
