@@ -15,7 +15,7 @@
   "dependencies": {
     "glob-to-regexp": "0.4.1",
     "mongodb-client-encryption": "2.1.0",
-    "mongoose": "6.4.3"
+    "mongoose": "6.4.6"
   },
   "devDependencies": {
     "@types/mongodb": "4.0.7",
