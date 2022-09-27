@@ -42,7 +42,7 @@ dotenvFiles.forEach((dotenvFile) => {
 
 function getGitSha() {
   try {
-    const sha = execSync('git rev-parse --short', { stdio: ['ignore', 'ignore', 'ignore'] });
+    const sha = execSync('git rev-parse --short HEAD').toString().replace(/\n/, '');
     return sha;
   } catch (e) {
     return 'test';

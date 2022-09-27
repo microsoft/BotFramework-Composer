@@ -73,6 +73,7 @@ export const EditQnAFromScratchModal: React.FC<EditQnAFromScratchModalProps> = (
       <div css={dialogWindow}>
         <Stack>
           <TextField
+            required
             data-testid={`knowledgeLocationTextField-name`}
             errorMessage={formErrors.name}
             label={formatMessage('Knowledge base name')}
