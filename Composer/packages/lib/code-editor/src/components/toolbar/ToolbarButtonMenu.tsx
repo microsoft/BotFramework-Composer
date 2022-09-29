@@ -341,9 +341,11 @@ export const ToolbarButtonMenu = React.memo((props: ToolbarButtonMenuProps) => {
     }
   }, [menuItems, flatPropertyListItems, flatFunctionListItems, noSearchResultMenuItem, query, payload.kind]);
 
+  const menuButtonRef = React.useRef<HTMLElement>(null);
   const onMenuDismissed = React.useCallback(() => {
     onReset();
     setPropertyTreeExpanded({});
+    menuButtonRef?.current?.focus();
   }, []);
 
   const menuProps: IContextualMenuProps = React.useMemo(() => {
@@ -449,6 +451,7 @@ export const ToolbarButtonMenu = React.memo((props: ToolbarButtonMenuProps) => {
       className={dismissHandlerClassName}
       data-testid="menuButton"
       disabled={disabled}
+      elementRef={menuButtonRef}
       menuProps={menuProps}
       styles={buttonStyles}
       onRenderIcon={renderIcon}
