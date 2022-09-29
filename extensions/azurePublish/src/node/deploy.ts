@@ -172,15 +172,26 @@ export class BotProjectDeploy {
       const profile = settings.publishTargets.find((p) => p.name === profileName);
       const configuration = JSON.parse(profile.configuration);
 
-      if (settings.runtime.command.includes('dotnet') && configuration.appServiceOperatingSystem === 'linux') {
-        await this.updateBotSettings(
-          this.accessToken,
-          name,
-          environment,
-          hostname,
-          absSettings.subscriptionId,
-          absSettings.resourceGroup
-        );
+      if (configuration.appServiceOperatingSystem === 'linux') {
+        let linuxFxVersion = '';
+
+        if (settings.runtime.command.includes('dotnet')) {
+          linuxFxVersion = 'DOTNETCORE|3.1';
+        }
+        if (settings.runtime.command.includes('npm')) {
+          linuxFxVersion = 'NODE|14-lts';
+        }
+        if (linuxFxVersion.length > 0) {
+          await this.updateBotSettings(
+            this.accessToken,
+            name,
+            environment,
+            hostname,
+            absSettings.subscriptionId,
+            absSettings.resourceGroup,
+            linuxFxVersion
+          );
+        }
       }
     } catch (error) {
       this.logger({
@@ -359,13 +370,16 @@ export class BotProjectDeploy {
     env: string,
     hostname: string,
     subscriptionId: string,
-    resourceGroup: string
+    resourceGroup: string,
+    linuxFxVersion: string
   ) {
     try {
       const updateEndpoint = this.buildUpdateEndpoint(hostname, name, env, subscriptionId, resourceGroup);
       const response = await axios.put(
         updateEndpoint,
-        { properties: { linuxFxVersion: 'DOTNETCORE|3.1' } },
+        {
+          properties: { linuxFxVersion: linuxFxVersion },
+        },
         { headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' } }
       );
 
