@@ -177,7 +177,7 @@ export const PublishProfileDialog: React.FC<PublishProfileDialogProps> = (props)
           subText: '',
         }}
         hidden={false}
-        minWidth={960}
+        maxWidth={960}
         modalProps={{
           isBlocking: true,
           isClickableOutsideFocusTrap: true,

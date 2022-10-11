@@ -46,6 +46,7 @@ export const root = css`
   height: calc(100vh - 50px);
   display: flex;
   flex-direction: row;
+  overflow: hidden;
 
   label: Page;
 `;
@@ -54,6 +55,7 @@ export const pageWrapper = css`
   display: flex;
   flex-direction: column;
   flex-grow: 1;
+  width: 100%;
 
   label: PageWrapper;
 `;
@@ -163,8 +165,17 @@ const Routes = (props) => {
   );
 };
 
-const projectStyle = css`
+const projectWrapper = css`
+  overflow: auto;
+  display: flex;
+  flex-flow: column;
   height: 100%;
+`;
+
+const projectStyle = css`
+  flex: auto;
+  min-width: 1030px;
+  min-height: 480px;
 
   & > div {
     height: 100%;
@@ -216,7 +227,11 @@ const ProjectRouter: React.FC<RouteComponentProps<{ projectId: string; skillId: 
     if (props.skillId && !botProjects.includes(props.skillId)) {
       return <LoadingSpinner />;
     } else {
-      return <div css={projectStyle}>{props.children}</div>;
+      return (
+        <div css={projectWrapper}>
+          <div css={projectStyle}>{props.children}</div>
+        </div>
+      );
     }
   }
   return <LoadingSpinner />;

@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx } from '@emotion/react';
+import { jsx, css } from '@emotion/react';
 import formatMessage from 'format-message';
 import { DialogFooter } from '@fluentui/react/lib/Dialog';
 import { useState, useMemo, useCallback, Fragment } from 'react';
@@ -12,6 +12,7 @@ import { IDropdownOption } from '@fluentui/react/lib/Dropdown';
 import { PublishTarget } from '@bfc/shared';
 import { DropdownField, TextField } from '@bfc/ui-shared';
 import { mergeStyleSets } from '@fluentui/react/lib/Styling';
+import styled from '@emotion/styled';
 
 import { separator } from '../../publish/styles';
 import { PublishType } from '../../../recoilModel/types';
@@ -32,6 +33,19 @@ type ProfileFormDialogProps = {
 
 //const hiddenProfileTypes = ['pva-publish-composer'];
 const hiddenProfileTypes = ['pva-publish-composer', 'azurePublishNew'];
+
+const ProfileContainer = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+`;
+
+const ProfileContent = styled.div`
+  flex-basis: 49%;
+  min-height: 430px;
+  @media screen and (max-width: 960px) /* 125% zoom */ {
+    min-height: calc(100vh - 160px);
+  }
+`;
 
 export const ProfileFormDialog: React.FC<ProfileFormDialogProps> = (props) => {
   const { name, setName, targetType, setTargetType, onDismiss, targets, types, onNext, setType, current } = props;
@@ -85,8 +99,8 @@ export const ProfileFormDialog: React.FC<ProfileFormDialogProps> = (props) => {
 
   return (
     <Fragment>
-      <Fragment>
-        <div style={{ width: '49%', minHeight: '430px' }}>
+      <ProfileContainer>
+        <ProfileContent>
           <form>
             <TextField
               required
@@ -110,7 +124,7 @@ export const ProfileFormDialog: React.FC<ProfileFormDialogProps> = (props) => {
               onChange={updateType}
             />
           </form>
-        </div>
+        </ProfileContent>
         <Separator css={separator} />
         <DialogFooter>
           <PrimaryButton
@@ -123,7 +137,7 @@ export const ProfileFormDialog: React.FC<ProfileFormDialogProps> = (props) => {
           />
           <DefaultButton style={{ margin: '0 4px' }} text={formatMessage('Cancel')} onClick={onDismiss} />
         </DialogFooter>
-      </Fragment>
+      </ProfileContainer>
     </Fragment>
   );
 };

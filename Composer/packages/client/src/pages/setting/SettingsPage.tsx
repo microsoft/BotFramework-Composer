@@ -33,6 +33,14 @@ const header = css`
   label: PageHeader;
 `;
 
+const pageWrapper = css`
+  overflow: auto;
+  > div {
+    min-width: 1030px;
+    min-height: 480px;
+  }
+`;
+
 const getProjectLink = (path: string, id?: string) => {
   return id ? `/settings/bot/${id}/${path}` : `/settings/${path}`;
 };
@@ -107,33 +115,35 @@ const SettingPage: React.FC<RouteComponentProps> = () => {
   }, [location.pathname]);
 
   return (
-    <Page
-      headerStyle={header}
-      mainRegionName={formatMessage('Settings editor')}
-      navLinks={links}
-      navRegionName={formatMessage('Settings menu')}
-      pageMode={'settings'}
-      title={title}
-      toolbarItems={[]}
-    >
-      <AddLanguageModal
-        defaultLanguage={defaultLanguage}
-        isOpen={showAddLanguageModal}
-        languages={languages}
-        locale={locale}
-        onDismiss={() => addLanguageDialogCancel(projectId)}
-        onSubmit={onAddLangModalSubmit}
-      ></AddLanguageModal>
-      <DeleteLanguageModal
-        defaultLanguage={defaultLanguage}
-        isOpen={showDelLanguageModal}
-        languages={languages}
-        locale={locale}
-        onDismiss={() => delLanguageDialogCancel(projectId)}
-        onSubmit={onDeleteLangModalSubmit}
-      ></DeleteLanguageModal>
-      <SettingsRoutes projectId={projectId} />
-    </Page>
+    <div css={pageWrapper}>
+      <Page
+        headerStyle={header}
+        mainRegionName={formatMessage('Settings editor')}
+        navLinks={links}
+        navRegionName={formatMessage('Settings menu')}
+        pageMode={'settings'}
+        title={title}
+        toolbarItems={[]}
+      >
+        <AddLanguageModal
+          defaultLanguage={defaultLanguage}
+          isOpen={showAddLanguageModal}
+          languages={languages}
+          locale={locale}
+          onDismiss={() => addLanguageDialogCancel(projectId)}
+          onSubmit={onAddLangModalSubmit}
+        ></AddLanguageModal>
+        <DeleteLanguageModal
+          defaultLanguage={defaultLanguage}
+          isOpen={showDelLanguageModal}
+          languages={languages}
+          locale={locale}
+          onDismiss={() => delLanguageDialogCancel(projectId)}
+          onSubmit={onDeleteLangModalSubmit}
+        ></DeleteLanguageModal>
+        <SettingsRoutes projectId={projectId} />
+      </Page>
+    </div>
   );
 };
 

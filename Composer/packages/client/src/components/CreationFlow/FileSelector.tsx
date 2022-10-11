@@ -34,6 +34,8 @@ import { StorageFolder, File } from '../../recoilModel/types';
 import { getFileIconName, calculateTimeDiff } from '../../utils/fileUtil';
 import httpClient from '../../utils/httpUtil';
 
+import { FormStack } from './FormStack';
+
 // -------------------- Styles -------------------- //
 
 const detailListContainer = css`
@@ -78,22 +80,6 @@ export const content = css`
   outline: none;
   margin-top: 3px;
 `;
-
-export const halfstack = {
-  root: [
-    {
-      flexBasis: '50%',
-    },
-  ],
-};
-
-export const stackinput = {
-  root: [
-    {
-      marginBottom: '1rem',
-    },
-  ],
-};
 
 export const editButton = {
   root: {
@@ -521,8 +507,8 @@ export const FileSelector: React.FC<FileSelectorProps> = (props) => {
 
   return (
     <Fragment>
-      <Stack horizontal styles={stackinput} tokens={{ childrenGap: '2rem' }}>
-        <StackItem grow={0} styles={halfstack}>
+      <FormStack>
+        <StackItem>
           <ComboBox
             allowFreeform
             useComboBoxAsMenuWidth
@@ -532,7 +518,6 @@ export const FileSelector: React.FC<FileSelectorProps> = (props) => {
             label={formatMessage('Location')}
             options={breadcrumbItems}
             selectedKey={currentPath}
-            styles={{ root: { width: '420px' } }}
             onChange={updatePath}
             onPendingValueChanged={updatePathPending}
           />
@@ -546,7 +531,7 @@ export const FileSelector: React.FC<FileSelectorProps> = (props) => {
             </Link>
           )}
         </StackItem>
-      </Stack>
+      </FormStack>
       <div css={detailListContainer} data-is-scrollable="true">
         <ScrollablePane scrollbarVisibility={ScrollbarVisibility.auto}>
           <DetailsList

@@ -8,6 +8,7 @@ import { PrimaryButton } from '@fluentui/react/lib/Button';
 import { ScrollablePane } from '@fluentui/react/lib/ScrollablePane';
 import formatMessage from 'format-message';
 import ReactMarkdown from 'react-markdown';
+import styled from '@emotion/styled';
 
 import { DialogTypes, DialogWrapper } from '../DialogWrapper';
 
@@ -18,6 +19,16 @@ type DisplayMarkdownDialogProps = {
   onDismiss: () => void;
 };
 
+const ScrollablePaneWrapper = styled.div`
+  height: 500px;
+  position: relative;
+  border: 1px solid #333;
+  @media screen and (max-width: 960px) /* 125% zoom */ {
+    height: auto;
+    flex: auto;
+  }
+`;
+
 export const DisplayMarkdownDialog = (props: DisplayMarkdownDialogProps) => {
   return (
     <DialogWrapper
@@ -26,13 +37,13 @@ export const DisplayMarkdownDialog = (props: DisplayMarkdownDialogProps) => {
       title={props.title}
       onDismiss={props.onDismiss}
     >
-      <div css={{ height: 500, position: 'relative', border: '1px solid #333' }}>
+      <ScrollablePaneWrapper>
         <ScrollablePane>
           <ReactMarkdown css={{ padding: 20 }} linkTarget="_blank">
             {props.content}
           </ReactMarkdown>
         </ScrollablePane>
-      </div>
+      </ScrollablePaneWrapper>
       <DialogFooter>
         <PrimaryButton text={formatMessage('OK')} onClick={props.onDismiss} />
       </DialogFooter>
