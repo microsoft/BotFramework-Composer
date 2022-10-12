@@ -1,7 +1,7 @@
 {
 	"version": 1,
 	"whatsNewLinks": [{
-		"title": "Community Guidance on QnA Maker and CQA Announcements",
+		"title": "Guidance on recent QnA Maker and CQA Announcements",
 		"description": "With the recent announcement of the Q&A Maker retirement, we encourage people to visit the following link to learn about Power Virtual Agent's and Bot Framework's plans to integrate with Language Studio & Custom Question Answering.",
 		"url": "https://github.com/microsoft/BotFramework-Composer/issues/9400"
 	}],
