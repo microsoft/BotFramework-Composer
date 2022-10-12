@@ -45,7 +45,6 @@ export const formContainer = css`
   display: flex;
   flex-direction: column;
   max-width: 500px;
-  // width: 500px;
   border-left: 1px solid #f3f2f1;
   padding: 10px 10px 10px 30px;
 `;
@@ -54,7 +53,6 @@ export const choiceContainer = css`
   display: flex;
   flex-direction: column;
   padding: 10px 30px 10px 10px;
-  // width: 329px;
 `;
 
 export const dialogWindow = css`

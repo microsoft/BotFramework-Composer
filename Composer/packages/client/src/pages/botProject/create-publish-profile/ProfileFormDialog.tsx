@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx, css } from '@emotion/react';
+import { jsx } from '@emotion/react';
 import formatMessage from 'format-message';
 import { DialogFooter } from '@fluentui/react/lib/Dialog';
 import { useState, useMemo, useCallback, Fragment } from 'react';

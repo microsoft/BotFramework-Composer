@@ -1879,7 +1879,7 @@ __metadata:
 
 "@bfc/code-editor@file:../../Composer/packages/lib/code-editor::locator=azurePublish%40workspace%3A.":
   version: 0.0.0
-  resolution: "@bfc/code-editor@file:../../Composer/packages/lib/code-editor#../../Composer/packages/lib/code-editor::hash=11552c&locator=azurePublish%40workspace%3A."
+  resolution: "@bfc/code-editor@file:../../Composer/packages/lib/code-editor#../../Composer/packages/lib/code-editor::hash=2fd137&locator=azurePublish%40workspace%3A."
   dependencies:
     "@emotion/react": ^11.1.3
     "@emotion/styled": ^11.1.3
@@ -1902,7 +1902,7 @@ __metadata:
     "@bfc/ui-shared": "*"
     react: 16.13.1
     react-dom: 16.13.1
-  checksum: 4d7fbf613915d6ae65bc1737346d5ad353766f36bb03f4fef0f94ce063d056166da9043677a4e8e610a2dbadb627e29df1893eda8dcac8f74201a2e77baccea2
+  checksum: 12992120cb3addfebd48ede1740792029a4c6ce268ab0be95c110bd60cbbe9993830d60753dbc7d5c87e992f64fdc122af09ebfe6e9fcbfc747102560e1fb574
   languageName: node
   linkType: hard
 
@@ -1957,7 +1957,7 @@ __metadata:
 
 "@bfc/ui-shared@file:../../Composer/packages/lib/ui-shared::locator=azurePublish%40workspace%3A.":
   version: 0.0.0
-  resolution: "@bfc/ui-shared@file:../../Composer/packages/lib/ui-shared#../../Composer/packages/lib/ui-shared::hash=ffa00b&locator=azurePublish%40workspace%3A."
+  resolution: "@bfc/ui-shared@file:../../Composer/packages/lib/ui-shared#../../Composer/packages/lib/ui-shared::hash=b9eafc&locator=azurePublish%40workspace%3A."
   dependencies:
     "@emotion/react": ^11.1.3
     "@emotion/styled": ^11.1.3
@@ -1969,7 +1969,7 @@ __metadata:
     format-message: ^6.2.3
     react: 16.13.1
     react-dom: 16.13.1
-  checksum: 349364ab9b42c8f96771b6e2ffcb9c7a3debbbef285bfa86979c1ae1ff33be96a23d77387840f2b3624b440584244f72a6012c4aade9dd8ce91f92b0d56ec98b
+  checksum: 77ca6110ec926304ce41637a8515d8a5b996e65500ddda0550d70ef50e2e977b68e3a9ffc31c83a03290dad35c37b375bb32c253414c0e018d6fb869bc25f536
   languageName: node
   linkType: hard
 
