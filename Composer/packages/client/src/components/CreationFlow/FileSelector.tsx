@@ -22,7 +22,7 @@ import {
 } from '@fluentui/react/lib/DetailsList';
 import formatMessage from 'format-message';
 import { Fragment } from 'react';
-import { Stack, StackItem } from '@fluentui/react/lib/Stack';
+import { StackItem } from '@fluentui/react/lib/Stack';
 import { ComboBox, IComboBox, IComboBoxOption } from '@fluentui/react/lib/ComboBox';
 import { TextField } from '@fluentui/react/lib/TextField';
 import moment from 'moment';
