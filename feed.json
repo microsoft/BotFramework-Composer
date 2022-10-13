@@ -1,35 +1,9 @@
 {
 	"version": 1,
 	"whatsNewLinks": [{
-		"title": "Conversational AI announcements at Microsoft Build 2021",
-		"description": "Find out more about our latest release, including Composer 2.0, new templates and enhanced authoring, testing and publishing capabilities.",
-		"url": "https://aka.ms/ConvAIBuild2021"
-	},
-	{
-		"title": "Announcing Enterprise Assistant Bot Template and Conversational UX Guide",
-		"description": "Find out more about the new Enterprise Assistant Bot template, to help you accelerate building high-quality enterprise assistants.",
-		"url": "http://aka.ms/EnterpriseAssistantBlogBuild2021"
-	},
-		{
-		"title": "Bot Framework Composer 1.3",
-		"description": "New preview features: Form Dialogs, Orchestrator and Package Manager",
-		"url": "https://techcommunity.microsoft.com/t5/azure-ai/bot-framework-composer-1-3-is-now-available/ba-p/1996923"
-	}, {
-		"title": "Build 2020 updates",
-		"description": "Read all of the updates from the Build conference, including Composer GA and Bot Framework SDK v4.9.",
-		"url": "https://techcommunity.microsoft.com/t5/azure-ai/build-2020-conversational-ai-updates/ba-p/1397685"
-	}, {
-		"title": "Microsoft Ignite 2020: Publish to Microsoft Power Virtual Agents ",
-		"description": "Open a Power Virtual Agents topic in Bot Framework Composer, create a custom bot and publish back to Microsoft Power Virtual Agents.",
-		"url": "https://powervirtualagents.microsoft.com/en-us/blog/power-virtual-agents-integration-with-bot-framework-composer-is-available-in-public-preview/"
-	}, {
-		"title": "Microsoft Ignite 2020: Conversational AI",
-		"description": "Updates to Conversational AI include Microsoft Teams APIs, and new releases for .NET, JavaScript, Python and Java (preview 7).",
-		"url": "https://techcommunity.microsoft.com/t5/azure-ai/november-2020-conversational-ai-update/ba-p/1892528"
-	}, {
-		"title": "Microsoft Ignite 2020: Integration of QnA into Composer",
-		"description": "Updates including the addition of creation and management capabilities for QnA Maker knowledgebase and improvement of overall productivity.",
-		"url": "https://techcommunity.microsoft.com/t5/azure-ai/ignite-2020-conversational-ai-updates/ba-p/1691841"
+		"title": "Guidance on recent QnA Maker and CQA Announcements",
+		"description": "With the recent announcement of the Q&A Maker retirement, we encourage people to visit the following link to learn about Power Virtual Agent's and Bot Framework's plans to integrate with Language Studio & Custom Question Answering.",
+		"url": "https://github.com/microsoft/BotFramework-Composer/issues/9400"
 	}],
 	"tabs": [{
 		"title": "Latest Videos",
