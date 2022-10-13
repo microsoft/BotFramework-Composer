@@ -32,13 +32,6 @@ export const ContentStyle = css`
     }
   }
 `;
-export const contentEditor = css`
-  flex: 4;
-  height: calc(100vh - 200px);
-  position: relative;
-  overflow: visible;
-  width: 100%;
-`;
 
 export const publishDialogText = css`
   background-color: #ddf3db;
