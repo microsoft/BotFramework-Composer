@@ -41,9 +41,10 @@ const ProfileContainer = styled.div`
 
 const ProfileContent = styled.div`
   flex-basis: 49%;
-  min-height: 430px;
+  min-height: 400px;
   @media screen and (max-width: 960px) /* 125% zoom */ {
     min-height: calc(100vh - 160px);
+    flex: auto;
   }
 `;
 

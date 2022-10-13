@@ -19,7 +19,7 @@ const Root = styled.div`
   display: grid;
   grid-template-columns: 30% 1fr;
   grid-template-rows: 1fr;
-  @media screen and (max-width: 960px) /* 125% zoom */ {
+  @media screen and (max-width: 640px) /* 200% zoom */ {
     grid-template-columns: 1fr;
     grid-auto-rows: auto;
   }

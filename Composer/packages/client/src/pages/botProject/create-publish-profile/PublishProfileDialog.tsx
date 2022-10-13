@@ -182,6 +182,11 @@ export const PublishProfileDialog: React.FC<PublishProfileDialogProps> = (props)
           isBlocking: true,
           isClickableOutsideFocusTrap: true,
         }}
+        styles={{
+          main: {
+            flex: 'auto',
+          },
+        }}
         onDismiss={closeDialog}
       >
         {page !== Page.ConfigProvision && (

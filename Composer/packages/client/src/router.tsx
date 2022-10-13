@@ -175,7 +175,7 @@ const projectWrapper = css`
 const projectStyle = css`
   flex: auto;
   min-width: 1030px;
-  min-height: 480px;
+  min-height: 400px;
 
   & > div {
     height: 100%;

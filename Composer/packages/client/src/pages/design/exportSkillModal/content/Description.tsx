@@ -20,9 +20,18 @@ const styles = {
     justify-content: space-between;
     width: 75%;
     margin: -7px 0;
+    @media screen and (max-width: 960px) /* 125% zoom */ {
+      width: auto;
+    }
+    @media screen and (max-width: 720px) /* 150% zoom */ {
+      flex-flow: column;
+    }
   `,
   field: css`
     flex-basis: 350px;
+    @media screen and (max-width: 720px) /* 150% zoom */ {
+      flex-basis: auto;
+    }
   `,
 };
 

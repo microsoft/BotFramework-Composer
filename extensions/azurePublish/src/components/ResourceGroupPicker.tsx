@@ -10,10 +10,13 @@ import { TextField } from '@fluentui/react/lib/TextField';
 
 import { useDebounce } from './useDebounce';
 
-const stackStyles = { root: { marginBottom: '6px', ninWidth: '500px' } };
-const dropdownStyles = { root: { marginBottom: '6px' }, dropdown: { maxWidth: '300px', width: 'auto' } };
+const stackStyles = { root: { marginBottom: '6px', ninWidth: '500px', flex: 'auto', alignSelf: 'stretch' } };
+const dropdownStyles = {
+  root: { marginBottom: '6px' },
+  dropdown: { maxWidth: '300px', width: 'auto' },
+};
 const itemIconStyles = { marginRight: '8px' };
-const newNameTextFileStyles = { root: { marginTop: '10px', maxWidth: '300px', flex: 'auto' } };
+const newNameTextFileStyles = { root: { marginTop: '10px', maxWidth: '300px' } };
 
 const CREATE_NEW_KEY = 'CREATE_NEW';
 

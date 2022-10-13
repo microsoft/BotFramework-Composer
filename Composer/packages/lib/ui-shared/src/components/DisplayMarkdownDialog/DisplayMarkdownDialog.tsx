@@ -24,8 +24,7 @@ const ScrollablePaneWrapper = styled.div`
   position: relative;
   border: 1px solid #333;
   @media screen and (max-width: 960px) /* 125% zoom */ {
-    height: auto;
-    flex: auto;
+    max-height: calc(100vh - 160px);
   }
 `;
 

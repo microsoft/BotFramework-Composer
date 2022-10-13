@@ -37,7 +37,7 @@ const pageWrapper = css`
   overflow: auto;
   > div {
     min-width: 1030px;
-    min-height: 480px;
+    min-height: 400px;
   }
 `;
 
