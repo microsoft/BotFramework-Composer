@@ -19,6 +19,7 @@ export const contentWrapper = css`
   flex-grow: 1;
   height: 100%;
   position: relative;
+  overflow: auto;
   label: DesignPageContent;
 `;
 
@@ -75,6 +76,11 @@ export const splitPaneWrapper = css`
   flex-grow: 1;
   overflow: hidden;
   height: 100%;
+  @media screen and (max-width: 960px) {
+    .secondary {
+      padding-right: 40px;
+    }
+  }
 `;
 
 export const visualPanel = css`
@@ -191,6 +197,7 @@ export const styles = {
     root: [
       {
         marginBottom: '1rem',
+        gap: '2rem',
       },
     ],
   },
