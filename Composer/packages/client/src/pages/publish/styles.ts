@@ -49,7 +49,6 @@ export const ContentStyle = css`
 `;
 export const contentEditor = css`
   flex: 4;
-  height: calc(100vh - 200px);
   min-height: 256px;
   position: relative;
   overflow: auto;
