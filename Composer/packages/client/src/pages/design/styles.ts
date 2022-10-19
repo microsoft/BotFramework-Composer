@@ -76,7 +76,7 @@ export const splitPaneWrapper = css`
   flex-grow: 1;
   overflow: hidden;
   height: 100%;
-  @media screen and (max-width: 960px) {
+  @media screen and (max-width: 1080px) {
     .secondary {
       padding-right: 40px;
     }
