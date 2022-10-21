@@ -9,6 +9,7 @@ import { useRecoilValue } from 'recoil';
 import { OpenConfirmModal, dialogStyle } from '@bfc/ui-shared';
 import { useSetRecoilState } from 'recoil';
 import React from 'react';
+import { useShellApi } from '@bfc/extension-client';
 
 import { DialogDeleting, removeSkillDialog } from '../../constants';
 import { createSelectedPath, deleteTrigger as DialogdeleteTrigger } from '../../utils/dialogUtil';
@@ -89,6 +90,7 @@ const SideBar: React.FC<SideBarProps> = React.memo(({ projectId }) => {
     removeSkillFromBotProject,
     updateZoomRate,
     deleteTrigger,
+    setMessage: announce,
   } = useRecoilValue(dispatcherState);
 
   const skillUsedInBotsMap = useRecoilValue(skillUsedInBotsSelector);
@@ -181,12 +183,12 @@ const SideBar: React.FC<SideBarProps> = React.memo(({ projectId }) => {
   }
 
   async function handleDeleteTrigger(projectId: string, dialogId: string, index: number) {
-    const content = DialogdeleteTrigger(
-      projectDialogsMap[projectId],
-      dialogId,
-      index,
-      async (trigger) => await deleteTrigger(projectId, dialogId, trigger)
-    );
+    const content = DialogdeleteTrigger(projectDialogsMap[projectId], dialogId, index, async (trigger) => {
+      await deleteTrigger(projectId, dialogId, trigger);
+      announce(
+        formatMessage(`The trigger {triggerName} has been deleted`, { triggerName: trigger.$designer?.name ?? '' })
+      );
+    });
 
     if (content) {
       await updateDialog({ id: dialogId, content, projectId });
