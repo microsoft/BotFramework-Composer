@@ -86,6 +86,6 @@ describe('<InsertEntityButton />', () => {
       jest.runAllTimers();
     });
 
-    expect((await screen.findAllByText(/.*target.*/)).length).toBe(1);
+    expect((await screen.findAllByText(/.*target.*/)).length).toBe(2);
   });
 });
