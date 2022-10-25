@@ -9,7 +9,6 @@ import { useRecoilValue } from 'recoil';
 import { OpenConfirmModal, dialogStyle } from '@bfc/ui-shared';
 import { useSetRecoilState } from 'recoil';
 import React from 'react';
-import { useShellApi } from '@bfc/extension-client';
 
 import { DialogDeleting, removeSkillDialog } from '../../constants';
 import { createSelectedPath, deleteTrigger as DialogdeleteTrigger } from '../../utils/dialogUtil';
