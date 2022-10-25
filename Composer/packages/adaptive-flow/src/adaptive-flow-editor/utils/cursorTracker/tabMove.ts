@@ -35,6 +35,18 @@ export function handleTabMove(currentElement: SelectorElement, selectableElement
   let nextElement: SelectorElement;
   const selectableChildren = findSelectableChildren(currentElement, selectableElements);
   const selectableParent = findSelectableParent(currentElement, selectableElements);
+  const selectableSiblings = selectableElements.filter(
+    (el) =>
+      !selectableChildren.includes(el) &&
+      el.bounds.top > currentElement.bounds.top - 10 &&
+      el.bounds.top < currentElement.bounds.top + 10
+  );
+  const nextSibling = locateNearestElement(
+    currentElement,
+    selectableSiblings,
+    command === KeyboardCommandTypes.Cursor.MoveNext ? Direction.Right : Direction.Left,
+    ['isNode', 'isEdgeMenu']
+  );
   const findElementWithSuffix = (suffix) => {
     return selectableElements.find((element) => element.selectedId === `${selectableParent?.selectedId}${suffix}`);
   };
@@ -42,12 +54,15 @@ export function handleTabMove(currentElement: SelectorElement, selectableElement
     if (selectableChildren.length > 0) {
       // Tab to inner selectable element.
       nextElement = selectableChildren[0];
+    } else if (nextSibling && nextSibling !== currentElement) {
+      // Tab nearest sibling element.
+      nextElement = nextSibling;
     } else {
       const hasInlineLinkElement = currentElement.selectedId.endsWith('dot') && findElementWithSuffix('link');
       if (hasInlineLinkElement) {
         nextElement = findElementWithSuffix('link') || currentElement;
       } else {
-        // Perform like presssing down arrow key.
+        // Perform like pressing down arrow key.
         nextElement = locateNearestElement(currentElement, selectableElements, Direction.Down, [
           'isNode',
           'isEdgeMenu',
@@ -55,7 +70,9 @@ export function handleTabMove(currentElement: SelectorElement, selectableElement
       }
     }
   } else if (command === KeyboardCommandTypes.Cursor.MovePrevious) {
-    if (selectableParent) {
+    if (nextSibling && nextSibling !== currentElement) {
+      nextElement = nextSibling;
+    } else if (selectableParent) {
       // Tab to parent.
       if (currentElement.isInlineLinkElement) {
         nextElement = findElementWithSuffix('dot') || selectableParent;

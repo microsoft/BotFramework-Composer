@@ -29,6 +29,7 @@ const styles = {
     display: flex;
     margin: 4px -18px;
     align-items: center;
+    width: 100%;
   `,
 };
 
