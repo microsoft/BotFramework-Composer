@@ -8089,6 +8089,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@xmldom/xmldom@npm:^0.8.3":
+  version: 0.8.3
+  resolution: "@xmldom/xmldom@npm:0.8.3"
+  checksum: 087303060fc794f0ec8c0e9031362c1ae56eb1cf06b291cc178602462c072fb9f84657a430ae9c8c1b4c0d33549259e89ed14ebc86ca1a696f253bdd7f0dffcf
+  languageName: node
+  linkType: hard
+
 "@xtuc/ieee754@npm:^1.2.0":
   version: 1.2.0
   resolution: "@xtuc/ieee754@npm:1.2.0"
@@ -8316,8 +8323,8 @@ __metadata:
   linkType: hard
 
 "adaptive-expressions@npm:^4.16.0":
-  version: 4.16.0
-  resolution: "adaptive-expressions@npm:4.16.0"
+  version: 4.18.0
+  resolution: "adaptive-expressions@npm:4.18.0"
   dependencies:
     "@microsoft/recognizers-text-data-types-timex-expression": 1.3.0
     "@types/atob-lite": ^2.0.0
@@ -8325,7 +8332,7 @@ __metadata:
     "@types/lodash.isequal": ^4.5.5
     "@types/lru-cache": ^5.1.0
     "@types/xmldom": ^0.1.30
-    "@xmldom/xmldom": ^0.7.4
+    "@xmldom/xmldom": ^0.8.3
     antlr4ts: 0.5.0-alpha.3
     atob-lite: ^2.0.0
     big-integer: ^1.6.48
@@ -8338,7 +8345,7 @@ __metadata:
     lru-cache: ^5.1.1
     uuid: ^8.3.2
     xpath: ^0.0.32
-  checksum: 3b1e9f33e8bb652834818d6689e537f4ac20ceb3961b291b20f91ecc1959f1d5496791fe157ff7f6fdf08d3a9feaf3df3d8e06fa877152c251fafe6ae62bed2b
+  checksum: 9e42ca6da3054151399629e0a4343dd0561b5554ec80e63fb4fa91c32b85e3b0b88aebfb38a2551ee2f07c2e77bf4b3bdc630fa3d2edc654e919271bae6cf6e7
   languageName: node
   linkType: hard
 

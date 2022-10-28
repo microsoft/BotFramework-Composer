@@ -1879,7 +1879,7 @@ __metadata:
 
 "@bfc/code-editor@file:../../Composer/packages/lib/code-editor::locator=azurePublish%40workspace%3A.":
   version: 0.0.0
-  resolution: "@bfc/code-editor@file:../../Composer/packages/lib/code-editor#../../Composer/packages/lib/code-editor::hash=cf4a8a&locator=azurePublish%40workspace%3A."
+  resolution: "@bfc/code-editor@file:../../Composer/packages/lib/code-editor#../../Composer/packages/lib/code-editor::hash=27f6e2&locator=azurePublish%40workspace%3A."
   dependencies:
     "@emotion/react": ^11.1.3
     "@emotion/styled": ^11.1.3
@@ -1902,7 +1902,7 @@ __metadata:
     "@bfc/ui-shared": "*"
     react: 16.13.1
     react-dom: 16.13.1
-  checksum: f3773eb308e7e1d6db3d13220510b48c7659febca2441213fbc3deeff35abddf559f8cababdea58a5630ae214124f82299ce1d86fe89a5196369adc9ab9234f7
+  checksum: 0b4012041c94c21ccc0df8d671cea67cba22501eb626ba03243a49dee099f19e2317cb4a207400d34804a826589f3a621add55f55e1675f28a8ad36a43d4ccd3
   languageName: node
   linkType: hard
 
@@ -1923,16 +1923,16 @@ __metadata:
 
 "@bfc/indexers@file:../../Composer/packages/lib/indexers::locator=azurePublish%40workspace%3A.":
   version: 0.0.0
-  resolution: "@bfc/indexers@file:../../Composer/packages/lib/indexers#../../Composer/packages/lib/indexers::hash=a7b36f&locator=azurePublish%40workspace%3A."
+  resolution: "@bfc/indexers@file:../../Composer/packages/lib/indexers#../../Composer/packages/lib/indexers::hash=795637&locator=azurePublish%40workspace%3A."
   dependencies:
     "@microsoft/bf-lu": 4.15.0-dev.20210702.cbf708d
-    adaptive-expressions: 4.12.0-rc1
+    adaptive-expressions: ^4.16.0
     botbuilder-lg: 4.14.0-dev.391a2ab
     lodash: ^4.17.19
     tslib: 2.4.0
   peerDependencies:
     "@bfc/shared": "*"
-  checksum: 9a5b961c3995f1d9b36745fefbf9d105ce0b19f75f917dc732fe863061e3081267830fe28b7a89ccb9e85a338d531c973d58ba43d16427d5ed1ab26f6e0a60fb
+  checksum: 69f622cd85c08f1c26af8e2c8207159508c3f13565c10afee7c087d6de27d8931969587df61c5acf0d8149e88926783dbd346d3fb05ae5256ce7aabce4f24b57
   languageName: node
   linkType: hard
 
@@ -3458,7 +3458,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/xmldom@npm:^0.1.29, @types/xmldom@npm:^0.1.30":
+"@types/xmldom@npm:^0.1.30":
   version: 0.1.31
   resolution: "@types/xmldom@npm:0.1.31"
   checksum: 127a6e3c5b92663af29ff9ee66152286f0c381e35b0265161cc2583a7829b4d15c7e46f724337b8d2b89b06685baf0176c3d724cdb08881166a587f83ebd63e8
@@ -3709,6 +3709,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@xmldom/xmldom@npm:^0.8.3":
+  version: 0.8.3
+  resolution: "@xmldom/xmldom@npm:0.8.3"
+  checksum: 087303060fc794f0ec8c0e9031362c1ae56eb1cf06b291cc178602462c072fb9f84657a430ae9c8c1b4c0d33549259e89ed14ebc86ca1a696f253bdd7f0dffcf
+  languageName: node
+  linkType: hard
+
 "@xtuc/ieee754@npm:^1.2.0":
   version: 1.2.0
   resolution: "@xtuc/ieee754@npm:1.2.0"
@@ -3813,31 +3820,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"adaptive-expressions@npm:4.12.0-rc1":
-  version: 4.12.0-rc1
-  resolution: "adaptive-expressions@npm:4.12.0-rc1"
-  dependencies:
-    "@microsoft/recognizers-text-data-types-timex-expression": 1.3.0
-    "@types/atob-lite": ^2.0.0
-    "@types/lru-cache": ^5.1.0
-    "@types/xmldom": ^0.1.29
-    antlr4ts: 0.5.0-alpha.3
-    atob-lite: ^2.0.0
-    big-integer: ^1.6.48
-    d3-format: ^1.4.4
-    dayjs: ^1.10.3
-    jspath: ^0.4.0
-    lodash: ^4.17.19
-    lru-cache: ^5.1.1
-    uuid: ^8.3.2
-    x2js: ^3.4.0
-    xml2js: ^0.4.23
-    xmldom: ^0.4.0
-    xpath: ^0.0.32
-  checksum: d6cacbba535ee708f29e3ebc399dc74b984c85c2e362791be8dba8c8f925edbf878d4b1c9a4a3929d0b844bf59a5cedc38961d3c6c78d7908a1a4d13e785e396
-  languageName: node
-  linkType: hard
-
 "adaptive-expressions@npm:4.14.0-dev.391a2ab":
   version: 4.14.0-dev.391a2ab
   resolution: "adaptive-expressions@npm:4.14.0-dev.391a2ab"
@@ -3863,6 +3845,33 @@ __metadata:
     xmldom: ^0.5.0
     xpath: ^0.0.32
   checksum: b7795279e5727837f46f4716e21d1c5e4d2456f7eece910b12afcaa74f638549b3ccf55f2103f6ecd5b0a91cf2bb7658b7c361f4f257a05381135f094bb61731
+  languageName: node
+  linkType: hard
+
+"adaptive-expressions@npm:^4.16.0":
+  version: 4.18.0
+  resolution: "adaptive-expressions@npm:4.18.0"
+  dependencies:
+    "@microsoft/recognizers-text-data-types-timex-expression": 1.3.0
+    "@types/atob-lite": ^2.0.0
+    "@types/btoa-lite": ^1.0.0
+    "@types/lodash.isequal": ^4.5.5
+    "@types/lru-cache": ^5.1.0
+    "@types/xmldom": ^0.1.30
+    "@xmldom/xmldom": ^0.8.3
+    antlr4ts: 0.5.0-alpha.3
+    atob-lite: ^2.0.0
+    big-integer: ^1.6.48
+    btoa-lite: ^1.0.0
+    d3-format: ^1.4.4
+    dayjs: ^1.10.3
+    fast-xml-parser: ^3.19.0
+    jspath: ^0.4.0
+    lodash.isequal: ^4.5.0
+    lru-cache: ^5.1.1
+    uuid: ^8.3.2
+    xpath: ^0.0.32
+  checksum: 9e42ca6da3054151399629e0a4343dd0561b5554ec80e63fb4fa91c32b85e3b0b88aebfb38a2551ee2f07c2e77bf4b3bdc630fa3d2edc654e919271bae6cf6e7
   languageName: node
   linkType: hard
 
@@ -5927,6 +5936,17 @@ __metadata:
   version: 2.0.6
   resolution: "fast-levenshtein@npm:2.0.6"
   checksum: 92cfec0a8dfafd9c7a15fba8f2cc29cd0b62b85f056d99ce448bbcd9f708e18ab2764bda4dd5158364f4145a7c72788538994f0d1787b956ef0d1062b0f7c24c
+  languageName: node
+  linkType: hard
+
+"fast-xml-parser@npm:^3.19.0":
+  version: 3.21.1
+  resolution: "fast-xml-parser@npm:3.21.1"
+  dependencies:
+    strnum: ^1.0.4
+  bin:
+    xml2js: cli.js
+  checksum: 73b9c907a424cc2f9b11a8a2f1b7448d936f1db6fa574b85cbe4be9739c2f77d99a827bb27d738a0db0047b20c71a5d663f64937fbdb9c38977fc6cd145221d2
   languageName: node
   linkType: hard
 
@@ -10190,6 +10210,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"strnum@npm:^1.0.4":
+  version: 1.0.5
+  resolution: "strnum@npm:1.0.5"
+  checksum: 651b2031db5da1bf4a77fdd2f116a8ac8055157c5420f5569f64879133825915ad461513e7202a16d7fec63c54fd822410d0962f8ca12385c4334891b9ae6dd2
+  languageName: node
+  linkType: hard
+
 "stylis@npm:4.0.13":
   version: 4.0.13
   resolution: "stylis@npm:4.0.13"
@@ -11252,13 +11279,6 @@ __metadata:
   version: 2.2.0
   resolution: "xmlchars@npm:2.2.0"
   checksum: 8c70ac94070ccca03f47a81fcce3b271bd1f37a591bf5424e787ae313fcb9c212f5f6786e1fa82076a2c632c0141552babcd85698c437506dfa6ae2d58723062
-  languageName: node
-  linkType: hard
-
-"xmldom@npm:^0.4.0":
-  version: 0.4.0
-  resolution: "xmldom@npm:0.4.0"
-  checksum: ea975a7bd87109542ce24b19a70e50a3d64d20c757affa1a6c8cf906cbb39f0071a1bea9016beb5532388bc61dcbefddb92f3db2197dceee2b4c46343348ab3c
   languageName: node
   linkType: hard
 
