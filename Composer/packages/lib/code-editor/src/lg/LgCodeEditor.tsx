@@ -76,7 +76,6 @@ const defaultLGServer = {
 
 declare global {
   interface Window {
-    monacoServiceInstance: MonacoServices;
     monacoLGEditorInstance: MonacoLanguageClient;
   }
 }
@@ -128,9 +127,7 @@ export const LgCodeEditor = (props: LgCodeEditorProps) => {
 
     if (!editor) return;
 
-    if (!window.monacoServiceInstance) {
-      window.monacoServiceInstance = MonacoServices.install(editor as any);
-    }
+    MonacoServices.install(editor as any);
 
     const uri = get(editor.getModel(), 'uri._formatted', '');
 

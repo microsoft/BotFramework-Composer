@@ -94,7 +94,6 @@ const defaultLUServer = {
 
 declare global {
   interface Window {
-    monacoServiceInstance: MonacoServices;
     monacoLUEditorInstance: MonacoLanguageClient;
   }
 }
@@ -187,9 +186,7 @@ const LuEditor: React.FC<LULSPEditorProps> = (props) => {
 
     if (!editor) return;
 
-    if (!window.monacoServiceInstance) {
-      window.monacoServiceInstance = MonacoServices.install(editor as any);
-    }
+    MonacoServices.install(editor as any);
 
     const uri = get(editor.getModel(), 'uri._formatted', '');
 
