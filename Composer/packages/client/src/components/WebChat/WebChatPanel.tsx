@@ -8,7 +8,7 @@ import {
   ConversationNetworkTrafficItem,
   ConversationNetworkErrorItem,
 } from '@botframework-composer/types';
-import { AxiosResponse } from 'axios';
+import type { AxiosResponse } from 'axios';
 import formatMessage from 'format-message';
 import { v4 as uuid } from 'uuid';
 import throttle from 'lodash/throttle';

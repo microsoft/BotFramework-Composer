@@ -5,7 +5,7 @@
 import { randomBytes } from 'crypto';
 
 import querystring from 'query-string';
-import axios from 'axios';
+import { axios } from '@bfc/shared/lib/axios';
 import jwtDecode from 'jwt-decode';
 import formatMessage from 'format-message';
 

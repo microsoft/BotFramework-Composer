@@ -22,20 +22,20 @@ import { isElectron } from './electronUtil';
 import storage from './storage';
 
 let idToken = getTokenFromCache('idToken');
+// eslint-disable-next-line no-underscore-dangle
+const fetchHeaders = { 'X-CSRF-Token': window.__csrf__ };
 
 async function getAccessToken(options: AuthParameters): Promise<string> {
   const { targetResource = '', scopes = [] } = options;
   try {
     if (isElectron()) {
-      const { __csrf__ = '' } = window;
-
       let url = '/api/auth/getAccessToken?';
       const params = new URLSearchParams();
       if (targetResource) {
         params.append('targetResource', targetResource);
       }
       url += params.toString();
-      const result = await fetch(url, { method: 'GET', headers: { 'X-CSRF-Token': __csrf__ } });
+      const result = await fetch(url, { method: 'GET', headers: fetchHeaders });
       const { accessToken = '' } = await result.json();
       return accessToken;
     } else if (authConfig.clientId && authConfig.redirectUrl && authConfig.tenantId) {
@@ -98,7 +98,7 @@ async function logOut() {
   cleanTokenFromCache('graphToken');
   if (isElectron()) {
     const url = '/api/auth/logOut';
-    const result = await fetch(url, { method: 'GET' });
+    const result = await fetch(url, { method: 'GET', headers: fetchHeaders });
     return result.ok;
   } else if (authConfig.clientId) {
     // clean token cache in storage
@@ -118,12 +118,8 @@ async function logOut() {
 async function getARMTokenForTenant(tenantId: string): Promise<string> {
   const options = {
     method: 'GET',
-    headers: {},
+    headers: fetchHeaders,
   };
-  if (isElectron()) {
-    const { __csrf__ = '' } = window;
-    options.headers['X-CSRF-Token'] = __csrf__;
-  }
   // do we have a valid token in the cache for this tenant?
   if (getTokenFromCache(`token-${tenantId}`)) {
     return getTokenFromCache(`token-${tenantId}`);
@@ -150,12 +146,8 @@ async function getARMTokenForTenant(tenantId: string): Promise<string> {
 async function getTenants(): Promise<AzureTenant[]> {
   const options = {
     method: 'GET',
-    headers: {},
+    headers: fetchHeaders,
   };
-  if (isElectron()) {
-    const { __csrf__ = '' } = window;
-    options.headers['X-CSRF-Token'] = __csrf__;
-  }
 
   const result = await fetch('/api/auth/getTenants', options);
   const { tenants = [] } = await result.json();
@@ -164,8 +156,7 @@ async function getTenants(): Promise<AzureTenant[]> {
 
 async function getAccount() {
   if (isElectron()) {
-    const { __csrf__ = '' } = window;
-    const result = await fetch('/api/auth/getAccount', { method: 'GET', headers: { 'X-CSRF-Token': __csrf__ } });
+    const result = await fetch('/api/auth/getAccount', { method: 'GET', headers: fetchHeaders });
     const { account = {} } = await result.json();
     return account;
   }
