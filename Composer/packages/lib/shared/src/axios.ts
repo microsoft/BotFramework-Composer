@@ -20,7 +20,7 @@ instance.interceptors.request.use(csrfInterceptor);
 export const axios = instance;
 
 export const createAxios: typeof Axios.create = (...args) => {
-  const axiosInstance = Axios.create(...args);
+  const axiosInstance = Axios.create(...args) ?? Axios;
   axiosInstance.interceptors.request.use(csrfInterceptor);
   return axiosInstance;
 };

@@ -1938,7 +1938,7 @@ __metadata:
 
 "@bfc/shared@file:../../Composer/packages/lib/shared::locator=azurePublish%40workspace%3A.":
   version: 0.0.0
-  resolution: "@bfc/shared@file:../../Composer/packages/lib/shared#../../Composer/packages/lib/shared::hash=f2033c&locator=azurePublish%40workspace%3A."
+  resolution: "@bfc/shared@file:../../Composer/packages/lib/shared#../../Composer/packages/lib/shared::hash=c7e412&locator=azurePublish%40workspace%3A."
   dependencies:
     "@botframework-composer/types": "*"
     format-message: 6.2.4
@@ -1952,7 +1952,7 @@ __metadata:
     react: 16.13.1
     react-dom: 16.13.1
     tslib: 2.4.0
-  checksum: 1d44f09337700bb0a87080a14855e84023e1fdaebac0079e579ebc3f5a90a72001776030946a84b6e16f00a015076eaa9f012626ab56bb5ec65c05faafb70048
+  checksum: 065ded842885d869405a9c21d5f6401d6669f93f5e6fc8e38dbd6c54bcc6efb4c18ca183307ed0d645a86493d8dbb01e8d8c3efc45da28ac3e09a3844913c894
   languageName: node
   linkType: hard
 
