@@ -13,7 +13,7 @@ const csrfInterceptor = (config: AxiosRequestConfig) => {
   return config;
 };
 
-const instance = Axios.create();
+const instance = Axios.create() ?? Axios;
 
 instance.interceptors.request.use(csrfInterceptor);
 
