@@ -13,14 +13,14 @@ const csrfInterceptor = (config: AxiosRequestConfig) => {
   return config;
 };
 
-const instance = Axios.create() ?? Axios;
+const instance = Axios.create();
 
 instance.interceptors.request.use(csrfInterceptor);
 
 export const axios = instance;
 
 export const createAxios: typeof Axios.create = (...args) => {
-  const axiosInstance = Axios.create(...args) ?? Axios;
+  const axiosInstance = Axios.create(...args);
   axiosInstance.interceptors.request.use(csrfInterceptor);
   return axiosInstance;
 };

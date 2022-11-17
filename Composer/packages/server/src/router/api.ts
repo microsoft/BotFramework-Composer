@@ -26,13 +26,13 @@ import { UtilitiesController } from './../controllers/utilities';
 const router: Router = express.Router({});
 
 // Routes bellow are NOT CSRF protected
-// Place only routes normally triggered by browser script tags and navigation
+// Place only routes loaded by browser script tags and navigation
 router.get('/extensions/settings/schema.json', ExtensionsController.getSettingsSchema);
 router.get('/extensions/:id/:bundleId', ExtensionsController.getBundleForView);
 
-// Routes bellow are CSRF protected
 router.use(csrfProtection);
 
+// Routes bellow are CSRF protected
 router.post('/projects', ProjectController.createProject);
 router.post('/projects/migrate', ProjectController.migrateProject);
 router.get('/projects', ProjectController.getAllProjects);
