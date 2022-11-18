@@ -1,7 +1,11 @@
-// Copyright (c) Microsoft Corporation.
-// Licensed under the MIT License.
+// // Copyright (c) Microsoft Corporation.
+// // Licensed under the MIT License.
 
-const axios = jest.createMockFromModule('axios');
+const axios = {
+  get: jest.fn().mockReturnValue(Promise.resolve(new Proxy({}, {
+    get() { return {} }
+  })))
+}
 
 module.exports = axios;
 module.exports.createAxios = jest.fn().mockReturnValue(axios)

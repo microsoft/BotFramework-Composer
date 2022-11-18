@@ -13,7 +13,7 @@ const csrfInterceptor = (config: AxiosRequestConfig) => {
   return config;
 };
 
-export const addCSRFInterceptor = (instance: AxiosInstance) => instance.interceptors?.request.use(csrfInterceptor);
+export const addCSRFInterceptor = (instance: AxiosInstance) => instance?.interceptors.request.use(csrfInterceptor);
 
 export const createAxios: typeof Axios.create = (...args) => {
   const axiosInstance = Axios.create(...args);
