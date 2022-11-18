@@ -9,7 +9,6 @@ import { authService } from '../services/auth/auth';
  * Middleware that verifies if the server-generated CSRF token is sent with the incoming request via header.
  */
 export const csrfProtection = (req: Request, res: Response, next?: NextFunction) => {
-  console.log('Checking CSRF protection');
   if (authService.csrfToken) {
     const csrfToken = req.get('X-CSRF-Token');
     if (!csrfToken) {
