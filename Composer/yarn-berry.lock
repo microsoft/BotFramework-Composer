@@ -4253,10 +4253,11 @@ __metadata:
     react: 16.13.1
     react-dom: 16.13.1
     rimraf: 3.0.2
-    tslib: 2.4.0
   peerDependencies:
+    axios: ^0.21.1
     react: 16.13.1
     react-dom: 16.13.1
+    tslib: 2.4.0
   languageName: unknown
   linkType: soft
 

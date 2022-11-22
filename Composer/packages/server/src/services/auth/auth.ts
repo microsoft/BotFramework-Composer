@@ -32,7 +32,8 @@ class AuthService {
       log('Production environment detected. Generating CSRF token.');
       this._csrfToken = uuid();
     } else {
-      this._csrfToken = '';
+      // use a placeholder as a token in development environment
+      this._csrfToken = '<?= __csrf__ ?>';
     }
   }
 
