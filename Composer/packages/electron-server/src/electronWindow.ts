@@ -26,7 +26,8 @@ export default class ElectronWindow {
     const { height, width } = screen.getPrimaryDisplay().workAreaSize;
     log(`Raw screen dimensions: ${height} x ${width}`);
     const adjustedHeight = Math.floor(height * 0.9); // take up 90% of screen height
-    const adjustedWidth = Math.floor((4 / 3) * adjustedHeight); // snap to 4:3 aspect ratio (16:9 doesn't look as good when scaled down)
+    // aim to maintain 4:3 ratio while trying to expose window to at least 1080px wide
+    const adjustedWidth = Math.max(Math.floor((4 / 3) * adjustedHeight), Math.min(1080, Math.floor(width * 0.9)));
     log(`Electron window dimensions: ${adjustedHeight} x ${adjustedWidth}`);
     const browserWindowOptions: Electron.BrowserWindowConstructorOptions = {
       width: adjustedWidth,

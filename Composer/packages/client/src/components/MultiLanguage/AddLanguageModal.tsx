@@ -163,7 +163,7 @@ const AddLanguageModal: React.FC<IAddLanguageModalProps> = (props) => {
               options={defalutLanguageListOptions}
               placeholder="Select an option"
               selectedKey={formData.defaultLang}
-              styles={{ dropdown: { width: 300, marginTop: 10 } }}
+              styles={{ dropdown: { maxWidth: 300, marginTop: 10 } }}
               onChange={onDefaultLanguageChange}
             />
           </StackItem>
@@ -209,7 +209,7 @@ const AddLanguageModal: React.FC<IAddLanguageModalProps> = (props) => {
               aria-labelledby={searchBoxLabelId}
               id={searchBoxId}
               placeholder={MultiLanguagesDialog.ADD_DIALOG.searchPlaceHolder}
-              styles={{ root: { width: 300 } }}
+              styles={{ root: { maxWidth: 300, width: 'auto' } }}
               onChange={onSearch}
             />
             <FocusZone direction={FocusZoneDirection.vertical}>

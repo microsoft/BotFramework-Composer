@@ -117,7 +117,7 @@ describe('<ToolbarButtonMenu />', () => {
       jest.runAllTimers();
     });
 
-    expect((await screen.findAllByText(/this/)).length).toBe(2);
+    expect((await screen.findAllByText(/this/)).length).toBe(3);
   });
 
   it('property: Should expand property in the menu on click if not leaf', async () => {

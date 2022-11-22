@@ -21,7 +21,7 @@ import { TooltipHost } from '@fluentui/react/lib/Tooltip';
 const styles = {
   detailListContainer: css`
     flex-grow: 1;
-    height: 310px;
+    min-height: 140px;
     position: relative;
     overflow: hidden;
   `,
