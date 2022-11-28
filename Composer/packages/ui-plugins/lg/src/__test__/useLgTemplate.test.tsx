@@ -131,7 +131,7 @@ sp1.1\`\`\`
 
 const expectedResult = {
   Text: { value: 'This is a somewhat long text we are trying to check', moreCount: 1 },
-  Speak: { value: 'sp1↵sp1.1', moreCount: 2 },
+  Speak: { value: 'sp1\nsp1.1', moreCount: 2 },
   Attachments: {
     value:
       "> To learn more Adaptive Cards format, read the documentation at\n> https://docs.microsoft.com/en-us/adaptive-cards/getting-started/bots\n- ```${json({\n  $schema: 'http://adaptivecards.io/schemas/adaptive-card.json',\n  version: '1.2',\n  type: 'AdaptiveCard',\n  body: [\n    {\n      type: 'TextBlock',\n      text: 'default text',\n      weight: 'bolder',\n      isSubtle: false,\n    },\n  ],\n})}```",

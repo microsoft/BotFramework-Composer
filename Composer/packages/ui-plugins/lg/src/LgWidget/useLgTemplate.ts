@@ -41,7 +41,7 @@ const getLgTemplateTextData = (
                   .filter((s) => s.kind === 'variation')
                   .map((s) => s.value);
                 if (variations.length) {
-                  acc[responseType] = { value: variations[0].replace(/\r?\n/g, '↵'), moreCount: variations.length - 1 };
+                  acc[responseType] = { value: variations[0], moreCount: variations.length - 1 };
                 }
               }
             } else {
