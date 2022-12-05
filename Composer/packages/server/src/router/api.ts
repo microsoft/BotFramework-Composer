@@ -25,6 +25,14 @@ import { UtilitiesController } from './../controllers/utilities';
 
 const router: Router = express.Router({});
 
+// Routes bellow are NOT CSRF protected
+// Place only routes loaded by browser script tags and navigation
+router.get('/extensions/settings/schema.json', ExtensionsController.getSettingsSchema);
+router.get('/extensions/:id/:bundleId', ExtensionsController.getBundleForView);
+
+router.use(csrfProtection);
+
+// Routes bellow are CSRF protected
 router.post('/projects', ProjectController.createProject);
 router.post('/projects/migrate', ProjectController.migrateProject);
 router.get('/projects', ProjectController.getAllProjects);
@@ -111,19 +119,17 @@ router.post('/extensions', ExtensionsController.addExtension);
 router.delete('/extensions', ExtensionsController.removeExtension);
 router.patch('/extensions/toggle', ExtensionsController.toggleExtension);
 router.get('/extensions/search', ExtensionsController.searchExtensions);
-router.get('/extensions/settings/schema.json', ExtensionsController.getSettingsSchema);
 router.get('/extensions/settings', ExtensionsController.getSettings);
 router.patch('/extensions/settings', ExtensionsController.updateSettings);
-router.get('/extensions/:id/:bundleId', ExtensionsController.getBundleForView);
 // proxy route for extensions (allows extension client code to make fetch calls using the Composer server as a proxy -- avoids browser blocking request due to CORS)
 router.post('/extensions/proxy/:url', ExtensionsController.performExtensionFetch);
 
 // authentication from client
-router.get('/auth/getAccessToken', csrfProtection, AuthController.getAccessToken);
+router.get('/auth/getAccessToken', AuthController.getAccessToken);
 router.get('/auth/logOut', AuthController.logOut);
-router.get('/auth/getTenants', csrfProtection, AuthController.getTenants);
-router.get('/auth/getAccount', csrfProtection, AuthController.getAccount);
-router.get('/auth/getARMTokenForTenant', csrfProtection, AuthController.getARMTokenForTenant);
+router.get('/auth/getTenants', AuthController.getTenants);
+router.get('/auth/getAccount', AuthController.getAccount);
+router.get('/auth/getARMTokenForTenant', AuthController.getARMTokenForTenant);
 
 // FeatureFlags
 router.get('/featureFlags', FeatureFlagController.getFeatureFlags);

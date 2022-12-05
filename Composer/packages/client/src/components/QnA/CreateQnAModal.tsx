@@ -52,7 +52,6 @@ import {
   contentBox,
   formContainer,
   choiceContainer,
-  nameStepContainer,
   resourceDropdown,
   dialogBodyStyles,
 } from './styles';
@@ -80,6 +79,23 @@ type KBRec = {
 type Step = 'name' | 'intro' | 'resource' | 'knowledge-base' | 'outcome';
 
 const mainElementStyle = { marginBottom: 20 };
+const dialogFooterStyles = {
+  action: {
+    margin: '4px',
+    '@media screen and (max-width: 640px)': /* 200% zoom */ {
+      margin: '0',
+    },
+  },
+  actionsRight: {
+    '@media screen and (max-width: 640px)': /* 200% zoom */ {
+      display: 'flex',
+      gap: '8px',
+      flexWrap: 'wrap',
+      justifyContent: 'flex-end',
+    },
+  },
+};
+
 const serviceName = 'QnA Maker';
 const serviceKeyType = 'QnAMaker';
 
@@ -301,7 +317,7 @@ export const CreateQnAModal: React.FC<CreateQnAModalProps> = (props) => {
   const renderNameStep = () => {
     return (
       <div>
-        <div style={nameStepContainer}>
+        <div css={dialogBodyStyles}>
           <div style={{ marginBottom: 14 }}>
             <span css={subText}>
               {formatMessage('Use Azure QnA Maker to extract question-and-answer pairs from an online FAQ. ')}
@@ -372,7 +388,7 @@ export const CreateQnAModal: React.FC<CreateQnAModalProps> = (props) => {
             )}
           </div>
         </div>
-        <DialogFooter>
+        <DialogFooter styles={dialogFooterStyles}>
           <DefaultButton
             disabled={!!loading}
             style={{ float: 'left' }}

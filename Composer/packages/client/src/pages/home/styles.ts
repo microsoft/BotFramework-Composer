@@ -20,8 +20,7 @@ export const outline = css`
 
 export const page = css`
   display: flex;
-  overflow-x: hidden;
-  overflow-y: auto;
+  overflow: auto;
   flex-wrap: wrap;
 `;
 
@@ -37,6 +36,8 @@ export const rightPage = css`
   padding-right: 24px;
   display: flex;
   flex-direction: column;
+  position: sticky;
+  left: 0;
 `;
 
 export const title = css`

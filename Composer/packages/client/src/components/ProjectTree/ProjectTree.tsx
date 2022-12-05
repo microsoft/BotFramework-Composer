@@ -59,6 +59,7 @@ const focusStyle = css`
 const tree = css`
   height: calc(100% - 45px);
   overflow-y: auto;
+  margin-left: -1px; // remove 1px overflow caused by Split view component calculations
   label: tree;
 `;
 

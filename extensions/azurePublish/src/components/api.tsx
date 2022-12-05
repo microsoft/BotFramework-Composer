@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 /* eslint-disable no-underscore-dangle */
-import axios from 'axios';
+import { axios } from '@bfc/shared/src/axios';
 import formatMessage from 'format-message';
 import { SubscriptionClient } from '@azure/arm-subscriptions';
 import { Subscription } from '@azure/arm-subscriptions/esm/models';
