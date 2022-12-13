@@ -7,7 +7,6 @@ import { EditorExtension } from '@bfc/extension-client';
 import { render, fireEvent } from '@botframework-composer/test-utils';
 
 import { SchemaEditorField } from '../Fields/SchemaEditorField';
-import { SCHEMA_URI } from '../contants';
 
 const renderSchemaEditor = ({ updateDialogSchema = jest.fn() } = {}) => {
   const api: any = {
@@ -61,7 +60,7 @@ describe('Schema Editor', () => {
           properties: expect.objectContaining({
             propertyName: {
               title: 'Property Name',
-              $ref: `${SCHEMA_URI}#/definitions/valueExpression`,
+              type: 'string',
             },
           }),
         }),
