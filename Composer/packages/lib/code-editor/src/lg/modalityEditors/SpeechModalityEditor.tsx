@@ -79,6 +79,16 @@ const SpeechModalityEditor = React.memo(
           text: formatMessage('Expecting'),
           selected: inputHint === 'expectingInput',
         },
+        {
+          key: 'ignoringSpeechInput',
+          text: formatMessage('Ignoring Speech'),
+          selected: inputHint === 'ignoringSpeechInput',
+        },
+        {
+          key: 'ignoringNonSpeechInput',
+          text: formatMessage('Ignoring Non Speech'),
+          selected: inputHint === 'ignoringNonSpeechInput',
+        },
       ],
       [inputHint]
     );
