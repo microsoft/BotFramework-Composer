@@ -168,7 +168,7 @@ export const cardPropPossibleValueType = {
   Text: 'Text | ${Expression}',
   Speak: 'Text | ${Expression}',
   Attachments: 'List of attachments',
-  InputHint: 'accepting | ignoring | expecting',
+  InputHint: 'accepting | ignoring | expecting | ignoringSpeech | ignoringNonSpeech',
   AttachmentLayout: 'list | carousel',
   SuggestedActions: 'Text | ${Expression}',
 };
