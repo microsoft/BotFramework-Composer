@@ -3572,8 +3572,8 @@ __metadata:
     "@fluentui/react": ^8.83.1
     "@types/lodash": ^4.14.146
     "@types/react": 16.9.23
-    adaptive-expressions: 4.12.0-rc1
-    botbuilder-lg: 4.14.0-dev.391a2ab
+    adaptive-expressions: ^4.18.0
+    botbuilder-lg: ^4.18.0
     create-react-class: ^15.6.3
     d3: ^5.9.1
     dagre: ^0.8.4
@@ -3951,8 +3951,8 @@ __metadata:
     "@botframework-composer/test-utils": "*"
     "@microsoft/bf-lu": 4.15.0-dev.20210702.cbf708d
     "@types/lodash": ^4.14.146
-    adaptive-expressions: 4.12.0-rc1
-    botbuilder-lg: 4.14.0-dev.391a2ab
+    adaptive-expressions: ^4.18.0
+    botbuilder-lg: ^4.18.0
     lodash: ^4.17.19
     rimraf: 3.0.2
     tslib: 2.4.0
@@ -4018,8 +4018,8 @@ __metadata:
     "@botframework-composer/test-utils": "*"
     "@botframework-composer/types": "*"
     "@types/node": 13.9.3
-    adaptive-expressions: 4.12.0-rc1
-    botbuilder-lg: 4.14.0-dev.391a2ab
+    adaptive-expressions: ^4.18.0
+    botbuilder-lg: ^4.18.0
     cross-env: 7.0.3
     express: 4.16.1
     rimraf: 3.0.2
@@ -7710,7 +7710,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/xmldom@npm:^0.1.29, @types/xmldom@npm:^0.1.30":
+"@types/xmldom@npm:^0.1.30":
   version: 0.1.31
   resolution: "@types/xmldom@npm:0.1.31"
   checksum: 127a6e3c5b92663af29ff9ee66152286f0c381e35b0265161cc2583a7829b4d15c7e46f724337b8d2b89b06685baf0176c3d724cdb08881166a587f83ebd63e8
@@ -8083,10 +8083,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@xmldom/xmldom@npm:^0.7.4":
-  version: 0.7.5
-  resolution: "@xmldom/xmldom@npm:0.7.5"
-  checksum: 8d7ec35c1ef6183b4f621df08e01d7e61f244fb964a4719025e65fe6ac06fac418919be64fb40fe5908e69158ef728f2d936daa082db326fe04603012b5f2a84
+"@xmldom/xmldom@npm:^0.8.3":
+  version: 0.8.6
+  resolution: "@xmldom/xmldom@npm:0.8.6"
+  checksum: f17ac6d99a971a6aeb831fcfc5cfa86f367664e45815046548814b2deb17ccc421fef4e0d5ba29e66179d112b552f6caa5680064f8e7bd8a389b788a60404c8e
   languageName: node
   linkType: hard
 
@@ -8236,34 +8236,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"adaptive-expressions@npm:4.12.0-rc1":
-  version: 4.12.0-rc1
-  resolution: "adaptive-expressions@npm:4.12.0-rc1"
-  dependencies:
-    "@microsoft/recognizers-text-data-types-timex-expression": 1.3.0
-    "@types/atob-lite": ^2.0.0
-    "@types/lru-cache": ^5.1.0
-    "@types/xmldom": ^0.1.29
-    antlr4ts: 0.5.0-alpha.3
-    atob-lite: ^2.0.0
-    big-integer: ^1.6.48
-    d3-format: ^1.4.4
-    dayjs: ^1.10.3
-    jspath: ^0.4.0
-    lodash: ^4.17.19
-    lru-cache: ^5.1.1
-    uuid: ^8.3.2
-    x2js: ^3.4.0
-    xml2js: ^0.4.23
-    xmldom: ^0.4.0
-    xpath: ^0.0.32
-  checksum: d6cacbba535ee708f29e3ebc399dc74b984c85c2e362791be8dba8c8f925edbf878d4b1c9a4a3929d0b844bf59a5cedc38961d3c6c78d7908a1a4d13e785e396
-  languageName: node
-  linkType: hard
-
-"adaptive-expressions@npm:4.14.0-dev.391a2ab":
-  version: 4.14.0-dev.391a2ab
-  resolution: "adaptive-expressions@npm:4.14.0-dev.391a2ab"
+"adaptive-expressions@npm:4.18.0, adaptive-expressions@npm:^4.18.0":
+  version: 4.18.0
+  resolution: "adaptive-expressions@npm:4.18.0"
   dependencies:
     "@microsoft/recognizers-text-data-types-timex-expression": 1.3.0
     "@types/atob-lite": ^2.0.0
@@ -8271,35 +8246,7 @@ __metadata:
     "@types/lodash.isequal": ^4.5.5
     "@types/lru-cache": ^5.1.0
     "@types/xmldom": ^0.1.30
-    antlr4ts: 0.5.0-alpha.3
-    atob-lite: ^2.0.0
-    big-integer: ^1.6.48
-    btoa-lite: ^1.0.0
-    d3-format: ^1.4.4
-    dayjs: ^1.10.3
-    jspath: ^0.4.0
-    lodash.isequal: ^4.5.0
-    lru-cache: ^5.1.1
-    uuid: ^8.3.2
-    x2js: ^3.4.0
-    xml2js: ^0.4.23
-    xmldom: ^0.5.0
-    xpath: ^0.0.32
-  checksum: b7795279e5727837f46f4716e21d1c5e4d2456f7eece910b12afcaa74f638549b3ccf55f2103f6ecd5b0a91cf2bb7658b7c361f4f257a05381135f094bb61731
-  languageName: node
-  linkType: hard
-
-"adaptive-expressions@npm:4.15.0, adaptive-expressions@npm:^4.15.0-dev.290c7e0":
-  version: 4.15.0
-  resolution: "adaptive-expressions@npm:4.15.0"
-  dependencies:
-    "@microsoft/recognizers-text-data-types-timex-expression": 1.3.0
-    "@types/atob-lite": ^2.0.0
-    "@types/btoa-lite": ^1.0.0
-    "@types/lodash.isequal": ^4.5.5
-    "@types/lru-cache": ^5.1.0
-    "@types/xmldom": ^0.1.30
-    "@xmldom/xmldom": ^0.7.4
+    "@xmldom/xmldom": ^0.8.3
     antlr4ts: 0.5.0-alpha.3
     atob-lite: ^2.0.0
     big-integer: ^1.6.48
@@ -8312,7 +8259,7 @@ __metadata:
     lru-cache: ^5.1.1
     uuid: ^8.3.2
     xpath: ^0.0.32
-  checksum: c8b4b9e8a632ae60a275178b9fd2e71e5b80a79be8451d7edc34703b6ab3fc0094f2affc698bd0883c08510da6fc0581f46d03e1ef58f43594bdc6b49566a8cb
+  checksum: 9e42ca6da3054151399629e0a4343dd0561b5554ec80e63fb4fa91c32b85e3b0b88aebfb38a2551ee2f07c2e77bf4b3bdc630fa3d2edc654e919271bae6cf6e7
   languageName: node
   linkType: hard
 
@@ -9839,28 +9786,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"botbuilder-lg@npm:4.14.0-dev.391a2ab":
-  version: 4.14.0-dev.391a2ab
-  resolution: "botbuilder-lg@npm:4.14.0-dev.391a2ab"
+"botbuilder-lg@npm:^4.18.0":
+  version: 4.18.0
+  resolution: "botbuilder-lg@npm:4.18.0"
   dependencies:
-    adaptive-expressions: 4.14.0-dev.391a2ab
-    antlr4ts: 0.5.0-alpha.3
-    lodash: ^4.17.19
-    path: ^0.12.7
-    uuid: ^8.3.2
-  checksum: 2b6cc7d4fd6bc1e070bbb0d100f5fa99bce1bfcdbc273ae16783d8bbd081d1b8e1ed9e73afb5f7ff21c0e1409fe9631f314ec670f5e7fac6afed7d01ceb48822
-  languageName: node
-  linkType: hard
-
-"botbuilder-lg@npm:^4.15.0-dev.290c7e0":
-  version: 4.15.0
-  resolution: "botbuilder-lg@npm:4.15.0"
-  dependencies:
-    adaptive-expressions: 4.15.0
+    adaptive-expressions: 4.18.0
     antlr4ts: 0.5.0-alpha.3
     lodash: ^4.17.19
     uuid: ^8.3.2
-  checksum: 35a0a99759a4ec5a2bca6703478d86a2aa8463780a7baee2e7fc71286c1fca529247ec68bb025a46317f75bd0753472643258e29833e6ac2d367e468c0405b28
+  checksum: e86d2241688eb40a0967701c79460c018b604ad5074c9bc8ee5a313f4b2f301bfe8dbe28a53eb66218af9482d2ead67654492d90741cec888a23c396abfdac3e
   languageName: node
   linkType: hard
 
@@ -30045,15 +29979,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"x2js@npm:^3.4.0":
-  version: 3.4.3
-  resolution: "x2js@npm:3.4.3"
-  dependencies:
-    "@xmldom/xmldom": ^0.7.4
-  checksum: cb4f89ffa685114504016df9bd5841b233217943c6471e22729ad1e958c589c74214a98e1113779495b3ca58beba34b0ec23535df541c6cf863ae2100c74538b
-  languageName: node
-  linkType: hard
-
 "xdg-basedir@npm:^4.0.0":
   version: 4.0.0
   resolution: "xdg-basedir@npm:4.0.0"
@@ -30068,7 +29993,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"xml2js@npm:^0.4.19, xml2js@npm:^0.4.23":
+"xml2js@npm:^0.4.19":
   version: 0.4.23
   resolution: "xml2js@npm:0.4.23"
   dependencies:
@@ -30112,20 +30037,6 @@ __metadata:
   version: 2.2.0
   resolution: "xmlchars@npm:2.2.0"
   checksum: 8c70ac94070ccca03f47a81fcce3b271bd1f37a591bf5424e787ae313fcb9c212f5f6786e1fa82076a2c632c0141552babcd85698c437506dfa6ae2d58723062
-  languageName: node
-  linkType: hard
-
-"xmldom@npm:^0.4.0":
-  version: 0.4.0
-  resolution: "xmldom@npm:0.4.0"
-  checksum: ea975a7bd87109542ce24b19a70e50a3d64d20c757affa1a6c8cf906cbb39f0071a1bea9016beb5532388bc61dcbefddb92f3db2197dceee2b4c46343348ab3c
-  languageName: node
-  linkType: hard
-
-"xmldom@npm:^0.5.0":
-  version: 0.5.0
-  resolution: "xmldom@npm:0.5.0"
-  checksum: 6afbfc9f4de847d1e12a3a95e393750a55f6b074881cd3c6192c99421a8548b0687b7851113d6318ff0121615674d3b064924f1c478da1c840757626bdfe4c18
   languageName: node
   linkType: hard
 
