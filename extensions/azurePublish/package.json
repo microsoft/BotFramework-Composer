@@ -66,7 +66,7 @@
     "@emotion/react": "11.9.3",
     "@emotion/styled": "11.9.3",
     "@fluentui/react": "8.78.1",
-    "adal-node": "0.2.3",
+    "adal-node": "0.2.4",
     "archiver": "5.3.1",
     "axios": "0.27.2",
     "encoding": "0.1.13",
@@ -86,7 +86,8 @@
   "resolutions": {
     "@botframework-composer/types": "file:../../Composer/packages/types",
     "bl": "^4.0.3",
-    "underscore": "^1.12.1"
+    "underscore": "^1.12.1",
+    "@azure/ms-rest-nodeauth/adal-node": "0.2.4"
   },
   "devDependencies": {
     "@babel/plugin-transform-runtime": "7.18.6",
