@@ -88,7 +88,8 @@
     "bl": "^4.0.3",
     "underscore": "^1.12.1",
     "@azure/ms-rest-nodeauth/adal-node": "0.2.4",
-    "terser": "^5.14.2"
+    "terser": "^5.14.2",
+    "loader-utils": "^2.0.4"
   },
   "devDependencies": {
     "@babel/plugin-transform-runtime": "7.18.6",
