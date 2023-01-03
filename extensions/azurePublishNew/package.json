@@ -84,7 +84,8 @@
     "vscode-languageserver-protocol": "3.15.0-next.8",
     "terser": "^5.14.2",
     "loader-utils": "^2.0.4",
-    "json5": "^2.2.2"
+    "json5": "^2.2.2",
+    "minimatch": "^3.1.2"
   },
   "devDependencies": {
     "@babel/plugin-transform-runtime": "7.18.6",
