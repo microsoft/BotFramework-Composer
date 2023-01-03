@@ -45,7 +45,8 @@
   "resolutions": {
     "@botframework-composer/types": "file:../../Composer/packages/types",
     "json-ptr": "^2.1",
-    "@microsoft/bf-cli-command": "4.14.0-dev.20210604.3f9ee15"
+    "@microsoft/bf-cli-command": "4.14.0-dev.20210604.3f9ee15",
+    "terser": "^5.14.2"
   },
   "dependencies": {
     "@bfc/extension": "file:../../Composer/packages/extension",
