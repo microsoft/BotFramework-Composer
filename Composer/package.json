@@ -38,6 +38,7 @@
     "markdown-it-attrs-es5/terser": "^5.14.2",
     "terser-webpack-plugin/terser": "^4.8.1",
     "d3-color": "^3.1.0",
+    "loader-utils@^0.2.16": "^1.4.2",
     "loader-utils@^1.0.0": "^1.4.2",
     "loader-utils@^1.0.2": "^1.4.2",
     "loader-utils@^1.1.0": "^1.4.2",
