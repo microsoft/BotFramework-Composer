@@ -40,7 +40,7 @@
     "@types/globby": "^9.1.0",
     "@types/http-errors": "^1.6.1",
     "@types/jest": "^26.0.15",
-    "@types/jsonwebtoken": "^8.3.3",
+    "@types/jsonwebtoken": "^9.0.0",
     "@types/lodash": "^4.14.146",
     "@types/lru-cache": "^5.1.0",
     "@types/mock-fs": "^3.6.30",
