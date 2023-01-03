@@ -1607,7 +1607,7 @@ __metadata:
 
 "@bfc/extension-client@file:../../Composer/packages/extension-client::locator=pva-publish-composer%40workspace%3A.":
   version: 1.0.0
-  resolution: "@bfc/extension-client@file:../../Composer/packages/extension-client#../../Composer/packages/extension-client::hash=8dd52b&locator=pva-publish-composer%40workspace%3A."
+  resolution: "@bfc/extension-client@file:../../Composer/packages/extension-client#../../Composer/packages/extension-client::hash=a20225&locator=pva-publish-composer%40workspace%3A."
   dependencies:
     debug: ^4.1.1
     lodash: ^4.17.19
@@ -1616,7 +1616,7 @@ __metadata:
     "@botframework-composer/types": "*"
     react: 16.13.1
     react-dom: 16.13.1
-  checksum: e915e895f8bddee9e70e18f12ba5ab4668bc6883ab3c9dd00833f3d7fb9be0e8cb0dbc35f686f4baf5baf31390f8e6bd037274219c68cea718b0d3f72d9ecc8a
+  checksum: 99de64d6a2c2c3fe68ae54c8b1ea7473ebed23af5308b4e900d940afdb55ae8ddc2b3a59e46efd875b7d227bc3e958f3341d042d3a474ff224bd2e4cd0e8a053
   languageName: node
   linkType: hard
 
@@ -1643,7 +1643,7 @@ __metadata:
 
 "@botframework-composer/types@file:../../Composer/packages/types::locator=pva-publish-composer%40workspace%3A.":
   version: 0.0.2
-  resolution: "@botframework-composer/types@file:../../Composer/packages/types#../../Composer/packages/types::hash=ff5977&locator=pva-publish-composer%40workspace%3A."
+  resolution: "@botframework-composer/types@file:../../Composer/packages/types#../../Composer/packages/types::hash=6a936c&locator=pva-publish-composer%40workspace%3A."
   dependencies:
     "@types/express": 4.16.1
     "@types/passport": ^1.0.4
@@ -1652,7 +1652,7 @@ __metadata:
     express-serve-static-core: 0.1.1
     json-schema: 0.4.0
     tslib: 2.4.0
-  checksum: 377541c2d09305b36e9e12a1b200725bf7c37580a959f2d24007f51052b5f9536b7e0dea48f1f7b574fcca0b8858c97658f413c2df50238f9e70cdcbeaf678e5
+  checksum: 0410a241e7ba936f9b28ead27b9ea4ff799bca5233f4d6d199b3507842904f378b9710605228836c9344adb4bab756253f16e5b2de890d891b6e4b9ca8595c05
   languageName: node
   linkType: hard
 
@@ -5314,14 +5314,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"json5@npm:^2.1.2":
-  version: 2.2.0
-  resolution: "json5@npm:2.2.0"
-  dependencies:
-    minimist: ^1.2.5
+"json5@npm:^2.2.2":
+  version: 2.2.3
+  resolution: "json5@npm:2.2.3"
   bin:
     json5: lib/cli.js
-  checksum: e88fc5274bb58fc99547baa777886b069d2dd96d9cfc4490b305fd16d711dabd5979e35a4f90873cefbeb552e216b041a304fe56702bedba76e19bc7845f208d
+  checksum: 2a7436a93393830bce797d4626275152e37e877b265e94ca69c99e3d20c2b9dab021279146a39cdb700e71b2dd32a4cebd1514cd57cee102b1af906ce5040349
   languageName: node
   linkType: hard
 
@@ -5595,7 +5593,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"minimist@npm:^1.1.1, minimist@npm:^1.2.0, minimist@npm:^1.2.5":
+"minimist@npm:^1.1.1, minimist@npm:^1.2.0":
   version: 1.2.6
   resolution: "minimist@npm:1.2.6"
   checksum: d15428cd1e11eb14e1233bcfb88ae07ed7a147de251441d61158619dfb32c4d7e9061d09cab4825fdee18ecd6fce323228c8c47b5ba7cd20af378ca4048fb3fb

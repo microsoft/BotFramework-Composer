@@ -54,6 +54,7 @@
     "rimraf": "3.0.2"
   },
   "resolutions": {
-    "@botframework-composer/types": "file:../../Composer/packages/types"
+    "@botframework-composer/types": "file:../../Composer/packages/types",
+    "json5": "^2.2.2"
   }
 }

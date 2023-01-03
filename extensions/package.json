@@ -10,6 +10,9 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
+  "resolutions": {
+    "json5": "^1.0.2"
+  },
   "dependencies": {
     "@emotion/eslint-plugin": "11.7.0",
     "@types/fs-extra": "9.0.13",
