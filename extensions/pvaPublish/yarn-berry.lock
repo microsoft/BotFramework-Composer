@@ -1607,7 +1607,7 @@ __metadata:
 
 "@bfc/extension-client@file:../../Composer/packages/extension-client::locator=pva-publish-composer%40workspace%3A.":
   version: 1.0.0
-  resolution: "@bfc/extension-client@file:../../Composer/packages/extension-client#../../Composer/packages/extension-client::hash=a20225&locator=pva-publish-composer%40workspace%3A."
+  resolution: "@bfc/extension-client@file:../../Composer/packages/extension-client#../../Composer/packages/extension-client::hash=bfe898&locator=pva-publish-composer%40workspace%3A."
   dependencies:
     debug: ^4.1.1
     lodash: ^4.17.19
@@ -1616,7 +1616,7 @@ __metadata:
     "@botframework-composer/types": "*"
     react: 16.13.1
     react-dom: 16.13.1
-  checksum: 99de64d6a2c2c3fe68ae54c8b1ea7473ebed23af5308b4e900d940afdb55ae8ddc2b3a59e46efd875b7d227bc3e958f3341d042d3a474ff224bd2e4cd0e8a053
+  checksum: b6cab145ea33a251b91dd7ace2e37cae7c0a08d0e56b9484a5efd6dc080fd2b9bce9eaf6365a5c9e39b9d6d014a9cc053b041b6eb074393bf45a23e220532d90
   languageName: node
   linkType: hard
 
@@ -1643,7 +1643,7 @@ __metadata:
 
 "@botframework-composer/types@file:../../Composer/packages/types::locator=pva-publish-composer%40workspace%3A.":
   version: 0.0.2
-  resolution: "@botframework-composer/types@file:../../Composer/packages/types#../../Composer/packages/types::hash=6a936c&locator=pva-publish-composer%40workspace%3A."
+  resolution: "@botframework-composer/types@file:../../Composer/packages/types#../../Composer/packages/types::hash=8e72f5&locator=pva-publish-composer%40workspace%3A."
   dependencies:
     "@types/express": 4.16.1
     "@types/passport": ^1.0.4
@@ -1652,7 +1652,7 @@ __metadata:
     express-serve-static-core: 0.1.1
     json-schema: 0.4.0
     tslib: 2.4.0
-  checksum: 0410a241e7ba936f9b28ead27b9ea4ff799bca5233f4d6d199b3507842904f378b9710605228836c9344adb4bab756253f16e5b2de890d891b6e4b9ca8595c05
+  checksum: e63a4524776c64f4bdaa4442cbaeccf27d6773e9a63e8013b394c5ebcc76f8f3dd05c3e830d3a228e47663db847c9f740a9f7a128ecd979b8ab42bc445ba453a
   languageName: node
   linkType: hard
 
@@ -5750,7 +5750,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"node-fetch@npm:2.6.1":
+"node-fetch@npm:2.6.7":
   version: 2.6.7
   resolution: "node-fetch@npm:2.6.7"
   dependencies:
@@ -6253,7 +6253,7 @@ __metadata:
     fs-extra: 10.1.0
     https-proxy-agent: 5.0.1
     jest: ^26.6.0
-    node-fetch: 2.6.1
+    node-fetch: 2.6.7
     react: ^16.13.0
     react-dom: ^16.13.0
     rimraf: 3.0.2
