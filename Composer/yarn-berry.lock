@@ -3762,7 +3762,7 @@ __metadata:
     autoprefixer: ^9.5.1
     copyfiles: ^2.2.0
     css-loader: ^2.1.1
-    express: 4.16.1
+    express: 4.17.3
     html-webpack-plugin: ^3.2.0
     json-schema-defaults: ^0.4.0
     lodash: ^4.17.19
@@ -4012,7 +4012,7 @@ __metadata:
     adaptive-expressions: ^4.18.0
     botbuilder-lg: ^4.18.0
     cross-env: 7.0.3
-    express: 4.16.1
+    express: 4.17.3
     rimraf: 3.0.2
     ts-node: ^8.4.1
     tslib: 2.4.0
@@ -4035,7 +4035,7 @@ __metadata:
     "@types/node": 13.9.3
     clean-webpack-plugin: ^3.0.0
     css-loader: ^3.2.0
-    express: 4.16.1
+    express: 4.17.3
     html-webpack-plugin: ^3.2.0
     monaco-languageclient: 0.10.2
     normalize-url: ^4.5.1
@@ -4179,7 +4179,7 @@ __metadata:
     download-npm-package: ^3.1.12
     ejs: 3.1.8
     eslint: 7.0.0
-    express: 4.16.1
+    express: 4.17.3
     express-serve-static-core: 0.1.1
     express-session: ^1.17.0
     extract-zip: 2.0.1

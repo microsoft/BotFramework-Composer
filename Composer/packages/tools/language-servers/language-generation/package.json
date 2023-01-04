@@ -27,7 +27,7 @@
     "@botframework-composer/test-utils": "*",
     "@types/node": "13.9.3",
     "cross-env": "7.0.3",
-    "express": "4.16.1",
+    "express": "4.17.3",
     "rimraf": "3.0.2",
     "ts-node": "^8.4.1",
     "typescript": "3.9.2",
