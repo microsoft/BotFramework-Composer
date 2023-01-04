@@ -3836,7 +3836,7 @@ __metadata:
     lodash: ^4.17.19
     mock-fs: ^4.10.1
     ncp: 2.0.0
-    node-fetch: 2.6.1
+    node-fetch: 2.6.7
     nodemon: ^2.0.3
     rimraf: 3.0.2
     semver: 7.3.2
@@ -4199,7 +4199,7 @@ __metadata:
     moment: ^2.29.1
     morgan: ^1.9.1
     msal: ^1.4.4
-    node-fetch: 2.6.1
+    node-fetch: 2.6.7
     nodemon: ^2.0.3
     passport: ^0.4.1
     path-to-regexp: ^6.1.0
@@ -21498,7 +21498,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"node-fetch@npm:2.6.1, node-fetch@npm:2.6.7, node-fetch@npm:^2.1.2, node-fetch@npm:^2.6.0, node-fetch@npm:^2.6.1, node-fetch@npm:^2.6.5":
+"node-fetch@npm:2.6.7, node-fetch@npm:^2.1.2, node-fetch@npm:^2.6.0, node-fetch@npm:^2.6.1, node-fetch@npm:^2.6.5":
   version: 2.6.7
   resolution: "node-fetch@npm:2.6.7"
   dependencies:

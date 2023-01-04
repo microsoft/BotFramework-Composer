@@ -38,7 +38,7 @@
     "format-message": "6.2.4",
     "fs-extra": "10.1.0",
     "https-proxy-agent": "5.0.1",
-    "node-fetch": "2.6.1",
+    "node-fetch": "2.6.7",
     "react": "^16.13.0",
     "react-dom": "^16.13.0"
   },
