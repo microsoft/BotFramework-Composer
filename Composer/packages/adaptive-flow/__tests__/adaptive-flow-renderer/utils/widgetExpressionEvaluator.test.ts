@@ -28,7 +28,7 @@ describe('evaluateWidgetProp()', () => {
     expect(evaluate('=action.x', { action: { x: false } })).toEqual(false);
 
     // Convert to string
-    expect(evaluate('=string(action.x)', { action: { x: null } })).toEqual('null');
+    expect(evaluate('=string(action.x)', { action: { x: null } })).toEqual('');
     expect(evaluate('=string(action.x)', { action: { x: undefined } })).toEqual(undefined);
     expect(evaluate('=string(action.x)', { action: { x: false } })).toEqual('false');
 
