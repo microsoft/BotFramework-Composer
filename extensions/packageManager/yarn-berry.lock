@@ -101,7 +101,7 @@ __metadata:
 
 "@bfc/extension-client@file:../../Composer/packages/extension-client::locator=package-manager%40workspace%3A.":
   version: 1.0.0
-  resolution: "@bfc/extension-client@file:../../Composer/packages/extension-client#../../Composer/packages/extension-client::hash=a20225&locator=package-manager%40workspace%3A."
+  resolution: "@bfc/extension-client@file:../../Composer/packages/extension-client#../../Composer/packages/extension-client::hash=8dd52b&locator=package-manager%40workspace%3A."
   dependencies:
     debug: ^4.1.1
     lodash: ^4.17.19
@@ -110,13 +110,13 @@ __metadata:
     "@botframework-composer/types": "*"
     react: 16.13.1
     react-dom: 16.13.1
-  checksum: 99de64d6a2c2c3fe68ae54c8b1ea7473ebed23af5308b4e900d940afdb55ae8ddc2b3a59e46efd875b7d227bc3e958f3341d042d3a474ff224bd2e4cd0e8a053
+  checksum: e915e895f8bddee9e70e18f12ba5ab4668bc6883ab3c9dd00833f3d7fb9be0e8cb0dbc35f686f4baf5baf31390f8e6bd037274219c68cea718b0d3f72d9ecc8a
   languageName: node
   linkType: hard
 
 "@bfc/extension@file:../../Composer/packages/extension::locator=package-manager%40workspace%3A.":
   version: 1.0.0
-  resolution: "@bfc/extension@file:../../Composer/packages/extension#../../Composer/packages/extension::hash=e95681&locator=package-manager%40workspace%3A."
+  resolution: "@bfc/extension@file:../../Composer/packages/extension#../../Composer/packages/extension::hash=904520&locator=package-manager%40workspace%3A."
   dependencies:
     "@botframework-composer/types": "*"
     "@types/debug": ^4.1.5
@@ -130,13 +130,13 @@ __metadata:
     path-to-regexp: ^6.1.0
     tar: ^6.1.6
     tslib: 2.4.0
-  checksum: abac7ff71e80e902f4e833648126b056d0f494b5084e448f5e0ca7f65b45b96900c09a48d2499ff18326a395721b115abf6a5056c29fa8ecccdb54af8a0c72b2
+  checksum: 874473d58d0d0e1e8db00c3cce15d296d17b699b90226b9434cf3cae52838a5064b33195194fff6c2eb485b536403949fed3bbd5a865e68df57cc271efba4b80
   languageName: node
   linkType: hard
 
 "@bfc/ui-shared@file:../../Composer/packages/lib/ui-shared::locator=package-manager%40workspace%3A.":
   version: 0.0.0
-  resolution: "@bfc/ui-shared@file:../../Composer/packages/lib/ui-shared#../../Composer/packages/lib/ui-shared::hash=aa8a5a&locator=package-manager%40workspace%3A."
+  resolution: "@bfc/ui-shared@file:../../Composer/packages/lib/ui-shared#../../Composer/packages/lib/ui-shared::hash=b508c9&locator=package-manager%40workspace%3A."
   dependencies:
     "@emotion/react": ^11.1.3
     "@emotion/styled": ^11.1.3
@@ -148,13 +148,13 @@ __metadata:
     format-message: ^6.2.3
     react: 16.13.1
     react-dom: 16.13.1
-  checksum: bd94dc1b2f31169e3bf01e7fd3a91d4f5e16fb934ad988ad270d27fbd3d899010c3b9a797a5469889152e3e2e0a8b87b29d537949e14e4639d9dedad272f2ea2
+  checksum: fba5741428b45fbd97a4342cdfbec6ca9a626daaf3df4a5da6c30f4a7a6c6311f493958a46ab2bd03efdc3465e504bf6b6c39ec6e40d3e3f4306f5e955f60333
   languageName: node
   linkType: hard
 
 "@botframework-composer/types@file:../../Composer/packages/types::locator=package-manager%40workspace%3A.":
   version: 0.0.2
-  resolution: "@botframework-composer/types@file:../../Composer/packages/types#../../Composer/packages/types::hash=6a936c&locator=package-manager%40workspace%3A."
+  resolution: "@botframework-composer/types@file:../../Composer/packages/types#../../Composer/packages/types::hash=ff5977&locator=package-manager%40workspace%3A."
   dependencies:
     "@types/express": 4.16.1
     "@types/passport": ^1.0.4
@@ -163,7 +163,7 @@ __metadata:
     express-serve-static-core: 0.1.1
     json-schema: 0.4.0
     tslib: 2.4.0
-  checksum: 0410a241e7ba936f9b28ead27b9ea4ff799bca5233f4d6d199b3507842904f378b9710605228836c9344adb4bab756253f16e5b2de890d891b6e4b9ca8595c05
+  checksum: 377541c2d09305b36e9e12a1b200725bf7c37580a959f2d24007f51052b5f9536b7e0dea48f1f7b574fcca0b8858c97658f413c2df50238f9e70cdcbeaf678e5
   languageName: node
   linkType: hard
 
