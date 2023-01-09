@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx } from '@emotion/react';
+import { jsx, css } from '@emotion/react';
 import { useState, Fragment } from 'react';
 import formatMessage from 'format-message';
 import { useRecoilValue } from 'recoil';
@@ -29,6 +29,10 @@ type Package = {
   packageName?: string;
 };
 
+const tableOverflowStyle = css`
+  overflow: hidden;
+`;
+
 const ExternalAdapterSettings = (props: Props) => {
   const { projectId } = props;
 
@@ -54,7 +58,7 @@ const ExternalAdapterSettings = (props: Props) => {
   if (schemaDefinitions == null) return null;
 
   const externalServices = (schemas: (JSONSchema7 & Package)[]) => (
-    <div role="table">
+    <div css={tableOverflowStyle} role="table">
       <div css={tableHeaderRow} role="row">
         <div css={tableColumnHeader(columnSizes[0])} role="columnheader">
           {formatMessage('Name')}
