@@ -198,7 +198,7 @@ const FormDialogPage: React.FC<Props> = React.memo((props: Props) => {
           resetOnDoubleClick
           initialPrimarySize="320px"
           minPrimarySize="320px"
-          minSecondarySize="800px"
+          minSecondarySize="630px"
           renderSplitter={renderThinSplitter}
           onMeasuredSizesChanged={onMeasuredSizesChanged}
         >
