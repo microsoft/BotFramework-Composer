@@ -36,6 +36,7 @@ import { mountDirectLineRoutes } from './directline/mountDirectlineRoutes';
 import { mountAttachmentRoutes } from './directline/mountAttachmentRoutes';
 import { cleanHostedBots } from './utility/cleanHostedBots';
 import { getVersion } from './utility/getVersion';
+import { serverHostname } from './settings/env';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const session = require('express-session');
@@ -183,12 +184,14 @@ export async function start(electronContext?: ElectronContext): Promise<number |
   });
 
   let server;
-  await new Promise((resolve) => {
-    server = app.listen(port, () => {
+  await new Promise<void>((resolve) => {
+    server = app.listen(port, serverHostname, () => {
       if (process.env.NODE_ENV === 'production') {
         // We don't use the debug logger here because we always want it to be shown.
         // eslint-disable-next-line no-console
-        console.log(`\n\n${chalk.green('Composer now running at:')}\n\n${chalk.blue(`http://localhost:${port}`)}\n`);
+        console.log(
+          `\n\n${chalk.green('Composer now running at:')}\n\n${chalk.blue(`http://${serverHostname}:${port}`)}\n`
+        );
       }
       resolve();
     });

@@ -243,9 +243,10 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
     }
   };
 
-  setupRuntimeLogServer = async (projectId: string) => {
+  setupRuntimeLogServer = async (projectId: string, serverHostname?: string) => {
     await RuntimeLogServer.init({
       log: this.composer.log,
+      hostname: serverHostname,
     });
     return RuntimeLogServer.getRuntimeLogStreamingUrl(projectId);
   };
