@@ -3404,6 +3404,9 @@
   "search_for_extensions_on_npm_c5ca65d9": {
     "message": "Search for extensions on npm"
   },
+  "search_for_the_query_found_count_plural_1_one_resu_da1e5732": {
+    "message": "Search for the { query }. Found { count, plural,\n     =1 {one result}\n  other {# results}\n}"
+  },
   "search_functions_4a1afbc3": {
     "message": "Search functions"
   },
@@ -3979,6 +3982,9 @@
   },
   "the_trigger_triggername_has_been_created_eed0c973": {
     "message": "The trigger { triggerName } has been created"
+  },
+  "the_trigger_triggername_has_been_deleted_b7d630f8": {
+    "message": "The trigger { triggerName } has been deleted"
   },
   "the_user_input_page_is_where_the_language_understa_c9262f3f": {
     "message": "The User Input page is where the Language Understanding editor locates. From here users can view all the Language Understanding templates and edit them."

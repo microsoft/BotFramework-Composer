@@ -187,7 +187,7 @@ const Page: React.FC<IPageProps> = (props) => {
         resetOnDoubleClick
         initialPrimarySize="20%"
         minPrimarySize="200px"
-        minSecondarySize="800px"
+        minSecondarySize="750px"
         renderSplitter={renderThinSplitter}
         onMeasuredSizesChanged={onMeasuredSizesChanged}
       >
