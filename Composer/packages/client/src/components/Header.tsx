@@ -7,12 +7,13 @@ import formatMessage from 'format-message';
 import { IconButton, IButtonStyles } from '@fluentui/react/lib/Button';
 import { Callout, DirectionalHint } from '@fluentui/react/lib/Callout';
 import { Dropdown, IDropdownOption } from '@fluentui/react/lib/Dropdown';
-import { TooltipHost } from '@fluentui/react/lib/Tooltip';
+import { TooltipHost, TooltipOverflowMode } from '@fluentui/react/lib/Tooltip';
 import { FocusTrapZone } from '@fluentui/react/lib/FocusTrapZone';
 import { useCallback, useState, Fragment, useMemo, useEffect } from 'react';
 import { NeutralColors, SharedColors, FontSizes, CommunicationColors } from '@fluentui/theme';
 import { useRecoilValue } from 'recoil';
 import { TeachingBubble } from '@fluentui/react/lib/TeachingBubble';
+import { mergeStyleSets } from '@fluentui/react/lib/Styling';
 
 import {
   dispatcherState,
@@ -38,6 +39,7 @@ import { languageListTemplates, languageFullName } from './MultiLanguage';
 import { NotificationButton } from './Notifications/NotificationButton';
 import { BotController } from './BotRuntimeController/BotController';
 import { GetStarted } from './GetStarted/GetStarted';
+
 export const actionButton = css`
   font-size: ${FontSizes.size18};
   margin-top: 2px;
@@ -51,16 +53,12 @@ const headerContainer = css`
   display: flex;
   flex-direction: row;
   align-items: center;
-`;
+  gap: 16px;
 
-const botName = css`
-  font-size: 16px;
-  color: #fff;
-  padding-left: 20px;
+  label: HeaderContainer;
 `;
 
 const botLocale = css`
-  margin-left: 20px;
   font-size: 12px;
   color: #fff;
   border-radius: 19px;
@@ -68,22 +66,27 @@ const botLocale = css`
   padding-left: 10px;
   padding-right: 10px;
   cursor: pointer;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 `;
 
 const headerTextContainer = css`
   display: flex;
   align-items: center;
   justify-content: flex-start;
-  min-width: 600px;
-  width: 50%;
+  min-width: 50px;
+  gap: 8px;
 `;
 
 const rightSection = css`
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  width: 50%;
+  min-width: 200px;
   margin: 0 10px;
+  margin-left: auto;
+  flex-shrink: 0;
 `;
 
 const buttonStyles: IButtonStyles = {
@@ -132,6 +135,35 @@ const calloutDescription = css`
   color: ${NeutralColors.black};
   font-size: ${FontSizes.size12};
 `;
+
+const logo = css`
+  margin-left: 9px;
+  @media screen and (max-width: 480px) /* 300% zoom */ {
+    display: none;
+  }
+`;
+
+const searchArea = css`
+  margin-right: 12px;
+  width: 220px;
+  @media screen and (max-width: 720px) /* 150% zoom */ {
+    width: unset;
+`;
+
+const classNames = mergeStyleSets({
+  projectNameOverflow: {
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
+    fontSize: FontSizes.size16,
+    color: NeutralColors.white,
+  },
+  subComponentStyles: {
+    projectNameTooltip: {
+      root: { display: 'block' },
+    },
+  },
+});
 
 // -------------------- Header -------------------- //
 
@@ -253,11 +285,18 @@ export const Header = () => {
 
   return (
     <div css={headerContainer} role="banner">
-      <img alt={logoLabel} aria-label={logoLabel} src={composerIcon} style={{ marginLeft: '9px' }} />
+      <img alt={logoLabel} aria-label={logoLabel} css={logo} src={composerIcon} />
       <div css={headerTextContainer}>
         {projectName && (
           <Fragment>
-            <span css={botName}>{projectName}</span>
+            <TooltipHost
+              content={projectName}
+              hostClassName={classNames.projectNameOverflow}
+              overflowMode={TooltipOverflowMode.Self}
+              styles={classNames.subComponentStyles.projectNameTooltip}
+            >
+              {projectName}
+            </TooltipHost>
             {languageListOptions.length > 1 && (
               <span
                 css={botLocale}
@@ -275,11 +314,7 @@ export const Header = () => {
       </div>
       <div css={rightSection}>
         {isShow && (
-          <div
-            css={css`
-              margin-right: 12px;
-            `}
-          >
+          <div css={searchArea}>
             <BotController
               isControllerHidden={hideBotController}
               onHideController={(isHidden: boolean) => {

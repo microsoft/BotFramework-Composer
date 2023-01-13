@@ -139,9 +139,14 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
         const retry = 10;
         let i = 0;
         do {
-          port = await portfinder.getPortPromise({ port: maxPort + 1, stopPort: 6000 });
+          const preferredPort = maxPort + 1;
+          port = await portfinder.getPortPromise({ port: preferredPort, stopPort: 6000 }).catch((err) => {
+            this.composer.log(`Unable to find an open port for ${this.name} (wanted ${preferredPort}): ${err}`);
+            return preferredPort;
+          });
           i++;
         } while (this.isPortUsed(port) && i < retry);
+        this.composer.log(`Using ${port} port for ${this.name}`);
 
         const updatedBotData: RunningBot = {
           ...LocalPublisher.runningBots[botId],
@@ -239,7 +244,9 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
   };
 
   setupRuntimeLogServer = async (projectId: string) => {
-    await RuntimeLogServer.init();
+    await RuntimeLogServer.init({
+      log: this.composer.log,
+    });
     return RuntimeLogServer.getRuntimeLogStreamingUrl(projectId);
   };
 

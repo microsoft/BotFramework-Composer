@@ -1903,7 +1903,7 @@ __metadata:
 
 "@bfc/extension-client@file:../../Composer/packages/extension-client::locator=azure-publish-new%40workspace%3A.":
   version: 1.0.0
-  resolution: "@bfc/extension-client@file:../../Composer/packages/extension-client#../../Composer/packages/extension-client::hash=1ccdd5&locator=azure-publish-new%40workspace%3A."
+  resolution: "@bfc/extension-client@file:../../Composer/packages/extension-client#../../Composer/packages/extension-client::hash=8dd52b&locator=azure-publish-new%40workspace%3A."
   dependencies:
     debug: ^4.1.1
     lodash: ^4.17.19
@@ -1912,7 +1912,7 @@ __metadata:
     "@botframework-composer/types": "*"
     react: 16.13.1
     react-dom: 16.13.1
-  checksum: e871e220343b04a641b46e94b9419281156c2f2920558dc345232eae130c0757bc386f4a567db50b9e77c4b1dc8ef393572277952859ca599319a697c77abff4
+  checksum: e915e895f8bddee9e70e18f12ba5ab4668bc6883ab3c9dd00833f3d7fb9be0e8cb0dbc35f686f4baf5baf31390f8e6bd037274219c68cea718b0d3f72d9ecc8a
   languageName: node
   linkType: hard
 
@@ -1933,7 +1933,7 @@ __metadata:
 
 "@bfc/shared@file:../../Composer/packages/lib/shared::locator=azure-publish-new%40workspace%3A.":
   version: 0.0.0
-  resolution: "@bfc/shared@file:../../Composer/packages/lib/shared#../../Composer/packages/lib/shared::hash=b1189d&locator=azure-publish-new%40workspace%3A."
+  resolution: "@bfc/shared@file:../../Composer/packages/lib/shared#../../Composer/packages/lib/shared::hash=8bb646&locator=azure-publish-new%40workspace%3A."
   dependencies:
     "@botframework-composer/types": "*"
     format-message: 6.2.4
@@ -1942,17 +1942,18 @@ __metadata:
     multimatch: ^5.0.0
     nanoid: ^3.1.3
     nanoid-dictionary: ^3.0.0
-    tslib: 2.4.0
   peerDependencies:
+    axios: ^0.21.1
     react: 16.13.1
     react-dom: 16.13.1
-  checksum: d6d584b1231582c660585be243a577ecc112e3834ce711241ec981d354bbd3efc4084d1a556c3bf6aa155f2506101e1f33f7fb3eddb154657eac688ba6c167f8
+    tslib: 2.4.0
+  checksum: ed6af3f1b57b302c951d934f2686f139541e99eb23765906e96f3d4b024b059f0e17f1af869939a6bf8170b366b3d0034a8fa4855395ad545f430a76e377b545
   languageName: node
   linkType: hard
 
 "@bfc/ui-shared@file:../../Composer/packages/lib/ui-shared::locator=azure-publish-new%40workspace%3A.":
   version: 0.0.0
-  resolution: "@bfc/ui-shared@file:../../Composer/packages/lib/ui-shared#../../Composer/packages/lib/ui-shared::hash=e5b454&locator=azure-publish-new%40workspace%3A."
+  resolution: "@bfc/ui-shared@file:../../Composer/packages/lib/ui-shared#../../Composer/packages/lib/ui-shared::hash=b508c9&locator=azure-publish-new%40workspace%3A."
   dependencies:
     "@emotion/react": ^11.1.3
     "@emotion/styled": ^11.1.3
@@ -1964,7 +1965,7 @@ __metadata:
     format-message: ^6.2.3
     react: 16.13.1
     react-dom: 16.13.1
-  checksum: 611483129dd4e2958981a63534253aa763125515551f2ee179615dbe1f53091a5afb8547e5b48e5fc31b7a54ce52d022e519b62dfa1eafe2005180c8162bacd2
+  checksum: fba5741428b45fbd97a4342cdfbec6ca9a626daaf3df4a5da6c30f4a7a6c6311f493958a46ab2bd03efdc3465e504bf6b6c39ec6e40d3e3f4306f5e955f60333
   languageName: node
   linkType: hard
 
@@ -1991,7 +1992,7 @@ __metadata:
 
 "@botframework-composer/types@file:../../Composer/packages/types::locator=azure-publish-new%40workspace%3A.":
   version: 0.0.2
-  resolution: "@botframework-composer/types@file:../../Composer/packages/types#../../Composer/packages/types::hash=33ce41&locator=azure-publish-new%40workspace%3A."
+  resolution: "@botframework-composer/types@file:../../Composer/packages/types#../../Composer/packages/types::hash=ff5977&locator=azure-publish-new%40workspace%3A."
   dependencies:
     "@types/express": 4.16.1
     "@types/passport": ^1.0.4
@@ -2000,7 +2001,7 @@ __metadata:
     express-serve-static-core: 0.1.1
     json-schema: 0.4.0
     tslib: 2.4.0
-  checksum: ca240110a807681973dcb661819b8979d4b05ad08763a171c17a10ba25aad32e3f0ec5125cb6b2462d0a6e1afa5b13b2c4dc336c1529a15ea4ac1c47654e0e31
+  checksum: 377541c2d09305b36e9e12a1b200725bf7c37580a959f2d24007f51052b5f9536b7e0dea48f1f7b574fcca0b8858c97658f413c2df50238f9e70cdcbeaf678e5
   languageName: node
   linkType: hard
 

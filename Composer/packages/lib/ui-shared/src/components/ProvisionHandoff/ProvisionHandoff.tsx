@@ -7,6 +7,8 @@ import { DialogFooter } from '@fluentui/react/lib/Dialog';
 import { PrimaryButton } from '@fluentui/react/lib/Button';
 import formatMessage from 'format-message';
 import { Text } from '@fluentui/react/lib/Text';
+import { Label } from '@fluentui/react/lib/Label';
+import { useId } from '@fluentui/react-hooks';
 import { DefaultButton, IconButton } from '@fluentui/react/lib/components/Button';
 import { FontSizes, NeutralColors } from '@fluentui/theme';
 import { useRef } from 'react';
@@ -41,6 +43,8 @@ export const ProvisionHandoff = (props: ProvisionHandoffProps) => {
     }
   };
 
+  const textFieldId = useId('instructions-field-');
+
   return (
     <DialogWrapper
       dialogType={DialogTypes.ProvisionFlow}
@@ -59,7 +63,9 @@ export const ProvisionHandoff = (props: ProvisionHandoffProps) => {
         </div>
       )}
       <div>
-        <Text style={{ fontSize: FontSizes.size14, fontWeight: 600 }}>{formatMessage('Instructions')}</Text>
+        <Label htmlFor={textFieldId} style={{ fontSize: FontSizes.size14, fontWeight: 600 }}>
+          {formatMessage('Instructions')}
+        </Label>
         <IconButton
           ariaLabel={formatMessage('Copy Icon')}
           menuIconProps={{ iconName: 'Copy' }}
@@ -86,6 +92,7 @@ export const ProvisionHandoff = (props: ProvisionHandoffProps) => {
       <TextField
         multiline
         componentRef={textFieldRef}
+        id={textFieldId}
         styles={{
           root: { marginTop: '10px' },
           fieldGroup: { height: '200px', backgroundColor: '#f3f2f1' },

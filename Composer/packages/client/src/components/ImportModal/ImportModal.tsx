@@ -8,7 +8,7 @@ import { navigate, RouteComponentProps } from '@reach/router';
 import { Dialog, DialogType } from '@fluentui/react/lib/Dialog';
 import { ExternalContentProviderType } from '@botframework-composer/types';
 import { useRecoilValue } from 'recoil';
-import axios from 'axios';
+import { axios } from '@bfc/shared/lib/axios';
 
 import { dispatcherState } from '../../recoilModel';
 import { createNotification } from '../../recoilModel/dispatchers/notification';

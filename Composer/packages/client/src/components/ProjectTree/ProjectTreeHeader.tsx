@@ -116,7 +116,7 @@ export const ProjectTreeHeader: React.FC<ProjectTreeHeaderProps> = ({
   const addCommandBtn = (
     <CommandButton
       data-is-focusable
-      ariaLabel={formatMessage('Actions')}
+      ariaLabel={formatMessage('Add actions')}
       className="project-tree-header-more-btn"
       css={buttonStyle}
       data-testid="projectTreeHeaderMoreButton"
