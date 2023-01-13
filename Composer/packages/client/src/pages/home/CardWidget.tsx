@@ -68,7 +68,7 @@ export const CardWidget: React.FC<CardWidgetProps> = ({
   return (
     <div ref={forwardedRef} css={home.cardWrapper} {...rest}>
       <a
-        aria-labelledBy={labelId}
+        aria-labelledby={labelId}
         css={[itemContainerWrapper(disabled), styles.container]}
         href={href}
         target={target}
@@ -93,7 +93,7 @@ export const CardWidget: React.FC<CardWidgetProps> = ({
           <div css={styles.content}>{content}</div>
         </div>
         {moreLinkText && (
-          <Link aria-labelledBy={labelId} css={styles.moreLink} role="link">
+          <Link aria-labelledby={labelId} css={styles.moreLink} role="link">
             {moreLinkText}
           </Link>
         )}

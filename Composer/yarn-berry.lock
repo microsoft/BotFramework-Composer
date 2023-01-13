@@ -3401,6 +3401,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@babel/runtime@npm:7.17.2":
+  version: 7.17.2
+  resolution: "@babel/runtime@npm:7.17.2"
+  dependencies:
+    regenerator-runtime: ^0.13.4
+  checksum: a48702d271ecc59c09c397856407afa29ff980ab537b3da58eeee1aeaa0f545402d340a1680c9af58aec94dfdcbccfb6abb211991b74686a86d03d3f6956cacd
+  languageName: node
+  linkType: hard
+
 "@babel/runtime@npm:7.3.1":
   version: 7.3.1
   resolution: "@babel/runtime@npm:7.3.1"
@@ -3419,7 +3428,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/runtime@npm:^7.0.0, @babel/runtime@npm:^7.10.2, @babel/runtime@npm:^7.12.1, @babel/runtime@npm:^7.12.5, @babel/runtime@npm:^7.13.10, @babel/runtime@npm:^7.15.4, @babel/runtime@npm:^7.2.0, @babel/runtime@npm:^7.3.4, @babel/runtime@npm:^7.6.3, @babel/runtime@npm:^7.7.2, @babel/runtime@npm:^7.8.4, @babel/runtime@npm:^7.9.2":
+"@babel/runtime@npm:^7.0.0, @babel/runtime@npm:^7.10.2, @babel/runtime@npm:^7.12.5, @babel/runtime@npm:^7.13.10, @babel/runtime@npm:^7.15.4, @babel/runtime@npm:^7.2.0, @babel/runtime@npm:^7.3.4, @babel/runtime@npm:^7.6.3, @babel/runtime@npm:^7.7.2, @babel/runtime@npm:^7.8.4, @babel/runtime@npm:^7.9.2":
   version: 7.16.7
   resolution: "@babel/runtime@npm:7.16.7"
   dependencies:
@@ -3681,8 +3690,8 @@ __metadata:
     babel-plugin-named-asset-import: ^0.3.1
     babel-preset-react-app: ^7.0.1
     bfj: 6.1.1
-    botframework-webchat: 4.15.1
-    botframework-webchat-core: 4.15.1
+    botframework-webchat: 4.15.3
+    botframework-webchat-core: 4.15.3
     browserslist: ^4.16.5
     case-sensitive-paths-webpack-plugin: 2.2.0
     css-loader: 3.2.0
@@ -4203,7 +4212,7 @@ __metadata:
     nodemon: ^2.0.3
     passport: ^0.4.1
     path-to-regexp: ^6.1.0
-    portfinder: ^1.0.28
+    portfinder: ^1.0.32
     prettier: 2.0.5
     rimraf: 3.0.2
     rsa-pem-from-mod-exp: ^0.8.4
@@ -4244,10 +4253,11 @@ __metadata:
     react: 16.13.1
     react-dom: 16.13.1
     rimraf: 3.0.2
-    tslib: 2.4.0
   peerDependencies:
+    axios: ^0.21.1
     react: 16.13.1
     react-dom: 16.13.1
+    tslib: 2.4.0
   languageName: unknown
   linkType: soft
 
@@ -4730,6 +4740,24 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@emotion/css@npm:11.7.1":
+  version: 11.7.1
+  resolution: "@emotion/css@npm:11.7.1"
+  dependencies:
+    "@emotion/babel-plugin": ^11.7.1
+    "@emotion/cache": ^11.7.1
+    "@emotion/serialize": ^1.0.0
+    "@emotion/sheet": ^1.0.3
+    "@emotion/utils": ^1.0.0
+  peerDependencies:
+    "@babel/core": ^7.0.0
+  peerDependenciesMeta:
+    "@babel/core":
+      optional: true
+  checksum: ac1f56656f33bdb6539cb4ca941532d8a155167296acdc7d0f820e1a4c679cee59f4b3456e79e1c1f6a493a1f7c6c62fb6ae29a56a51a0bf531374f9b2838967
+  languageName: node
+  linkType: hard
+
 "@emotion/eslint-plugin@npm:11.7.0":
   version: 11.7.0
   resolution: "@emotion/eslint-plugin@npm:11.7.0"
@@ -4831,6 +4859,13 @@ __metadata:
   version: 1.1.0
   resolution: "@emotion/sheet@npm:1.1.0"
   checksum: a4b74e16a8fea1157413efe4904f5f679d724323cb605d66d20a0b98744422f5d411fca927ceb52e4de454a0a819c5273ca9496db9f011b4ecd17b9f1b212007
+  languageName: node
+  linkType: hard
+
+"@emotion/sheet@npm:^1.0.3":
+  version: 1.2.0
+  resolution: "@emotion/sheet@npm:1.2.0"
+  checksum: b3771e47963d36c179f9a1119055d7e5d18e2718e73ebe2b4b1c56f4bbf4ea6b12c50bbc52cd502f03f7981beb2fbb3fee2638b6f5ef6c5f223b06f8bf88ec7b
   languageName: node
   linkType: hard
 
@@ -7421,7 +7456,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react-redux@npm:^7.1.16, @types/react-redux@npm:^7.1.20":
+"@types/react-redux@npm:^7.1.20":
   version: 7.1.22
   resolution: "@types/react-redux@npm:7.1.22"
   dependencies:
@@ -9038,7 +9073,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"async@npm:^2.5.0, async@npm:^2.6.2":
+"async@npm:^2.5.0, async@npm:^2.6.2, async@npm:^2.6.4":
   version: 2.6.4
   resolution: "async@npm:2.6.4"
   dependencies:
@@ -9551,6 +9586,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"base64-arraybuffer@npm:1.0.2":
+  version: 1.0.2
+  resolution: "base64-arraybuffer@npm:1.0.2"
+  checksum: 15e6400d2d028bf18be4ed97702b11418f8f8779fb8c743251c863b726638d52f69571d4cc1843224da7838abef0949c670bde46936663c45ad078e89fee5c62
+  languageName: node
+  linkType: hard
+
 "base64-js@npm:1.5.1, base64-js@npm:^1.0.2, base64-js@npm:^1.3.1, base64-js@npm:^1.5.1":
   version: 1.5.1
   resolution: "base64-js@npm:1.5.1"
@@ -9838,15 +9880,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"botframework-directlinespeech-sdk@npm:4.15.1":
-  version: 4.15.1
-  resolution: "botframework-directlinespeech-sdk@npm:4.15.1"
+"botframework-directlinespeech-sdk@npm:4.15.3":
+  version: 4.15.3
+  resolution: "botframework-directlinespeech-sdk@npm:4.15.3"
   dependencies:
-    "@babel/runtime": 7.15.4
+    "@babel/runtime": 7.17.2
     abort-controller: 3.0.0
     abort-controller-es5: 2.0.1
-    base64-arraybuffer: 0.2.0
-    core-js: 3.18.3
+    base64-arraybuffer: 1.0.2
+    core-js: 3.21.1
     event-as-promise: 1.0.5
     event-target-shim: 6.0.2
     math-random: 2.0.1
@@ -9854,7 +9896,7 @@ __metadata:
     p-defer: 4.0.0
     p-defer-es5: 2.0.1
     web-speech-cognitive-services: 7.1.1
-  checksum: 18c8fa24f5fb46d588836071e492cc48e4f71b54a7776b3bcf43dcdf21f61f7cd094b41acdb5b5f635b1f89b9c6f6e5d63250a5d38a4d0f6fb6fef158f1f4802
+  checksum: 70a7081a5d1b39231fde9ba2dff92b205d2d6e86de7a915122806051e16d3ca579312f0f0eb313d19e1070c3066d1d60da916f9c03d2459facd2b3599d8210c8
   languageName: node
   linkType: hard
 
@@ -9880,93 +9922,93 @@ __metadata:
   languageName: node
   linkType: hard
 
-"botframework-webchat-api@npm:4.15.1":
-  version: 4.15.1
-  resolution: "botframework-webchat-api@npm:4.15.1"
+"botframework-webchat-api@npm:4.15.3":
+  version: 4.15.3
+  resolution: "botframework-webchat-api@npm:4.15.3"
   dependencies:
-    botframework-webchat-core: 4.15.1
-    globalize: 1.6.0
+    botframework-webchat-core: 4.15.3
+    globalize: 1.7.0
     math-random: 2.0.1
-    prop-types: 15.7.2
-    react-redux: 7.2.4
-    redux: 4.0.5
+    prop-types: 15.8.1
+    react-redux: 7.2.8
+    redux: 4.1.2
     simple-update-in: 2.2.0
   peerDependencies:
     react: ">= 16.8.6"
     react-dom: ">= 16.8.6"
-  checksum: 67ee9d39b4add78560fd56aa8f9ee4d73e373573483723be661d94ee6f040d34d218f79da787e0d92038e591d084a2de425de62f7e5d717cc3907b34c7c8ed58
+  checksum: 3d2a108ceb1fc6c5806cd535325b204063c0072a5a6055347f7e0552b737096308e05ddacd90652a25ce5a25c2577b34960270ad1509bb59961e8d998018b044
   languageName: node
   linkType: hard
 
-"botframework-webchat-component@npm:4.15.1":
-  version: 4.15.1
-  resolution: "botframework-webchat-component@npm:4.15.1"
+"botframework-webchat-component@npm:4.15.3":
+  version: 4.15.3
+  resolution: "botframework-webchat-component@npm:4.15.3"
   dependencies:
-    "@emotion/css": 11.1.3
+    "@emotion/css": 11.7.1
     base64-js: 1.5.1
-    botframework-webchat-api: 4.15.1
-    botframework-webchat-core: 4.15.1
+    botframework-webchat-api: 4.15.3
+    botframework-webchat-core: 4.15.3
     classnames: 2.3.1
     compute-scroll-into-view: 1.0.17
     event-target-shim: 6.0.2
     markdown-it: 12.3.2
     math-random: 2.0.1
-    memoize-one: 5.2.1
-    prop-types: 15.7.2
+    memoize-one: 6.0.0
+    prop-types: 15.8.1
     react-dictate-button: 2.0.1
     react-film: 3.1.0
-    react-redux: 7.2.4
+    react-redux: 7.2.6
     react-say: 2.1.0
     react-scroll-to-bottom: 4.2.0
-    redux: 4.0.5
+    redux: 4.1.2
     simple-update-in: 2.2.0
   peerDependencies:
     react: ">= 16.8.6"
     react-dom: ">= 16.8.6"
-  checksum: 4596798aecc151ddb8e95fbfcd47c988d9e7c671ff84b9be4478b1408b742179ccc18937aa43add4176000787e237dcac39ea77e122802c37ee962f648fdf5db
+  checksum: 245f6b4e48c5ea24da75fb0054d264c606ddbedb7456345d1ecdb500b6dba718f2f710ea51c784e90fe166153942472d9b416a154cb16afbce836b583fb7b3ef
   languageName: node
   linkType: hard
 
-"botframework-webchat-core@npm:4.15.1":
-  version: 4.15.1
-  resolution: "botframework-webchat-core@npm:4.15.1"
+"botframework-webchat-core@npm:4.15.3":
+  version: 4.15.3
+  resolution: "botframework-webchat-core@npm:4.15.3"
   dependencies:
-    "@babel/runtime": 7.15.4
+    "@babel/runtime": 7.17.2
     jwt-decode: 3.1.2
     math-random: 2.0.1
-    mime: 2.5.2
+    mime: 3.0.0
     p-defer: 4.0.0
     p-defer-es5: 2.0.1
-    redux: 4.0.5
+    redux: 4.1.2
     redux-devtools-extension: 2.13.9
     redux-saga: 1.1.3
     simple-update-in: 2.2.0
-  checksum: ffecef3e6b9e42d2298441b8f866ed51d707722bf2777df6daec7f6d01c2b72a7d2c0542df23b1778e211b3b561a439498639c9fc7e1e1d77f0199004a709ab2
+  checksum: 73c961dcae97bec010d509a36fe58c212b4a4dfb159f613c04955eddfcf642c0f00c3bbe33d866cf75e509d38a41f307453d0c649fabe57feea693f71718eccd
   languageName: node
   linkType: hard
 
-"botframework-webchat@npm:4.15.1":
-  version: 4.15.1
-  resolution: "botframework-webchat@npm:4.15.1"
+"botframework-webchat@npm:4.15.3":
+  version: 4.15.3
+  resolution: "botframework-webchat@npm:4.15.3"
   dependencies:
-    "@babel/runtime": 7.15.4
+    "@babel/runtime": 7.17.2
     adaptivecards: 2.10.0
     botframework-directlinejs: 0.15.1
-    botframework-directlinespeech-sdk: 4.15.1
-    botframework-webchat-api: 4.15.1
-    botframework-webchat-component: 4.15.1
-    botframework-webchat-core: 4.15.1
+    botframework-directlinespeech-sdk: 4.15.3
+    botframework-webchat-api: 4.15.3
+    botframework-webchat-component: 4.15.3
+    botframework-webchat-core: 4.15.3
     classnames: 2.3.1
-    core-js: 3.18.3
+    core-js: 3.21.1
     markdown-it: 12.3.2
-    markdown-it-attrs: 4.0.0
+    markdown-it-attrs: 4.1.3
     markdown-it-attrs-es5: 2.0.2
     markdown-it-for-inline: 0.1.1
     math-random: 2.0.1
-    memoize-one: 5.2.1
+    memoize-one: 6.0.0
     microsoft-cognitiveservices-speech-sdk: 1.17.0
-    prop-types: 15.7.2
-    sanitize-html: 2.4.0
+    prop-types: 15.8.1
+    sanitize-html: 2.7.0
     url-search-params-polyfill: 8.1.1
     uuid: 8.3.2
     web-speech-cognitive-services: 7.1.1
@@ -9974,7 +10016,7 @@ __metadata:
   peerDependencies:
     react: ">= 16.8.6"
     react-dom: ">= 16.8.6"
-  checksum: 14de89a0aba63125965f840942c84b7c5fe37cada0d3eb5e04b7069865ddb634ea83b6f9ee0de0976712ca2e472eb406e7ee72363915895e411d7791eb1223d3
+  checksum: 65f0979af9e458defce5db95bde26d0224a6e2202975bf600736d52d0ade74ce2b082976ad280b6885e655e72d3efbb0be873a5814fa7df25a3ba0eb3b507275
   languageName: node
   linkType: hard
 
@@ -11672,6 +11714,13 @@ __metadata:
   version: 3.18.3
   resolution: "core-js@npm:3.18.3"
   checksum: 4aa5017992c18b0a09ded6c7dbf3c3880b27b6ade97a522dba332f52381466978d441317e5aad49f0684e9241aecc450e3e72c550ddaccfc9fb1e69c5908e53c
+  languageName: node
+  linkType: hard
+
+"core-js@npm:3.21.1":
+  version: 3.21.1
+  resolution: "core-js@npm:3.21.1"
+  checksum: d68eddd831340ad5b24ac29c72fda022a43b17f194c4278b6b875a843283d316502cb4abd07f28631d6ebc4387f66aa06e2b1b3c8fd7e08096a751b5c63f6889
   languageName: node
   linkType: hard
 
@@ -16477,12 +16526,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"globalize@npm:1.6.0":
-  version: 1.6.0
-  resolution: "globalize@npm:1.6.0"
+"globalize@npm:1.7.0":
+  version: 1.7.0
+  resolution: "globalize@npm:1.7.0"
   dependencies:
     cldrjs: ^0.5.4
-  checksum: caebc4d68def1951b2afe2a9c1ecb785060a031c494a868c17733b0f6c44554f88165e897c71747186d885b84a6e69223992d88304db1890284f048f5e1488bc
+  checksum: 630e690a7516e69a500597991e4cf1e98ad79f0de45db5590c0af0066a71a24f4c13a9fcdc4c64aa2d2f8aecf6e52d6e229d8adf794776500544908978bd5bd9
   languageName: node
   linkType: hard
 
@@ -20608,12 +20657,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"markdown-it-attrs@npm:4.0.0":
-  version: 4.0.0
-  resolution: "markdown-it-attrs@npm:4.0.0"
+"markdown-it-attrs@npm:4.1.3":
+  version: 4.1.3
+  resolution: "markdown-it-attrs@npm:4.1.3"
   peerDependencies:
     markdown-it: ">= 9.0.0 < 13.0.0"
-  checksum: 53f38634812e138889c7407336207a44384d94ca103ab79df8420a905e7574737456819fff9b3136651c1f376776e5a728cfaa2498856a831e74cdffafaf93fb
+  checksum: 0aa27a9baf796dc28649b6685f57a159ccc3d0edb361a11c2db4d202bb4b700cafdbf8e4b05deca181ea2b1c713394b0f1604f10485f5de134f82604cf6e13ff
   languageName: node
   linkType: hard
 
@@ -20776,6 +20825,13 @@ __metadata:
   version: 5.2.1
   resolution: "memoize-one@npm:5.2.1"
   checksum: a3cba7b824ebcf24cdfcd234aa7f86f3ad6394b8d9be4c96ff756dafb8b51c7f71320785fbc2304f1af48a0467cbbd2a409efc9333025700ed523f254cb52e3d
+  languageName: node
+  linkType: hard
+
+"memoize-one@npm:6.0.0":
+  version: 6.0.0
+  resolution: "memoize-one@npm:6.0.0"
+  checksum: f185ea69f7cceae5d1cb596266dcffccf545e8e7b4106ec6aa93b71ab9d16460dd118ac8b12982c55f6d6322fcc1485de139df07eacffaae94888b9b3ad7675f
   languageName: node
   linkType: hard
 
@@ -20967,12 +21023,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"mime@npm:2.5.2":
-  version: 2.5.2
-  resolution: "mime@npm:2.5.2"
+"mime@npm:3.0.0":
+  version: 3.0.0
+  resolution: "mime@npm:3.0.0"
   bin:
     mime: cli.js
-  checksum: dd3c93d433d41a09f6a1cfa969b653b769899f3bd573e7bfcea33bdc8b0cc4eba57daa2f95937369c2bd2b6d39d62389b11a4309fe40d1d3a1b736afdedad0ff
+  checksum: f43f9b7bfa64534e6b05bd6062961681aeb406a5b53673b53b683f27fcc4e739989941836a355eef831f4478923651ecc739f4a5f6e20a76487b432bfd4db928
   languageName: node
   linkType: hard
 
@@ -21432,6 +21488,15 @@ __metadata:
   bin:
     nanoid: bin/nanoid.cjs
   checksum: 3d1d5a69fea84e538057cf64106e713931c4ef32af344068ecff153ff91252f39b0f2b472e09b0dfff43ac3cf520c92938d90e6455121fe93976e23660f4fccc
+  languageName: node
+  linkType: hard
+
+"nanoid@npm:^3.3.4":
+  version: 3.3.4
+  resolution: "nanoid@npm:3.3.4"
+  bin:
+    nanoid: bin/nanoid.cjs
+  checksum: 2fddd6dee994b7676f008d3ffa4ab16035a754f4bb586c61df5a22cf8c8c94017aadd360368f47d653829e0569a92b129979152ff97af23a558331e47e37cd9c
   languageName: node
   linkType: hard
 
@@ -22916,7 +22981,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"portfinder@npm:^1.0.26, portfinder@npm:^1.0.28":
+"portfinder@npm:^1.0.26":
   version: 1.0.28
   resolution: "portfinder@npm:1.0.28"
   dependencies:
@@ -22924,6 +22989,17 @@ __metadata:
     debug: ^3.1.1
     mkdirp: ^0.5.5
   checksum: 91fef602f13f8f4c64385d0ad2a36cc9dc6be0b8d10a2628ee2c3c7b9917ab4fefb458815b82cea2abf4b785cd11c9b4e2d917ac6fa06f14b6fa880ca8f8928c
+  languageName: node
+  linkType: hard
+
+"portfinder@npm:^1.0.32":
+  version: 1.0.32
+  resolution: "portfinder@npm:1.0.32"
+  dependencies:
+    async: ^2.6.4
+    debug: ^3.2.7
+    mkdirp: ^0.5.6
+  checksum: 116b4aed1b9e16f6d5503823d966d9ffd41b1c2339e27f54c06cd2f3015a9d8ef53e2a53b57bc0a25af0885977b692007353aa28f9a0a98a44335cb50487240d
   languageName: node
   linkType: hard
 
@@ -23740,6 +23816,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"postcss@npm:^8.3.11":
+  version: 8.4.16
+  resolution: "postcss@npm:8.4.16"
+  dependencies:
+    nanoid: ^3.3.4
+    picocolors: ^1.0.0
+    source-map-js: ^1.0.2
+  checksum: 10eee25efd77868036403858577da0cefaf2e0905feeaba5770d5438ccdddba3d01cba8063e96b8aac4c6daa0ed413dd5ae0554a433a3c4db38df1d134cffc1f
+  languageName: node
+  linkType: hard
+
 "prelude-ls@npm:^1.2.1":
   version: 1.2.1
   resolution: "prelude-ls@npm:1.2.1"
@@ -23910,7 +23997,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prop-types@npm:^15.5.4, prop-types@npm:^15.6.1, prop-types@npm:^15.6.2, prop-types@npm:^15.7.2, prop-types@npm:^15.8.1":
+"prop-types@npm:15.8.1, prop-types@npm:^15.5.4, prop-types@npm:^15.6.1, prop-types@npm:^15.6.2, prop-types@npm:^15.7.2, prop-types@npm:^15.8.1":
   version: 15.8.1
   resolution: "prop-types@npm:15.8.1"
   dependencies:
@@ -24456,28 +24543,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-redux@npm:7.2.4":
-  version: 7.2.4
-  resolution: "react-redux@npm:7.2.4"
-  dependencies:
-    "@babel/runtime": ^7.12.1
-    "@types/react-redux": ^7.1.16
-    hoist-non-react-statics: ^3.3.2
-    loose-envify: ^1.4.0
-    prop-types: ^15.7.2
-    react-is: ^16.13.1
-  peerDependencies:
-    react: ^16.8.3 || ^17
-  peerDependenciesMeta:
-    react-dom:
-      optional: true
-    react-native:
-      optional: true
-  checksum: 214fa1a4811f95090b77d96ec7114c322adf388b6d086ebebf50cdaf03549758037283f953d2b920cf6ee2f6ffad8f35e92f1ab959b3f2c957f5075d00e16d0a
-  languageName: node
-  linkType: hard
-
-"react-redux@npm:^7.2.0":
+"react-redux@npm:7.2.6, react-redux@npm:^7.2.0":
   version: 7.2.6
   resolution: "react-redux@npm:7.2.6"
   dependencies:
@@ -24495,6 +24561,27 @@ __metadata:
     react-native:
       optional: true
   checksum: 0bf142ce0d0b80aef955650fd5e9489fca32d94f19ee23893b332f1b01ceee7bd3623337c942cbda642667d1dc9de5ac869c3c1946afa6cf2046407b57d24741
+  languageName: node
+  linkType: hard
+
+"react-redux@npm:7.2.8":
+  version: 7.2.8
+  resolution: "react-redux@npm:7.2.8"
+  dependencies:
+    "@babel/runtime": ^7.15.4
+    "@types/react-redux": ^7.1.20
+    hoist-non-react-statics: ^3.3.2
+    loose-envify: ^1.4.0
+    prop-types: ^15.7.2
+    react-is: ^17.0.2
+  peerDependencies:
+    react: ^16.8.3 || ^17 || ^18
+  peerDependenciesMeta:
+    react-dom:
+      optional: true
+    react-native:
+      optional: true
+  checksum: ecf1933e91013f2d41bfc781515b536bf81eb1f70ff228607841094c8330fe77d522372b359687e51c0b52b9888dba73db9ac0486aace1896ab9eb9daec102d5
   languageName: node
   linkType: hard
 
@@ -24831,17 +24918,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"redux@npm:4.0.5":
-  version: 4.0.5
-  resolution: "redux@npm:4.0.5"
-  dependencies:
-    loose-envify: ^1.4.0
-    symbol-observable: ^1.2.0
-  checksum: 23689ba4318bfffd4517c8c8d49c5e9a7df1b864b3cf4a4784e10060652e28054586a4a64053d1252ae5f105da61cda03fe01a422b05a053c8604b1be1689d16
-  languageName: node
-  linkType: hard
-
-"redux@npm:^4.0.0, redux@npm:^4.0.4":
+"redux@npm:4.1.2, redux@npm:^4.0.0, redux@npm:^4.0.4":
   version: 4.1.2
   resolution: "redux@npm:4.1.2"
   dependencies:
@@ -25689,18 +25766,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"sanitize-html@npm:2.4.0":
-  version: 2.4.0
-  resolution: "sanitize-html@npm:2.4.0"
+"sanitize-html@npm:2.7.0":
+  version: 2.7.0
+  resolution: "sanitize-html@npm:2.7.0"
   dependencies:
     deepmerge: ^4.2.2
     escape-string-regexp: ^4.0.0
     htmlparser2: ^6.0.0
     is-plain-object: ^5.0.0
-    klona: ^2.0.3
     parse-srcset: ^1.0.2
-    postcss: ^8.0.2
-  checksum: e1ac0c54f4ad29463a5b7ab5ac3ff5b15d39e4dd16ff96483b0e1669a5bb3c04cbd269e30e95106a988ce0c433e5f895a7852d9d9af5f6606bf40be8be24b3dc
+    postcss: ^8.3.11
+  checksum: 73a4d66f69578bace3506519ca0734279b7117e15c33c7e4d075cdb483b1586261a18acd35934f6c6109f3b2a4a82f82c242171a94d5dc23fba5b09b01ea5b22
   languageName: node
   linkType: hard
 
@@ -26388,7 +26464,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"source-map-js@npm:^1.0.1":
+"source-map-js@npm:^1.0.1, source-map-js@npm:^1.0.2":
   version: 1.0.2
   resolution: "source-map-js@npm:1.0.2"
   checksum: c049a7fc4deb9a7e9b481ae3d424cc793cb4845daa690bc5a05d428bf41bf231ced49b4cf0c9e77f9d42fdb3d20d6187619fc586605f5eabe995a316da8d377c
@@ -27282,13 +27358,6 @@ __metadata:
   version: 1.0.1
   resolution: "symbol-observable@npm:1.0.1"
   checksum: 8e8a4591f4ba4ec82e7c1ba6b0e695331e43572337b87fda06d183f445539f05d1ab9fe177e162c13dd74dbe1374bb96451698157d97ad417c26f7e46e7053be
-  languageName: node
-  linkType: hard
-
-"symbol-observable@npm:^1.2.0":
-  version: 1.2.0
-  resolution: "symbol-observable@npm:1.2.0"
-  checksum: 48ffbc22e3d75f9853b3ff2ae94a44d84f386415110aea5effc24d84c502e03a4a6b7a8f75ebaf7b585780bda34eb5d6da3121f826a6f93398429d30032971b6
   languageName: node
   linkType: hard
 

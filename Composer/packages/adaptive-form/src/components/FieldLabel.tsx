@@ -121,6 +121,7 @@ const FieldLabel: React.FC<FieldLabelProps> = (props) => {
     >
       <Label
         htmlFor={id}
+        id={`${id}-field-label`}
         required={required}
         styles={{
           root: {

@@ -98,7 +98,7 @@ export const rowDetails = {
         background: NeutralColors.gray30,
         selectors: {
           '.ms-TextField-fieldGroup': {
-            background: NeutralColors.gray30,
+            background: 'transparent',
           },
           '.ms-Button--icon': {
             visibility: 'visible',
@@ -117,7 +117,7 @@ export const rowDetails = {
             visibility: 'visible',
           },
           '.ms-TextField-fieldGroup': {
-            background: NeutralColors.gray30,
+            background: 'transparent',
           },
         },
       },
@@ -140,8 +140,10 @@ export const addAlternative = {
     fontSize: 12,
     paddingLeft: 0,
     marginLeft: -5,
-    color: SharedColors.cyanBlue10,
     display: 'none',
+    '@media (forced-colors: none)': {
+      color: SharedColors.cyanBlue10,
+    },
   },
 } as IButtonStyles;
 

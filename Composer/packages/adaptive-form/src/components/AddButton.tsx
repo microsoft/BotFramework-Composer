@@ -24,13 +24,20 @@ export const actionButtonStyles: IButtonStyles = {
 
 type Props = {
   disabled?: boolean;
+  ariaLabel?: string;
   onClick: React.MouseEventHandler<unknown>;
 };
 
-export const AddButton = ({ children, onClick, disabled }: React.PropsWithChildren<Props>) => {
+export const AddButton = ({ ariaLabel, children, onClick, disabled }: React.PropsWithChildren<Props>) => {
   return (
     <ButtonContainer>
-      <ActionButton data-testid="add-button" disabled={disabled} styles={actionButtonStyles} onClick={onClick}>
+      <ActionButton
+        ariaLabel={ariaLabel}
+        data-testid="add-button"
+        disabled={disabled}
+        styles={actionButtonStyles}
+        onClick={onClick}
+      >
         {children ?? formatMessage('Add new')}
       </ActionButton>
     </ButtonContainer>
