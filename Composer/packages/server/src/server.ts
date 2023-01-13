@@ -36,7 +36,7 @@ import { mountDirectLineRoutes } from './directline/mountDirectlineRoutes';
 import { mountAttachmentRoutes } from './directline/mountAttachmentRoutes';
 import { cleanHostedBots } from './utility/cleanHostedBots';
 import { getVersion } from './utility/getVersion';
-import { serverHostname } from './settings/env';
+import { serverListenHost, serverHostname } from './settings/env';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const session = require('express-session');
@@ -185,7 +185,7 @@ export async function start(electronContext?: ElectronContext): Promise<number |
 
   let server;
   await new Promise<void>((resolve) => {
-    server = app.listen(port, serverHostname, () => {
+    server = app.listen(port, serverListenHost, () => {
       if (process.env.NODE_ENV === 'production') {
         // We don't use the debug logger here because we always want it to be shown.
         // eslint-disable-next-line no-console

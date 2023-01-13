@@ -41,7 +41,7 @@ const waitForMainWindowToShow = new Promise((resolve) => {
 
 // webpack dev server runs on :3000
 const getBaseUrl = () => {
-  const host = process.env.COMPOSER_HOSTNAME ?? 'localhost';
+  const host = process.env.COMPOSER_HOST ?? 'localhost';
   if (isDevelopment) {
     return `http://${host}:3000/`;
   }

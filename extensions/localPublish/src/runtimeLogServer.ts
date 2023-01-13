@@ -26,9 +26,11 @@ export class RuntimeLogServer {
 
   public static async init({
     log,
+    boundHost = 'localhost',
     hostname = 'localhost',
   }: {
     log: Debugger;
+    boundHost?: string;
     hostname?: string;
   }): Promise<number | void> {
     if (!this.restServer) {
@@ -49,7 +51,7 @@ export class RuntimeLogServer {
         return preferredPort;
       });
       log(`Using ${port} port for runtime-log`);
-      this.restServer.listen(port, hostname);
+      this.restServer.listen(port, boundHost);
 
       app.use('/ws/runtimeLog/:projectId', (req: Request, res: Response) => {
         if (!(req as any).claimUpgrade) {

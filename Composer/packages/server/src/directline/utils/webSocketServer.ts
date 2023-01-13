@@ -13,7 +13,7 @@ import {
   ConversationNetworkTrafficItem,
 } from '@botframework-composer/types';
 
-import { serverHostname } from '../../settings/env';
+import { serverListenHost } from '../../settings/env';
 
 import log from './logger';
 
@@ -89,7 +89,7 @@ export class WebSocketServer {
       });
       this.port = port;
       log(`Using ${port} port for directline`);
-      this.restServer.listen(port, serverHostname);
+      this.restServer.listen(port, serverListenHost);
 
       app.use('/ws/conversation/:conversationId', (req: express.Request, res: express.Response) => {
         if (!(req as any).claimUpgrade) {
