@@ -34,6 +34,7 @@ RUN yarn build:prod $YARN_ARGS
 ENV COMPOSER_REMOTE_EXTENSIONS_DIR "/src/remote-extensions"
 ENV COMPOSER_REMOTE_EXTENSION_DATA_DIR "/src/extension-data"
 ENV COMPOSER_EXTENSION_MANIFEST "/src/extensions.json"
+ENV COMPOSER_HOST="0.0.0.0"
 CMD ["yarn","start:server"]
 
 FROM base as composerbasic
