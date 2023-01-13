@@ -84,6 +84,7 @@ export const EditQnAFromUrlModal: React.FC<EditQnAFromUrlModalProps> = (props) =
       <div css={dialogWindow}>
         <Stack>
           <TextField
+            required
             data-testid={`knowledgeLocationTextField-name`}
             errorMessage={formErrors.name}
             label={formatMessage('Knowledge base name')}

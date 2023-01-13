@@ -20,8 +20,7 @@ export const outline = css`
 
 export const page = css`
   display: flex;
-  overflow-x: hidden;
-  overflow-y: auto;
+  overflow: auto;
   flex-wrap: wrap;
 `;
 
@@ -30,6 +29,8 @@ export const leftPage = css`
   padding: 0 24px 24px 24px;
   display: flex;
   flex-direction: column;
+  max-width: 100%;
+  overflow: hidden;
 `;
 
 export const rightPage = css`
@@ -37,6 +38,9 @@ export const rightPage = css`
   padding-right: 24px;
   display: flex;
   flex-direction: column;
+  @media (max-width: 1024px) {
+    flex: 50%;
+  }
 `;
 
 export const title = css`
@@ -63,6 +67,9 @@ export const introduction = css`
 export const rowContainer = css`
   display: flex;
   margin-top: 12px;
+  overflow-x: auto;
+  padding-bottom: 12px;
+  gap: 12px;
 `;
 
 export const recentBotsContainer = css`
@@ -87,9 +94,11 @@ export const pivotContainer = css`
 `;
 
 export const tabRowContainer = css`
-  flex-wrap: wrap;
   display: flex;
   clear: both;
+  overflow-x: auto;
+  padding-bottom: 12px;
+  gap: 12px;
 `;
 
 export const tabRowViewMore = css`
@@ -108,7 +117,8 @@ export const tabRowViewMore = css`
 
 export const cardWrapper = css`
   display: flex;
-  margin-right: 12px;
+  flex-basis: 25%;
+  min-width: ${ImageCoverWidth}px;
 `;
 
 export const itemContainerWrapper = (disabled?: boolean) => css`
@@ -187,16 +197,7 @@ export const newsDescription = css`
 export const cardItem = {
   container: css`
     font-size: ${fonts.medium.fontSize};
-    margin: 12px 0 0 12px;
-    &:first-child {
-      margin-left: 0;
-    }
     padding: 12px;
-    min-width: ${ImageCoverWidth}px;
-    width: 17vw;
-    @media (max-width: 1416px) {
-      width: 20vw;
-    }
     text-align: left;
     border: 1px #efedeb solid;
     box-shadow: ${Depths.depth4};
@@ -328,9 +329,8 @@ export const whatsNewsContainer = css`
   border-radius: 5px;
   margin: 20px 0 24px 0;
   background: #f6f6f6;
-  @media (max-width: 1416px) {
+  @media (max-width: 1024px) {
     background: none;
-    min-width: 200px;
     margin: 15px 0 0 0;
   }
 `;

@@ -80,8 +80,13 @@ export class WebSocketServer {
         const res = new http.ServerResponse(req);
         return app(req, res as Response);
       });
-      const port = await portfinder.getPortPromise();
+      const preferredPort = 7000;
+      const port = await portfinder.getPortPromise().catch((err) => {
+        log(`Unable to find an open port for directline (wanted ${preferredPort}): ${err}`);
+        return preferredPort;
+      });
       this.port = port;
+      log(`Using ${port} port for directline`);
       this.restServer.listen(port);
 
       app.use('/ws/conversation/:conversationId', (req: express.Request, res: express.Response) => {

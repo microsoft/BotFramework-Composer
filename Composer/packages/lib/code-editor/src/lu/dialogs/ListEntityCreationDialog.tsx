@@ -256,7 +256,7 @@ export const ListEntityCreationDialog = (props: Props) => {
       }}
       hidden={false}
       modalProps={dialogModalProps}
-      styles={{ main: { width: '960px !important', minWidth: '960px !important' } }}
+      styles={{ main: { maxWidth: '960px' } }}
       onDismiss={onDismiss}
     >
       <SubText>

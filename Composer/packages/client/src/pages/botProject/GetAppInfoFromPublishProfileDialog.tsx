@@ -93,6 +93,7 @@ export const GetAppInfoFromPublishProfileDialog: React.FC<Props> = (props) => {
     >
       <div css={{ height: '100px' }}>
         <Dropdown
+          ariaLabel={formatMessage('Publishing profile')}
           data-testid={'publishProfileDropdown'}
           errorMessage={publishTargetsErrorMessage}
           options={publishTargetOptions}

@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx } from '@emotion/react';
+import { jsx, css } from '@emotion/react';
 import { RouteComponentProps } from '@reach/router';
 import { useRecoilValue } from 'recoil';
 import { Split, SplitMeasuredSizes } from '@geoffcox/react-splitter';
@@ -19,6 +19,10 @@ import PropertyPanel from './PropertyPanel';
 import useEmptyPropsHandler from './useEmptyPropsHandler';
 import { contentWrapper, splitPaneContainer, splitPaneWrapper } from './styles';
 import Modals from './Modals';
+
+const splitContainer = css`
+  height: 100%;
+`;
 
 const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: string; skillId?: string }>> = (
   props
@@ -38,41 +42,43 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
 
   return (
     <div css={contentWrapper} role="main">
-      <Split
-        resetOnDoubleClick
-        initialPrimarySize="20%"
-        minPrimarySize="200px"
-        minSecondarySize="800px"
-        renderSplitter={renderThinSplitter}
-        splitterSize="5px"
-        onMeasuredSizesChanged={onMeasuredSizesChanged}
-      >
-        <div css={contentWrapper}>
-          <div css={splitPaneContainer}>
-            <div css={splitPaneWrapper}>
-              <SideBar projectId={activeBot} />
+      <div css={splitContainer}>
+        <Split
+          resetOnDoubleClick
+          initialPrimarySize="20%"
+          minPrimarySize="200px"
+          minSecondarySize="750px"
+          renderSplitter={renderThinSplitter}
+          splitterSize="5px"
+          onMeasuredSizesChanged={onMeasuredSizesChanged}
+        >
+          <div css={contentWrapper}>
+            <div css={splitPaneContainer}>
+              <div css={splitPaneWrapper}>
+                <SideBar projectId={activeBot} />
+              </div>
             </div>
           </div>
-        </div>
 
-        <div css={contentWrapper}>
-          <CommandBar projectId={activeBot} />
-          <Conversation css={splitPaneContainer}>
-            <div css={splitPaneWrapper}>
-              <Split
-                resetOnDoubleClick
-                initialPrimarySize="65%"
-                minPrimarySize="500px"
-                minSecondarySize="350px"
-                renderSplitter={renderThinSplitter}
-              >
-                <VisualPanel projectId={activeBot} />
-                <PropertyPanel isSkill={activeBot !== projectId} projectId={activeBot} />
-              </Split>
-            </div>
-          </Conversation>
-        </div>
-      </Split>
+          <div css={contentWrapper}>
+            <CommandBar projectId={activeBot} />
+            <Conversation css={splitPaneContainer}>
+              <div css={splitPaneWrapper}>
+                <Split
+                  resetOnDoubleClick
+                  initialPrimarySize="65%"
+                  minPrimarySize="450px"
+                  minSecondarySize="300px"
+                  renderSplitter={renderThinSplitter}
+                >
+                  <VisualPanel projectId={activeBot} />
+                  <PropertyPanel isSkill={activeBot !== projectId} projectId={activeBot} />
+                </Split>
+              </div>
+            </Conversation>
+          </div>
+        </Split>
+      </div>
       <Modals projectId={activeBot} rootBotId={projectId} />
     </div>
   );
