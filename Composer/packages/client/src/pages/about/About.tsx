@@ -8,12 +8,25 @@ import { Link } from '@fluentui/react/lib/Link';
 import formatMessage from 'format-message';
 import { RouteComponentProps } from '@reach/router';
 import { generateUniqueId } from '@bfc/shared';
+import { useRecoilValue } from 'recoil';
 
 import { isElectron } from '../../utils/electronUtil';
+import { userSettingsState } from '../../recoilModel';
 
 import * as about from './styles';
 
+const getLocaleA11yStatementLink = (locale: string) => {
+  switch (locale) {
+    case 'it':
+      return 'https://www.microsoft.com/it-it/accessibility/declarations';
+    default:
+      return;
+  }
+};
+
 export const About: React.FC<RouteComponentProps> = () => {
+  const { appLocale } = useRecoilValue(userSettingsState);
+  const a11yStatementLink = getLocaleA11yStatementLink(appLocale);
   return (
     <div css={about.content} role="main">
       <div css={about.body}>
@@ -62,30 +75,43 @@ export const About: React.FC<RouteComponentProps> = () => {
           </div>
         </div>
       </div>
-      <div css={about.linkRow}>
-        <Link href={'https://docs.microsoft.com/en-us/composer/introduction'} styles={about.helpLink} target={'_blank'}>
-          {formatMessage(`Documentation`)}
-        </Link>
-      </div>
-      <div css={about.linkRow}>
-        <Link
-          href={'https://github.com/microsoft/BotFramework-Composer/issues/new/choose'}
-          styles={about.helpLink}
-          target={'_blank'}
-        >
-          {formatMessage(`Report a bug or request a feature`)}
-        </Link>
-      </div>
-      <div css={about.linkContainer}>
+      <div css={about.links}>
         <div css={about.linkRow}>
-          <Icon iconName={'BlockedSite'} styles={about.icon} tabIndex={-1} />
           <Link
-            href={'https://github.com/microsoft/BotFramework-Composer/blob/stable/LICENSE.md'}
-            styles={about.link}
+            href={'https://docs.microsoft.com/en-us/composer/introduction'}
+            styles={about.helpLink}
             target={'_blank'}
           >
-            {formatMessage(`Terms of Use`)}
+            {formatMessage(`Documentation`)}
           </Link>
+        </div>
+        <div css={about.linkRow}>
+          <Link
+            href={'https://github.com/microsoft/BotFramework-Composer/issues/new/choose'}
+            styles={about.helpLink}
+            target={'_blank'}
+          >
+            {formatMessage(`Report a bug or request a feature`)}
+          </Link>
+        </div>
+        <div css={about.linkContainer}>
+          {a11yStatementLink && (
+            <div css={about.linkRow}>
+              <Link href={a11yStatementLink} styles={about.helpLink} target={'_blank'}>
+                {formatMessage(`Accessibility statement`)}
+              </Link>
+            </div>
+          )}
+          <div css={about.linkRow}>
+            <Icon iconName={'BlockedSite'} styles={about.icon} tabIndex={-1} />
+            <Link
+              href={'https://github.com/microsoft/BotFramework-Composer/blob/stable/LICENSE.md'}
+              styles={about.helpLink}
+              target={'_blank'}
+            >
+              {formatMessage(`Terms of Use`)}
+            </Link>
+          </div>
         </div>
       </div>
     </div>

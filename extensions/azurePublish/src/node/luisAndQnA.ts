@@ -4,7 +4,6 @@
 import * as path from 'path';
 
 import * as fs from 'fs-extra';
-import { isUsingAdaptiveRuntime } from '@bfc/shared';
 import { ILuisConfig, FileInfo, IBotProject, RuntimeTemplate, DialogSetting } from '@botframework-composer/types';
 import axios, { AxiosRequestConfig } from 'axios';
 

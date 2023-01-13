@@ -23,6 +23,7 @@ import { IDropdownOption } from '@fluentui/react/lib/Dropdown';
 import camelCase from 'lodash/camelCase';
 import upperFirst from 'lodash/upperFirst';
 import { Label } from '@fluentui/react/lib/Label';
+import styled from '@emotion/styled';
 
 import { CreationFlowStatus, DialogCreationCopy, nameRegex, botNameRegex } from '../../constants';
 import { FieldConfig, useForm } from '../../hooks/useForm';
@@ -34,6 +35,7 @@ import { getAliasFromPayload, Profile } from '../../utils/electronUtil';
 import TelemetryClient from '../../telemetry/TelemetryClient';
 
 import { LocationSelectContent } from './LocationSelectContent';
+import { FormStack } from './FormStack';
 
 // -------------------- Styles -------------------- //
 
@@ -48,27 +50,23 @@ const textFieldlabel = {
 };
 
 const name = {
-  root: {
-    width: '420px',
-  },
   subComponentStyles: textFieldlabel,
 };
 
-const halfstack = {
-  root: [
-    {
-      flexBasis: '50%',
-    },
-  ],
+const dropdownCalloutStyles = {
+  root: {
+    minWidth: '200px',
+    maxWidth: '100vw',
+  },
 };
 
-const stackinput = {
-  root: [
-    {
-      marginBottom: '1rem',
-    },
-  ],
-};
+const InnerFormStack = styled(FormStack)`
+  --min-column-size: 151px; /* two fields can't fit on 125% zoom */
+  column-gap: 1rem;
+  @media screen and (max-width: 960px) /* 125% zoom */ {
+    --min-column-size: 240px; /* force two-column layout for zoom up to 300% */
+  }
+`;
 
 // -------------------- DefineConversation -------------------- //
 
@@ -417,8 +415,8 @@ const DefineConversation: React.FC<DefineConversationProps> = (props) => {
       <DialogWrapper isOpen {...dialogCopy} dialogType={DialogTypes.CreateFlow} onDismiss={onDismiss}>
         <form onSubmit={handleSubmit}>
           <input style={{ display: 'none' }} type="submit" />
-          <Stack horizontal styles={stackinput} tokens={{ childrenGap: '2rem' }}>
-            <StackItem grow={0} styles={halfstack}>
+          <FormStack>
+            <StackItem>
               <TextField
                 autoFocus
                 required
@@ -431,19 +429,21 @@ const DefineConversation: React.FC<DefineConversationProps> = (props) => {
               />
             </StackItem>
             {!isImported && (
-              <StackItem grow={0} styles={halfstack}>
-                <Stack horizontal styles={stackinput} tokens={{ childrenGap: '2rem' }}>
-                  <StackItem grow={0}>
+              <StackItem>
+                <InnerFormStack>
+                  <StackItem>
                     <DropdownField
                       required
+                      calloutProps={{
+                        styles: dropdownCalloutStyles,
+                      }}
                       data-testid="NewDialogRuntimeType"
                       label={formatMessage('Runtime type')}
                       options={getSupportedRuntimesForTemplate()}
                       selectedKey={formData.runtimeType}
                       styles={{
-                        root: { width: inBotMigration ? '200px' : '420px' },
-                        dropdownItem: { height: '100px' },
-                        dropdownItemSelected: { height: '100px' },
+                        dropdownItem: { height: 'auto' },
+                        dropdownItemSelected: { height: 'auto' },
                       }}
                       tooltip={formatMessage(
                         'Azure offers a number of ways to host your application code. The runtime type refers to the hosting model for the computing resources that your application runs on.'
@@ -453,21 +453,20 @@ const DefineConversation: React.FC<DefineConversationProps> = (props) => {
                     />
                   </StackItem>
                   {inBotMigration && (
-                    <StackItem grow={0}>
+                    <StackItem>
                       <DropdownField
                         data-testid="NewDialogRuntimeLanguage"
                         label={formatMessage('Runtime Language')}
                         options={getRuntimeLanguageOptions()}
                         selectedKey={formData.runtimeLanguage}
-                        styles={{ root: { width: '200px' } }}
                         onChange={(_e, option) => updateField('runtimeLanguage', option?.key.toString())}
                       />
                     </StackItem>
                   )}
-                </Stack>
+                </InnerFormStack>
               </StackItem>
             )}
-          </Stack>
+          </FormStack>
           {locationSelectContent}
           <DialogFooter>
             <DefaultButton text={formatMessage('Cancel')} onClick={onDismiss} />

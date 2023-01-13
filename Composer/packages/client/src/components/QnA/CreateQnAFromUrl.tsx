@@ -111,11 +111,11 @@ export const CreateQnAFromUrl: React.FC<CreateQnAFromFormProps> = (props) => {
         </p>
       </Stack>
       <Stack maxHeight={400} styles={urlStackStyle}>
-        <Text styles={knowledgeBaseStyle}>{formatMessage('Source URL')}</Text>
         <div key={`add${formData.locales[0]}InCreateQnAFromUrlModal`} css={urlPairStyle}>
           <TextField
             data-testid={`add${formData.locales[0]}InCreateQnAFromUrlModal`}
             errorMessage={formDataErrors.urls[0]}
+            label={formatMessage('Source URL')}
             placeholder={formatMessage('Enter a URL')}
             styles={textFieldUrl}
             value={formData.urls[0]}

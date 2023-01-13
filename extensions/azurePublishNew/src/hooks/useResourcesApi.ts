@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import axios from 'axios';
+import { axios } from '@bfc/shared/lib/axios';
 import debug from 'debug';
 import React from 'react';
 

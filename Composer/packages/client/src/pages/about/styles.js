@@ -55,14 +55,17 @@ export const diagnosticsInfo = css`
 
 export const linkContainer = css`
   display: flex;
-  margin-left: 35px;
   flex-direction: column;
-  height: 110px;
+  min-height: 110px;
   margin-top: 15px;
 `;
 
 export const linkTitle = css`
   font-size: 24px;
+`;
+
+export const links = css`
+  margin-left: 60px;
 `;
 
 export const linkRow = css`
@@ -77,7 +80,6 @@ export const link = {
     fontSize: FontSizes.mediumPlus,
     fontWeight: FontWeights.regular,
     color: '#0078d4',
-    marginLeft: '10px',
     textDecoration: 'underline',
   },
 };
@@ -87,7 +89,6 @@ export const helpLink = {
     fontSize: FontSizes.mediumPlus,
     fontWeight: FontWeights.regular,
     color: '#0078d4',
-    marginLeft: '60px',
     textDecoration: 'underline',
   },
 };
@@ -96,5 +97,7 @@ export const icon = {
   root: {
     color: '#0078d4',
     fontSize: '20px',
+    width: '30px',
+    marginLeft: '-30px',
   },
 };
