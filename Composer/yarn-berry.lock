@@ -3700,7 +3700,7 @@ __metadata:
     immer: ^9.0.6
     jest-websocket-mock: ^2.2.0
     jsonwebtoken: ^9.0.0
-    jszip: ^3.6.0
+    jszip: ^3.8.0
     jwt-decode: ^2.2.0
     lodash: ^4.17.19
     mini-css-extract-plugin: 0.8.0
@@ -11376,13 +11376,6 @@ __metadata:
   version: 9.3.0
   resolution: "commander@npm:9.3.0"
   checksum: d421ce66fee25792a1470c69aa8d1b86434bf873a96483aa92c8267f81a6f20c6f7c426f5e82f88ac50a8ec4855d3f2787aebcdef8aa559e1080a2337a95a217
-  languageName: node
-  linkType: hard
-
-"commander@npm:~2.19.0":
-  version: 2.19.0
-  resolution: "commander@npm:2.19.0"
-  checksum: d52ffb0b31528784005356f879591b5a4875d3e88806c115fb30a8de0994d2fa9ca3f72a3cb880cdaf1bfb9df185f928cfcbbc656fa831f9c6109a209569ef6d
   languageName: node
   linkType: hard
 
@@ -19699,15 +19692,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jszip@npm:^3.6.0":
-  version: 3.7.1
-  resolution: "jszip@npm:3.7.1"
+"jszip@npm:^3.8.0":
+  version: 3.10.1
+  resolution: "jszip@npm:3.10.1"
   dependencies:
     lie: ~3.3.0
     pako: ~1.0.2
     readable-stream: ~2.3.6
-    set-immediate-shim: ~1.0.1
-  checksum: 67d737a82b294cc102e7451e32d5acbbab29860399be460cae598084327e6f2ea0c9bca2d3dad701da6a75ddf77f34c6a1dd7db0c3d5c0fec5998b7e56d6d59d
+    setimmediate: ^1.0.5
+  checksum: abc77bfbe33e691d4d1ac9c74c8851b5761fba6a6986630864f98d876f3fcc2d36817dfc183779f32c00157b5d53a016796677298272a714ae096dfe6b1c8b60
   languageName: node
   linkType: hard
 
@@ -25952,13 +25945,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"set-immediate-shim@npm:~1.0.1":
-  version: 1.0.1
-  resolution: "set-immediate-shim@npm:1.0.1"
-  checksum: 5085c84039d1e5eee73d2bf48ce765fcec76159021d0cc7b40e23bcdf62cb6d450ffb781e3c62c1118425242c48eae96df712cba0a20a437e86b0d4a15d51a11
-  languageName: node
-  linkType: hard
-
 "set-value@npm:^3.0.2":
   version: 4.0.1
   resolution: "set-value@npm:4.0.1"
@@ -25968,7 +25954,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"setimmediate@npm:^1.0.4":
+"setimmediate@npm:^1.0.4, setimmediate@npm:^1.0.5":
   version: 1.0.5
   resolution: "setimmediate@npm:1.0.5"
   checksum: c9a6f2c5b51a2dabdc0247db9c46460152ffc62ee139f3157440bd48e7c59425093f42719ac1d7931f054f153e2d26cf37dfeb8da17a794a58198a2705e527fd
@@ -28201,24 +28187,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"uglify-js@npm:3.4.x":
-  version: 3.4.10
-  resolution: "uglify-js@npm:3.4.10"
-  dependencies:
-    commander: ~2.19.0
-    source-map: ~0.6.1
+"uglify-js@npm:^3.17.4":
+  version: 3.17.4
+  resolution: "uglify-js@npm:3.17.4"
   bin:
     uglifyjs: bin/uglifyjs
-  checksum: dfc61c85b0660216432e021aac6a5f3ea0331720003d4d929b95f297daceb73bc9615875ca150516b49bc57ab60d3cf32415fc006cccf20f275c806f6686da0d
-  languageName: node
-  linkType: hard
-
-"uglify-js@npm:^3.5.1":
-  version: 3.14.5
-  resolution: "uglify-js@npm:3.14.5"
-  bin:
-    uglifyjs: bin/uglifyjs
-  checksum: 0330eb11a36f4181b6d9a00336355989bfad9dd2203049fc63a59454b0d12337612272ad011bc571b9a382bf74d829ca20409ebfe089e38edb26cfc06bfa2cc9
+  checksum: 7b3897df38b6fc7d7d9f4dcd658599d81aa2b1fb0d074829dd4e5290f7318dbca1f4af2f45acb833b95b1fe0ed4698662ab61b87e94328eb4c0a0d3435baf924
   languageName: node
   linkType: hard
 
