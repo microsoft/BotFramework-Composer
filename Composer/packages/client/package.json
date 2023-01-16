@@ -61,7 +61,7 @@
     "format-message-generate-id": "^6.2.3",
     "immer": "^9.0.6",
     "jsonwebtoken": "^9.0.0",
-    "jszip": "^3.6.0",
+    "jszip": "^3.8.0",
     "jwt-decode": "^2.2.0",
     "lodash": "^4.17.19",
     "prop-types": "^15.7.2",
