@@ -52,7 +52,8 @@
     "json5@^2.2.0": "^2.2.2",
     "json5@^2.2.1": "^2.2.2",
     "minimatch": "^3.1.2",
-    "uglify-js": "^3.17.4"
+    "uglify-js": "^3.17.4",
+    "jsonwebtoken": "^9.0.0"
   },
   "engines": {
     "node": "14.x"
