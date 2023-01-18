@@ -18,12 +18,21 @@ export class RuntimeLogServer {
   private static servers: WSServer = {};
   private static sockets: Record<string, WebSocket> = {};
   private static port: number;
+  private static hostname: string;
 
   public static getRuntimeLogStreamingUrl(projectId: string): string {
-    return `ws://localhost:${this.port}/ws/runtimeLog/${projectId}`;
+    return `ws://${this.hostname}:${this.port}/ws/runtimeLog/${projectId}`;
   }
 
-  public static async init({ log }: { log: Debugger }): Promise<number | void> {
+  public static async init({
+    log,
+    boundHost = 'localhost',
+    hostname = 'localhost',
+  }: {
+    log: Debugger;
+    boundHost?: string;
+    hostname?: string;
+  }): Promise<number | void> {
     if (!this.restServer) {
       const app = express();
       this.restServer = http.createServer(app);
@@ -42,7 +51,7 @@ export class RuntimeLogServer {
         return preferredPort;
       });
       log(`Using ${port} port for runtime-log`);
-      this.restServer.listen(port);
+      this.restServer.listen(port, boundHost);
 
       app.use('/ws/runtimeLog/:projectId', (req: Request, res: Response) => {
         if (!(req as any).claimUpgrade) {
@@ -74,6 +83,7 @@ export class RuntimeLogServer {
         }
       });
       this.port = port;
+      this.hostname = hostname;
       return this.port;
     }
   }
