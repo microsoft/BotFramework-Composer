@@ -41,13 +41,14 @@ const waitForMainWindowToShow = new Promise((resolve) => {
 
 // webpack dev server runs on :3000
 const getBaseUrl = () => {
+  const host = process.env.COMPOSER_HOST ?? 'localhost';
   if (isDevelopment) {
-    return 'http://localhost:3000/';
+    return `http://${host}:3000/`;
   }
   if (!serverPort) {
     throw new Error('getBaseUrl() called before serverPort is defined.');
   }
-  return `http://localhost:${serverPort}/`;
+  return `http://${host}:${serverPort}/`;
 };
 
 // set production flag
