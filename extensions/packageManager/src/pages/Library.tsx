@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx } from '@emotion/react';
+import { jsx, css } from '@emotion/react';
 import styled from '@emotion/styled';
 import React, { useState, Fragment, useEffect } from 'react';
 import formatMessage from 'format-message';
@@ -78,6 +78,15 @@ const InstallButtonVersion = styled.span`
 
   label: install-button-version;
 `;
+
+const tabsStackStyle = css`
+  min-width: 512px;
+  overflow: auto;
+`;
+
+const fieldStyles = {
+  root: { maxWidth: '200px' },
+};
 
 const Library: React.FC = () => {
   const [items, setItems] = useState<LibraryRef[]>([]);
@@ -673,7 +682,7 @@ const Library: React.FC = () => {
               </Pivot>
             </Stack.Item>
             <Stack.Item align="end" grow={1}>
-              <Stack horizontal horizontalAlign="end" tokens={{ childrenGap: 10 }}>
+              <Stack horizontal css={tabsStackStyle} horizontalAlign="center" tokens={{ childrenGap: 10 }}>
                 <Stack.Item>
                   <Dropdown
                     ariaLabel={formatMessage('Feeds')}
@@ -681,9 +690,7 @@ const Library: React.FC = () => {
                     options={feeds}
                     placeholder="Format"
                     selectedKey={feed}
-                    styles={{
-                      root: { width: '200px' },
-                    }}
+                    styles={fieldStyles}
                     onChange={onChangeFeed}
                   ></Dropdown>
                 </Stack.Item>
@@ -691,9 +698,7 @@ const Library: React.FC = () => {
                   <SearchBox
                     disabled={!feeds || !feed || (!searchTerm && items.length === 0)}
                     placeholder="Search"
-                    styles={{
-                      root: { width: '200px' },
-                    }}
+                    styles={fieldStyles}
                     onClear={() => setSearchTerm('')}
                     onSearch={setSearchTerm}
                   />

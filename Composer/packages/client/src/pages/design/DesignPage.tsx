@@ -47,7 +47,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
           resetOnDoubleClick
           initialPrimarySize="20%"
           minPrimarySize="200px"
-          minSecondarySize="800px"
+          minSecondarySize="750px"
           renderSplitter={renderThinSplitter}
           splitterSize="5px"
           onMeasuredSizesChanged={onMeasuredSizesChanged}
@@ -67,8 +67,8 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
                 <Split
                   resetOnDoubleClick
                   initialPrimarySize="65%"
-                  minPrimarySize="500px"
-                  minSecondarySize="350px"
+                  minPrimarySize="450px"
+                  minSecondarySize="300px"
                   renderSplitter={renderThinSplitter}
                 >
                   <VisualPanel projectId={activeBot} />
