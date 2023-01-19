@@ -221,7 +221,7 @@ export const DefaultFlowSchema: FlowUISchema = {
     widget: 'ActionCard',
     body: {
       widget: 'PropertyDescription',
-      property: '=coalesce(action.errorValue, "?")',
+      property: '=coalesce(string(action.errorValue), "?")',
       description: '= ErrorValue',
     },
   },
