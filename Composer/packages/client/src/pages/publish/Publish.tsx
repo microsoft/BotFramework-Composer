@@ -2,8 +2,8 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx } from '@emotion/react';
-import { useState, useEffect, useMemo, Fragment, useRef } from 'react';
+import { jsx, css } from '@emotion/react';
+import { useState, useEffect, useMemo, useRef } from 'react';
 import { navigate, RouteComponentProps } from '@reach/router';
 import formatMessage from 'format-message';
 import { useRecoilValue } from 'recoil';
@@ -55,6 +55,19 @@ const SKILL_PUBLISH_STATUS = {
   PUBLISHED: 'published',
   CANCEL: 'cancel',
 };
+
+const publishContainerStyle = css`
+  display: flex;
+  flex-flow: column nowrap;
+  height: calc(100% - 1px);
+`;
+
+const publishPivotStyle = css`
+  flex: auto;
+  display: flex;
+  flex-flow: column nowrap;
+`;
+
 const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: string }>> = (props) => {
   const { projectId = '' } = props;
   const botProjectData = useRecoilValue(localBotsDataSelector);
@@ -425,7 +438,7 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
   };
 
   return (
-    <Fragment>
+    <div css={publishContainerStyle}>
       {publishDialogVisible && (
         <PublishDialog
           items={selectedBots.filter((bot) => !!bot.publishTarget)}
@@ -461,8 +474,9 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
       </div>
 
       <Pivot
+        css={publishPivotStyle}
         selectedKey={activeTab}
-        styles={{ root: { marginLeft: 12 } }}
+        styles={{ root: { marginLeft: 12 }, itemContainer: { flex: 'auto', '> div': { height: '100%' } } }}
         onLinkClick={(link) => {
           setActiveTab(link?.props?.itemKey || '');
           if (link?.props.itemKey) {
@@ -488,7 +502,7 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
           </div>
         </PivotItem>
         <PivotItem headerText={formatMessage('Publishing profile')} itemKey={'addNewPublishProfile'}>
-          <Stack horizontal verticalFill styles={{ root: { borderTop: '1px solid #CCC' } }}>
+          <Stack horizontal verticalFill styles={{ root: { borderTop: '1px solid #CCC', height: '100%' } }}>
             {botProjectData && botProjectData.length > 1 && (
               <Stack.Item styles={{ root: { width: '175px', borderRight: '1px solid #CCC' } }}>
                 <ProjectList
@@ -504,7 +518,7 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
           </Stack>
         </PivotItem>
       </Pivot>
-    </Fragment>
+    </div>
   );
 };
 
