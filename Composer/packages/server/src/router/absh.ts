@@ -67,7 +67,7 @@ const absh: AuthProviderInit = {
       const { kid } = header;
 
       if (!kid || kid.length === 0) {
-        callback('kid missing');
+        callback(new Error('kid missing'));
         return;
       }
 
@@ -78,7 +78,7 @@ const absh: AuthProviderInit = {
         }
 
         if (!key) {
-          callback('no key');
+          callback(new Error('no key'));
           return;
         }
 
