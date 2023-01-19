@@ -28,6 +28,8 @@ import { EntityTypesObj, LineState } from './entityEnum';
 import * as util from './matchingPattern';
 import { LUOption, LUDocument, generateDiagnostic, convertDiagnostics, createFoldingRanges } from './utils';
 
+type LURequestParams = { uri: string; luOption?: LUOption };
+
 // define init methods call from client
 const LABELEXPERIENCEREQUEST = 'labelingExperienceRequest';
 const InitializeDocumentsMethodName = 'initializeDocuments';
@@ -95,7 +97,7 @@ export class LUServer {
       if (method === LABELEXPERIENCEREQUEST) {
         this.labelingExperienceHandler(params);
       } else if (InitializeDocumentsMethodName === method) {
-        const { uri, luOption }: { uri: string; luOption?: LUOption } = params;
+        const { uri, luOption }: { uri: string; luOption?: LUOption } = params as LURequestParams;
         const textDocument = this.documents.get(uri);
         if (textDocument) {
           this.addLUDocument(textDocument, luOption);
@@ -253,7 +255,7 @@ export class LUServer {
     luFeatures: any
   ): Promise<string[]> {
     let content = '';
-    const result: string[] = [];
+    let result: string[] = [];
     for (const importFile of imports) {
       try {
         content = (await importResolver('.', importFile.id)).content;
@@ -262,11 +264,17 @@ export class LUServer {
       }
 
       let parsed: any;
+      let imported: any;
       try {
-        const { resource } = await this.luParser.parse(content, importFile.id, luFeatures);
+        const { resource, imports } = await this.luParser.parse(content, importFile.id, luFeatures);
         parsed = resource;
+        imported = imports;
       } catch (error) {
         // ignore if file not exist
+      }
+
+      if (imported && imported.length > 0) {
+        result = await this.findAllImportedEntities(imported, importResolver, luFeatures);
       }
 
       if (parsed) {
@@ -575,6 +583,7 @@ export class LUServer {
 
     //suggest a regex pattern for seperated line definition
     if (util.isSeperatedEntityDef(curLineContent)) {
+      // eslint-disable-next-line security/detect-unsafe-regex
       const seperatedEntityDef = /^\s*@\s*([\w._]+|"[\w._\s]+")+\s*=\s*$/; //lgtm [js/redos]
       let entityName = '';
       const matchGroup = curLineContent.match(seperatedEntityDef);

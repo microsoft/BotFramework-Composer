@@ -8,12 +8,12 @@ import { formDialogSchemaIndexer } from '../src/formDialogSchemaIndexer';
 const files: FileInfo[] = [
   { name: 'file1.json', content: '', lastModified: '', relativePath: '', path: '' },
   { name: 'file2.dialog', content: '', lastModified: '', relativePath: '', path: '' },
-  { name: 'file3.form-dialog', content: '', lastModified: '', relativePath: '', path: '' },
+  { name: 'file3.form', content: '', lastModified: '', relativePath: '', path: '' },
   { name: 'file4.lu', content: '', lastModified: '', relativePath: '', path: '' },
   { name: 'file5.lg', content: '', lastModified: '', relativePath: '', path: '' },
   { name: 'file6.botproj', content: '', lastModified: '', relativePath: '', path: '' },
   { name: 'file7.qna', content: '', lastModified: '', relativePath: '', path: '' },
-  { name: 'file8.form-dialog', content: '', lastModified: '', relativePath: '', path: '' },
+  { name: 'file8.form', content: '', lastModified: '', relativePath: '', path: '' },
 ];
 
 const expected = [

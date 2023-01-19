@@ -2,12 +2,12 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx, css } from '@emotion/core';
+import { jsx, css } from '@emotion/react';
 import React from 'react';
 import { FormErrors, JSONSchema7, UIOptions } from '@bfc/extension-client';
 import ErrorBoundary from 'react-error-boundary';
 import formatMessage from 'format-message';
-import { FontSizes } from '@uifabric/fluent-theme';
+import { FontSizes } from '@fluentui/theme';
 
 import AdaptiveFormContext from '../AdaptiveFormContext';
 
@@ -66,7 +66,7 @@ export const AdaptiveForm: React.FC<AdaptiveFormProps> = function AdaptiveForm(p
           <SchemaField
             isRoot
             definitions={schema?.definitions}
-            id={formData?.$designer?.id ? `root[${formData?.$designer?.id}]` : 'root'}
+            id={formData?.$designer?.id ? `root-${formData?.$designer?.id}` : 'root'}
             name="root"
             rawErrors={errors}
             schema={schema}

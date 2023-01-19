@@ -23,6 +23,7 @@ import {
   showErrorDiagnosticsState,
   showWarningDiagnosticsState,
   projectsForDiagnosticsFilterState,
+  templateFeedUrlState,
 } from '../atoms/appState';
 import { AppUpdaterStatus, CreationFlowStatus, CreationFlowType } from '../../constants';
 import OnboardingState from '../../utils/onboardingStorage';
@@ -153,6 +154,31 @@ export const applicationDispatcher = () => {
     }
   });
 
+  const fetchTemplateFeedUrl = useRecoilCallback(({ set }: CallbackInterface) => async () => {
+    try {
+      const response = await httpClient.get(`/assets/templateFeedUrl`);
+      const templateFeedUrl = response.data?.templateFeedUrl;
+      set(templateFeedUrlState, templateFeedUrl);
+    } catch (err) {
+      set(applicationErrorState, {
+        message: formatMessage('Error getting template feed URL from user'),
+        summary: err.message,
+      });
+    }
+  });
+
+  const setTemplateFeedUrl = useRecoilCallback(({ set }: CallbackInterface) => async (newTemplateFeedUrl: string) => {
+    try {
+      set(templateFeedUrlState, newTemplateFeedUrl);
+      await httpClient.post(`/assets/templateFeedUrl`, { feedUrl: newTemplateFeedUrl });
+    } catch (err) {
+      set(applicationErrorState, {
+        message: formatMessage('Error getting template feed URL from user'),
+        summary: err.message,
+      });
+    }
+  });
+
   const performAppCleanupOnQuit = useRecoilCallback((callbackHelpers: CallbackInterface) => async () => {
     // shutdown any running bots to avoid orphaned processes
     await flushExistingTasks(callbackHelpers);
@@ -199,5 +225,7 @@ export const applicationDispatcher = () => {
     setErrorDiagnosticsFilter,
     setWarningDiagnosticsFilter,
     setProjectsForDiagnosticsFilter,
+    fetchTemplateFeedUrl,
+    setTemplateFeedUrl,
   };
 };

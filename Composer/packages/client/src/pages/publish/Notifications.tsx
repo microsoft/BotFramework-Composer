@@ -1,12 +1,12 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 /** @jsx jsx */
-import { jsx, css } from '@emotion/core';
+import { jsx, css } from '@emotion/react';
 import formatMessage from 'format-message';
-import { ProgressIndicator } from 'office-ui-fabric-react/lib/ProgressIndicator';
-import { Icon } from 'office-ui-fabric-react/lib/Icon';
-import { IconButton } from 'office-ui-fabric-react/lib/Button';
-import { CommunicationColors, FontSizes, SharedColors } from '@uifabric/fluent-theme';
+import { ProgressIndicator } from '@fluentui/react/lib/ProgressIndicator';
+import { Icon } from '@fluentui/react/lib/Icon';
+import { IconButton } from '@fluentui/react/lib/Button';
+import { CommunicationColors, FontSizes, SharedColors } from '@fluentui/theme';
 
 import { CardProps } from '../../components/Notifications/NotificationCard';
 

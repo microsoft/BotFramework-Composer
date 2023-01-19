@@ -1,8 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { css } from '@emotion/core';
-import { FontWeights, FontSizes } from 'office-ui-fabric-react/lib/Styling';
+import { css } from '@emotion/react';
+import { FontWeights, FontSizes } from '@fluentui/react/lib/Styling';
 export const hostedSettings = css`
   position: absolute;
   top: 0;

@@ -3,18 +3,13 @@
 
 /* eslint-disable react/display-name */
 /** @jsx jsx */
-import { jsx } from '@emotion/core';
-import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
-import { Link } from 'office-ui-fabric-react/lib/Link';
-import { Sticky, StickyPositionType } from 'office-ui-fabric-react/lib/Sticky';
-import { ScrollablePane, ScrollbarVisibility } from 'office-ui-fabric-react/lib/ScrollablePane';
-import { IObjectWithKey } from 'office-ui-fabric-react/lib/MarqueeSelection';
-import {
-  DetailsList,
-  DetailsListLayoutMode,
-  SelectionMode,
-  CheckboxVisibility,
-} from 'office-ui-fabric-react/lib/DetailsList';
+import { jsx } from '@emotion/react';
+import { TooltipHost } from '@fluentui/react/lib/Tooltip';
+import { Link } from '@fluentui/react/lib/Link';
+import { Sticky, StickyPositionType } from '@fluentui/react/lib/Sticky';
+import { ScrollablePane, ScrollbarVisibility } from '@fluentui/react/lib/ScrollablePane';
+import { IObjectWithKey } from '@fluentui/react/lib/MarqueeSelection';
+import { DetailsList, DetailsListLayoutMode, SelectionMode, CheckboxVisibility } from '@fluentui/react/lib/DetailsList';
 import formatMessage from 'format-message';
 import { useMemo } from 'react';
 

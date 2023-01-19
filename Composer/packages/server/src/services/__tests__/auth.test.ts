@@ -21,13 +21,13 @@ describe('auth service', () => {
     expect((authService as any)._csrfToken).toBeTruthy();
   });
 
-  it('should not generate a CSRF token in the development environment', () => {
+  it('should use template as a CSRF token in the development environment', () => {
     Object.assign(process.env, { ...process.env, NODE_ENV: 'development' });
     // eslint-disable-next-line @typescript-eslint/no-var-requires
     const { authService } = require('../auth/auth');
 
     // eslint-disable-next-line no-underscore-dangle
-    expect((authService as any)._csrfToken).not.toBeTruthy();
+    expect((authService as any)._csrfToken).toEqual('<?= __csrf__ ?>');
   });
 
   it('should get an access token', async () => {

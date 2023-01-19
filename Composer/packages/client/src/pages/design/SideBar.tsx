@@ -2,9 +2,9 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx } from '@emotion/core';
+import { jsx } from '@emotion/react';
 import formatMessage from 'format-message';
-import { Diagnostic } from '@bfc/shared';
+import { Diagnostic, DialogInfo } from '@bfc/shared';
 import { useRecoilValue } from 'recoil';
 import { OpenConfirmModal, dialogStyle } from '@bfc/ui-shared';
 import { useSetRecoilState } from 'recoil';
@@ -47,13 +47,13 @@ function onRenderContent(subTitle, style) {
   );
 }
 
-function getAllRef(targetId, dialogs) {
-  let refs: string[] = [];
+function getAllRef(targetId: string, dialogs: DialogInfo[]) {
+  const refs: string[] = [];
+
+  // find target dialog's all parent
   dialogs.forEach((dialog) => {
-    if (dialog.id === targetId) {
-      refs = refs.concat(dialog.referredDialogs);
-    } else if (!dialog.referredDialogs.every((item) => item !== targetId)) {
-      refs.push(dialog.displayName || dialog.id);
+    if (dialog.referredDialogs?.some((name) => name === targetId)) {
+      refs.push(dialog.id);
     }
   });
   return refs;
@@ -89,6 +89,7 @@ const SideBar: React.FC<SideBarProps> = React.memo(({ projectId }) => {
     removeSkillFromBotProject,
     updateZoomRate,
     deleteTrigger,
+    setMessage: announce,
   } = useRecoilValue(dispatcherState);
 
   const skillUsedInBotsMap = useRecoilValue(skillUsedInBotsSelector);
@@ -181,12 +182,12 @@ const SideBar: React.FC<SideBarProps> = React.memo(({ projectId }) => {
   }
 
   async function handleDeleteTrigger(projectId: string, dialogId: string, index: number) {
-    const content = DialogdeleteTrigger(
-      projectDialogsMap[projectId],
-      dialogId,
-      index,
-      async (trigger) => await deleteTrigger(projectId, dialogId, trigger)
-    );
+    const content = DialogdeleteTrigger(projectDialogsMap[projectId], dialogId, index, async (trigger) => {
+      await deleteTrigger(projectId, dialogId, trigger);
+      announce(
+        formatMessage(`The trigger {triggerName} has been deleted`, { triggerName: trigger.$designer?.name ?? '' })
+      );
+    });
 
     if (content) {
       await updateDialog({ id: dialogId, content, projectId });

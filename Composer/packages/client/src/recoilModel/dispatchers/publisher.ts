@@ -20,7 +20,7 @@ import { openInEmulator } from '../../utils/navigation';
 import { botEndpointsState } from '../atoms';
 import {
   rootBotProjectIdSelector,
-  dialogsSelectorFamily,
+  dialogsWithLuProviderSelectorFamily,
   luFilesSelectorFamily,
   qnaFilesSelectorFamily,
 } from '../selectors';
@@ -102,12 +102,6 @@ export const publisherDispatcher = () => {
     const { set, snapshot } = callbackHelpers;
     const { endpointURL, status, port } = data;
 
-    // remove job id in publish storage if published
-    if (status === PUBLISH_SUCCESS || status === PUBLISH_FAILED) {
-      const publishJobIds = publishStorage.get('jobIds') || {};
-      delete publishJobIds[`${projectId}-${target.name}`];
-      publishStorage.set('jobIds', publishJobIds);
-    }
     // the action below only applies to when a bot is being started using the "start bot" button
     // a check should be added to this that ensures this ONLY applies to the "default" profile.
     if (target.name === defaultPublishConfig.name) {
@@ -211,7 +205,7 @@ export const publisherDispatcher = () => {
     ) => {
       try {
         const { snapshot } = callbackHelpers;
-        const dialogs = await snapshot.getPromise(dialogsSelectorFamily(projectId));
+        const dialogs = await snapshot.getPromise(dialogsWithLuProviderSelectorFamily(projectId));
         const luFiles = await snapshot.getPromise(luFilesSelectorFamily(projectId));
         const qnaFiles = await snapshot.getPromise(qnaFilesSelectorFamily(projectId));
         const referredLuFiles = luUtil.checkLuisBuild(luFiles, dialogs);

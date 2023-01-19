@@ -2,14 +2,14 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx, css } from '@emotion/core';
+import { jsx, css } from '@emotion/react';
 import { useRecoilValue } from 'recoil';
 import React, { Fragment, useEffect, useState } from 'react';
 import { RouteComponentProps } from '@reach/router';
-import { Pivot, PivotItem } from 'office-ui-fabric-react/lib/components/Pivot';
+import { Pivot, PivotItem } from '@fluentui/react/lib/components/Pivot';
 import formatMessage from 'format-message';
-import { IButtonProps } from 'office-ui-fabric-react/lib/Button';
-import { NeutralColors } from '@uifabric/fluent-theme';
+import { IButtonProps } from '@fluentui/react/lib/Button';
+import { NeutralColors } from '@fluentui/theme';
 
 import { localBotsDataSelector } from '../../recoilModel/selectors/project';
 import { DisableFeatureToolTip } from '../../components/DisableFeatureToolTip';

@@ -3,8 +3,8 @@
 
 import React from 'react';
 import styled from '@emotion/styled';
-import { ActionButton, IButtonStyles } from 'office-ui-fabric-react/lib/components/Button';
-import { FluentTheme } from '@uifabric/fluent-theme';
+import { ActionButton, IButtonStyles } from '@fluentui/react/lib/components/Button';
+import { FluentTheme } from '@fluentui/theme';
 import formatMessage from 'format-message';
 
 export const ButtonContainer = styled.div({
@@ -23,13 +23,21 @@ export const actionButtonStyles: IButtonStyles = {
 };
 
 type Props = {
-  onClick: () => void;
+  disabled?: boolean;
+  ariaLabel?: string;
+  onClick: React.MouseEventHandler<unknown>;
 };
 
-export const AddButton = ({ children, onClick }: React.PropsWithChildren<Props>) => {
+export const AddButton = ({ ariaLabel, children, onClick, disabled }: React.PropsWithChildren<Props>) => {
   return (
     <ButtonContainer>
-      <ActionButton styles={actionButtonStyles} onClick={onClick}>
+      <ActionButton
+        ariaLabel={ariaLabel}
+        data-testid="add-button"
+        disabled={disabled}
+        styles={actionButtonStyles}
+        onClick={onClick}
+      >
         {children ?? formatMessage('Add new')}
       </ActionButton>
     </ButtonContainer>

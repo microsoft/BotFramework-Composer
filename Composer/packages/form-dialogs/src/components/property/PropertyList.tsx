@@ -2,10 +2,10 @@
 // Licensed under the MIT License.
 
 import styled from '@emotion/styled';
-import { NeutralColors } from '@uifabric/fluent-theme';
+import { NeutralColors } from '@fluentui/theme';
 import formatMessage from 'format-message';
-import { Stack } from 'office-ui-fabric-react/lib/Stack';
-import { Text } from 'office-ui-fabric-react/lib/Text';
+import { Stack } from '@fluentui/react/lib/Stack';
+import { Text } from '@fluentui/react/lib/Text';
 import * as React from 'react';
 import { Droppable } from 'react-beautiful-dnd';
 
@@ -64,6 +64,12 @@ const InternalPropertyList = React.memo((props: Props) => (
 
 export const PropertyList = (props: Props) => {
   const { kind } = props;
+  const helpText =
+    kind === 'required'
+      ? formatMessage(
+          'Required properties are properties that your bot will ask the user to provide. The user must provide values for all required properties.'
+        )
+      : formatMessage('Optional properties are properties the bot accepts if given but does not ask for.');
 
   return (
     <Root horizontalAlign="center">
@@ -71,16 +77,7 @@ export const PropertyList = (props: Props) => {
         <HeaderText>
           {kind === 'required' ? formatMessage('Required properties') : formatMessage('Optional properties')}
         </HeaderText>
-        <HelpTooltip
-          helpMessage={
-            kind === 'required'
-              ? formatMessage(
-                  'Required properties are properties that your bot will ask the user to provide. The user must provide values for all required properties.'
-                )
-              : formatMessage('Optional properties are properties the bot accepts if given but does not ask for.')
-          }
-          tooltipId={`${kind}-tooltip`}
-        />
+        <HelpTooltip aria-label={helpText} helpMessage={helpText} tooltipId={`${kind}-tooltip`} />
       </Header>
       <Droppable direction="vertical" droppableId={kind}>
         {(provided, { isDraggingOver }) => (

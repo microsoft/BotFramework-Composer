@@ -363,7 +363,7 @@ export const showErrorDiagnosticsState = atom<boolean>({
 
 export const showWarningDiagnosticsState = atom<boolean>({
   key: getFullyQualifiedKey('showWarningDiagnostics'),
-  default: false,
+  default: true,
 });
 
 export const projectsForDiagnosticsFilterState = atom<string[]>({
@@ -373,5 +373,10 @@ export const projectsForDiagnosticsFilterState = atom<string[]>({
 
 export const selectedTemplateVersionState = atom<string>({
   key: getFullyQualifiedKey('selectedTemplateVersion'),
+  default: '',
+});
+
+export const templateFeedUrlState = atom<string>({
+  key: getFullyQualifiedKey('templateFeedUrlState'),
   default: '',
 });

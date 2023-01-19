@@ -2,8 +2,8 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx } from '@emotion/core';
-import { Icon } from 'office-ui-fabric-react/lib/Icon';
+import { jsx } from '@emotion/react';
+import { Icon } from '@fluentui/react/lib/Icon';
 
 import { LoopIconSize } from '../constants/ElementSizes';
 

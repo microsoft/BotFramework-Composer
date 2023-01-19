@@ -33,7 +33,7 @@ const renderSelectSkillDialog = ({ onChange = jest.fn() } = {}) => {
 describe('Select Skill Dialog', () => {
   it('should display label', async () => {
     const { findByText } = renderSelectSkillDialog();
-    await findByText('Skill Dialog Name');
+    await findByText('Skill Dialog Name', { selector: '[for]' });
   });
 
   it('should update the dialog file with the selected skill', async () => {
@@ -41,7 +41,7 @@ describe('Select Skill Dialog', () => {
     const keys = Object.keys(skills);
 
     const { baseElement, findByRole } = renderSelectSkillDialog({ onChange });
-    const combobox = await findByRole('listbox');
+    const combobox = await findByRole('combobox');
     act(() => {
       fireEvent.click(combobox);
     });

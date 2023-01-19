@@ -33,6 +33,9 @@ const createArrayItem = <ItemType = unknown>(value: ItemType): ArrayItem<ItemTyp
   };
 };
 
+export const isItemValueEmpty = (value?: any) =>
+  !value || (typeof value === 'object' && !Object.values(value).some((val) => !!val));
+
 export const getArrayItemProps = <ItemType = unknown>(
   items: ArrayItem<ItemType>[],
   index: number,
@@ -95,7 +98,9 @@ export function useArrayItems<ItemType = unknown>(
   };
 
   const addItem = (newItem: ItemType) => {
-    handleChange(cache.concat(createArrayItem(newItem)));
+    // Allow only the last value in the cache to be empty
+    const newCache = isItemValueEmpty(newItem) ? cache.filter(({ value }) => !isItemValueEmpty(value)) : cache;
+    handleChange(newCache.concat(createArrayItem(newItem)));
   };
 
   const handleResetCache = (items: ItemType[]) => {

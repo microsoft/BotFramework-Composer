@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { TelemetryEventTypes } from '@bfc/shared';
+import { TelemetryEventTypes, PageNames } from '@bfc/shared';
 
 import httpClient from '../../utils/httpUtil';
 import AppInsightsClient from '../AppInsightsClient';
@@ -15,7 +15,7 @@ describe('Application Insights Logger', () => {
     (httpClient.post as jest.Mock).mockResolvedValue({});
 
     AppInsightsClient.setup({ allowDataCollection: true });
-    AppInsightsClient.trackEvent('TestEvent', { value: '1' });
+    AppInsightsClient.trackEvent('CreateNewBotProjectCompleted', { template: 'Test template', status: '200' });
     AppInsightsClient.drain();
 
     expect(httpClient.post).toBeCalledWith(
@@ -24,9 +24,10 @@ describe('Application Insights Logger', () => {
         events: expect.arrayContaining([
           expect.objectContaining({
             type: TelemetryEventTypes.TrackEvent,
-            name: 'TestEvent',
+            name: 'CreateNewBotProjectCompleted',
             properties: {
-              value: '1',
+              template: 'Test template',
+              status: '200',
             },
           }),
         ]),
@@ -38,7 +39,7 @@ describe('Application Insights Logger', () => {
     (httpClient.post as jest.Mock).mockResolvedValue({});
 
     AppInsightsClient.setup({ allowDataCollection: false });
-    AppInsightsClient.trackEvent('TestEvent', { value: '1' });
+    AppInsightsClient.trackEvent('CreateNewBotProjectCompleted', { template: 'Test template', status: '200' });
     AppInsightsClient.drain();
 
     expect(httpClient.post).not.toHaveBeenCalled();
@@ -48,7 +49,7 @@ describe('Application Insights Logger', () => {
     (httpClient.post as jest.Mock).mockResolvedValue({});
 
     AppInsightsClient.setup({ allowDataCollection: true });
-    AppInsightsClient.logPageView('TestEvent', 'https://composer', { value: '1' });
+    AppInsightsClient.logPageView(PageNames.Home, 'https://composer', { value: '1' });
     AppInsightsClient.drain();
 
     expect(httpClient.post).toBeCalledWith(
@@ -58,7 +59,7 @@ describe('Application Insights Logger', () => {
           expect.objectContaining({
             type: TelemetryEventTypes.PageView,
             url: 'https://composer',
-            name: 'TestEvent',
+            name: PageNames.Home,
             properties: {
               value: '1',
             },
@@ -72,7 +73,7 @@ describe('Application Insights Logger', () => {
     (httpClient.post as jest.Mock).mockResolvedValue({});
 
     AppInsightsClient.setup({ allowDataCollection: false });
-    AppInsightsClient.logPageView('TestEvent', 'https://composer', { value: '1' });
+    AppInsightsClient.logPageView(PageNames.Home, 'https://composer', { value: '1' });
     AppInsightsClient.drain();
 
     expect(httpClient.post).not.toHaveBeenCalled();
@@ -83,7 +84,7 @@ describe('Application Insights Logger', () => {
     AppInsightsClient.setup({ allowDataCollection: true });
 
     for (let i = 0; i < 42; i++) {
-      AppInsightsClient.logPageView('TestEvent', 'https://composer', { value: '1' });
+      AppInsightsClient.logPageView(PageNames.Home, 'https://composer', { value: '1' });
     }
     AppInsightsClient.drain();
 

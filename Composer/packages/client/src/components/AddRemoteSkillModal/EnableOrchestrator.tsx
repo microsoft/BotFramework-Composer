@@ -3,10 +3,10 @@
 
 import React, { useState } from 'react';
 import formatMessage from 'format-message';
-import { Link } from 'office-ui-fabric-react/lib/Link';
-import { Checkbox } from 'office-ui-fabric-react/lib/Checkbox';
-import { Stack, StackItem } from 'office-ui-fabric-react/lib/Stack';
-import { PrimaryButton, DefaultButton, Button } from 'office-ui-fabric-react/lib/Button';
+import { Link } from '@fluentui/react/lib/Link';
+import { Checkbox } from '@fluentui/react/lib/Checkbox';
+import { Stack, StackItem } from '@fluentui/react/lib/Stack';
+import { PrimaryButton, DefaultButton, Button } from '@fluentui/react/lib/Button';
 import { useRecoilValue } from 'recoil';
 import { DialogSetting } from '@botframework-composer/types';
 

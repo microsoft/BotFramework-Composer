@@ -3,13 +3,13 @@
 
 /** @jsx jsx */
 import React, { useState, useMemo } from 'react';
-import { jsx } from '@emotion/core';
+import { jsx } from '@emotion/react';
 import { useRecoilValue } from 'recoil';
 import { PublishTarget } from '@bfc/shared';
 import formatMessage from 'format-message';
-import { DefaultButton, PrimaryButton } from 'office-ui-fabric-react/lib/Button';
-import Dialog, { DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
-import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
+import { DefaultButton, PrimaryButton } from '@fluentui/react/lib/Button';
+import Dialog, { DialogFooter } from '@fluentui/react/lib/Dialog';
+import { Dropdown, IDropdownOption } from '@fluentui/react/lib/Dropdown';
 
 import { settingsState } from '../../recoilModel/atoms/botState';
 
@@ -93,6 +93,7 @@ export const GetAppInfoFromPublishProfileDialog: React.FC<Props> = (props) => {
     >
       <div css={{ height: '100px' }}>
         <Dropdown
+          ariaLabel={formatMessage('Publishing profile')}
           data-testid={'publishProfileDropdown'}
           errorMessage={publishTargetsErrorMessage}
           options={publishTargetOptions}

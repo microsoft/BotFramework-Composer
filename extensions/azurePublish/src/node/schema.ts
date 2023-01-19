@@ -55,6 +55,10 @@ const schema: JSONSchema7 = {
       type: 'string',
       title: "The operating system for the App Service. 'windows' or 'linux'.",
     },
+    scmHostDomain: {
+      type: 'string',
+      title: "An optional host domain for SCM deployment URLs. Defaults to 'scm.azurewebsites.net'.",
+    },
     settings: {
       type: 'object',
       title: 'Settings for Azure resources',
@@ -143,7 +147,7 @@ const schema: JSONSchema7 = {
       required: ['MicrosoftAppId', 'MicrosoftAppPassword'],
     },
   },
-  required: ['subscriptionID', 'publishName', 'provision'],
+  required: ['subscriptionId', 'name', 'settings', 'accessToken'],
   default: {
     name: '<unique name in your subscription>',
     environment: 'dev',
@@ -155,6 +159,7 @@ const schema: JSONSchema7 = {
     subscriptionId: '<id of your subscription>',
     region: '<region of your resource group>',
     appServiceOperatingSystem: 'windows',
+    scmHostDomain: '',
     luisResource: '<name of your luis resource>',
     settings: {
       applicationInsights: {

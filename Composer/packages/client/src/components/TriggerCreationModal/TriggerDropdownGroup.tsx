@@ -2,12 +2,12 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx } from '@emotion/core';
+import { jsx } from '@emotion/react';
 import { FC, ReactNode, useCallback, useMemo, useState } from 'react';
-import { Stack } from 'office-ui-fabric-react/lib/Stack';
-import { Dropdown } from 'office-ui-fabric-react/lib/Dropdown';
-import { IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
-import { Icon } from 'office-ui-fabric-react/lib/Icon';
+import { Stack } from '@fluentui/react/lib/Stack';
+import { Dropdown } from '@fluentui/react/lib/Dropdown';
+import { IDropdownOption } from '@fluentui/react/lib/Dropdown';
+import { Icon } from '@fluentui/react/lib/Icon';
 import { SDKKinds } from '@bfc/shared';
 import { TriggerUISchema } from '@bfc/extension-client';
 import formatMessage from 'format-message';

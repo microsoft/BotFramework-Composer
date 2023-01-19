@@ -2,9 +2,9 @@
 // Licensed under the MIT License.
 
 import { createSvgIcon } from '@fluentui/react-icons';
-import { FluentTheme } from '@uifabric/fluent-theme';
+import { FluentTheme } from '@fluentui/theme';
 import formatMessage from 'format-message';
-import { ICommandBarItemProps } from 'office-ui-fabric-react/lib/CommandBar';
+import { ICommandBarItemProps } from '@fluentui/react/lib/CommandBar';
 import React from 'react';
 
 import { defaultMenuHeight } from '../lg/constants';
@@ -47,6 +47,7 @@ export const useEditorToolbarPopExpandItem = (
             key: 'popExpandButton',
             buttonStyles: itemButtonStyles,
             className: options?.customClassName,
+            ariaLabel: formatMessage('Pop out editor: open editor'),
             onRenderIcon: () => {
               let PopExpandIcon = createSvgIcon({ svg: () => popExpandSvgIcon, displayName: 'PopExpandIcon' });
               PopExpandIcon = withTooltip({ content: formatMessage('Pop out editor') }, PopExpandIcon);

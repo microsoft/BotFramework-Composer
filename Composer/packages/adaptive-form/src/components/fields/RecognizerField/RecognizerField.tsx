@@ -1,16 +1,16 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 /** @jsx jsx */
-import { jsx, css } from '@emotion/core';
+import { jsx, css } from '@emotion/react';
 import React, { useCallback, useMemo, useState, useEffect } from 'react';
 import { FieldProps, useShellApi, useRecognizerConfig } from '@bfc/extension-client';
 import { MicrosoftIRecognizer } from '@bfc/shared';
 import formatMessage from 'format-message';
-import { Dialog, DialogFooter, DialogType } from 'office-ui-fabric-react/lib/Dialog';
-import { ScrollablePane, ScrollbarVisibility } from 'office-ui-fabric-react/lib/ScrollablePane';
-import { Link } from 'office-ui-fabric-react/lib/Link';
-import { CheckboxVisibility, DetailsList, SelectionMode, Selection } from 'office-ui-fabric-react/lib/DetailsList';
-import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button';
+import { Dialog, DialogFooter, DialogType } from '@fluentui/react/lib/Dialog';
+import { ScrollablePane, ScrollbarVisibility } from '@fluentui/react/lib/ScrollablePane';
+import { Link } from '@fluentui/react/lib/Link';
+import { CheckboxVisibility, DetailsList, SelectionMode, Selection } from '@fluentui/react/lib/DetailsList';
+import { PrimaryButton, DefaultButton } from '@fluentui/react/lib/Button';
 
 import { FieldLabel } from '../../FieldLabel';
 
@@ -27,8 +27,7 @@ const AzureBlue = '#0078D4';
 const recognizerContainer = css`
   position: relative;
   height: 500px;
-  border-top: 1px solid #f3f2f1;
-  border-bottom: 1px solid #f3f2f1;
+  border: 1px solid #f3f2f1;
 `;
 const learnRecognizerUrl = 'https://docs.microsoft.com/en-us/composer/concept-dialog?tabs=v2x#recognizer';
 

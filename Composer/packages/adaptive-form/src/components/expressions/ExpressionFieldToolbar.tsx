@@ -1,9 +1,9 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { DirectionalHint } from 'office-ui-fabric-react/lib/ContextualMenu';
+import { DirectionalHint } from '@fluentui/react/lib/ContextualMenu';
 import React from 'react';
-import { Callout } from 'office-ui-fabric-react/lib/Callout';
+import { Callout } from '@fluentui/react/lib/Callout';
 import { FieldToolbar } from '@bfc/code-editor';
 import { useShellApi } from '@bfc/extension-client';
 

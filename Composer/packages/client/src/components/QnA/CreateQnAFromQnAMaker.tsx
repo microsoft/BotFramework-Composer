@@ -2,11 +2,11 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx } from '@emotion/core';
+import { jsx } from '@emotion/react';
 import React, { Fragment, useEffect } from 'react';
 import formatMessage from 'format-message';
-import { Stack } from 'office-ui-fabric-react/lib/Stack';
-import { Text } from 'office-ui-fabric-react/lib/Text';
+import { Stack } from '@fluentui/react/lib/Stack';
+import { Text } from '@fluentui/react/lib/Text';
 
 import { FieldConfig, useForm } from '../../hooks/useForm';
 

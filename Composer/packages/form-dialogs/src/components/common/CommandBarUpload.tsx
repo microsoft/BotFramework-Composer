@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import formatMessage from 'format-message';
-import { CommandBarButton } from 'office-ui-fabric-react/lib/Button';
+import { CommandBarButton } from '@fluentui/react/lib/Button';
 import * as React from 'react';
 
 type Props = {

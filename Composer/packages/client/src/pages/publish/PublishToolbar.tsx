@@ -2,12 +2,12 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx } from '@emotion/core';
+import { jsx } from '@emotion/react';
 import React from 'react';
 import formatMessage from 'format-message';
-import { ActionButton } from 'office-ui-fabric-react/lib/Button';
-import { SharedColors } from '@uifabric/fluent-theme/lib/fluent/FluentColors';
-import { FontSizes } from '@uifabric/fluent-theme';
+import { ActionButton } from '@fluentui/react/lib/Button';
+import { SharedColors } from '@fluentui/theme';
+import { FontSizes } from '@fluentui/theme';
 import { Toolbar, IToolbarItem, defaultToolbarButtonStyles } from '@bfc/ui-shared';
 
 export type PublishToolbarProps = {

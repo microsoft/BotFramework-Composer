@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx } from '@emotion/core';
+import { jsx } from '@emotion/react';
 import { TokenCredentials } from '@azure/ms-rest-js';
 import formatMessage from 'format-message';
 import { useRecoilValue } from 'recoil';

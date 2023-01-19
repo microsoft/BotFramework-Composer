@@ -63,14 +63,14 @@ describe('LU parse and validation', () => {
     expect(result1.diagnostics.length).toEqual(1);
   });
 
-  it('Throws when ML entity is disable (validateResource)', () => {
+  it('Throws when ML entity is disable (validateResource, not orchestrator)', () => {
     const fileContent = `# AskForName
     - {@userName=Jack}
     `;
-    const result1 = parse('a.lu', fileContent, { enableMLEntities: false }, []);
+    const result1 = parse('a.lu', fileContent, { isOrchestartor: false, enableMLEntities: false }, []);
     expect(result1.diagnostics.length).toEqual(1);
 
-    const result2 = parse('a.lu', fileContent, { enableMLEntities: true }, []);
+    const result2 = parse('a.lu', fileContent, { isOrchestartor: false, enableMLEntities: true }, []);
     expect(result2.diagnostics.length).toEqual(0);
   });
 

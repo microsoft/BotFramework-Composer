@@ -2,8 +2,8 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx } from '@emotion/core';
-import { Icon as FabricIcon } from 'office-ui-fabric-react/lib/Icon';
+import { jsx } from '@emotion/react';
+import { Icon as FabricIcon } from '@fluentui/react/lib/Icon';
 
 import { iconCss } from './iconStyles';
 

@@ -6,6 +6,7 @@ import http from 'http';
 import portfinder from 'portfinder';
 import express, { Request, Response } from 'express';
 import { Server as WSServer } from 'ws';
+import { Debugger } from 'debug';
 
 interface WebSocket {
   close(): void;
@@ -17,12 +18,21 @@ export class RuntimeLogServer {
   private static servers: WSServer = {};
   private static sockets: Record<string, WebSocket> = {};
   private static port: number;
+  private static hostname: string;
 
   public static getRuntimeLogStreamingUrl(projectId: string): string {
-    return `ws://localhost:${this.port}/ws/runtimeLog/${projectId}`;
+    return `ws://${this.hostname}:${this.port}/ws/runtimeLog/${projectId}`;
   }
 
-  public static async init(): Promise<number | void> {
+  public static async init({
+    log,
+    boundHost = 'localhost',
+    hostname = 'localhost',
+  }: {
+    log: Debugger;
+    boundHost?: string;
+    hostname?: string;
+  }): Promise<number | void> {
     if (!this.restServer) {
       const app = express();
       this.restServer = http.createServer(app);
@@ -35,8 +45,13 @@ export class RuntimeLogServer {
         const res: any = new http.ServerResponse(req);
         return app(req, res);
       });
-      const port = await portfinder.getPortPromise();
-      this.restServer.listen(port);
+      const preferredPort = 8001;
+      const port = await portfinder.getPortPromise({ port: preferredPort }).catch((err) => {
+        log(`Unable to find an open port for runtime-log (wanted ${preferredPort}): ${err}`);
+        return preferredPort;
+      });
+      log(`Using ${port} port for runtime-log`);
+      this.restServer.listen(port, boundHost);
 
       app.use('/ws/runtimeLog/:projectId', (req: Request, res: Response) => {
         if (!(req as any).claimUpgrade) {
@@ -68,6 +83,7 @@ export class RuntimeLogServer {
         }
       });
       this.port = port;
+      this.hostname = hostname;
       return this.port;
     }
   }

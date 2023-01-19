@@ -2,13 +2,13 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { css, jsx } from '@emotion/core';
+import { css, jsx } from '@emotion/react';
 import { generateUniqueId } from '@bfc/shared';
 import formatMessage from 'format-message';
-import { PrimaryButton } from 'office-ui-fabric-react/lib/components/Button';
-import { Dialog, DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
+import { PrimaryButton } from '@fluentui/react/lib/components/Button';
+import { Dialog, DialogFooter } from '@fluentui/react/lib/Dialog';
 import React from 'react';
-import { FontWeights } from 'office-ui-fabric-react/lib/Styling';
+import { FontWeights } from '@fluentui/react/lib/Styling';
 
 type PulledFailedDialogProps = {
   error: Error | string;

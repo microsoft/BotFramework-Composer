@@ -2,13 +2,13 @@
 // Licensed under the MIT License.
 
 import styled from '@emotion/styled';
-import { FluentTheme, NeutralColors } from '@uifabric/fluent-theme';
+import { FluentTheme, NeutralColors } from '@fluentui/theme';
 import formatMessage from 'format-message';
-import { DefaultButton } from 'office-ui-fabric-react/lib/Button';
-import { CommandBar, ICommandBarItemProps } from 'office-ui-fabric-react/lib/CommandBar';
-import { ProgressIndicator } from 'office-ui-fabric-react/lib/ProgressIndicator';
-import { Stack } from 'office-ui-fabric-react/lib/Stack';
-import { Text } from 'office-ui-fabric-react/lib/Text';
+import { DefaultButton } from '@fluentui/react/lib/Button';
+import { CommandBar, ICommandBarItemProps } from '@fluentui/react/lib/CommandBar';
+import { ProgressIndicator } from '@fluentui/react/lib/ProgressIndicator';
+import { Stack } from '@fluentui/react/lib/Stack';
+import { Text } from '@fluentui/react/lib/Text';
 import * as React from 'react';
 import { useRecoilValue } from 'recoil';
 import { OpenConfirmModal } from '@bfc/ui-shared';
@@ -66,7 +66,7 @@ const downloadFile = async (fileName: string, schemaExtension: string, content: 
   const href = URL.createObjectURL(blob);
   const link = document.createElement('a');
   link.href = href;
-  link.download = `${fileName}.${schemaExtension}`;
+  link.download = `${fileName}${schemaExtension}`;
   document.body.appendChild(link);
   link.click();
   document.body.removeChild(link);
@@ -152,9 +152,9 @@ export const FormDialogPropertiesEditor = React.memo((props: Props) => {
     {
       key: 'export',
       iconProps: { iconName: 'Export' },
-      text: formatMessage('Export JSON'),
-      title: formatMessage('Export JSON'),
-      ariaLabel: formatMessage('Export JSON'),
+      text: formatMessage('Export schema'),
+      title: formatMessage('Export schema'),
+      ariaLabel: formatMessage('Export schema'),
       disabled: !propertyIds.length || !schemaValid,
       onClick: () => {
         downloadFile(schema.name, schemaExtension, schemaJson);

@@ -1,11 +1,11 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { css } from '@emotion/core';
-import { ITheme, getTheme } from 'office-ui-fabric-react/lib/Styling';
-import { Depths, MotionTimings, MotionDurations, NeutralColors } from '@uifabric/fluent-theme';
-import { FontWeights, FontSizes } from 'office-ui-fabric-react/lib/Styling';
-import { IButtonStyles } from 'office-ui-fabric-react/lib/Button';
+import { css } from '@emotion/react';
+import { ITheme, getTheme } from '@fluentui/react/lib/Styling';
+import { Depths, MotionTimings, MotionDurations, NeutralColors } from '@fluentui/theme';
+import { FontWeights, FontSizes } from '@fluentui/react/lib/Styling';
+import { IButtonStyles } from '@fluentui/react/lib/Button';
 const theme: ITheme = getTheme();
 const { fonts } = theme;
 
@@ -20,8 +20,7 @@ export const outline = css`
 
 export const page = css`
   display: flex;
-  overflow-x: hidden;
-  overflow-y: auto;
+  overflow: auto;
   flex-wrap: wrap;
 `;
 
@@ -30,6 +29,8 @@ export const leftPage = css`
   padding: 0 24px 24px 24px;
   display: flex;
   flex-direction: column;
+  max-width: 100%;
+  overflow: hidden;
 `;
 
 export const rightPage = css`
@@ -37,6 +38,9 @@ export const rightPage = css`
   padding-right: 24px;
   display: flex;
   flex-direction: column;
+  @media (max-width: 1024px) {
+    flex: 50%;
+  }
 `;
 
 export const title = css`
@@ -63,6 +67,9 @@ export const introduction = css`
 export const rowContainer = css`
   display: flex;
   margin-top: 12px;
+  overflow-x: auto;
+  padding-bottom: 12px;
+  gap: 12px;
 `;
 
 export const recentBotsContainer = css`
@@ -87,9 +94,11 @@ export const pivotContainer = css`
 `;
 
 export const tabRowContainer = css`
-  flex-wrap: wrap;
   display: flex;
   clear: both;
+  overflow-x: auto;
+  padding-bottom: 12px;
+  gap: 12px;
 `;
 
 export const tabRowViewMore = css`
@@ -106,6 +115,12 @@ export const tabRowViewMore = css`
   }
 `;
 
+export const cardWrapper = css`
+  display: flex;
+  flex-basis: 25%;
+  min-width: ${ImageCoverWidth}px;
+`;
+
 export const itemContainerWrapper = (disabled?: boolean) => css`
   border-radius: 2px;
   border-width: 0;
@@ -113,7 +128,6 @@ export const itemContainerWrapper = (disabled?: boolean) => css`
   display: block;
   height: auto;
   text-decoration-line: none;
-  margin-right: 12px;
   padding: 0;
 `;
 
@@ -130,12 +144,11 @@ export const subtitle = css`
   margin: 0;
 `;
 
-export const bluetitle = css`
+export const blueTitle = css`
   line-height: 20px;
   font-size: ${fonts.medium.fontSize};
   display: inline-block;
   color: #0078d4;
-  margin: 16px 0 0 0;
 `;
 
 export const toolbar = css`
@@ -184,22 +197,14 @@ export const newsDescription = css`
 export const cardItem = {
   container: css`
     font-size: ${fonts.medium.fontSize};
-    margin: 12px 0 0 12px;
-    &:first-child {
-      margin-left: 0;
-    }
     padding: 12px;
-    min-width: ${ImageCoverWidth}px;
-    width: 17vw;
-    @media (max-width: 1416px) {
-      width: 20vw;
-    }
     text-align: left;
     border: 1px #efedeb solid;
     box-shadow: ${Depths.depth4};
     transition: box-shadow ${MotionDurations.duration2} ${MotionTimings.standard};
     &:hover,
-    &:focus {
+    &:focus,
+    &:focus-within {
       box-shadow: ${Depths.depth16};
     }
 
@@ -324,15 +329,22 @@ export const whatsNewsContainer = css`
   border-radius: 5px;
   margin: 20px 0 24px 0;
   background: #f6f6f6;
-  @media (max-width: 1416px) {
+  @media (max-width: 1024px) {
     background: none;
-    min-width: 200px;
     margin: 15px 0 0 0;
   }
 `;
 
 export const whatsNewsList = css`
   flex: 1;
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+`;
+
+export const whatsNewsListItem = css`
+  display: block;
+  margin: 16px 0 0 0;
 `;
 
 export const loading = css`

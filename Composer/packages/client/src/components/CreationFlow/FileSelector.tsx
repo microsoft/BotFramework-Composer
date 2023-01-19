@@ -5,33 +5,36 @@
 import path from 'path';
 
 import { useMemo, useState, useRef, useEffect } from 'react';
-import { jsx, css } from '@emotion/core';
-import { Icon } from 'office-ui-fabric-react/lib/Icon';
-import { IconButton } from 'office-ui-fabric-react/lib/Button';
-import { Link } from 'office-ui-fabric-react/lib/Link';
-import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
-import { Sticky, StickyPositionType } from 'office-ui-fabric-react/lib/Sticky';
-import { ScrollablePane, ScrollbarVisibility } from 'office-ui-fabric-react/lib/ScrollablePane';
+import { jsx, css } from '@emotion/react';
+import { Icon } from '@fluentui/react/lib/Icon';
+import { IconButton } from '@fluentui/react/lib/Button';
+import { Link } from '@fluentui/react/lib/Link';
+import { TooltipHost } from '@fluentui/react/lib/Tooltip';
+import { Sticky, StickyPositionType } from '@fluentui/react/lib/Sticky';
+import { ScrollablePane, ScrollbarVisibility } from '@fluentui/react/lib/ScrollablePane';
 import {
   DetailsList,
   DetailsListLayoutMode,
   Selection,
   SelectionMode,
   CheckboxVisibility,
-} from 'office-ui-fabric-react/lib/DetailsList';
+  IColumn,
+} from '@fluentui/react/lib/DetailsList';
 import formatMessage from 'format-message';
 import { Fragment } from 'react';
-import { Stack, StackItem } from 'office-ui-fabric-react/lib/Stack';
-import { ComboBox, IComboBox, IComboBoxOption } from 'office-ui-fabric-react/lib/ComboBox';
-import { TextField } from 'office-ui-fabric-react/lib/TextField';
+import { StackItem } from '@fluentui/react/lib/Stack';
+import { ComboBox, IComboBox, IComboBoxOption } from '@fluentui/react/lib/ComboBox';
+import { TextField } from '@fluentui/react/lib/TextField';
 import moment from 'moment';
-import { mergeStyleSets } from 'office-ui-fabric-react/lib/Styling';
+import { mergeStyleSets } from '@fluentui/react/lib/Styling';
 import debounce from 'lodash/debounce';
 
 import { FileTypes, nameRegex } from '../../constants';
 import { StorageFolder, File } from '../../recoilModel/types';
 import { getFileIconName, calculateTimeDiff } from '../../utils/fileUtil';
 import httpClient from '../../utils/httpUtil';
+
+import { FormStack } from './FormStack';
 
 // -------------------- Styles -------------------- //
 
@@ -77,22 +80,6 @@ export const content = css`
   outline: none;
   margin-top: 3px;
 `;
-
-export const halfstack = {
-  root: [
-    {
-      flexBasis: '50%',
-    },
-  ],
-};
-
-export const stackinput = {
-  root: [
-    {
-      marginBottom: '1rem',
-    },
-  ],
-};
 
 export const editButton = {
   root: {
@@ -252,7 +239,7 @@ export const FileSelector: React.FC<FileSelectorProps> = (props) => {
   const renderNameColumn = (file: File, index: number | undefined) => {
     const iconName = getFileIconName(file);
     return (
-      <div data-is-focusable css={tableCell}>
+      <div css={tableCell}>
         {index == selectedIndex && editMode !== EditMode.NONE ? (
           <TextField
             autoFocus
@@ -296,7 +283,7 @@ export const FileSelector: React.FC<FileSelectorProps> = (props) => {
     );
   };
 
-  const tableColumns = [
+  const tableColumns: IColumn[] = [
     {
       key: 'type',
       name: formatMessage('File Type'),
@@ -308,6 +295,8 @@ export const FileSelector: React.FC<FileSelectorProps> = (props) => {
       fieldName: 'name',
       minWidth: 16,
       maxWidth: 16,
+      sortAscendingAriaLabel: formatMessage('Sorted A to Z'),
+      sortDescendingAriaLabel: formatMessage('Sorted Z to A'),
       onRender: renderIcon,
     },
     {
@@ -332,6 +321,8 @@ export const FileSelector: React.FC<FileSelectorProps> = (props) => {
       maxWidth: 500,
       isResizable: true,
       data: 'number',
+      sortAscendingAriaLabel: formatMessage('Sorted ascending'),
+      sortDescendingAriaLabel: formatMessage('Sorted descending'),
       onRender: (item: File) => {
         return (
           <div data-is-focusable css={tableCell}>
@@ -349,7 +340,7 @@ export const FileSelector: React.FC<FileSelectorProps> = (props) => {
     },
     {
       key: 'Edit',
-      name: '',
+      name: formatMessage('Edit'),
       fieldName: '',
       minWidth: 30,
       maxWidth: 30,
@@ -361,8 +352,8 @@ export const FileSelector: React.FC<FileSelectorProps> = (props) => {
           !focusedStorageFolder.writable ||
           item.type !== FileTypes.FOLDER ||
           index !== selectedIndex ? null : (
-          <div data-is-focusable css={tableCell}>
-            <div css={content} tabIndex={-1}>
+          <div css={tableCell}>
+            <div css={content}>
               <IconButton
                 ariaLabel={formatMessage('Edit')}
                 iconProps={{ iconName: 'Edit' }}
@@ -516,8 +507,8 @@ export const FileSelector: React.FC<FileSelectorProps> = (props) => {
 
   return (
     <Fragment>
-      <Stack horizontal styles={stackinput} tokens={{ childrenGap: '2rem' }}>
-        <StackItem grow={0} styles={halfstack}>
+      <FormStack>
+        <StackItem>
           <ComboBox
             allowFreeform
             useComboBoxAsMenuWidth
@@ -527,7 +518,6 @@ export const FileSelector: React.FC<FileSelectorProps> = (props) => {
             label={formatMessage('Location')}
             options={breadcrumbItems}
             selectedKey={currentPath}
-            styles={{ root: { width: '420px' } }}
             onChange={updatePath}
             onPendingValueChanged={updatePathPending}
           />
@@ -541,7 +531,7 @@ export const FileSelector: React.FC<FileSelectorProps> = (props) => {
             </Link>
           )}
         </StackItem>
-      </Stack>
+      </FormStack>
       <div css={detailListContainer} data-is-scrollable="true">
         <ScrollablePane scrollbarVisibility={ScrollbarVisibility.auto}>
           <DetailsList

@@ -4,17 +4,17 @@
 
 /** @jsx jsx */
 import { BotTemplate, localTemplateId } from '@bfc/shared';
-import { css, jsx } from '@emotion/core';
+import { css, jsx } from '@emotion/react';
 import formatMessage from 'format-message';
-import { CommandButton } from 'office-ui-fabric-react/lib/components/Button';
-import { Stack } from 'office-ui-fabric-react/lib/Stack';
+import { CommandButton } from '@fluentui/react/lib/components/Button';
+import { Stack } from '@fluentui/react/lib/Stack';
 import React, { useEffect, Fragment } from 'react';
 import ReactMarkdown from 'react-markdown';
-import { Text } from 'office-ui-fabric-react/lib/Text';
-import { Link } from 'office-ui-fabric-react/lib/Link';
-import { TextField } from 'office-ui-fabric-react/lib/components/TextField';
-import { FontIcon } from 'office-ui-fabric-react/lib/Icon';
-import { SharedColors } from '@uifabric/fluent-theme/lib/fluent/FluentColors';
+import { Text } from '@fluentui/react/lib/Text';
+import { Link } from '@fluentui/react/lib/Link';
+import { TextField } from '@fluentui/react/lib/components/TextField';
+import { FontIcon } from '@fluentui/react/lib/Icon';
+import { SharedColors } from '@fluentui/theme';
 import { useRecoilValue } from 'recoil';
 
 import composerIcon from '../../images/composerIcon.svg';
@@ -24,7 +24,6 @@ import { useFeatureFlag } from '../../utils/hooks';
 
 const templateTitleContainer = (isLocalTemplate: boolean) => css`
   width: 100%;
-  padding-right: 2%;
   height: fit-content
   overflow: hidden;
   flex-grow: 1;
@@ -134,7 +133,13 @@ export const TemplateDetailView: React.FC<TemplateDetailViewProps> = (props) => 
           `To create a bot from your own Bot Framework Template you need to add a path to your local templates index.js file. <templateDocLink>Learn more</templateDocLink>`,
           {
             templateDocLink: ({ children }) => (
-              <Link key="local-template-link" href={templateDocUrl} rel="noopener noreferrer" target="_blank">
+              <Link
+                key="local-template-link"
+                aria-label={formatMessage('Learn more on how to add Bot Framework Templates')}
+                href={templateDocUrl}
+                rel="noopener noreferrer"
+                target="_blank"
+              >
                 {children}
               </Link>
             ),
@@ -168,24 +173,28 @@ export const TemplateDetailView: React.FC<TemplateDetailViewProps> = (props) => 
     );
   };
 
-  return (
-    <div>
-      <div css={templateTitleContainer(isLocalTemplate)}>
-        <Stack horizontal>
-          <Stack.Item>{renderTemplateIcon()}</Stack.Item>
-          <Stack.Item>
-            <span css={templateTitle(isLocalTemplate)}>
-              {props.template?.name ? props.template.name : formatMessage('Template undefined')}
-            </span>
-            {!isLocalTemplate && renderVersionButton()}
-          </Stack.Item>
-        </Stack>
+  const renderDetailView = () => {
+    return (
+      <div>
+        <div css={templateTitleContainer(isLocalTemplate)}>
+          <Stack horizontal>
+            <Stack.Item>{renderTemplateIcon()}</Stack.Item>
+            <Stack.Item>
+              <span css={templateTitle(isLocalTemplate)}>
+                {props.template?.name ? props.template.name : formatMessage('Template undefined')}
+              </span>
+              {!isLocalTemplate && renderVersionButton()}
+            </Stack.Item>
+          </Stack>
+        </div>
+        {isLocalTemplate ? (
+          renderLocalTemplateForm()
+        ) : (
+          <ReactMarkdown linkTarget="_blank">{getStrippedReadMe()}</ReactMarkdown>
+        )}
       </div>
-      {isLocalTemplate ? (
-        renderLocalTemplateForm()
-      ) : (
-        <ReactMarkdown linkTarget="_blank">{getStrippedReadMe()}</ReactMarkdown>
-      )}
-    </div>
-  );
+    );
+  };
+
+  return <Fragment>{props.template ? renderDetailView() : null}</Fragment>;
 };

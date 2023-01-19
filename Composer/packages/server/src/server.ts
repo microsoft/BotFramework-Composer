@@ -36,6 +36,7 @@ import { mountDirectLineRoutes } from './directline/mountDirectlineRoutes';
 import { mountAttachmentRoutes } from './directline/mountAttachmentRoutes';
 import { cleanHostedBots } from './utility/cleanHostedBots';
 import { getVersion } from './utility/getVersion';
+import { serverListenHost, serverHostname } from './settings/env';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const session = require('express-session');
@@ -137,6 +138,17 @@ export async function start(electronContext?: ElectronContext): Promise<number |
   const preferredPort = toNumber(process.env.PORT) || 5000;
   let port = preferredPort;
 
+  if (process.env.NODE_ENV === 'production') {
+    // Dynamically search for an open PORT starting with PORT or 5000, so that
+    // the app doesn't crash if the port is already being used.
+    // (disabled in dev in order to avoid breaking the webpack dev server proxy)
+    port = await portfinder.getPortPromise({ port: preferredPort }).catch((err) => {
+      log(`Unable to find an open port for server (wanted ${preferredPort}): ${err}`);
+      return preferredPort;
+    });
+  }
+  log(`Using ${port} port for server`);
+
   // Setup directline and conversation routes for v3 bots
   const DLServerState = DLServerContext.getInstance(port);
   const conversationRouter = mountConversationsRoutes(DLServerState);
@@ -171,19 +183,15 @@ export async function start(electronContext?: ElectronContext): Promise<number |
     });
   });
 
-  if (process.env.NODE_ENV === 'production') {
-    // Dynamically search for an open PORT starting with PORT or 5000, so that
-    // the app doesn't crash if the port is already being used.
-    // (disabled in dev in order to avoid breaking the webpack dev server proxy)
-    port = await portfinder.getPortPromise({ port: preferredPort });
-  }
   let server;
-  await new Promise((resolve) => {
-    server = app.listen(port, () => {
+  await new Promise<void>((resolve) => {
+    server = app.listen(port, serverListenHost, () => {
       if (process.env.NODE_ENV === 'production') {
         // We don't use the debug logger here because we always want it to be shown.
         // eslint-disable-next-line no-console
-        console.log(`\n\n${chalk.green('Composer now running at:')}\n\n${chalk.blue(`http://localhost:${port}`)}\n`);
+        console.log(
+          `\n\n${chalk.green('Composer now running at:')}\n\n${chalk.blue(`http://${serverHostname}:${port}`)}\n`
+        );
       }
       resolve();
     });

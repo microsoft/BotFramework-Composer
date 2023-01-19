@@ -1,10 +1,10 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-import { css } from '@emotion/core';
-import { FontWeights, mergeStyleSets } from '@uifabric/styling';
-import { NeutralColors, SharedColors, FontSizes } from '@uifabric/fluent-theme';
-import { IButtonStyles } from 'office-ui-fabric-react/lib/Button';
-import { ITextFieldStyles } from 'office-ui-fabric-react/lib/TextField';
+import { css } from '@emotion/react';
+import { FontWeights, mergeStyleSets } from '@fluentui/style-utilities';
+import { NeutralColors, SharedColors, FontSizes } from '@fluentui/theme';
+import { IButtonStyles } from '@fluentui/react/lib/Button';
+import { ITextFieldStyles } from '@fluentui/react/lib/TextField';
 
 export const classNames = mergeStyleSets({
   groupHeader: {
@@ -94,11 +94,11 @@ export const rowDetails = {
       '.ms-GroupHeader-expand': {
         fontSize: 8,
       },
-      '&:hover': {
+      '&:hover, &:focus-within': {
         background: NeutralColors.gray30,
         selectors: {
           '.ms-TextField-fieldGroup': {
-            background: NeutralColors.gray30,
+            background: 'transparent',
           },
           '.ms-Button--icon': {
             visibility: 'visible',
@@ -117,7 +117,7 @@ export const rowDetails = {
             visibility: 'visible',
           },
           '.ms-TextField-fieldGroup': {
-            background: NeutralColors.gray30,
+            background: 'transparent',
           },
         },
       },
@@ -140,8 +140,10 @@ export const addAlternative = {
     fontSize: 12,
     paddingLeft: 0,
     marginLeft: -5,
-    color: SharedColors.cyanBlue10,
     display: 'none',
+    '@media (forced-colors: none)': {
+      color: SharedColors.cyanBlue10,
+    },
   },
 } as IButtonStyles;
 

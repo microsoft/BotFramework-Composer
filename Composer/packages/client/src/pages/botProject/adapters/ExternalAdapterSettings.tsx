@@ -2,13 +2,13 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx } from '@emotion/core';
+import { jsx, css } from '@emotion/react';
 import { useState, Fragment } from 'react';
 import formatMessage from 'format-message';
 import { useRecoilValue } from 'recoil';
 import { BotSchemas, DialogSetting } from '@bfc/shared';
-import { Link } from 'office-ui-fabric-react/lib/Link';
-import { Toggle } from 'office-ui-fabric-react/lib/Toggle';
+import { Link } from '@fluentui/react/lib/Link';
+import { Toggle } from '@fluentui/react/lib/Toggle';
 import { JSONSchema7 } from '@botframework-composer/types';
 import { AdapterRecord } from '@botframework-composer/types/src';
 
@@ -28,6 +28,10 @@ type Package = {
   key: string;
   packageName?: string;
 };
+
+const tableOverflowStyle = css`
+  overflow: hidden;
+`;
 
 const ExternalAdapterSettings = (props: Props) => {
   const { projectId } = props;
@@ -54,7 +58,7 @@ const ExternalAdapterSettings = (props: Props) => {
   if (schemaDefinitions == null) return null;
 
   const externalServices = (schemas: (JSONSchema7 & Package)[]) => (
-    <div role="table">
+    <div css={tableOverflowStyle} role="table">
       <div css={tableHeaderRow} role="row">
         <div css={tableColumnHeader(columnSizes[0])} role="columnheader">
           {formatMessage('Name')}

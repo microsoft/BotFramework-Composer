@@ -3,8 +3,8 @@
 
 /** @jsx jsx */
 import React, { useState, useRef } from 'react';
-import { jsx, css } from '@emotion/core';
-import { FocusZone, FocusZoneDirection } from 'office-ui-fabric-react';
+import { jsx, css } from '@emotion/react';
+import { FocusZone, FocusZoneDirection } from '@fluentui/react';
 import formatMessage from 'format-message';
 
 import { ListItem } from './ListItem';

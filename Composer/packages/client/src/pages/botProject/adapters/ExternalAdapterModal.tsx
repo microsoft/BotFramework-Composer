@@ -3,10 +3,10 @@
 
 import React, { useState, useMemo } from 'react';
 import formatMessage from 'format-message';
-import { DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
-import { Text } from 'office-ui-fabric-react/lib/Text';
-import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button';
-import { Link } from 'office-ui-fabric-react/lib/Link';
+import { DialogFooter } from '@fluentui/react/lib/Dialog';
+import { Text } from '@fluentui/react/lib/Text';
+import { PrimaryButton, DefaultButton } from '@fluentui/react/lib/Button';
+import { Link } from '@fluentui/react/lib/Link';
 import { DialogWrapper, DialogTypes } from '@bfc/ui-shared';
 import { ObjectField } from '@bfc/adaptive-form';
 import { useRecoilValue } from 'recoil';

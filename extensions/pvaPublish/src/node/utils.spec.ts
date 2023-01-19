@@ -41,6 +41,11 @@ describe('should return the proper PVA base URL for the environment', () => {
     Object.assign(process.env, { COMPOSER_PVA_PUBLISH_ENV: 'GCC' });
     expect(getBaseUrl()).toBe(BASE_URLS.GCC);
   });
+
+  it('gcc high', () => {
+    Object.assign(process.env, { COMPOSER_PVA_PUBLISH_ENV: 'GCC-HIGH' });
+    expect(getBaseUrl()).toBe(BASE_URLS.GCC_HIGH);
+  });
 });
 
 describe('it should return the proper PVA auth parameters for the base URL', () => {
@@ -70,5 +75,14 @@ describe('it should return the proper PVA auth parameters for the base URL', () 
   it('gcc', () => {
     const url = 'https://gcc.api.powerva.microsoft.us/api/botmanagement/v1';
     expect(getAuthCredentials(url)).toEqual(AUTH_CREDENTIALS.GCC);
+  });
+
+  it('gcc high', () => {
+    const url = 'https://high.api.powerva.microsoft.us/api/botmanagement/v1';
+    const tenantId = '1234-6789-abcd-efgh';
+    expect(getAuthCredentials(url, tenantId)).toEqual({
+      ...AUTH_CREDENTIALS.GCC_HIGH,
+      authority: `https://login.microsoftonline.us/${tenantId}`,
+    });
   });
 });

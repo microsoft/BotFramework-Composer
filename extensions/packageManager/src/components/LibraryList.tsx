@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx } from '@emotion/core';
+import { jsx } from '@emotion/react';
 import formatMessage from 'format-message';
 import {
   DetailsList,
@@ -11,7 +11,7 @@ import {
   CheckboxVisibility,
   Selection,
   FontIcon,
-} from 'office-ui-fabric-react';
+} from '@fluentui/react';
 import React, { useState, useEffect, useMemo, Fragment } from 'react';
 
 import { listRoot, tableView, detailList } from './styles';

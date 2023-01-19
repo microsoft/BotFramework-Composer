@@ -3,18 +3,14 @@
 
 import * as React from 'react';
 import formatMessage from 'format-message';
-import { Text } from 'office-ui-fabric-react/lib/Text';
+import { Text } from '@fluentui/react/lib/Text';
 import styled from '@emotion/styled';
-import { FluentTheme } from '@uifabric/fluent-theme';
-import { Link, Stack } from 'office-ui-fabric-react';
+import { FluentTheme } from '@fluentui/theme';
+import { Link, Stack } from '@fluentui/react';
+import { SectionTitle } from '@bfc/ui-shared';
 
 const Content = styled(Stack)`
   padding: 0px 20px;
-`;
-
-const Title = styled(Text)`
-  font-size: ${FluentTheme.fonts.xLarge.fontSize};
-  margin: 8px 0;
 `;
 
 const Summary = styled.div`
@@ -51,7 +47,7 @@ const urls = {
 export const CreateResourceInstructionsStep = () => {
   return (
     <Content>
-      <Title>{formatMessage('Create new resources')}</Title>
+      <SectionTitle level={2}>{formatMessage('Create new resources')}</SectionTitle>
       <Summary>
         <Text>
           {formatMessage(

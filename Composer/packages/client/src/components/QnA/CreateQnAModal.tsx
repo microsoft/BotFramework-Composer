@@ -2,14 +2,14 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx } from '@emotion/core';
+import { jsx } from '@emotion/react';
 import React, { Fragment, useEffect, useMemo, useState } from 'react';
 import { useRecoilValue } from 'recoil';
 import formatMessage from 'format-message';
-import { Dialog, DialogType, DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
-import { ChoiceGroup, IChoiceGroupOption } from 'office-ui-fabric-react/lib/ChoiceGroup';
-import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button';
-import { Link } from 'office-ui-fabric-react/lib/Link';
+import { Dialog, DialogType, DialogFooter } from '@fluentui/react/lib/Dialog';
+import { ChoiceGroup, IChoiceGroupOption } from '@fluentui/react/lib/ChoiceGroup';
+import { PrimaryButton, DefaultButton } from '@fluentui/react/lib/Button';
+import { Link } from '@fluentui/react/lib/Link';
 import {
   DetailsList,
   SelectionMode,
@@ -19,9 +19,9 @@ import {
   DetailsRow,
   IDetailsRowProps,
   CheckboxVisibility,
-} from 'office-ui-fabric-react/lib/DetailsList';
-import { Spinner } from 'office-ui-fabric-react/lib/Spinner';
-import { Dropdown } from 'office-ui-fabric-react/lib/Dropdown';
+} from '@fluentui/react/lib/DetailsList';
+import { Spinner } from '@fluentui/react/lib/Spinner';
+import { Dropdown } from '@fluentui/react/lib/Dropdown';
 import { SubscriptionClient } from '@azure/arm-subscriptions';
 import { Subscription } from '@azure/arm-subscriptions/esm/models';
 import { TokenCredentials } from '@azure/ms-rest-js';
@@ -30,8 +30,8 @@ import { CognitiveServicesCredentials } from '@azure/ms-rest-azure-js';
 import { QnAMakerClient } from '@azure/cognitiveservices-qnamaker';
 import sortBy from 'lodash/sortBy';
 import uniq from 'lodash/uniq';
-import { NeutralColors } from '@uifabric/fluent-theme';
-import { IRenderFunction } from '@uifabric/utilities';
+import { NeutralColors } from '@fluentui/theme';
+import { IRenderFunction } from '@fluentui/utilities';
 
 import TelemetryClient from '../../telemetry/TelemetryClient';
 import {
@@ -52,7 +52,6 @@ import {
   contentBox,
   formContainer,
   choiceContainer,
-  nameStepContainer,
   resourceDropdown,
   dialogBodyStyles,
 } from './styles';
@@ -80,6 +79,23 @@ type KBRec = {
 type Step = 'name' | 'intro' | 'resource' | 'knowledge-base' | 'outcome';
 
 const mainElementStyle = { marginBottom: 20 };
+const dialogFooterStyles = {
+  action: {
+    margin: '4px',
+    '@media screen and (max-width: 640px)': /* 200% zoom */ {
+      margin: '0',
+    },
+  },
+  actionsRight: {
+    '@media screen and (max-width: 640px)': /* 200% zoom */ {
+      display: 'flex',
+      gap: '8px',
+      flexWrap: 'wrap',
+      justifyContent: 'flex-end',
+    },
+  },
+};
+
 const serviceName = 'QnA Maker';
 const serviceKeyType = 'QnAMaker';
 
@@ -121,7 +137,7 @@ export const CreateQnAModal: React.FC<CreateQnAModalProps> = (props) => {
   const avaliableLanguages = uniq(locales.map((item) => localeToLanguage(item)));
 
   const actionOptions: IChoiceGroupOption[] = [
-    { key: 'url', text: formatMessage('Create new knowledge base from URL or file ') },
+    { key: 'url', text: formatMessage('Create new knowledge base from URL') },
     {
       key: 'portal',
       text: formatMessage('Import existing knowledge base from QnA maker portal'),
@@ -155,7 +171,7 @@ export const CreateQnAModal: React.FC<CreateQnAModalProps> = (props) => {
   }, []);
 
   useEffect(() => {
-    if (isAuthenticated) {
+    if (isAuthenticated && showCreateQnAFrom) {
       setAvailableSubscriptions([]);
       setSubscriptionsErrorMessage(undefined);
       getSubscriptions(currentUser.token)
@@ -173,7 +189,7 @@ export const CreateQnAModal: React.FC<CreateQnAModalProps> = (props) => {
           setSubscriptionsErrorMessage(err.message);
         });
     }
-  }, [currentUser, isAuthenticated]);
+  }, [currentUser, isAuthenticated, showCreateQnAFrom]);
 
   useEffect(() => {
     // reset the ui
@@ -301,7 +317,7 @@ export const CreateQnAModal: React.FC<CreateQnAModalProps> = (props) => {
   const renderNameStep = () => {
     return (
       <div>
-        <div style={nameStepContainer}>
+        <div css={dialogBodyStyles}>
           <div style={{ marginBottom: 14 }}>
             <span css={subText}>
               {formatMessage('Use Azure QnA Maker to extract question-and-answer pairs from an online FAQ. ')}
@@ -372,7 +388,7 @@ export const CreateQnAModal: React.FC<CreateQnAModalProps> = (props) => {
             )}
           </div>
         </div>
-        <DialogFooter>
+        <DialogFooter styles={dialogFooterStyles}>
           <DefaultButton
             disabled={!!loading}
             style={{ float: 'left' }}

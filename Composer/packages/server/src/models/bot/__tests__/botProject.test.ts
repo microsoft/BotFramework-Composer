@@ -284,29 +284,36 @@ describe('qna operations', () => {
 });
 
 describe('skill operations', () => {
+  const url = 'https://xxx/manifests/Empty_45-2-1-manifest.json';
+  const skillName = 'manifest';
+  const zipContent = {
+    'manifests/': '',
+    'manifests/Empty-2-1-manifest.json':
+      '{\n  "$schema": "https://schemas.botframework.com/schemas/skills/v2.1/skill-manifest.json",\n  "$id": "Empty-f49bb91b-8d8d-492a-adc5-dd6c599bbc7a",\n  "endpoints": [\n    {\n      "protocol": "BotFrameworkV3",\n      "name": "bb-0622",\n      "endpointUrl": "https://bb-0622.azurewebsites.net/api/messages",\n      "description": "<description>",\n      "msAppId": "56969972-de80-4fbc-ad8c-e0ccf1600d09"\n    }\n  ],\n  "name": "Empty",\n  "version": "abc",\n  "publisherName": "abc",\n  "activities": {\n    "Empty": {\n      "type": "event",\n      "name": "Empty"\n    },\n    "conversationUpdate": {\n      "type": "conversationUpdate"\n    },\n    "message": {\n      "type": "message"\n    }\n  },\n  "dispatchModels": {\n    "languages": {\n      "en-us": [\n        {\n          "name": "Empty",\n          "contentType": "application/lu",\n          "url": "./skill-Empty.en-us.lu",\n          "description": "<description>"\n        }\n      ]\n    },\n    "intents": [\n      "test"\n    ]\n  }\n}\n',
+    'manifests/skill-Empty.en-us.lu':
+      '# test\n> add some example phrases to trigger this intent:\n> - please tell me the weather\n> - what is the weather like in {city=Seattle}\n\n> entity definitions:\n> @ ml city\n-test',
+  };
+
   afterEach(() => {
     cleanup(Path.join(botDir, '/skills'));
   });
 
-  xit('should create skill files', async () => {
+  it('should create skill files', async () => {
     await proj.init();
 
-    const url = 'https://luhantest0625.azurewebsites.net/manifests/Empty_45-2-1-manifest.json';
-    const skillName = 'manifest';
-    const file = await proj.createSkillFiles(url, skillName, {});
+    const file = await proj.createSkillFiles(url, skillName, zipContent);
 
     expect(file).not.toBeUndefined();
-  }, 10000);
+    expect(file?.content).toContain(zipContent['manifests/Empty-2-1-manifest.json']);
+  });
 
-  xit('should delete skill files', async () => {
-    const url = 'https://luhantest0625.azurewebsites.net/manifests/Empty_45-2-1-manifest.json';
-    const skillName = 'manifest';
-    await proj.createSkillFiles(url, skillName, {});
+  it('should delete skill files', async () => {
+    await proj.createSkillFiles(url, skillName, zipContent);
     const fileLength = proj.luFiles.length;
 
     await proj.deleteSkillFiles(skillName);
     expect(proj.luFiles.length).toBeLessThanOrEqual(fileLength);
-  }, 10000);
+  });
 });
 
 describe('buildFiles', () => {

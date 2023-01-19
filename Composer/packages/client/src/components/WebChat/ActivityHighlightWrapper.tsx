@@ -2,10 +2,10 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { css, jsx } from '@emotion/core';
+import { css, jsx } from '@emotion/react';
 import React, { useMemo } from 'react';
 import { useRecoilValue } from 'recoil';
-import { NeutralColors } from '@uifabric/fluent-theme';
+import { NeutralColors } from '@fluentui/theme';
 
 import { rootBotProjectIdSelector, webChatInspectionDataState } from '../../recoilModel';
 

@@ -10,7 +10,7 @@ yarn start >> e2e.log 2>&1 &
 SERVER_PID=$!
 
 cd packages/integration-tests
-npx cypress run "$@"
+yarn run cypress -- "$@"
 EXIT_CODE=$?
 
 # kill server process

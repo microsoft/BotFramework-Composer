@@ -3,13 +3,13 @@
 
 /** @jsx jsx */
 import React, { Fragment } from 'react';
-import { jsx } from '@emotion/core';
+import { jsx, css } from '@emotion/react';
 import formatMessage from 'format-message';
-import { ActionButton, DefaultButton } from 'office-ui-fabric-react/lib/Button';
-import { useBoolean } from '@uifabric/react-hooks';
-import Dialog, { DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
-import { SharedColors } from '@uifabric/fluent-theme';
-import { FontWeights } from 'office-ui-fabric-react/lib/Styling';
+import { ActionButton, DefaultButton } from '@fluentui/react/lib/Button';
+import { useBoolean } from '@fluentui/react-hooks';
+import Dialog, { DialogFooter } from '@fluentui/react/lib/Dialog';
+import { SharedColors } from '@fluentui/theme';
+import { FontWeights } from '@fluentui/react/lib/Styling';
 
 // -------------------- CreatePublishProfileDialog -------------------- //
 
@@ -48,14 +48,26 @@ export const CreatePublishProfileDialog: React.FC<CreatePublishProfileDialogProp
           subText: dialogTitle.subText,
         }}
         hidden={hideDialog}
-        minWidth={960}
+        maxWidth={960}
         modalProps={{
           isBlocking: true,
           isClickableOutsideFocusTrap: true,
         }}
+        styles={{
+          main: {
+            flex: 'auto',
+          },
+        }}
         onDismiss={toggleHideDialog}
       >
-        <div css={{ height: '430px' }}>
+        <div
+          css={css`
+            height: 430px;
+            @media screen and (max-width: 960px) /* 125% zoom */ {
+              height: auto;
+            }
+          `}
+        >
           <ActionButton
             data-testid={'addNewPublishProfile'}
             styles={actionButton}

@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 /** @jsx jsx */
-import { jsx, css } from '@emotion/core';
+import { jsx, css } from '@emotion/react';
 import React, { useEffect, useState } from 'react';
 import { FieldProps, UIOptions, useFormConfig } from '@bfc/extension-client';
 
@@ -14,6 +14,7 @@ const schemaField = {
     display: flex;
     flex-direction: column;
     margin: 10px ${isRoot ? 18 : 0}px;
+    font-size: 14px;
 
     label: SchemaFieldContainer;
   `,
@@ -62,7 +63,7 @@ export const SchemaField: React.FC<FieldProps> = (props) => {
         handleChange(schema.default);
       }
     }
-  }, []);
+  }, [value]);
 
   if (name.startsWith('$') || hidden) {
     return null;

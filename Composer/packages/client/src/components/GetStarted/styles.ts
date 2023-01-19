@@ -1,8 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-import { css } from '@emotion/core';
-import { FontSizes } from '@uifabric/fluent-theme';
-import { FontWeights } from 'office-ui-fabric-react/lib/Styling';
+import { css } from '@emotion/react';
+import { FontSizes } from '@fluentui/theme';
+import { FontWeights } from '@fluentui/react/lib/Styling';
 
 export const h3Style = css`
   font-size: ${FontSizes.size14};

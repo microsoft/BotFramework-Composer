@@ -2,17 +2,17 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx, css } from '@emotion/core';
+import { jsx, css } from '@emotion/react';
 import formatMessage from 'format-message';
 import ErrorBoundary from 'react-error-boundary';
 import React from 'react';
 import { LoadingTimeout } from '@bfc/adaptive-form/lib/components/LoadingTimeout';
 import { FieldLabel } from '@bfc/adaptive-form/lib/components/FieldLabel';
 import ErrorInfo from '@bfc/adaptive-form/lib/components/ErrorInfo';
-import { FontSizes, NeutralColors } from '@uifabric/fluent-theme';
-import { FontWeights } from '@uifabric/styling';
-import { DetailsList, DetailsListLayoutMode, SelectionMode } from 'office-ui-fabric-react/lib/DetailsList';
-import { Link } from 'office-ui-fabric-react/lib/Link';
+import { FontSizes, NeutralColors } from '@fluentui/theme';
+import { FontWeights } from '@fluentui/style-utilities';
+import { DetailsList, DetailsListLayoutMode, SelectionMode } from '@fluentui/react/lib/DetailsList';
+import { Link } from '@fluentui/react/lib/Link';
 import get from 'lodash/get';
 
 import { SkillInfo } from '../../recoilModel';

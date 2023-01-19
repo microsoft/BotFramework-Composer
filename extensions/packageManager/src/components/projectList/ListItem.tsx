@@ -2,10 +2,10 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx, css } from '@emotion/core';
+import { jsx, css } from '@emotion/react';
 import React from 'react';
-import { Icon } from 'office-ui-fabric-react';
-import { NeutralColors } from '@uifabric/fluent-theme';
+import { Icon } from '@fluentui/react';
+import { NeutralColors } from '@fluentui/theme';
 
 import { ListLink } from './ProjectList';
 

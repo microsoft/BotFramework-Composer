@@ -1,11 +1,12 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 /** @jsx jsx */
-import { jsx } from '@emotion/core';
+import { jsx } from '@emotion/react';
 import React from 'react';
 import { FieldProps } from '@bfc/extension-client';
-import { Dropdown, IDropdownOption, ResponsiveMode } from 'office-ui-fabric-react/lib/Dropdown';
+import { Dropdown, IDropdownOption } from '@fluentui/react/lib/Dropdown';
 import formatMessage from 'format-message';
+import { ResponsiveMode } from '@fluentui/react/lib/utilities/decorators/withResponsiveMode';
 
 import { FieldLabel } from '../FieldLabel';
 
@@ -71,6 +72,7 @@ const BooleanField: React.FC<FieldProps> = function CheckboxWidget(props) {
         required={required}
       />
       <Dropdown
+        aria-required={required}
         ariaLabel={label || formatMessage('boolean field')}
         id={id}
         options={options}

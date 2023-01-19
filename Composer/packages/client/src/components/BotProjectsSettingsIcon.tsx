@@ -2,8 +2,8 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx } from '@emotion/core';
-import { FontSizes } from '@uifabric/fluent-theme';
+import { jsx } from '@emotion/react';
+import { FontSizes } from '@fluentui/theme';
 
 const color = (active: boolean, disabled: boolean) => {
   return active ? '#000' : disabled ? '#999' : '#4f4f4f';

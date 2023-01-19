@@ -510,3 +510,6 @@ export const LgTemplateSamples = {
     };
   },
 };
+
+export const firstPartyTemplateFeed =
+  'https://registry.npmjs.org/-/v1/search?text=generator+keywords:bf-template+scope:microsoft';

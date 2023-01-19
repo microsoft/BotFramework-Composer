@@ -4,8 +4,8 @@
 /** @jsx jsx */
 import formatMessage from 'format-message';
 import { useRef } from 'react';
-import { jsx, css } from '@emotion/core';
-import { Spinner, SpinnerSize } from 'office-ui-fabric-react/lib/Spinner';
+import { jsx, css } from '@emotion/react';
+import { Spinner, SpinnerSize } from '@fluentui/react/lib/Spinner';
 import { useRecoilValue } from 'recoil';
 
 import { File } from '../../recoilModel/types';

@@ -76,7 +76,7 @@ describe('<GetAppInfoFromPublishProfile />', () => {
     );
     const dropdown = component.getByTestId('publishProfileDropdown');
     fireEvent.click(dropdown);
-    const options = screen.getAllByRole('option').slice(1);
+    const options = screen.getAllByRole('option');
     expect(options[0]).toHaveTextContent(mockProfileName);
   });
 });

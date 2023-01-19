@@ -14,8 +14,10 @@ import {
   IExtensionRegistration,
   PublishResponse,
   PublishResult,
+  SDKKinds,
 } from '@botframework-composer/types';
 import { parseRuntimeKey, applyPublishingProfileToSettings } from '@bfc/shared';
+import { indexer } from '@bfc/indexers';
 
 import { authConfig, ResourcesItem } from '../types';
 
@@ -303,6 +305,13 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
       }
       const currentSettings = currentProfile?.settings;
 
+      let runtimeIdentifier = 'win-x64';
+      if (currentProfile?.runtimeIdentifier) {
+        runtimeIdentifier = currentProfile?.runtimeIdentifier;
+      } else if (provisionConfig.appServiceOperatingSystem === 'linux') {
+        runtimeIdentifier = 'linux-x64';
+      }
+
       const publishProfile = {
         name: currentProfile?.name ?? provisionConfig.hostname,
         environment: currentProfile?.environment ?? 'composer',
@@ -314,7 +323,7 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
         luisResource: provisionResults.luisPrediction
           ? `${provisionConfig.hostname}-luis`
           : currentProfile?.luisResource,
-        runtimeIdentifier: currentProfile?.runtimeIdentifier ?? 'win-x64',
+        runtimeIdentifier: runtimeIdentifier,
         region: provisionConfig.location,
         appServiceOperatingSystem:
           provisionConfig.appServiceOperatingSystem ?? currentProfile?.appServiceOperatingSystem,
@@ -533,6 +542,27 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
       return this.getProvisionHistory(botId, processName);
     };
 
+    // This is an equivalent of allRequiredRecognizersSelector (packages\client\src\recoilModel\selectors\project.ts) for a single project
+    // The node server code does not have access to recoil state nor hooks
+    // We should reconcile this method and the hook to share logic and provide it to both the client UI, extension UI, and extension server code.
+    private getRequiredRecognizers = (project: IBotProject): { requiresLUIS: boolean; requiresQNA: boolean } => {
+      const { files } = project.getProject();
+
+      const { luResources, qnaResources, recognizers } = indexer.index(files, project.name);
+
+      const hasLuContent = luResources.some((luResource) => luResource.content?.trim() !== '');
+
+      const hasLuisRecognizers = recognizers.some(
+        (recognizer) => recognizer.content?.$kind === SDKKinds.LuisRecognizer
+      );
+
+      const requiresLUIS = hasLuContent && hasLuisRecognizers;
+
+      const requiresQNA = qnaResources.some((qna) => qna.content?.trim().replace(/^>.*$/g, '').trim() !== '');
+
+      return { requiresLUIS, requiresQNA };
+    };
+
     getResources = async (project: IBotProject, user): Promise<ResourcesItem[]> => {
       const recommendedResources: ResourcesItem[] = [];
 
@@ -579,23 +609,21 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
         required: false,
       });
 
-      // luis and qna required values will be properly set by extension front end caller
-      const requireLUIS = false;
-      const requireQNA = false;
+      const { requiresLUIS, requiresQNA } = this.getRequiredRecognizers(project);
 
       recommendedResources.push({
         ...AzureResourceDefinitions[AzureResourceTypes.LUIS_AUTHORING],
-        required: requireLUIS,
+        required: requiresLUIS,
       });
 
       recommendedResources.push({
         ...AzureResourceDefinitions[AzureResourceTypes.LUIS_PREDICTION],
-        required: requireLUIS,
+        required: requiresLUIS,
       });
 
       recommendedResources.push({
         ...AzureResourceDefinitions[AzureResourceTypes.QNA],
-        required: requireQNA,
+        required: requiresQNA,
       });
 
       return recommendedResources;

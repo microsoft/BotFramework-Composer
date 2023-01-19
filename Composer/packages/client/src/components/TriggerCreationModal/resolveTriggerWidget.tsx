@@ -3,8 +3,8 @@
 
 import React from 'react';
 import formatMessage from 'format-message';
-import { Label } from 'office-ui-fabric-react/lib/Label';
-import { TextField } from 'office-ui-fabric-react/lib/TextField';
+import { Label } from '@fluentui/react/lib/Label';
+import { TextField } from '@fluentui/react/lib/TextField';
 import { PlaceHolderSectionName } from '@bfc/indexers/lib/utils/luUtil';
 import { UserSettings, DialogInfo, SDKKinds, LuFile } from '@bfc/shared';
 import { LuEditor, inlineModePlaceholder } from '@bfc/code-editor';

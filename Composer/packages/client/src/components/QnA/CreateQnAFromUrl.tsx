@@ -2,14 +2,14 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx } from '@emotion/core';
+import { jsx } from '@emotion/react';
 import React, { useState, useMemo, Fragment, useEffect } from 'react';
 import formatMessage from 'format-message';
-import { Stack } from 'office-ui-fabric-react/lib/Stack';
-import { TextField } from 'office-ui-fabric-react/lib/TextField';
-import { Text } from 'office-ui-fabric-react/lib/Text';
-import { Checkbox } from 'office-ui-fabric-react/lib/Checkbox';
-import { Dropdown } from 'office-ui-fabric-react/lib/Dropdown';
+import { Stack } from '@fluentui/react/lib/Stack';
+import { TextField } from '@fluentui/react/lib/TextField';
+import { Text } from '@fluentui/react/lib/Text';
+import { Checkbox } from '@fluentui/react/lib/Checkbox';
+import { Dropdown } from '@fluentui/react/lib/Dropdown';
 
 import { Locales } from '../../locales';
 
@@ -101,21 +101,21 @@ export const CreateQnAFromUrl: React.FC<CreateQnAFromFormProps> = (props) => {
   return (
     <Fragment>
       <Stack>
-        <Text styles={knowledgeBaseStyle}>{formatMessage('Create new knowledge base from URL or file')}</Text>
+        <Text styles={knowledgeBaseStyle}>{formatMessage('Create new knowledge base from URL')}</Text>
         <p>
           <span css={subText}>
             {formatMessage(
-              'Select this option when you want to create a knowledge base from  content such as an FAQ available online or in a file .csv, .xls or .doc format '
+              'Select this option if you want to create a knowledge base from content hosted online such as an FAQ or document link (.csv, .xls or .doc format)'
             )}
           </span>
         </p>
       </Stack>
       <Stack maxHeight={400} styles={urlStackStyle}>
-        <Text styles={knowledgeBaseStyle}>{formatMessage('Source URL')}</Text>
         <div key={`add${formData.locales[0]}InCreateQnAFromUrlModal`} css={urlPairStyle}>
           <TextField
             data-testid={`add${formData.locales[0]}InCreateQnAFromUrlModal`}
             errorMessage={formDataErrors.urls[0]}
+            label={formatMessage('Source URL')}
             placeholder={formatMessage('Enter a URL')}
             styles={textFieldUrl}
             value={formData.urls[0]}

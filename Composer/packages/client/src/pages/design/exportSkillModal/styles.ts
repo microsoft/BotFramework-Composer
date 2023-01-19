@@ -1,9 +1,9 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { FontWeights } from 'office-ui-fabric-react/lib/Styling';
-import { FontSizes } from '@uifabric/fluent-theme';
-import { css } from '@emotion/core';
+import { FontWeights } from '@fluentui/react/lib/Styling';
+import { FontSizes } from '@fluentui/theme';
+import { css } from '@emotion/react';
 
 export const styles = {
   dialog: {
@@ -27,10 +27,12 @@ export const styles = {
     },
   },
   container: css`
-    height: 500px;
+    height: calc(100vh - 170px);
+    max-height: 500px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    overflow: auto;
 
     label: ContentContainer;
   `,
@@ -43,5 +45,8 @@ export const styles = {
     display: flex;
     flex-direction: row-reverse;
     justify-content: space-between;
+  `,
+  buttonsRight: css`
+    display: flex;
   `,
 };

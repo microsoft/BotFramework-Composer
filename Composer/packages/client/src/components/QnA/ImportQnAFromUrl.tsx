@@ -2,12 +2,12 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx } from '@emotion/core';
+import { jsx } from '@emotion/react';
 import React, { useEffect } from 'react';
 import formatMessage from 'format-message';
-import { Stack } from 'office-ui-fabric-react/lib/Stack';
-import { TextField } from 'office-ui-fabric-react/lib/TextField';
-import { Checkbox } from 'office-ui-fabric-react/lib/Checkbox';
+import { Stack } from '@fluentui/react/lib/Stack';
+import { TextField } from '@fluentui/react/lib/TextField';
+import { Checkbox } from '@fluentui/react/lib/Checkbox';
 import { QnAFile } from '@bfc/shared';
 
 import { FieldConfig, useForm } from '../../hooks/useForm';
@@ -43,7 +43,7 @@ const title = <div style={titleStyle}>{formatMessage('Replace knowledge base fro
 const description = (
   <div style={descriptionStyle}>
     {formatMessage(
-      'Select this option when you want to replace current knowledge base from content such as an FAQ available online or in a file .csv, .xls or .doc format '
+      'Select this option if you want to replace current knowledge base from content hosted online such as an FAQ or document link (.csv, .xls or .doc format)'
     )}
   </div>
 );
@@ -86,7 +86,7 @@ export const ImportQnAFromUrl: React.FC<ImportQnAFromUrlModalProps> = (props) =>
         <TextField
           data-testid={'ImportNewUrlToOverwriteQnAFile'}
           errorMessage={formErrors.url}
-          label={formatMessage('Source URL or file')}
+          label={formatMessage('Source URL')}
           placeholder={formatMessage('Enter a URL to Import QnA resource')}
           prefix={getLanguage(locale)}
           styles={textFieldKBNameFromScratch}

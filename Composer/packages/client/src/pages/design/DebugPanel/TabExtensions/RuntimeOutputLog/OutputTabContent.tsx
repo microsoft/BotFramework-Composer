@@ -4,7 +4,7 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx } from '@emotion/core';
+import { jsx } from '@emotion/react';
 import { Split } from '@geoffcox/react-splitter';
 import { useEffect, useRef, useState } from 'react';
 import { useRecoilValue } from 'recoil';
@@ -112,9 +112,9 @@ export const OutputsTabContent: React.FC<DebugPanelTabHeaderProps> = ({ isActive
     >
       <Split
         resetOnDoubleClick
-        initialPrimarySize="200px"
-        minPrimarySize="250px"
-        minSecondarySize="600px"
+        initialPrimarySize="20%"
+        minPrimarySize="200px"
+        minSecondarySize="700px"
         renderSplitter={renderThinSplitter}
         splitterSize="5px"
       >

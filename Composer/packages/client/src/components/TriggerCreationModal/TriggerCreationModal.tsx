@@ -2,14 +2,14 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx } from '@emotion/core';
+import { jsx } from '@emotion/react';
 import React, { useState } from 'react';
 import formatMessage from 'format-message';
-import { Dialog, DialogType, DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
-import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button';
+import { Dialog, DialogType, DialogFooter } from '@fluentui/react/lib/Dialog';
+import { PrimaryButton, DefaultButton } from '@fluentui/react/lib/Button';
 import { SDKKinds, RegexRecognizer } from '@bfc/shared';
 import { useRecoilValue } from 'recoil';
-import { useTriggerConfig, TriggerUISchema } from '@bfc/extension-client';
+import { useTriggerConfig, TriggerUISchema, useShellApi } from '@bfc/extension-client';
 
 import { TriggerFormData, TriggerFormDataErrors } from '../../utils/dialogUtil';
 import { userSettingsState } from '../../recoilModel/atoms';
@@ -49,6 +49,9 @@ interface TriggerCreationModalProps {
 }
 
 export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props) => {
+  const {
+    shellApi: { announce },
+  } = useShellApi();
   const { isOpen, onDismiss, onSubmit, dialogId, projectId } = props;
   const dialogs = useRecoilValue(dialogsSelectorFamily(projectId));
   const triggerUISchema = useTriggerConfig();
@@ -78,6 +81,7 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props)
     }
     onDismiss();
     onSubmit(dialogId, { ...formData, $kind: selectedType, label: resolveSchemaLabel(selectedType, triggerUISchema) });
+    announce(formatMessage(`The trigger {triggerName} has been created`, { triggerName: formData.intent }));
     TelemetryClient.track('AddNewTriggerCompleted', { kind: formData.$kind });
   };
 

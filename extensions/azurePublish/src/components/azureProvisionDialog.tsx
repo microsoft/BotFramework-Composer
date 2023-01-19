@@ -4,8 +4,8 @@ import * as React from 'react';
 import formatMessage from 'format-message';
 import styled from '@emotion/styled';
 import { useState, useMemo, useEffect, Fragment, useCallback, useRef } from 'react';
-import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
-import { DefaultButton, PrimaryButton } from 'office-ui-fabric-react/lib/Button';
+import { Dropdown, IDropdownOption } from '@fluentui/react/lib/Dropdown';
+import { DefaultButton, PrimaryButton } from '@fluentui/react/lib/Button';
 import {
   logOut,
   useAuthApi,
@@ -17,7 +17,7 @@ import {
 } from '@bfc/extension-client';
 import { Subscription } from '@azure/arm-subscriptions/esm/models';
 import { DeployLocation, Notification } from '@botframework-composer/types';
-import { FluentTheme, NeutralColors } from '@uifabric/fluent-theme';
+import { FluentTheme, NeutralColors } from '@fluentui/theme';
 import { LoadingSpinner, OpenConfirmModal, ProvisionHandoff } from '@bfc/ui-shared';
 import {
   ScrollablePane,
@@ -42,8 +42,9 @@ import {
   Link,
   ChoiceGroup,
   IChoiceGroupOption,
-} from 'office-ui-fabric-react';
-import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
+  mergeStyles,
+} from '@fluentui/react';
+import { MessageBar, MessageBarType } from '@fluentui/react/lib/MessageBar';
 import { JsonEditor } from '@bfc/code-editor';
 import { ResourceGroup } from '@azure/arm-resources/esm/models';
 import sortBy from 'lodash/sortBy';
@@ -89,6 +90,10 @@ const ProvisonActions = styled.div<ProvisonActionsStylingProps>((props) => ({
   display: 'flex',
   flexFlow: 'row nowrap',
   justifyContent: props.showSignout ? 'space-between' : 'flex-end',
+  '@media screen and (max-width: 640px)': /* 200% zoom */ {
+    flexWrap: 'wrap',
+    gap: '8px',
+  },
 }));
 
 const ConfigureResourcesSectionName = styled(Text)`
@@ -116,14 +121,21 @@ const ConfigureResourcesPropertyLabel = styled(Label)`
   font-weight: ${FontWeights.regular};
 `;
 
-const configureResourceDropdownStyles = { root: { paddingBottom: '4px', width: '300px' } };
+const configureResourceDropdownStyles = {
+  root: { paddingBottom: '4px', maxWidth: '300px', width: 'auto', flex: 'auto', alignSelf: 'stretch' },
+  errorMessage: { wordBreak: 'break-word' },
+};
 
-const configureResourceTextFieldStyles = { root: { paddingBottom: '4px', width: '300px' } };
+const configureResourceTextFieldStyles = {
+  root: { paddingBottom: '4px', maxWidth: '300px', width: 'auto', flex: 'auto', alignSelf: 'stretch' },
+};
 
 const configureResourcesIconStyle = {
   root: {
     color: NeutralColors.gray160,
     userSelect: 'none',
+    flex: 'auto',
+    alignSelf: 'stretch',
   },
 };
 
@@ -131,6 +143,29 @@ const LearnMoreLink = styled(Link)`
   user-select: none;
   font-size: 14px;
 `;
+
+const ButtonsWrapper = styled.div`
+  display: flex;
+  gap: 8px;
+  padding-bottom: 2px;
+  justify-content: flex-end;
+`;
+
+const viewAreaStyles = mergeStyles({
+  height: 'calc(100vh - 65px)',
+  '@media screen and (max-width: 480px)': /* 200% zoom */ {
+    height: 'calc(100vh - 130px)',
+  },
+});
+
+const formStack = mergeStyles({
+  '> .ms-Stack': {
+    '@media screen and (max-width: 480px)': /* 300% zoom */ {
+      flexDirection: 'column',
+      marginRight: '4px',
+    },
+  },
+});
 
 const appOSChoiceGroupStyles = {
   flexContainer: { display: 'flex', flexDirection: 'row', alignItems: 'center' },
@@ -162,6 +197,7 @@ const DialogTitle = {
         a: ({ children }) => (
           <a
             key="add-resource-learn-more"
+            aria-label={formatMessage('Learn more on how to add more Azure resources')}
             href={'https://aka.ms/composer-publish-bot#create-new-azure-resources'}
             rel="noopener noreferrer"
             target="_blank"
@@ -359,6 +395,7 @@ export const AzureProvisionDialog: React.FC = () => {
   const currentConfig = removePlaceholder(publishConfig);
   const extensionState = { ...defaultExtensionState, ...getItem(profileName) };
   const [subscriptions, setSubscriptions] = useState<Subscription[] | undefined>();
+  const [subscriptionsLoading, setSubscriptionsLoading] = useState<boolean>(false);
   const [subscriptionsErrorMessage, setSubscriptionsErrorMessage] = useState<string>();
   const [deployLocations, setDeployLocations] = useState<DeployLocation[]>([]);
   const [luisLocations, setLuisLocations] = useState<DeployLocation[]>([]);
@@ -493,9 +530,11 @@ export const AzureProvisionDialog: React.FC = () => {
   useEffect(() => {
     if (isAuthenticated) {
       setSubscriptionsErrorMessage(undefined);
+      setSubscriptionsLoading(true);
       getSubscriptions(currentUser.token)
         .then((data) => {
           if (isMounted.current) {
+            setSubscriptionsLoading(false);
             setSubscriptions(data);
             if (data.length === 0) {
               setSubscriptionsErrorMessage(
@@ -508,6 +547,7 @@ export const AzureProvisionDialog: React.FC = () => {
         })
         .catch((err) => {
           if (isMounted.current) {
+            setSubscriptionsLoading(false);
             setSubscriptionsErrorMessage(err.message);
           }
         });
@@ -756,7 +796,7 @@ export const AzureProvisionDialog: React.FC = () => {
   const resourceGroupNames = resourceGroups?.map((r) => r.name) || [];
 
   const PageChooseAction = (
-    <div style={{ height: 'calc(100vh - 65px)' }}>
+    <div className={viewAreaStyles}>
       <ChooseProvisionAction
         choice={formData.creationType}
         onChoiceChanged={(choice) => {
@@ -794,13 +834,9 @@ export const AzureProvisionDialog: React.FC = () => {
   }, [preferredAppServiceOS]);
 
   const PageFormConfig = (
-    <ScrollablePane
-      data-is-scrollable="true"
-      scrollbarVisibility={ScrollbarVisibility.auto}
-      style={{ height: 'calc(100vh - 65px)' }}
-    >
+    <ScrollablePane className={viewAreaStyles} data-is-scrollable="true" scrollbarVisibility={ScrollbarVisibility.auto}>
       <form style={{ width: '100%' }}>
-        <Stack>
+        <Stack className={formStack}>
           <ConfigureResourcesSectionName>{formatMessage('Azure details')}</ConfigureResourcesSectionName>
           <ConfigureResourcesSectionDescription>
             {formatMessage('Subscription, enter resource group name.')}
@@ -813,10 +849,10 @@ export const AzureProvisionDialog: React.FC = () => {
               {renderPropertyInfoIcon(formatMessage('The subscription that will be billed for the resources.'))}
             </Stack>
             <Dropdown
-              disabled={currentConfig?.subscriptionId}
+              disabled={currentConfig?.subscriptionId || !subscriptionOptions?.length}
               errorMessage={subscriptionsErrorMessage}
               options={subscriptionOptions}
-              placeholder={formatMessage('Select one')}
+              placeholder={subscriptionsLoading ? formatMessage('Loading ...') : formatMessage('Select one')}
               selectedKey={formData.subscriptionId}
               styles={configureResourceDropdownStyles}
               onChange={(_e, o) => {
@@ -893,7 +929,7 @@ export const AzureProvisionDialog: React.FC = () => {
               {renderPropertyInfoIcon(formatMessage('The region where your resources and bot will be used.'))}
             </Stack>
             <Dropdown
-              disabled={currentConfig?.region}
+              disabled={currentConfig?.region || !deployLocationOptions?.length}
               options={deployLocationOptions}
               placeholder={formatMessage('Select one')}
               selectedKey={formData.region}
@@ -917,7 +953,7 @@ export const AzureProvisionDialog: React.FC = () => {
               </LearnMoreLink>
             </Stack>
             <Dropdown
-              disabled={currentConfig?.settings?.luis?.region}
+              disabled={currentConfig?.settings?.luis?.region || !luisLocationOptions?.length}
               options={luisLocationOptions}
               placeholder={formatMessage('Select one')}
               selectedKey={formData.luisLocation}
@@ -946,9 +982,9 @@ export const AzureProvisionDialog: React.FC = () => {
 
       return (
         <ScrollablePane
+          className={viewAreaStyles}
           data-is-scrollable="true"
           scrollbarVisibility={ScrollbarVisibility.auto}
-          style={{ height: 'calc(100vh - 65px)' }}
         >
           <Stack>
             {requiredListItems.length > 0 && (
@@ -980,7 +1016,7 @@ export const AzureProvisionDialog: React.FC = () => {
 
   const PageReview = (
     <Fragment>
-      <ScrollablePane scrollbarVisibility={ScrollbarVisibility.auto} style={{ height: 'calc(100vh - 65px)' }}>
+      <ScrollablePane className={viewAreaStyles} scrollbarVisibility={ScrollbarVisibility.auto}>
         <DetailsList
           isHeaderVisible
           columns={reviewCols}
@@ -1007,9 +1043,8 @@ export const AzureProvisionDialog: React.FC = () => {
               onRenderSecondaryText={onRenderSecondaryText}
             />
           ) : null}
-          <div>
+          <ButtonsWrapper>
             <DefaultButton
-              style={{ margin: '0 4px' }}
               text={formatMessage('Back')}
               onClick={() => {
                 clearAll();
@@ -1019,7 +1054,6 @@ export const AzureProvisionDialog: React.FC = () => {
             />
             <PrimaryButton
               disabled={!formData.creationType}
-              style={{ margin: '0 4px' }}
               text={formatMessage('Next')}
               onClick={() => {
                 switch (formData.creationType) {
@@ -1037,14 +1071,13 @@ export const AzureProvisionDialog: React.FC = () => {
               }}
             />
             <DefaultButton
-              style={{ margin: '0 4px' }}
               text={formatMessage('Cancel')}
               onClick={() => {
                 telemetryClient?.track('ProvisionCancel');
                 closeDialog();
               }}
             />
-          </div>
+          </ButtonsWrapper>
         </ProvisonActions>
       );
     } else if (page === PageTypes.ConfigProvision) {
@@ -1058,9 +1091,8 @@ export const AzureProvisionDialog: React.FC = () => {
               onRenderSecondaryText={onRenderSecondaryText}
             />
           ) : null}
-          <div>
+          <ButtonsWrapper>
             <DefaultButton
-              style={{ margin: '0 4px' }}
               text={formatMessage('Back')}
               onClick={() => {
                 clearAll();
@@ -1071,7 +1103,6 @@ export const AzureProvisionDialog: React.FC = () => {
             {formData.creationType === 'create' && (
               <PrimaryButton
                 disabled={isNextDisabled}
-                style={{ margin: '0 4px' }}
                 text={formatMessage('Next')}
                 onClick={() => {
                   onNext(formData.hostname);
@@ -1080,7 +1111,6 @@ export const AzureProvisionDialog: React.FC = () => {
             )}
             {formData.creationType === 'generate' && (
               <PrimaryButton
-                style={{ margin: '0 4px' }}
                 text={formatMessage('Generate resource request')}
                 onClick={() => onNext(formData.hostname)}
               />
@@ -1100,7 +1130,7 @@ export const AzureProvisionDialog: React.FC = () => {
                 closeDialog();
               }}
             />
-          </div>
+          </ButtonsWrapper>
         </ProvisonActions>
       );
     } else if (page === PageTypes.AddResources) {
@@ -1114,9 +1144,8 @@ export const AzureProvisionDialog: React.FC = () => {
               onRenderSecondaryText={onRenderSecondaryText}
             />
           ) : null}
-          <div>
+          <ButtonsWrapper>
             <DefaultButton
-              style={{ margin: '0 4px' }}
               text={formatMessage('Back')}
               onClick={() => {
                 if (formData.creationType === 'generate') {
@@ -1128,7 +1157,6 @@ export const AzureProvisionDialog: React.FC = () => {
             />
             <PrimaryButton
               disabled={!isSelectAddResources}
-              style={{ margin: '0 4px' }}
               text={formatMessage('Next')}
               onClick={() => {
                 if (formData.creationType === 'generate') {
@@ -1160,7 +1188,7 @@ export const AzureProvisionDialog: React.FC = () => {
                 closeDialog();
               }}
             />
-          </div>
+          </ButtonsWrapper>
         </ProvisonActions>
       );
     } else if (page === PageTypes.ReviewResource) {
@@ -1174,9 +1202,8 @@ export const AzureProvisionDialog: React.FC = () => {
               onRenderSecondaryText={onRenderSecondaryText}
             />
           ) : null}
-          <div>
+          <ButtonsWrapper>
             <DefaultButton
-              style={{ margin: '0 4px' }}
               text={formatMessage('Back')}
               onClick={() => {
                 setPageAndTitle(PageTypes.AddResources);
@@ -1184,7 +1211,6 @@ export const AzureProvisionDialog: React.FC = () => {
             />
             <PrimaryButton
               disabled={isNextDisabled}
-              style={{ margin: '0 4px' }}
               text={formatMessage('Create')}
               onClick={() => {
                 const selectedResources = formData.requiredResources.concat(formData.enabledResources);
@@ -1203,39 +1229,31 @@ export const AzureProvisionDialog: React.FC = () => {
               }}
             />
             <DefaultButton
-              style={{ margin: '0 4px' }}
               text={formatMessage('Cancel')}
               onClick={() => {
                 closeDialog();
               }}
             />
-          </div>
+          </ButtonsWrapper>
         </ProvisonActions>
       );
     } else {
       return (
-        <>
+        <ButtonsWrapper>
           <DefaultButton
-            style={{ margin: '0 4px' }}
             text={formatMessage('Back')}
             onClick={() => {
               setPageAndTitle(PageTypes.ChooseAction);
             }}
           />
-          <PrimaryButton
-            disabled={isEditorError}
-            style={{ margin: '0 4px' }}
-            text={formatMessage('Import')}
-            onClick={onSave}
-          />
+          <PrimaryButton disabled={isEditorError} text={formatMessage('Import')} onClick={onSave} />
           <DefaultButton
-            style={{ margin: '0 4px' }}
             text={formatMessage('Cancel')}
             onClick={() => {
               closeDialog();
             }}
           />
-        </>
+        </ButtonsWrapper>
       );
     }
   }, [onSave, page, formData, isEditorError, isNextDisabled, publishType, extensionResourceOptions, currentUser]);

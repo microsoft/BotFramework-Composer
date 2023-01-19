@@ -2,10 +2,10 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx } from '@emotion/core';
+import { jsx } from '@emotion/react';
 import formatMessage from 'format-message';
-import { IconButton } from 'office-ui-fabric-react/lib/Button';
-import { FluentTheme } from '@uifabric/fluent-theme';
+import { IconButton } from '@fluentui/react/lib/Button';
+import { FluentTheme } from '@fluentui/theme';
 
 import { useOnboardingContext } from '../../OnboardingContext';
 

@@ -3,10 +3,10 @@
 
 /** @jsx jsx */
 import React, { Fragment, useEffect, useRef } from 'react';
-import { jsx } from '@emotion/core';
+import { jsx } from '@emotion/react';
 import formatMessage from 'format-message';
 
-import { title } from './styles';
+import { SettingTitle } from './shared/SettingTitle';
 import { RuntimeSettings as Runtime } from './runtime-settings/RuntimeSettings';
 
 // -------------------- RuntimeSettings -------------------- //
@@ -29,7 +29,7 @@ export const RuntimeSettings: React.FC<RuntimeSettingsProps> = (props) => {
 
   return (
     <Fragment>
-      <div css={title}>{formatMessage('Custom runtime')}</div>
+      <SettingTitle>{formatMessage('Custom runtime')}</SettingTitle>
       <div ref={containerRef}>
         <Runtime projectId={projectId} />
       </div>

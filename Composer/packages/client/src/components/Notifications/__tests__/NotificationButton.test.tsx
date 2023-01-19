@@ -11,7 +11,7 @@ import { NotificationButton } from '../NotificationButton';
 jest.mock('../NotificationPanel', () => ({
   NotificationPanel: ({ isOpen }) => isOpen && <div data-testid="NotificationPanel" />,
 }));
-jest.mock('office-ui-fabric-react/lib/Button', () => ({
+jest.mock('@fluentui/react/lib/Button', () => ({
   IconButton: ({ children, onClick }) => (
     <button data-testid="NotificationButton" onClick={onClick}>
       {children}

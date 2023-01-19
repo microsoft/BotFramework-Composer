@@ -2,8 +2,8 @@
 // Licensed under the MIT License.
 
 module.exports = {
-  extends: ['./.eslintrc.js', 'plugin:react/recommended'],
-  plugins: ['react-hooks', 'format-message', 'emotion', 'jsx-a11y'],
+  extends: ['./.eslintrc.js', 'plugin:react/recommended', 'plugin:security/recommended'],
+  plugins: ['react-hooks', 'format-message', '@emotion', 'jsx-a11y', 'security'],
   settings: {
     react: {
       version: '16.9.16',
@@ -41,7 +41,7 @@ module.exports = {
     ],
 
     // emotion
-    'emotion/jsx-import': 'error',
+    '@emotion/jsx-import': 'error',
 
     // jsx-a11y
     // taken from https://github.com/evcohen/eslint-plugin-jsx-a11y/blob/master/src/index.js

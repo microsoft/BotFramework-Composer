@@ -2,11 +2,11 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx } from '@emotion/core';
+import { jsx } from '@emotion/react';
 import React, { useState, useEffect } from 'react';
-import { Dialog, DialogType, DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
-import { SearchBox } from 'office-ui-fabric-react/lib/SearchBox';
-import { DefaultButton, PrimaryButton } from 'office-ui-fabric-react/lib/Button';
+import { Dialog, DialogType, DialogFooter } from '@fluentui/react/lib/Dialog';
+import { SearchBox } from '@fluentui/react/lib/SearchBox';
+import { DefaultButton, PrimaryButton } from '@fluentui/react/lib/Button';
 import axios, { CancelToken } from 'axios';
 import formatMessage from 'format-message';
 import { ExtensionSearchResult } from '@bfc/extension-client';

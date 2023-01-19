@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 /** @jsx jsx */
-import { jsx, css } from '@emotion/core';
+import { jsx, css } from '@emotion/react';
 import React from 'react';
 import formatMessage from 'format-message';
 type SkillDetailProps = {
@@ -25,6 +25,8 @@ type SkillDetailProps = {
 };
 const container = css`
   width: 100%;
+  height: 100%;
+  overflow-y: auto;
   margin: 10px 0px;
 `;
 const segment = css`

@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx, css } from '@emotion/core';
+import { jsx, css } from '@emotion/react';
 import React, { useRef } from 'react';
 import formatMessage from 'format-message';
 import {
@@ -12,10 +12,10 @@ import {
   CheckboxVisibility,
   ConstrainMode,
   Selection,
-} from 'office-ui-fabric-react/lib/DetailsList';
-import { ScrollablePane } from 'office-ui-fabric-react/lib/ScrollablePane';
-import { Sticky } from 'office-ui-fabric-react/lib/Sticky';
-import { ShimmeredDetailsList } from 'office-ui-fabric-react/lib/ShimmeredDetailsList';
+} from '@fluentui/react/lib/DetailsList';
+import { ScrollablePane } from '@fluentui/react/lib/ScrollablePane';
+import { Sticky } from '@fluentui/react/lib/Sticky';
+import { ShimmeredDetailsList } from '@fluentui/react/lib/ShimmeredDetailsList';
 import { ExtensionSearchResult } from '@bfc/extension-client';
 
 type ExtensionSearchResultsProps = {

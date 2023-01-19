@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { Dialog } from 'office-ui-fabric-react/lib/Dialog';
+import { Dialog } from '@fluentui/react/lib/Dialog';
 import React from 'react';
 
 import { BaseEditorProps } from '../BaseEditor';

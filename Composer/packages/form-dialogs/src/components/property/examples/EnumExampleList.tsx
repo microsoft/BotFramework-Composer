@@ -4,10 +4,10 @@
 import { OpenConfirmModal } from '@bfc/ui-shared';
 import formatMessage from 'format-message';
 import cloneDeep from 'lodash/cloneDeep';
-import { IconButton } from 'office-ui-fabric-react/lib/Button';
-import { Label } from 'office-ui-fabric-react/lib/Label';
-import { Stack } from 'office-ui-fabric-react/lib/Stack';
-import { Text } from 'office-ui-fabric-react/lib/Text';
+import { IconButton } from '@fluentui/react/lib/Button';
+import { Label } from '@fluentui/react/lib/Label';
+import { Stack } from '@fluentui/react/lib/Stack';
+import { Text } from '@fluentui/react/lib/Text';
 import React from 'react';
 import styled from '@emotion/styled';
 

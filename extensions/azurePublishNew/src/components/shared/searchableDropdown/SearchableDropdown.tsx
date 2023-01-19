@@ -1,28 +1,22 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import {
-  CommandButton,
-  IBaseButtonProps,
-  IButtonProps,
-  IButtonStyles,
-  IconButton,
-} from 'office-ui-fabric-react/lib/Button';
-import { getTheme } from 'office-ui-fabric-react/lib/Styling';
+import { CommandButton, IBaseButtonProps, IButtonProps, IButtonStyles, IconButton } from '@fluentui/react/lib/Button';
+import { getTheme } from '@fluentui/react/lib/Styling';
 import styled from '@emotion/styled';
 import formatMessage from 'format-message';
-import { Callout, DirectionalHint } from 'office-ui-fabric-react/lib/Callout';
-import { IContextualMenuItem } from 'office-ui-fabric-react/lib/ContextualMenu';
-import { Text } from 'office-ui-fabric-react/lib/Text';
-import { FocusZone, FocusZoneDirection } from 'office-ui-fabric-react/lib/FocusZone';
-import { ILabelStyleProps, ILabelStyles, Label } from 'office-ui-fabric-react/lib/Label';
-import { SelectionZone } from 'office-ui-fabric-react/lib/Selection';
-import { Spinner, SpinnerSize } from 'office-ui-fabric-react/lib/Spinner';
-import { Stack } from 'office-ui-fabric-react/lib/Stack';
-import { mergeStyleSets } from 'office-ui-fabric-react/lib/Styling';
-import { ITextField, ITextFieldProps, ITextFieldStyles, TextField } from 'office-ui-fabric-react/lib/TextField';
-import { classNamesFunction, getId, IStyleFunctionOrObject, SelectionMode } from 'office-ui-fabric-react/lib/Utilities';
-import { ICalloutPositionedInfo } from 'office-ui-fabric-react/lib/utilities/positioning';
+import { Callout, DirectionalHint } from '@fluentui/react/lib/Callout';
+import { IContextualMenuItem } from '@fluentui/react/lib/ContextualMenu';
+import { Text } from '@fluentui/react/lib/Text';
+import { FocusZone, FocusZoneDirection } from '@fluentui/react/lib/FocusZone';
+import { ILabelStyleProps, ILabelStyles, Label } from '@fluentui/react/lib/Label';
+import { SelectionZone } from '@fluentui/react/lib/Selection';
+import { Spinner, SpinnerSize } from '@fluentui/react/lib/Spinner';
+import { Stack } from '@fluentui/react/lib/Stack';
+import { mergeStyleSets } from '@fluentui/react/lib/Styling';
+import { ITextField, ITextFieldProps, ITextFieldStyles, TextField } from '@fluentui/react/lib/TextField';
+import { classNamesFunction, getId, IStyleFunctionOrObject, SelectionMode } from '@fluentui/react/lib/Utilities';
+import { ICalloutPositionedInfo } from '@fluentui/react/lib/utilities/positioning';
 import * as React from 'react';
 
 import { SearchableDropdownTextField, SearchableDropdownTextFieldProps } from './SearchableDropdownTextField';

@@ -2,10 +2,10 @@
 // Licensed under the MIT License.
 
 import { LuEntity, LuFile } from '@botframework-composer/types';
-import { FluentTheme } from '@uifabric/fluent-theme';
+import { FluentTheme } from '@fluentui/theme';
 import formatMessage from 'format-message';
-import { CommandBarButton as DefaultCommandBarButton } from 'office-ui-fabric-react/lib/Button';
-import { IContextualMenuItem } from 'office-ui-fabric-react/lib/ContextualMenu';
+import { CommandBarButton as DefaultCommandBarButton } from '@fluentui/react/lib/Button';
+import { IContextualMenuItem } from '@fluentui/react/lib/ContextualMenu';
 import * as React from 'react';
 
 import { withTooltip } from '../utils/withTooltip';

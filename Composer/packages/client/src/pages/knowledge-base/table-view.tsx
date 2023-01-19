@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx } from '@emotion/core';
+import { jsx } from '@emotion/react';
 import { useRecoilValue } from 'recoil';
 import { OpenConfirmModal, dialogStyle } from '@bfc/ui-shared';
 import React, { useEffect, useState, useCallback, Fragment, useRef } from 'react';
@@ -15,15 +15,15 @@ import {
   IDetailsGroupRenderProps,
   IGroup,
   IDetailsList,
-} from 'office-ui-fabric-react/lib/DetailsList';
-import { GroupHeader, CollapseAllVisibility } from 'office-ui-fabric-react/lib/GroupedList';
-import { IOverflowSetItemProps, OverflowSet } from 'office-ui-fabric-react/lib/OverflowSet';
-import { IContextualMenuItem } from 'office-ui-fabric-react/lib/ContextualMenu';
-import { Link } from 'office-ui-fabric-react/lib/Link';
-import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
-import { IconButton, ActionButton, PrimaryButton } from 'office-ui-fabric-react/lib/Button';
-import { ScrollablePane, ScrollbarVisibility } from 'office-ui-fabric-react/lib/ScrollablePane';
-import { Sticky, StickyPositionType } from 'office-ui-fabric-react/lib/Sticky';
+} from '@fluentui/react/lib/DetailsList';
+import { GroupHeader, CollapseAllVisibility } from '@fluentui/react/lib/GroupedList';
+import { IOverflowSetItemProps, OverflowSet } from '@fluentui/react/lib/OverflowSet';
+import { IContextualMenuItem } from '@fluentui/react/lib/ContextualMenu';
+import { Link } from '@fluentui/react/lib/Link';
+import { TooltipHost } from '@fluentui/react/lib/Tooltip';
+import { IconButton, ActionButton, PrimaryButton } from '@fluentui/react/lib/Button';
+import { ScrollablePane, ScrollbarVisibility } from '@fluentui/react/lib/ScrollablePane';
+import { Sticky, StickyPositionType } from '@fluentui/react/lib/Sticky';
 import formatMessage from 'format-message';
 import { RouteComponentProps } from '@reach/router';
 import isEqual from 'lodash/isEqual';
@@ -31,7 +31,7 @@ import isEmpty from 'lodash/isEmpty';
 import flatMap from 'lodash/flatMap';
 import { QnASection, QnAFile } from '@bfc/shared';
 import { qnaUtil } from '@bfc/indexers';
-import { NeutralColors } from '@uifabric/fluent-theme';
+import { NeutralColors } from '@fluentui/theme';
 
 import emptyQnAIcon from '../../images/emptyQnAIcon.svg';
 import { navigateTo } from '../../utils/navigation';
@@ -43,6 +43,7 @@ import { EditQnAModal } from '../../components/QnA/EditQnAFrom';
 import { ReplaceQnAFromModal } from '../../components/QnA/ReplaceQnAFromModal';
 import { getQnAFileUrlOption } from '../../utils/qnaUtil';
 import TelemetryClient from '../../telemetry/TelemetryClient';
+import { CellFocusZone } from '../../components/CellFocusZone';
 
 import {
   formCell,
@@ -352,6 +353,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
       const onRenderItem = (item: IOverflowSetItemProps): JSX.Element => {
         return (
           <IconButton
+            aria-Label={formatMessage('Edit knowledge base name')}
             menuIconProps={{ iconName: 'Edit' }}
             styles={{
               root: {
@@ -566,7 +568,8 @@ const TableView: React.FC<TableViewProps> = (props) => {
           const addQuestionButton = (
             <ActionButton
               styles={addAlternative}
-              onClick={() => {
+              onClick={(ev) => {
+                ev.stopPropagation();
                 setCreatingQuestionInKthSection(item.sectionId);
                 TelemetryClient.track('AlternateQnAPhraseAdded');
               }}
@@ -576,7 +579,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
           );
 
           return (
-            <div data-is-focusable css={formCell}>
+            <CellFocusZone>
               {questions.map((question, qIndex: number) => {
                 const isQuestionEmpty = question.content === '';
                 const isOnlyQuestion = questions.length === 1 && qIndex === 0;
@@ -627,6 +630,9 @@ const TableView: React.FC<TableViewProps> = (props) => {
                       }}
                       onChange={() => {}}
                       onFocus={() => setExpandedIndex(index)}
+                      onNewLine={() => {
+                        setCreatingQuestionInKthSection(item.sectionId);
+                      }}
                     />
                   </div>
                 );
@@ -674,11 +680,12 @@ const TableView: React.FC<TableViewProps> = (props) => {
                   }}
                   onChange={() => {}}
                   onFocus={() => setExpandedIndex(index)}
+                  onNewLine={() => {}}
                 />
               ) : (
                 addQuestionButton
               )}
-            </div>
+            </CellFocusZone>
           );
         },
       },
@@ -698,7 +705,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
             item.fileId === createQnAPairSettings.groupKey && index === createQnAPairSettings.sectionIndex;
 
           return (
-            <div data-is-focusable css={formCell}>
+            <CellFocusZone>
               <EditableField
                 required
                 ariaLabel={formatMessage(`Answer is {content}`, { content: item.Answer })}
@@ -741,7 +748,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
                 onChange={() => {}}
                 onFocus={() => setExpandedIndex(index)}
               />
-            </div>
+            </CellFocusZone>
           );
         },
       },
@@ -755,7 +762,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
         data: 'string',
         onRender: (item) => {
           return (
-            <div data-is-focusable css={formCell} style={{ marginTop: 10, marginLeft: 13 }}>
+            <div css={formCell} style={{ marginTop: 10, marginLeft: 13 }}>
               {item.usedIn.map(({ id, displayName }) => {
                 return (
                   <Link
@@ -928,6 +935,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
           checkboxVisibility={CheckboxVisibility.hidden}
           columns={getTableColums()}
           componentRef={detailListRef}
+          getKey={(item, index) => `row-${index}`}
           groupProps={{
             onRenderHeader: onRenderGroupHeader,
             collapseAllVisibility: CollapseAllVisibility.hidden,

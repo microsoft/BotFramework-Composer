@@ -141,7 +141,7 @@ describe('<SkillForm />', () => {
       const nextButton = getByTestId('SetAppIdNext');
       nextButton.click();
 
-      const urlInput = getByLabelText('Skill Manifest URL');
+      const urlInput = getByLabelText('Skill Manifest');
       act(() => {
         fireEvent.change(urlInput, {
           target: {
@@ -203,7 +203,7 @@ describe('<SkillForm />', () => {
     });
 
     it('should try and retrieve manifest', async () => {
-      (httpClient.get as jest.Mock) = jest.fn().mockResolvedValue({ data: 'skill manifest' });
+      (httpClient.get as jest.Mock) = jest.fn().mockResolvedValue({ data: { name: 'skill manifest' } });
 
       const manifestUrl = 'https://skill';
 
@@ -213,7 +213,7 @@ describe('<SkillForm />', () => {
           url: manifestUrl,
         },
       });
-      expect(setSkillManifest).toBeCalledWith('skill manifest');
+      expect(setSkillManifest).toBeCalledWith({ name: 'skill manifest' });
     });
 
     it('should try and retrieve manifest with local manifest', async () => {

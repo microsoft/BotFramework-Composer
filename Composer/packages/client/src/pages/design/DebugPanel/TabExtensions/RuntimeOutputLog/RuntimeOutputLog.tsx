@@ -2,8 +2,8 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx } from '@emotion/core';
-import { NeutralColors, FontSizes } from '@uifabric/fluent-theme';
+import { jsx } from '@emotion/react';
+import { NeutralColors, FontSizes } from '@fluentui/theme';
 import { useRecoilValue } from 'recoil';
 import { default as AnsiUp } from 'ansi_up';
 import { useEffect, useRef } from 'react';

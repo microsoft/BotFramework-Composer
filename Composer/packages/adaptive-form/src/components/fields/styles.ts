@@ -1,9 +1,10 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { css } from '@emotion/core';
-import { NeutralColors } from '@uifabric/fluent-theme';
-import { FontSizes } from '@uifabric/styling';
+import { css } from '@emotion/react';
+import { NeutralColors } from '@fluentui/theme';
+import { FontSizes } from '@fluentui/style-utilities';
+import { getTheme, mergeStyles, getFocusStyle } from '@fluentui/react/lib/Styling';
 
 export const arrayItem = {
   container: css`
@@ -13,6 +14,12 @@ export const arrayItem = {
 
     label: ArrayFieldItemContainer;
   `,
+
+  contaInerFocus: mergeStyles(
+    getFocusStyle(getTheme(), {
+      inset: -3,
+    })
+  ),
 
   field: css`
     display: flex;

@@ -2,18 +2,18 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { css, jsx } from '@emotion/core';
+import { css, jsx } from '@emotion/react';
 import formatMessage from 'format-message';
 import React, { useMemo, useCallback, useEffect, useRef, FocusEvent, KeyboardEvent, useState, FormEvent } from 'react';
-import { TextField, ITextField, ITextFieldStyles } from 'office-ui-fabric-react/lib/TextField';
+import { TextField, ITextField, ITextFieldStyles } from '@fluentui/react/lib/TextField';
 import debounce from 'lodash/debounce';
 import {
   IContextualMenuItem,
   ContextualMenu,
   DirectionalHint,
   IContextualMenuStyles,
-} from 'office-ui-fabric-react/lib/ContextualMenu';
-import { SharedColors } from '@uifabric/fluent-theme';
+} from '@fluentui/react/lib/ContextualMenu';
+import { SharedColors } from '@fluentui/theme';
 import { useRecoilValue } from 'recoil';
 import { UserSettings } from '@botframework-composer/types';
 
@@ -128,24 +128,24 @@ export const WatchVariablePicker = React.memo((props: WatchVariablePickerProps) 
       text: node.name,
       secondaryText: paths[node.id],
       onClick: (event) => {
-        if (node.children.length) {
-          event?.preventDefault();
-          onToggleExpand(node.id, !propertyTreeExpanded[node.id]);
-        } else {
-          event?.preventDefault();
-          const path = paths[node.id];
-          setQuery(path);
-          setErrorMessage('');
-          TelemetryClient.track('StateWatchPropertyAdded', { property: path });
-          setWatchedVariables(currentProjectId, { ...watchedVariables, [variableId]: path });
-          onHideContextualMenu();
-        }
+        event?.preventDefault();
+        const path = paths[node.id];
+        setQuery(path);
+        setErrorMessage('');
+        TelemetryClient.track('StateWatchPropertyAdded', { property: path });
+        setWatchedVariables(currentProjectId, { ...watchedVariables, [variableId]: path });
+        onHideContextualMenu();
       },
       data: {
         node,
         path: paths[node.id],
         level: levels[node.id] - 1,
         onToggleExpand,
+      },
+      itemProps: {
+        styles: {
+          root: { padding: 0 },
+        },
       },
     }));
   };
@@ -176,6 +176,11 @@ export const WatchVariablePicker = React.memo((props: WatchVariablePickerProps) 
         node,
         path: paths[node.id],
         level: 0,
+      },
+      itemProps: {
+        styles: {
+          root: { padding: 0 },
+        },
       },
     })) as IContextualMenuItem[];
   }, [currentProjectId, onHideContextualMenu, payload, propertyTreeConfig, variableId, watchedVariables]);

@@ -5,10 +5,10 @@
 import React, { useEffect } from 'react';
 import { useRecoilValue } from 'recoil';
 import { OpenConfirmModal } from '@bfc/ui-shared';
-import { css, jsx } from '@emotion/core';
+import { css, jsx } from '@emotion/react';
 import formatMessage from 'format-message';
-import { PrimaryButton } from 'office-ui-fabric-react/lib/Button';
-import { FontWeights } from 'office-ui-fabric-react/lib/Styling';
+import { PrimaryButton } from '@fluentui/react/lib/Button';
+import { FontWeights } from '@fluentui/react/lib/Styling';
 
 import { dispatcherState } from '../../recoilModel';
 import { navigateTo } from '../../utils/navigation';

@@ -2,11 +2,11 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx } from '@emotion/core';
+import { jsx } from '@emotion/react';
 import React, { useState, useMemo } from 'react';
 import { useRecoilValue } from 'recoil';
 import { DiagnosticSeverity } from '@bfc/shared';
-import { Stack } from 'office-ui-fabric-react/lib/Stack';
+import { Stack } from '@fluentui/react/lib/Stack';
 
 import { DebugPanelTabHeaderProps } from '../types';
 import { dispatcherState, showErrorDiagnosticsState, showWarningDiagnosticsState } from '../../../../../recoilModel';
@@ -63,6 +63,7 @@ export const DiagnosticsContent: React.FC<DebugPanelTabHeaderProps> = ({ isActiv
   if (!isActive) {
     return null;
   }
+
   return (
     <Stack verticalFill>
       <Stack.Item

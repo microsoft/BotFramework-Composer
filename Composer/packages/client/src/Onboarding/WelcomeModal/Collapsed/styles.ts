@@ -1,9 +1,9 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { css } from '@emotion/core';
-import { IButtonStyles } from 'office-ui-fabric-react/lib/Button';
-import { FluentTheme } from '@uifabric/fluent-theme';
+import { css } from '@emotion/react';
+import { IButtonStyles } from '@fluentui/react/lib/Button';
+import { FluentTheme } from '@fluentui/theme';
 
 export const content = css`
   color: ${FluentTheme.palette.white};

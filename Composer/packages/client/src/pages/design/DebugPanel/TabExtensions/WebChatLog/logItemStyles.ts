@@ -1,8 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { css } from '@emotion/core';
-import { NeutralColors, SharedColors } from '@uifabric/fluent-theme';
+import { css } from '@emotion/react';
+import { NeutralColors, SharedColors } from '@fluentui/theme';
 
 import { getDefaultFontSettings } from '../../../../../recoilModel/utils/fontUtil';
 

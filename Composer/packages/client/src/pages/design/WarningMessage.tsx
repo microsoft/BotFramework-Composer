@@ -2,10 +2,10 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx } from '@emotion/core';
-import { SharedColors } from '@uifabric/fluent-theme';
-import { Icon } from 'office-ui-fabric-react/lib/Icon';
-import { ActionButton } from 'office-ui-fabric-react/lib/Button';
+import { jsx } from '@emotion/react';
+import { SharedColors } from '@fluentui/theme';
+import { Icon } from '@fluentui/react/lib/Icon';
+import { ActionButton } from '@fluentui/react/lib/Button';
 import React from 'react';
 
 import { triggerNotSupportedWarning } from '../../constants';

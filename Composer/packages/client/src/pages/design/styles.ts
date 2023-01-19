@@ -1,9 +1,9 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { css } from '@emotion/core';
-import { mergeStyleSets, FontWeights } from 'office-ui-fabric-react/lib/Styling';
-import { NeutralColors, FontSizes } from '@uifabric/fluent-theme';
+import { css } from '@emotion/react';
+import { mergeStyleSets, FontWeights } from '@fluentui/react/lib/Styling';
+import { NeutralColors, FontSizes } from '@fluentui/theme';
 
 export const pageRoot = css`
   height: 100%;
@@ -19,6 +19,7 @@ export const contentWrapper = css`
   flex-grow: 1;
   height: 100%;
   position: relative;
+  overflow: auto;
   label: DesignPageContent;
 `;
 
@@ -191,6 +192,7 @@ export const styles = {
     root: [
       {
         marginBottom: '1rem',
+        gap: '2rem',
       },
     ],
   },

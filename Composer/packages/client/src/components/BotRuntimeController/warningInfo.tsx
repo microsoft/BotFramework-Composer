@@ -2,9 +2,9 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx, css } from '@emotion/core';
-import { IconButton } from 'office-ui-fabric-react/lib/Button';
-import { SharedColors } from '@uifabric/fluent-theme';
+import { jsx, css } from '@emotion/react';
+import { IconButton } from '@fluentui/react/lib/Button';
+import { SharedColors } from '@fluentui/theme';
 
 // -------------------- Styles -------------------- //
 

@@ -2,23 +2,21 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { css, jsx } from '@emotion/core';
-import { PublishTarget, SkillManifestFile } from '@bfc/shared';
+import { css, jsx } from '@emotion/react';
+import { PublishTarget } from '@bfc/shared';
 import formatMessage from 'format-message';
 import React, { Fragment, useEffect, useMemo, useState } from 'react';
 import { useRecoilValue } from 'recoil';
-import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
-import { Icon } from 'office-ui-fabric-react/lib/Icon';
-import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
-import { TextField } from 'office-ui-fabric-react/lib/TextField';
-import { NeutralColors } from '@uifabric/fluent-theme';
-import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
-import { Link } from 'office-ui-fabric-react/lib/Link';
+import { Icon } from '@fluentui/react/lib/Icon';
+import { Dropdown, IDropdownOption } from '@fluentui/react/lib/Dropdown';
+import { FluentTheme, NeutralColors } from '@fluentui/theme';
+import { MessageBar, MessageBarType } from '@fluentui/react/lib/MessageBar';
+import { Link } from '@fluentui/react/lib/Link';
+import { TextField } from '@bfc/ui-shared';
 
-import { botDisplayNameState, dispatcherState, settingsState, skillManifestsState } from '../../../../recoilModel';
+import { botDisplayNameState, dispatcherState, settingsState } from '../../../../recoilModel';
 import { CreatePublishProfileDialog } from '../../../botProject/CreatePublishProfileDialog';
-import { iconStyle } from '../../../botProject/runtime-settings/style';
-import { ContentProps, VERSION_REGEX } from '../constants';
+import { ContentProps } from '../constants';
 import { PublishProfileWrapperDialog } from '../../../botProject/PublishProfieWrapperDialog';
 
 const styles = {
@@ -28,35 +26,15 @@ const styles = {
   `,
 };
 
-const onRenderLabel = (props) => {
-  return (
-    <div
-      style={{
-        display: 'flex',
-        flexDirection: 'row',
-        marginBottom: '5px',
-      }}
-    >
-      <div
-        style={{
-          marginRight: '5px',
-          fontWeight: 600,
-          fontSize: '14px',
-        }}
-      >
-        <div
-          style={{
-            padding: '0 5px',
-          }}
-        >
-          {props.label}
-        </div>
-      </div>
-      <TooltipHost content={props.ariaLabel}>
-        <Icon iconName="Info" styles={iconStyle(props.required)} />
-      </TooltipHost>
-    </div>
-  );
+const inputStyles = {
+  root: { paddingBottom: '8px' },
+  subComponentStyles: {
+    label: {
+      root: {
+        color: FluentTheme.palette.neutralPrimary,
+      },
+    },
+  },
 };
 
 const onRenderInvalidProfileWarning = (hasValidProfile, handleShowPublishProfileWrapperDialog) => {
@@ -74,25 +52,8 @@ const onRenderInvalidProfileWarning = (hasValidProfile, handleShowPublishProfile
   );
 };
 
-export const getManifestId = (
-  botName: string,
-  skillManifests: SkillManifestFile[],
-  { content: { $schema } = {} }: Partial<SkillManifestFile>
-): string => {
-  const [version] = VERSION_REGEX.exec($schema) || [''];
-
-  let fileId = version ? `${botName}-${version.replace(/\./g, '-')}-manifest` : `${botName}-manifest`;
-  let i = -1;
-
-  while (skillManifests.some(({ id }) => id === fileId) && i < skillManifests.length) {
-    if (i < 0) {
-      fileId = fileId.concat(`-${++i}`);
-    } else {
-      fileId = fileId.substr(0, fileId.lastIndexOf('-')).concat(`-${++i}`);
-    }
-  }
-
-  return fileId;
+export const getManifestId = (botName: string): string => {
+  return `${botName}-manifest`;
 };
 
 const onRenderTitle = (options: IDropdownOption[] | undefined): JSX.Element | null => {
@@ -129,7 +90,6 @@ export const SelectProfile: React.FC<ContentProps> = ({
   const [appId, setAppId] = useState<string>();
   const { id, content } = manifest;
   const botName = useRecoilValue(botDisplayNameState(projectId));
-  const skillManifests = useRecoilValue(skillManifestsState(projectId));
 
   const [showCreateProfileDialog, setShowCreateProfileDialog] = useState(true);
   const [selectedKey, setSelectedKey] = useState('');
@@ -219,10 +179,8 @@ export const SelectProfile: React.FC<ContentProps> = ({
   }, [settings]);
 
   useEffect(() => {
-    if (!id) {
-      const fileId = getManifestId(botName, skillManifests, manifest);
-      setSkillManifest({ ...manifest, id: fileId });
-    }
+    const fileId = getManifestId(botName);
+    setSkillManifest({ ...manifest, id: fileId });
   }, [id]);
 
   return (
@@ -236,7 +194,7 @@ export const SelectProfile: React.FC<ContentProps> = ({
             options={publishingOptions}
             placeholder={formatMessage('Select one')}
             selectedKey={selectedKey}
-            styles={{ root: { paddingBottom: '8px' } }}
+            styles={inputStyles}
             onChange={handleCurrentProfileChange}
             onRenderTitle={onRenderTitle}
           />
@@ -247,22 +205,22 @@ export const SelectProfile: React.FC<ContentProps> = ({
               <TextField
                 disabled
                 required
-                ariaLabel={formatMessage('The endpoint url')}
                 label={formatMessage('Endpoint Url')}
                 placeholder={formatMessage('The endpoint url of your web app resource')}
-                styles={{ root: { paddingBottom: '8px' } }}
+                styles={inputStyles}
+                tooltip={formatMessage('The endpoint url')}
+                tooltipIconProps={{ iconName: 'Info' }}
                 value={endpointUrl}
-                onRenderLabel={onRenderLabel}
               />
               <TextField
                 disabled
                 required
-                ariaLabel={formatMessage('The app id of your application registration')}
                 label={formatMessage('Microsoft App ID')}
                 placeholder={formatMessage('The App ID')}
-                styles={{ root: { paddingBottom: '8px' } }}
+                styles={inputStyles}
+                tooltip={formatMessage('The app id of your application registration')}
+                tooltipIconProps={{ iconName: 'Info' }}
                 value={appId}
-                onRenderLabel={onRenderLabel}
               />
             </Fragment>
           )}

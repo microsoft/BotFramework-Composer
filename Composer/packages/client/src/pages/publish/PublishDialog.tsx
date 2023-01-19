@@ -2,13 +2,13 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx } from '@emotion/core';
-import { Dialog, DialogType, DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
-import { DefaultButton, PrimaryButton } from 'office-ui-fabric-react/lib/Button';
+import { jsx } from '@emotion/react';
+import { Dialog, DialogType, DialogFooter } from '@fluentui/react/lib/Dialog';
+import { DefaultButton, PrimaryButton } from '@fluentui/react/lib/Button';
 import { Fragment, useState, useEffect } from 'react';
-import { TextField } from 'office-ui-fabric-react/lib/TextField';
+import { TextField } from '@fluentui/react/lib/TextField';
 import formatMessage from 'format-message';
-import { CheckboxVisibility, DetailsList } from 'office-ui-fabric-react/lib/DetailsList';
+import { CheckboxVisibility, DetailsList } from '@fluentui/react/lib/DetailsList';
 import { useRecoilValue } from 'recoil';
 
 import { dispatcherState, isAuthenticatedState } from '../../recoilModel/atoms';

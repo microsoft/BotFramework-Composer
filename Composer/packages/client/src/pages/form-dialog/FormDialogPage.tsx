@@ -4,8 +4,8 @@
 import styled from '@emotion/styled';
 import { navigate, RouteComponentProps } from '@reach/router';
 import formatMessage from 'format-message';
-import { Stack } from 'office-ui-fabric-react/lib/Stack';
-import { Text } from 'office-ui-fabric-react/lib/Text';
+import { Stack } from '@fluentui/react/lib/Stack';
+import { Text } from '@fluentui/react/lib/Text';
 import * as React from 'react';
 import { useRecoilValue } from 'recoil';
 import { OpenConfirmModal } from '@bfc/ui-shared';
@@ -198,7 +198,7 @@ const FormDialogPage: React.FC<Props> = React.memo((props: Props) => {
           resetOnDoubleClick
           initialPrimarySize="320px"
           minPrimarySize="320px"
-          minSecondarySize="800px"
+          minSecondarySize="630px"
           renderSplitter={renderThinSplitter}
           onMeasuredSizesChanged={onMeasuredSizesChanged}
         >

@@ -11,7 +11,7 @@ import querystring from 'query-string';
 import debounce from 'lodash/debounce';
 import get from 'lodash/get';
 import { CodeEditorSettings } from '@bfc/shared';
-import { ActionButton } from 'office-ui-fabric-react/lib/Button';
+import { ActionButton } from '@fluentui/react/lib/Button';
 
 import { dispatcherState, userSettingsState, qnaFilesSelectorFamily } from '../../recoilModel';
 import { navigateTo } from '../../utils/navigation';

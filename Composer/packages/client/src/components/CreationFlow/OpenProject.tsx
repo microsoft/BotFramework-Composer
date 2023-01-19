@@ -3,9 +3,9 @@
 
 /** @jsx jsx */
 
-import { jsx } from '@emotion/core';
-import { DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
-import { DefaultButton } from 'office-ui-fabric-react/lib/Button';
+import { jsx } from '@emotion/react';
+import { DialogFooter } from '@fluentui/react/lib/Dialog';
+import { DefaultButton } from '@fluentui/react/lib/Button';
 import formatMessage from 'format-message';
 import { RouteComponentProps } from '@reach/router';
 import querystring from 'query-string';

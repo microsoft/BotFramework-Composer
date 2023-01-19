@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx } from '@emotion/core';
+import { jsx } from '@emotion/react';
 import { FC, ReactNode } from 'react';
 import { TextDiv } from '@bfc/ui-shared';
 import { WidgetContainerProps } from '@bfc/extension-client';

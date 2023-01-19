@@ -2,17 +2,19 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx } from '@emotion/core';
+import { jsx } from '@emotion/react';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { DefaultButton, IconButton } from 'office-ui-fabric-react/lib/Button';
-import { TooltipHost, DirectionalHint } from 'office-ui-fabric-react/lib/Tooltip';
-import { IContextualMenuItem } from 'office-ui-fabric-react/lib/ContextualMenu';
+import { DefaultButton, IconButton } from '@fluentui/react/lib/Button';
+import { TooltipHost, TooltipOverflowMode } from '@fluentui/react/lib/Tooltip';
+import { IContextualMenuItem } from '@fluentui/react/lib/ContextualMenu';
 import { useRecoilValue } from 'recoil';
 import formatMessage from 'format-message';
-import { css } from '@emotion/core';
-import { NeutralColors, CommunicationColors } from '@uifabric/fluent-theme';
-import { Spinner, SpinnerSize } from 'office-ui-fabric-react/lib/Spinner';
+import { css } from '@emotion/react';
+import { NeutralColors, CommunicationColors } from '@fluentui/theme';
+import { Spinner, SpinnerSize } from '@fluentui/react/lib/Spinner';
 import { DiagnosticSeverity } from '@botframework-composer/types';
+import { DirectionalHint } from '@fluentui/react/lib/common/DirectionalHint';
+import { mergeStyleSets, FontSizes } from '@fluentui/react/lib/Styling';
 
 import { DisableFeatureToolTip } from '../DisableFeatureToolTip';
 import TelemetryClient from '../../telemetry/TelemetryClient';
@@ -59,6 +61,50 @@ const startPanelsContainer = css`
 `;
 
 const transparentBackground = 'rgba(255, 255, 255, 0.5)';
+
+const classNames = mergeStyleSets({
+  startButtonOverflow: {
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
+    fontSize: FontSizes.size16,
+    color: NeutralColors.white,
+  },
+  subComponentStyles: {
+    startButton: {
+      root: {
+        backgroundColor: CommunicationColors.tint10,
+        display: 'flex',
+        alignItems: 'center',
+        minWidth: '100px',
+        height: '36px',
+        flexDirection: 'row',
+        padding: '0 7px',
+        border: `1px solid ${CommunicationColors.tint10}`,
+        width: '100%',
+      },
+      rootHovered: {
+        background: transparentBackground,
+      },
+      rootDisabled: {
+        opacity: 0.6,
+        backgroundColor: CommunicationColors.tint10,
+        color: `${NeutralColors.white}`,
+        border: 'none',
+        font: '62px',
+      },
+    },
+    startButtonTooltip: {
+      root: {
+        display: 'block',
+        flex: 'auto',
+        '@media screen and (max-width: 720px)': /* 150% zoom */ {
+          width: '35px',
+        },
+      },
+    },
+  },
+});
 
 type BotControllerProps = {
   onHideController: (isHidden: boolean) => void;
@@ -224,58 +270,43 @@ const BotController: React.FC<BotControllerProps> = ({ onHideController, isContr
           )}
           isPVABot={isPVABot}
         >
-          <DefaultButton
-            primary
-            aria-roledescription={formatMessage('Bot Controller')}
-            data-testid={'startBotButton'}
-            disabled={disableStartBots || areBotsProcessing}
-            iconProps={{
-              iconName: statusIconClass,
-              styles: {
-                root: {
-                  color: `${NeutralColors.white}`,
-                },
-              },
-            }}
-            id={'startBotPanelElement'}
-            menuAs={() => null}
-            styles={{
-              root: {
-                backgroundColor: CommunicationColors.tint10,
-                display: 'flex',
-                alignItems: 'center',
-                minWidth: '229px',
-                height: '36px',
-                flexDirection: 'row',
-                padding: '0 7px',
-                border: `1px solid ${CommunicationColors.tint10}`,
-                width: '100%',
-              },
-              rootHovered: {
-                background: transparentBackground,
-              },
-              rootDisabled: {
-                opacity: 0.6,
-                backgroundColor: CommunicationColors.tint10,
-                color: `${NeutralColors.white}`,
-                border: 'none',
-                font: '62px',
-              },
-            }}
-            onClick={handleClick}
+          <TooltipHost
+            content={startPanelButtonText}
+            hostClassName={classNames.startButtonOverflow}
+            overflowMode={TooltipOverflowMode.Self}
+            styles={classNames.subComponentStyles.startButtonTooltip}
           >
-            {areBotsProcessing && (
-              <Spinner
-                size={SpinnerSize.small}
-                styles={{
+            <DefaultButton
+              primary
+              aria-roledescription={formatMessage('Bot Controller')}
+              data-testid={'startBotButton'}
+              disabled={disableStartBots || areBotsProcessing}
+              iconProps={{
+                iconName: statusIconClass,
+                styles: {
                   root: {
-                    marginRight: '5px',
+                    color: `${NeutralColors.white}`,
                   },
-                }}
-              />
-            )}
-            <span style={{ margin: '0 0 2px 5px' }}>{startPanelButtonText}</span>
-          </DefaultButton>
+                },
+              }}
+              id={'startBotPanelElement'}
+              menuAs={() => null}
+              styles={classNames.subComponentStyles.startButton({})}
+              onClick={handleClick}
+            >
+              {areBotsProcessing && (
+                <Spinner
+                  size={SpinnerSize.small}
+                  styles={{
+                    root: {
+                      marginRight: '5px',
+                    },
+                  }}
+                />
+              )}
+              <span style={{ margin: '0 0 2px 5px' }}>{startPanelButtonText}</span>
+            </DefaultButton>
+          </TooltipHost>
         </DisableFeatureToolTip>
         <div ref={onboardRef} css={[iconSectionContainer, disableStartBots ? disabledStyle : '']}>
           <TooltipHost content={startStopLabel} directionalHint={DirectionalHint.bottomCenter}>
@@ -311,6 +342,7 @@ const BotController: React.FC<BotControllerProps> = ({ onHideController, isContr
         hidden={isControllerHidden}
         items={items}
         target={botControllerMenuTarget}
+        onDismiss={() => onHideController(true)}
       />
     </React.Fragment>
   );

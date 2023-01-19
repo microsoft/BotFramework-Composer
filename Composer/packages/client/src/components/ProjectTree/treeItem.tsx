@@ -2,24 +2,25 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx, css } from '@emotion/core';
+import { jsx, css } from '@emotion/react';
 import React, { useState, useCallback } from 'react';
-import { FontSizes, FluentTheme } from '@uifabric/fluent-theme';
-import { DefaultPalette } from '@uifabric/styling';
-import { OverflowSet, IOverflowSetItemProps } from 'office-ui-fabric-react/lib/OverflowSet';
-import { TooltipHost, DirectionalHint } from 'office-ui-fabric-react/lib/Tooltip';
-import { ContextualMenuItemType, IContextualMenuItem } from 'office-ui-fabric-react/lib/ContextualMenu';
-import { IconButton } from 'office-ui-fabric-react/lib/Button';
-import { Link } from 'office-ui-fabric-react/lib/Link';
-import { Icon } from 'office-ui-fabric-react/lib/Icon';
+import { FontSizes, FluentTheme } from '@fluentui/theme';
+import { DefaultPalette, getFocusStyle, getTheme, mergeStyles } from '@fluentui/style-utilities';
+import { OverflowSet, IOverflowSetItemProps } from '@fluentui/react/lib/OverflowSet';
+import { TooltipHost } from '@fluentui/react/lib/Tooltip';
+import { ContextualMenuItemType, IContextualMenuItem } from '@fluentui/react/lib/ContextualMenu';
+import { IconButton } from '@fluentui/react/lib/Button';
+import { Link } from '@fluentui/react/lib/Link';
+import { Icon } from '@fluentui/react/lib/Icon';
 import formatMessage from 'format-message';
-import { NeutralColors, SharedColors } from '@uifabric/fluent-theme';
-import { IButtonStyles } from 'office-ui-fabric-react/lib/Button';
-import { IContextualMenuStyles } from 'office-ui-fabric-react/lib/ContextualMenu';
-import { ICalloutContentStyles, Callout } from 'office-ui-fabric-react/lib/Callout';
+import { NeutralColors, SharedColors } from '@fluentui/theme';
+import { IButtonStyles } from '@fluentui/react/lib/Button';
+import { IContextualMenuStyles } from '@fluentui/react/lib/ContextualMenu';
+import { ICalloutContentStyles, Callout } from '@fluentui/react/lib/Callout';
 import { DiagnosticSeverity, Diagnostic, Icons } from '@bfc/shared';
 import isEmpty from 'lodash/isEmpty';
 import uniqueId from 'lodash/uniqueId';
+import { DirectionalHint } from '@fluentui/react/lib/common/DirectionalHint';
 
 import { THREE_DOTS_ICON_WIDTH } from './constants';
 import { TreeLink, TreeMenuItem } from './types';
@@ -29,10 +30,6 @@ import { TreeItemContent } from './TreeItemContent';
 
 const projectTreeItemContainer = (extraSpace: number) => css`
   outline: none;
-  :focus {
-    outline: rgb(102, 102, 102) solid 1px;
-    z-index: 1;
-  }
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
@@ -49,7 +46,7 @@ const projectTreeItem = css`
   display: flex;
   align-items: center;
   height: 24px;
-  padding-left: 4px;
+  padding: 0 4px;
 
   label: ProjectTreeItem;
 `;
@@ -59,6 +56,10 @@ export const moreMenu: Partial<ICalloutContentStyles> = {
     marginTop: '-1px',
   },
 };
+
+const treeItemFocusClass = mergeStyles(getFocusStyle(getTheme()), {
+  inset: 1,
+});
 
 export const menuStyle: Partial<IContextualMenuStyles> = {
   subComponentStyles: {
@@ -426,7 +427,7 @@ export const TreeItem: React.FC<ITreeItemProps> = ({
 }) => {
   const [thisItemSelected, setThisItemSelected] = useState<boolean>(false);
 
-  const ariaLabel = `${objectNames[itemType]()} ${link.displayName}`;
+  const ariaLabel = `${link.displayName} ${objectNames[itemType]()}`;
   const dataTestId = `${dialogName ?? '$Root'}_${link.displayName}`;
   const isExternal = Boolean(link.href);
 
@@ -464,12 +465,23 @@ export const TreeItem: React.FC<ITreeItemProps> = ({
           <div
             data-is-focusable
             aria-label={`${ariaLabel} ${warningContent} ${errorContent}`}
-            css={projectTreeItemContainer}
+            className={treeItemFocusClass}
+            css={projectTreeItemContainer(0)}
             tabIndex={0}
             onBlur={item.onBlur}
             onFocus={item.onFocus}
+            onKeyDown={
+              onSelect
+                ? (e) => {
+                    if (e.key === 'Enter') {
+                      onSelect(link);
+                      e.stopPropagation();
+                    }
+                  }
+                : undefined
+            }
           >
-            <div css={projectTreeItem} role="presentation" tabIndex={-1}>
+            <div css={projectTreeItem} role="presentation">
               {item.itemType != null && TreeIcons[item.itemType] != null && (
                 <Icon
                   iconName={TreeIcons[item.itemType]}
@@ -480,7 +492,6 @@ export const TreeItem: React.FC<ITreeItemProps> = ({
                       outline: 'none',
                     },
                   }}
-                  tabIndex={-1}
                 />
               )}
               <span className={'treeItem-text'} css={itemName(maxTextWidth)}>
@@ -529,7 +540,7 @@ export const TreeItem: React.FC<ITreeItemProps> = ({
             <IconButton
               ariaLabel={moreLabel}
               className="dialog-more-btn"
-              data-is-focusable={isActive}
+              data-is-focusable={isActive || isChildSelected}
               data-testid="dialogMoreButton"
               menuIconProps={{
                 iconName: 'More',
@@ -562,11 +573,8 @@ export const TreeItem: React.FC<ITreeItemProps> = ({
 
   return (
     <div
-      aria-label={ariaLabel}
       css={navContainer(isMenuOpen, isActive, thisItemSelected, textWidth - overflowIconWidthOnHover, isBroken)}
       data-testid={dataTestId}
-      role={role}
-      tabIndex={0}
       onClick={
         onSelect
           ? () => {
@@ -574,21 +582,8 @@ export const TreeItem: React.FC<ITreeItemProps> = ({
             }
           : undefined
       }
-      onKeyDown={
-        onSelect
-          ? (e) => {
-              if (e.key === 'Enter') {
-                onSelect(link);
-                e.stopPropagation();
-              }
-            }
-          : undefined
-      }
     >
       <OverflowSet
-        //In 8.0 the OverflowSet will no longer be wrapped in a FocusZone
-        //remove this at that time
-        doNotContainWithinFocusZone
         css={overflowSet(isBroken)}
         data-testid={linkString}
         items={[

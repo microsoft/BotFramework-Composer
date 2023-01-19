@@ -2,8 +2,8 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { css, jsx } from '@emotion/core';
-import { NeutralColors, SharedColors } from '@uifabric/fluent-theme';
+import { css, jsx } from '@emotion/react';
+import { NeutralColors, SharedColors } from '@fluentui/theme';
 
 const timestampStyle = css`
   color: ${SharedColors.green20};

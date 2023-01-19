@@ -2,6 +2,12 @@
 // Licensed under the MIT License.
 
 export type AuthParameters = {
+  /** What login endpoint to use
+   *
+   * ex: https://login.microsoftonline.com/common
+   */
+  authority?: string;
+
   /** (Web) Client ID of the AAD app that the user is authenticating against. */
   clientId?: string;
   /** (Web) List of OAuth scopes that will be granted once the user has authenticated. */
@@ -16,6 +22,12 @@ export type AuthParameters = {
 };
 
 export type ElectronAuthParameters = {
+  /** What login endpoint to use
+   *
+   * ex: https://login.microsoftonline.com/common
+   */
+  authority?: string;
+
   /**
    * The resource for which we want to get a token for.
    *

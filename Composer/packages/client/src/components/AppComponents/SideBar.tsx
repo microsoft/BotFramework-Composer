@@ -2,15 +2,16 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx, css } from '@emotion/core';
-import { NeutralColors, FontSizes } from '@uifabric/fluent-theme';
+import { jsx, css } from '@emotion/react';
+import { NeutralColors, FontSizes } from '@fluentui/theme';
 import { useState } from 'react';
 import formatMessage from 'format-message';
-import { IconButton } from 'office-ui-fabric-react/lib/Button';
-import { FocusZone } from 'office-ui-fabric-react/lib/FocusZone';
-import { TooltipHost, DirectionalHint } from 'office-ui-fabric-react/lib/Tooltip';
+import { IconButton } from '@fluentui/react/lib/Button';
+import { FocusZone } from '@fluentui/react/lib/FocusZone';
+import { TooltipHost } from '@fluentui/react/lib/Tooltip';
 import { RouteComponentProps } from '@reach/router';
 import { useRecoilValue } from 'recoil';
+import { DirectionalHint } from '@fluentui/react/lib/common/DirectionalHint';
 
 import { resolveToBasePath } from '../../utils/fileUtil';
 import { BASEPATH } from '../../constants';
@@ -46,8 +47,10 @@ const sideBar = (isExpand: boolean) => css`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: auto;
   flex-shrink: 0;
+  scrollbar-width: thin;
 `;
 
 const dividerTop = css`

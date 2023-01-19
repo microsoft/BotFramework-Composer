@@ -1,8 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { FontSizes, getTheme, mergeStyleSets } from 'office-ui-fabric-react/lib/Styling';
-import { css } from '@emotion/core';
+import { FontSizes, getTheme, mergeStyleSets } from '@fluentui/react/lib/Styling';
+import { css } from '@emotion/react';
 
 const theme = getTheme();
 

@@ -2,16 +2,21 @@
 // Licensed under the MIT License.
 
 import React from 'react';
-import { IContextualMenuItemProps } from 'office-ui-fabric-react/lib/ContextualMenu';
-import { IStackStyles, Stack } from 'office-ui-fabric-react/lib/Stack';
-import { Text } from 'office-ui-fabric-react/lib/Text';
-import { NeutralColors } from '@uifabric/fluent-theme';
+import { IContextualMenuItemProps } from '@fluentui/react/lib/ContextualMenu';
+import { IStackStyles, Stack } from '@fluentui/react/lib/Stack';
+import { Text } from '@fluentui/react/lib/Text';
+import { NeutralColors } from '@fluentui/theme';
 
 import { PropertyItem, PropertyTreeItem } from './PropertyTreeItem';
 import { DEFAULT_TREE_ITEM_HEIGHT } from './constants';
 
 const labelContainerStyle: IStackStyles = {
-  root: { whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', height: DEFAULT_TREE_ITEM_HEIGHT },
+  root: {
+    whiteSpace: 'nowrap',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    height: DEFAULT_TREE_ITEM_HEIGHT,
+  },
 };
 
 export const getPickerContextualMenuItem = (query: string, propertyTreeExpanded: Record<string, boolean>) => (
@@ -36,7 +41,7 @@ export const getPickerContextualMenuItem = (query: string, propertyTreeExpanded:
             key={`segment-${idx}`}
             styles={{
               root: {
-                color: idx === pathNodes.length - 1 ? NeutralColors.black : NeutralColors.gray70,
+                color: idx === pathNodes.length - 1 ? NeutralColors.black : NeutralColors.gray130,
               },
             }}
             variant="small"

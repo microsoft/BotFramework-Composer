@@ -2,12 +2,12 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx } from '@emotion/core';
+import { jsx } from '@emotion/react';
 import { PublishTarget } from '@botframework-composer/types';
 import formatMessage from 'format-message';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useRecoilValue } from 'recoil';
-import axios from 'axios';
+import { axios } from '@bfc/shared/lib/axios';
 
 import { createNotification } from '../../recoilModel/dispatchers/notification';
 import { ImportSuccessNotificationWrapper } from '../../components/ImportModal/ImportSuccessNotification';

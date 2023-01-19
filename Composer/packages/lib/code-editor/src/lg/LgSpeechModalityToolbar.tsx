@@ -1,14 +1,14 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { FluentTheme } from '@uifabric/fluent-theme';
+import { FluentTheme } from '@fluentui/theme';
 import formatMessage from 'format-message';
 import {
   ContextualMenuItemType,
   IContextualMenuItemProps,
   IContextualMenuItemRenderFunctions,
-} from 'office-ui-fabric-react/lib/ContextualMenu';
-import { Link } from 'office-ui-fabric-react/lib/Link';
+} from '@fluentui/react/lib/ContextualMenu';
+import { Link } from '@fluentui/react/lib/Link';
 import * as React from 'react';
 
 import { ItemWithTooltip } from '../components/ItemWithTooltip';
@@ -36,6 +36,7 @@ export const LgSpeechModalityToolbar = React.memo((props: Props) => {
   const renderHeaderContent = React.useCallback(
     (itemProps: IContextualMenuItemProps, defaultRenders: IContextualMenuItemRenderFunctions) => (
       <ItemWithTooltip
+        aria-label={formatMessage('Learn more about SSML Tags')}
         itemText={defaultRenders.renderItemName(itemProps)}
         tooltipId="ssml-menu-header"
         tooltipProps={ssmlHeaderTooltipProps}

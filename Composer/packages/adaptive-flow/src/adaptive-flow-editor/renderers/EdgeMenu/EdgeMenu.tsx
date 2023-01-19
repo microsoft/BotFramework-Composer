@@ -2,13 +2,14 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx } from '@emotion/core';
+import { jsx } from '@emotion/react';
 import { useContext, useState } from 'react';
 import formatMessage from 'format-message';
 import { DefinitionSummary } from '@bfc/shared';
-import { TooltipHost, DirectionalHint } from 'office-ui-fabric-react/lib/Tooltip';
+import { TooltipHost } from '@fluentui/react/lib/Tooltip';
 import { useMenuConfig } from '@bfc/extension-client';
 import { IconMenu } from '@bfc/ui-shared';
+import { DirectionalHint } from '@fluentui/react/lib/common/DirectionalHint';
 
 // TODO: leak of visual-sdk domain (EdgeAddButtonSize)
 import { EdgeAddButtonSize } from '../../../adaptive-flow-renderer/constants/ElementSizes';

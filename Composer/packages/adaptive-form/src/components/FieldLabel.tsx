@@ -1,19 +1,19 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 /** @jsx jsx */
-import { jsx } from '@emotion/core';
+import { jsx } from '@emotion/react';
 import React, { useRef } from 'react';
-import { DirectionalHint, TooltipHost, TooltipDelay } from 'office-ui-fabric-react/lib/Tooltip';
-import { Icon } from 'office-ui-fabric-react/lib/Icon';
-import { Label } from 'office-ui-fabric-react/lib/Label';
-import { NeutralColors } from '@uifabric/fluent-theme';
+import { TooltipDelay } from '@fluentui/react/lib/Tooltip';
+import { Label } from '@fluentui/react/lib/Label';
 import formatMessage from 'format-message';
 import { useShellApi } from '@bfc/extension-client';
+import { HelpTooltip } from '@bfc/ui-shared';
+import { FontSizes } from '@fluentui/react/lib/Styling';
+import { DirectionalHint } from '@fluentui/react/lib/common/DirectionalHint';
 
 import { useAdaptiveFormContext } from '../AdaptiveFormContext';
 
 import { Link } from './Link';
-import { focusBorder } from './sharedStyles';
 
 interface DescriptionCalloutProps {
   title: string;
@@ -35,10 +35,19 @@ const DescriptionCallout: React.FC<DescriptionCalloutProps> = function Descripti
   }
 
   return (
-    <TooltipHost
+    <HelpTooltip
+      aria-label={title + '; ' + description}
       delay={TooltipDelay.zero}
       directionalHint={DirectionalHint.bottomAutoEdge}
-      styles={{ root: { display: 'inline-block' } }}
+      iconProps={{
+        'data-testid': 'FieldLabelHelpIcon',
+      }}
+      styles={{
+        helpIcon: {
+          fontSize: FontSizes.size12,
+          lineHeight: '15px',
+        },
+      }}
       tooltipProps={{
         styles: { root: { width: '288px', padding: '17px 28px' } },
         onRenderContent: () => (
@@ -83,26 +92,7 @@ const DescriptionCallout: React.FC<DescriptionCalloutProps> = function Descripti
           timeOpened.current = null;
         }
       }}
-    >
-      <div css={focusBorder} data-testid="FieldLabelDescriptionIcon" tabIndex={0}>
-        <Icon
-          aria-label={title + '; ' + description}
-          iconName={'Unknown'}
-          styles={{
-            root: {
-              width: '16px',
-              minWidth: '16px',
-              height: '16px',
-              color: NeutralColors.gray160,
-              fontSize: '12px',
-              marginBottom: '-2px',
-              paddingLeft: '4px',
-              paddingTop: '4px',
-            },
-          }}
-        />
-      </div>
-    </TooltipHost>
+    />
   );
 };
 
@@ -131,6 +121,7 @@ const FieldLabel: React.FC<FieldLabelProps> = (props) => {
     >
       <Label
         htmlFor={id}
+        id={`${id}-field-label`}
         required={required}
         styles={{
           root: {

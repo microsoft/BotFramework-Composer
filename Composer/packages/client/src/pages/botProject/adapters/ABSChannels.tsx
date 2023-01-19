@@ -3,21 +3,21 @@
 
 /** @jsx jsx */
 import React, { useEffect, useState, Fragment } from 'react';
-import { jsx } from '@emotion/core';
+import { jsx } from '@emotion/react';
 import formatMessage from 'format-message';
-import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
-import { Icon } from 'office-ui-fabric-react/lib/Icon';
-import { Link } from 'office-ui-fabric-react/lib/Link';
-import { Toggle } from 'office-ui-fabric-react/lib/Toggle';
+import { Dropdown, IDropdownOption } from '@fluentui/react/lib/Dropdown';
+import { Icon } from '@fluentui/react/lib/Icon';
+import { Link } from '@fluentui/react/lib/Link';
+import { Toggle } from '@fluentui/react/lib/Toggle';
 import { useRecoilValue } from 'recoil';
 import { SubscriptionClient } from '@azure/arm-subscriptions';
 import { Subscription } from '@azure/arm-subscriptions/esm/models';
 import { TokenCredentials } from '@azure/ms-rest-js';
-import { Spinner } from 'office-ui-fabric-react/lib/Spinner';
-import { Stack } from 'office-ui-fabric-react/lib/Stack';
+import { Spinner } from '@fluentui/react/lib/Spinner';
+import { Stack } from '@fluentui/react/lib/Stack';
 import { OpenConfirmModal } from '@bfc/ui-shared';
-import { Text } from 'office-ui-fabric-react/lib/Text';
-import { TeachingBubble } from 'office-ui-fabric-react/lib/TeachingBubble';
+import { Text } from '@fluentui/react/lib/Text';
+import { TeachingBubble } from '@fluentui/react/lib/TeachingBubble';
 
 import TelemetryClient from '../../../telemetry/TelemetryClient';
 import { LoadingSpinner } from '../../../components/LoadingSpinner';
@@ -94,6 +94,7 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
   const { setApplicationLevelError, requireUserLogin } = useRecoilValue(dispatcherState);
   const currentUser = useRecoilValue(currentUserState);
   const isAuthenticated = useRecoilValue(isAuthenticatedState);
+  const [selectedConnectionKey, setSelectedConnectionKey] = useState<string>('');
 
   /* Copied from Azure Publishing extension */
   const getSubscriptions = async (token: string): Promise<Array<Subscription>> => {
@@ -115,11 +116,15 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
     }
   };
 
-  const onSelectProfile = async (_, opt) => {
+  const isDropdownFocusEvent = (event: React.FormEvent<HTMLDivElement>) => event.type === 'focus';
+
+  const onSelectProfile = async (ev, opt) => {
     if (opt.key === 'manageProfiles') {
+      if (isDropdownFocusEvent(ev)) return;
       TelemetryClient.track('ConnectionsAddNewProfile');
       navigateTo(`/bot/${projectId}/publish/all/#addNewPublishProfile`);
     } else {
+      setSelectedConnectionKey(opt.key);
       // identify the publishing profile in the list
       const profile = publishTargets?.find((p) => p.name === opt.key);
       if (profile) {
@@ -593,9 +598,11 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
       )}
       <div>
         <Dropdown
+          ariaLabel={formatMessage('Select publishing profile')}
           data-testid="publishTargetDropDown"
           options={publishTargetOptions}
           placeholder={formatMessage('Select publishing profile')}
+          selectedKey={selectedConnectionKey}
           styles={{
             root: { display: 'flex', alignItems: 'center', marginBottom: 10 },
             label: { width: 200 },

@@ -4,9 +4,9 @@
 import { TagInput } from '@bfc/ui-shared';
 import styled from '@emotion/styled';
 import formatMessage from 'format-message';
-import { Announced } from 'office-ui-fabric-react/lib/Announced';
-import { DefaultButton, PrimaryButton } from 'office-ui-fabric-react/lib/Button';
-import { CommandBar, ICommandBarItemProps } from 'office-ui-fabric-react/lib/CommandBar';
+import { Announced } from '@fluentui/react/lib/Announced';
+import { DefaultButton, PrimaryButton } from '@fluentui/react/lib/Button';
+import { CommandBar, ICommandBarItemProps } from '@fluentui/react/lib/CommandBar';
 import {
   DetailsList,
   DetailsRow,
@@ -15,12 +15,12 @@ import {
   ISelection,
   Selection,
   SelectionMode,
-} from 'office-ui-fabric-react/lib/DetailsList';
-import { Dialog, DialogFooter, DialogType } from 'office-ui-fabric-react/lib/Dialog';
-import { Link } from 'office-ui-fabric-react/lib/Link';
-import { Stack } from 'office-ui-fabric-react/lib/Stack';
-import { TextField } from 'office-ui-fabric-react/lib/TextField';
-import { IRenderFunction } from 'office-ui-fabric-react/lib/Utilities';
+} from '@fluentui/react/lib/DetailsList';
+import { Dialog, DialogFooter, DialogType } from '@fluentui/react/lib/Dialog';
+import { Link } from '@fluentui/react/lib/Link';
+import { Stack } from '@fluentui/react/lib/Stack';
+import { TextField } from '@fluentui/react/lib/TextField';
+import { IRenderFunction } from '@fluentui/react/lib/Utilities';
 import * as React from 'react';
 
 import { ListEntity, ListEntityItem } from '../types';
@@ -256,7 +256,7 @@ export const ListEntityCreationDialog = (props: Props) => {
       }}
       hidden={false}
       modalProps={dialogModalProps}
-      styles={{ main: { width: '960px !important', minWidth: '960px !important' } }}
+      styles={{ main: { maxWidth: '960px' } }}
       onDismiss={onDismiss}
     >
       <SubText>

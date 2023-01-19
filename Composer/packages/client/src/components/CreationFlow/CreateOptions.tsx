@@ -2,13 +2,13 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx } from '@emotion/core';
+import { jsx } from '@emotion/react';
 import { useState, Fragment, useEffect } from 'react';
 import formatMessage from 'format-message';
 import { BotTemplate } from '@bfc/shared';
 import { navigate, RouteComponentProps } from '@reach/router';
 import querystring from 'query-string';
-import axios from 'axios';
+import { axios } from '@bfc/shared/lib/axios';
 import { useRecoilValue } from 'recoil';
 
 import { getAliasFromPayload, isElectron } from '../../utils/electronUtil';
@@ -86,7 +86,7 @@ export function CreateOptions(props: CreateOptionsProps) {
   return (
     <Fragment>
       <AzureBotDialog
-        isOpen={isOpenOptionsModal}
+        isOpen={!isOpenCreateModal && isOpenOptionsModal}
         onDismiss={onDismiss}
         onJumpToOpenModal={onJumpToOpenModal}
         onToggleCreateModal={setIsOpenCreateModal}

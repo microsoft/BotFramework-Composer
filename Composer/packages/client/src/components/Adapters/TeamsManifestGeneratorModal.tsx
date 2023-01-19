@@ -3,17 +3,17 @@
 
 /** @jsx jsx */
 import { v4 as uuidv4 } from 'uuid';
-import { jsx } from '@emotion/core';
-import { DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
-import { PrimaryButton } from 'office-ui-fabric-react/lib/Button';
+import { jsx } from '@emotion/react';
+import { DialogFooter } from '@fluentui/react/lib/Dialog';
+import { PrimaryButton } from '@fluentui/react/lib/Button';
 import formatMessage from 'format-message';
-import { Text } from 'office-ui-fabric-react/lib/Text';
-import { IButtonStyles, IconButton } from 'office-ui-fabric-react/lib/components/Button';
-import { FontSizes, NeutralColors } from '@uifabric/fluent-theme/lib/fluent';
+import { Text } from '@fluentui/react/lib/Text';
+import { IButtonStyles, IconButton } from '@fluentui/react/lib/components/Button';
+import { FontSizes, NeutralColors } from '@fluentui/theme';
 import { useRef } from 'react';
-import { ITextField, TextField } from 'office-ui-fabric-react/lib/components/TextField';
+import { ITextField, TextField } from '@fluentui/react/lib/components/TextField';
 import { DialogTypes, DialogWrapper } from '@bfc/ui-shared/lib/components/DialogWrapper';
-import { DefaultButton } from 'office-ui-fabric-react/lib/Button';
+import { DefaultButton } from '@fluentui/react/lib/Button';
 import { useRecoilValue } from 'recoil';
 
 import { defaultTeamsManifest } from '../../constants';

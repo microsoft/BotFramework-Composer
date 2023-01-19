@@ -4,7 +4,7 @@
 import React from 'react';
 import styled from '@emotion/styled';
 import formatMessage from 'format-message';
-import { FluentTheme, NeutralColors } from '@uifabric/fluent-theme';
+import { FluentTheme, NeutralColors } from '@fluentui/theme';
 import {
   ScrollablePane,
   ScrollbarVisibility,
@@ -17,7 +17,7 @@ import {
   IStackTokens,
   IStackItemStyles,
   Link,
-} from 'office-ui-fabric-react';
+} from '@fluentui/react';
 import { usePublishApi, useAuthApi } from '@bfc/extension-client';
 
 import { SubscriptionPicker } from '../../resourceConfiguration/SubscriptionPicker';
@@ -65,7 +65,7 @@ const ConfigureResourcesPropertyLabel = styled(Label)`
   font-weight: ${FontWeights.regular};
 `;
 
-const autoCompleteTextFieldStyles = { root: { paddingBottom: '4px', width: '300px' } };
+const autoCompleteTextFieldStyles = { root: { paddingBottom: '4px', maxWidth: '300px', flex: 'auto' } };
 
 const configureResourcesIconStyle = {
   root: {
@@ -80,7 +80,8 @@ const LearnMoreLink = styled(Link)`
 `;
 
 const FullWidthForm = styled.form`
-  width: '100%';
+  width: 100%;
+  min-width: 500px;
 `;
 
 const urls = {

@@ -2,12 +2,12 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx, css } from '@emotion/core';
+import { jsx, css } from '@emotion/react';
 import React, { useCallback, useState } from 'react';
-import { DefaultButton, PrimaryButton, IButtonStyles } from 'office-ui-fabric-react/lib/Button';
-import { Dialog, DialogType, IDialogContentStyles } from 'office-ui-fabric-react/lib/Dialog';
-import { Link } from 'office-ui-fabric-react/lib/Link';
-import { NeutralColors } from '@uifabric/fluent-theme';
+import { DefaultButton, PrimaryButton, IButtonStyles } from '@fluentui/react/lib/Button';
+import { Dialog, DialogType, IDialogContentStyles } from '@fluentui/react/lib/Dialog';
+import { Link } from '@fluentui/react/lib/Link';
+import { NeutralColors } from '@fluentui/theme';
 import formatMessage from 'format-message';
 import { useRecoilValue } from 'recoil';
 

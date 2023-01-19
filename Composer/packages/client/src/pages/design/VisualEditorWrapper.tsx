@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 /** @jsx jsx */
-import { jsx } from '@emotion/core';
+import { jsx } from '@emotion/react';
 import React, { useMemo } from 'react';
 import { EditorExtension, PluginConfig } from '@bfc/extension-client';
 import { useRecoilValue } from 'recoil';

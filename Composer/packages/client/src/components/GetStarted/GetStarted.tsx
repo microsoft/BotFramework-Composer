@@ -2,12 +2,12 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx } from '@emotion/core';
-import React from 'react';
+import { jsx } from '@emotion/react';
+import React, { useState, useCallback } from 'react';
 import formatMessage from 'format-message';
-import { Panel, IPanelStyles, PanelType } from 'office-ui-fabric-react/lib/Panel';
-import { Pivot, PivotItem } from 'office-ui-fabric-react/lib/Pivot';
-import { Stack } from 'office-ui-fabric-react/lib/Stack';
+import { Panel, IPanelStyles, PanelType } from '@fluentui/react/lib/Panel';
+import { Pivot, PivotItem } from '@fluentui/react/lib/Pivot';
+import { Stack } from '@fluentui/react/lib/Stack';
 
 import { GetStartedNextSteps } from './GetStartedNextSteps';
 import { GetStartedLearn } from './GetStartedLearn';
@@ -22,32 +22,61 @@ type GetStartedProps = {
   onBotReady: () => void;
 };
 
-const panelStyles = {
+const panelStyles: Partial<IPanelStyles> = {
   root: {
     marginTop: 50,
   },
-} as IPanelStyles;
+};
+
+enum GetStartedTab {
+  GetStarted = 'GetStarted',
+  LearnMore = 'LearnMore',
+}
+
+interface ActiveTabContentProps {
+  activeTab: GetStartedTab;
+  tabProps: GetStartedProps;
+}
+
+const ActiveTabContent: React.FC<ActiveTabContentProps> = ({ activeTab, tabProps }) => {
+  switch (activeTab) {
+    case GetStartedTab.GetStarted:
+      return <GetStartedNextSteps {...tabProps} />;
+    case GetStartedTab.LearnMore: {
+      const { projectId, onDismiss } = tabProps;
+      return <GetStartedLearn {...{ projectId, onDismiss }} />;
+    }
+    default:
+      return null;
+  }
+};
 
 export const GetStarted: React.FC<GetStartedProps> = (props) => {
-  const { projectId, onDismiss } = props;
+  const [activeTab, setActiveTab] = useState(GetStartedTab.GetStarted);
 
-  const renderTabs = () => {
+  const handleLinkClick = useCallback((item?: PivotItem) => {
+    if (item) {
+      setActiveTab(item.props.itemKey as GetStartedTab);
+    }
+  }, []);
+
+  const renderTabs = useCallback(() => {
     return (
       <Stack grow styles={{ root: { alignSelf: 'flex-start', padding: '0 20px' } }}>
-        <Pivot styles={{ link: { fontSize: '20px' }, linkIsSelected: { fontSize: '20px' } }}>
-          <PivotItem headerText={formatMessage('Get started')}>
-            <GetStartedNextSteps {...props} />
-          </PivotItem>
-          <PivotItem headerText={formatMessage('Learn more')}>
-            <GetStartedLearn projectId={projectId} onDismiss={onDismiss} />
-          </PivotItem>
+        <Pivot
+          styles={{ link: { fontSize: '20px' }, linkIsSelected: { fontSize: '20px' } }}
+          onLinkClick={handleLinkClick}
+        >
+          <PivotItem headerText={formatMessage('Get started')} itemKey={GetStartedTab.GetStarted} />
+          <PivotItem headerText={formatMessage('Learn more')} itemKey={GetStartedTab.LearnMore} />
         </Pivot>
       </Stack>
     );
-  };
+  }, []);
 
   return (
     <Panel
+      closeButtonAriaLabel={formatMessage('Close Get Started panel')}
       customWidth="395px"
       isBlocking={false}
       isOpen={props.isOpen}
@@ -55,6 +84,8 @@ export const GetStarted: React.FC<GetStartedProps> = (props) => {
       type={PanelType.custom}
       onDismiss={props.onDismiss}
       onRenderHeader={renderTabs}
-    />
+    >
+      <ActiveTabContent activeTab={activeTab} tabProps={props} />
+    </Panel>
   );
 };

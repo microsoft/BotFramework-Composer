@@ -1,17 +1,17 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 /** @jsx jsx */
-import { jsx } from '@emotion/core';
+import { jsx } from '@emotion/react';
 import formatMessage from 'format-message';
 import { Fragment, useEffect, useState, useRef } from 'react';
-import { ActionButton } from 'office-ui-fabric-react/lib/Button';
-import { Callout } from 'office-ui-fabric-react/lib/Callout';
-import { Persona, PersonaSize } from 'office-ui-fabric-react/lib/Persona';
-import { ILinkStyles, Link } from 'office-ui-fabric-react/lib/Link';
+import { ActionButton } from '@fluentui/react/lib/Button';
+import { Callout } from '@fluentui/react/lib/Callout';
+import { Persona, PersonaSize } from '@fluentui/react/lib/Persona';
+import { ILinkStyles, Link } from '@fluentui/react/lib/Link';
 import { useRecoilValue } from 'recoil';
-import { NeutralColors } from '@uifabric/fluent-theme';
-import { Stack } from 'office-ui-fabric-react/lib/Stack';
-import { FontSizes } from 'office-ui-fabric-react/lib/Styling';
+import { NeutralColors } from '@fluentui/theme';
+import { Stack } from '@fluentui/react/lib/Stack';
+import { FontSizes } from '@fluentui/react/lib/Styling';
 
 import {
   currentUserState,

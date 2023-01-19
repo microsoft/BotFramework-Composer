@@ -2,12 +2,12 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { css, jsx } from '@emotion/core';
+import { css, jsx } from '@emotion/react';
 import React, { useCallback } from 'react';
-import { ActionButton } from 'office-ui-fabric-react/lib/Button';
-import { IPanelProps, Panel, PanelType } from 'office-ui-fabric-react/lib/Panel';
-import { IRenderFunction } from 'office-ui-fabric-react/lib/Utilities';
-import { NeutralColors, SharedColors } from '@uifabric/fluent-theme';
+import { ActionButton } from '@fluentui/react/lib/Button';
+import { IPanelProps, Panel, PanelType } from '@fluentui/react/lib/Panel';
+import { IRenderFunction } from '@fluentui/react/lib/Utilities';
+import { NeutralColors, SharedColors } from '@fluentui/theme';
 import formatMessage from 'format-message';
 
 import { Notification } from '../../recoilModel/types';
@@ -37,7 +37,7 @@ const styles = {
 type NotificationPanelProps = {
   isOpen: boolean;
   notifications: Notification[];
-  onDismiss: (event?: React.SyntheticEvent<HTMLElement, Event>) => void;
+  onDismiss: (event?: React.SyntheticEvent<HTMLElement, Event> | KeyboardEvent) => void;
   onDeleteNotification: (id: string) => void;
 };
 

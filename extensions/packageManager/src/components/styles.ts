@@ -1,8 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-import { css } from '@emotion/core';
-import { FontWeights, FontSizes } from 'office-ui-fabric-react';
-import { NeutralColors } from '@uifabric/fluent-theme';
+import { css } from '@emotion/react';
+import { FontWeights, FontSizes } from '@fluentui/react';
+import { NeutralColors } from '@fluentui/theme';
 
 export const packageScrollContainerStyle = {
   root: { borderTop: '1px solid #CCC', height: 'calc(100% - 150px)' },
@@ -31,13 +31,6 @@ export const ContentStyle = css`
       margin-top: 0px;
     }
   }
-`;
-export const contentEditor = css`
-  flex: 4;
-  height: calc(100vh - 200px);
-  position: relative;
-  overflow: visible;
-  width: 100%;
 `;
 
 export const publishDialogText = css`
@@ -69,7 +62,7 @@ export const targetListTiTle = css`
 export const listRoot = css`
   height: calc(100% - 48px);
   position: relative;
-  overflow-y: auto;
+  min-width: 512px;
   flex-grow: 1;
   display: flex;
   flex-direction: column;

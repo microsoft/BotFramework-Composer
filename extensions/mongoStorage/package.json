@@ -13,15 +13,17 @@
   "author": "benbro@microsoft.com",
   "license": "MIT",
   "dependencies": {
-    "glob-to-regexp": "^0.4.1",
-    "mongodb-client-encryption": "^1.1.0",
-    "mongoose": "^5.10.3"
+    "glob-to-regexp": "0.4.1",
+    "mongodb-client-encryption": "2.1.0",
+    "mongoose": "^6.8.3"
   },
   "devDependencies": {
-    "@types/mongodb": "^3.5.14",
-    "@types/mongoose": "^5.7.14"
+    "@types/mongodb": "4.0.7",
+    "@types/mongoose": "5.11.97"
   },
   "resolutions": {
-    "bl": "^4.0.3"
+    "bl": "^4.0.3",
+    "minimatch": "^3.1.2",
+    "mongoose": "^6.8.3"
   }
 }

@@ -1,9 +1,10 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 /** @jsx jsx */
-import { jsx } from '@emotion/core';
+import { jsx } from '@emotion/react';
 import React from 'react';
 import { FieldProps } from '@bfc/extension-client';
+import formatMessage from 'format-message';
 
 import { FieldLabel } from '../../FieldLabel';
 import { getPropertyItemProps, useObjectItems } from '../../../utils/objectUtils';
@@ -43,6 +44,7 @@ const OpenObjectField: React.FC<FieldProps<{
             formData={value}
             id={`${id}.value`}
             name={propertyName}
+            required={required}
             schema={typeof additionalProperties === 'object' ? additionalProperties : {}}
             uiOptions={uiOptions.properties?.additionalProperties || {}}
             value={propertyValue}
@@ -50,7 +52,12 @@ const OpenObjectField: React.FC<FieldProps<{
           />
         );
       })}
-      {additionalProperties && <AddButton onClick={onClick} />}
+      {additionalProperties && (
+        <AddButton
+          ariaLabel={label ? formatMessage('Add new value to the {label} field', { label }) : undefined}
+          onClick={onClick}
+        />
+      )}
     </div>
   );
 };

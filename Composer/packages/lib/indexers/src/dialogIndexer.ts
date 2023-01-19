@@ -149,7 +149,7 @@ function extractReferredDialogs(dialog): string[] {
    * */
   const visitor: VisitorFunc = (path: string, value: any): boolean => {
     // it's a valid schema dialog node.
-    if (has(value, '$kind') && value.$kind === SDKKinds.BeginDialog) {
+    if (has(value, '$kind') && value.$kind === SDKKinds.BeginDialog && value.dialog) {
       const dialogName = value.dialog;
       dialogs.push(dialogName);
     }

@@ -4,13 +4,13 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 
 /** @jsx jsx */
-import { jsx, css } from '@emotion/core';
+import { jsx, css } from '@emotion/react';
 import { useContext, useCallback, useEffect } from 'react';
 import { generateActionTitle, PromptTab } from '@bfc/shared';
 import { useShellApi } from '@bfc/extension-client';
-import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
-import { DirectionalHint } from 'office-ui-fabric-react/lib/Callout';
-import { Icon } from 'office-ui-fabric-react/lib/Icon';
+import { TooltipHost } from '@fluentui/react/lib/Tooltip';
+import { DirectionalHint } from '@fluentui/react/lib/Callout';
+import { Icon } from '@fluentui/react/lib/Icon';
 
 import { AttrNames } from '../constants/ElementAttributes';
 import { NodeRendererContext } from '../contexts/NodeRendererContext';
@@ -151,7 +151,10 @@ export const ActionNodeWrapper = ({ id, tab, data, onEvent, hideComment, childre
         gapSpace: 4,
         beakWidth: 12,
         target: escapeId(`#${nodeId}-comment-target`),
-        styles: { container: { borderRadius: '2px' } },
+        styles: {
+          container: { borderRadius: '2px' },
+          calloutMain: { overflowWrap: 'break-word', whiteSpace: 'pre-line' },
+        },
       }}
       content={data.$designer?.comment}
     >

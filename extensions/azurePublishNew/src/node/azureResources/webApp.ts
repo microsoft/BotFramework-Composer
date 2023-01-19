@@ -68,7 +68,7 @@ const webAppProvisionMethod = (provisionConfig: ProvisionServiceConfig) => {
         },
       });
       const hostname = webAppResult?.hostNames?.[0];
-      return { ...workingSet, webAppResult: { hostname: hostname } };
+      return { ...workingSet, webApp: { hostname: hostname } };
     } catch (err) {
       throw createCustomizeError(ProvisionErrors.CREATE_WEB_APP_ERROR, stringifyError(err));
     }

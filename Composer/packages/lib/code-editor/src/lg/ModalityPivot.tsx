@@ -2,19 +2,19 @@
 // Licensed under the MIT License.
 
 import { CodeEditorSettings, LgTemplate, TelemetryClient, extractTemplateNameFromExpression } from '@bfc/shared';
-import { FluentTheme, FontSizes } from '@uifabric/fluent-theme';
+import { FluentTheme, FontSizes } from '@fluentui/theme';
 import formatMessage from 'format-message';
-import { IconButton } from 'office-ui-fabric-react/lib/Button';
+import { IconButton } from '@fluentui/react/lib/Button';
 import {
   ContextualMenuItemType,
   IContextualMenuItem,
   IContextualMenuItemProps,
   IContextualMenuItemRenderFunctions,
   IContextualMenuProps,
-} from 'office-ui-fabric-react/lib/ContextualMenu';
-import { Link } from 'office-ui-fabric-react/lib/Link';
-import { IPivotStyles, Pivot, PivotItem } from 'office-ui-fabric-react/lib/Pivot';
-import { Stack } from 'office-ui-fabric-react/lib/Stack';
+} from '@fluentui/react/lib/ContextualMenu';
+import { Link } from '@fluentui/react/lib/Link';
+import { IPivotStyles, Pivot, PivotItem } from '@fluentui/react/lib/Pivot';
+import { Stack } from '@fluentui/react/lib/Stack';
 import React, { useCallback, useMemo, useRef, useState } from 'react';
 import mergeWith from 'lodash/mergeWith';
 
@@ -205,6 +205,7 @@ export const ModalityPivot = React.memo((props: Props) => {
     (itemProps: IContextualMenuItemProps, defaultRenders: IContextualMenuItemRenderFunctions) =>
       itemProps.item.itemType === ContextualMenuItemType.Header ? (
         <ItemWithTooltip
+          aria-label={formatMessage('Learn more about adding more to this response')}
           itemText={defaultRenders.renderItemName(itemProps)}
           tooltipId="modality-add-menu-header"
           tooltipText={formatMessage.rich('To learn more, <a>visit this document</a>.', {
@@ -217,6 +218,7 @@ export const ModalityPivot = React.memo((props: Props) => {
         />
       ) : (
         <ItemWithTooltip
+          aria-label={formatMessage('Learn more about {item}', { item: itemProps.item.text })}
           itemText={defaultRenders.renderItemName(itemProps)}
           tooltipId={itemProps.item.key}
           tooltipText={getModalityTooltipText(itemProps.item.key as ModalityType)}
@@ -393,7 +395,12 @@ export const ModalityPivot = React.memo((props: Props) => {
           ))}
         </Pivot>
         {menuItems.filter((item) => item.itemType !== ContextualMenuItemType.Header).length && (
-          <IconButton iconProps={addButtonIconProps} menuProps={addMenuProps} onRenderMenuIcon={() => null} />
+          <IconButton
+            aria-label={formatMessage('Add more to this response')}
+            iconProps={addButtonIconProps}
+            menuProps={addMenuProps}
+            onRenderMenuIcon={() => null}
+          />
         )}
       </Stack>
 

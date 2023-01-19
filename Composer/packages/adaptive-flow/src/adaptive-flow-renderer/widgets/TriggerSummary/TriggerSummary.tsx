@@ -4,8 +4,8 @@
 /** @jsx jsx */
 
 import { conceptLabels, getFriendlyName } from '@bfc/shared';
-import { jsx } from '@emotion/core';
-import { Icon } from 'office-ui-fabric-react/lib/Icon';
+import { jsx } from '@emotion/react';
+import { Icon } from '@fluentui/react/lib/Icon';
 
 import {
   triggerContainerStyle,

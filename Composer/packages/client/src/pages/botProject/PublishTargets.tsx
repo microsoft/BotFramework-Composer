@@ -3,13 +3,13 @@
 
 /** @jsx jsx */
 import React, { Fragment, useState, useEffect } from 'react';
-import { jsx, css } from '@emotion/core';
+import { jsx, css } from '@emotion/react';
 import { useRecoilValue } from 'recoil';
 import { PublishTarget } from '@bfc/shared';
 import formatMessage from 'format-message';
-import { ActionButton } from 'office-ui-fabric-react/lib/Button';
-import { FontWeights } from 'office-ui-fabric-react/lib/Styling';
-import { SharedColors } from '@uifabric/fluent-theme';
+import { ActionButton } from '@fluentui/react/lib/Button';
+import { FontWeights } from '@fluentui/react/lib/Styling';
+import { SharedColors } from '@fluentui/theme';
 import { OpenConfirmModal } from '@bfc/ui-shared';
 
 import { dispatcherState, settingsState, publishTypesState } from '../../recoilModel';

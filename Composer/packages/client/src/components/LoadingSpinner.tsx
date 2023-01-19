@@ -2,11 +2,11 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx, css } from '@emotion/core';
+import { jsx, css } from '@emotion/react';
 import React from 'react';
-import { Spinner } from 'office-ui-fabric-react/lib/Spinner';
+import { Spinner } from '@fluentui/react/lib/Spinner';
 import formatMessage from 'format-message';
-import Dialog, { DialogType } from 'office-ui-fabric-react/lib/Dialog';
+import Dialog, { DialogType } from '@fluentui/react/lib/Dialog';
 
 const container = css`
   height: 100%;

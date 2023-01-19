@@ -3,18 +3,19 @@
 
 import React, { Fragment, useRef, useState, useCallback, useEffect, useMemo } from 'react';
 import formatMessage from 'format-message';
-import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button';
-import { Stack, StackItem } from 'office-ui-fabric-react/lib/Stack';
-import { TextField } from 'office-ui-fabric-react/lib/TextField';
-import { FontSizes } from '@uifabric/fluent-theme';
+import { PrimaryButton, DefaultButton } from '@fluentui/react/lib/Button';
+import { Stack, StackItem } from '@fluentui/react/lib/Stack';
+import { TextField } from '@fluentui/react/lib/TextField';
+import { FontSizes } from '@fluentui/theme';
 import { useRecoilValue } from 'recoil';
 import debounce from 'lodash/debounce';
 import { isUsingAdaptiveRuntime, SDKKinds, isManifestJson } from '@bfc/shared';
 import { DialogWrapper, DialogTypes } from '@bfc/ui-shared';
-import { Separator } from 'office-ui-fabric-react/lib/Separator';
-import { Dropdown, IDropdownOption, ResponsiveMode } from 'office-ui-fabric-react/lib/Dropdown';
-import { FontWeights } from 'office-ui-fabric-react/lib/Styling';
+import { Separator } from '@fluentui/react/lib/Separator';
+import { Dropdown, IDropdownOption } from '@fluentui/react/lib/Dropdown';
+import { FontWeights } from '@fluentui/react/lib/Styling';
 import { JSZipObject } from 'jszip';
+import { ResponsiveMode } from '@fluentui/react/lib/utilities/decorators/withResponsiveMode';
 
 import { LoadingSpinner } from '../../components/LoadingSpinner';
 import {
@@ -32,6 +33,7 @@ import TelemetryClient from '../../telemetry/TelemetryClient';
 import { TriggerFormData } from '../../utils/dialogUtil';
 import { selectIntentDialog } from '../../constants';
 import { PublishProfileDialog } from '../../pages/botProject/create-publish-profile/PublishProfileDialog';
+import { skillNameRegex } from '../../utils/skillManifestUtil';
 
 import { SelectIntent } from './SelectIntent';
 import { SkillDetail } from './SkillDetail';
@@ -46,7 +48,16 @@ export interface SkillFormDataErrors {
 
 const urlRegex = /^http[s]?:\/\/\w+/;
 const filePathRegex = /([^<>/\\:""]+\.\w+$)/;
-export const skillNameRegex = /^\w[-\w]*$/;
+
+// All endpoints should have endpoint url
+const hasEndpointUrl = (content) => {
+  const endpoints = content.endpoints;
+  if (endpoints && endpoints.length > 0) {
+    return endpoints.every((endpoint) => !!endpoint.endpointUrl);
+  }
+  return false;
+};
+
 export const msAppIdRegex = /^[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12}$/;
 
 export interface CreateSkillModalProps {
@@ -99,9 +110,17 @@ export const validateLocalZip = async (files: Record<string, JSZipObject>) => {
     if (manifestFiles.length > 1) {
       result.error = { manifestUrl: formatMessage('zip folder has multiple manifest json') };
     } else if (manifestFiles.length === 1) {
-      const content = await manifestFiles[0].async('string');
-      result.manifestContent = JSON.parse(content);
-      result.zipContent = zipContent;
+      const content = JSON.parse(await manifestFiles[0].async('string'));
+      if (hasEndpointUrl(content)) {
+        result.manifestContent = content;
+        result.zipContent = zipContent;
+      } else {
+        result.error = {
+          manifestUrl: formatMessage(
+            'Endpoints should not be empty or endpoint should have endpoint url field in manifest json'
+          ),
+        };
+      }
     } else {
       result.error = { manifestUrl: formatMessage('could not locate manifest.json in zip') };
     }
@@ -112,6 +131,10 @@ export const validateLocalZip = async (files: Record<string, JSZipObject>) => {
   return result;
 };
 
+const validateSKillName = (skillContent, setSkillManifest) => {
+  skillContent.name = skillContent.name.replace(skillNameRegex, '');
+  setSkillManifest(skillContent);
+};
 export const getSkillManifest = async (
   projectId: string,
   manifestUrl: string,
@@ -125,7 +148,7 @@ export const getSkillManifest = async (
         url: manifestUrl,
       },
     });
-    setSkillManifest(data);
+    validateSKillName(data, setSkillManifest);
   } catch (error) {
     const httpMessage = error?.response?.data?.message;
     const message = httpMessage?.match('Unexpected string in JSON')
@@ -302,11 +325,11 @@ export const CreateSkillModal: React.FC<CreateSkillModalProps> = (props) => {
     });
 
     const result = await validateLocalZip(files);
-    result.error.manifestUrl && setFormDataErrors(result.error);
+    setFormDataErrors(result.error);
     result.path && setManifestDirPath(result.path);
     result.zipContent && setZipContent(result.zipContent);
     if (result.manifestContent) {
-      setSkillManifest(result.manifestContent);
+      validateSKillName(result.manifestContent, setSkillManifest);
       setShowDetail(true);
     }
   };
@@ -385,8 +408,8 @@ export const CreateSkillModal: React.FC<CreateSkillModalProps> = (props) => {
                   <TextField
                     required
                     errorMessage={formDataErrors.manifestUrl}
-                    label={formatMessage('Skill Manifest URL')}
-                    placeholder={formatMessage('Ask the skill owner for the URL and provide your bot’s App ID')}
+                    label={formatMessage('Skill Manifest')}
+                    placeholder={formatMessage('Enter manifest URL or select a .zip file')}
                     styles={{ root: { width: '300px' } }}
                     value={formData.manifestUrl || ''}
                     onChange={handleManifestUrlChange}

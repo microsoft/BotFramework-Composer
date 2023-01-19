@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 /* eslint-disable no-underscore-dangle */
-import axios from 'axios';
+import { axios } from '@bfc/shared/src/axios';
 import formatMessage from 'format-message';
 import { SubscriptionClient } from '@azure/arm-subscriptions';
 import { Subscription } from '@azure/arm-subscriptions/esm/models';
@@ -395,7 +395,7 @@ export const CheckCognitiveResourceSku = async (
 export const getResourceList = async (projectId: string, type: string): Promise<ResourcesItem[]> => {
   try {
     const { getRequiredRecognizers } = usePublishApi();
-    const requiredRecognizers = getRequiredRecognizers();
+    const requiredRecognizers = getRequiredRecognizers().filter((p) => p.projectId === projectId);
 
     const requireLUIS = requiredRecognizers.some((p) => p.requiresLUIS);
     const requireQNA = requiredRecognizers.some((p) => p.requiresQNA);

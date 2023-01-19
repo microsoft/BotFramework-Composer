@@ -2,11 +2,11 @@
 // Licensed under the MIT License.
 
 import styled from '@emotion/styled';
-import { FluentTheme } from '@uifabric/fluent-theme';
-import { ITextField, TextField } from 'office-ui-fabric-react/lib/TextField';
-import { Stack } from 'office-ui-fabric-react/lib/Stack';
-import { Text } from 'office-ui-fabric-react/lib/Text';
-import { IconButton } from 'office-ui-fabric-react/lib/Button';
+import { FluentTheme } from '@fluentui/theme';
+import { ITextField, TextField } from '@fluentui/react/lib/TextField';
+import { Stack } from '@fluentui/react/lib/Stack';
+import { Text } from '@fluentui/react/lib/Text';
+import { IconButton } from '@fluentui/react/lib/Button';
 import React, { useCallback, useEffect, useRef } from 'react';
 import formatMessage from 'format-message';
 import { CodeEditorSettings, LgTemplate, TelemetryClient } from '@bfc/shared';
@@ -165,7 +165,13 @@ const TextViewItem = React.memo(
             {onRenderDisplayText?.() ?? value.replace(/\r?\n/g, '↵')}
           </Text>
         </Stack>
-        <RemoveIcon className={removeIconClassName} iconProps={{ iconName: 'Trash' }} tabIndex={-1} onClick={remove} />
+        <RemoveIcon
+          ariaLabel={formatMessage('Remove item')}
+          className={removeIconClassName}
+          iconProps={{ iconName: 'Trash' }}
+          tabIndex={-1}
+          onClick={remove}
+        />
       </TextViewItemRoot>
     );
   }

@@ -2,12 +2,12 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx } from '@emotion/core';
+import { jsx } from '@emotion/react';
 import React, { useEffect, useState, useMemo } from 'react';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import formatMessage from 'format-message';
-import { TeachingBubble } from 'office-ui-fabric-react/lib/TeachingBubble';
-import { ScrollablePane } from 'office-ui-fabric-react/lib/ScrollablePane';
+import { TeachingBubble } from '@fluentui/react/lib/TeachingBubble';
+import { ScrollablePane } from '@fluentui/react/lib/ScrollablePane';
 import { DisplayMarkdownDialog } from '@bfc/ui-shared';
 
 import TelemetryClient from '../../telemetry/TelemetryClient';

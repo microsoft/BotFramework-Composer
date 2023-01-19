@@ -2,9 +2,9 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx } from '@emotion/core';
-import { Dialog, DialogFooter, DialogType } from 'office-ui-fabric-react/lib/Dialog';
-import { DefaultButton } from 'office-ui-fabric-react/lib/Button';
+import { jsx } from '@emotion/react';
+import { Dialog, DialogFooter, DialogType } from '@fluentui/react/lib/Dialog';
+import { DefaultButton } from '@fluentui/react/lib/Button';
 import React from 'react';
 import formatMessage from 'format-message';
 import { generateUniqueId } from '@bfc/shared';

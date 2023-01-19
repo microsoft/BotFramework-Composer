@@ -1,8 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 /** @jsx jsx */
-import { jsx } from '@emotion/core';
-import { NeutralColors } from '@uifabric/fluent-theme';
+import { jsx } from '@emotion/react';
+import { NeutralColors } from '@fluentui/theme';
 import { useRecoilValue } from 'recoil';
 
 import { zIndices } from '../../utils/zIndices';
@@ -26,6 +26,7 @@ export const WebChatContainer = () => {
         display: isWebChatPanelVisible ? 'block' : 'none',
         background: `${NeutralColors.white}`,
         boxShadow: '-4px 0px 6px 1px rgb(0 0 0 / 10%)',
+        maxWidth: 'calc(100vw - 50px)',
       }}
     >
       {webchatEssentials?.projectId ? (

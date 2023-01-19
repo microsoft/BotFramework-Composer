@@ -2,12 +2,13 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx } from '@emotion/core';
+import { jsx } from '@emotion/react';
 import React from 'react';
-import { ActionButton, DefaultButton, IButtonStyles, IconButton } from 'office-ui-fabric-react/lib/Button';
-import { IContextualMenuProps } from 'office-ui-fabric-react/lib/ContextualMenu';
+import { ActionButton, IButtonStyles, IconButton } from '@fluentui/react/lib/Button';
+import { IContextualMenuProps } from '@fluentui/react/lib/ContextualMenu';
 import formatMessage from 'format-message';
-import { CommunicationColors, NeutralColors } from '@uifabric/fluent-theme';
+import { CommunicationColors, NeutralColors } from '@fluentui/theme';
+import { SplitButton } from '@bfc/ui-shared';
 
 import { RestartOption } from './types';
 
@@ -22,12 +23,17 @@ const customButtonStyles: IButtonStyles = {
   icon: {
     color: `${CommunicationColors.primary}`,
   },
+  textContainer: {
+    '@media screen and (max-width: 480px)': /* 300% zoom */ {
+      display: 'none',
+    },
+  },
   splitButtonMenuButton: { backgroundColor: `${NeutralColors.white}`, width: 28, border: 'none' },
   splitButtonMenuIcon: { fontSize: '7px' },
   splitButtonDivider: {
     backgroundColor: `${NeutralColors.gray50}`,
     width: 1,
-    right: 26,
+    right: 28,
     position: 'absolute',
     top: 4,
     bottom: 4,
@@ -112,8 +118,7 @@ export const WebChatHeader: React.FC<WebChatHeaderProps> = ({
           onClick={onCloseWebChat}
         />
       </h4>
-      <DefaultButton
-        split
+      <SplitButton
         aria-roledescription="split button"
         ariaLabel="restart-conversation"
         disabled={isRestartButtonDisabled}

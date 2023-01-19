@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import { AxiosInstance } from 'axios';
+import type { AxiosInstance } from 'axios';
 
 import { IDiagnostic } from './diagnostic';
 import type {

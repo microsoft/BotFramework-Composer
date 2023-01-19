@@ -3,7 +3,7 @@
 
 /** @jsx jsx */
 import React, { Fragment, useState, useEffect } from 'react';
-import { jsx } from '@emotion/core';
+import { jsx } from '@emotion/react';
 import { useRecoilValue } from 'recoil';
 import { PublishTarget } from '@bfc/shared';
 

@@ -3,7 +3,7 @@
 
 import formatMessage from 'format-message';
 import React from 'react';
-import { IDropdownOption, DropdownMenuItemType } from 'office-ui-fabric-react/lib/Dropdown';
+import { IDropdownOption, DropdownMenuItemType } from '@fluentui/react/lib/Dropdown';
 import { CodeEditorSettings, extractTemplateNameFromExpression } from '@bfc/shared';
 
 import {

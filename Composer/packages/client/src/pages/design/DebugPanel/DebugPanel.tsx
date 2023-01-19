@@ -2,15 +2,16 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx, css } from '@emotion/core';
-import { useCallback, useMemo } from 'react';
+import { jsx, css } from '@emotion/react';
+import { useCallback, useEffect, useMemo, useRef } from 'react';
 import formatMessage from 'format-message';
-import { IconButton } from 'office-ui-fabric-react/lib/Button';
-import { Pivot, PivotItem } from 'office-ui-fabric-react/lib/Pivot';
-import { FontSizes } from '@uifabric/fluent-theme';
+import { IconButton } from '@fluentui/react/lib/Button';
+import { IPivot, Pivot, PivotItem } from '@fluentui/react/lib/Pivot';
+import { FontSizes } from '@fluentui/theme';
 import { Resizable } from 're-resizable';
-import { Label } from 'office-ui-fabric-react/lib/Label';
+import { Label } from '@fluentui/react/lib/Label';
 import { useRecoilValue } from 'recoil';
+import { useId } from '@fluentui/react-hooks';
 
 import TelemetryClient from '../../../telemetry/TelemetryClient';
 import { debugPanelExpansionState, debugPanelActiveTabState, dispatcherState } from '../../../recoilModel';
@@ -36,6 +37,14 @@ export const DebugPanel: React.FC = () => {
   const { setActiveTabInDebugPanel, setDebugPanelExpansion } = useRecoilValue(dispatcherState);
   const isPanelExpanded = useRecoilValue(debugPanelExpansionState);
   const activeTab = useRecoilValue(debugPanelActiveTabState);
+  const pivotRef = useRef<IPivot>(null);
+  const contentId = useId('debug-panel-content');
+
+  useEffect(() => {
+    if (isPanelExpanded) {
+      pivotRef.current?.focus();
+    }
+  }, [isPanelExpanded, activeTab]);
 
   const onExpandPanel = useCallback((activeTabKey: DebugDrawerKeys) => {
     setDebugPanelExpansion(true);
@@ -48,7 +57,6 @@ export const DebugPanel: React.FC = () => {
 
   const onCollapsePanel = useCallback(() => {
     setDebugPanelExpansion(false);
-    setActiveTabInDebugPanel(undefined);
     TelemetryClient.track('DrawerPaneClosed');
   }, []);
 
@@ -106,6 +114,7 @@ export const DebugPanel: React.FC = () => {
     return (
       <Pivot
         aria-label={formatMessage('Debug Panel Header')}
+        componentRef={pivotRef}
         selectedKey={isPanelExpanded ? activeTab : null}
         styles={{
           link: {
@@ -129,7 +138,7 @@ export const DebugPanel: React.FC = () => {
   }, [isPanelExpanded, activeTab]);
 
   return (
-    <div>
+    <div aria-label={formatMessage('debug panel')} role="region">
       <Resizable
         css={css`
           ${debugPaneContainerStyle}
@@ -163,15 +172,20 @@ export const DebugPanel: React.FC = () => {
             {headerPivot}
           </div>
           <div
+            aria-controls={contentId}
+            aria-expanded={isPanelExpanded ? 'true' : 'false'}
+            aria-label={formatMessage('Toggle debug panel')}
             css={{ flexGrow: 1, cursor: 'pointer', outline: 'none' }}
             data-testid="header__blank"
             role="button"
-            tabIndex={0}
+            tabIndex={-1}
             onClick={onDebugPaneClick}
             onKeyPress={onDebugPaneClick}
           />
           <div css={rightBarStyle} data-testid="header__right">
             <IconButton
+              aria-controls={contentId}
+              aria-expanded={isPanelExpanded ? 'true' : 'false'}
               iconProps={{ iconName: isPanelExpanded ? 'ChevronDown' : 'ChevronUp' }}
               styles={{ root: { height: '100%' } }}
               title={isPanelExpanded ? formatMessage('Collapse Debug Panel') : formatMessage('Expand Debug Panel')}
@@ -185,10 +199,21 @@ export const DebugPanel: React.FC = () => {
             />
           </div>
         </div>
-        <div css={debugPaneContentStyle} data-testid="debug-panel__content">
+        <div
+          aria-label={formatMessage('Debug panel tab content')}
+          css={debugPaneContentStyle}
+          data-testid="debug-panel__content"
+          id={contentId}
+          role="region"
+        >
           {debugExtensions.map((debugTabs) => {
             const { ContentWidget } = debugTabs;
-            return <ContentWidget key={`tabContent-${debugTabs.key}`} isActive={activeTab === debugTabs.key} />;
+            return (
+              <ContentWidget
+                key={`tabContent-${debugTabs.key}`}
+                isActive={activeTab === debugTabs.key && isPanelExpanded}
+              />
+            );
           })}
         </div>
       </Resizable>

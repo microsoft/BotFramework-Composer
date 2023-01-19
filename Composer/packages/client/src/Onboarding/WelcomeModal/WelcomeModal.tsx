@@ -2,9 +2,9 @@
 // Licensed under the MIT License.
 
 import React from 'react';
-import { Modal } from 'office-ui-fabric-react/lib/Modal';
-import { FluentTheme } from '@uifabric/fluent-theme';
-import { IModalStyles } from 'office-ui-fabric-react/lib/Modal';
+import { Modal } from '@fluentui/react/lib/Modal';
+import { FluentTheme } from '@fluentui/theme';
+import { IModalStyles } from '@fluentui/react/lib/Modal';
 
 import { useOnboardingContext } from '../OnboardingContext';
 

@@ -3,8 +3,8 @@
 
 import styled from '@emotion/styled';
 import formatMessage from 'format-message';
-import { Stack } from 'office-ui-fabric-react/lib/Stack';
-import { Text } from 'office-ui-fabric-react/lib/Text';
+import { Stack } from '@fluentui/react/lib/Stack';
+import { Text } from '@fluentui/react/lib/Text';
 import * as React from 'react';
 import { useRecoilValue } from 'recoil';
 
@@ -51,6 +51,7 @@ export const RequiredPriorityIndicator = React.memo((props: Props) => {
               help: ({ children }) => (
                 <HelpTooltip
                   key={`${propertyId}-priority-tooltip`}
+                  aria-label={children}
                   helpMessage={children}
                   tooltipId={`${propertyId}-priority-tooltip`}
                 />

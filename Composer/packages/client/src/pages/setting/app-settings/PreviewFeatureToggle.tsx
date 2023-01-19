@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx } from '@emotion/core';
+import { jsx } from '@emotion/react';
 import { Fragment, useState } from 'react';
 import formatMessage from 'format-message';
 import { FeatureFlag, FeatureFlagKey } from '@botframework-composer/types';
@@ -39,7 +39,11 @@ export const PreviewFeatureToggle: React.FC = () => {
       }
     });
     if (result.length === 0) {
-      result.push(<span css={noFeatureFlagText}>{formatMessage('There are no preview features at this time.')}</span>);
+      result.push(
+        <span key={'noPreviewFeatureText'} css={noFeatureFlagText}>
+          {formatMessage('There are no preview features at this time.')}
+        </span>
+      );
     }
     return <div css={featureFlagGroupContainer}>{result}</div>;
   };

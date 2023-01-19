@@ -131,7 +131,7 @@ const checkLUISLocales = (assets: { dialogs: DialogInfo[]; setting: DialogSettin
     setting: { languages },
   } = assets;
 
-  // if use LUIS, continue
+  // if not using LUIS, continue
   const useLUIS = dialogs.some((item) => !!item.luFile && item?.luProvider === SDKKinds.LuisRecognizer);
   if (!useLUIS) return [];
 
@@ -147,7 +147,7 @@ const checkLUISLocales = (assets: { dialogs: DialogInfo[]; setting: DialogSettin
 
 /**
  * Check bot settings & dialog
- * files meet QnA requirments.
+ * files meet QnA requirements.
  */
 const checkQnALocales = (assets: { dialogs: DialogInfo[]; setting: DialogSetting }): Diagnostic[] => {
   const {
@@ -155,7 +155,7 @@ const checkQnALocales = (assets: { dialogs: DialogInfo[]; setting: DialogSetting
     setting: { languages },
   } = assets;
 
-  // if use LUIS, continue
+  // if not using QnA, continue
   const useQnA = dialogs.some((item) => !!item.qnaFile);
   if (!useQnA) return [];
 

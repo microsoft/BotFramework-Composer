@@ -2,23 +2,22 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx } from '@emotion/core';
+import { jsx } from '@emotion/react';
 import moment from 'moment';
 import formatMessage from 'format-message';
-import { Checkbox } from 'office-ui-fabric-react/lib/Checkbox';
-import { Icon } from 'office-ui-fabric-react/lib/Icon';
+import { Checkbox } from '@fluentui/react/lib/Checkbox';
+import { Icon } from '@fluentui/react/lib/Icon';
 import React, { useState, Fragment, useMemo, useRef } from 'react';
-import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
-import { Spinner, SpinnerSize } from 'office-ui-fabric-react/lib/Spinner';
+import { Dropdown, IDropdownOption } from '@fluentui/react/lib/Dropdown';
+import { Spinner, SpinnerSize } from '@fluentui/react/lib/Spinner';
 import { PublishResult } from '@bfc/shared';
-import { CheckboxVisibility, DetailsList } from 'office-ui-fabric-react/lib/DetailsList';
-import { ActionButton, IconButton } from 'office-ui-fabric-react/lib/Button';
-import { SharedColors } from '@uifabric/fluent-theme';
-import { FontSizes } from '@uifabric/styling';
+import { CheckboxVisibility, DetailsList, IColumn } from '@fluentui/react/lib/DetailsList';
+import { ActionButton, IconButton } from '@fluentui/react/lib/Button';
+import { SharedColors } from '@fluentui/theme';
+import { FontSizes } from '@fluentui/style-utilities';
 import get from 'lodash/get';
 import { useCopyToClipboard } from '@bfc/ui-shared';
-import { Callout } from 'office-ui-fabric-react/lib/Callout';
-import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
+import { Callout } from '@fluentui/react/lib/Callout';
 
 import { ApiStatus } from '../../utils/publishStatusPollingUpdater';
 
@@ -33,35 +32,25 @@ const copiedCalloutStyles = {
 };
 
 type SkillManifestUrlFieldProps = {
-  urls: string[];
+  url: string;
 };
 
-const SkillManifestUrlField = ({ urls }: SkillManifestUrlFieldProps) => {
-  const { isCopiedToClipboard, copyTextToClipboard, resetIsCopiedToClipboard } = useCopyToClipboard(urls[0]);
+const SkillManifestUrlField = ({ url }: SkillManifestUrlFieldProps) => {
+  const { isCopiedToClipboard, copyTextToClipboard, resetIsCopiedToClipboard } = useCopyToClipboard(url);
 
   const calloutTarget = useRef<HTMLElement>();
-  const clipUrl = (url) => url.replace('azurewebsites.net/manifests/', 'azureweb...');
   return (
     <Fragment>
-      <TooltipHost
-        content={urls.map((url) => (
-          <div key={url} style={{ display: 'flex' }}>
-            {clipUrl(url)}
-            <IconButton iconProps={{ iconName: 'copy' }} onClick={() => navigator.clipboard.writeText(url)} />
-          </div>
-        ))}
+      <ActionButton
+        className="skill-manifest-copy-button"
+        title={url}
+        onClick={(e) => {
+          calloutTarget.current = e.target as HTMLElement;
+          copyTextToClipboard();
+        }}
       >
-        <ActionButton
-          className="skill-manifest-copy-button"
-          title={urls[0]}
-          onClick={(e) => {
-            calloutTarget.current = e.target as HTMLElement;
-            copyTextToClipboard();
-          }}
-        >
-          {formatMessage('Copy Skill Manifest URL')}
-        </ActionButton>
-      </TooltipHost>
+        {formatMessage('Copy Skill Manifest URL')}
+      </ActionButton>
       {isCopiedToClipboard && (
         <Callout
           setInitialFocus
@@ -136,9 +125,18 @@ export const BotStatusList: React.FC<BotStatusListProps> = ({
     }
   };
 
-  const handleChangePublishTarget = (item: BotStatus, option?: IDropdownOption): void => {
+  const isDropdownFocusEvent = (event: React.FormEvent<HTMLDivElement>) => event.type === 'focus';
+
+  const handleChangePublishTarget = (
+    event: React.FormEvent<HTMLDivElement>,
+    item: BotStatus,
+    option?: IDropdownOption
+  ): void => {
     if (option) {
       if (option.key === 'manageProfiles') {
+        // Focus events trigger onChange when no option selected
+        // This prevents navigation on focus events
+        if (isDropdownFocusEvent(event)) return;
         onManagePublishProfile(item.id);
       } else {
         onChangePublishTarget(option.text, item);
@@ -183,7 +181,7 @@ export const BotStatusList: React.FC<BotStatusListProps> = ({
     }
   };
 
-  const columns = [
+  const columns: IColumn[] = [
     {
       key: 'Bot',
       name: formatMessage('Bot'),
@@ -193,6 +191,8 @@ export const BotStatusList: React.FC<BotStatusListProps> = ({
       maxWidth: 200,
       isRowHeader: true,
       data: 'string',
+      sortAscendingAriaLabel: formatMessage('Sorted A to Z'),
+      sortDescendingAriaLabel: formatMessage('Sorted Z to A'),
       onRender: (item: BotStatus) => {
         return (
           <Checkbox
@@ -223,17 +223,20 @@ export const BotStatusList: React.FC<BotStatusListProps> = ({
       maxWidth: 200,
       isRowHeader: true,
       data: 'string',
+      sortAscendingAriaLabel: formatMessage('Sorted A to Z'),
+      sortDescendingAriaLabel: formatMessage('Sorted Z to A'),
       onRender: (item: BotStatus) => {
         return (
           <Dropdown
-            defaultSelectedKey={item.publishTarget}
+            aria-label={formatMessage('Publish target')}
             options={getPublishTargetOptions(item)}
             placeholder={formatMessage('Select a publish target')}
+            selectedKey={item.publishTarget}
             styles={{
               root: { width: '100%' },
               dropdownItems: { selectors: { '.ms-Button-flexContainer': { width: '100%' } } },
             }}
-            onChange={(_, option?: IDropdownOption) => handleChangePublishTarget(item, option)}
+            onChange={(event, option?: IDropdownOption) => handleChangePublishTarget(event, item, option)}
             onRenderOption={renderDropdownOption}
           />
         );
@@ -249,6 +252,8 @@ export const BotStatusList: React.FC<BotStatusListProps> = ({
       maxWidth: 134,
       isRowHeader: true,
       data: 'string',
+      sortAscendingAriaLabel: formatMessage('Sorted ascending'),
+      sortDescendingAriaLabel: formatMessage('Sorted descending'),
       onRender: (item: BotStatus) => {
         return <span>{item.time ? moment(item.time).format('MM-DD-YYYY') : null}</span>;
       },
@@ -263,6 +268,8 @@ export const BotStatusList: React.FC<BotStatusListProps> = ({
       maxWidth: 134,
       isRowHeader: true,
       data: 'string',
+      sortAscendingAriaLabel: formatMessage('Sorted A to Z'),
+      sortDescendingAriaLabel: formatMessage('Sorted Z to A'),
       onRender: (item: BotStatus) => {
         return renderPublishStatus(item);
       },
@@ -279,6 +286,8 @@ export const BotStatusList: React.FC<BotStatusListProps> = ({
       isCollapsible: true,
       isMultiline: true,
       data: 'string',
+      sortAscendingAriaLabel: formatMessage('Sorted A to Z'),
+      sortDescendingAriaLabel: formatMessage('Sorted Z to A'),
       onRender: (item: BotStatus) => {
         return <span>{item.message}</span>;
       },
@@ -295,6 +304,8 @@ export const BotStatusList: React.FC<BotStatusListProps> = ({
       isCollapsible: true,
       isMultiline: true,
       data: 'string',
+      sortAscendingAriaLabel: formatMessage('Sorted A to Z'),
+      sortDescendingAriaLabel: formatMessage('Sorted Z to A'),
       onRender: (item: BotStatus) => {
         return <span>{item.comment}</span>;
       },
@@ -302,20 +313,20 @@ export const BotStatusList: React.FC<BotStatusListProps> = ({
     },
     {
       key: 'SkillManifest',
-      name: '',
+      name: formatMessage('Manifest'),
       className: 'skillManifest',
       fieldName: 'skillManifestUrl',
       minWidth: 134,
       maxWidth: 150,
       data: 'string',
       onRender: (item: BotStatus) => {
-        return item?.skillManifestUrls.length > 0 && <SkillManifestUrlField urls={item.skillManifestUrls} />;
+        return item?.skillManifestUrl && <SkillManifestUrlField url={item.skillManifestUrl} />;
       },
       isPadded: true,
     },
     {
       key: 'ShowPublishHistory',
-      name: '',
+      name: formatMessage('History'),
       className: 'showHistory',
       fieldName: 'showHistory',
       minWidth: 150,
@@ -327,6 +338,8 @@ export const BotStatusList: React.FC<BotStatusListProps> = ({
       onRender: (item: BotStatus) => {
         return (
           <IconButton
+            aria-expanded={expandedBotIds[item.id] ? 'true' : 'false'}
+            aria-label={formatMessage('Show {name} publish history', { name: item.name })}
             iconProps={{ iconName: expandedBotIds[item.id] ? 'ChevronDown' : 'ChevronRight' }}
             styles={{ root: { float: 'right' } }}
             onClick={() => onChangeShowHistoryBots(item)}

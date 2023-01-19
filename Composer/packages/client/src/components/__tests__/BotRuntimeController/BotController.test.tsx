@@ -14,7 +14,7 @@ const mockStop = jest.fn();
 const mockSingleStop = jest.fn();
 const mockSingleStart = jest.fn();
 
-jest.mock('office-ui-fabric-react/lib/Button', () => ({
+jest.mock('@fluentui/react/lib/Button', () => ({
   DefaultButton: ({ children, onClick }) => (
     <button data-testid="button" onClick={onClick}>
       {children}
@@ -61,11 +61,11 @@ describe('<BotController />', () => {
       set(botStatusState(projectIds[1]), BotStatus.connected);
       set(botStatusState(projectIds[2]), BotStatus.failed);
     };
-    const { findByText } = renderWithRecoil(
+    const { findAllByText } = renderWithRecoil(
       <BotController isControllerHidden={false} onHideController={jest.fn()} />,
       initRecoilState
     );
-    await findByText('Restart all bots (2/3 running)');
+    await findAllByText('Restart all bots (2/3 running)');
   });
 
   it('should show that no bots have been started', async () => {

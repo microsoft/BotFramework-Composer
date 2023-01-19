@@ -2,11 +2,11 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx } from '@emotion/core';
+import { jsx } from '@emotion/react';
 import React from 'react';
 import formatMessage from 'format-message';
-import { Link } from 'office-ui-fabric-react/lib/Link';
-import { ScrollablePane } from 'office-ui-fabric-react/lib/ScrollablePane';
+import { Link } from '@fluentui/react/lib/Link';
+import { ScrollablePane } from '@fluentui/react/lib/ScrollablePane';
 import { useRecoilValue } from 'recoil';
 
 import TelemetryClient from '../../telemetry/TelemetryClient';

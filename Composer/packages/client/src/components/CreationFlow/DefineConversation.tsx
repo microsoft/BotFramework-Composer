@@ -5,27 +5,25 @@
 /** @jsx jsx */
 import Path from 'path';
 
-import { jsx } from '@emotion/core';
-import { DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
+import { jsx } from '@emotion/react';
+import { DialogFooter } from '@fluentui/react/lib/Dialog';
 import formatMessage from 'format-message';
-import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button';
-import { Stack, StackItem } from 'office-ui-fabric-react/lib/Stack';
+import { PrimaryButton, DefaultButton } from '@fluentui/react/lib/Button';
+import { Stack, StackItem } from '@fluentui/react/lib/Stack';
 import React, { Fragment, useEffect, useCallback, useMemo, useState } from 'react';
-import { TextField } from 'office-ui-fabric-react/lib/TextField';
+import { TextField } from '@fluentui/react/lib/TextField';
 import { RouteComponentProps } from '@reach/router';
 import querystring from 'query-string';
-import { FontWeights } from '@uifabric/styling';
-import { DialogWrapper, DialogTypes } from '@bfc/ui-shared';
+import { FontWeights } from '@fluentui/style-utilities';
+import { DialogWrapper, DialogTypes, DropdownField } from '@bfc/ui-shared';
 import { useRecoilValue } from 'recoil';
 import { csharpFeedKey, FeedType, functionsRuntimeKey, nodeFeedKey, QnABotTemplateId } from '@bfc/shared';
 import { RuntimeType, webAppRuntimeKey, localTemplateId } from '@bfc/shared';
-import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
+import { IDropdownOption } from '@fluentui/react/lib/Dropdown';
 import camelCase from 'lodash/camelCase';
 import upperFirst from 'lodash/upperFirst';
-import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
-import { Icon } from 'office-ui-fabric-react/lib/Icon';
-import { NeutralColors } from '@uifabric/fluent-theme';
-import { Label } from 'office-ui-fabric-react/lib/Label';
+import { Label } from '@fluentui/react/lib/Label';
+import styled from '@emotion/styled';
 
 import { CreationFlowStatus, DialogCreationCopy, nameRegex, botNameRegex } from '../../constants';
 import { FieldConfig, useForm } from '../../hooks/useForm';
@@ -37,6 +35,7 @@ import { getAliasFromPayload, Profile } from '../../utils/electronUtil';
 import TelemetryClient from '../../telemetry/TelemetryClient';
 
 import { LocationSelectContent } from './LocationSelectContent';
+import { FormStack } from './FormStack';
 
 // -------------------- Styles -------------------- //
 
@@ -51,27 +50,23 @@ const textFieldlabel = {
 };
 
 const name = {
-  root: {
-    width: '420px',
-  },
   subComponentStyles: textFieldlabel,
 };
 
-const halfstack = {
-  root: [
-    {
-      flexBasis: '50%',
-    },
-  ],
+const dropdownCalloutStyles = {
+  root: {
+    minWidth: '200px',
+    maxWidth: '100vw',
+  },
 };
 
-const stackinput = {
-  root: [
-    {
-      marginBottom: '1rem',
-    },
-  ],
-};
+const InnerFormStack = styled(FormStack)`
+  --min-column-size: 151px; /* two fields can't fit on 125% zoom */
+  column-gap: 1rem;
+  @media screen and (max-width: 960px) /* 125% zoom */ {
+    --min-column-size: 240px; /* force two-column layout for zoom up to 300% */
+  }
+`;
 
 // -------------------- DefineConversation -------------------- //
 
@@ -96,6 +91,14 @@ type DefineConversationFormData = {
     urlSuffix?: string; // url to deep link to after creation
     preserveRoot?: boolean; // identifier that is used to determine ay project file renames upon creation
   };
+};
+
+type DefineConversationUrlData = {
+  alias?: string;
+  eTag?: string;
+  imported?: string;
+  templateDir?: string;
+  urlSuffix?: string;
 };
 
 type DefineConversationProps = {
@@ -178,8 +181,8 @@ const DefineConversation: React.FC<DefineConversationProps> = (props) => {
 
   useEffect(() => {
     if (props.location?.state) {
-      const { imported } = props.location.state;
-      setIsImported(imported);
+      const { imported } = props.location.state as DefineConversationUrlData;
+      setIsImported(!!imported);
     }
   }, [props.location?.state]);
 
@@ -281,7 +284,7 @@ const DefineConversation: React.FC<DefineConversationProps> = (props) => {
         ...formData,
       };
       if (props.location?.state) {
-        const { alias, eTag, imported, templateDir, urlSuffix } = props.location.state;
+        const { alias, eTag, imported, templateDir, urlSuffix } = props.location.state as DefineConversationUrlData;
 
         if (imported) {
           dataToSubmit.pvaData = {
@@ -412,8 +415,8 @@ const DefineConversation: React.FC<DefineConversationProps> = (props) => {
       <DialogWrapper isOpen {...dialogCopy} dialogType={DialogTypes.CreateFlow} onDismiss={onDismiss}>
         <form onSubmit={handleSubmit}>
           <input style={{ display: 'none' }} type="submit" />
-          <Stack horizontal styles={stackinput} tokens={{ childrenGap: '2rem' }}>
-            <StackItem grow={0} styles={halfstack}>
+          <FormStack>
+            <StackItem>
               <TextField
                 autoFocus
                 required
@@ -426,59 +429,44 @@ const DefineConversation: React.FC<DefineConversationProps> = (props) => {
               />
             </StackItem>
             {!isImported && (
-              <StackItem grow={0} styles={halfstack}>
-                <Stack horizontal styles={stackinput} tokens={{ childrenGap: '2rem' }}>
-                  <StackItem grow={0}>
-                    <Dropdown
+              <StackItem>
+                <InnerFormStack>
+                  <StackItem>
+                    <DropdownField
+                      required
+                      calloutProps={{
+                        styles: dropdownCalloutStyles,
+                      }}
                       data-testid="NewDialogRuntimeType"
                       label={formatMessage('Runtime type')}
                       options={getSupportedRuntimesForTemplate()}
                       selectedKey={formData.runtimeType}
                       styles={{
-                        root: { width: inBotMigration ? '200px' : '420px' },
-                        dropdownItem: { height: '100px' },
-                        dropdownItemSelected: { height: '100px' },
+                        dropdownItem: { height: 'auto' },
+                        dropdownItemSelected: { height: 'auto' },
                       }}
-                      onChange={(_e, option) => updateField('runtimeType', option?.key.toString())}
-                      onRenderLabel={(props) => (
-                        <Stack horizontal styles={{ root: { alignItems: 'center' } }}>
-                          <Label required>{props?.label}</Label>
-                          <TooltipHost
-                            content={formatMessage(
-                              'Azure offers a number of ways to host your application code. The runtime type refers to the hosting model for the computing resources that your application runs on.'
-                            )}
-                          >
-                            <Icon
-                              iconName="Unknown"
-                              styles={{
-                                root: {
-                                  color: NeutralColors.gray160,
-                                  userSelect: 'none',
-                                },
-                              }}
-                            />
-                          </TooltipHost>
-                        </Stack>
+                      tooltip={formatMessage(
+                        'Azure offers a number of ways to host your application code. The runtime type refers to the hosting model for the computing resources that your application runs on.'
                       )}
+                      onChange={(_e, option) => updateField('runtimeType', option?.key.toString())}
                       onRenderOption={renderRuntimeDropdownOption}
                     />
                   </StackItem>
                   {inBotMigration && (
-                    <StackItem grow={0}>
-                      <Dropdown
+                    <StackItem>
+                      <DropdownField
                         data-testid="NewDialogRuntimeLanguage"
                         label={formatMessage('Runtime Language')}
                         options={getRuntimeLanguageOptions()}
                         selectedKey={formData.runtimeLanguage}
-                        styles={{ root: { width: '200px' } }}
                         onChange={(_e, option) => updateField('runtimeLanguage', option?.key.toString())}
                       />
                     </StackItem>
                   )}
-                </Stack>
+                </InnerFormStack>
               </StackItem>
             )}
-          </Stack>
+          </FormStack>
           {locationSelectContent}
           <DialogFooter>
             <DefaultButton text={formatMessage('Cancel')} onClick={onDismiss} />

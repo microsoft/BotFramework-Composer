@@ -146,7 +146,7 @@ export class OneAuthInstance extends OneAuthBase {
       // use the signed in account to acquire a token
       const reqParams = new this.oneAuth.AuthParameters(
         DEFAULT_AUTH_SCHEME,
-        DEFAULT_AUTH_AUTHORITY,
+        params.authority || DEFAULT_AUTH_AUTHORITY,
         params.targetResource,
         this.signedInAccount.realm,
         ''
@@ -168,7 +168,7 @@ export class OneAuthInstance extends OneAuthBase {
         // use the signed in account to acquire a token
         const reqParams = new this.oneAuth.AuthParameters(
           DEFAULT_AUTH_SCHEME,
-          DEFAULT_AUTH_AUTHORITY,
+          params.authority || DEFAULT_AUTH_AUTHORITY,
           params.targetResource,
           this.signedInAccount.realm,
           ''
@@ -341,7 +341,7 @@ export class OneAuthInstance extends OneAuthBase {
       // sign-in every time with auth parameters to get a token
       const reqParams = new this.oneAuth.AuthParameters(
         DEFAULT_AUTH_SCHEME,
-        DEFAULT_AUTH_AUTHORITY,
+        params.authority || DEFAULT_AUTH_AUTHORITY,
         params.targetResource,
         '',
         ''

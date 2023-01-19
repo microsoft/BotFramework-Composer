@@ -1,11 +1,12 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 /** @jsx jsx */
-import { jsx } from '@emotion/core';
+import { jsx } from '@emotion/react';
 import React from 'react';
 import { FieldProps } from '@bfc/extension-client';
+import formatMessage from 'format-message';
 
-import { getArrayItemProps, useArrayItems } from '../../utils';
+import { getArrayItemProps, isItemValueEmpty, useArrayItems } from '../../utils';
 import { FieldLabel } from '../FieldLabel';
 import { AddButton } from '../AddButton';
 
@@ -38,6 +39,8 @@ const ArrayField: React.FC<FieldProps<unknown[]>> = (props) => {
     return <UnsupportedField {...props} />;
   }
 
+  const canAddMore = !(arrayItems.length && isItemValueEmpty(arrayItems[arrayItems.length - 1]?.value));
+
   return (
     <div className={className}>
       <FieldLabel description={description} helpLink={uiOptions?.helpLink} id={id} label={label} required={required} />
@@ -45,8 +48,10 @@ const ArrayField: React.FC<FieldProps<unknown[]>> = (props) => {
         <ArrayFieldItem
           {...rest}
           key={element.id}
+          ariaLabel={formatMessage('{label}: row {index}', { label, index: idx + 1 })}
+          autofocus={!element.value && idx === arrayItems.length - 1}
           error={rawErrors[idx]}
-          id={id}
+          id={`${id}.${idx}`}
           label={false}
           rawErrors={rawErrors[idx]}
           schema={itemSchema}
@@ -55,7 +60,7 @@ const ArrayField: React.FC<FieldProps<unknown[]>> = (props) => {
           {...getArrayItemProps(arrayItems, idx, handleChange)}
         />
       ))}
-      <AddButton onClick={onClick} />
+      <AddButton disabled={!canAddMore} onClick={onClick} />
     </div>
   );
 };

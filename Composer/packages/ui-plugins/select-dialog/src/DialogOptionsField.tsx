@@ -5,11 +5,13 @@ import React from 'react';
 import styled from '@emotion/styled';
 import { FieldProps, JSONSchema7, useShellApi } from '@bfc/extension-client';
 import { FieldLabel, IntellisenseTextField, OpenObjectField, WithTypeIcons, SchemaField } from '@bfc/adaptive-form';
-import Stack from 'office-ui-fabric-react/lib/components/Stack/Stack';
-import { FluentTheme, NeutralColors } from '@uifabric/fluent-theme';
+import Stack from '@fluentui/react/lib/components/Stack/Stack';
+import { FluentTheme, NeutralColors } from '@fluentui/theme';
 import formatMessage from 'format-message';
-import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
-import Ajv, { AnySchemaObject } from 'ajv';
+import { Dropdown, IDropdownOption } from '@fluentui/react/lib/Dropdown';
+import Ajv, { AnySchemaObject, SchemaObject } from 'ajv';
+
+import { bundleSchema } from './bundleSchema';
 
 const loadSchema = async (uri: string) => {
   const res = await fetch(uri);
@@ -79,11 +81,23 @@ const DialogOptionsField: React.FC<FieldProps> = ({
   onChange,
 }) => {
   const { dialog, options } = value;
-  const { dialogSchemas } = useShellApi();
-  const { content: schema }: { content?: JSONSchema7 } = React.useMemo(
-    () => dialogSchemas.find(({ id }) => id === dialog) || {},
+  const { dialogSchemas, topics } = useShellApi();
+
+  const topicIdMap = React.useMemo(() => {
+    return topics.reduce((all, t) => {
+      if (t.content?.id) {
+        all[t.content.id] = t.id;
+      }
+      return all;
+    }, {} as Record<string, string>);
+  }, [topics]);
+
+  const dialogId = (dialog && topicIdMap[dialog]) ?? dialog;
+  const { content: rawSchema }: { content?: JSONSchema7 } = React.useMemo(
+    () => dialogSchemas.find(({ id }) => id === dialogId) || {},
     [dialog, dialogSchemas]
   );
+  const [schema, setSchema] = React.useState<JSONSchema7 | undefined>(undefined);
 
   const [selectedKey, setSelectedKey] = React.useState<string>();
   const [validationStatus, setValidationStatus] = React.useState<JSONValidationStatus>('validating');
@@ -92,11 +106,29 @@ const DialogOptionsField: React.FC<FieldProps> = ({
 
   React.useEffect(() => {
     mountRef.current = true;
+
+    return () => {
+      mountRef.current = false;
+    };
+  });
+
+  React.useEffect(() => {
+    (async () => {
+      if (rawSchema) {
+        const bundled = await bundleSchema(rawSchema);
+        if (mountRef.current) {
+          setSchema(bundled);
+        }
+      }
+    })();
+  }, [rawSchema]);
+
+  React.useEffect(() => {
     if (schema && Object.keys(schema.properties || {}).length) {
       (async () => {
         setValidationStatus('validating');
         try {
-          const validate = await ajv.compileAsync(schema, true);
+          const validate = await ajv.compileAsync(schema as SchemaObject, true);
           const valid = validate(schema);
 
           if (mountRef.current) {
@@ -113,10 +145,6 @@ const DialogOptionsField: React.FC<FieldProps> = ({
     } else {
       setSelectedKey(getSelectedKey(options, schema, false));
     }
-
-    return () => {
-      mountRef.current = false;
-    };
   }, [schema]);
 
   const change = React.useCallback(

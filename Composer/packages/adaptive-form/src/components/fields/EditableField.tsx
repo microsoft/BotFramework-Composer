@@ -2,9 +2,9 @@
 // Licensed under the MIT License.
 
 import React, { useState, useEffect } from 'react';
-import { TextField, ITextFieldStyles } from 'office-ui-fabric-react/lib/TextField';
-import { NeutralColors } from '@uifabric/fluent-theme';
-import { mergeStyleSets } from '@uifabric/styling';
+import { TextField, ITextFieldStyles } from '@fluentui/react/lib/TextField';
+import { NeutralColors } from '@fluentui/theme';
+import { mergeStyleSets } from '@fluentui/style-utilities';
 import { FieldProps } from '@bfc/extension-client';
 
 interface EditableFieldProps extends Omit<FieldProps, 'definitions'> {

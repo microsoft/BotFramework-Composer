@@ -2,18 +2,18 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx, css } from '@emotion/core';
+import { jsx, css } from '@emotion/react';
 import { useEffect, useMemo } from 'react';
-import { ContextualMenu } from 'office-ui-fabric-react/lib/ContextualMenu';
-import { Dialog, DialogFooter, DialogType } from 'office-ui-fabric-react/lib/components/Dialog';
-import { IDragOptions } from 'office-ui-fabric-react/lib/Modal';
+import { ContextualMenu } from '@fluentui/react/lib/ContextualMenu';
+import { Dialog, DialogFooter, DialogType } from '@fluentui/react/lib/components/Dialog';
+import { IDragOptions } from '@fluentui/react/lib/Modal';
 import { JsonEditor } from '@bfc/code-editor';
-import { PrimaryButton } from 'office-ui-fabric-react/lib/Button';
+import { PrimaryButton } from '@fluentui/react/lib/Button';
 import formatMessage from 'format-message';
-import { FontSizes } from '@uifabric/fluent-theme';
-import { FontWeights } from 'office-ui-fabric-react/lib/Styling';
-import { IDialogContentStyles } from 'office-ui-fabric-react/lib/Dialog';
-import { IModalStyles } from 'office-ui-fabric-react/lib/Modal';
+import { FontSizes } from '@fluentui/theme';
+import { FontWeights } from '@fluentui/react/lib/Styling';
+import { IDialogContentStyles } from '@fluentui/react/lib/Dialog';
+import { IModalStyles } from '@fluentui/react/lib/Modal';
 import { useRecoilValue } from 'recoil';
 
 import { skillsStateSelector, userSettingsState } from '../../recoilModel';

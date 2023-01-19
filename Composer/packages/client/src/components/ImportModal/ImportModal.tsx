@@ -2,13 +2,13 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx } from '@emotion/core';
+import { jsx } from '@emotion/react';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { navigate, RouteComponentProps } from '@reach/router';
-import { Dialog, DialogType } from 'office-ui-fabric-react/lib/Dialog';
+import { Dialog, DialogType } from '@fluentui/react/lib/Dialog';
 import { ExternalContentProviderType } from '@botframework-composer/types';
 import { useRecoilValue } from 'recoil';
-import axios from 'axios';
+import { axios } from '@bfc/shared/lib/axios';
 
 import { dispatcherState } from '../../recoilModel';
 import { createNotification } from '../../recoilModel/dispatchers/notification';

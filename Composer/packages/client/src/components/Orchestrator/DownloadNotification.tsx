@@ -2,12 +2,12 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { css, jsx } from '@emotion/core';
-import { SharedColors } from '@uifabric/fluent-theme';
-import { FontSizes } from '@uifabric/styling';
+import { css, jsx } from '@emotion/react';
+import { SharedColors } from '@fluentui/theme';
+import { FontSizes } from '@fluentui/style-utilities';
 import formatMessage from 'format-message';
-import { Icon } from 'office-ui-fabric-react/lib/Icon';
-import { ProgressIndicator } from 'office-ui-fabric-react/lib/ProgressIndicator';
+import { Icon } from '@fluentui/react/lib/Icon';
+import { ProgressIndicator } from '@fluentui/react/lib/ProgressIndicator';
 
 import { CardProps } from '../Notifications/NotificationCard';
 

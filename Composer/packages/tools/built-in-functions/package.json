@@ -11,5 +11,8 @@
     "@botframework-composer/test-utils": "*"
   },
   "author": "Microsoft",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "tslib": "2.4.0"
+  }
 }

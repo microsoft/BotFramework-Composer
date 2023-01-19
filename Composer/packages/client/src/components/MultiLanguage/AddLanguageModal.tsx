@@ -4,23 +4,29 @@
 /** @jsx jsx */
 import without from 'lodash/without';
 import cloneDeep from 'lodash/cloneDeep';
-import { jsx } from '@emotion/core';
+import { jsx } from '@emotion/react';
 import React, { useState, useCallback, useMemo, useEffect } from 'react';
 import formatMessage from 'format-message';
-import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button';
-import { SearchBox } from 'office-ui-fabric-react/lib/SearchBox';
-import { ScrollablePane, IScrollablePaneStyles } from 'office-ui-fabric-react/lib/ScrollablePane';
-import { Stack, StackItem } from 'office-ui-fabric-react/lib/Stack';
-import { Checkbox } from 'office-ui-fabric-react/lib/Checkbox';
-import { Label } from 'office-ui-fabric-react/lib/Label';
-import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
+import { PrimaryButton, DefaultButton } from '@fluentui/react/lib/Button';
+import { SearchBox } from '@fluentui/react/lib/SearchBox';
+import { ScrollablePane, IScrollablePaneStyles } from '@fluentui/react/lib/ScrollablePane';
+import { Stack, StackItem } from '@fluentui/react/lib/Stack';
+import { Checkbox } from '@fluentui/react/lib/Checkbox';
+import { Label } from '@fluentui/react/lib/Label';
+import { Dropdown, IDropdownOption } from '@fluentui/react/lib/Dropdown';
 import { DialogWrapper, DialogTypes } from '@bfc/ui-shared';
+import { hiddenContentStyle, mergeStyles } from '@fluentui/react/lib/Styling';
+import { Announced } from '@fluentui/react/lib/Announced';
+import { useId } from '@fluentui/react-hooks';
+import { FocusZoneDirection, FocusZone } from '@fluentui/react/lib/FocusZone';
 
 import { MultiLanguagesDialog } from '../../constants';
 
 import { ILanguageFormData } from './types';
 import { classNames } from './styles';
 import { languageListTemplatesSorted, languageListTemplates } from './utils';
+
+const screenReaderOnly = mergeStyles(hiddenContentStyle);
 
 export interface IAddLanguageModalProps {
   isOpen: boolean;
@@ -108,15 +114,16 @@ const AddLanguageModal: React.FC<IAddLanguageModalProps> = (props) => {
         label += formatMessage(' - Current');
       }
       return (
-        <Checkbox
-          key={locale}
-          className={classNames.checkboxItem}
-          defaultChecked={isEnabled}
-          disabled={isEnabled}
-          label={label}
-          title={locale}
-          onChange={onChange(locale)}
-        />
+        <div key={locale} role="listitem">
+          <Checkbox
+            className={classNames.checkboxItem}
+            defaultChecked={isEnabled}
+            disabled={isEnabled}
+            label={label}
+            title={locale}
+            onChange={onChange(locale)}
+          />
+        </div>
       );
     });
 
@@ -132,6 +139,10 @@ const AddLanguageModal: React.FC<IAddLanguageModalProps> = (props) => {
       };
     });
   }, [currentLanguages]);
+
+  const searchBoxLabelId = useId('search-box-label');
+  const searchBoxId = useId('search-box');
+  const translationsLabelId = useId('translations-label');
 
   const onSearch = (_e, newValue) => {
     setSearchKeywords(newValue.trim());
@@ -152,19 +163,60 @@ const AddLanguageModal: React.FC<IAddLanguageModalProps> = (props) => {
               options={defalutLanguageListOptions}
               placeholder="Select an option"
               selectedKey={formData.defaultLang}
-              styles={{ dropdown: { width: 300, marginTop: 10 } }}
+              styles={{ dropdown: { maxWidth: 300, marginTop: 10 } }}
               onChange={onDefaultLanguageChange}
             />
           </StackItem>
-          <StackItem grow={0}>
-            <Label>{MultiLanguagesDialog.ADD_DIALOG.selectionTitle}</Label>
+          <StackItem aria-labelledby={translationsLabelId} grow={0}>
+            <div id={translationsLabelId}>
+              <div className={screenReaderOnly}>{formatMessage('Bot language translations')}</div>
+              <Announced
+                message={formatMessage(
+                  `{
+                    hasFilter, select,
+                      false {}
+                      other {Search results for "{searchKeywords}":}
+                  } {
+                    languagesCount, plural,
+                      =1 {one language found}
+                      =0 {no languages found}
+                      other {# languages found}
+                  }
+              `,
+                  { searchKeywords, hasFilter: !!searchKeywords, languagesCount: languageCheckBoxList.length }
+                )}
+              />
+              <Announced
+                message={formatMessage(
+                  `{
+                    languagesCount, plural,
+                      =0 {No languages selected}
+                      =1 {One language selected}
+                      other {# languages selected}
+                  }`,
+                  { languagesCount: formData.languages.length }
+                )}
+              />
+              <div className={screenReaderOnly}>
+                {formatMessage('Press tab then up and down arrow keys to navigate the search results')}
+              </div>
+            </div>
+            <Label htmlFor={searchBoxId} id={searchBoxLabelId}>
+              {MultiLanguagesDialog.ADD_DIALOG.selectionTitle}
+            </Label>
             <SearchBox
               disableAnimation
+              aria-labelledby={searchBoxLabelId}
+              id={searchBoxId}
               placeholder={MultiLanguagesDialog.ADD_DIALOG.searchPlaceHolder}
-              styles={{ root: { width: 300 } }}
+              styles={{ root: { maxWidth: 300, width: 'auto' } }}
               onChange={onSearch}
             />
-            <ScrollablePane styles={scrollablePaneStyles}>{languageCheckBoxList}</ScrollablePane>
+            <FocusZone direction={FocusZoneDirection.vertical}>
+              <ScrollablePane styles={scrollablePaneStyles}>
+                <div role="list">{languageCheckBoxList}</div>
+              </ScrollablePane>
+            </FocusZone>
           </StackItem>
           <StackItem>
             <Checkbox

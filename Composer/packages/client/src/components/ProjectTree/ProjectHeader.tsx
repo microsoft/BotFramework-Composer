@@ -4,7 +4,7 @@
 /** @jsx jsx */
 
 import { useCallback } from 'react';
-import { jsx, css } from '@emotion/core';
+import { jsx, css } from '@emotion/react';
 import formatMessage from 'format-message';
 import { useRecoilValue } from 'recoil';
 import { Diagnostic } from '@bfc/shared';

@@ -2,9 +2,9 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx } from '@emotion/core';
+import { jsx } from '@emotion/react';
 import formatMessage from 'format-message';
-import { Link } from 'office-ui-fabric-react/lib/Link';
+import { Link } from '@fluentui/react/lib/Link';
 import { RouteComponentProps } from '@reach/router';
 import { useRecoilValue } from 'recoil';
 import { Fragment } from 'react';
@@ -41,6 +41,7 @@ export const ElectronSettings: React.FC<RouteComponentProps> = () => {
               a: (props) => {
                 <Link
                   key="nightly-link-learn-more-link"
+                  aria-label={formatMessage('Learn more about Bot Framework Composer Nightly Releases')}
                   href="https://github.com/microsoft/BotFramework-Composer-Nightlies"
                   rel="noopener noreferrer"
                   styles={link}

@@ -2,18 +2,21 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx, css } from '@emotion/core';
+import { jsx } from '@emotion/react';
 import formatMessage from 'format-message';
-import { DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
+import { DialogFooter } from '@fluentui/react/lib/Dialog';
 import { useState, useMemo, useCallback, Fragment } from 'react';
-import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button';
-import { Separator } from 'office-ui-fabric-react/lib/Separator';
-import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
-import { TextField } from 'office-ui-fabric-react/lib/TextField';
+import { PrimaryButton, DefaultButton } from '@fluentui/react/lib/Button';
+import { Separator } from '@fluentui/react/lib/Separator';
+import { IDropdownOption } from '@fluentui/react/lib/Dropdown';
 import { PublishTarget } from '@bfc/shared';
+import { DropdownField, TextField } from '@bfc/ui-shared';
+import { mergeStyleSets } from '@fluentui/react/lib/Styling';
+import styled from '@emotion/styled';
 
 import { separator } from '../../publish/styles';
 import { PublishType } from '../../../recoilModel/types';
+import { customFieldLabel } from '../../../styles';
 
 type ProfileFormDialogProps = {
   onDismiss: () => void;
@@ -27,28 +30,23 @@ type ProfileFormDialogProps = {
   setTargetType: (value: string) => void;
   current?: { index: number; item: PublishTarget } | null;
 };
-const labelContainer = css`
-  display: flex;
-  flex-direction: row;
-  margin-bottom: 5px;
-`;
-
-const customerLabel = css`
-  margin-right: 5px;
-  font-weight: 600;
-  font-size: 14px;
-`;
-
-const onRenderLabel = (props) => {
-  return (
-    <div css={labelContainer}>
-      <div css={customerLabel}> {props.label} </div>
-    </div>
-  );
-};
 
 //const hiddenProfileTypes = ['pva-publish-composer'];
 const hiddenProfileTypes = ['pva-publish-composer', 'azurePublishNew'];
+
+const ProfileContainer = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+`;
+
+const ProfileContent = styled.div`
+  flex-basis: 49%;
+  min-height: 400px;
+  @media screen and (max-width: 960px) /* 125% zoom */ {
+    min-height: calc(100vh - 160px);
+    flex: auto;
+  }
+`;
 
 export const ProfileFormDialog: React.FC<ProfileFormDialogProps> = (props) => {
   const { name, setName, targetType, setTargetType, onDismiss, targets, types, onNext, setType, current } = props;
@@ -102,8 +100,8 @@ export const ProfileFormDialog: React.FC<ProfileFormDialogProps> = (props) => {
 
   return (
     <Fragment>
-      <Fragment>
-        <div style={{ width: '49%', minHeight: '430px' }}>
+      <ProfileContainer>
+        <ProfileContent>
           <form>
             <TextField
               required
@@ -113,22 +111,21 @@ export const ProfileFormDialog: React.FC<ProfileFormDialogProps> = (props) => {
               errorMessage={errorMessage}
               label={formatMessage('Name')}
               placeholder={formatMessage('e.g. AzureBot')}
-              styles={{ root: { paddingBottom: '8px' } }}
+              styles={mergeStyleSets(customFieldLabel, { root: { paddingBottom: '8px' } })}
               onChange={updateName}
-              onRenderLabel={onRenderLabel}
             />
-            <Dropdown
+            <DropdownField
               required
-              ariaLabel={formatMessage('The target where you publish your bot')}
+              ariaLabel={formatMessage('Publishing target: the target where you publish your bot')}
               defaultSelectedKey={targetType}
               label={formatMessage('Publishing target')}
               options={targetTypes}
               placeholder={formatMessage('Select one')}
+              styles={customFieldLabel}
               onChange={updateType}
-              onRenderLabel={onRenderLabel}
             />
           </form>
-        </div>
+        </ProfileContent>
         <Separator css={separator} />
         <DialogFooter>
           <PrimaryButton
@@ -141,7 +138,7 @@ export const ProfileFormDialog: React.FC<ProfileFormDialogProps> = (props) => {
           />
           <DefaultButton style={{ margin: '0 4px' }} text={formatMessage('Cancel')} onClick={onDismiss} />
         </DialogFooter>
-      </Fragment>
+      </ProfileContainer>
     </Fragment>
   );
 };

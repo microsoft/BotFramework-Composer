@@ -2,12 +2,12 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { css, jsx } from '@emotion/core';
-import { SharedColors } from '@uifabric/fluent-theme';
+import { css, jsx } from '@emotion/react';
+import { SharedColors } from '@fluentui/theme';
 import formatMessage from 'format-message';
-import { ActionButton } from 'office-ui-fabric-react/lib/Button';
-import { FontWeights } from 'office-ui-fabric-react/lib/Styling';
-import { ITextField, ITextFieldProps, TextField } from 'office-ui-fabric-react/lib/TextField';
+import { ActionButton } from '@fluentui/react/lib/Button';
+import { FontWeights } from '@fluentui/react/lib/Styling';
+import { ITextField, ITextFieldProps, TextField } from '@fluentui/react/lib/TextField';
 import React, { useEffect, useRef, useState } from 'react';
 
 import { tableColumnHeader, tableRow, tableRowItem } from '../../../botProject/styles';

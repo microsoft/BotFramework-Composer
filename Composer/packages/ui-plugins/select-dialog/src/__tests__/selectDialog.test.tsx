@@ -58,7 +58,7 @@ describe('Select Dialog', () => {
     const menu = await findByLabelText('Dialog name');
     fireEvent.click(menu);
 
-    const createItem = getAllByRole(baseElement, 'menuitem').pop();
+    const createItem = getAllByRole(baseElement, 'option').pop();
     expect(createItem).toHaveTextContent('Create a new dialog');
     act(() => {
       fireEvent.click(createItem);
@@ -79,7 +79,7 @@ describe('Select Dialog', () => {
     const menu = await findByLabelText('Dialog name');
     fireEvent.click(menu);
 
-    const [dialog] = getAllByRole(baseElement, 'menuitem');
+    const [dialog] = getAllByRole(baseElement, 'option');
     expect(dialog).toHaveTextContent('dialog2');
     act(() => {
       fireEvent.click(dialog);
@@ -90,6 +90,6 @@ describe('Select Dialog', () => {
 
   it('should display label', async () => {
     const { findByText } = renderSelectDialog();
-    await findByText('Dialog name');
+    await findByText('Dialog name', { selector: '[for]' });
   });
 });

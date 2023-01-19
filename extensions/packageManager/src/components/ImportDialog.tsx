@@ -2,10 +2,10 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx } from '@emotion/core';
+import { jsx } from '@emotion/react';
 import React, { Fragment, useState } from 'react';
 import formatMessage from 'format-message';
-import { TextField, DialogFooter, PrimaryButton, DefaultButton } from 'office-ui-fabric-react';
+import { TextField, DialogFooter, PrimaryButton, DefaultButton } from '@fluentui/react';
 
 interface ImportDialogProps {
   closeDialog: () => void;

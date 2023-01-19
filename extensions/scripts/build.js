@@ -75,7 +75,7 @@ const getBundleConfigs = (extPath, packageJSON, watch = false) => {
                   react: 'React',
                   'react-dom': 'ReactDOM',
                   '@bfc/extension-client': 'ExtensionClient',
-                  'office-ui-fabric-react': 'Fabric',
+                  '@fluentui/react': 'Fabric',
                   '@bfc/code-editor': 'CodeEditors',
                   '@bfc/ui-shared': 'UIShared',
                 }),

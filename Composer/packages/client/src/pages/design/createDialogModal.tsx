@@ -2,10 +2,10 @@
 // Licensed under the MIT License.
 import React, { useCallback } from 'react';
 import formatMessage from 'format-message';
-import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button';
-import { DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
-import { Stack, StackItem } from 'office-ui-fabric-react/lib/Stack';
-import { TextField } from 'office-ui-fabric-react/lib/TextField';
+import { PrimaryButton, DefaultButton } from '@fluentui/react/lib/Button';
+import { DialogFooter } from '@fluentui/react/lib/Dialog';
+import { Stack, StackItem } from '@fluentui/react/lib/Stack';
+import { TextField } from '@fluentui/react/lib/TextField';
 import { useRecoilValue } from 'recoil';
 import { RecognizerSchema, useRecognizerConfig, useShellApi } from '@bfc/extension-client';
 import { DialogFactory, SDKKinds, DialogUtils } from '@bfc/shared';
@@ -80,7 +80,7 @@ export const CreateDialogModal: React.FC<CreateDialogModalProps> = (props) => {
 
   const seedNewDialog = (formData: DialogFormData) => {
     const seededContent = new DialogFactory(schemas.sdk?.content).create(SDKKinds.AdaptiveDialog, {
-      $designer: { name: formData.name, description: formData.description },
+      $designer: { name: formData.name, comment: formData.description },
       generator: `${formData.name}.lg`,
       recognizer: seedNewRecognizer(defaultRecognizer),
     });
@@ -115,7 +115,7 @@ export const CreateDialogModal: React.FC<CreateDialogModalProps> = (props) => {
     >
       <form onSubmit={handleSubmit}>
         <input style={{ display: 'none' }} type="submit" />
-        <Stack styles={wizardStyles.stackinput} tokens={{ childrenGap: '2rem' }}>
+        <Stack styles={wizardStyles.stackinput}>
           <StackItem grow={0} styles={wizardStyles.halfstack}>
             <TextField
               autoFocus

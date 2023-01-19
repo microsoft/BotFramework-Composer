@@ -113,7 +113,7 @@ describe('QnA creation flow', () => {
     const next1 = getByText('Next');
     fireEvent.click(next1);
 
-    const option = getAllByText('Create new knowledge base from URL or file');
+    const option = getAllByText('Create new knowledge base from URL');
     fireEvent.click(option[0]);
 
     const urlField = getByTestId('adden-usInCreateQnAFromUrlModal');

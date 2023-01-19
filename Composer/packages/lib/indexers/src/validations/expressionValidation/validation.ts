@@ -55,7 +55,10 @@ export const checkExpression = (exp: any, required: boolean, types: number[]): n
       break;
     }
     case 'string': {
-      returnType = checkStringExpression(exp, types.length === 1 && types[0] === ReturnType.String);
+      returnType = checkStringExpression(
+        exp,
+        types.some((type) => type & ReturnType.String)
+      );
       break;
     }
     default:

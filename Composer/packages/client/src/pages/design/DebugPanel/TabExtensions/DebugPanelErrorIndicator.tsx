@@ -2,8 +2,8 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx } from '@emotion/core';
-import { SharedColors } from '@uifabric/fluent-theme';
+import { jsx } from '@emotion/react';
+import { SharedColors } from '@fluentui/theme';
 
 import { Indicator } from './Indicator';
 

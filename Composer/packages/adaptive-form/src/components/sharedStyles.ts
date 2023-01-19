@@ -1,8 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { css } from '@emotion/core';
-import { NeutralColors } from '@uifabric/fluent-theme';
+import { css } from '@emotion/react';
+import { NeutralColors } from '@fluentui/theme';
 
 export const focusBorder = css`
   &:focus {

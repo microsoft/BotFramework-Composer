@@ -2,10 +2,10 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx } from '@emotion/core';
+import { jsx } from '@emotion/react';
 import { useRef, useState, useMemo } from 'react';
 import { useRecoilValue } from 'recoil';
-import { SharedColors } from '@uifabric/fluent-theme';
+import { SharedColors } from '@fluentui/theme';
 
 import { botStatusState } from '../../recoilModel';
 import { BotStatus, BotStatusesCopy } from '../../constants';

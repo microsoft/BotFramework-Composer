@@ -3,7 +3,7 @@
 
 import React from 'react';
 import formatMessage from 'format-message';
-import { ITextField, ITextFieldProps, TextField } from 'office-ui-fabric-react';
+import { ITextField, ITextFieldProps, TextField } from '@fluentui/react';
 
 export type SearchableDropdownTextFieldProps = ITextFieldProps & {
   /**

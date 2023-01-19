@@ -2,17 +2,16 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx } from '@emotion/core';
+import { jsx } from '@emotion/react';
 import React, { useEffect, useRef, useState } from 'react';
 import formatMessage from 'format-message';
-import { Dialog, DialogFooter, DialogType } from 'office-ui-fabric-react/lib/Dialog';
-import { DefaultButton, PrimaryButton } from 'office-ui-fabric-react/lib/Button';
+import { Dialog, DialogFooter, DialogType } from '@fluentui/react/lib/Dialog';
+import { DefaultButton, PrimaryButton } from '@fluentui/react/lib/Button';
 import { JSONSchema7 } from '@bfc/extension-client';
-import { Link } from 'office-ui-fabric-react/lib/components/Link';
+import { Link } from '@fluentui/react/lib/components/Link';
 import { useRecoilValue } from 'recoil';
-import { PublishTarget, SkillManifestFile } from '@bfc/shared';
+import { isUsingAdaptiveRuntime, PublishTarget, SkillManifestFile } from '@bfc/shared';
 import { navigate } from '@reach/router';
-import { isUsingAdaptiveRuntime } from '@bfc/shared';
 import cloneDeep from 'lodash/cloneDeep';
 
 import { Notification } from '../../../recoilModel/types';
@@ -277,7 +276,7 @@ const ExportSkillModal: React.FC<ExportSkillModalProps> = ({ onSubmit, onDismiss
       onDismiss={handleDismiss}
     >
       <div css={styles.container}>
-        <p style={{ height: '38px' }}>
+        <p>
           {typeof subText === 'function' && subText()}
           {helpLink && (
             <React.Fragment>
@@ -288,12 +287,7 @@ const ExportSkillModal: React.FC<ExportSkillModalProps> = ({ onSubmit, onDismiss
             </React.Fragment>
           )}
         </p>
-        <div
-          css={{
-            ...styles.content,
-            overflow: order[currentStep] === ManifestEditorSteps.MANIFEST_DESCRIPTION ? 'auto' : 'hidden',
-          }}
-        >
+        <div css={styles.content}>
           <Content
             callers={callers}
             completeStep={handleNext}
@@ -316,41 +310,41 @@ const ExportSkillModal: React.FC<ExportSkillModalProps> = ({ onSubmit, onDismiss
             onUpdateIsCreateProfileFromSkill={setIsCreateProfileFromSkill}
           />
         </div>
-        <DialogFooter styles={{ actions: { lineHeight: '0px' } }}>
-          <div css={styles.buttonContainer}>
-            <div>
-              {buttons.map(({ disabled, primary, text, onClick }, index) => {
-                const Button = primary ? PrimaryButton : DefaultButton;
-
-                const isDisabled =
-                  typeof disabled === 'function' ? disabled({ publishTarget: currentPublishTarget }) : !!disabled;
-
-                return (
-                  <Button
-                    key={index}
-                    disabled={isDisabled}
-                    styles={{ root: { marginLeft: '8px' } }}
-                    text={text()}
-                    onClick={onClick({
-                      generateManifest: handleGenerateManifest,
-                      setCurrentStep,
-                      manifest: skillManifest,
-                      onDismiss: handleDismiss,
-                      onNext: handleNext,
-                      onBack: handleBack,
-                      onSave: handleSave,
-                      onPublish: handleTriggerPublish,
-                      onSubmit,
-                      onSaveSkill,
-                    })}
-                  />
-                );
-              })}
-            </div>
-            {editJson && <DefaultButton text={formatMessage('Edit in JSON')} onClick={handleEditJson} />}
-          </div>
-        </DialogFooter>
       </div>
+      <DialogFooter styles={{ actions: { lineHeight: '0px' } }}>
+        <div css={styles.buttonContainer}>
+          <div css={styles.buttonsRight}>
+            {buttons.map(({ disabled, primary, text, onClick }, index) => {
+              const Button = primary ? PrimaryButton : DefaultButton;
+
+              const isDisabled =
+                typeof disabled === 'function' ? disabled({ publishTarget: currentPublishTarget }) : !!disabled;
+
+              return (
+                <Button
+                  key={index}
+                  disabled={isDisabled}
+                  styles={{ root: { marginLeft: '8px' } }}
+                  text={text()}
+                  onClick={onClick({
+                    generateManifest: handleGenerateManifest,
+                    setCurrentStep,
+                    manifest: skillManifest,
+                    onDismiss: handleDismiss,
+                    onNext: handleNext,
+                    onBack: handleBack,
+                    onSave: handleSave,
+                    onPublish: handleTriggerPublish,
+                    onSubmit,
+                    onSaveSkill,
+                  })}
+                />
+              );
+            })}
+          </div>
+          {editJson && <DefaultButton text={formatMessage('Edit in JSON')} onClick={handleEditJson} />}
+        </div>
+      </DialogFooter>
     </Dialog>
   );
 };

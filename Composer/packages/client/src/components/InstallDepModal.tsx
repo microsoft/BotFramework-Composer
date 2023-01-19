@@ -4,13 +4,13 @@
 
 /** @jsx jsx */
 import { DialogTypes, DialogWrapper } from '@bfc/ui-shared/lib/components/DialogWrapper';
-import { jsx } from '@emotion/core';
+import { jsx } from '@emotion/react';
 import formatMessage from 'format-message';
-import { DefaultButton, PrimaryButton } from 'office-ui-fabric-react/lib/components/Button';
-import { DialogFooter } from 'office-ui-fabric-react/lib/components/Dialog';
+import { DefaultButton, PrimaryButton } from '@fluentui/react/lib/components/Button';
+import { DialogFooter } from '@fluentui/react/lib/components/Dialog';
 import React from 'react';
-import { Text } from 'office-ui-fabric-react/lib/Text';
-import { Link } from 'office-ui-fabric-react/lib/Link';
+import { Text } from '@fluentui/react/lib/Text';
+import { Link } from '@fluentui/react/lib/Link';
 
 type InstallDepModalProps = {
   onDismiss: () => void;

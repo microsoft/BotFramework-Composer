@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx, css } from '@emotion/core';
+import { jsx, css } from '@emotion/react';
 import React, { useEffect, useMemo, useState, useCallback } from 'react';
 import {
   Dialog,
@@ -10,14 +10,14 @@ import {
   DialogType,
   IDialogContentStyles,
   IDialogFooterStyles,
-} from 'office-ui-fabric-react/lib/Dialog';
-import { DefaultButton, PrimaryButton, IButtonStyles } from 'office-ui-fabric-react/lib/Button';
-import { Icon } from 'office-ui-fabric-react/lib/Icon';
-import { ProgressIndicator } from 'office-ui-fabric-react/lib/ProgressIndicator';
-import { ChoiceGroup } from 'office-ui-fabric-react/lib/ChoiceGroup';
+} from '@fluentui/react/lib/Dialog';
+import { DefaultButton, PrimaryButton, IButtonStyles } from '@fluentui/react/lib/Button';
+import { Icon } from '@fluentui/react/lib/Icon';
+import { ProgressIndicator } from '@fluentui/react/lib/ProgressIndicator';
+import { ChoiceGroup } from '@fluentui/react/lib/ChoiceGroup';
 import formatMessage from 'format-message';
 import { useRecoilValue } from 'recoil';
-import { SharedColors, NeutralColors } from '@uifabric/fluent-theme';
+import { SharedColors, NeutralColors } from '@fluentui/theme';
 import { IpcRendererEvent } from 'electron';
 
 import { AppUpdaterStatus } from '../../constants';
@@ -68,7 +68,7 @@ const { ipcRenderer } = window;
 type SelectOptionProps = {
   checked?: boolean;
   text: string;
-  key: string;
+  key?: string;
 };
 
 function SelectOption(props: SelectOptionProps | undefined) {

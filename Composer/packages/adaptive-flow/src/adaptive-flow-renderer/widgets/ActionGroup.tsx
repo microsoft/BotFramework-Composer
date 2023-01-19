@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx } from '@emotion/core';
+import { jsx } from '@emotion/react';
 import { useMemo, FunctionComponent, useContext } from 'react';
 
 import { GraphNode } from '../models/GraphNode';

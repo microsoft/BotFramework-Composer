@@ -41,7 +41,7 @@ describe('parse', () => {
     expect(intents[0].Children.length).toEqual(2);
     expect(intents[0].Children[0].Name).toEqual('CheckUnreadTodo');
     expect(intents[0].Children[0].Entities.length).toEqual(1);
-    expect(intents[0].Children[0].Entities[0]).toEqual('todoTitle');
+    expect(intents[0].Children[0].Entities[0].Name).toEqual('todoTitle');
   });
 
   it('should parse LU file with import', () => {
@@ -111,6 +111,6 @@ describe('index', () => {
     expect(intents.length).toEqual(1);
     expect(intents[0].Name).toEqual('Greeting');
     expect(intents[0].Entities.length).toEqual(1);
-    expect(intents[0].Entities[0]).toEqual('friendsName');
+    expect(intents[0].Entities[0].Name).toEqual('friendsName');
   });
 });

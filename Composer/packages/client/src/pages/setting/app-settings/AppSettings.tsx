@@ -2,19 +2,20 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx, css } from '@emotion/core';
+import { jsx, css } from '@emotion/react';
 import React, { lazy, useCallback, useState, Suspense } from 'react';
 import formatMessage from 'format-message';
-import { TeachingBubble } from 'office-ui-fabric-react/lib/TeachingBubble';
-import { FontIcon } from 'office-ui-fabric-react/lib/Icon';
-import { DirectionalHint } from 'office-ui-fabric-react/lib/common/DirectionalHint';
-import { NeutralColors } from '@uifabric/fluent-theme';
+import { TeachingBubble } from '@fluentui/react/lib/TeachingBubble';
+import { FontIcon } from '@fluentui/react/lib/Icon';
+import { DirectionalHint } from '@fluentui/react/lib/common/DirectionalHint';
+import { NeutralColors } from '@fluentui/theme';
 import { RouteComponentProps } from '@reach/router';
 import { useRecoilValue } from 'recoil';
 
 import { isElectron } from '../../../utils/electronUtil';
 import { onboardingState, userSettingsState, dispatcherState } from '../../../recoilModel';
 import { onboardingDisabled } from '../../../constants';
+import TelemetryService from '../../../telemetry/TelemetryClient';
 
 import { container, section } from './styles';
 import { SettingToggle } from './SettingToggle';
@@ -22,6 +23,7 @@ import { SettingDropdown } from './SettingDropdown';
 import { FontSettings } from './fontSettings';
 import * as images from './images';
 import { PreviewFeatureToggle } from './PreviewFeatureToggle';
+import { TemplateFeedForm } from './TemplateFeedForm';
 
 const ElectronSettings = lazy(() =>
   import('./electronSettings').then((module) => ({ default: module.ElectronSettings }))
@@ -55,6 +57,7 @@ const AppSettings: React.FC<RouteComponentProps> = () => {
   };
 
   const handleDataCollectionChange = (allowDataCollection: boolean) => {
+    TelemetryService.track('TelemetryOptInOut', { enabled: allowDataCollection });
     updateUserSettings({
       telemetry: {
         allowDataCollection,
@@ -109,6 +112,10 @@ const AppSettings: React.FC<RouteComponentProps> = () => {
             tooltip={formatMessage('This is the language used for Composer’s user interface.')}
             onChange={onLocaleChange}
           />
+        </section>
+        <section css={section}>
+          <h2>{formatMessage('Template Feed Settings')}</h2>
+          <TemplateFeedForm />
         </section>
         {!onboardingDisabled && (
           <React.Fragment>

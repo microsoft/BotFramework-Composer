@@ -137,13 +137,10 @@ const getHandlers = () => {
           };
 
           const newExamples = data?.$examples?.[locale]?.[`${cardData.name}Value`] ? data.$examples : defaultExamples;
-          const oldExamples = currentPropertyCardData?.$examples?.[locale]?.[`${cardData.name}Value`]
-            ? currentPropertyCardData.$examples
-            : defaultExamples;
 
           // Merge default, old and new and only keep the examples for current enum values
           const mergedExamples = pick(
-            merge(defaultExamples, newExamples, oldExamples),
+            merge(defaultExamples, newExamples),
             cardData.enum.map((e: string) => `${locale}.${cardData.name}Value.${e}`)
           );
           cardData.$examples = mergedExamples;

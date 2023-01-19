@@ -3,9 +3,9 @@
 
 /** @jsx jsx */
 import React, { useCallback, useState, useRef } from 'react';
-import { NeutralColors } from '@uifabric/fluent-theme';
-import { jsx, css } from '@emotion/core';
-import { FocusZone, FocusZoneDirection } from 'office-ui-fabric-react/lib/FocusZone';
+import { NeutralColors } from '@fluentui/theme';
+import { jsx, css } from '@emotion/react';
+import { FocusZone, FocusZoneDirection } from '@fluentui/react/lib/FocusZone';
 import formatMessage from 'format-message';
 import { DialogInfo, ITrigger, Diagnostic, DiagnosticSeverity, LanguageFileImport, getFriendlyName } from '@bfc/shared';
 import debounce from 'lodash/debounce';
@@ -13,6 +13,8 @@ import throttle from 'lodash/throttle';
 import { useRecoilValue } from 'recoil';
 import { extractSchemaProperties, groupTriggersByPropertyReference, NoGroupingTriggerGroupName } from '@bfc/indexers';
 import isEqual from 'lodash/isEqual';
+import { Announced } from '@fluentui/react/lib/Announced';
+import { useId } from '@fluentui/react-hooks';
 
 import {
   dispatcherState,
@@ -57,6 +59,7 @@ const focusStyle = css`
 const tree = css`
   height: calc(100% - 45px);
   overflow-y: auto;
+  margin-left: -1px; // remove 1px overflow caused by Split view component calculations
   label: tree;
 `;
 
@@ -174,6 +177,8 @@ export const ProjectTree: React.FC<Props> = ({
   const rootProjectId = useRecoilValue(rootBotProjectIdSelector);
   const projectCollection: TreeDataPerProject[] = useRecoilValue(projectTreeSelectorFamily);
   const jsonSchemaFilesByProjectId = useRecoilValue(jsonSchemaFilesByProjectIdSelector);
+
+  const projectTreeNavLabelId = useId('project-tree-nav-label');
 
   // TODO Refactor to make sure tree is not generated until a new trigger/dialog is added. #5462
   const createSubtree = useCallback(() => {
@@ -773,24 +778,30 @@ export const ProjectTree: React.FC<Props> = ({
   return (
     <div
       ref={treeRef}
-      aria-label={formatMessage('Navigation pane')}
+      aria-labelledby={projectTreeNavLabelId}
       className="ProjectTree"
       css={root}
       data-testid="ProjectTree"
     >
       <ProjectTreeHeader
         ariaLabel={headerAriaLabel}
+        filterValue={filter}
         menu={headerMenu}
         placeholder={headerPlaceholder}
         onFilter={onFilter}
       />
       <FocusZone isCircularNavigation css={focusStyle} direction={FocusZoneDirection.vertical}>
-        <div
-          aria-label={formatMessage(
-            `{
+        <Announced
+          id={projectTreeNavLabelId}
+          message={formatMessage(
+            `Navigation pane, {
+              hasFilter, select,
+                false {}
+                other {search results for "{filter}":}
+            } {
             dialogNum, plural,
-                =0 {No bots have}
-                =1 {One bot has}
+                =0 {no bots have}
+                =1 {one bot has}
               other {# bots have}
             } been found.
             {
@@ -798,9 +809,8 @@ export const ProjectTree: React.FC<Props> = ({
                   0 {}
                 other {Press down arrow key to navigate the search results}
             }`,
-            { dialogNum: projectCollection.length }
+            { dialogNum: projectCollection.length, filter: filter, hasFilter: !!filter }
           )}
-          aria-live={'polite'}
         />
         <div css={tree}>{projectTree}</div>
       </FocusZone>

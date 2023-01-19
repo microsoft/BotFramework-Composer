@@ -57,17 +57,17 @@ describe('<ToolbarButtonMenu />', () => {
    * -------------------------------------------------
    */
   it('template: Should render icon button with templates in the menu when passed template payload', async () => {
-    const component = render(<ToolbarButtonMenu payload={templatePayload} />);
+    const component = render(<ToolbarButtonMenu ariaLabel="test" payload={templatePayload} />);
 
     expect(component).toBeTruthy();
 
     fireEvent.click(screen.getByTestId('menuButton'));
 
-    expect((await screen.findAllByText(/t-/)).length).toBe(5);
+    expect((await screen.findAllByText(/-\s+t-/)).length).toBe(5);
   });
 
   it('template: Should filter templates when passed query', async () => {
-    render(<ToolbarButtonMenu payload={templatePayload} />);
+    render(<ToolbarButtonMenu ariaLabel="test" payload={templatePayload} />);
 
     fireEvent.click(screen.getByTestId('menuButton'));
     fireEvent.change(screen.getByPlaceholderText('Search templates'), { target: { value: 'keyword' } });
@@ -76,11 +76,11 @@ describe('<ToolbarButtonMenu />', () => {
       jest.runAllTimers();
     });
 
-    expect((await screen.findAllByText(/t-/)).length).toBe(3);
+    expect((await screen.findAllByText(/-\s+t-/)).length).toBe(3);
   });
 
   it('template: Should call onSelectCallback when a template is selected', async () => {
-    const component = render(<ToolbarButtonMenu payload={templatePayload} />);
+    const component = render(<ToolbarButtonMenu ariaLabel="test" payload={templatePayload} />);
 
     expect(component).toBeTruthy();
 
@@ -97,7 +97,7 @@ describe('<ToolbarButtonMenu />', () => {
    */
 
   it('property: Should render icon button with properties in menu when passed property payload', async () => {
-    const component = render(<ToolbarButtonMenu payload={propertiesPayload} />);
+    const component = render(<ToolbarButtonMenu ariaLabel="test" payload={propertiesPayload} />);
 
     expect(component).toBeTruthy();
 
@@ -108,7 +108,7 @@ describe('<ToolbarButtonMenu />', () => {
   });
 
   it('property: Should filter properties when passed query', async () => {
-    render(<ToolbarButtonMenu payload={propertiesPayload} />);
+    render(<ToolbarButtonMenu ariaLabel="test" payload={propertiesPayload} />);
 
     fireEvent.click(screen.getByTestId('menuButton'));
     fireEvent.change(screen.getByPlaceholderText('Search properties'), { target: { value: 'this' } });
@@ -117,11 +117,11 @@ describe('<ToolbarButtonMenu />', () => {
       jest.runAllTimers();
     });
 
-    expect((await screen.findAllByText(/this/)).length).toBe(2);
+    expect((await screen.findAllByText(/this/)).length).toBe(3);
   });
 
   it('property: Should expand property in the menu on click if not leaf', async () => {
-    render(<ToolbarButtonMenu payload={propertiesPayload} />);
+    render(<ToolbarButtonMenu ariaLabel="test" payload={propertiesPayload} />);
 
     fireEvent.click(screen.getByTestId('menuButton'));
     fireEvent.click(screen.getByText('this.'));
@@ -130,7 +130,7 @@ describe('<ToolbarButtonMenu />', () => {
   });
 
   it('property: Should call onSelectCallback when a leaf property is selected', async () => {
-    const component = render(<ToolbarButtonMenu payload={propertiesPayload} />);
+    const component = render(<ToolbarButtonMenu ariaLabel="test" payload={propertiesPayload} />);
 
     expect(component).toBeTruthy();
 
@@ -148,7 +148,7 @@ describe('<ToolbarButtonMenu />', () => {
    */
 
   it('function: Should render icon button with functions in menu when passed function payload', async () => {
-    const component = render(<ToolbarButtonMenu payload={functionPayload} />);
+    const component = render(<ToolbarButtonMenu ariaLabel="test" payload={functionPayload} />);
 
     expect(component).toBeTruthy();
 
@@ -160,7 +160,7 @@ describe('<ToolbarButtonMenu />', () => {
   });
 
   it('function: Should show sub-menu when category is clicked from menu', async () => {
-    render(<ToolbarButtonMenu payload={functionPayload} />);
+    render(<ToolbarButtonMenu ariaLabel="test" payload={functionPayload} />);
 
     fireEvent.click(screen.getByTestId('menuButton'));
     fireEvent.click(screen.getByText(builtInFunctionsGrouping[0].name));
@@ -171,7 +171,7 @@ describe('<ToolbarButtonMenu />', () => {
   });
 
   it('function: Should filter functions when passed query', async () => {
-    render(<ToolbarButtonMenu payload={functionPayload} />);
+    render(<ToolbarButtonMenu ariaLabel="test" payload={functionPayload} />);
 
     fireEvent.click(screen.getByTestId('menuButton'));
     fireEvent.change(screen.getByPlaceholderText('Search functions'), { target: { value: 'string' } });
@@ -188,7 +188,7 @@ describe('<ToolbarButtonMenu />', () => {
   });
 
   it('function: Should call onSelectCallback when a function is selected', async () => {
-    const component = render(<ToolbarButtonMenu payload={functionPayload} />);
+    const component = render(<ToolbarButtonMenu ariaLabel="test" payload={functionPayload} />);
 
     expect(component).toBeTruthy();
 

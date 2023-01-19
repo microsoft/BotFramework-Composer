@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import * as React from 'react';
-import { ITooltipHostProps, TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
+import { ITooltipHostProps, TooltipHost } from '@fluentui/react/lib/Tooltip';
 
 export type WithTooltipProps = ITooltipHostProps;
 

@@ -2,12 +2,12 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx } from '@emotion/core';
-import { IconButton } from 'office-ui-fabric-react/lib/Button';
+import { jsx } from '@emotion/react';
+import { IconButton } from '@fluentui/react/lib/Button';
 import { Fragment } from 'react';
-import { OverflowSet, IOverflowSetItemProps } from 'office-ui-fabric-react/lib/OverflowSet';
+import { OverflowSet, IOverflowSetItemProps } from '@fluentui/react/lib/OverflowSet';
 import formatMessage from 'format-message';
-import { Spinner, SpinnerSize } from 'office-ui-fabric-react/lib/Spinner';
+import { Spinner, SpinnerSize } from '@fluentui/react/lib/Spinner';
 
 import { overflowSet, targetSelected } from './styles';
 

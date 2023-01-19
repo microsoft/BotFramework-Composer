@@ -2,14 +2,14 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx } from '@emotion/core';
+import { jsx } from '@emotion/react';
 import React from 'react';
 import formatMessage from 'format-message';
-import { Dialog, DialogType, DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
-import { Stack } from 'office-ui-fabric-react/lib/Stack';
-import { TextField } from 'office-ui-fabric-react/lib/TextField';
-import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button';
-import { Checkbox } from 'office-ui-fabric-react/lib/Checkbox';
+import { Dialog, DialogType, DialogFooter } from '@fluentui/react/lib/Dialog';
+import { Stack } from '@fluentui/react/lib/Stack';
+import { TextField } from '@fluentui/react/lib/TextField';
+import { PrimaryButton, DefaultButton } from '@fluentui/react/lib/Button';
+import { Checkbox } from '@fluentui/react/lib/Checkbox';
 import { QnAFile } from '@bfc/shared';
 
 import { FieldConfig, useForm } from '../../hooks/useForm';

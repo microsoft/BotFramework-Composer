@@ -3,12 +3,12 @@
 
 import * as React from 'react';
 import styled from '@emotion/styled';
-import { Stack } from 'office-ui-fabric-react/lib/Stack';
-import { Text } from 'office-ui-fabric-react/lib/Text';
-import { Checkbox } from 'office-ui-fabric-react/lib/Checkbox';
-import { FluentTheme, NeutralColors } from '@uifabric/fluent-theme';
-import { FocusZone, FocusZoneDirection } from 'office-ui-fabric-react/lib/FocusZone';
-import { List } from 'office-ui-fabric-react/lib/List';
+import { Stack } from '@fluentui/react/lib/Stack';
+import { Text } from '@fluentui/react/lib/Text';
+import { Checkbox } from '@fluentui/react/lib/Checkbox';
+import { FluentTheme, NeutralColors } from '@fluentui/theme';
+import { FocusZone, FocusZoneDirection } from '@fluentui/react/lib/FocusZone';
+import { List } from '@fluentui/react/lib/List';
 
 import { ResourcesItem } from '../../types';
 

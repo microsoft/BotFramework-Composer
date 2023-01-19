@@ -2,9 +2,10 @@
 // Licensed under the MIT License.
 
 import styled from '@emotion/styled';
-import { NeutralColors } from '@uifabric/fluent-theme';
-import { Icon, IIconStyles } from 'office-ui-fabric-react/lib/Icon';
-import { Stack } from 'office-ui-fabric-react/lib/Stack';
+import { NeutralColors } from '@fluentui/theme';
+import formatMessage from 'format-message';
+import { IconButton, IButtonStyles } from '@fluentui/react/lib/Button';
+import { Stack } from '@fluentui/react/lib/Stack';
 import * as React from 'react';
 
 import { DEFAULT_TREE_ITEM_HEIGHT } from './constants';
@@ -18,21 +19,23 @@ export type PropertyItem = {
 const DEFAULT_INDENTATION_PADDING = 16;
 const expandIconWidth = 16;
 
-const toggleExpandIconStyle: IIconStyles = {
+const toggleExpandIconStyle: IButtonStyles = {
   root: {
     height: DEFAULT_TREE_ITEM_HEIGHT,
     width: DEFAULT_TREE_ITEM_HEIGHT,
     display: 'inline-flex',
     justifyContent: 'center',
     alignItems: 'center',
-    fontSize: 8,
     transition: 'background 250ms ease',
-    selectors: {
-      '&:hover': { background: NeutralColors.gray50 },
-      '&:before': {
-        content: '""',
-      },
-    },
+  },
+  rootHovered: { backgroundColor: NeutralColors.gray30 },
+  rootPressed: { backgroundColor: NeutralColors.gray40 },
+  icon: {
+    color: NeutralColors.gray160,
+    fontSize: 8,
+    height: 8,
+    width: 8,
+    lineHeight: 8,
   },
 };
 
@@ -72,8 +75,9 @@ export const PropertyTreeItem = React.memo((props: PropertyTreeItemProps) => {
   return (
     <Root horizontal style={{ paddingLeft }} title={item.name} verticalAlign="center">
       {isExpandable ? (
-        <Icon
-          iconName={expanded ? 'CaretDownSolid8' : 'CaretRightSolid8'}
+        <IconButton
+          ariaLabel={expanded ? formatMessage('Collapse item') : formatMessage('Expand item')}
+          iconProps={{ iconName: expanded ? 'CaretDownSolid8' : 'CaretRightSolid8' }}
           styles={toggleExpandIconStyle}
           onClick={toggleExpanded}
         />
@@ -82,6 +86,17 @@ export const PropertyTreeItem = React.memo((props: PropertyTreeItemProps) => {
       )}
       <Content
         horizontal
+        styles={{
+          root: {
+            transition: 'background 250ms ease',
+            selectors: isExpandable
+              ? {
+                  '&:hover': { backgroundColor: NeutralColors.gray30 },
+                  '&:active': { backgroundColor: NeutralColors.gray40 },
+                }
+              : undefined,
+          },
+        }}
         verticalAlign="center"
         width={`calc(100% - ${paddingLeft + (isExpandable ? expandIconWidth : 0)}px)`}
       >

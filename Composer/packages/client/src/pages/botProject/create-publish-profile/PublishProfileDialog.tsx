@@ -2,12 +2,12 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx } from '@emotion/core';
+import { jsx } from '@emotion/react';
 import { Fragment, useState, useEffect, useCallback } from 'react';
 import { PublishTarget } from '@bfc/shared';
 import formatMessage from 'format-message';
-import { Dialog } from 'office-ui-fabric-react/lib/Dialog';
-import { Link } from 'office-ui-fabric-react/lib/Link';
+import { Dialog } from '@fluentui/react/lib/Dialog';
+import { Link } from '@fluentui/react/lib/Link';
 import { useRecoilValue } from 'recoil';
 
 import { getTenantIdFromCache, setTenantId } from '../../../utils/auth';
@@ -177,10 +177,15 @@ export const PublishProfileDialog: React.FC<PublishProfileDialogProps> = (props)
           subText: '',
         }}
         hidden={false}
-        minWidth={960}
+        maxWidth={960}
         modalProps={{
           isBlocking: true,
           isClickableOutsideFocusTrap: true,
+        }}
+        styles={{
+          main: {
+            flex: 'auto',
+          },
         }}
         onDismiss={closeDialog}
       >

@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx, css } from '@emotion/core';
+import { jsx, css } from '@emotion/react';
 import React, { useEffect, useState, useRef, useCallback } from 'react';
 import { RouteComponentProps } from '@reach/router';
 import {
@@ -14,12 +14,12 @@ import {
   ConstrainMode,
   DetailsRow,
   IDetailsRowStyles,
-} from 'office-ui-fabric-react/lib/DetailsList';
-import { Toggle } from 'office-ui-fabric-react/lib/Toggle';
-import { ShimmeredDetailsList } from 'office-ui-fabric-react/lib/ShimmeredDetailsList';
+} from '@fluentui/react/lib/DetailsList';
+import { Toggle } from '@fluentui/react/lib/Toggle';
+import { ShimmeredDetailsList } from '@fluentui/react/lib/ShimmeredDetailsList';
 import formatMessage from 'format-message';
 import { useRecoilValue, selector } from 'recoil';
-import { NeutralColors } from '@uifabric/fluent-theme';
+import { NeutralColors } from '@fluentui/theme';
 import { ExtensionMetadata, ExtensionSearchResult } from '@bfc/extension-client';
 import { Toolbar, IToolbarItem, defaultToolbarButtonStyles } from '@bfc/ui-shared';
 

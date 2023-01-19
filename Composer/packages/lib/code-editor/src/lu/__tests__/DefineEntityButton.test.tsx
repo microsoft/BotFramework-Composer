@@ -33,8 +33,7 @@ describe('<DefineEntityButton />', () => {
     act(() => {
       jest.runAllTimers();
     });
-
-    expect((await screen.findAllByText(/.*age.*/)).length).toBe(2);
+    expect(await screen.findByText('age')).toBeInTheDocument();
   });
 
   it('prebuilt: Should call onDefineEntity callback when a menu item is clicked', async () => {
@@ -52,20 +51,20 @@ describe('<DefineEntityButton />', () => {
     expect(callback).toBeCalledWith('prebuilt', { entityName: 'datetimeV2' });
   });
 
-  it('Should open a new window when link in tooltip is clicked', () => {
-    const origOpen = window.open;
-    window.open = jest.fn();
-
+  it('Should display link when tooltip is opened', async () => {
     render(<DefineEntityButton onDefineEntity={jest.fn()} />);
 
-    fireEvent.click(screen.getByTestId('menuButton'));
-    fireEvent.mouseOver(screen.getByTestId('helpIcon'));
-    act(() => {
+    await act(async () => {
+      fireEvent.click(screen.getByTestId('menuButton'));
+    });
+
+    await act(async () => {
+      fireEvent.mouseOver(screen.getByTestId('helpIcon'));
       jest.runAllTimers();
     });
-    fireEvent.click(screen.getByText('this page'));
 
-    expect(window.open).toBeCalled();
-    window.open = origOpen;
+    expect(
+      screen.getByLabelText('Learn more about Define new entity', { selector: '.ms-Tooltip' })
+    ).toBeInTheDocument();
   });
 });

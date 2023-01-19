@@ -49,6 +49,7 @@ import { projectDialogsMapSelector, botDisplayNameState } from '../../recoilMode
 import { deleteTrigger as DialogdeleteTrigger } from '../../utils/dialogUtil';
 import { BotConvertConfirmDialog } from '../../components/BotConvertDialog';
 import { getManifestJsonFromZip } from '../utils/skill';
+import { skillNameRegex } from '../../utils/skillManifestUtil';
 
 import { announcementState, boilerplateVersionState, recentProjectsState, templateIdState } from './../atoms';
 import { logMessage, setError } from './../dispatchers/shared';
@@ -95,7 +96,9 @@ export const projectDispatcher = () => {
         const rootDialog = rootBotProjectId && projectDialogsMap[rootBotProjectId].find((dialog) => dialog.isRoot);
         // remove the same identifier trigger in root bot
         if (rootBotProjectId && rootDialog && rootDialog.triggers.length > 0) {
-          const index = rootDialog.triggers.findIndex((item) => item.displayName === triggerName);
+          const index = rootDialog.triggers.findIndex(
+            (item) => item.displayName === triggerName.replace(skillNameRegex, '')
+          );
           if (index >= 0) {
             const content = DialogdeleteTrigger(
               projectDialogsMap[rootBotProjectId],

@@ -2,27 +2,28 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx, css } from '@emotion/core';
+import { jsx, css } from '@emotion/react';
 import { useState, Fragment, useEffect, useMemo } from 'react';
 import formatMessage from 'format-message';
-import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button';
-import { DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
-import { ScrollablePane, ScrollbarVisibility } from 'office-ui-fabric-react/lib/ScrollablePane';
-import { Selection } from 'office-ui-fabric-react/lib/DetailsList';
+import { PrimaryButton, DefaultButton } from '@fluentui/react/lib/Button';
+import { DialogFooter } from '@fluentui/react/lib/Dialog';
+import { ScrollablePane, ScrollbarVisibility } from '@fluentui/react/lib/ScrollablePane';
+import { IColumn, Selection } from '@fluentui/react/lib/DetailsList';
+import { Text } from '@fluentui/react/lib/Text';
 import {
   DetailsList,
   DetailsListLayoutMode,
   SelectionMode,
   CheckboxVisibility,
   DetailsRow,
-} from 'office-ui-fabric-react/lib/DetailsList';
+} from '@fluentui/react/lib/DetailsList';
 import { BotTemplate, localTemplateId } from '@bfc/shared';
 import { DialogWrapper, DialogTypes, LoadingSpinner } from '@bfc/ui-shared';
-import { NeutralColors, SharedColors } from '@uifabric/fluent-theme';
+import { NeutralColors, SharedColors } from '@fluentui/theme';
 import { WindowLocation } from '@reach/router';
-import { IPivotItemProps, Pivot, PivotItem } from 'office-ui-fabric-react/lib/Pivot';
-import { Link } from 'office-ui-fabric-react/lib/Link';
-import { FontIcon } from 'office-ui-fabric-react/lib/Icon';
+import { IPivotItemProps, Pivot, PivotItem } from '@fluentui/react/lib/Pivot';
+import { Link } from '@fluentui/react/lib/Link';
+import { FontIcon } from '@fluentui/react/lib/Icon';
 import { csharpFeedKey, nodeFeedKey } from '@botframework-composer/types';
 import { useRecoilState, useRecoilValue } from 'recoil';
 
@@ -30,33 +31,33 @@ import msftIcon from '../../images/msftIcon.svg';
 import { DialogCreationCopy } from '../../constants';
 import { creationFlowTypeState, fetchReadMePendingState, selectedTemplateReadMeState } from '../../recoilModel';
 import TelemetryClient from '../../telemetry/TelemetryClient';
+import { navigateTo } from '../../utils/navigation';
 
 import { TemplateDetailView } from './TemplateDetailView';
 
 // -------------------- Styles -------------------- //
 
 const detailListContainer = css`
-  width: 48%;
-  padding-right: 2%;
+  flex-basis: 50%;
   height: 400px;
   overflow: hidden;
-  float: left;
-  flex-grow: 1;
 `;
 
 const templateDetailContainer = css`
-  width: 48%;
-  padding-right: 2%;
+  flex-basis: 50%;
   height: 400px;
   overflow: auto;
-  flex-grow: 1;
-  float: left;
 `;
 
 const pickerContainer = css`
   position: relative;
-  height: 400px;
+  min-height: 400px;
   border: 1px solid #f3f2f1;
+  display: flex;
+  gap: 8px;
+  @media screen and (max-width: 480px) /* 300% zoom */ {
+    flex-flow: column;
+  }
 `;
 
 const rowDetails = (disabled) => {
@@ -102,6 +103,11 @@ const content = css`
   outline: none;
 `;
 
+const noTemplateTextStyle = css`
+  padding-top: 5px;
+  padding-left: 5px;
+`;
+
 const optionKeys = {
   createFromScratch: 'createFromScratch',
   createFromQnA: 'createFromQnA',
@@ -134,6 +140,7 @@ export function CreateBot(props: CreateBotProps) {
   const [localTemplatePathValid, setLocalTemplatePathValid] = useState<boolean>(false);
   const [displayedTemplates, setDisplayedTemplates] = useState<BotTemplate[]>([]);
   const [readMe] = useRecoilState(selectedTemplateReadMeState);
+
   const fetchReadMePending = useRecoilValue(fetchReadMePendingState);
   const creationFlowType = useRecoilValue(creationFlowTypeState);
 
@@ -189,7 +196,7 @@ export function CreateBot(props: CreateBotProps) {
     }
   };
 
-  const tableColumns = [
+  const tableColumns: IColumn[] = [
     {
       key: 'name',
       name: formatMessage('Name'),
@@ -262,6 +269,71 @@ export function CreateBot(props: CreateBotProps) {
   const dialogWrapperProps =
     creationFlowType === 'Skill' ? DialogCreationCopy.CREATE_NEW_SKILLBOT : DialogCreationCopy.CREATE_NEW_BOT;
 
+  const renderTemplateSelector = () => {
+    return (
+      <Fragment>
+        <div css={detailListContainer} data-is-scrollable="true" id="templatePickerContainer">
+          <ScrollablePane
+            scrollbarVisibility={ScrollbarVisibility.auto}
+            styles={{ root: { width: '100%', height: 'inherit', position: 'relative' } }}
+          >
+            <DetailsList
+              checkboxVisibility={CheckboxVisibility.hidden}
+              columns={tableColumns}
+              compact={false}
+              getKey={(item) => item.name}
+              isHeaderVisible={false}
+              items={displayedTemplates}
+              layoutMode={DetailsListLayoutMode.justified}
+              selection={selectedTemplate}
+              selectionMode={disabled ? SelectionMode.none : SelectionMode.single}
+              onRenderRow={onRenderRow}
+            />
+          </ScrollablePane>
+        </div>
+        <div css={templateDetailContainer} data-is-scrollable="true">
+          {fetchReadMePending ? (
+            <LoadingSpinner />
+          ) : (
+            <TemplateDetailView
+              localTemplatePath={localTemplatePath}
+              readMe={readMe}
+              template={getTemplate()}
+              onUpdateLocalTemplatePath={onUpdateLocalTemplatePath}
+              onValidateLocalTemplatePath={setLocalTemplatePathValid}
+            />
+          )}
+        </div>
+      </Fragment>
+    );
+  };
+
+  const renderNoTemplateView = () => {
+    return (
+      <Fragment>
+        <div css={noTemplateTextStyle}>
+          <Text variant={'medium'}>
+            {formatMessage.rich(
+              `No templates pulled from currently configured template feed, please <feedFormDeepLink>configure your feed</feedFormDeepLink> to get templates.`,
+              {
+                feedFormDeepLink: ({ children }) => (
+                  <Link
+                    key="template-feed-link"
+                    onClick={() => {
+                      navigateTo('/settings');
+                    }}
+                  >
+                    {children}
+                  </Link>
+                ),
+              }
+            )}
+          </Text>
+        </div>
+      </Fragment>
+    );
+  };
+
   return (
     <Fragment>
       <DialogWrapper isOpen={isOpen} {...dialogWrapperProps} dialogType={DialogTypes.CreateFlow} onDismiss={onDismiss}>
@@ -280,40 +352,7 @@ export function CreateBot(props: CreateBotProps) {
             itemKey={nodeFeedKey}
           ></PivotItem>
         </Pivot>
-        <div css={pickerContainer}>
-          <div css={detailListContainer} data-is-scrollable="true" id="templatePickerContainer">
-            <ScrollablePane
-              scrollbarVisibility={ScrollbarVisibility.auto}
-              styles={{ root: { width: '100%', height: 'inherit', position: 'relative' } }}
-            >
-              <DetailsList
-                checkboxVisibility={CheckboxVisibility.hidden}
-                columns={tableColumns}
-                compact={false}
-                getKey={(item) => item.name}
-                isHeaderVisible={false}
-                items={displayedTemplates}
-                layoutMode={DetailsListLayoutMode.justified}
-                selection={selectedTemplate}
-                selectionMode={disabled ? SelectionMode.none : SelectionMode.single}
-                onRenderRow={onRenderRow}
-              />
-            </ScrollablePane>
-          </div>
-          <div css={templateDetailContainer} data-is-scrollable="true">
-            {fetchReadMePending ? (
-              <LoadingSpinner />
-            ) : (
-              <TemplateDetailView
-                localTemplatePath={localTemplatePath}
-                readMe={readMe}
-                template={getTemplate()}
-                onUpdateLocalTemplatePath={onUpdateLocalTemplatePath}
-                onValidateLocalTemplatePath={setLocalTemplatePathValid}
-              />
-            )}
-          </div>
-        </div>
+        <div css={pickerContainer}>{currentTemplateId ? renderTemplateSelector() : renderNoTemplateView()}</div>
         <DialogFooter>
           <Link
             href={templateRequestUrl}

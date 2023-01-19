@@ -2,18 +2,18 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx, css } from '@emotion/core';
+import { jsx, css } from '@emotion/react';
 import {
   IContextualMenuItem,
   ContextualMenuItemType,
-} from 'office-ui-fabric-react/lib/components/ContextualMenu/ContextualMenu.types';
-import { NeutralColors } from '@uifabric/fluent-theme';
+} from '@fluentui/react/lib/components/ContextualMenu/ContextualMenu.types';
+import { NeutralColors } from '@fluentui/theme';
 import { SDKKinds, DefinitionSummary, DisabledMenuActions } from '@bfc/shared';
-import { FontIcon } from 'office-ui-fabric-react/lib/Icon';
+import { FontIcon } from '@fluentui/react/lib/Icon';
 import formatMessage from 'format-message';
 import { MenuUISchema, MenuOptions } from '@bfc/extension-client';
 import set from 'lodash/set';
-import { ITooltipHostStyles, TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
+import { ITooltipHostStyles, TooltipHost } from '@fluentui/react/lib/Tooltip';
 
 import { MenuEventTypes } from '../../constants/MenuTypes';
 

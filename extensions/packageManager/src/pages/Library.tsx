@@ -2,12 +2,12 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx } from '@emotion/core';
+import { jsx, css } from '@emotion/react';
+import styled from '@emotion/styled';
 import React, { useState, Fragment, useEffect } from 'react';
 import formatMessage from 'format-message';
 import {
   Link,
-  PrimaryButton,
   DefaultButton,
   Pivot,
   PivotItem,
@@ -23,7 +23,7 @@ import {
   SearchBox,
   IContextualMenuProps,
   IDropdownOption,
-} from 'office-ui-fabric-react';
+} from '@fluentui/react';
 import {
   render,
   useHttpClient,
@@ -32,7 +32,7 @@ import {
   useTelemetryClient,
   TelemetryClient,
 } from '@bfc/extension-client';
-import { Toolbar, IToolbarItem, LoadingSpinner, DisplayMarkdownDialog } from '@bfc/ui-shared';
+import { Toolbar, IToolbarItem, LoadingSpinner, DisplayMarkdownDialog, SplitButton } from '@bfc/ui-shared';
 import ReactMarkdown from 'react-markdown';
 
 import {
@@ -61,6 +61,32 @@ export interface PackageSourceFeed extends IDropdownOption {
   };
   readonly?: boolean;
 }
+
+const InstallButtonText = styled.span`
+  overflow: hidden;
+  display: inline-block;
+
+  label: install-button-text;
+`;
+
+const InstallButtonVersion = styled.span`
+  max-width: 80px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  display: inline-block;
+
+  label: install-button-version;
+`;
+
+const tabsStackStyle = css`
+  min-width: 512px;
+  overflow: auto;
+`;
+
+const fieldStyles = {
+  root: { maxWidth: '200px' },
+};
 
 const Library: React.FC = () => {
   const [items, setItems] = useState<LibraryRef[]>([]);
@@ -432,8 +458,8 @@ const Library: React.FC = () => {
 
       console.error(err);
       setApplicationLevelError({
-        status: err.response.status,
-        message: err.response && err.response.data.message ? err.response.data.message : err,
+        status: err?.response?.status,
+        message: err?.response?.data?.message || err,
         summary: strings.importError,
       });
     }
@@ -576,6 +602,8 @@ const Library: React.FC = () => {
     updateFeeds(response.data);
   };
 
+  const InstallButton = versionOptions != undefined ? SplitButton : DefaultButton;
+
   return (
     <ScrollablePane scrollbarVisibility={ScrollbarVisibility.auto}>
       <Dialog
@@ -654,7 +682,7 @@ const Library: React.FC = () => {
               </Pivot>
             </Stack.Item>
             <Stack.Item align="end" grow={1}>
-              <Stack horizontal horizontalAlign="end" tokens={{ childrenGap: 10 }}>
+              <Stack horizontal css={tabsStackStyle} horizontalAlign="center" tokens={{ childrenGap: 10 }}>
                 <Stack.Item>
                   <Dropdown
                     ariaLabel={formatMessage('Feeds')}
@@ -662,9 +690,7 @@ const Library: React.FC = () => {
                     options={feeds}
                     placeholder="Format"
                     selectedKey={feed}
-                    styles={{
-                      root: { width: '200px' },
-                    }}
+                    styles={fieldStyles}
                     onChange={onChangeFeed}
                   ></Dropdown>
                 </Stack.Item>
@@ -672,9 +698,7 @@ const Library: React.FC = () => {
                   <SearchBox
                     disabled={!feeds || !feed || (!searchTerm && items.length === 0)}
                     placeholder="Search"
-                    styles={{
-                      root: { width: '200px' },
-                    }}
+                    styles={fieldStyles}
                     onClear={() => setSearchTerm('')}
                     onSearch={setSearchTerm}
                   />
@@ -779,65 +803,32 @@ const Library: React.FC = () => {
                   {selectedItem.authors}
                 </Stack.Item>
                 <Stack.Item align="center" grow={1} styles={{ root: { textAlign: 'right' } }}>
-                  <PrimaryButton
+                  <InstallButton
+                    primary
                     disabled={!ejectedRuntime || !selectedItem.isCompatible}
                     menuProps={versionOptions}
                     split={versionOptions != undefined}
-                    styles={{ root: { maxWidth: 180, textOverflow: 'ellipsis' } }}
+                    splitButtonAriaLabel="See install options"
                     onClick={install}
                   >
                     {/* display "v1.0 installed" if installed, or "install v1.1" if not" */}
                     {isInstalled(selectedItem) && selectedVersion === installedVersion(selectedItem) ? (
                       <span>
-                        <span
-                          css={{
-                            maxWidth: 80,
-                            textOverflow: 'ellipsis',
-                            overflow: 'hidden',
-                            whiteSpace: 'nowrap',
-                            display: 'inline-block',
-                          }}
-                          title={selectedVersion}
-                        >
-                          {selectedVersion}
-                        </span>
-                        &nbsp;
-                        <span css={{ display: 'inline-block', overflow: 'hidden' }}>{strings.installed}</span>
+                        <InstallButtonVersion>{selectedVersion}</InstallButtonVersion>&nbsp;
+                        <InstallButtonText>{strings.installed}</InstallButtonText>
                       </span>
                     ) : isUpdate ? (
                       <span>
-                        <span css={{ display: 'inline-block', overflow: 'hidden' }}>{strings.updateButton}</span>
-                        <span
-                          css={{
-                            maxWidth: 80,
-                            textOverflow: 'ellipsis',
-                            overflow: 'hidden',
-                            whiteSpace: 'nowrap',
-                            display: 'inline-block',
-                          }}
-                          title={selectedVersion}
-                        >
-                          {selectedVersion}
-                        </span>
+                        <InstallButtonText>{strings.updateButton}</InstallButtonText>&nbsp;
+                        <InstallButtonVersion>{selectedVersion}</InstallButtonVersion>
                       </span>
                     ) : (
                       <span>
-                        <span css={{ display: 'inline-block', overflow: 'hidden' }}>{strings.installButton}</span>&nbsp;
-                        <span
-                          css={{
-                            maxWidth: 80,
-                            textOverflow: 'ellipsis',
-                            overflow: 'hidden',
-                            whiteSpace: 'nowrap',
-                            display: 'inline-block',
-                          }}
-                          title={selectedVersion}
-                        >
-                          {selectedVersion}
-                        </span>
+                        <InstallButtonText>{strings.installButton}</InstallButtonText>&nbsp;
+                        <InstallButtonVersion>{selectedVersion}</InstallButtonVersion>
                       </span>
                     )}
-                  </PrimaryButton>
+                  </InstallButton>
                 </Stack.Item>
               </Stack>
 

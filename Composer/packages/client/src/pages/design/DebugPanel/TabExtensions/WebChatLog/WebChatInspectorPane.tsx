@@ -3,9 +3,9 @@
 
 /** @jsx jsx */
 import { JsonEditor } from '@bfc/code-editor';
-import { css, jsx } from '@emotion/core';
-import { NeutralColors } from '@uifabric/fluent-theme';
-import { Pivot, PivotItem } from 'office-ui-fabric-react/lib/Pivot';
+import { css, jsx } from '@emotion/react';
+import { NeutralColors } from '@fluentui/theme';
+import { Pivot, PivotItem } from '@fluentui/react/lib/Pivot';
 import { useCallback } from 'react';
 import { Resizable } from 're-resizable';
 

@@ -2,13 +2,13 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { css, jsx } from '@emotion/core';
+import { css, jsx } from '@emotion/react';
 import * as React from 'react';
 import { RouteComponentProps } from '@reach/router';
-import { Dialog, DialogType, IDialogContentProps } from 'office-ui-fabric-react/lib/Dialog';
-import { IProgressIndicatorStyles, ProgressIndicator } from 'office-ui-fabric-react/lib/ProgressIndicator';
+import { Dialog, DialogType, IDialogContentProps } from '@fluentui/react/lib/Dialog';
+import { IProgressIndicatorStyles, ProgressIndicator } from '@fluentui/react/lib/ProgressIndicator';
 import formatMessage from 'format-message';
-import { FontWeights } from 'office-ui-fabric-react/lib/Styling';
+import { FontWeights } from '@fluentui/react/lib/Styling';
 import { PublishTarget } from '@botframework-composer/types';
 import { generateUniqueId } from '@bfc/shared';
 

@@ -1,8 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-import { css } from '@emotion/core';
-import { FontWeights, FontSizes } from 'office-ui-fabric-react/lib/Styling';
-import { NeutralColors } from '@uifabric/fluent-theme';
+import { css } from '@emotion/react';
+import { FontWeights, FontSizes } from '@fluentui/react/lib/Styling';
+import { NeutralColors } from '@fluentui/theme';
 
 export const settingsContainer = css`
   display: flex;
@@ -49,7 +49,7 @@ export const ContentStyle = css`
 `;
 export const contentEditor = css`
   flex: 4;
-  height: calc(100vh - 200px);
+  min-height: 256px;
   position: relative;
   overflow: auto;
 `;

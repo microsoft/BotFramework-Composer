@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx } from '@emotion/core';
+import { jsx } from '@emotion/react';
 import React, { useMemo, useCallback } from 'react';
 import { LuEditor, inlineModePlaceholder } from '@bfc/code-editor';
 import { FieldProps, useShellApi } from '@bfc/extension-client';
@@ -82,6 +82,8 @@ const LuisIntentEditor: React.FC<FieldProps<string>> = (props) => {
     if (!intentName) {
       return;
     }
+
+    if (newValue === placeholder || newValue === inlineModePlaceholder) return;
 
     const newIntent = { Name: intentName, Body: newValue };
     shellApi

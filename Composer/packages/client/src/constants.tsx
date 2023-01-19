@@ -10,8 +10,8 @@ import {
   TeamsManifest,
 } from '@botframework-composer/types';
 import formatMessage from 'format-message';
-import { IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
-import { Link } from 'office-ui-fabric-react/lib/Link';
+import { IDropdownOption } from '@fluentui/react/lib/Dropdown';
+import { Link } from '@fluentui/react/lib/Link';
 
 export const BASEPATH = process.env.PUBLIC_URL || '/';
 export const BASEURL = `${process.env.PUBLIC_URL || ''}/api`;
@@ -333,7 +333,13 @@ export const addSkillDialog = {
           `To connect to a skill, your bot needs the information captured in the skill’s manifest of the bot, and, for secure access, the skill needs to know your bot's AppID. <link>Learn more.</link>`,
           {
             link: ({ children }) => (
-              <Link key="learn-more-about-skills" href={url} rel="noopener noreferrer" target="_blank">
+              <Link
+                key="learn-more-about-skills"
+                aria-label={formatMessage('Learn more about skills')}
+                href={url}
+                rel="noopener noreferrer"
+                target="_blank"
+              >
                 {children}
               </Link>
             ),
@@ -468,9 +474,6 @@ export const triggerNotSupportedWarning = () =>
     'This trigger type is not supported by the RegEx recognizer. To ensure this trigger is fired, change the recognizer type.'
   );
 
-export const firstPartyTemplateFeed =
-  'https://registry.npmjs.org/-/v1/search?text=generator+keywords:bf-template+scope:microsoft'; // +maintainer:botframework
-
 // TODO: replace language options with available languages pertinent to the selected template (issue #5554)
 export const defaultPrimaryLanguage = 'english';
 
@@ -524,7 +527,7 @@ export const defaultTeamsManifest: TeamsManifest = {
 };
 
 export const defaultBotPort = 3979;
-export const defaultBotEndpoint = `http://localhost:${defaultBotPort}/api/messages`;
+export const defaultBotEndpoint = `http://${location.hostname}:${defaultBotPort}/api/messages`;
 
 const DAYS_IN_MS = 1000 * 60 * 60 * 24;
 export const SURVEY_PARAMETERS = {

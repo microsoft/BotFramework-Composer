@@ -2,10 +2,12 @@
 // Licensed under the MIT License.
 
 import styled from '@emotion/styled';
-import { NeutralColors } from '@uifabric/fluent-theme';
-import { Icon, IIconStyles } from 'office-ui-fabric-react/lib/Icon';
-import { Stack } from 'office-ui-fabric-react/lib/Stack';
+import { NeutralColors } from '@fluentui/theme';
+import { Icon, IIconStyles } from '@fluentui/react/lib/Icon';
+import { Button } from '@fluentui/react/lib/Button';
+import { Stack } from '@fluentui/react/lib/Stack';
 import * as React from 'react';
+import { IContextualMenuItem } from '@fluentui/react/lib/ContextualMenu';
 
 import { PropertyItem } from '../../types';
 
@@ -23,7 +25,7 @@ const toggleExpandIconStyle: IIconStyles = {
     fontSize: 8,
     transition: 'background 250ms ease',
     selectors: {
-      '&:hover': { background: NeutralColors.gray50 },
+      '&:hover, &:focus-within': { background: NeutralColors.gray50 },
       '&:before': {
         content: '""',
       },
@@ -32,7 +34,9 @@ const toggleExpandIconStyle: IIconStyles = {
 };
 
 const Root = styled(Stack)({
+  width: '100%',
   height: DEFAULT_TREE_ITEM_HEIGHT,
+  border: 'none',
 });
 
 const Content = styled(Stack)<{
@@ -42,6 +46,10 @@ const Content = styled(Stack)<{
 }));
 
 type PropertyTreeItemProps = {
+  onClick?: (
+    ev?: React.MouseEvent<HTMLElement> | React.KeyboardEvent<HTMLElement>,
+    item?: IContextualMenuItem
+  ) => boolean | void;
   item: PropertyItem;
   level: number;
   onRenderLabel: (item: PropertyItem) => React.ReactNode;
@@ -50,7 +58,7 @@ type PropertyTreeItemProps = {
 };
 
 export const PropertyTreeItem = React.memo((props: PropertyTreeItemProps) => {
-  const { expanded = false, item, level, onToggleExpand, onRenderLabel } = props;
+  const { expanded = false, item, level, onToggleExpand, onRenderLabel, ...rest } = props;
 
   const paddingLeft = level * DEFAULT_INDENTATION_PADDING;
 
@@ -65,7 +73,18 @@ export const PropertyTreeItem = React.memo((props: PropertyTreeItemProps) => {
   const isExpandable = !!item.children?.length && onToggleExpand;
 
   return (
-    <Root horizontal style={{ paddingLeft }} title={item.name} verticalAlign="center">
+    <Root
+      horizontal
+      aria-expanded={isExpandable ? (expanded ? 'true' : 'false') : undefined}
+      as={Button}
+      className="ms-ContextualMenu-link"
+      role="menuitem"
+      style={{ paddingLeft }}
+      tabIndex={0}
+      title={item.name}
+      verticalAlign="center"
+      {...rest}
+    >
       {isExpandable ? (
         <Icon
           iconName={expanded ? 'CaretDownSolid8' : 'CaretRightSolid8'}

@@ -1,10 +1,10 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 /** @jsx jsx */
-import { css, jsx, SerializedStyles } from '@emotion/core';
+import { css, jsx, SerializedStyles } from '@emotion/react';
 import React, { useState } from 'react';
-import { NeutralColors } from '@uifabric/fluent-theme';
-import { IconButton } from 'office-ui-fabric-react/lib/Button';
+import { NeutralColors } from '@fluentui/theme';
+import { IconButton } from '@fluentui/react/lib/Button';
 import formatMessage from 'format-message';
 
 type CollapsableComponentProps = {
