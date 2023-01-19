@@ -162,6 +162,37 @@ export class BotProjectDeploy {
         status: BotProjectDeployLoggerType.DEPLOY_SUCCESS,
         message: 'Published successfully!',
       });
+
+      // STEP 6: UPDATE STACK PROPERTY IN WEB APP
+      this.logger({
+        status: BotProjectDeployLoggerType.DEPLOY_INFO,
+        message: 'Updating Bots properties',
+      });
+
+      const profile = settings.publishTargets.find((p) => p.name === profileName);
+      const configuration = JSON.parse(profile.configuration);
+
+      if (configuration.appServiceOperatingSystem === 'linux') {
+        let linuxFxVersion = '';
+
+        if (settings.runtime.command.includes('dotnet')) {
+          linuxFxVersion = 'DOTNETCORE|3.1';
+        }
+        if (settings.runtime.command.includes('npm')) {
+          linuxFxVersion = 'NODE|14-lts';
+        }
+        if (linuxFxVersion.length > 0) {
+          await this.updateBotSettings(
+            this.accessToken,
+            name,
+            environment,
+            hostname,
+            absSettings.subscriptionId,
+            absSettings.resourceGroup,
+            linuxFxVersion
+          );
+        }
+      }
     } catch (error) {
       this.logger({
         status: BotProjectDeployLoggerType.DEPLOY_ERROR,
@@ -248,14 +279,22 @@ export class BotProjectDeploy {
         try {
           const statusResponse = await axios.get(statusUrl, { headers: { Authorization: `Bearer ${token}` } });
 
-          if (statusResponse.data.provisioningState === 'Succeeded') {
+          /* We use the 'statusEnum' property to map the states of Windows and Linux bots.
+          The 'provisioningState' property was previously being used, but Linux bots don't have it.
+          Visit https://github.com/projectkudu/kudu/blob/master/Kudu.Contracts/Deployment/DeployStatus.cs for more information. */
+          const statusEnum = {
+            3: 'Failed',
+            4: 'Succeeded',
+          }[statusResponse.data.status];
+
+          if (statusEnum === 'Succeeded') {
             this.logger({
               status: BotProjectDeployLoggerType.DEPLOY_INFO,
               message: 'Zip upload processed successfully.',
             });
             clearInterval(timerId);
             resolve();
-          } else if (statusResponse.data.provisioningState === 'Failed') {
+          } else if (statusEnum === 'Failed') {
             clearInterval(timerId);
             reject(`Zip upload processing failed. ${statusResponse.data.status_text}`);
           } else {
@@ -322,6 +361,52 @@ export class BotProjectDeploy {
     const hostnameResult = hostname ? hostname : name + (env ? '-' + env : '');
     const scmHostDomainResult = scmHostDomain ? scmHostDomain : 'scm.azurewebsites.net';
     return `https://${hostnameResult}.${scmHostDomainResult}/zipdeploy/?isAsync=true`;
+  };
+
+  // Update Web App Settings
+  private async updateBotSettings(
+    token: string,
+    name: string,
+    env: string,
+    hostname: string,
+    subscriptionId: string,
+    resourceGroup: string,
+    linuxFxVersion: string
+  ) {
+    try {
+      const updateEndpoint = this.buildUpdateEndpoint(hostname, name, env, subscriptionId, resourceGroup);
+      const response = await axios.put(
+        updateEndpoint,
+        {
+          properties: { linuxFxVersion: linuxFxVersion },
+        },
+        { headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' } }
+      );
+
+      if (response.status === 200) {
+        this.logger({
+          status: BotProjectDeployLoggerType.DEPLOY_INFO,
+          message: `Settings successfully updated.`,
+        });
+      }
+    } catch (err) {
+      const errorMessage = JSON.stringify(err, Object.getOwnPropertyNames(err));
+      throw createCustomizeError(
+        AzurePublishErrors.DEPLOY_ZIP_ERROR,
+        `There was a problem updating the bot's settings. ${errorMessage}`
+      );
+    }
+  }
+
+  private buildUpdateEndpoint = (
+    hostname: string,
+    name: string,
+    env: string,
+    subscriptionId: string,
+    resourceGroupName: string
+  ) => {
+    const hostnameResult = hostname ? hostname : name + (env ? '-' + env : '');
+    return `https://management.azure.com/subscriptions/${subscriptionId}/resourceGroups/${resourceGroupName}/providers/Microsoft.Web/sites/${hostnameResult}/config/web?api-version=2022-03-01`;
   };
 
   /**
