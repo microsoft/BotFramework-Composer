@@ -18,10 +18,12 @@ const disabledTextFieldStyle = mergeStyleSets(customFieldLabel, {
   root: {
     selectors: {
       '.ms-TextField-field': {
-        background: '#ddf3db',
-      },
-      '.ms-Dropdown-title': {
-        background: '#ddf3db',
+        '@media (forced-colors: none)': {
+          background: '#ddf3db',
+        },
+        '.ms-Dropdown-title': {
+          background: '#ddf3db',
+        },
       },
       'p > span': {
         width: '100%',

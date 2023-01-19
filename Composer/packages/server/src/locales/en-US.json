@@ -89,6 +89,9 @@
   "access_external_resources_7e37fe21": {
     "message": "Access external resources"
   },
+  "accessibility_statement_b5bd8ca2": {
+    "message": "Accessibility statement"
+  },
   "action_created_f80af9a0": {
     "message": "Action created"
   },
@@ -179,6 +182,9 @@
   "add_a_skill_host_endpoint_so_your_skills_can_relia_950a7614": {
     "message": "Add a skill host endpoint so your skills can reliably connect to your root bot. <a>Learn more</a>."
   },
+  "add_actions_6c84c880": {
+    "message": "Add actions"
+  },
   "add_allowed_callers_7188d3d4": {
     "message": "Add allowed callers"
   },
@@ -238,6 +244,9 @@
   },
   "add_new_validation_rule_here_eb675ccf": {
     "message": "Add new validation rule here"
+  },
+  "add_new_value_to_the_label_field_6d8cc425": {
+    "message": "Add new value to the { label } field"
   },
   "add_packages_3ab0558c": {
     "message": "Add packages"
@@ -2153,6 +2162,9 @@
   "label_row_index_e1b09205": {
     "message": "{ label }: row { index }"
   },
+  "language_6b3e2c7c": {
+    "message": "Language"
+  },
   "language_generation_1876f6d6": {
     "message": "Language Generation"
   },
@@ -2317,6 +2329,9 @@
   },
   "list_of_attachments_with_their_type_used_by_channe_7ecf0086": {
     "message": "List of attachments with their type. Used by channels to render as UI cards or other generic file attachment types."
+  },
+  "list_of_languages_that_bot_will_be_able_to_underst_6868beff": {
+    "message": "List of languages that bot will be able to understand and respond to"
   },
   "list_of_languages_that_bot_will_be_able_to_underst_c6f62837": {
     "message": "List of languages that bot will be able to understand (User input) and respond to (Bot responses). To make this bot available in other languages, click ‘Manage languages’ to create a copy of the default language, and translate the content into the new language."
@@ -2885,6 +2900,9 @@
   "pop_out_editor_5528a187": {
     "message": "Pop out editor"
   },
+  "pop_out_editor_open_editor_c29c5820": {
+    "message": "Pop out editor: open editor"
+  },
   "power_virtual_agents_bots_cannot_be_run_at_the_mom_a866be28": {
     "message": "Power Virtual Agents bots cannot be run at the moment. Publish the bot to Power Virtual Agents and test it there."
   },
@@ -2902,6 +2920,9 @@
   },
   "press_shift_enter_to_insert_a_new_line_2a5a970f": {
     "message": "Press Shift+Enter to insert a new line"
+  },
+  "press_tab_then_up_and_down_arrow_keys_to_navigate__f09033c0": {
+    "message": "Press tab then up and down arrow keys to navigate the search results"
   },
   "preview_features_e279bac5": {
     "message": "Preview features"
@@ -3383,6 +3404,9 @@
   "search_for_extensions_on_npm_c5ca65d9": {
     "message": "Search for extensions on npm"
   },
+  "search_for_the_query_found_count_plural_1_one_resu_da1e5732": {
+    "message": "Search for the { query }. Found { count, plural,\n     =1 {one result}\n  other {# results}\n}"
+  },
   "search_functions_4a1afbc3": {
     "message": "Search functions"
   },
@@ -3686,6 +3710,12 @@
   "sorted_a_to_z_915b2ed3": {
     "message": "Sorted A to Z"
   },
+  "sorted_ascending_a1e96e3a": {
+    "message": "Sorted ascending"
+  },
+  "sorted_descending_3093c22f": {
+    "message": "Sorted descending"
+  },
   "sorted_z_to_a_722f1567": {
     "message": "Sorted Z to A"
   },
@@ -3949,6 +3979,12 @@
   },
   "the_skill_you_tried_to_remove_from_the_project_is__2c0bd965": {
     "message": "The skill you tried to remove from the project is currently used in the below bot(s). Removing this skill won’t delete the files, but it will cause your Bot to malfunction without additional action."
+  },
+  "the_trigger_triggername_has_been_created_eed0c973": {
+    "message": "The trigger { triggerName } has been created"
+  },
+  "the_trigger_triggername_has_been_deleted_b7d630f8": {
+    "message": "The trigger { triggerName } has been deleted"
   },
   "the_user_input_page_is_where_the_language_understa_c9262f3f": {
     "message": "The User Input page is where the Language Understanding editor locates. From here users can view all the Language Understanding templates and edit them."

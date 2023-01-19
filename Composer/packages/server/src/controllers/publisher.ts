@@ -15,6 +15,7 @@ import AssetService from '../services/asset';
 import logger from '../logger';
 import { LocationRef } from '../models/bot/interface';
 import { TelemetryService } from '../services/telemetry';
+import { serverListenHost, serverHostname } from '../settings/env';
 
 const log = logger.extend('publisher-controller');
 
@@ -318,7 +319,7 @@ export const PublishController = {
       const pluginMethod = ExtensionContext.extensions.publish[extensionName].methods.setupRuntimeLogServer;
       if (typeof pluginMethod === 'function') {
         try {
-          const runtimeLogUrl = await pluginMethod.call(null, projectId);
+          const runtimeLogUrl = await pluginMethod.call(null, projectId, serverHostname, serverListenHost);
           return res.status(200).send(runtimeLogUrl);
         } catch (ex) {
           res.status(400).json({

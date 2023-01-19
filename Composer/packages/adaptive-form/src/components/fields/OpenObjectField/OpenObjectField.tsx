@@ -4,6 +4,7 @@
 import { jsx } from '@emotion/react';
 import React from 'react';
 import { FieldProps } from '@bfc/extension-client';
+import formatMessage from 'format-message';
 
 import { FieldLabel } from '../../FieldLabel';
 import { getPropertyItemProps, useObjectItems } from '../../../utils/objectUtils';
@@ -51,7 +52,12 @@ const OpenObjectField: React.FC<FieldProps<{
           />
         );
       })}
-      {additionalProperties && <AddButton onClick={onClick} />}
+      {additionalProperties && (
+        <AddButton
+          ariaLabel={label ? formatMessage('Add new value to the {label} field', { label }) : undefined}
+          onClick={onClick}
+        />
+      )}
     </div>
   );
 };

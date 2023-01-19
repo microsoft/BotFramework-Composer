@@ -8,7 +8,7 @@ import formatMessage from 'format-message';
 import { PrimaryButton, DefaultButton } from '@fluentui/react/lib/Button';
 import { DialogFooter } from '@fluentui/react/lib/Dialog';
 import { ScrollablePane, ScrollbarVisibility } from '@fluentui/react/lib/ScrollablePane';
-import { Selection } from '@fluentui/react/lib/DetailsList';
+import { IColumn, Selection } from '@fluentui/react/lib/DetailsList';
 import { Text } from '@fluentui/react/lib/Text';
 import {
   DetailsList,
@@ -38,27 +38,26 @@ import { TemplateDetailView } from './TemplateDetailView';
 // -------------------- Styles -------------------- //
 
 const detailListContainer = css`
-  width: 48%;
-  padding-right: 2%;
+  flex-basis: 50%;
   height: 400px;
   overflow: hidden;
-  float: left;
-  flex-grow: 1;
 `;
 
 const templateDetailContainer = css`
-  width: 48%;
-  padding-right: 2%;
+  flex-basis: 50%;
   height: 400px;
   overflow: auto;
-  flex-grow: 1;
-  float: left;
 `;
 
 const pickerContainer = css`
   position: relative;
-  height: 400px;
+  min-height: 400px;
   border: 1px solid #f3f2f1;
+  display: flex;
+  gap: 8px;
+  @media screen and (max-width: 480px) /* 300% zoom */ {
+    flex-flow: column;
+  }
 `;
 
 const rowDetails = (disabled) => {
@@ -197,7 +196,7 @@ export function CreateBot(props: CreateBotProps) {
     }
   };
 
-  const tableColumns = [
+  const tableColumns: IColumn[] = [
     {
       key: 'name',
       name: formatMessage('Name'),

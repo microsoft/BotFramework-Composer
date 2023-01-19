@@ -61,11 +61,11 @@ describe('<BotController />', () => {
       set(botStatusState(projectIds[1]), BotStatus.connected);
       set(botStatusState(projectIds[2]), BotStatus.failed);
     };
-    const { findByText } = renderWithRecoil(
+    const { findAllByText } = renderWithRecoil(
       <BotController isControllerHidden={false} onHideController={jest.fn()} />,
       initRecoilState
     );
-    await findByText('Restart all bots (2/3 running)');
+    await findAllByText('Restart all bots (2/3 running)');
   });
 
   it('should show that no bots have been started', async () => {

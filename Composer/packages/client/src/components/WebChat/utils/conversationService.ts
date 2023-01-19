@@ -2,7 +2,8 @@
 // Licensed under the MIT License.
 
 import { v4 as uuidv4 } from 'uuid';
-import axios, { AxiosInstance, AxiosResponse } from 'axios';
+import type { AxiosInstance, AxiosResponse } from 'axios';
+import { axios, createAxios } from '@bfc/shared/lib/axios';
 import { createStore as createWebChatStore } from 'botframework-webchat-core';
 import { createDirectLine } from 'botframework-webchat';
 import moment from 'moment';
@@ -21,7 +22,7 @@ export class ConversationService {
 
   constructor(directlineHostUrl: string) {
     this.directlineHostUrl = directlineHostUrl.endsWith('/') ? directlineHostUrl.slice(0, -1) : directlineHostUrl;
-    this.composerApiClient = axios.create({
+    this.composerApiClient = createAxios({
       baseURL: directlineHostUrl,
     });
     this.setUpConversationServer();
@@ -79,7 +80,7 @@ export class ConversationService {
       secret,
       domain: `${this.directlineHostUrl}/v3/directline`,
       webSocket: true,
-      streamUrl: `ws://localhost:${this.restServerForWSPort}/ws/conversation/${conversationId}`,
+      streamUrl: `ws://${location.hostname}:${this.restServerForWSPort}/ws/conversation/${conversationId}`,
     });
     return directLine;
   }
