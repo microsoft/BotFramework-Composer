@@ -527,7 +527,7 @@ export const defaultTeamsManifest: TeamsManifest = {
 };
 
 export const defaultBotPort = 3979;
-export const defaultBotEndpoint = `http://localhost:${defaultBotPort}/api/messages`;
+export const defaultBotEndpoint = `http://${location.hostname}:${defaultBotPort}/api/messages`;
 
 const DAYS_IN_MS = 1000 * 60 * 60 * 24;
 export const SURVEY_PARAMETERS = {
