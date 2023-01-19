@@ -19,6 +19,7 @@ export const contentWrapper = css`
   flex-grow: 1;
   height: 100%;
   position: relative;
+  overflow: auto;
   label: DesignPageContent;
 `;
 
@@ -191,6 +192,7 @@ export const styles = {
     root: [
       {
         marginBottom: '1rem',
+        gap: '2rem',
       },
     ],
   },

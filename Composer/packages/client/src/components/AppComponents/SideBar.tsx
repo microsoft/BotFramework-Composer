@@ -47,8 +47,10 @@ const sideBar = (isExpand: boolean) => css`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: auto;
   flex-shrink: 0;
+  scrollbar-width: thin;
 `;
 
 const dividerTop = css`

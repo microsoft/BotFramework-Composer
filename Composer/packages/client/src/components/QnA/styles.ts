@@ -19,8 +19,8 @@ export const styles = {
   },
   modalCreateFromUrl: {
     main: {
-      maxWidth: '960px !important',
-      width: '920px',
+      maxWidth: '920px !important',
+      flexBasis: '100%',
     },
   },
   modalCreateFromScratch: {
@@ -35,13 +35,16 @@ export const contentBox = css`
   min-height: 320px;
   border: 1px solid #f3f2f1;
   height: 429px;
+  @media screen and (max-width: 640px) /* 200% zoom */ {
+    flex-flow: column;
+    height: auto;
+  }
 `;
 
 export const formContainer = css`
   display: flex;
   flex-direction: column;
   max-width: 500px;
-  width: 500px;
   border-left: 1px solid #f3f2f1;
   padding: 10px 10px 10px 30px;
 `;
@@ -50,7 +53,6 @@ export const choiceContainer = css`
   display: flex;
   flex-direction: column;
   padding: 10px 30px 10px 10px;
-  width: 329px;
 `;
 
 export const dialogWindow = css`
@@ -70,14 +72,13 @@ export const urlPairStyle = css`
   display: flex;
 `;
 
-const fieldGroupWidth = 500;
-
 export const textFieldKBNameFromUrl = {
   root: {
     paddingBottom: 20,
+    flex: 'auto',
   },
   fieldGroup: {
-    width: fieldGroupWidth,
+    flex: 'auto',
   },
 };
 
@@ -85,34 +86,18 @@ export const textFieldKBNameFromScratch = {
   root: {
     paddingBottom: 20,
   },
-  fieldGroup: {
-    width: fieldGroupWidth,
-  },
 };
 
 export const dropdownStyles: Partial<IDropdownStyles> = {
-  dropdown: { width: fieldGroupWidth },
-};
-
-export const textFieldLocales = {
   root: {
-    width: 115,
-    marginRight: 20,
-    paddingBottom: 20,
-    selectors: {
-      '.ms-Label': {
-        color: NeutralColors.gray160,
-      },
-    },
+    flex: 'auto',
   },
 };
 
 export const textFieldUrl = {
   root: {
     paddingBottom: 12,
-  },
-  fieldGroup: {
-    width: fieldGroupWidth,
+    flex: 'auto',
   },
 };
 
@@ -157,13 +142,14 @@ export const titleStyle = {
   marginBottom: 10,
 };
 
-export const nameStepContainer = {
-  height: 464,
-  width: 921,
-};
-
 export const resourceDropdown = {
   dropdown: { width: '100%', marginBottom: 10 },
 };
 
-export const dialogBodyStyles = { height: 464, width: 910, paddingRight: 10 };
+export const dialogBodyStyles = {
+  height: 464,
+  paddingRight: 10,
+  '@media screen and (max-width: 960px)': /* 125% zoom */ {
+    height: 'auto',
+  },
+};

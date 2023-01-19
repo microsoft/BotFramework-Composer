@@ -115,7 +115,7 @@ export const CreateDialogModal: React.FC<CreateDialogModalProps> = (props) => {
     >
       <form onSubmit={handleSubmit}>
         <input style={{ display: 'none' }} type="submit" />
-        <Stack styles={wizardStyles.stackinput} tokens={{ childrenGap: '2rem' }}>
+        <Stack styles={wizardStyles.stackinput}>
           <StackItem grow={0} styles={wizardStyles.halfstack}>
             <TextField
               autoFocus

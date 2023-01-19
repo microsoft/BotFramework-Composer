@@ -6,12 +6,14 @@
 # before doing yarn install due to yarn workspace symlinking.
 #
 ################
-FROM  mcr.microsoft.com/dotnet/core/sdk:3.1-focal as base
+FROM mcr.microsoft.com/dotnet/core/sdk:3.1-focal as base
 RUN apt update \
     && apt -y install curl dirmngr apt-transport-https lsb-release ca-certificates \
     && curl -sL https://deb.nodesource.com/setup_14.x | bash - \
     && apt install -y nodejs libgomp1 \
-    && npm install -g yarn
+    && corepack enable \
+    && corepack prepare yarn@3.2.1 --activate \
+    && yarn --version
 
 FROM base as build
 ARG YARN_ARGS
@@ -32,6 +34,7 @@ RUN yarn build:prod $YARN_ARGS
 ENV COMPOSER_REMOTE_EXTENSIONS_DIR "/src/remote-extensions"
 ENV COMPOSER_REMOTE_EXTENSION_DATA_DIR "/src/extension-data"
 ENV COMPOSER_EXTENSION_MANIFEST "/src/extensions.json"
+ENV COMPOSER_HOST="0.0.0.0"
 CMD ["yarn","start:server"]
 
 FROM base as composerbasic
@@ -46,7 +49,7 @@ COPY --from=build /src/Composer/packages ./packages
 COPY --from=build /src/extensions ../extensions
 
 ENV NODE_ENV "production"
-RUN yarn --production --immutable --force $YARN_ARGS && yarn cache clean
+RUN yarn install --immutable $YARN_ARGS && yarn cache clean
 
 FROM base
 ENV NODE_ENV "production"
@@ -59,4 +62,5 @@ ENV COMPOSER_BUILTIN_EXTENSIONS_DIR "/app/extensions"
 ENV COMPOSER_REMOTE_EXTENSIONS_DIR "/app/remote-extensions"
 ENV COMPOSER_REMOTE_EXTENSION_DATA_DIR "/app/extension-data"
 ENV COMPOSER_EXTENSION_MANIFEST "/app/extensions.json"
+ENV COMPOSER_HOST="0.0.0.0"
 CMD ["yarn","start:server"]

@@ -23,6 +23,11 @@ const customButtonStyles: IButtonStyles = {
   icon: {
     color: `${CommunicationColors.primary}`,
   },
+  textContainer: {
+    '@media screen and (max-width: 480px)': /* 300% zoom */ {
+      display: 'none',
+    },
+  },
   splitButtonMenuButton: { backgroundColor: `${NeutralColors.white}`, width: 28, border: 'none' },
   splitButtonMenuIcon: { fontSize: '7px' },
   splitButtonDivider: {

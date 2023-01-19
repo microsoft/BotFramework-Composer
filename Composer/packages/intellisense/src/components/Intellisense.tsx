@@ -1,17 +1,20 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { Announced } from '@fluentui/react';
-import React, { AriaAttributes, useCallback, useEffect, useState } from 'react';
+import { Announced } from '@fluentui/react/lib/Announced';
+import React, { AriaAttributes, useCallback, useMemo } from 'react';
 import formatMessage from 'format-message';
+import { useId } from '@fluentui/react-hooks';
 
 import { useLanguageServer } from '../hooks/useLanguageServer';
 import { checkIsOutside } from '../utils/uiUtils';
 
 import { CompletionList } from './CompletionList';
-import { useId } from '@fluentui/react-hooks';
 
-type AriaState = Pick<AriaAttributes, 'aria-autocomplete' | 'aria-expanded' | 'aria-activedescendant' | 'aria-owns'> & {
+type AriaState = Pick<
+  AriaAttributes,
+  'aria-autocomplete' | 'aria-activedescendant' | 'aria-expanded' | 'aria-owns' | 'aria-labelledby'
+> & {
   role: string;
   'aria-description': string;
 };
@@ -65,29 +68,26 @@ export const Intellisense = React.memo(
     const itemIdPrefix = useId('suggestion-item');
     const suggestionsContainerId = useId('suggestion-items');
     const getItemId = useCallback((index: number) => `${itemIdPrefix}-${index}`, []);
-    const [aria, setAria] = useState<AriaState>(() => ({
-      role: 'combobox',
-      'aria-owns': suggestionsContainerId,
-      'aria-autocomplete': 'list',
-      'aria-expanded': 'false',
-      'aria-activedescendant': '',
-      'aria-description': formatMessage("Start typing to get suggestions or type '=' to write an expression"),
-    }));
-
-    useEffect(() => {
+    const aria = useMemo<AriaState>(() => {
+      const labelId = `${id.replace(/^intellisense-/, '')}-field-label`;
+      const initial = {
+        role: 'combobox',
+        'aria-owns': suggestionsContainerId,
+        'aria-autocomplete': 'list',
+        'aria-expanded': 'false',
+        'aria-activedescendant': undefined,
+        'aria-description': formatMessage("Start typing to get suggestions or type '=' to write an expression"),
+        'aria-labelledby': labelId,
+      } as const;
       if (showCompletionList && selectedCompletionItem >= 0) {
-        setAria({
-          ...aria,
+        return {
+          ...initial,
           'aria-expanded': 'true',
           'aria-activedescendant': getItemId(selectedCompletionItem),
-        });
-      } else {
-        setAria({
-          ...aria,
-          'aria-expanded': 'false',
-          'aria-activedescendant': '',
-        });
+        };
       }
+
+      return initial;
     }, [selectedCompletionItem, showCompletionList]);
 
     const completionItems = useLanguageServer(url, scopes, id, textFieldValue, cursorPosition, projectId);

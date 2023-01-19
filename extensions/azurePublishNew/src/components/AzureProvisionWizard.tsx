@@ -5,6 +5,7 @@ import React, { useState } from 'react';
 import styled from '@emotion/styled';
 import { RecoilRoot } from 'recoil';
 import { usePublishApi } from '@bfc/extension-client';
+import { css } from '@emotion/react';
 
 import { ProvisionAction } from '../types';
 import { usePublishProfileInitializer } from '../hooks/usePublishProfileInitializer';
@@ -18,13 +19,19 @@ type RootStyleProps = {
   activeStepIndex: number;
 };
 
-const Root = styled.div<RootStyleProps>(({ activeStepIndex }) => ({
-  height: '100%',
-  width: '100%',
-  display: 'grid',
-  gridTemplateColumns: activeStepIndex === 0 ? '30% 1fr' : '1fr',
-  gridTemplateRows: '1fr',
-}));
+const Root = styled.div<RootStyleProps>(
+  ({ activeStepIndex }) => css`
+    height: 100%;
+    width: 100%;
+    display: grid;
+    grid-template-columns: ${activeStepIndex === 0 ? '30% 1fr' : '1fr'},
+    grid-template-rows: 1fr;
+    @media screen and (max-width: 960px) /* 125% zoom */ {
+      grid-template-columns: 1fr;
+      grid-auto-rows: auto;
+    }
+  `
+);
 
 export const AzureProvisionWizard = () => {
   const [provisionAction, setProvisionAction] = useState<ProvisionAction>('create');

@@ -1,11 +1,11 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import axios from 'axios';
+import { createAxios } from '@bfc/shared/lib/axios';
 
 import { BASEURL } from '../constants';
 
-const httpClient = axios.create({
+const httpClient = createAxios({
   baseURL: BASEURL,
 });
 

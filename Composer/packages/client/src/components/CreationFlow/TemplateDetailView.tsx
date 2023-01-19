@@ -24,7 +24,6 @@ import { useFeatureFlag } from '../../utils/hooks';
 
 const templateTitleContainer = (isLocalTemplate: boolean) => css`
   width: 100%;
-  padding-right: 2%;
   height: fit-content
   overflow: hidden;
   flex-grow: 1;
