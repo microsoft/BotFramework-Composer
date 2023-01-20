@@ -6,7 +6,7 @@ import './commands';
 before(() => {
   cy.exec('yarn clean-all');
   cy.getCSRFToken();
-  cy.createTemplateBot('EmptySample2');
+  cy.createTemplateBot('EmptySample');
 });
 
 beforeEach(() => {
