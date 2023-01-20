@@ -11,7 +11,7 @@ import React, { useState, Fragment, useMemo, useRef } from 'react';
 import { Dropdown, IDropdownOption } from '@fluentui/react/lib/Dropdown';
 import { Spinner, SpinnerSize } from '@fluentui/react/lib/Spinner';
 import { PublishResult } from '@bfc/shared';
-import { CheckboxVisibility, DetailsList } from '@fluentui/react/lib/DetailsList';
+import { CheckboxVisibility, DetailsList, IColumn } from '@fluentui/react/lib/DetailsList';
 import { ActionButton, IconButton } from '@fluentui/react/lib/Button';
 import { SharedColors } from '@fluentui/theme';
 import { FontSizes } from '@fluentui/style-utilities';
@@ -181,7 +181,7 @@ export const BotStatusList: React.FC<BotStatusListProps> = ({
     }
   };
 
-  const columns = [
+  const columns: IColumn[] = [
     {
       key: 'Bot',
       name: formatMessage('Bot'),
@@ -191,6 +191,8 @@ export const BotStatusList: React.FC<BotStatusListProps> = ({
       maxWidth: 200,
       isRowHeader: true,
       data: 'string',
+      sortAscendingAriaLabel: formatMessage('Sorted A to Z'),
+      sortDescendingAriaLabel: formatMessage('Sorted Z to A'),
       onRender: (item: BotStatus) => {
         return (
           <Checkbox
@@ -221,6 +223,8 @@ export const BotStatusList: React.FC<BotStatusListProps> = ({
       maxWidth: 200,
       isRowHeader: true,
       data: 'string',
+      sortAscendingAriaLabel: formatMessage('Sorted A to Z'),
+      sortDescendingAriaLabel: formatMessage('Sorted Z to A'),
       onRender: (item: BotStatus) => {
         return (
           <Dropdown
@@ -248,6 +252,8 @@ export const BotStatusList: React.FC<BotStatusListProps> = ({
       maxWidth: 134,
       isRowHeader: true,
       data: 'string',
+      sortAscendingAriaLabel: formatMessage('Sorted ascending'),
+      sortDescendingAriaLabel: formatMessage('Sorted descending'),
       onRender: (item: BotStatus) => {
         return <span>{item.time ? moment(item.time).format('MM-DD-YYYY') : null}</span>;
       },
@@ -262,6 +268,8 @@ export const BotStatusList: React.FC<BotStatusListProps> = ({
       maxWidth: 134,
       isRowHeader: true,
       data: 'string',
+      sortAscendingAriaLabel: formatMessage('Sorted A to Z'),
+      sortDescendingAriaLabel: formatMessage('Sorted Z to A'),
       onRender: (item: BotStatus) => {
         return renderPublishStatus(item);
       },
@@ -278,6 +286,8 @@ export const BotStatusList: React.FC<BotStatusListProps> = ({
       isCollapsible: true,
       isMultiline: true,
       data: 'string',
+      sortAscendingAriaLabel: formatMessage('Sorted A to Z'),
+      sortDescendingAriaLabel: formatMessage('Sorted Z to A'),
       onRender: (item: BotStatus) => {
         return <span>{item.message}</span>;
       },
@@ -294,6 +304,8 @@ export const BotStatusList: React.FC<BotStatusListProps> = ({
       isCollapsible: true,
       isMultiline: true,
       data: 'string',
+      sortAscendingAriaLabel: formatMessage('Sorted A to Z'),
+      sortDescendingAriaLabel: formatMessage('Sorted Z to A'),
       onRender: (item: BotStatus) => {
         return <span>{item.comment}</span>;
       },

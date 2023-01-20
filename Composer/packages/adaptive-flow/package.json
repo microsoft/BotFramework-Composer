@@ -28,9 +28,9 @@
     "@bfc/ui-shared": "*",
     "@emotion/react": "^11.1.3",
     "@emotion/styled": "^11.1.3",
-    "@fluentui/react": "^8.57.1",
-    "adaptive-expressions": "4.12.0-rc1",
-    "botbuilder-lg": "4.14.0-dev.391a2ab",
+    "@fluentui/react": "^8.83.1",
+    "adaptive-expressions": "^4.18.0",
+    "botbuilder-lg": "^4.18.0",
     "create-react-class": "^15.6.3",
     "d3": "^5.9.1",
     "dagre": "^0.8.4",
@@ -39,7 +39,7 @@
     "prop-types": "^15.7.2",
     "react-measure": "^2.3.0",
     "source-map-loader": "^0.2.4",
-    "tslib": "2.0.3"
+    "tslib": "2.4.0"
   },
   "peerDependencies": {
     "format-message": "^6.2.3",
@@ -49,11 +49,11 @@
     "@botframework-composer/test-utils": "*",
     "@types/lodash": "^4.14.146",
     "@types/react": "16.9.23",
-    "format-message": "^6.2.3",
+    "format-message": "6.2.4",
     "json-loader": "^0.5.7",
     "react": "16.13.1",
     "react-dom": "16.13.1",
-    "ts-loader": "7.0.4",
+    "ts-loader": "9.3.1",
     "tsconfig-paths-webpack-plugin": "^3.2.0"
   },
   "author": "",

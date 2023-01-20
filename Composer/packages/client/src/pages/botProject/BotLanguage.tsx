@@ -8,8 +8,16 @@ import { useRecoilValue } from 'recoil';
 import { ActionButton } from '@fluentui/react/lib/Button';
 import formatMessage from 'format-message';
 import cloneDeep from 'lodash/cloneDeep';
-import { FontSizes, FontWeights } from '@fluentui/react/lib/Styling';
+import {
+  getFocusStyle,
+  FontSizes,
+  FontWeights,
+  mergeStyles,
+  hiddenContentStyle,
+  getTheme,
+} from '@fluentui/react/lib/Styling';
 import { NeutralColors, SharedColors } from '@fluentui/theme';
+import { useId } from '@fluentui/react-hooks';
 
 import { dispatcherState, settingsState } from '../../recoilModel';
 import { languageListTemplates } from '../../components/MultiLanguage';
@@ -56,15 +64,17 @@ const languageRowContainer = css`
   display: flex;
   height: 30px;
   line-height: 30px;
+  &:hover .ms-Button,
+  &:focus .ms-Button,
+  &:focus-within .ms-Button {
+    visibility: visible;
+  }
 `;
 
 const languageItemContainer = css`
   display: flex;
   width: 100%;
   justify-content: space-between;
-  &:hover .ms-Button {
-    visibility: visible;
-  }
 `;
 
 const languageButton = {
@@ -92,6 +102,10 @@ const languageButtonContainer = css`
   justify-content: space-between;
   width: 240px;
 `;
+
+const screenReaderOnlyClassName = mergeStyles(hiddenContentStyle);
+
+const focusClassName = mergeStyles(getFocusStyle(getTheme(), { inset: -3 }));
 
 // -------------------- BotLanguage -------------------- //
 
@@ -149,6 +163,8 @@ export const BotLanguage: React.FC<BotLanguageProps> = (props) => {
   const dl = languageListOptions.splice(index, 1)[0];
   languageListOptions.unshift(dl);
 
+  const languageRowAriaId = useId('language-row-aria-');
+
   return (
     <Fragment>
       <div css={botLanguageContainerStyle}>
@@ -157,18 +173,33 @@ export const BotLanguage: React.FC<BotLanguageProps> = (props) => {
             'List of languages that bot will be able to understand (User input) and respond to (Bot responses). To make this bot available in other languages, click ‘Manage languages’ to create a copy of the default language, and translate the content into the new language.'
           )}
         </div>
-        <div css={botLanguageFieldStyle}>
+        <div
+          aria-label={formatMessage('List of languages that bot will be able to understand and respond to')}
+          css={botLanguageFieldStyle}
+          role="list"
+        >
           {languageListOptions.map((l) => (
-            <div key={l.key} css={languageRowContainer}>
+            <div
+              key={l.key}
+              aria-labelledby={`${languageRowAriaId}-${l.key}`}
+              className={focusClassName}
+              css={languageRowContainer}
+              role="listitem"
+              // Needed for keyboard navigation
+              // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex
+              tabIndex={0}
+            >
               {l.key === defaultLanguage && (
-                <div css={languageTextStyle} data-testid={'defaultLanguage'}>
+                <div css={languageTextStyle} data-testid={'defaultLanguage'} id={`${languageRowAriaId}-${l.key}`}>
                   {l.text}
                   <span css={defaultLanguageTextStyle}> {formatMessage('DEFAULT LANGUAGE')}</span>
                 </div>
               )}
               {l.key !== defaultLanguage && (
                 <div css={languageItemContainer}>
-                  <div css={languageItem}>{l.text}</div>
+                  <div css={languageItem} id={`${languageRowAriaId}-${l.key}`}>
+                    {l.text} <span className={screenReaderOnlyClassName}>{formatMessage('Language')}</span>
+                  </div>
                   <div css={languageButtonContainer}>
                     <ActionButton
                       data-testid={'setDefaultLanguage'}

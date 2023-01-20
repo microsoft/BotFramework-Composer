@@ -23,14 +23,14 @@
     "@bfc/shared": "*",
     "@botframework-composer/test-utils": "*",
     "@types/lodash": "^4.14.146",
-    "rimraf": "^2.6.3"
+    "rimraf": "3.0.2"
   },
   "dependencies": {
     "@microsoft/bf-lu": "4.15.0-dev.20210702.cbf708d",
-    "adaptive-expressions": "4.12.0-rc1",
-    "botbuilder-lg": "4.14.0-dev.391a2ab",
+    "adaptive-expressions": "^4.18.0",
+    "botbuilder-lg": "^4.18.0",
     "lodash": "^4.17.19",
-    "tslib": "2.0.3"
+    "tslib": "2.4.0"
   },
   "peerDependencies": {
     "@bfc/shared": "*"

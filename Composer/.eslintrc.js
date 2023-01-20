@@ -87,7 +87,7 @@ module.exports = {
     'lodash/import-scope': ['error', 'method'],
     'lodash/matches-prop-shorthand': 'error',
     'lodash/matches-shorthand': 'error',
-    'lodash/path-style': 'error',
+    'lodash/path-style': 'warn',
     'lodash/prefer-compact': 'error',
     'lodash/prefer-flat-map': 'error',
     'lodash/prefer-immutable-method': 'error',

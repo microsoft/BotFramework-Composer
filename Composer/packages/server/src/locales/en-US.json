@@ -89,6 +89,9 @@
   "access_external_resources_7e37fe21": {
     "message": "Access external resources"
   },
+  "accessibility_statement_b5bd8ca2": {
+    "message": "Accessibility statement"
+  },
   "action_created_f80af9a0": {
     "message": "Action created"
   },
@@ -179,6 +182,9 @@
   "add_a_skill_host_endpoint_so_your_skills_can_relia_950a7614": {
     "message": "Add a skill host endpoint so your skills can reliably connect to your root bot. <a>Learn more</a>."
   },
+  "add_actions_6c84c880": {
+    "message": "Add actions"
+  },
   "add_allowed_callers_7188d3d4": {
     "message": "Add allowed callers"
   },
@@ -238,6 +244,9 @@
   },
   "add_new_validation_rule_here_eb675ccf": {
     "message": "Add new validation rule here"
+  },
+  "add_new_value_to_the_label_field_6d8cc425": {
+    "message": "Add new value to the { label } field"
   },
   "add_packages_3ab0558c": {
     "message": "Add packages"
@@ -617,6 +626,9 @@
   "bot_language_active_7cf9dc78": {
     "message": "Bot language (active)"
   },
+  "bot_language_translations_87becf3c": {
+    "message": "Bot language translations"
+  },
   "bot_name_cannot_start_with_a_number_or_space_3a5c6fc1": {
     "message": "Bot name cannot start with a number or space"
   },
@@ -761,6 +773,9 @@
   "close_d634289d": {
     "message": "Close"
   },
+  "close_get_started_panel_fd89cc4d": {
+    "message": "Close Get Started panel"
+  },
   "close_webchat_b26d03e1": {
     "message": "Close WebChat"
   },
@@ -859,6 +874,9 @@
   },
   "configure_the_command_used_by_composer_to_start_yo_f4231dc6": {
     "message": "Configure the command used by Composer to start your bot application when testing locally."
+  },
+  "configure_the_template_feed_that_composer_sources__4dc844e4": {
+    "message": "Configure the template feed that Composer sources its bot templates from."
   },
   "configure_your_bot_7483e4a": {
     "message": "Configure your bot"
@@ -1133,8 +1151,14 @@
   "debug_break_870a75df": {
     "message": "Debug break"
   },
+  "debug_panel_af4779dd": {
+    "message": "debug panel"
+  },
   "debug_panel_header_2ee4d70c": {
     "message": "Debug Panel Header"
+  },
+  "debug_panel_tab_content_9ba3b9a6": {
+    "message": "Debug panel tab content"
   },
   "debugging_options_20e2e9da": {
     "message": "Debugging options"
@@ -1262,6 +1286,9 @@
   "dialog_management_2980578": {
     "message": "Dialog management"
   },
+  "dialog_name_9205defe": {
+    "message": "Dialog name"
+  },
   "dialog_opened_f6392b1": {
     "message": "Dialog opened"
   },
@@ -1279,9 +1306,6 @@
   },
   "dialogfactory_missing_schema_5c3255c4": {
     "message": "DialogFactory missing schema."
-  },
-  "dialognum_plural_0_no_bots_have_1_one_bot_has_othe_549c9b69": {
-    "message": "{ dialogNum, plural,\n     =0 {No bots have}\n     =1 {One bot has}\n  other {# bots have}\n} been found.\n            { dialogNum, select,\n      0 {}\n  other {Press down arrow key to navigate the search results}\n}"
   },
   "dialogs_triggers_and_actions_8a39ffea": {
     "message": "Dialogs, triggers, and actions"
@@ -1372,9 +1396,6 @@
   },
   "edit_c5fbea07": {
     "message": "Edit"
-  },
-  "edit_displayname_dialog_description_986a7d60": {
-    "message": "Edit { displayName } dialog description"
   },
   "edit_in_json_75d0d754": {
     "message": "Edit in JSON"
@@ -1541,8 +1562,11 @@
   "error_event_c079b608": {
     "message": "Error event"
   },
-  "error_fetching_runtime_templates_5e8a4701": {
-    "message": "Error fetching runtime templates"
+  "error_fetching_bot_project_templates_2637e908": {
+    "message": "Error fetching bot project templates"
+  },
+  "error_getting_template_feed_url_from_user_6a9c9b70": {
+    "message": "Error getting template feed URL from user"
   },
   "error_in_ui_schema_for_title_errormsg_options_7f3c22f2": {
     "message": "Error in UI schema for { title }: { errorMsg }\n{ options }"
@@ -1669,9 +1693,6 @@
   },
   "fields_must_be_either_all_strings_or_all_fieldset__d3df28c": {
     "message": "fields must be either all strings or all fieldset objects"
-  },
-  "file_name_8fd421ff": {
-    "message": "File name"
   },
   "file_not_found_9eec054c": {
     "message": "File not found"
@@ -1868,6 +1889,9 @@
   "handover_to_human_handoff_activity_477a71fe": {
     "message": "Handover to human (Handoff activity)"
   },
+  "hasfilter_select_false_other_search_results_for_se_c65f9ca4": {
+    "message": "{ hasFilter, select,\n  false {}\n  other {Search results for \"{ searchKeywords }\":}\n} { languagesCount, plural,\n     =1 {one language found}\n     =0 {no languages found}\n  other {# languages found}\n}\n              "
+  },
   "help_us_improve_468828c5": {
     "message": "Help us improve?"
   },
@@ -1882,6 +1906,9 @@
   },
   "hide_notes_on_canvas_cb566092": {
     "message": "Hide notes on canvas"
+  },
+  "history_cd3f60a9": {
+    "message": "History"
   },
   "home_351838cd": {
     "message": "Home"
@@ -1903,9 +1930,6 @@
   },
   "iconname_file_icon_29976c8e": {
     "message": "{ iconName } file icon"
-  },
-  "id_already_exists_please_enter_a_unique_file_name_174913a3": {
-    "message": "{ id } already exists. Please enter a unique file name."
   },
   "if_azure_resources_and_subscription_are_managed_by_e36717f6": {
     "message": "If Azure resources and subscription are managed by others, use the following information to request creation of the resources that you need to build and run your bot."
@@ -2096,6 +2120,9 @@
   "item_added_f3910bed": {
     "message": "item added"
   },
+  "item_index_allowed_caller_bot_app_id_b55b885": {
+    "message": "Item { index }: Allowed caller bot App ID"
+  },
   "itemcount_plural_0_no_schemas_1_one_schema_other_s_e1aea7f": {
     "message": "{ itemCount, plural,\n     =0 {No schemas}\n     =1 {One schema}\n  other {# schemas}\n} have been found.\n            { itemCount, select,\n      0 {}\n  other {Press down arrow key to navigate the search results}\n}"
   },
@@ -2132,6 +2159,12 @@
   "label_entity_45d7b842": {
     "message": "Label entity"
   },
+  "label_row_index_e1b09205": {
+    "message": "{ label }: row { index }"
+  },
+  "language_6b3e2c7c": {
+    "message": "Language"
+  },
   "language_generation_1876f6d6": {
     "message": "Language Generation"
   },
@@ -2150,6 +2183,9 @@
   "languagepolicy_e754ad28": {
     "message": "LanguagePolicy"
   },
+  "languagescount_plural_0_no_languages_selected_1_on_2a9100ea": {
+    "message": "{ languagesCount, plural,\n     =0 {No languages selected}\n     =1 {One language selected}\n  other {# languages selected}\n}"
+  },
   "last_modified_time_is_time_b1497d3": {
     "message": "Last modified time is { time }"
   },
@@ -2165,23 +2201,59 @@
   "learn_more_about_activities_134f453d": {
     "message": "Learn more about activities"
   },
+  "learn_more_about_adding_more_to_this_response_37af92fe": {
+    "message": "Learn more about adding more to this response"
+  },
+  "learn_more_about_app_id_a4f5fec6": {
+    "message": "Learn more about App ID"
+  },
+  "learn_more_about_bot_framework_composer_nightly_re_60e57e5b": {
+    "message": "Learn more about Bot Framework Composer Nightly Releases"
+  },
+  "learn_more_about_configuring_azure_publishing_on_t_cb947e4d": {
+    "message": "Learn more about configuring Azure publishing on the \"Publishing Profiles\" page"
+  },
   "learn_more_about_custom_actions_e7aa69e9": {
     "message": "Learn more about custom actions"
   },
   "learn_more_about_endpoints_df156708": {
     "message": "Learn more about endpoints"
   },
+  "learn_more_about_item_82ff9c8e": {
+    "message": "Learn more about { item }"
+  },
+  "learn_more_about_language_understanding_luis_dce31c2d": {
+    "message": "Learn more about Language Understanding (LUIS)"
+  },
+  "learn_more_about_luis_usage_limits_8681862e": {
+    "message": "Learn more about LUIS usage limits"
+  },
   "learn_more_about_manifests_6e7c364b": {
     "message": "Learn more about manifests"
+  },
+  "learn_more_about_option_b2626ee9": {
+    "message": "Learn more about { option }"
   },
   "learn_more_about_orchestrator_c070e031": {
     "message": "Learn more about Orchestrator"
   },
+  "learn_more_about_qna_maker_61636dfc": {
+    "message": "Learn more about QnA Maker"
+  },
   "learn_more_about_recognizers_e58eb215": {
     "message": "Learn more about recognizers"
   },
+  "learn_more_about_service_43172796": {
+    "message": "Learn more about { service }"
+  },
   "learn_more_about_skill_manifests_7708ce2c": {
     "message": "Learn more about skill manifests"
+  },
+  "learn_more_about_skills_fea8e7aa": {
+    "message": "Learn more about skills"
+  },
+  "learn_more_about_ssml_tags_73aca2e": {
+    "message": "Learn more about SSML Tags"
   },
   "learn_more_about_title_d1d3edbe": {
     "message": "Learn more about { title }"
@@ -2191,6 +2263,21 @@
   },
   "learn_more_c08939e8": {
     "message": "Learn more."
+  },
+  "learn_more_on_how_to_add_bot_framework_templates_46a39cd5": {
+    "message": "Learn more on how to add Bot Framework Templates"
+  },
+  "learn_more_on_how_to_add_language_understanding_to_3fac23e7": {
+    "message": "Learn more on how to add Language Understanding to your bot"
+  },
+  "learn_more_on_how_to_add_qna_to_your_bot_e475fb42": {
+    "message": "Learn more on how to add QnA to your bot"
+  },
+  "learn_more_on_how_to_connect_a_bot_to_channels_8ebc0b2a": {
+    "message": "Learn more on how to connect a bot to channels"
+  },
+  "learn_more_on_how_to_test_your_bot_in_bot_framewor_8c93d788": {
+    "message": "Learn more on how to test your bot in Bot Framework Composer Documentation"
   },
   "leave_product_tour_49585718": {
     "message": "Leave Product Tour?"
@@ -2222,6 +2309,9 @@
   "line_startline_startcharacter_line_endline_endchar_372bb2f4": {
     "message": "line { startLine }:{ startCharacter } - line { endLine }:{ endCharacter }"
   },
+  "link_create_a_new_bot_to_get_started_link_f7108e63": {
+    "message": "<Link>Create a new bot to get started</Link>"
+  },
   "link_to_this_skill_has_been_broken_343072bd": {
     "message": "Link to this skill has been broken"
   },
@@ -2239,6 +2329,9 @@
   },
   "list_of_attachments_with_their_type_used_by_channe_7ecf0086": {
     "message": "List of attachments with their type. Used by channels to render as UI cards or other generic file attachment types."
+  },
+  "list_of_languages_that_bot_will_be_able_to_underst_6868beff": {
+    "message": "List of languages that bot will be able to understand and respond to"
   },
   "list_of_languages_that_bot_will_be_able_to_underst_c6f62837": {
     "message": "List of languages that bot will be able to understand (User input) and respond to (Bot responses). To make this bot available in other languages, click ‘Manage languages’ to create a copy of the default language, and translate the content into the new language."
@@ -2354,6 +2447,9 @@
   "manage_properties_c9fa4456": {
     "message": "Manage properties"
   },
+  "manifest_191f3589": {
+    "message": "Manifest"
+  },
   "manifest_could_not_be_loaded_1c011a6a": {
     "message": "Manifest could not be loaded"
   },
@@ -2365,9 +2461,6 @@
   },
   "manifest_url_can_not_be_accessed_ba43fc31": {
     "message": "Manifest URL can not be accessed"
-  },
-  "manifest_version_1edc004a": {
-    "message": "Manifest Version"
   },
   "mb_8f9f9e84": {
     "message": "MB"
@@ -2495,9 +2588,6 @@
   "name_1aed4a1b": {
     "message": "Name"
   },
-  "name_and_save_your_skill_manifest_cfd672b7": {
-    "message": "Name and save your skill manifest."
-  },
   "name_cannot_be_found_at_the_location_27560dcb": {
     "message": "{ name } cannot be found at the location."
   },
@@ -2524,6 +2614,9 @@
   },
   "navigation_pane_e587b73c": {
     "message": "Navigation pane"
+  },
+  "navigation_pane_hasfilter_select_false_other_searc_a916913f": {
+    "message": "Navigation pane, { hasFilter, select,\n  false {}\n  other {search results for \"{ filter }\":}\n} { dialogNum, plural,\n     =0 {no bots have}\n     =1 {one bot has}\n  other {# bots have}\n} been found.\n            { dialogNum, select,\n      0 {}\n  other {Press down arrow key to navigate the search results}\n}"
   },
   "navigation_path_8b299e64": {
     "message": "Navigation Path"
@@ -2602,6 +2695,9 @@
   },
   "no_templates_found_d8dca69b": {
     "message": "No templates found"
+  },
+  "no_templates_pulled_from_currently_configured_temp_4694ad75": {
+    "message": "No templates pulled from currently configured template feed, please <feedFormDeepLink>configure your feed</feedFormDeepLink> to get templates."
   },
   "no_thanks_20701267": {
     "message": "No thanks"
@@ -2717,9 +2813,6 @@
   "open_teams_416aae5c": {
     "message": "Open Teams"
   },
-  "open_the_product_tour_to_learn_about_bot_framework_4e6e7227": {
-    "message": "Open the product tour to learn about Bot Framework Composer or <Link>create a new bot</Link>"
-  },
   "open_web_chat_23601990": {
     "message": "Open Web Chat"
   },
@@ -2807,6 +2900,9 @@
   "pop_out_editor_5528a187": {
     "message": "Pop out editor"
   },
+  "pop_out_editor_open_editor_c29c5820": {
+    "message": "Pop out editor: open editor"
+  },
   "power_virtual_agents_bots_cannot_be_run_at_the_mom_a866be28": {
     "message": "Power Virtual Agents bots cannot be run at the moment. Publish the bot to Power Virtual Agents and test it there."
   },
@@ -2824,6 +2920,9 @@
   },
   "press_shift_enter_to_insert_a_new_line_2a5a970f": {
     "message": "Press Shift+Enter to insert a new line"
+  },
+  "press_tab_then_up_and_down_arrow_keys_to_navigate__f09033c0": {
+    "message": "Press tab then up and down arrow keys to navigate the search results"
   },
   "preview_features_e279bac5": {
     "message": "Preview features"
@@ -2968,6 +3067,9 @@
   },
   "publishing_target_46605bc5": {
     "message": "Publishing target"
+  },
+  "publishing_target_the_target_where_you_publish_you_8efc2307": {
+    "message": "Publishing target: the target where you publish your bot"
   },
   "publishing_your_skill_b5957f9c": {
     "message": "Publishing your skill..."
@@ -3119,6 +3221,12 @@
   "remove_item_5877e701": {
     "message": "Remove item"
   },
+  "remove_item_index_d53be4fe": {
+    "message": "Remove item { index }"
+  },
+  "remove_item_name_c6021c4f": {
+    "message": "Remove item { name }"
+  },
   "remove_this_dialog_6146716c": {
     "message": "Remove this dialog"
   },
@@ -3175,6 +3283,9 @@
   },
   "requiredtext_priority_help_priority_refers_to_the__54ceda82": {
     "message": "{ requiredText } | Priority <help>Priority refers to the order in which the bot will ask for the required properties.</help> : { priority }"
+  },
+  "reset_to_default_feed_d14cb3d8": {
+    "message": "Reset to default feed"
   },
   "reset_view_d5f8245a": {
     "message": "Reset view"
@@ -3263,14 +3374,8 @@
   "sample_phrases_are_phrases_a966b47f": {
     "message": "Sample Phrases are { phrases }"
   },
-  "save_11a80ec3": {
-    "message": "Save"
-  },
   "save_app_id_f64b6102": {
     "message": "Save App ID"
-  },
-  "save_your_skill_manifest_63bf5f26": {
-    "message": "Save your skill manifest"
   },
   "schema_24739a48": {
     "message": "Schema"
@@ -3298,6 +3403,9 @@
   },
   "search_for_extensions_on_npm_c5ca65d9": {
     "message": "Search for extensions on npm"
+  },
+  "search_for_the_query_found_count_plural_1_one_resu_da1e5732": {
+    "message": "Search for the { query }. Found { count, plural,\n     =1 {one result}\n  other {# results}\n}"
   },
   "search_functions_4a1afbc3": {
     "message": "Search functions"
@@ -3350,9 +3458,6 @@
   "select_a_trigger_type_219bb52f": {
     "message": "Select a trigger type"
   },
-  "select_all_f73344a8": {
-    "message": "Select all"
-  },
   "select_an_activity_type_c982fcbe": {
     "message": "Select an activity type"
   },
@@ -3370,6 +3475,9 @@
   },
   "select_bots_8c8a87fe": {
     "message": "Select bots"
+  },
+  "select_bots_to_display_problems_for_e111baba": {
+    "message": "Select bots to display problems for"
   },
   "select_d70f31da": {
     "message": "Select"
@@ -3521,6 +3629,9 @@
   "show_more_af9cbc16": {
     "message": "Show More"
   },
+  "show_name_publish_history_d082f29d": {
+    "message": "Show { name } publish history"
+  },
   "show_notes_on_canvas_f0baaa43": {
     "message": "Show notes on canvas"
   },
@@ -3566,9 +3677,6 @@
   "skill_host_endpoint_url_702c277c": {
     "message": "Skill host endpoint URL"
   },
-  "skill_host_endpoint_url_e68b65f6": {
-    "message": "Skill host endpoint url"
-  },
   "skill_manifest_d7db2e25": {
     "message": "Skill Manifest"
   },
@@ -3601,6 +3709,12 @@
   },
   "sorted_a_to_z_915b2ed3": {
     "message": "Sorted A to Z"
+  },
+  "sorted_ascending_a1e96e3a": {
+    "message": "Sorted ascending"
+  },
+  "sorted_descending_3093c22f": {
+    "message": "Sorted descending"
   },
   "sorted_z_to_a_722f1567": {
     "message": "Sorted Z to A"
@@ -3665,6 +3779,9 @@
   "start_typing_kind_or_b0c305da": {
     "message": "Start typing { kind } or"
   },
+  "start_typing_to_get_suggestions_or_type_to_write_a_1fbb9183": {
+    "message": "Start typing to get suggestions or type ''='' to write an expression"
+  },
   "starting_2b76fa0d": {
     "message": "Starting"
   },
@@ -3716,6 +3833,12 @@
   "suggestion_for_card_or_activity_type_b257066a": {
     "message": "Suggestion for Card or Activity: { type }"
   },
+  "suggestions_list_235b0633": {
+    "message": "Suggestions list"
+  },
+  "suggestionscount_plural_1_one_suggestion_found_0_n_850b88ca": {
+    "message": "{ suggestionsCount, plural,\n     =1 {One suggestion found}\n     =0 {No suggestions found}\n  other {# suggestions found}\n}"
+  },
   "switch_directory_30967d20": {
     "message": "Switch directory"
   },
@@ -3748,6 +3871,12 @@
   },
   "teams_requires_a_few_more_steps_to_get_your_connec_320c55f2": {
     "message": "Teams requires a few more steps to get your connection up and running. Follow the instructions on our documentation page to learn how."
+  },
+  "template_feed_settings_2a5141": {
+    "message": "Template Feed Settings"
+  },
+  "template_feed_url_ed8d0e60": {
+    "message": "Template Feed Url"
   },
   "template_name_c37cf8d9": {
     "message": "Template name: "
@@ -3851,8 +3980,11 @@
   "the_skill_you_tried_to_remove_from_the_project_is__2c0bd965": {
     "message": "The skill you tried to remove from the project is currently used in the below bot(s). Removing this skill won’t delete the files, but it will cause your Bot to malfunction without additional action."
   },
-  "the_target_where_you_publish_your_bot_3132ef47": {
-    "message": "The target where you publish your bot"
+  "the_trigger_triggername_has_been_created_eed0c973": {
+    "message": "The trigger { triggerName } has been created"
+  },
+  "the_trigger_triggername_has_been_deleted_b7d630f8": {
+    "message": "The trigger { triggerName } has been deleted"
   },
   "the_user_input_page_is_where_the_language_understa_c9262f3f": {
     "message": "The User Input page is where the Language Understanding editor locates. From here users can view all the Language Understanding templates and edit them."
@@ -3904,6 +4036,9 @@
   },
   "this_entity_name_is_reserved_f97d9573": {
     "message": "This entity name is reserved"
+  },
+  "this_feed_did_not_return_any_templates_please_conf_95fc8c61": {
+    "message": "This feed did not return any templates, please confirm that this is a valid template feed URL."
   },
   "this_is_a_required_field_acb9837e": {
     "message": "This is a required field."
@@ -4031,6 +4166,9 @@
   "to_which_language_will_you_be_translating_your_bot_77219d69": {
     "message": "To which language will you be translating your bot?"
   },
+  "toggle_debug_panel_dbb749df": {
+    "message": "Toggle debug panel"
+  },
   "toggle_details_cf95a620": {
     "message": "Toggle Details"
   },
@@ -4069,6 +4207,9 @@
   },
   "trigger_group_79a00ac6": {
     "message": "Trigger group"
+  },
+  "trigger_name_a23ed36c": {
+    "message": "Trigger name"
   },
   "trigger_phrases_are_inputs_from_users_that_will_be_f8c61866": {
     "message": "Trigger phrases are inputs from users that will be used to train your LUIS model. This follows .lu file format."
@@ -4273,9 +4414,6 @@
   },
   "version_5599c321": {
     "message": "Version"
-  },
-  "version_version_a051e218": {
-    "message": "Version { version }"
   },
   "video_card_cda18e03": {
     "message": "Video card"

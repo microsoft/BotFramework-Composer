@@ -20,13 +20,15 @@ const allowedNavigationKeys = ['ArrowDown', 'ArrowUp', 'ArrowLeft', 'ArrowRight'
 const defaultContainerStyle = (hasFocus, hasErrors) => css`
   display: flex;
   width: 100%;
-  outline: ${hasErrors
-    ? `2px solid ${SharedColors.red10}`
-    : hasFocus
-    ? `2px solid ${SharedColors.cyanBlue10}`
-    : undefined};
-  background: ${hasFocus || hasErrors ? NeutralColors.white : 'inherit'};
   margin-top: 2px;
+  @media (forced-colors: none) {
+    background: ${hasFocus || hasErrors ? NeutralColors.white : 'inherit'};
+    outline: ${hasErrors
+      ? `2px solid ${SharedColors.red10}`
+      : hasFocus
+      ? `2px solid ${SharedColors.cyanBlue10}`
+      : undefined};
+  }
   :hover .ms-Button-icon,
   :focus-within .ms-Button-icon {
     visibility: visible;
@@ -38,6 +40,12 @@ const defaultContainerStyle = (hasFocus, hasErrors) => css`
     :focus {
       cursor: inherit;
     }
+  }
+`;
+
+const requiredText = css`
+  @media (forced-colors: none) {
+    color: ${SharedColors.red20};
   }
 `;
 
@@ -270,8 +278,10 @@ const EditableField: React.FC<EditableFieldProps> = (props) => {
                     ':hover': {
                       borderColor: hasFocus ? undefined : NeutralColors.gray30,
                     },
-                    '.ms-TextField-field': {
-                      background: hasFocus || hasEditingErrors ? NeutralColors.white : 'inherit',
+                    '@media (forced-colors: none)': {
+                      '.ms-TextField-field': {
+                        background: hasFocus || hasEditingErrors ? NeutralColors.white : 'inherit',
+                      },
                     },
                   },
                 },
@@ -312,17 +322,17 @@ const EditableField: React.FC<EditableFieldProps> = (props) => {
             }}
             styles={{
               root: {
-                background: hasFocus ? NeutralColors.white : 'inherit',
+                '@media (forced-colors: none)': {
+                  background: hasFocus ? NeutralColors.white : 'inherit',
+                },
               },
             }}
             onClick={iconProps?.onClick || resetValue}
           />
         )}
       </div>
-      {hasErrors && hasBeenEdited && (
-        <span style={{ color: SharedColors.red20 }}>{requiredMessage || formErrors.value}</span>
-      )}
-      {error && <span style={{ color: SharedColors.red20 }}>{error}</span>}
+      {hasErrors && hasBeenEdited && <span css={requiredText}>{requiredMessage || formErrors.value}</span>}
+      {error && <span css={requiredText}>{error}</span>}
       {hasErrors && hasBeenEdited && <Announced message={requiredMessage || formErrors.value} role="alert" />}
       {error && <Announced message={error} role="alert" />}
     </Fragment>

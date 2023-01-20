@@ -13,6 +13,8 @@ import {
   ConversationNetworkTrafficItem,
 } from '@botframework-composer/types';
 
+import { serverListenHost } from '../../settings/env';
+
 import log from './logger';
 
 const socketTrafficChannelKey = 'DL_TRAFFIC_SOCKET';
@@ -80,9 +82,14 @@ export class WebSocketServer {
         const res = new http.ServerResponse(req);
         return app(req, res as Response);
       });
-      const port = await portfinder.getPortPromise();
+      const preferredPort = 7000;
+      const port = await portfinder.getPortPromise().catch((err) => {
+        log(`Unable to find an open port for directline (wanted ${preferredPort}): ${err}`);
+        return preferredPort;
+      });
       this.port = port;
-      this.restServer.listen(port);
+      log(`Using ${port} port for directline`);
+      this.restServer.listen(port, serverListenHost);
 
       app.use('/ws/conversation/:conversationId', (req: express.Request, res: express.Response) => {
         if (!(req as any).claimUpgrade) {

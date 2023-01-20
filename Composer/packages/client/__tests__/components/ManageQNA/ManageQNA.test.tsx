@@ -152,7 +152,7 @@ describe('<ManageQNA />', () => {
     const onNext = jest.fn();
     const onToggleVisibility = jest.fn();
 
-    const { baseElement, findByText, findByTestId, findByRole } = renderWithRecoil(
+    const { baseElement, findByText, findByTestId } = renderWithRecoil(
       <ManageQNA
         hidden={false}
         onDismiss={onDismiss}
@@ -164,7 +164,7 @@ describe('<ManageQNA />', () => {
 
     // test the default option (choose existing)
     // click the next button, ensure the title changes
-    const nextButton = await findByRole('button', { name: 'Next' });
+    const nextButton = (await findByText('Next')).closest('button')!;
     expect(nextButton).toBeDefined();
     await act(async () => {
       await fireEvent.click(nextButton);
@@ -181,7 +181,7 @@ describe('<ManageQNA />', () => {
 
     // ensure that since a subscription hasn't been selected
     // this button is disabled
-    const nextButton2 = await findByRole('button', { name: 'Next' });
+    const nextButton2 = (await findByText('Next')).closest('button')!;
     expect(nextButton2).toBeDefined();
     expect(nextButton2).toBeDisabled();
 
@@ -233,7 +233,7 @@ describe('<ManageQNA />', () => {
     const onNext = jest.fn();
     const onToggleVisibility = jest.fn();
 
-    const { baseElement, findByText, findByTestId, findByRole } = renderWithRecoil(
+    const { baseElement, findByText, findByTestId } = renderWithRecoil(
       <ManageQNA
         hidden={false}
         onDismiss={onDismiss}
@@ -249,7 +249,7 @@ describe('<ManageQNA />', () => {
     fireEvent.click(createOption);
 
     // click the next button, ensure the title changes
-    const nextButton = await findByRole('button', { name: 'Next' });
+    const nextButton = (await findByText('Next')).closest('button')!;
     expect(nextButton).toBeDefined();
     await act(async () => {
       await fireEvent.click(nextButton);
@@ -258,7 +258,7 @@ describe('<ManageQNA />', () => {
 
     // ensure that since a subscription hasn't been selected
     // this button is disabled
-    const nextButton2 = await findByRole('button', { name: 'Next' });
+    const nextButton2 = (await findByText('Next')).closest('button')!;
     expect(nextButton2).toBeDefined();
     expect(nextButton2).toBeDisabled();
 
@@ -285,7 +285,7 @@ describe('<ManageQNA />', () => {
       await fireEvent.click(nextButton2);
     });
 
-    const nextButton3 = await findByRole('button', { name: 'Next' });
+    const nextButton3 = (await findByText('Next')).closest('button')!;
     expect(nextButton3).toBeDefined();
     expect(nextButton3).toBeDisabled();
 
@@ -297,16 +297,18 @@ describe('<ManageQNA />', () => {
     expect(resourceName).toBeDefined();
     expect(resourceName).toBeEnabled();
 
-    // choose subscription
+    // select group
     await act(async () => {
-      await fireEvent.click(resourceOption);
+      fireEvent.click(resourceOption);
+    });
+    await act(async () => {
+      fireEvent.click(resourceOption);
+      const myGroup = await findByText('mockedGroup');
+      fireEvent.click(myGroup);
+      fireEvent.blur(resourceOption);
     });
 
-    const myGroup = await findByText('mockedGroup');
-    expect(myGroup).toBeDefined();
-
     await act(async () => {
-      await fireEvent.click(myGroup);
       await fireEvent.change(resourceName, { target: { value: 'mockedResource' } });
     });
 
@@ -314,7 +316,6 @@ describe('<ManageQNA />', () => {
     const regionOption = await findByTestId('rootRegion');
     expect(regionOption).toBeDefined();
     expect(regionOption).toBeEnabled();
-    // choose subscription
     await act(async () => {
       await fireEvent.click(regionOption);
     });
@@ -332,7 +333,6 @@ describe('<ManageQNA />', () => {
     const tierOption = await findByTestId('tier');
     expect(tierOption).toBeDefined();
     expect(tierOption).toBeEnabled();
-    // choose subscription
     await act(async () => {
       await fireEvent.keyDown(tierOption, DOWN_ARROW);
     });
@@ -366,7 +366,7 @@ describe('<ManageQNA />', () => {
     const onNext = jest.fn();
     const onToggleVisibility = jest.fn();
 
-    const { baseElement, findByText, findByRole } = renderWithRecoil(
+    const { baseElement, findByText } = renderWithRecoil(
       <ManageQNA
         hidden={false}
         onDismiss={onDismiss}
@@ -382,7 +382,7 @@ describe('<ManageQNA />', () => {
     fireEvent.click(generateOption);
 
     // click the next button, ensure the title changes
-    const nextButton = await findByRole('button', { name: 'Next' });
+    const nextButton = (await findByText('Next')).closest('button')!;
     expect(nextButton).toBeDefined();
     await act(async () => {
       await fireEvent.click(nextButton);

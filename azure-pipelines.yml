@@ -12,33 +12,37 @@ jobs:
 
     steps:
       - task: UseDotNet@2
+        displayName: "Use .NET Core 3.1.x"
         inputs:
           packageType: "runtime"
           version: "3.1.x"
+
       - task: NodeTool@0
-        displayName: "Use Node 14.15.5"
+        displayName: "Use Node 14.17.0"
         inputs:
-          versionSpec: 14.15.5
+          versionSpec: 14.17.0
+
       - task: Bash@3
-        displayName: "Adding myGet source"
+        displayName: "npm install generator-bot-empty"
         inputs:
           targetType: "inline"
           script:
-            # Write your commands here
-            dotnet nuget add source https://botbuilder.myget.org/F/botbuilder-v4-dotnet-daily/api/v3/index.json
-
             npm install -g @microsoft/generator-bot-empty
+
       - task: Cache@2
         displayName: Cache Cypress binary
         inputs:
-          key: cypress | $(Agent.OS) | Composer/yarn.lock
+          key: cypress | $(Agent.OS) | Composer/yarn-berry.lock
           path: /home/vsts/.cache/Cypress
-      - script: yarn --frozen-lock-file
+
+      - script: yarn --immutable
         displayName: yarn install
         workingDirectory: Composer
+
       - script: yarn build
         displayName: yarn build
         workingDirectory: Composer
+
       - script: ./scripts/e2e-ci.sh --record --parallel --ci-build-id $(Build.BuildNumber) --group "Azure CI"
         displayName: Run E2E Tests
         workingDirectory: Composer/packages/integration-tests
@@ -51,6 +55,7 @@ jobs:
           TERM: xterm
           COMPOSER_BOTS_FOLDER: $(System.DefaultWorkingDirectory)/MyBots
           DEBUG: composer
+
       - task: PublishPipelineArtifact@1
         displayName: Publish Cypress Artifacts
         condition: failed()
@@ -58,16 +63,47 @@ jobs:
         inputs:
           targetPath: $(Build.ArtifactStagingDirectory)/cypress
           artifactName: e2e
+
       - script: cat e2e.log
         displayName: Server Logs
         condition: always()
         continueOnError: true
         workingDirectory: Composer
+
+      - powershell: |
+          cd ..
+          ls -R
+        displayName: Dir workspace
+        continueOnError: true
+        condition: succeededOrFailed()
+
   - job: security
     displayName: Security Analysis
     pool:
       vmImage: ubuntu-latest
     steps:
+      - powershell: |
+          # Gin up imitation v1 yarn.lock files to aid Component Governance Detection analysis. The method:
+          # Find v3 yarn-berry.lock files. From each, generate a yarn.lock file, deleting all occurrences of 'npm:'.
+          # This allows CG to work with yarn v3.
+          $find = 'npm:';
+          $replace = '';
+
+          Get-ChildItem -Recurse -Path '**/yarn-berry.lock' | % {
+            $source = $_.FullName;
+            $dest = $_.DirectoryName + "/yarn.lock"
+            Write-Host $source;
+            Write-Host $dest;
+            Copy-Item -Path $source -Destination $dest -Force
+
+            $content = Get-Content -Raw $dest;
+            $content -Replace "$find", "$replace" | Set-Content $dest;
+
+            '--------------------'; get-content $dest; '====================';
+          }
+        displayName: Generate "yarn.lock" files for CG Detection
+        continueOnError: true
+
       - task: ComponentGovernanceComponentDetection@0
         displayName: Component Detection
         inputs:
@@ -75,3 +111,4 @@ jobs:
           verbosity: "Verbose"
           alertWarningLevel: "High"
           failOnAlert: true
+

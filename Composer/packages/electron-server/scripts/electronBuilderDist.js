@@ -14,9 +14,7 @@ const { createBuilderConfig } = require('./createBuilderConfig');
  * a packaged, distributable application for the host OS
  */
 try {
-  const electronBuilderBinary = process.env.BERRY_ENABLED
-    ? resolve(__dirname, '../../../node_modules/.bin/electron-builder')
-    : resolve(__dirname, '../node_modules/.bin/electron-builder');
+  const electronBuilderBinary = resolve(__dirname, '../../../node_modules/.bin/electron-builder');
   const electronServerDir = resolve(__dirname, '..');
   let platform;
   let unpackedAppDir;

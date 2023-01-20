@@ -95,37 +95,28 @@ const hasChanges = (name, lastModified) => {
 };
 
 const install = async (name, extPath) => {
-  if (process.env.BERRY_ENABLED) {
-    // yarn berry (v2+)
-    console.log('[%s] yarn install', name);
-    execSync('yarn install', { cwd: extPath, stdio: 'inherit' });
-  } else {
-    // yarn v1
-    console.log(`[%s] yarn install --production=false --frozen-lockfile ${FORCE ? '--force' : ''}`, name);
-    execSync(`yarn --production=false --frozen-lockfile ${FORCE ? '--force' : ''}`, { cwd: extPath, stdio: 'inherit' });
-  }
+  // yarn berry (v2+)
+  console.log('[%s] yarn install', name);
+  execSync('yarn install', { cwd: extPath, stdio: 'inherit' });
 };
 
 async function main() {
   checkComposerLibs();
 
-  let extensionRootPackagePath, extensionRootLockPath;
   const extensionsDir = path.join(__dirname, '..');
-  if (process.env.BERRY_ENABLED) {
-    // yarn v2 (berry) gets confused when a package deeper in the tree (an extension)
-    // tries to do a "yarn install" when it detects a package.json / yarn.lock in a parent
-    // folder (/extensions/package.json)
-    // https://github.com/yarnpkg/berry/issues/625
-    //
-    // To get around this, we will temporarily rename the package.json and lock files while we install extension dependencies.
+  // yarn v2 (berry) gets confused when a package deeper in the tree (an extension)
+  // tries to do a "yarn install" when it detects a package.json / yarn.lock in a parent
+  // folder (/extensions/package.json)
+  // https://github.com/yarnpkg/berry/issues/625
+  //
+  // To get around this, we will temporarily rename the package.json and lock files while we install extension dependencies.
 
-    extensionRootPackagePath = path.join(extensionsDir, 'package.json');
-    extensionRootLockPath = path.join(extensionsDir, 'yarn-berry.lock');
-    console.log(`Temporarily renaming ${extensionRootPackagePath} and ${extensionRootLockPath}`);
-    await fs.move(extensionRootPackagePath, path.join(extensionsDir, 'temp-package.json'));
-    await fs.move(extensionRootLockPath, path.join(extensionsDir, 'temp-yarn-berry.lock'));
-    console.log('Successfully renamed.');
-  }
+  const extensionRootPackagePath = path.join(extensionsDir, 'package.json');
+  const extensionRootLockPath = path.join(extensionsDir, 'yarn-berry.lock');
+  console.log(`Temporarily renaming ${extensionRootPackagePath} and ${extensionRootLockPath}`);
+  await fs.move(extensionRootPackagePath, path.join(extensionsDir, 'temp-package.json'));
+  await fs.move(extensionRootLockPath, path.join(extensionsDir, 'temp-yarn-berry.lock'));
+  console.log('Successfully renamed.');
 
   const errors = [];
 
@@ -156,13 +147,11 @@ async function main() {
     }
   }
 
-  if (process.env.BERRY_ENABLED) {
-    // restore the package.json and lock file
-    console.log(`Restoring ${extensionRootPackagePath} and ${extensionRootLockPath}`);
-    await fs.move(path.join(extensionsDir, 'temp-package.json'), extensionRootPackagePath);
-    await fs.move(path.join(extensionsDir, 'temp-yarn-berry.lock'), extensionRootLockPath);
-    console.log('Successfully restored.');
-  }
+  // restore the package.json and lock file
+  console.log(`Restoring ${extensionRootPackagePath} and ${extensionRootLockPath}`);
+  await fs.move(path.join(extensionsDir, 'temp-package.json'), extensionRootPackagePath);
+  await fs.move(path.join(extensionsDir, 'temp-yarn-berry.lock'), extensionRootLockPath);
+  console.log('Successfully restored.');
 
   if (errors.length > 0) {
     const formattedErrors = errors.map((e) => `\t- [${e.name}] ${e.message}`).join('\n');

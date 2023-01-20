@@ -5,10 +5,13 @@ import childProcess from 'child_process';
 
 import { Path } from '../utility/path';
 
+export const serverListenHost = process.env.COMPOSER_HOST || 'localhost';
+export const serverHostname = serverListenHost === '0.0.0.0' || !serverListenHost ? 'localhost' : serverListenHost;
+
 export const absHosted = process.env.COMPOSER_AUTH_PROVIDER === 'abs-h';
 export const absHostRoot = process.env.WEBSITE_HOSTNAME
   ? `https://${process.env.WEBSITE_HOSTNAME}`
-  : 'http://localhost:3978';
+  : `http://${serverHostname}:3978`;
 
 let folder = process.env.COMPOSER_BOTS_FOLDER;
 if (folder?.endsWith(':')) {

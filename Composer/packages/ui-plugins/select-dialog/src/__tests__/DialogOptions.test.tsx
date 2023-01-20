@@ -98,7 +98,7 @@ const renderDialogOptionsField = ({ value } = {}) => {
 describe('DialogOptionsField', () => {
   it('should render label', async () => {
     const { findByText } = renderDialogOptionsField();
-    await findByText('Dialog options');
+    await findByText('Dialog options', { selector: '[for]' });
   });
 
   it('should render the options form if the dialog schema is defined and options is not a string', async () => {
