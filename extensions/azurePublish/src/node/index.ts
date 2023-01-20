@@ -305,6 +305,13 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
       }
       const currentSettings = currentProfile?.settings;
 
+      let runtimeIdentifier = 'win-x64';
+      if (currentProfile?.runtimeIdentifier) {
+        runtimeIdentifier = currentProfile?.runtimeIdentifier;
+      } else if (provisionConfig.appServiceOperatingSystem === 'linux') {
+        runtimeIdentifier = 'linux-x64';
+      }
+
       const publishProfile = {
         name: currentProfile?.name ?? provisionConfig.hostname,
         environment: currentProfile?.environment ?? 'composer',
@@ -316,7 +323,7 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
         luisResource: provisionResults.luisPrediction
           ? `${provisionConfig.hostname}-luis`
           : currentProfile?.luisResource,
-        runtimeIdentifier: currentProfile?.runtimeIdentifier ?? 'win-x64',
+        runtimeIdentifier: runtimeIdentifier,
         region: provisionConfig.location,
         appServiceOperatingSystem:
           provisionConfig.appServiceOperatingSystem ?? currentProfile?.appServiceOperatingSystem,
