@@ -6,6 +6,11 @@
 declare namespace Cypress {
   interface Chainable {
     /**
+     * Get CSRF token
+     * @example cy.getCSRFToken().then(token => ...)
+     */
+    getCSRFToken(): Chainable<string>;
+    /**
      * Creates a bot based on empty bot.
      * @example cy.createBot('EmptySample', ()=> {})
      */
