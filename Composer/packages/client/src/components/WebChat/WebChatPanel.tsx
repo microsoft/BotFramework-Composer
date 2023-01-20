@@ -22,7 +22,7 @@ import { WebChatHeader } from './WebChatHeader';
 import { WebChatComposer } from './WebChatComposer';
 import { BotSecret, ChatData, RestartOption } from './types';
 
-const BASEPATH = process.env.PUBLIC_URL || 'http://localhost:3000/';
+const BASEPATH = process.env.PUBLIC_URL || `http://${location.hostname}:3000/`;
 // TODO: Refactor to include Webchat header component as a part of WebchatComposer to avoid this variable.
 const webChatHeaderHeight = '85px';
 
@@ -67,7 +67,7 @@ export const WebChatPanel: React.FC<WebChatPanelProps> = ({
       const conversationServerPort = await conversationService.setUpConversationServer();
       try {
         // set up Web Chat traffic listener
-        webChatTrafficChannel.current = new WebSocket(`ws://localhost:${conversationServerPort}/ws/traffic`);
+        webChatTrafficChannel.current = new WebSocket(`ws://${location.hostname}:${conversationServerPort}/ws/traffic`);
         if (webChatTrafficChannel.current) {
           webChatTrafficChannel.current.onmessage = (event) => {
             const data:
