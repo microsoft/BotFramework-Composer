@@ -17,6 +17,7 @@ Cypress.Commands.add('getCSRFToken', () => {
     .its('__csrf__')
     .then((csrf) => {
       csrfToken = csrf;
+      return csrf;
     });
 });
 
