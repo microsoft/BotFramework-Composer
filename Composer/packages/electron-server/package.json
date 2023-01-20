@@ -40,7 +40,7 @@
     "@types/globby": "^9.1.0",
     "@types/http-errors": "^1.6.1",
     "@types/jest": "^26.0.15",
-    "@types/jsonwebtoken": "^8.3.3",
+    "@types/jsonwebtoken": "^9.0.0",
     "@types/lodash": "^4.14.146",
     "@types/lru-cache": "^5.1.0",
     "@types/mock-fs": "^3.6.30",
@@ -71,7 +71,7 @@
     "format-message-generate-id": "^6.2.3",
     "fs-extra": "^9.0.0",
     "lodash": "^4.17.19",
-    "node-fetch": "2.6.1",
+    "node-fetch": "2.6.7",
     "semver": "7.3.2",
     "tslib": "2.4.0",
     "uuid": "7.0.0"

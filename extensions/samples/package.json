@@ -9,6 +9,9 @@
     "build": "node ../scripts/build.js",
     "watch": "yarn build --watch"
   },
+  "resolutions": {
+    "terser": "^5.14.2"
+  },
   "devDependencies": {
     "@types/node": "18.0.3",
     "ts-loader": "9.3.1",

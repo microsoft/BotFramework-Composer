@@ -58,6 +58,9 @@
     }
   },
   "main": "dist/extension.js",
+  "resolutions": {
+    "terser": "^5.14.2"
+  },
   "dependencies": {
     "@bfc/extension-client": "file:../../Composer/packages/extension-client",
     "@botframework-composer/types": "file:../../Composer/packages/types",
