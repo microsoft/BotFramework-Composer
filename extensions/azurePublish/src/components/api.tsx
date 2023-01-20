@@ -451,7 +451,7 @@ export const getPreview = (hostname: string): PreviewResourcesItem[] => {
   const blobStorageName = hostname.toLowerCase().replace(/-/g, '').replace(/_/g, '');
   const luisResourceName = `${hostname}-luis`;
   const luisAuthoringName = `${hostname}-luis-authoring`;
-  const qnaAccountName = `${hostname}-qna`;
+  const qnaAccountName = `${hostname.toLowerCase().replace(/-/g, '').replace(/_/g, '')}-qna`;
   const applicationInsightsName = `${hostname}`;
 
   const previewList = [
