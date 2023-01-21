@@ -162,9 +162,7 @@
           "name": "appsettings",
           "type": "config",
           "apiVersion": "2015-08-01",
-          "dependsOn": [
-            "[concat('Microsoft.Web/Sites/', variables('webAppName'))]"
-          ],
+          "dependsOn": ["[concat('Microsoft.Web/Sites/', variables('webAppName'))]"],
           "properties": {
             "FUNCTIONS_EXTENSION_VERSION": "~3",
             "FUNCTIONS_WORKER_RUNTIME": "dotnet",
@@ -197,9 +195,7 @@
       "type": "Microsoft.DocumentDB/databaseAccounts/sqlDatabases",
       "apiVersion": "2020-03-01",
       "name": "[concat(variables('cosmosDbAccountName'), '/botstate-db')]",
-      "dependsOn": [
-        "[resourceId('Microsoft.DocumentDB/databaseAccounts', variables('cosmosDbAccountName'))]"
-      ],
+      "dependsOn": ["[resourceId('Microsoft.DocumentDB/databaseAccounts', variables('cosmosDbAccountName'))]"],
       "properties": {
         "resource": {
           "id": "botstate-db"
@@ -234,9 +230,7 @@
             ]
           },
           "partitionKey": {
-            "paths": [
-              "/id"
-            ],
+            "paths": ["/id"],
             "kind": "Hash"
           },
           "conflictResolutionPolicy": {
@@ -249,11 +243,11 @@
       "condition": "[parameters('useCosmosDb')]"
     },
     {
-      "apiVersion": "2017-12-01",
+      "apiVersion": "2018-07-12",
       "type": "Microsoft.BotService/botServices",
       "name": "[parameters('botId')]",
       "location": "global",
-      "kind": "bot",
+      "kind": "azurebot",
       "sku": {
         "name": "[parameters('botSku')]"
       },
@@ -262,14 +256,13 @@
         "displayName": "[parameters('botId')]",
         "endpoint": "[variables('botEndpoint')]",
         "msaAppId": "[parameters('appId')]",
+        "openWithHint": "bfcomposer://",
         "developerAppInsightsApplicationId": null,
         "developerAppInsightKey": null,
         "publishingCredentials": null,
         "storageResourceId": null
       },
-      "dependsOn": [
-        "[resourceId('Microsoft.Web/sites/', variables('webAppName'))]"
-      ]
+      "dependsOn": ["[resourceId('Microsoft.Web/sites/', variables('webAppName'))]"]
     },
     {
       "comments": "app insights",
