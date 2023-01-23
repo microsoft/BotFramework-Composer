@@ -1,6 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { serverHostname } from '../../settings/env';
+
 import { BotEndpoint } from './entities/botEndpoint';
 import { Attachments } from './entities/attachments';
 import { ConversationSet } from './entities/conversationSet';
@@ -27,7 +29,7 @@ class DLServerContext {
       conversations: new ConversationSet(),
       endpoints: new EndpointSet(),
       attachments: new Attachments(),
-      serviceUrl: serverPort ? `http://localhost:${serverPort}` : '',
+      serviceUrl: serverPort ? `http://${serverHostname}:${serverPort}` : '',
       dispatchers: {
         getDefaultEndpoint: this.getDefaultEndpoint,
         updateConversation: this.updateConversation,

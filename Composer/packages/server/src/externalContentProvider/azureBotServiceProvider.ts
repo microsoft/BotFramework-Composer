@@ -74,7 +74,7 @@ export class AzureBotServiceProvider extends ExternalContentProvider<AzureBotSer
       type: 'azurePublish',
       configuration: JSON.stringify({
         hostname: '',
-        runtimeIdentifier: 'win-x64',
+        runtimeIdentifier: this.metadata.runtimeIdentifier ?? 'win-x64',
         settings: {
           MicrosoftAppId: appId,
           MicrosoftAppPassword: appPwd,
