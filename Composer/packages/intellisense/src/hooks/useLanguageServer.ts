@@ -52,6 +52,10 @@ export const useLanguageServer = (
     ws.current.onmessage = (messageText) => {
       handleMessage(messageText);
     };
+
+    return () => {
+      ws.current.close();
+    };
   }, [url]);
 
   // If scopes change, update backend with info

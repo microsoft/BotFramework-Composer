@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 /* eslint-disable no-underscore-dangle */
-import axios from 'axios';
+import { axios } from '@bfc/shared/src/axios';
 import formatMessage from 'format-message';
 import { SubscriptionClient } from '@azure/arm-subscriptions';
 import { Subscription } from '@azure/arm-subscriptions/esm/models';
@@ -451,7 +451,7 @@ export const getPreview = (hostname: string): PreviewResourcesItem[] => {
   const blobStorageName = hostname.toLowerCase().replace(/-/g, '').replace(/_/g, '');
   const luisResourceName = `${hostname}-luis`;
   const luisAuthoringName = `${hostname}-luis-authoring`;
-  const qnaAccountName = `${hostname}-qna`;
+  const qnaAccountName = `${hostname.toLowerCase().replace(/-/g, '').replace(/_/g, '')}-qna`;
   const applicationInsightsName = `${hostname}`;
 
   const previewList = [
