@@ -62,7 +62,7 @@ export const targetListTiTle = css`
 export const listRoot = css`
   height: calc(100% - 48px);
   position: relative;
-  overflow-y: auto;
+  min-width: 512px;
   flex-grow: 1;
   display: flex;
   flex-direction: column;

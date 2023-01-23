@@ -170,12 +170,24 @@ const BaseEditor: React.FC<BaseEditorProps> = (props) => {
 
   const onEditorMount: EditorDidMount = (getValue, editor) => {
     editorRef.current = editor;
+    const action = editorRef.current.addAction({
+      id: 'escape',
+      label: 'Escape editor',
+      keybindings: [MonacoKeyCode.Escape],
+      keybindingContext: null,
+      contextMenuGroupId: 'navigation',
+      contextMenuOrder: 1.5,
+      run: () => {
+        (document.activeElement as HTMLElement)?.blur();
+      },
+    });
 
     if (typeof editorDidMount === 'function') {
       editorDidMount(getValue, editor);
     }
 
     editor.onDidDispose(() => {
+      action.dispose();
       editorRef.current = undefined;
     });
   };
@@ -219,14 +231,6 @@ const BaseEditor: React.FC<BaseEditorProps> = (props) => {
       };
     }
   }, [onChange, editorRef.current]);
-
-  // Add a command to escape from editor
-  useEffect(() => {
-    if (!editorRef.current) return;
-    editorRef.current.addCommand(MonacoKeyCode.Escape, () => {
-      (document.activeElement as HTMLElement)?.blur();
-    });
-  }, [editorRef.current]);
 
   const errorMsgFromDiagnostics = useMemo(() => {
     const errors = findErrors(diagnostics);
