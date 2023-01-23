@@ -137,14 +137,6 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({ onFocus, onBlur, schema
     editorEvent && handleEditorEvent(editorEvent.type, editorEvent.payload);
   };
 
-  const marqueeStyles = (_) => {
-    return {
-      root: {
-        width: '100%',
-        height: '100%',
-      },
-    };
-  };
   return (
     <CacheProvider value={emotionCache}>
       <NodeRendererContext.Provider value={nodeContext}>
@@ -158,15 +150,15 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({ onFocus, onBlur, schema
             {...enableKeyboardCommandAttributes(handleCommand)}
             data-testid="visualdesigner-container"
           >
-            <SelectionContext.Provider value={selectionContext}>
-              <MarqueeSelection isDraggingConstrainedToRoot selection={selection} styles={marqueeStyles}>
-                <FlowToolbar
-                  flowCommentsVisible={flowCommentsVisible}
-                  flowZoomRate={flowZoomRate}
-                  focusedId={focusedId}
-                  toggleFlowComments={toggleFlowComments}
-                  updateFlowZoomRate={updateFlowZoomRate}
-                >
+            <FlowToolbar
+              flowCommentsVisible={flowCommentsVisible}
+              flowZoomRate={flowZoomRate}
+              focusedId={focusedId}
+              toggleFlowComments={toggleFlowComments}
+              updateFlowZoomRate={updateFlowZoomRate}
+            >
+              <SelectionContext.Provider value={selectionContext}>
+                <MarqueeSelection isDraggingConstrainedToRoot selection={selection}>
                   <div
                     className="flow-editor-container"
                     css={{
@@ -200,9 +192,9 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({ onFocus, onBlur, schema
                       }}
                     />
                   </div>
-                </FlowToolbar>
-              </MarqueeSelection>
-            </SelectionContext.Provider>
+                </MarqueeSelection>
+              </SelectionContext.Provider>
+            </FlowToolbar>
           </div>
         </SelfHostContext.Provider>
       </NodeRendererContext.Provider>

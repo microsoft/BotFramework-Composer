@@ -15,13 +15,15 @@
   "dependencies": {
     "glob-to-regexp": "0.4.1",
     "mongodb-client-encryption": "2.1.0",
-    "mongoose": "6.4.3"
+    "mongoose": "^6.8.3"
   },
   "devDependencies": {
     "@types/mongodb": "4.0.7",
     "@types/mongoose": "5.11.97"
   },
   "resolutions": {
-    "bl": "^4.0.3"
+    "bl": "^4.0.3",
+    "minimatch": "^3.1.2",
+    "mongoose": "^6.8.3"
   }
 }

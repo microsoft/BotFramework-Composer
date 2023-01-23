@@ -9,6 +9,10 @@
     "build": "node ../scripts/build.js",
     "watch": "yarn build --watch"
   },
+  "resolutions": {
+    "terser": "^5.14.2",
+    "minimatch": "^3.1.2"
+  },
   "dependencies": {
     "@botframework-composer/types": "file:../../Composer/packages/types",
     "fs-extra": "10.1.0",
