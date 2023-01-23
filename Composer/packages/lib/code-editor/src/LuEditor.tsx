@@ -190,9 +190,10 @@ const LuEditor: React.FC<LULSPEditorProps> = (props) => {
 
     const uri = get(editor.getModel(), 'uri._formatted', '');
 
+    let webSocket: WebSocket;
     if (!window.monacoLUEditorInstance) {
       const url = createUrl(luServer);
-      const webSocket: WebSocket = createWebSocket(url);
+      webSocket = createWebSocket(url);
       listen({
         webSocket,
         onConnection: (connection: MessageConnection) => {
@@ -239,6 +240,10 @@ const LuEditor: React.FC<LULSPEditorProps> = (props) => {
       }
       sendRequestWithRetry(languageClient, 'initializeDocuments', { luOption, uri });
     }
+
+    return () => {
+      webSocket.close();
+    };
   }, [editor, onNavigateToLuPage]);
 
   const onInit: OnInit = (monaco) => {

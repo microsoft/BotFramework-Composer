@@ -5,6 +5,49 @@ import '@testing-library/cypress/add-commands';
 
 let TemplateBotProjectId = '';
 
+let csrfToken: string;
+
+Cypress.Commands.add('getCSRFToken', () => {
+  if (csrfToken) {
+    return cy.wrap(csrfToken);
+  }
+  cy.visit('/');
+  return cy
+    .window()
+    .its('__csrf__')
+    .then((csrf) => {
+      csrfToken = csrf;
+      return csrf;
+    });
+});
+
+Cypress.Commands.overwrite('request', (originalFn, ...options) => {
+  return cy.getCSRFToken().then((csrf) => {
+    const headers = {
+      'X-CSRF-Token': csrf,
+    };
+
+    const optionsObject = options[0];
+
+    if (optionsObject === Object(optionsObject)) {
+      optionsObject.headers = {
+        ...headers,
+        ...optionsObject.headers,
+      };
+
+      return originalFn(optionsObject);
+    }
+
+    const [method, url, body] = options;
+    return originalFn({
+      method,
+      url,
+      body,
+      headers,
+    });
+  });
+});
+
 Cypress.Commands.add('createBot', (botName: string, callback?: (bot: any) => void) => {
   const params = {
     description: '',
@@ -60,6 +103,7 @@ Cypress.Commands.add('createTestBot', (botName: string, callback?: (bot: any) =>
     storageId: 'default',
   };
 
+  cy.wrap(TemplateBotProjectId).should('not.be.empty');
   cy.request('post', `/api/projects/${TemplateBotProjectId}/project/saveAs`, params).then((res) => {
     callback?.(res.body);
   });

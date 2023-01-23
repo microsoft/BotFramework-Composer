@@ -130,10 +130,11 @@ export const LgCodeEditor = (props: LgCodeEditorProps) => {
     MonacoServices.install(editor as any);
 
     const uri = get(editor.getModel(), 'uri._formatted', '');
+    let webSocket: WebSocket;
 
     if (!window.monacoLGEditorInstance) {
       const url = createUrl(lgServer);
-      const webSocket: WebSocket = createWebSocket(url);
+      webSocket = createWebSocket(url);
       listen({
         webSocket,
         onConnection: (connection: MessageConnection) => {
@@ -169,6 +170,10 @@ export const LgCodeEditor = (props: LgCodeEditorProps) => {
         })
       );
     }
+
+    return () => {
+      webSocket.close();
+    };
   }, [editor, onNavigateToLgPage]);
 
   const onInit: OnInit = (monaco) => {
