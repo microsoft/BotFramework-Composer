@@ -1,9 +1,13 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-const { ipcRenderer } = require('electron'); // eslint-disable-line
+const { ipcRenderer, contextBridge } = require('electron'); // eslint-disable-line
 
 // expose ipcRenderer to the browser
-window.ipcRenderer = ipcRenderer;
+contextBridge.exposeInMainWorld('ipcRenderer', {
+  send: (...args) => ipcRenderer.send(...args),
+  on: (...args) => ipcRenderer.on(...args),
+});
+
 // flag to distinguish electron client from web app client
-window.__IS_ELECTRON__ = true;
+contextBridge.exposeInMainWorld('__IS_ELECTRON__', true);
