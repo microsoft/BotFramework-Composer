@@ -22,7 +22,7 @@ function typecheck(extPath) {
       // eslint-disable-next-line security/detect-non-literal-fs-filename
       const configFile = ts.readJsonConfigFile(tsConfigPath, ts.sys.readFile);
 
-      const { fileNames, options } = ts.parseJsonSourceFileConfigFileContent(configFile, ts.sys, './');
+      const { fileNames, options } = ts.parseJsonSourceFileConfigFileContent(configFile, ts.sys, extPath);
 
       const program = ts.createProgram(fileNames, { ...options, noEmit: true });
       const emitResult = program.emit();
