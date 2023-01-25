@@ -15,26 +15,31 @@ const formatHost = {
 };
 
 function typecheck(extPath) {
-  const tsConfigPath = ts.findConfigFile(extPath, ts.sys.fileExists, 'tsconfig.json');
+  return new Promise((resolve, reject) => {
+    const tsConfigPath = ts.findConfigFile(extPath, ts.sys.fileExists, 'tsconfig.json');
 
-  if (tsConfigPath) {
-    // eslint-disable-next-line security/detect-non-literal-fs-filename
-    const configFile = ts.readJsonConfigFile(tsConfigPath, ts.sys.readFile);
+    if (tsConfigPath) {
+      // eslint-disable-next-line security/detect-non-literal-fs-filename
+      const configFile = ts.readJsonConfigFile(tsConfigPath, ts.sys.readFile);
 
-    const { fileNames, options } = ts.parseJsonSourceFileConfigFileContent(configFile, ts.sys, './');
+      const { fileNames, options } = ts.parseJsonSourceFileConfigFileContent(configFile, ts.sys, './');
 
-    const program = ts.createProgram(fileNames, { ...options, noEmit: true });
-    const emitResult = program.emit();
+      const program = ts.createProgram(fileNames, { ...options, noEmit: true });
+      const emitResult = program.emit();
 
-    const allDiagnostics = ts.getPreEmitDiagnostics(program).concat(emitResult.diagnostics);
-    const hasTsErrors = allDiagnostics.some((d) => d.category === ts.DiagnosticCategory.Error);
+      const allDiagnostics = ts.getPreEmitDiagnostics(program).concat(emitResult.diagnostics);
+      const hasTsErrors = allDiagnostics.some((d) => d.category === ts.DiagnosticCategory.Error);
 
-    if (hasTsErrors) {
-      const tsOutput = ts.formatDiagnosticsWithColorAndContext(allDiagnostics, formatHost);
+      if (hasTsErrors) {
+        const tsOutput = ts.formatDiagnosticsWithColorAndContext(allDiagnostics, formatHost);
 
-      throw new Error(`TypeScript errors:\n${tsOutput}}`);
+        reject(new Error(`TypeScript errors:\n${tsOutput}}`));
+        return;
+      }
     }
-  }
+
+    resolve();
+  });
 }
 
 const getBundleConfigs = (extPath, packageJSON, watch = false) => {
