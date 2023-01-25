@@ -18,7 +18,6 @@ function typecheck(extPath) {
   const tsConfigPath = ts.findConfigFile(extPath, ts.sys.fileExists, 'tsconfig.json');
 
   if (tsConfigPath) {
-    console.log('found config:', tsConfigPath);
     // eslint-disable-next-line security/detect-non-literal-fs-filename
     const configFile = ts.readJsonConfigFile(tsConfigPath, ts.sys.readFile);
 
