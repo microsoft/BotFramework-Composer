@@ -6,6 +6,37 @@ const path = require('path');
 const fs = require('fs-extra');
 const esbuild = require('esbuild');
 const GlobalsPlugin = require('esbuild-plugin-globals');
+const ts = require('typescript');
+
+const formatHost = {
+  getCanonicalFileName: (path) => path,
+  getCurrentDirectory: ts.sys.getCurrentDirectory,
+  getNewLine: () => ts.sys.newLine,
+};
+
+function typecheck(extPath) {
+  const tsConfigPath = ts.findConfigFile(extPath, ts.sys.fileExists, 'tsconfig.json');
+
+  if (tsConfigPath) {
+    console.log('found config:', tsConfigPath);
+    // eslint-disable-next-line security/detect-non-literal-fs-filename
+    const configFile = ts.readJsonConfigFile(tsConfigPath, ts.sys.readFile);
+
+    const { fileNames, options } = ts.parseJsonSourceFileConfigFileContent(configFile, ts.sys, './');
+
+    const program = ts.createProgram(fileNames, { ...options, noEmit: true });
+    const emitResult = program.emit();
+
+    const allDiagnostics = ts.getPreEmitDiagnostics(program).concat(emitResult.diagnostics);
+    const hasTsErrors = allDiagnostics.some((d) => d.category === ts.DiagnosticCategory.Error);
+
+    if (hasTsErrors) {
+      const tsOutput = ts.formatDiagnosticsWithColorAndContext(allDiagnostics, formatHost);
+
+      throw new Error(`TypeScript errors:\n${tsOutput}}`);
+    }
+  }
+}
 
 const getBundleConfigs = (extPath, packageJSON, watch = false) => {
   const buildConfigs = [];
@@ -111,6 +142,7 @@ const compile = async (name, extPath, watch = false) => {
 
   try {
     await cleanDist(name, extPath);
+    work.push(typecheck(extPath));
     for (const config of getBundleConfigs(extPath, packageJSON, watch)) {
       work.push(service.build(config));
     }
