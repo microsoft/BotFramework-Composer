@@ -48,7 +48,7 @@ export class BotProjectProvision {
   // Will be assigned by create or deploy
   private tenantId = '';
 
-  constructor(config: ProvisionConfig) {
+  constructor(config: ProvisionConfig, private getArmAccessToken?: (tenantId: string) => Promise<string>) {
     this.subscriptionId = config.subscription;
     this.logger = config.logger;
     this.accessToken = config.accessToken;
@@ -97,8 +97,15 @@ export class BotProjectProvision {
       message: '> Creating App Registration ...',
     });
 
+    const armAccessToken = await this.getArmAccessToken?.(this.tenantId);
+
+    this.logger({
+      status: BotProjectDeployLoggerType.PROVISION_INFO,
+      message: `> Retrieved arm access token ...: ${armAccessToken}`,
+    });
+
     const appCreateOptions: AxiosRequestConfig = {
-      headers: { Authorization: `Bearer ${this.graphToken}` },
+      headers: { Authorization: `Bearer ${armAccessToken ?? this.graphToken}` },
     };
 
     // This call if successful returns an object in the form
