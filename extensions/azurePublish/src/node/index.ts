@@ -267,7 +267,13 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
     /*******************************************************************************************************************************/
     /* These methods provision resources to azure async */
     /*******************************************************************************************************************************/
-    asyncProvision = async (jobId: string, config: ProvisionConfig, project: IBotProject, user): Promise<void> => {
+    asyncProvision = async (
+      jobId: string,
+      config: ProvisionConfig,
+      project: IBotProject,
+      user,
+      getArmAccessToken: (tenantId: string) => Promise<string>
+    ): Promise<void> => {
       const { runtimeLanguage } = parseRuntimeKey(project.settings?.runtime?.key);
 
       // map runtime language/platform to worker runtime
@@ -285,13 +291,16 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
       const { name } = provisionConfig;
 
       // Create the object responsible for actually taking the provision actions.
-      const azureProvisioner = new BotProjectProvision({
-        ...provisionConfig,
-        logger: (msg: any) => {
-          this.logger(msg);
-          BackgroundProcessManager.updateProcess(jobId, 202, msg.message);
+      const azureProvisioner = new BotProjectProvision(
+        {
+          ...provisionConfig,
+          logger: (msg: any) => {
+            this.logger(msg);
+            BackgroundProcessManager.updateProcess(jobId, 202, msg.message);
+          },
         },
-      });
+        getArmAccessToken
+      );
 
       // perform the provision using azureProvisioner.create.
       // this will start the process, then return.
@@ -504,9 +513,15 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
     /**************************************************************************************************
      * plugin methods for provision
      *************************************************************************************************/
-    provision = async (config: any, project: IBotProject, user, getAccessToken): Promise<ProcessStatus> => {
+    provision = async (
+      config: any,
+      project: IBotProject,
+      user,
+      getAccessToken,
+      getArmAccessToken
+    ): Promise<ProcessStatus> => {
       const jobId = BackgroundProcessManager.startProcess(202, project.id, config.name, 'Creating Azure resources...');
-      this.asyncProvision(jobId, config, project, user);
+      this.asyncProvision(jobId, config, project, user, getArmAccessToken);
       return BackgroundProcessManager.getStatus(jobId);
     };
 
