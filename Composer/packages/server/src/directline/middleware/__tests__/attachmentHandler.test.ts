@@ -20,9 +20,14 @@ const mockSend = jest.fn(() => ({
   end: mockEnd,
 }));
 
+const mockType = jest.fn(() => ({
+  send: mockSend,
+}));
+
 const mockStatus = jest.fn(() => ({
   json: mockJsonResponse,
   send: mockSend,
+  type: mockType,
 }));
 
 describe('getAttachment handler', () => {
@@ -54,12 +59,15 @@ describe('getAttachment handler', () => {
       end: jest.fn(),
       send: jest.fn(),
       type: jest.fn(),
+      status: mockStatus,
       json: mockJsonResponse,
     };
 
     getAttachmentHandler(req, res);
 
-    expect(res.send).toHaveBeenCalledWith(StatusCodes.OK, Buffer.from(mockAttachmentData));
+    expect(res.status).toHaveBeenCalledWith(StatusCodes.OK);
+    expect(res.status().type).toHaveBeenCalledWith('text/plain');
+    expect(res.status().type().send).toHaveBeenCalledWith(Buffer.from(mockAttachmentData));
   });
 
   it('should return the attachment content uploaded via the bot', () => {
@@ -80,12 +88,14 @@ describe('getAttachment handler', () => {
       end: jest.fn(),
       type: jest.fn(),
       send: jest.fn(),
-      status: jest.fn(),
+      status: mockStatus,
     };
 
     getAttachmentHandler(req, res);
 
-    expect(res.send).toHaveBeenCalledWith(StatusCodes.OK, Buffer.from(mockAttachmentData.toString(), 'base64'));
+    expect(res.status).toHaveBeenCalledWith(StatusCodes.OK);
+    expect(res.status().type).toHaveBeenCalledWith('text/plain');
+    expect(res.status().type().send).toHaveBeenCalledWith(Buffer.from(mockAttachmentData.toString(), 'base64'));
   });
 
   it('should send an error message if the original view is requested, but missing', () => {
