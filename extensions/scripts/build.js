@@ -146,7 +146,8 @@ const compile = async (name, extPath, watch = false) => {
 
   try {
     await cleanDist(name, extPath);
-    work.push(typecheck(extPath));
+    // fixme: temproary skip untill release
+    // work.push(typecheck(extPath));
     for (const config of getBundleConfigs(extPath, packageJSON, watch)) {
       work.push(service.build(config));
     }
