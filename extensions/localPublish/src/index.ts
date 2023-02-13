@@ -213,7 +213,7 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
     if (LocalPublisher.runningBots[botId]) {
       if (LocalPublisher.runningBots[botId].status === 200) {
         const port = LocalPublisher.runningBots[botId].port;
-        const url = `http://localhost:${port}`;
+        const url = `https://bfc.azuresandbox.labsbch.cl:${port}`;
         return {
           status: 200,
           result: {
