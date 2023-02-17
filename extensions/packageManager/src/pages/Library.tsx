@@ -80,8 +80,11 @@ const InstallButtonVersion = styled.span`
 `;
 
 const tabsStackStyle = css`
-  min-width: 512px;
-  overflow: auto;
+  overflow: hidden auto;
+  max-height: 100%;
+  flex: auto;
+  display: flex;
+  flex-flow: column nowrap;
 `;
 
 const fieldStyles = {
@@ -655,7 +658,7 @@ const Library: React.FC = () => {
             />
           </Stack.Item>
         )}
-        <Stack.Item align="stretch" styles={{ root: { flexGrow: 1, overflowX: 'hidden', maxHeight: '100%' } }}>
+        <Stack.Item align="stretch" css={tabsStackStyle}>
           {!ejectedRuntime && (
             <MessageBar
               actions={
@@ -681,8 +684,8 @@ const Library: React.FC = () => {
                 <PivotItem headerText={strings.installHeader} itemKey={TABS.INSTALL} />
               </Pivot>
             </Stack.Item>
-            <Stack.Item align="end" grow={1}>
-              <Stack horizontal css={tabsStackStyle} horizontalAlign="center" tokens={{ childrenGap: 10 }}>
+            <Stack.Item align="center" grow={1}>
+              <Stack horizontal grow={1} horizontalAlign="end" tokens={{ childrenGap: 10 }} verticalAlign="center">
                 <Stack.Item>
                   <Dropdown
                     ariaLabel={formatMessage('Feeds')}
