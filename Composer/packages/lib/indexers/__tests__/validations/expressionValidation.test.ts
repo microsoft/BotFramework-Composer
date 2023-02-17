@@ -69,4 +69,14 @@ describe('validate expression', () => {
     const result = checkExpression("=concat('test', '1')", true, [ReturnType.String]);
     expect(result).toBe(24);
   });
+
+  it('use LG expressions will not throw error', () => {
+    try {
+      checkExpression('${LGChoiceOptions()}', true, [ReturnType.Number]);
+    } catch (error) {
+      expect(error.message).toBe(
+        "LGChoiceOptions does not have an evaluator, it's not a built-in function or a custom function."
+      );
+    }
+  });
 });
