@@ -172,7 +172,7 @@ export const LgCodeEditor = (props: LgCodeEditorProps) => {
     }
 
     return () => {
-      webSocket.close();
+      webSocket?.close();
     };
   }, [editor, onNavigateToLgPage]);
 
