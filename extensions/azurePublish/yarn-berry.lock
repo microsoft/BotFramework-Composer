@@ -1875,6 +1875,7 @@ __metadata:
     "@bfc/ui-shared": "*"
     react: 16.13.1
     react-dom: 16.13.1
+  checksum: 9e11b3431d263513ec2f0904b85e0e29047b0e0877e20a71913bdc3a58737b2d0672e20d3d96bbf29fc14466cbd4e726ba7a25480700eeedaf03764b04ae0c14
   languageName: node
   linkType: hard
 
@@ -1910,7 +1911,7 @@ __metadata:
 
 "@bfc/shared@file:../../Composer/packages/lib/shared::locator=azurePublish%40workspace%3A.":
   version: 0.0.0
-  resolution: "@bfc/shared@file:../../Composer/packages/lib/shared#../../Composer/packages/lib/shared::hash=8bb646&locator=azurePublish%40workspace%3A."
+  resolution: "@bfc/shared@file:../../Composer/packages/lib/shared#../../Composer/packages/lib/shared::hash=019a78&locator=azurePublish%40workspace%3A."
   dependencies:
     "@botframework-composer/types": "*"
     format-message: 6.2.4
@@ -1924,7 +1925,7 @@ __metadata:
     react: 16.13.1
     react-dom: 16.13.1
     tslib: 2.4.0
-  checksum: ed6af3f1b57b302c951d934f2686f139541e99eb23765906e96f3d4b024b059f0e17f1af869939a6bf8170b366b3d0034a8fa4855395ad545f430a76e377b545
+  checksum: 4c6c1367b0e520ef3d123f288e7eb411fd14edda97cc9938a8a167c997322f9b2035f8b7009b804a3143f293c468c083fd0acf59c1cbf7bbdb1376fa125355cc
   languageName: node
   linkType: hard
 
