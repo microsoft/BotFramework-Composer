@@ -1,0 +1,6 @@
+{
+  "azurePath": "Composer/Compliance",
+  "notificationAliases": "botframework-composer-eng@service.microsoft.com",
+  "codebaseName": "TSABotFrameworkComposer",
+  "ignoreBranchName": true
+}
