@@ -8,7 +8,13 @@ export const packageScrollContainerStyle = {
   root: { borderTop: '1px solid #CCC', height: 'calc(100% - 150px)' },
 };
 
-export const tabAndSearchBarStyles = { root: { paddingLeft: '12px', paddingRight: '20px', height: '48px' } };
+export const tabAndSearchBarStyles = {
+  root: {
+    paddingLeft: '12px',
+    paddingRight: '20px',
+    height: '48px',
+  },
+};
 
 export const ContentHeaderStyle = css`
   padding: 5px 20px;

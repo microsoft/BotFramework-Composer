@@ -245,7 +245,7 @@ const LuEditor: React.FC<LULSPEditorProps> = (props) => {
     }
 
     return () => {
-      webSocket.close();
+      webSocket?.close();
     };
   }, [editor, onNavigateToLuPage]);
 
