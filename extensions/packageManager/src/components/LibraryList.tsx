@@ -166,6 +166,7 @@ export const LibraryList: React.FC<ILibraryListProps> = (props) => {
           selection={selection}
           selectionMode={SelectionMode.single}
           setKey="none"
+          onShouldVirtualize={() => false}
         />
       </div>
     </div>
