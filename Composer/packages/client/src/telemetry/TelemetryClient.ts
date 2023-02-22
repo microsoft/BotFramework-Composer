@@ -56,7 +56,6 @@ export default class TelemetryClient {
       ...this._additionalProperties?.(),
       timestamp: Date.now(),
       composerVersion: process.env.COMPOSER_VERSION || 'unknown',
-      sdkPackageVersion: process.env.SDK_PACKAGE_VERSION || 'unknown',
     };
   }
 }

@@ -39,7 +39,7 @@ export const smallerText = css`
 export const diagnosticsInfoText = css`
   display: flex;
   justify-content: space-between;
-  width: 550px;
+  max-width: 700px;
   font-size: 24px;
 `;
 

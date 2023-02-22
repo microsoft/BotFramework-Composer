@@ -11,7 +11,7 @@ import { generateUniqueId } from '@bfc/shared';
 import { useRecoilValue } from 'recoil';
 
 import { isElectron } from '../../utils/electronUtil';
-import { userSettingsState } from '../../recoilModel';
+import { userSettingsState, botBuilderVersionState } from '../../recoilModel';
 
 import * as about from './styles';
 
@@ -27,6 +27,8 @@ const getLocaleA11yStatementLink = (locale: string) => {
 export const About: React.FC<RouteComponentProps> = () => {
   const { appLocale } = useRecoilValue(userSettingsState);
   const a11yStatementLink = getLocaleA11yStatementLink(appLocale);
+  const botBuilderVersion = useRecoilValue(botBuilderVersionState);
+
   return (
     <div css={about.content} role="main">
       <div css={about.body}>
@@ -63,14 +65,50 @@ export const About: React.FC<RouteComponentProps> = () => {
         <div css={about.diagnosticsInfo}>
           <div css={about.diagnosticsInfoText}>
             <div css={about.diagnosticsInfoTextAlignLeft}>{formatMessage(`SDK runtime packages`)}</div>
-            <div css={about.diagnosticsInfoTextAlignLeft}>
-              <Link
-                href={`https://github.com/microsoft/botframework-sdk/releases/tag/${process.env.SDK_PACKAGE_VERSION}`}
-                style={{ marginLeft: '5px', textDecoration: 'underline' }}
-                target={'_blank'}
-              >
-                {process.env.SDK_PACKAGE_VERSION || 'Unknown'}
-              </Link>
+            <div css={about.diagnosticsInfoTextAlignLeft} style={{ display: 'flex', flexDirection: 'column' }}>
+              <p style={{ margin: '0', marginLeft: '10px' }}>
+                <span style={{ opacity: '75%', marginRight: '5px' }}>DotNet:</span>
+                {botBuilderVersion.dotnet || '...'} (
+                <Link
+                  href={`https://www.nuget.org/packages/Microsoft.Bot.Builder.Dialogs.Adaptive.Runtime/${botBuilderVersion.dotnet}`}
+                  style={{ textDecoration: 'underline' }}
+                  target={'_blank'}
+                >
+                  nuget
+                </Link>
+                ,
+                <Link
+                  href={`https://github.com/microsoft/botbuilder-dotnet/releases/tag/${botBuilderVersion.dotnet}`}
+                  style={{ marginLeft: '3px', textDecoration: 'underline' }}
+                  target={'_blank'}
+                >
+                  release
+                </Link>
+                )
+              </p>
+              <p style={{ margin: '0', marginLeft: '10px' }}>
+                <span style={{ opacity: '75%', marginRight: '5px' }}>JavaScript:</span>
+                {botBuilderVersion.js || '...'} (
+                <Link
+                  href={`https://www.npmjs.com/package/botbuilder-dialogs-adaptive-runtime/v/${botBuilderVersion.js}`}
+                  style={{ textDecoration: 'underline' }}
+                  target={'_blank'}
+                >
+                  npm
+                </Link>
+                ,
+                <Link
+                  href={`https://github.com/microsoft/botbuilder-js/releases/tag/${botBuilderVersion.js.replace(
+                    '-preview',
+                    ''
+                  )}`}
+                  style={{ marginLeft: '3px', textDecoration: 'underline' }}
+                  target={'_blank'}
+                >
+                  release
+                </Link>
+                )
+              </p>
             </div>
           </div>
         </div>
