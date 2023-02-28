@@ -154,7 +154,7 @@ __metadata:
 
 "@botframework-composer/types@file:../../Composer/packages/types::locator=package-manager%40workspace%3A.":
   version: 0.0.2
-  resolution: "@botframework-composer/types@file:../../Composer/packages/types#../../Composer/packages/types::hash=3376d2&locator=package-manager%40workspace%3A."
+  resolution: "@botframework-composer/types@file:../../Composer/packages/types#../../Composer/packages/types::hash=a03b13&locator=package-manager%40workspace%3A."
   dependencies:
     "@types/express": 4.16.1
     "@types/passport": ^1.0.4
@@ -163,7 +163,7 @@ __metadata:
     express-serve-static-core: 0.1.1
     json-schema: 0.4.0
     tslib: 2.4.0
-  checksum: f86758c6c1d8956424337e4ea2062dda79f7ddde9bc64788ef6d3f3fac85abba6cd127756b3e2246a0a44c24ced2de804725dcd59f39cc728964a6b7df67eff5
+  checksum: 042462523dc3e89a15817f431da9df2cfd64b5adcbc29b0fb7dfcebe2989dd7e76445890540be2919c7c230912826a5b83bd1bd90398ef3be4c7e35be78ed41d
   languageName: node
   linkType: hard
 

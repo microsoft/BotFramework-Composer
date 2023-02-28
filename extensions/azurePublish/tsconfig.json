@@ -3,7 +3,10 @@
     "esModuleInterop": true,
     "jsx": "react",
     "skipLibCheck": true,
-    "types": ["./node_modules/monaco-editor/monaco", "@types/jest"]
+    "typeRoots": [
+      "./node_modules/@types/",
+    ],
+    "types": ["jest"]
   },
   "include": [
     "src/**/*",
