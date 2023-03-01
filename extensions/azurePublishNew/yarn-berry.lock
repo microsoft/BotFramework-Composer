@@ -14,42 +14,46 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@azure/arm-appinsights@npm:4.0.0":
-  version: 4.0.0
-  resolution: "@azure/arm-appinsights@npm:4.0.0"
+"@azure/abort-controller@npm:^1.0.4":
+  version: 1.1.0
+  resolution: "@azure/abort-controller@npm:1.1.0"
+  dependencies:
+    tslib: ^2.2.0
+  checksum: 0f45e504d4aea799486867179afe7589255f6c111951279958e9d0aa5faebb2c96b8f88e3e3c958ce07b02bcba0b0cddb1bbec94705f573a48ecdb93eec1a92a
+  languageName: node
+  linkType: hard
+
+"@azure/arm-appinsights@npm:^3.0.0":
+  version: 3.1.1
+  resolution: "@azure/arm-appinsights@npm:3.1.1"
   dependencies:
     "@azure/core-auth": ^1.1.4
     "@azure/ms-rest-azure-js": ^2.1.0
     "@azure/ms-rest-js": ^2.2.0
     tslib: ^1.10.0
-  checksum: c9fadbc1d21e98984e957c7c63542b86da46b9fcf1f13a41c7f563f1859dff765a3a8bcb3aae221cf6ebc97f26d9b353de1a6776b9640ae241b5a6d082d453a5
+  checksum: 8eeea6793ca816af442e1109f4118e36783032ec4521a387cfa28052dc9852a4e12c11a192b0e5f2daa46403fa0b31056ee038f4352c70b264973c291152761d
   languageName: node
   linkType: hard
 
-"@azure/arm-appservice-profile-2019-03-01-hybrid@npm:1.2.0":
-  version: 1.2.0
-  resolution: "@azure/arm-appservice-profile-2019-03-01-hybrid@npm:1.2.0"
+"@azure/arm-appservice-profile-2019-03-01-hybrid@npm:1.0.0":
+  version: 1.0.0
+  resolution: "@azure/arm-appservice-profile-2019-03-01-hybrid@npm:1.0.0"
   dependencies:
-    "@azure/core-auth": ^1.1.4
-    "@azure/ms-rest-azure-js": ^1.4.0
-    "@azure/ms-rest-js": ^1.11.0
+    "@azure/ms-rest-azure-js": ^1.3.2
+    "@azure/ms-rest-js": ^1.8.1
     tslib: ^1.9.3
-  checksum: c70f4e73ac8a1f8fe9b1e85be3790f7705c1029e9157dd61d4987dbfdba75fcac984c4ef4318e01be82d00f8fcb605b52e403b10b92d48b7b41ac498065f5475
+  checksum: 6433344278ef3fe5bf8795572bcfd18cda9071def9f6081ef1732c7f497ec7f80e3f2d20c23c1d14216f160b126a3282e05cade810b6a2b6b1b4147dfca00cdf
   languageName: node
   linkType: hard
 
-"@azure/arm-appservice@npm:13.0.0":
-  version: 13.0.0
-  resolution: "@azure/arm-appservice@npm:13.0.0"
+"@azure/arm-appservice@npm:^6.0.0":
+  version: 6.1.0
+  resolution: "@azure/arm-appservice@npm:6.1.0"
   dependencies:
-    "@azure/abort-controller": ^1.0.0
-    "@azure/core-auth": ^1.3.0
-    "@azure/core-client": ^1.5.0
-    "@azure/core-lro": ^2.2.0
-    "@azure/core-paging": ^1.2.0
-    "@azure/core-rest-pipeline": ^1.8.0
-    tslib: ^2.2.0
-  checksum: 0a21b4d462ac0ba5b46561ef90559bfc2b1f5a2a8ea551ae13f95205b4aafee5b5bd5d03f52fced7687af8d5f37d5451b48b4edc8acabf977b534af1b2790dcd
+    "@azure/ms-rest-azure-js": ^2.0.1
+    "@azure/ms-rest-js": ^2.0.4
+    tslib: ^1.10.0
+  checksum: 1c2c98b980cecb18c0323f558d39a07bbd78b029d75183f3b8e713a334453eb0ef3139e25bae1196f0d12c4dd5ae3ad7da9c1478ab8247c88d3269eebdff569e
   languageName: node
   linkType: hard
 
@@ -65,145 +69,115 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@azure/arm-cognitiveservices@npm:7.2.0":
-  version: 7.2.0
-  resolution: "@azure/arm-cognitiveservices@npm:7.2.0"
+"@azure/arm-cognitiveservices@npm:^5.2.0":
+  version: 5.2.0
+  resolution: "@azure/arm-cognitiveservices@npm:5.2.0"
   dependencies:
-    "@azure/abort-controller": ^1.0.0
-    "@azure/core-auth": ^1.3.0
-    "@azure/core-client": ^1.5.0
-    "@azure/core-lro": ^2.2.0
-    "@azure/core-paging": ^1.2.0
-    "@azure/core-rest-pipeline": ^1.8.0
-    tslib: ^2.2.0
-  checksum: de7689e174ed6b25de07357031a5c7c7b1af360753d95dcc98d524ac0f6e42b600b8d832b445bc4a06459e060c04c65b97131b87731441656735ae458ad76b15
+    "@azure/ms-rest-azure-js": ^2.0.1
+    "@azure/ms-rest-js": ^2.0.4
+    tslib: ^1.10.0
+  checksum: 20e7988a27f3783165cc82f7eb1aff7f680d888c1b8e698debe90b1e215f945e2f83c9e5035580ab59b6531caa9e0a2481847c746f62f36d226b4fbb8d443276
   languageName: node
   linkType: hard
 
-"@azure/arm-cosmosdb@npm:15.0.0":
-  version: 15.0.0
-  resolution: "@azure/arm-cosmosdb@npm:15.0.0"
+"@azure/arm-cosmosdb@npm:^9.0.0":
+  version: 9.1.0
+  resolution: "@azure/arm-cosmosdb@npm:9.1.0"
   dependencies:
-    "@azure/abort-controller": ^1.0.0
-    "@azure/core-auth": ^1.3.0
-    "@azure/core-client": ^1.0.0
-    "@azure/core-lro": ^2.2.0
-    "@azure/core-paging": ^1.2.0
-    "@azure/core-rest-pipeline": ^1.1.0
-    tslib: ^2.2.0
-  checksum: 4dfb8ad4fb01a68203c757029e6cac4016b8e4687ee3d3b381d57178c9611d6ba978e1c0cef038d6d9713a487fb503d514b423cf11697ad1b58e763d5a56c028
+    "@azure/ms-rest-azure-js": ^2.0.1
+    "@azure/ms-rest-js": ^2.0.4
+    tslib: ^1.10.0
+  checksum: 4992ecfbc14b6e923ec628c38b8206e8b0f589ba8ce7697eab0acfd2cbc49e0b334ba145774551b3b5e0bdd7cf22d8687d8aaf96ad77288db0ad49d2c809fa4e
   languageName: node
   linkType: hard
 
-"@azure/arm-deploymentmanager@npm:3.1.1":
-  version: 3.1.1
-  resolution: "@azure/arm-deploymentmanager@npm:3.1.1"
+"@azure/arm-deploymentmanager@npm:3.0.0":
+  version: 3.0.0
+  resolution: "@azure/arm-deploymentmanager@npm:3.0.0"
+  dependencies:
+    "@azure/ms-rest-azure-js": ^2.0.1
+    "@azure/ms-rest-js": ^2.0.4
+    tslib: ^1.10.0
+  checksum: f5ff083cb5b14a1af9f6c0a600ffd8ad60bd9ed21559ddf77b432ba223d2889a0729865b345e3066c145f8ed6c4cf9fc0eb44ff95764f481fb5c758174e40323
+  languageName: node
+  linkType: hard
+
+"@azure/arm-keyvault-profile-2020-09-01-hybrid@npm:^1.0.0":
+  version: 1.1.1
+  resolution: "@azure/arm-keyvault-profile-2020-09-01-hybrid@npm:1.1.1"
   dependencies:
     "@azure/core-auth": ^1.1.4
     "@azure/ms-rest-azure-js": ^2.1.0
     "@azure/ms-rest-js": ^2.2.0
     tslib: ^1.10.0
-  checksum: a570916f3d1acde5b0959e6fe6c84a4c5a69734870cba9091a3cbc85f160f5b805458b600075f78c948af3bc294319a8e522a00e429ec236158690628a1cad0d
+  checksum: c8ae4cbed3ae65016590ca562a9fd6b6fe39328fb3ee18872aea3efe4e7a2b25ca90980177c52766616b84e6bb8a4a01c77936e2d4a84c66ef7a74874db5d335
   languageName: node
   linkType: hard
 
-"@azure/arm-keyvault-profile-2020-09-01-hybrid@npm:2.0.0":
+"@azure/arm-keyvault@npm:^1.2.1":
+  version: 1.3.2
+  resolution: "@azure/arm-keyvault@npm:1.3.2"
+  dependencies:
+    "@azure/core-auth": ^1.1.4
+    "@azure/ms-rest-azure-js": ^1.4.0
+    "@azure/ms-rest-js": ^1.11.0
+    tslib: ^1.9.3
+  checksum: 861dbb54fd07408400a2bbd79a3127d4f22df160205f9ebccf5266eb7cf11f1285cbc6001cccdae7b73700fb532d6f924d90956dba98665bcbda966a1901edb2
+  languageName: node
+  linkType: hard
+
+"@azure/arm-resources@npm:2.1.0":
+  version: 2.1.0
+  resolution: "@azure/arm-resources@npm:2.1.0"
+  dependencies:
+    "@azure/ms-rest-azure-js": ^2.0.1
+    "@azure/ms-rest-js": ^2.0.4
+    tslib: ^1.10.0
+  checksum: 5354ba2add7ec9698303c32c00fe1d6c9e949cf68c3f5f08cb4f7feb9bb5208523f02ac8824beaa07fc0e3ac0cbaafdf95d0834e599b6096b9cec8612491ad6c
+  languageName: node
+  linkType: hard
+
+"@azure/arm-search@npm:^1.3.0":
+  version: 1.4.1
+  resolution: "@azure/arm-search@npm:1.4.1"
+  dependencies:
+    "@azure/core-auth": ^1.1.4
+    "@azure/ms-rest-azure-js": ^1.4.0
+    "@azure/ms-rest-js": ^1.11.0
+    tslib: ^1.9.3
+  checksum: 7102e38d06a59e108a7780a2cbbd29e9e06a81b6562dd3f56c4179effc1993b4be51b576a6262c77b544e6791e33b8e65b795f42a253d87b8a5896f8138f2ffb
+  languageName: node
+  linkType: hard
+
+"@azure/arm-storage@npm:^15.0.0":
+  version: 15.3.0
+  resolution: "@azure/arm-storage@npm:15.3.0"
+  dependencies:
+    "@azure/ms-rest-azure-js": ^2.0.1
+    "@azure/ms-rest-js": ^2.0.4
+    tslib: ^1.10.0
+  checksum: 20ca82ebd001d7e6be2bfc2d2d086962249b192ce25e7f1316b2d1e18ec34a5bf02fe73dc865263ed16a86c34a9714de575302e8b89b4861a6b34ee719ee10a5
+  languageName: node
+  linkType: hard
+
+"@azure/arm-subscriptions@npm:2.0.0":
   version: 2.0.0
-  resolution: "@azure/arm-keyvault-profile-2020-09-01-hybrid@npm:2.0.0"
+  resolution: "@azure/arm-subscriptions@npm:2.0.0"
   dependencies:
-    "@azure/abort-controller": ^1.0.0
-    "@azure/core-auth": ^1.3.0
-    "@azure/core-client": ^1.0.0
-    "@azure/core-lro": ^2.2.0
-    "@azure/core-paging": ^1.2.0
-    "@azure/core-rest-pipeline": ^1.1.0
-    tslib: ^2.2.0
-  checksum: a2aa88865b17a8b64e902cfbd22ee0ccdf0f517537439b45ee6b0f5b19e1fe7f26dc2ab92402d26ce504378359075b7f72756f93fb9776163ca2c3da5223d058
+    "@azure/ms-rest-azure-js": ^2.0.1
+    "@azure/ms-rest-js": ^2.0.4
+    tslib: ^1.10.0
+  checksum: b556f16f9b2ab4d3c6a1feece089dcc2b725b6547bd817ef3d0174652db19cf6d1d8619b0ac98f1929007a17c35937e54de2918ee679ba1ef7b0be9501cabc47
   languageName: node
   linkType: hard
 
-"@azure/arm-keyvault@npm:2.0.0":
-  version: 2.0.0
-  resolution: "@azure/arm-keyvault@npm:2.0.0"
-  dependencies:
-    "@azure/abort-controller": ^1.0.0
-    "@azure/core-auth": ^1.3.0
-    "@azure/core-client": ^1.0.0
-    "@azure/core-lro": ^2.2.0
-    "@azure/core-paging": ^1.2.0
-    "@azure/core-rest-pipeline": ^1.1.0
-    tslib: ^2.2.0
-  checksum: 01198fa2a59e410f1c5086fe0d28ca3b406c073706642bf879edca72e1bdfdb3e520fb18afa99def017f98b7780fd30e832e091ef8271bd10b5bbb2a8b3fcbeb
-  languageName: node
-  linkType: hard
-
-"@azure/arm-resources@npm:5.0.1":
-  version: 5.0.1
-  resolution: "@azure/arm-resources@npm:5.0.1"
-  dependencies:
-    "@azure/abort-controller": ^1.0.0
-    "@azure/core-auth": ^1.3.0
-    "@azure/core-client": ^1.5.0
-    "@azure/core-lro": ^2.2.0
-    "@azure/core-paging": ^1.2.0
-    "@azure/core-rest-pipeline": ^1.8.0
-    tslib: ^2.2.0
-  checksum: adb305499c8e389b26e2bc2660c77936fea8d33df23c0d46cd76d448b3b88cedd766a6ba869d6ea8bf76508889f7d50e078dde67d9e796ac7c313d9b9bfa47ae
-  languageName: node
-  linkType: hard
-
-"@azure/arm-search@npm:3.0.1":
-  version: 3.0.1
-  resolution: "@azure/arm-search@npm:3.0.1"
-  dependencies:
-    "@azure/abort-controller": ^1.0.0
-    "@azure/core-auth": ^1.3.0
-    "@azure/core-client": ^1.5.0
-    "@azure/core-lro": ^2.2.0
-    "@azure/core-paging": ^1.2.0
-    "@azure/core-rest-pipeline": ^1.8.0
-    tslib: ^2.2.0
-  checksum: 31341df443385c8da33c330e52a95704e0776968eb3109d5df143d541bf66232020d525f8ee9ce2027d36c9bd5ba44b7b0f58c9e377bfd81f6f2e607f1620aa1
-  languageName: node
-  linkType: hard
-
-"@azure/arm-storage@npm:17.2.1":
-  version: 17.2.1
-  resolution: "@azure/arm-storage@npm:17.2.1"
-  dependencies:
-    "@azure/abort-controller": ^1.0.0
-    "@azure/core-auth": ^1.3.0
-    "@azure/core-client": ^1.5.0
-    "@azure/core-lro": ^2.2.0
-    "@azure/core-paging": ^1.2.0
-    "@azure/core-rest-pipeline": ^1.8.0
-    tslib: ^2.2.0
-  checksum: 7c238e8c0fb04839cdb031e22e0f6494399b1375ebbb72bbef0a34d895659c602f5c7b2b0b84f4d7eecd6eee72e0172ca7893922431feec2e206d816750ae2ff
-  languageName: node
-  linkType: hard
-
-"@azure/arm-subscriptions@npm:5.0.1":
-  version: 5.0.1
-  resolution: "@azure/arm-subscriptions@npm:5.0.1"
-  dependencies:
-    "@azure/abort-controller": ^1.0.0
-    "@azure/core-auth": ^1.3.0
-    "@azure/core-client": ^1.5.0
-    "@azure/core-lro": ^2.2.0
-    "@azure/core-paging": ^1.2.0
-    "@azure/core-rest-pipeline": ^1.8.0
-    tslib: ^2.2.0
-  checksum: 3b7103635f7d0d6b662ff89c1ab42e522afe79a9fd66207092d9b2683ddca8e9654dd9f14b3de88da6504b9164245acfcaa743d7fac3eebcf3469c47ade6b90a
-  languageName: node
-  linkType: hard
-
-"@azure/cognitiveservices-luis-authoring@npm:4.0.0-preview.3":
-  version: 4.0.0-preview.3
-  resolution: "@azure/cognitiveservices-luis-authoring@npm:4.0.0-preview.3"
+"@azure/cognitiveservices-luis-authoring@npm:4.0.0-preview.1":
+  version: 4.0.0-preview.1
+  resolution: "@azure/cognitiveservices-luis-authoring@npm:4.0.0-preview.1"
   dependencies:
     "@azure/ms-rest-js": ^2.0.3
     tslib: ^1.10.0
-  checksum: a589c398a49ed5475db998d9d36b9b9126c8363d5e8657b33b8d73313523f304a05db6020f2692d3cf25ca3c0cec8254a76a499d7beb618ab1a58f4c1fe18bfe
+  checksum: d0bcd63ec9f8903a583e646c55426733e0d14840e3b4ba9aa21a38bf1297677e993deb2896890612702b997d92082e6509e1275b32ec131a727b219adbdd6b18
   languageName: node
   linkType: hard
 
@@ -224,7 +198,32 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@azure/core-client@npm:^1.0.0, @azure/core-client@npm:^1.5.0":
+"@azure/core-auth@npm:^1.4.0":
+  version: 1.4.0
+  resolution: "@azure/core-auth@npm:1.4.0"
+  dependencies:
+    "@azure/abort-controller": ^1.0.0
+    tslib: ^2.2.0
+  checksum: 1c76c296fe911ad39fc780b033c25a92c41c5a15f011b816d42c13584f627a4dd153dfb4334900ec93eb5b006e14bdda37e8412a7697c5a9636a0abaccffad39
+  languageName: node
+  linkType: hard
+
+"@azure/core-client@npm:^1.3.0":
+  version: 1.7.2
+  resolution: "@azure/core-client@npm:1.7.2"
+  dependencies:
+    "@azure/abort-controller": ^1.0.0
+    "@azure/core-auth": ^1.4.0
+    "@azure/core-rest-pipeline": ^1.9.1
+    "@azure/core-tracing": ^1.0.0
+    "@azure/core-util": ^1.0.0
+    "@azure/logger": ^1.0.0
+    tslib: ^2.2.0
+  checksum: 2c6af345ed7f97d7d214873cf08c2564603c659abc8950a1b866b137dfb8b68cc367f75a1c0d0ea840ac8f66a50604661f6f2569184dcda717ec4e62c3c6d977
+  languageName: node
+  linkType: hard
+
+"@azure/core-client@npm:^1.5.0":
   version: 1.6.0
   resolution: "@azure/core-client@npm:1.6.0"
   dependencies:
@@ -239,26 +238,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@azure/core-http@npm:^2.0.0":
-  version: 2.2.3
-  resolution: "@azure/core-http@npm:2.2.3"
+"@azure/core-http-compat@npm:^1.3.0":
+  version: 1.3.0
+  resolution: "@azure/core-http-compat@npm:1.3.0"
   dependencies:
-    "@azure/abort-controller": ^1.0.0
-    "@azure/core-asynciterator-polyfill": ^1.0.0
-    "@azure/core-auth": ^1.3.0
-    "@azure/core-tracing": 1.0.0-preview.13
-    "@azure/logger": ^1.0.0
-    "@types/node-fetch": ^2.5.0
-    "@types/tunnel": ^0.0.3
-    form-data: ^4.0.0
-    node-fetch: ^2.6.6
-    process: ^0.11.10
-    tough-cookie: ^4.0.0
-    tslib: ^2.2.0
-    tunnel: ^0.0.6
-    uuid: ^8.3.0
-    xml2js: ^0.4.19
-  checksum: a19d4f318988f3eb5215624cf428281b589cc834ba0c4928ee05f949861fad3b8da8999ca56adf2b061782fe5d4c3f617f377afaddb8d36e4c8652ba08493076
+    "@azure/abort-controller": ^1.0.4
+    "@azure/core-client": ^1.3.0
+    "@azure/core-rest-pipeline": ^1.3.0
+  checksum: 26938e58348c44b7fe3ede0dececaa3bf1f8b2012bdd457a004da973dd3cfbfd093c44184ea3fa0e6b41d4c4bf62574c268bc4cf50325f5dadedb7500158b742
   languageName: node
   linkType: hard
 
@@ -284,33 +271,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@azure/core-paging@npm:^1.2.0":
-  version: 1.3.0
-  resolution: "@azure/core-paging@npm:1.3.0"
-  dependencies:
-    tslib: ^2.2.0
-  checksum: 3fbf3d6474e2346f7c3ea8344a41bf41e053789efbbd29df78365e9c9ca66e143da3e5407d8c9dd5ddc82a65680185cd6f0ec851c48635776d18a6a605a98e78
-  languageName: node
-  linkType: hard
-
-"@azure/core-rest-pipeline@npm:^1.1.0, @azure/core-rest-pipeline@npm:^1.5.0, @azure/core-rest-pipeline@npm:^1.8.0":
-  version: 1.9.0
-  resolution: "@azure/core-rest-pipeline@npm:1.9.0"
-  dependencies:
-    "@azure/abort-controller": ^1.0.0
-    "@azure/core-auth": ^1.3.0
-    "@azure/core-tracing": ^1.0.1
-    "@azure/core-util": ^1.0.0
-    "@azure/logger": ^1.0.0
-    form-data: ^4.0.0
-    http-proxy-agent: ^4.0.1
-    https-proxy-agent: ^5.0.0
-    tslib: ^2.2.0
-    uuid: ^8.3.0
-  checksum: a8d21693251b7c2c87b52c62b4dd4a37901a82be8b050283821a56ec80257ef39cb2aa36f7f57bf0cb425ab4c04d84df74e019db8a6b404f1d40a81a08f8e260
-  languageName: node
-  linkType: hard
-
 "@azure/core-rest-pipeline@npm:^1.2.0":
   version: 1.4.0
   resolution: "@azure/core-rest-pipeline@npm:1.4.0"
@@ -325,6 +285,42 @@ __metadata:
     tslib: ^2.2.0
     uuid: ^8.3.0
   checksum: 63addce249281a11c23c3a22d2a7eb0cae8d7d89b5ee16a49cc6d85b5d3e9293e6d8051cf20c15ee1150af5b4295dc162d6a911f064f3f56d6122f2727145a24
+  languageName: node
+  linkType: hard
+
+"@azure/core-rest-pipeline@npm:^1.3.0, @azure/core-rest-pipeline@npm:^1.9.1":
+  version: 1.10.1
+  resolution: "@azure/core-rest-pipeline@npm:1.10.1"
+  dependencies:
+    "@azure/abort-controller": ^1.0.0
+    "@azure/core-auth": ^1.4.0
+    "@azure/core-tracing": ^1.0.1
+    "@azure/core-util": ^1.0.0
+    "@azure/logger": ^1.0.0
+    form-data: ^4.0.0
+    http-proxy-agent: ^5.0.0
+    https-proxy-agent: ^5.0.0
+    tslib: ^2.2.0
+    uuid: ^8.3.0
+  checksum: d1c165047519c05b702184ffadf900a1f3eca032795b0f4f5b174c8257b663c1b1eab847236579dddcf637ea380896e17328ebf5022050441ee80672ad6c449d
+  languageName: node
+  linkType: hard
+
+"@azure/core-rest-pipeline@npm:^1.5.0, @azure/core-rest-pipeline@npm:^1.8.0":
+  version: 1.9.0
+  resolution: "@azure/core-rest-pipeline@npm:1.9.0"
+  dependencies:
+    "@azure/abort-controller": ^1.0.0
+    "@azure/core-auth": ^1.3.0
+    "@azure/core-tracing": ^1.0.1
+    "@azure/core-util": ^1.0.0
+    "@azure/logger": ^1.0.0
+    form-data: ^4.0.0
+    http-proxy-agent: ^4.0.1
+    https-proxy-agent: ^5.0.0
+    tslib: ^2.2.0
+    uuid: ^8.3.0
+  checksum: a8d21693251b7c2c87b52c62b4dd4a37901a82be8b050283821a56ec80257ef39cb2aa36f7f57bf0cb425ab4c04d84df74e019db8a6b404f1d40a81a08f8e260
   languageName: node
   linkType: hard
 
@@ -356,12 +352,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@azure/cosmos@npm:3.16.2":
-  version: 3.16.2
-  resolution: "@azure/cosmos@npm:3.16.2"
+"@azure/cosmos@npm:^3.7.4":
+  version: 3.17.2
+  resolution: "@azure/cosmos@npm:3.17.2"
   dependencies:
     "@azure/core-auth": ^1.3.0
     "@azure/core-rest-pipeline": ^1.2.0
+    "@azure/core-tracing": ^1.0.0
     debug: ^4.1.1
     fast-json-stable-stringify: ^2.1.0
     jsbi: ^3.1.3
@@ -371,33 +368,37 @@ __metadata:
     tslib: ^2.2.0
     universal-user-agent: ^6.0.0
     uuid: ^8.3.0
-  checksum: b18ac2b2f78f73f68c2fbf6820857c53b34e000da262d7657ee259006c34239e9738cc010fd141076b05d2afa3a562d1c80b674e28803c0d8dde16de426634b8
+  checksum: f21491dbe23503af43ef74c89689b8f586080f215a0f94d55b44a8896bbd68a11a3e8ae1cf8490ecd0b5a8c45d607ab2387910f5213052c42fb1c9661db6a3b4
   languageName: node
   linkType: hard
 
-"@azure/graph@npm:5.0.3":
-  version: 5.0.3
-  resolution: "@azure/graph@npm:5.0.3"
+"@azure/graph@npm:5.0.1":
+  version: 5.0.1
+  resolution: "@azure/graph@npm:5.0.1"
   dependencies:
     "@azure/ms-rest-azure-js": ^2.0.0
     "@azure/ms-rest-js": ^2.0.3
     tslib: ^1.10.0
-  checksum: 53ad53eda9fddc6401642e6fbb61f24fd117d343f97a2221932a64f9391f8a74795448bedef401d243710a173c08af1f8b36a69a5921718bafd78f25bd385cdb
+  checksum: e052b9213ef48402cad153dfc113e82a8ac0ac565165d56738caabd9b77ce2c4522c7210f835159c14e25f02c8fb9a7211f8a962b0044ce0cdd8024f208d6e74
   languageName: node
   linkType: hard
 
-"@azure/keyvault-secrets@npm:4.4.0":
-  version: 4.4.0
-  resolution: "@azure/keyvault-secrets@npm:4.4.0"
+"@azure/keyvault-secrets@npm:^4.1.0":
+  version: 4.6.0
+  resolution: "@azure/keyvault-secrets@npm:4.6.0"
   dependencies:
     "@azure/abort-controller": ^1.0.0
-    "@azure/core-http": ^2.0.0
+    "@azure/core-auth": ^1.3.0
+    "@azure/core-client": ^1.5.0
+    "@azure/core-http-compat": ^1.3.0
     "@azure/core-lro": ^2.2.0
     "@azure/core-paging": ^1.1.1
-    "@azure/core-tracing": 1.0.0-preview.13
+    "@azure/core-rest-pipeline": ^1.8.0
+    "@azure/core-tracing": ^1.0.0
+    "@azure/core-util": ^1.0.0
     "@azure/logger": ^1.0.0
     tslib: ^2.2.0
-  checksum: 4efd2a0215f05dce5be1fe6f3dd675424f0ff000e87154d0d53d4d6d8e5adfaf89f610d2c03ff111c6b31ffaf59a704a3cd61666b107ac1385ad241f8c5c609e
+  checksum: 27a321b1d9211a0eedda96fbc509788cb71b40e8582a062d7c00f37046ec716259729c0e90e36c946eaaf24a473fea467401b8e68343097fd01cabf2f73e0f70
   languageName: node
   linkType: hard
 
@@ -410,7 +411,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@azure/ms-rest-azure-js@npm:^1.4.0":
+"@azure/ms-rest-azure-js@npm:^1.3.2, @azure/ms-rest-azure-js@npm:^1.4.0":
   version: 1.4.0
   resolution: "@azure/ms-rest-azure-js@npm:1.4.0"
   dependencies:
@@ -421,7 +422,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@azure/ms-rest-azure-js@npm:^2.0.0, @azure/ms-rest-azure-js@npm:^2.1.0":
+"@azure/ms-rest-azure-js@npm:^2.0.0, @azure/ms-rest-azure-js@npm:^2.0.1, @azure/ms-rest-azure-js@npm:^2.1.0":
   version: 2.1.0
   resolution: "@azure/ms-rest-azure-js@npm:2.1.0"
   dependencies:
@@ -432,7 +433,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@azure/ms-rest-js@npm:^1.10.0, @azure/ms-rest-js@npm:^1.11.0":
+"@azure/ms-rest-js@npm:^1.10.0, @azure/ms-rest-js@npm:^1.11.0, @azure/ms-rest-js@npm:^1.8.1":
   version: 1.11.2
   resolution: "@azure/ms-rest-js@npm:1.11.2"
   dependencies:
@@ -462,6 +463,23 @@ __metadata:
     uuid: ^8.3.2
     xml2js: ^0.4.19
   checksum: c90a7ae522da590cc9f1d848ec5658a74db6083970666e16e24cfa8cd2e3b06134cac539abc9c372e5360c5445e9547934fcc942ea145b8e912990889627167c
+  languageName: node
+  linkType: hard
+
+"@azure/ms-rest-js@npm:^2.0.4":
+  version: 2.6.4
+  resolution: "@azure/ms-rest-js@npm:2.6.4"
+  dependencies:
+    "@azure/core-auth": ^1.1.4
+    abort-controller: ^3.0.0
+    form-data: ^2.5.0
+    node-fetch: ^2.6.7
+    tough-cookie: ^3.0.1
+    tslib: ^1.10.0
+    tunnel: 0.0.6
+    uuid: ^8.3.2
+    xml2js: ^0.4.19
+  checksum: eefc1bf2cc00ee5f603a64b6d145aef98287fe9de7fbb3d8cd68c2f24b38eddb4af4535b6bd937f8fac285c47a6c68db3c005095444d78b5e70fb5adaa4f2780
   languageName: node
   linkType: hard
 
@@ -3076,6 +3094,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@tootallnate/once@npm:2":
+  version: 2.0.0
+  resolution: "@tootallnate/once@npm:2.0.0"
+  checksum: ad87447820dd3f24825d2d947ebc03072b20a42bfc96cbafec16bff8bbda6c1a81fcb0be56d5b21968560c5359a0af4038a68ba150c3e1694fe4c109a063bed8
+  languageName: node
+  linkType: hard
+
 "@types/archiver@npm:5.3.1":
   version: 5.3.1
   resolution: "@types/archiver@npm:5.3.1"
@@ -3371,7 +3396,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node-fetch@npm:^2.5.0, @types/node-fetch@npm:~2.5.5":
+"@types/node-fetch@npm:~2.5.5":
   version: 2.5.12
   resolution: "@types/node-fetch@npm:2.5.12"
   dependencies:
@@ -3544,15 +3569,6 @@ __metadata:
   version: 4.0.1
   resolution: "@types/tough-cookie@npm:4.0.1"
   checksum: 7570c1c2d74201f4ead3512cf8e4c99e97d92ab8a02ae2fb987fd720ced0ca1a2baf250c98a861a170b86762606c9bf6d32207675f13dffc5ab75c08c96578d2
-  languageName: node
-  linkType: hard
-
-"@types/tunnel@npm:^0.0.3":
-  version: 0.0.3
-  resolution: "@types/tunnel@npm:0.0.3"
-  dependencies:
-    "@types/node": "*"
-  checksum: 53e23a1f9fb14a491c00425b2a4fc443817564d77be5e1b95fcbeb6d009551b62ea82ffc3e5ca0c6b9f6b186824ca6ec46e7450c1bcd6674a46d1325f0116e24
   languageName: node
   linkType: hard
 
@@ -4260,23 +4276,23 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "azure-publish-new@workspace:."
   dependencies:
-    "@azure/arm-appinsights": 4.0.0
-    "@azure/arm-appservice": 13.0.0
-    "@azure/arm-appservice-profile-2019-03-01-hybrid": 1.2.0
+    "@azure/arm-appinsights": ^3.0.0
+    "@azure/arm-appservice": ^6.0.0
+    "@azure/arm-appservice-profile-2019-03-01-hybrid": 1.0.0
     "@azure/arm-botservice": 3.1.0
-    "@azure/arm-cognitiveservices": 7.2.0
-    "@azure/arm-cosmosdb": 15.0.0
-    "@azure/arm-deploymentmanager": 3.1.1
-    "@azure/arm-keyvault": 2.0.0
-    "@azure/arm-keyvault-profile-2020-09-01-hybrid": 2.0.0
-    "@azure/arm-resources": 5.0.1
-    "@azure/arm-search": 3.0.1
-    "@azure/arm-storage": 17.2.1
-    "@azure/arm-subscriptions": 5.0.1
-    "@azure/cognitiveservices-luis-authoring": 4.0.0-preview.3
-    "@azure/cosmos": 3.16.2
-    "@azure/graph": 5.0.3
-    "@azure/keyvault-secrets": 4.4.0
+    "@azure/arm-cognitiveservices": ^5.2.0
+    "@azure/arm-cosmosdb": ^9.0.0
+    "@azure/arm-deploymentmanager": 3.0.0
+    "@azure/arm-keyvault": ^1.2.1
+    "@azure/arm-keyvault-profile-2020-09-01-hybrid": ^1.0.0
+    "@azure/arm-resources": 2.1.0
+    "@azure/arm-search": ^1.3.0
+    "@azure/arm-storage": ^15.0.0
+    "@azure/arm-subscriptions": 2.0.0
+    "@azure/cognitiveservices-luis-authoring": 4.0.0-preview.1
+    "@azure/cosmos": ^3.7.4
+    "@azure/graph": 5.0.1
+    "@azure/keyvault-secrets": ^4.1.0
     "@babel/plugin-transform-runtime": 7.18.6
     "@bfc/extension-client": "file:../../Composer/packages/extension-client"
     "@bfc/indexers": ../../Composer/packages/lib/indexers
@@ -6671,6 +6687,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"http-proxy-agent@npm:^5.0.0":
+  version: 5.0.0
+  resolution: "http-proxy-agent@npm:5.0.0"
+  dependencies:
+    "@tootallnate/once": 2
+    agent-base: 6
+    debug: 4
+  checksum: e2ee1ff1656a131953839b2a19cd1f3a52d97c25ba87bd2559af6ae87114abf60971e498021f9b73f9fd78aea8876d1fb0d4656aac8a03c6caa9fc175f22b786
+  languageName: node
+  linkType: hard
+
 "http-signature@npm:~1.2.0":
   version: 1.2.0
   resolution: "http-signature@npm:1.2.0"
@@ -8620,7 +8647,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"node-fetch@npm:^2.6.0, node-fetch@npm:^2.6.6":
+"node-fetch@npm:^2.6.0":
   version: 2.6.7
   resolution: "node-fetch@npm:2.6.7"
   dependencies:
@@ -8631,6 +8658,20 @@ __metadata:
     encoding:
       optional: true
   checksum: 8d816ffd1ee22cab8301c7756ef04f3437f18dace86a1dae22cf81db8ef29c0bf6655f3215cb0cdb22b420b6fe141e64b26905e7f33f9377a7fa59135ea3e10b
+  languageName: node
+  linkType: hard
+
+"node-fetch@npm:^2.6.7":
+  version: 2.6.9
+  resolution: "node-fetch@npm:2.6.9"
+  dependencies:
+    whatwg-url: ^5.0.0
+  peerDependencies:
+    encoding: ^0.1.0
+  peerDependenciesMeta:
+    encoding:
+      optional: true
+  checksum: acb04f9ce7224965b2b59e71b33c639794d8991efd73855b0b250921382b38331ffc9d61bce502571f6cc6e11a8905ca9b1b6d4aeb586ab093e2756a1fd190d0
   languageName: node
   linkType: hard
 
@@ -9141,13 +9182,6 @@ __metadata:
   version: 2.0.1
   resolution: "process-nextick-args@npm:2.0.1"
   checksum: 1d38588e520dab7cea67cbbe2efdd86a10cc7a074c09657635e34f035277b59fbb57d09d8638346bf7090f8e8ebc070c96fa5fd183b777fff4f5edff5e9466cf
-  languageName: node
-  linkType: hard
-
-"process@npm:^0.11.10":
-  version: 0.11.10
-  resolution: "process@npm:0.11.10"
-  checksum: bfcce49814f7d172a6e6a14d5fa3ac92cc3d0c3b9feb1279774708a719e19acd673995226351a082a9ae99978254e320ccda4240ddc474ba31a76c79491ca7c3
   languageName: node
   linkType: hard
 
@@ -10609,7 +10643,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tunnel@npm:0.0.6, tunnel@npm:^0.0.6":
+"tunnel@npm:0.0.6":
   version: 0.0.6
   resolution: "tunnel@npm:0.0.6"
   checksum: c362948df9ad34b649b5585e54ce2838fa583aa3037091aaed66793c65b423a264e5229f0d7e9a95513a795ac2bd4cb72cda7e89a74313f182c1e9ae0b0994fa
