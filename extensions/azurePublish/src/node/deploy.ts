@@ -12,7 +12,7 @@ import { TokenCredentials } from '@azure/ms-rest-js';
 import { DialogSetting } from '@botframework-composer/types';
 
 import { BotProjectDeployConfig, BotProjectDeployLoggerType } from './types';
-import { build, publishLuisToPrediction } from './luisAndQnA';
+import { build, BuildSettingType, publishLuisToPrediction } from './luisAndQnA';
 import { AzurePublishErrors, createCustomizeError, stringifyError } from './utils/errorHandler';
 import { copyDir } from './utils/copyDir';
 import { KeyVaultApi } from './keyvaultHelper/keyvaultApi';
@@ -45,7 +45,7 @@ export class BotProjectDeploy {
    */
   public async deploy(
     project: any,
-    settings: DialogSetting,
+    settings: BuildSettingType<DialogSetting>,
     profileName: string,
     name: string,
     environment: string,
@@ -100,8 +100,7 @@ export class BotProjectDeploy {
         settings.luis,
         luisResource,
         this.projPath,
-        this.logger,
-        settings?.runtime
+        this.logger
       );
 
       const qnaConfig = await project.builder.getQnaConfig();
@@ -247,7 +246,7 @@ export class BotProjectDeploy {
       const archive = archiver('zip', { zlib: { level: 9 } });
       // eslint-disable-next-line security/detect-non-literal-fs-filename
       const stream = fs.createWriteStream(out);
-      return new Promise((resolve, reject) => {
+      return new Promise<void>((resolve, reject) => {
         archive
           .glob('**/*', {
             cwd: source,

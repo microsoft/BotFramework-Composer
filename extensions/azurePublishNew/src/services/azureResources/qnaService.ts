@@ -7,11 +7,10 @@ import { TokenCredentials } from '@azure/ms-rest-js';
 import { throwNotImplementedError } from '../throwNotImplementedError';
 
 const createQNAService = (token: string, subscriptionId: string) => {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const tokenCredentials = new TokenCredentials(token) as any;
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const tokenCredentials = new TokenCredentials(token);
+  // @ts-expect-error
   const searchManagementClient = new SearchManagementClient(tokenCredentials, subscriptionId);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  // @ts-expect-error
   const webSiteManagementClient = new WebSiteManagementClient(tokenCredentials, subscriptionId);
 
   const checkNameAvailability = async () => {

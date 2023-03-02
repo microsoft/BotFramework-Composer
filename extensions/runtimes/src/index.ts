@@ -8,9 +8,9 @@ import { exec } from 'child_process';
 import { DialogSetting, IBotProject } from '@botframework-composer/types';
 import rimraf from 'rimraf';
 import * as fs from 'fs-extra';
+import { IFileStorage } from '@botframework-composer/types';
 
 import { copyDir } from './copyDir';
-import { IFileStorage } from './interface';
 
 const execAsync = promisify(exec);
 const removeDirAndFiles = promisify(rimraf);
