@@ -458,7 +458,11 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
       const bot = LocalPublisher.runningBots[botId];
       // Kill the bot process AND all child processes
       try {
-        process.kill(isWin ? bot.process.pid : -bot.process.pid);
+        if (isWin) {
+          spawn(`taskkill /pid ${bot.process.pid} /T /F`);
+        } else {
+          process.kill(-bot.process.pid);
+        }
       } catch (err) {
         // swallow this error which happens if the child process is already gone
       }
