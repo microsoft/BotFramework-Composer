@@ -16,6 +16,7 @@ import {
   PublishResult,
   SDKKinds,
   PublishProfile,
+  AuthParameters,
 } from '@botframework-composer/types';
 import { parseRuntimeKey, applyPublishingProfileToSettings } from '@bfc/shared';
 import { indexer } from '@bfc/indexers';
@@ -273,7 +274,7 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
       config: ProvisionConfig,
       project: IBotProject,
       user,
-      getArmAccessToken: (tenantId: string) => Promise<string>
+      geAccessToken: (params: AuthParameters) => Promise<string>
     ): Promise<void> => {
       const { runtimeLanguage } = parseRuntimeKey(project.settings?.runtime?.key);
 
@@ -300,7 +301,7 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
             BackgroundProcessManager.updateProcess(jobId, 202, msg.message);
           },
         },
-        getArmAccessToken
+        geAccessToken
       );
 
       // perform the provision using azureProvisioner.create.
@@ -521,15 +522,9 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
     /**************************************************************************************************
      * plugin methods for provision
      *************************************************************************************************/
-    provision = async (
-      config: any,
-      project: IBotProject,
-      user,
-      getAccessToken,
-      getArmAccessToken
-    ): Promise<ProcessStatus> => {
+    provision = async (config: any, project: IBotProject, user, getAccessToken): Promise<ProcessStatus> => {
       const jobId = BackgroundProcessManager.startProcess(202, project.id, config.name, 'Creating Azure resources...');
-      this.asyncProvision(jobId, config, project, user, getArmAccessToken);
+      this.asyncProvision(jobId, config, project, user, getAccessToken);
       return BackgroundProcessManager.getStatus(jobId);
     };
 

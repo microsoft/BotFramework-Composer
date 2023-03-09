@@ -59,7 +59,6 @@ export type PullResponse = {
 };
 
 type GetAccessToken = (params: AuthParameters) => Promise<string>;
-type GetArmAccessToken = (tenantId: string) => Promise<string>;
 
 // TODO: Add types for project, metadata
 export type PublishPlugin<Config = any> = {
@@ -103,7 +102,6 @@ export type PublishPlugin<Config = any> = {
     project: IBotProject,
     user?: UserIdentity,
     getAccessToken?: GetAccessToken,
-    getArmAccessToken?: GetArmAccessToken
   ) => Promise<ProcessStatus>;
   getProvisionStatus?: (
     target: string,
