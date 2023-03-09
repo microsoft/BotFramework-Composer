@@ -98,6 +98,11 @@ export class BotProjectProvision {
       message: '> Creating App Registration ...',
     });
 
+    this.logger({
+      status: BotProjectDeployLoggerType.PROVISION_INFO,
+      message: `> TenantId: ${this.tenantId}`,
+    });
+
     const accessToken = await this.getAccessToken?.({
       scopes: ['https://graph.microsoft.com/Application.ReadWrite.All'],
       targetResource: 'https://graph.microsoft.com/',
