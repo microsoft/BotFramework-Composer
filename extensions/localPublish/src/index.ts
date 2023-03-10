@@ -486,3 +486,5 @@ const cleanup = () => {
 (['SIGINT', 'SIGTERM', 'SIGQUIT'] as NodeJS.Signals[]).forEach((signal: NodeJS.Signals) => {
   process.on(signal, cleanup.bind(null, signal));
 });
+
+process.on('beforeExit', cleanup);

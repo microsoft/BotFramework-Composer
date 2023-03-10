@@ -210,9 +210,27 @@ async function main(show = false) {
         );
     }
 
-    mainWindow.on('closed', () => {
-      ElectronWindow.destroy();
-    });
+    const quitApp = async () => {
+      const allWindowsClosed = new Promise<void>((resolve) => app.once('window-all-closed', resolve));
+      const webContentsDestroyed = new Promise<void>((resolve) =>
+        mainWindow.webContents.once('destroyed', () => {
+          ElectronWindow.destroy();
+          resolve();
+        })
+      );
+
+      mainWindow.webContents.send('session-update', 'session-ended');
+      mainWindow.webContents.send('cleanup');
+
+      await Promise.all([webContentsDestroyed, allWindowsClosed]);
+      // preserve app icon in the dock on MacOS
+      if (isMac()) return;
+
+      process.emit('beforeExit', 0);
+      app.quit();
+    };
+
+    mainWindow.on('close', quitApp);
     log('Rendered application.');
   }
 }
@@ -316,21 +334,6 @@ async function run() {
     if (process.env.COMPOSER_DEV_TOOLS) {
       mainWindow?.webContents.openDevTools();
     }
-  });
-
-  // Quit when all windows are closed.
-  app.on('window-all-closed', () => {
-    // On OS X it is common for applications and their menu bar
-    // to stay active until the user quits explicitly with Cmd + Q
-    if (!isMac()) {
-      app.quit();
-    }
-  });
-
-  app.on('before-quit', () => {
-    const mainWindow = ElectronWindow.getInstance().browserWindow;
-    mainWindow?.webContents.send('session-update', 'session-ended');
-    mainWindow?.webContents.send('cleanup');
   });
 
   app.on('activate', () => {
