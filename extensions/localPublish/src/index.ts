@@ -459,7 +459,7 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
       // Kill the bot process AND all child processes
       try {
         if (isWin) {
-          spawn(`taskkill /pid ${bot.process.pid} /T /F`);
+          spawn(`taskkill /pid ${bot.process.pid} /T /F`, { shell: true });
         } else {
           process.kill(-bot.process.pid);
         }
