@@ -49,10 +49,12 @@ export const validateExpressions: ValidateFunc = (
     let errorMessage = '';
     let warningMessage = '';
     try {
-      //the cacheKey adds the type of the value at the end, this allows a new indexing system to prevent the overwriting in cache
-      const cacheKey = types.length > 1 ? value : `${value}.${types[0]}`;
-      newCache[cacheKey] = cache?.[cacheKey] ? cache[cacheKey] : checkExpression(value, required, types);
-      errorMessage = checkReturnType(newCache[cacheKey], types);
+      const valueToValidate = cache?.[path] ? cache[path] : checkExpression(value, required, types)
+      errorMessage = checkReturnType(valueToValidate, types);
+      if (!errorMessage) {
+        //First validate that the types of the value match and then store the type value in newCache using the path as key to avoid overwriting.
+        newCache[path] = valueToValidate;
+      }
     } catch (error) {
       //change the missing custom function error to warning
       warningMessage = filterCustomFunctionError(error.message, customFunctions);

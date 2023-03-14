@@ -1896,7 +1896,7 @@ __metadata:
 
 "@bfc/indexers@file:../../Composer/packages/lib/indexers::locator=azurePublish%40workspace%3A.":
   version: 0.0.0
-  resolution: "@bfc/indexers@file:../../Composer/packages/lib/indexers#../../Composer/packages/lib/indexers::hash=99ba57&locator=azurePublish%40workspace%3A."
+  resolution: "@bfc/indexers@file:../../Composer/packages/lib/indexers#../../Composer/packages/lib/indexers::hash=52caad&locator=azurePublish%40workspace%3A."
   dependencies:
     "@microsoft/bf-lu": 4.15.0-dev.20210702.cbf708d
     adaptive-expressions: ^4.18.0
@@ -1905,7 +1905,7 @@ __metadata:
     tslib: 2.4.0
   peerDependencies:
     "@bfc/shared": "*"
-  checksum: 5a2aab3716adf348a98496dd60f07dacb492f8d4e5e393b6cee28d0f39ae5291f5985c4e64f549dde184ec3d49a4a531c1963de19278b89497966fd2fce4373f
+  checksum: 1e0e72e94ee93ca43e97cf7d4a4bad2ac9bddd32308c4c596966c1fda9ae712812ba27c2f76f72efae37160d04d1a349fbe09bc889a3858e52e493b77f7e1a5a
   languageName: node
   linkType: hard
 
