@@ -334,6 +334,23 @@ async function run() {
     if (process.env.COMPOSER_DEV_TOOLS) {
       mainWindow?.webContents.openDevTools();
     }
+
+    let mainWindowClosed = false;
+    mainWindow?.on('close', (event) => {
+      if (mainWindowClosed) {
+        return;
+      }
+
+      event.preventDefault();
+
+      ipcMain.on('closed', () => {
+        mainWindowClosed = true;
+        mainWindow.close();
+      });
+
+      mainWindow.webContents.send('session-update', 'session-ended');
+      mainWindow.webContents.send('closing');
+    });
   });
 
   app.on('activate', () => {
