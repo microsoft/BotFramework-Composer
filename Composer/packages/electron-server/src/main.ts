@@ -209,28 +209,6 @@ async function main(show = false) {
           console.error('[Windows] Error while waiting for main window to show before processing deep link: ', e)
         );
     }
-
-    const quitApp = async () => {
-      const allWindowsClosed = new Promise<void>((resolve) => app.once('window-all-closed', resolve));
-      const webContentsDestroyed = new Promise<void>((resolve) =>
-        mainWindow.webContents.once('destroyed', () => {
-          ElectronWindow.destroy();
-          resolve();
-        })
-      );
-
-      mainWindow.webContents.send('session-update', 'session-ended');
-      mainWindow.webContents.send('cleanup');
-
-      await Promise.all([webContentsDestroyed, allWindowsClosed]);
-      // preserve app icon in the dock on MacOS
-      if (isMac()) return;
-
-      process.emit('beforeExit', 0);
-      app.quit();
-    };
-
-    mainWindow.on('close', quitApp);
     log('Rendered application.');
   }
 }
@@ -286,6 +264,24 @@ async function run() {
   } else {
     app.quit();
   }
+
+  const quitApp = async () => {
+    const mainWindow = ElectronWindow.getInstance().browserWindow;
+    const allWindowsClosed = new Promise<void>((resolve) => app.once('window-all-closed', resolve));
+    const webContentsDestroyed = new Promise<void>((resolve) =>
+      mainWindow?.webContents.once('destroyed', () => {
+        ElectronWindow.destroy();
+        resolve();
+      })
+    );
+
+    await Promise.all([webContentsDestroyed, allWindowsClosed]);
+    // preserve app icon in the dock on MacOS
+    if (isMac()) return;
+
+    process.emit('beforeExit', 0);
+    app.quit();
+  };
 
   app.on('ready', async () => {
     log('App ready');
@@ -343,9 +339,10 @@ async function run() {
 
       event.preventDefault();
 
-      ipcMain.on('closed', () => {
+      ipcMain.once('closed', () => {
         mainWindowClosed = true;
         mainWindow.close();
+        quitApp();
       });
 
       mainWindow.webContents.send('session-update', 'session-ended');
