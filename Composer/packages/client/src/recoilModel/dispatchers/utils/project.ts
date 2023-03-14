@@ -103,7 +103,7 @@ import { getPublishProfileFromPayload } from '../../../utils/electronUtil';
 import { crossTrainConfigState, projectIndexingState } from './../../atoms/botState';
 import { recognizersSelectorFamily } from './../../selectors/recognizers';
 
-export const resetBotStates = async ({ reset }: CallbackInterface, projectId: string) => {
+export const resetBotStates = ({ reset }: CallbackInterface, projectId: string) => {
   const botStates = Object.keys(botstates);
   botStates.forEach((state) => {
     const currentRecoilAtom: any = botstates[state];
@@ -137,13 +137,13 @@ export const flushExistingTasks = async (callbackHelpers: CallbackInterface) => 
   reset(botProjectSpaceLoadedState);
   reset(botProjectIdsState);
 
-  for (const projectId of projectIds) {
-    botRuntimeOperations?.stopBot(projectId);
+  const result = projectIds.map(async (projectId) => {
+    await botRuntimeOperations?.stopBot(projectId);
     resetBotStates(callbackHelpers, projectId);
-  }
+  });
 
   const workers = [lgWorker, luWorker, qnaWorker];
-  return Promise.all([workers.map((w) => w.flush())]);
+  return Promise.all([result, workers.map((w) => w.flush())]);
 };
 
 // merge sensitive values in localStorage

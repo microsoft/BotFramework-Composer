@@ -306,6 +306,22 @@ async function run() {
     }
 
     mainWindow?.webContents.send('machine-info', { id: machineId, os: os.platform() });
+    let mainWindowClosed = false;
+    mainWindow?.on('close', (event) => {
+      if (mainWindowClosed) {
+        return;
+      }
+
+      event.preventDefault();
+
+      ipcMain.on('closed', () => {
+        mainWindowClosed = true;
+        mainWindow.close();
+      });
+
+      mainWindow.webContents.send('session-update', 'session-ended');
+      mainWindow.webContents.send('closing');
+    });
   });
 
   // Quit when all windows are closed.
@@ -315,12 +331,6 @@ async function run() {
     if (!isMac()) {
       app.quit();
     }
-  });
-
-  app.on('before-quit', () => {
-    const mainWindow = ElectronWindow.getInstance().browserWindow;
-    mainWindow?.webContents.send('session-update', 'session-ended');
-    mainWindow?.webContents.send('cleanup');
   });
 
   app.on('activate', () => {
