@@ -142,8 +142,10 @@ export const flushExistingTasks = async (callbackHelpers: CallbackInterface) => 
     resetBotStates(callbackHelpers, projectId);
   });
 
-  const workers = [lgWorker, luWorker, qnaWorker];
-  return Promise.all([result, workers.map((w) => w.flush())]);
+  const workers = [lgWorker, luWorker, qnaWorker].map(async (worker) => {
+    await worker.flush();
+  });
+  await Promise.all([...result, ...workers]);
 };
 
 // merge sensitive values in localStorage
