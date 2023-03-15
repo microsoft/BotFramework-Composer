@@ -270,12 +270,14 @@ async function run() {
   const quitApp = async () => {
     const mainWindow = getMainWindow();
     const allWindowsClosed = new Promise<void>((resolve) => app.once('window-all-closed', resolve));
-    const webContentsDestroyed = new Promise<void>((resolve) =>
-      mainWindow?.webContents.once('destroyed', () => {
-        ElectronWindow.destroy();
-        resolve();
-      })
-    );
+    const webContentsDestroyed = mainWindow
+      ? new Promise<void>((resolve) =>
+          mainWindow.webContents.once('destroyed', () => {
+            ElectronWindow.destroy();
+            resolve();
+          })
+        )
+      : Promise.resolve();
 
     await Promise.all([webContentsDestroyed, allWindowsClosed]);
     // preserve app icon in the dock on MacOS
@@ -286,11 +288,13 @@ async function run() {
   };
 
   const initApp = async () => {
-    const mainWindow = getMainWindow();
-    mainWindow?.webContents.send('session-update', 'session-started');
+    let mainWindow = getMainWindow();
+    if (!mainWindow) return;
+
+    mainWindow.webContents.send('session-update', 'session-started');
 
     if (process.env.COMPOSER_DEV_TOOLS) {
-      mainWindow?.webContents.openDevTools();
+      mainWindow.webContents.openDevTools();
     }
 
     let mainWindowClosed = false;
@@ -305,13 +309,21 @@ async function run() {
         return;
       }
 
+    mainWindow.on('close', (event) => {
       event.preventDefault();
-      mainWindowClosing = true;
+      if (!mainWindow?.isVisible) {
+        return;
+      }
 
-      ipcMain.once('closed', () => {
-        mainWindowClosing = false;
-        mainWindowClosed = true;
-        mainWindow.close();
+      mainWindow.hide();
+
+      // Give 30 seconds to close app gracefully, then proceed
+      Promise.race([
+        new Promise<void>((resolve) => setTimeout(resolve, 30000)),
+        new Promise<void>((resolve) => ipcMain.once('closed', () => resolve())),
+      ]).then(() => {
+        mainWindow?.close();
+        mainWindow = undefined;
         quitApp();
       });
 
