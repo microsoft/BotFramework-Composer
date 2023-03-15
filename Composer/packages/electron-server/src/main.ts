@@ -294,14 +294,22 @@ async function run() {
     }
 
     let mainWindowClosed = false;
+    let mainWindowClosing = false;
     mainWindow?.on('close', (event) => {
+      // hide window on the second attempt to close to not bother user with teardown screen
+      if (mainWindowClosing) {
+        mainWindow.hide();
+        return;
+      }
       if (mainWindowClosed) {
         return;
       }
 
       event.preventDefault();
+      mainWindowClosing = true;
 
       ipcMain.once('closed', () => {
+        mainWindowClosing = false;
         mainWindowClosed = true;
         mainWindow.close();
         quitApp();
