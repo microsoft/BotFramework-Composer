@@ -265,8 +265,10 @@ async function run() {
     app.quit();
   }
 
+  const getMainWindow = () => ElectronWindow.getInstance().browserWindow;
+
   const quitApp = async () => {
-    const mainWindow = ElectronWindow.getInstance().browserWindow;
+    const mainWindow = getMainWindow();
     const allWindowsClosed = new Promise<void>((resolve) => app.once('window-all-closed', resolve));
     const webContentsDestroyed = new Promise<void>((resolve) =>
       mainWindow?.webContents.once('destroyed', () => {
@@ -283,13 +285,39 @@ async function run() {
     app.quit();
   };
 
+  const initApp = async () => {
+    const mainWindow = getMainWindow();
+    mainWindow?.webContents.send('session-update', 'session-started');
+
+    if (process.env.COMPOSER_DEV_TOOLS) {
+      mainWindow?.webContents.openDevTools();
+    }
+
+    let mainWindowClosed = false;
+    mainWindow?.on('close', (event) => {
+      if (mainWindowClosed) {
+        return;
+      }
+
+      event.preventDefault();
+
+      ipcMain.once('closed', () => {
+        mainWindowClosed = true;
+        mainWindow.close();
+        quitApp();
+      });
+
+      mainWindow.webContents.send('session-update', 'session-ended');
+      mainWindow.webContents.send('closing');
+    });
+  };
+
   app.on('ready', async () => {
     log('App ready');
 
     log('Loading latest known locale');
     loadLocale(currentAppLocale);
 
-    const getMainWindow = () => ElectronWindow.getInstance().browserWindow;
     const { startApp, updateStatus } = await initSplashScreen({
       getMainWindow,
       icon: join(__dirname, '../resources/composerIcon_1024x1024.png'),
@@ -320,34 +348,8 @@ async function run() {
     });
 
     await main();
-
     setTimeout(() => startApp(signalThatMainWindowIsShowing), 500);
-
-    const mainWindow = getMainWindow();
-
-    mainWindow?.webContents.send('session-update', 'session-started');
-
-    if (process.env.COMPOSER_DEV_TOOLS) {
-      mainWindow?.webContents.openDevTools();
-    }
-
-    let mainWindowClosed = false;
-    mainWindow?.on('close', (event) => {
-      if (mainWindowClosed) {
-        return;
-      }
-
-      event.preventDefault();
-
-      ipcMain.once('closed', () => {
-        mainWindowClosed = true;
-        mainWindow.close();
-        quitApp();
-      });
-
-      mainWindow.webContents.send('session-update', 'session-ended');
-      mainWindow.webContents.send('closing');
-    });
+    await initApp();
   });
 
   app.on('activate', () => {
@@ -355,6 +357,7 @@ async function run() {
     // dock icon is clicked and there are no other windows open.
     if (!ElectronWindow.isBrowserWindowCreated) {
       main(true);
+      initApp();
     }
   });
 
