@@ -310,11 +310,13 @@ async function run() {
       }
 
     mainWindow.on('close', (event) => {
-      event.preventDefault();
+      // when the window is not visible, it means that window.close
+      // has been called by the handler, so it is time to proceed
       if (!mainWindow?.isVisible) {
         return;
       }
 
+      event.preventDefault();
       mainWindow.hide();
 
       // Give 30 seconds to close app gracefully, then proceed
