@@ -22,7 +22,7 @@
     "@microsoft/bf-dialog": "4.14.0-dev.20210415.161c029",
     "debug": "^4.3.1",
     "tslib": "2.4.0",
-    "yeoman-environment": "^2.10.3"
+    "yeoman-environment": "^3.2.0"
   },
   "devDependencies": {
     "@types/debug": "^4.1.5",
