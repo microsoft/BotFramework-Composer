@@ -49,7 +49,7 @@ export const validateExpressions: ValidateFunc = (
     let errorMessage = '';
     let warningMessage = '';
     try {
-      const valueToValidate = cache?.[path] ? cache[path] : checkExpression(value, required, types)
+      const valueToValidate = cache?.[path] ? cache[path] : checkExpression(value, required, types);
       errorMessage = checkReturnType(valueToValidate, types);
       if (!errorMessage) {
         //First validate that the types of the value match and then store the type value in newCache using the path as key to avoid overwriting.
