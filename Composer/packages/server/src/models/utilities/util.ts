@@ -40,5 +40,11 @@ export const getRemoteFile = async (url): Promise<string> => {
 
 // convert zip folder name to skill name
 export const convertFolderNameToSkillName = (path, skillName) => {
-  return path.replace(/(\w+)\//, `${skillName}/`);
+  const hasFolder = path.match(/(\w+)\//);
+
+  if (hasFolder === null) {
+    return `${skillName}/${path}`;
+  }
+
+  return path.replace(hasFolder[0], `${skillName}/`);
 };

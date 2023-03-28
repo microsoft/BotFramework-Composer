@@ -6,6 +6,8 @@ import { jsx, css } from '@emotion/react';
 import formatMessage from 'format-message';
 import ErrorBoundary from 'react-error-boundary';
 import React from 'react';
+import { useRecoilValue } from 'recoil';
+import { useShellApi } from '@bfc/extension-client';
 import { LoadingTimeout } from '@bfc/adaptive-form/lib/components/LoadingTimeout';
 import { FieldLabel } from '@bfc/adaptive-form/lib/components/FieldLabel';
 import ErrorInfo from '@bfc/adaptive-form/lib/components/ErrorInfo';
@@ -15,7 +17,8 @@ import { DetailsList, DetailsListLayoutMode, SelectionMode } from '@fluentui/rea
 import { Link } from '@fluentui/react/lib/Link';
 import get from 'lodash/get';
 
-import { SkillInfo } from '../../recoilModel';
+import { SkillInfo, skillNameIdentifierByProjectIdSelector } from '../../recoilModel';
+import { isExternalLink } from '../../utils/httpUtil';
 
 import { formEditor } from './styles';
 import { PropertyEditorHeader } from './PropertyEditorHeader';
@@ -82,6 +85,12 @@ export const ManifestEditor: React.FC<ManifestEditorProps> = (props) => {
   const { formData } = props;
   const { manifest } = formData;
 
+  const skillsByProjectId = useRecoilValue(skillNameIdentifierByProjectIdSelector);
+  const { shellApi } = useShellApi();
+
+  const skillNameIdentifier = skillsByProjectId[formData.id];
+  const { displayManifestModal } = shellApi;
+
   if (!manifest) {
     return (
       <LoadingTimeout timeout={2000}>
@@ -117,9 +126,13 @@ export const ManifestEditor: React.FC<ManifestEditorProps> = (props) => {
               label={formatMessage('Manifest URL')}
             />
             <p>
-              <Link aria-label={formData.location} href={formData.location} rel="noopener noreferrer" target="_blank">
-                {formData.location}
-              </Link>
+              {isExternalLink(formData.location) ? (
+                <Link aria-label={formData.location} href={formData.location} rel="noopener noreferrer" target="_blank">
+                  {formData.location}
+                </Link>
+              ) : (
+                <Link onClick={() => manifest && displayManifestModal(skillNameIdentifier)}>{formData.location}</Link>
+              )}
             </p>
           </section>
           <section css={styles.section}>
