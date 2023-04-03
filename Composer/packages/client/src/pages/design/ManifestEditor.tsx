@@ -18,7 +18,6 @@ import { Link } from '@fluentui/react/lib/Link';
 import get from 'lodash/get';
 
 import { SkillInfo, skillNameIdentifierByProjectIdSelector } from '../../recoilModel';
-import { isExternalLink } from '../../utils/httpUtil';
 
 import { formEditor } from './styles';
 import { PropertyEditorHeader } from './PropertyEditorHeader';
@@ -76,6 +75,10 @@ const styles = {
 
 const helpLink =
   'https://docs.microsoft.com/en-us/azure/bot-service/skills-write-manifest-2-1?view=azure-bot-service-4.0';
+
+const isExternalLink = (url: string): boolean => {
+  return /^http[s]?:\/\/\w+/.test(url);
+};
 
 export interface ManifestEditorProps {
   formData: SkillInfo;

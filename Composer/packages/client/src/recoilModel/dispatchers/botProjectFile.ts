@@ -8,12 +8,15 @@ import { CallbackInterface, useRecoilCallback } from 'recoil';
 import { produce } from 'immer';
 import { BotProjectFile, BotProjectSpaceSkill, Skill } from '@bfc/shared';
 
-import { isExternalLink } from '../../utils/httpUtil';
 import { botNameIdentifierState, botProjectFileState, dispatcherState, locationState, settingsState } from '../atoms';
 import { rootBotProjectIdSelector } from '../selectors';
 
 import { setRootBotSettingState } from './setting';
 import { addSkillFiles, deleteSkillFiles } from './utils/skills';
+
+const isExternalLink = (url: string): boolean => {
+  return /^http[s]?:\/\/\w+/.test(url);
+};
 
 export const botProjectFileDispatcher = () => {
   const addLocalSkill = useRecoilCallback(({ set, snapshot }: CallbackInterface) => async (skillId: string) => {
