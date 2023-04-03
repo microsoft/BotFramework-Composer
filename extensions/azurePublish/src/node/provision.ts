@@ -3,6 +3,7 @@
 
 import { TokenCredentials } from '@azure/ms-rest-js';
 import axios, { AxiosRequestConfig } from 'axios';
+import { AuthParameters } from '@botframework-composer/types';
 
 import { BotProjectDeployLoggerType } from './types';
 import { AzureResourceManangerConfig } from './azureResourceManager/azureResourceManagerConfig';
@@ -48,7 +49,7 @@ export class BotProjectProvision {
   // Will be assigned by create or deploy
   private tenantId = '';
 
-  constructor(config: ProvisionConfig) {
+  constructor(config: ProvisionConfig, private getAccessToken?: (params: AuthParameters) => Promise<string>) {
     this.subscriptionId = config.subscription;
     this.logger = config.logger;
     this.accessToken = config.accessToken;
@@ -97,8 +98,24 @@ export class BotProjectProvision {
       message: '> Creating App Registration ...',
     });
 
+    this.logger({
+      status: BotProjectDeployLoggerType.PROVISION_INFO,
+      message: `> TenantId: ${this.tenantId}`,
+    });
+
+    const accessToken = await this.getAccessToken?.({
+      scopes: ['https://graph.microsoft.com/Application.ReadWrite.All'],
+      targetResource: 'https://graph.microsoft.com/',
+      authority: `https://login.microsoftonline.com/${this.tenantId}/oauth2/v2.0/authorize`,
+    });
+
+    this.logger({
+      status: BotProjectDeployLoggerType.PROVISION_INFO,
+      message: `> Retrieved graph access token ...: ${accessToken}`,
+    });
+
     const appCreateOptions: AxiosRequestConfig = {
-      headers: { Authorization: `Bearer ${this.graphToken}` },
+      headers: { Authorization: `Bearer ${accessToken ?? this.graphToken}` },
     };
 
     // This call if successful returns an object in the form
