@@ -171,7 +171,7 @@ export class BotProjectProvision {
       },
     };
     const setSecretOptions: AxiosRequestConfig = {
-      headers: { Authorization: `Bearer ${this.graphToken}` },
+      headers: { Authorization: appCreateOptions.headers.Authorization },
     };
 
     let passwordSet;
