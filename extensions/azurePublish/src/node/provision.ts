@@ -104,14 +104,16 @@ export class BotProjectProvision {
     });
 
     const accessToken = await this.getAccessToken?.({
-      scopes: ['https://graph.microsoft.com/Application.ReadWrite.All'],
+      scopes: ['https://graph.microsoft.com/Application.ReadWrite.All'], // TODO: figure out if we need to pass scopes
       targetResource: 'https://graph.microsoft.com/',
       authority: `https://login.microsoftonline.com/${this.tenantId}/oauth2/v2.0/authorize`,
     });
 
     this.logger({
       status: BotProjectDeployLoggerType.PROVISION_INFO,
-      message: `> Retrieved graph access token ...: ${accessToken}`,
+      message: `> Retrieved tenant specific graph access token ...: ${accessToken?.length} ${
+        accessToken === this.graphToken
+      }`,
     });
 
     const appCreateOptions: AxiosRequestConfig = {
