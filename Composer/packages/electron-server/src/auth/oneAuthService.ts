@@ -390,7 +390,10 @@ export class OneAuthInstance extends OneAuthBase {
   }
 }
 
-// only use the shim in Linux, or dev environment without flag enabled
-const useShim = (isDevelopment && process.env.COMPOSER_ENABLE_ONEAUTH !== 'true') || isLinux();
+// only use the shim on Linux, or dev environment without the flag enabled or when the flag is false
+const useShim =
+  (isDevelopment && process.env.COMPOSER_ENABLE_ONEAUTH !== 'true') ||
+  isLinux() ||
+  (process.env.COMPOSER_ENABLE_ONEAUTH && process.env.COMPOSER_ENABLE_ONEAUTH === 'false');
 
 export const OneAuthService = useShim ? new OneAuthShim() : new OneAuthInstance();

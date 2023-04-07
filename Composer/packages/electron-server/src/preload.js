@@ -11,3 +11,4 @@ contextBridge.exposeInMainWorld('ipcRenderer', {
 
 // flag to distinguish electron client from web app client
 contextBridge.exposeInMainWorld('__IS_ELECTRON__', true);
+contextBridge.exposeInMainWorld('__ENABLE_ONEAUTH__', process.env.COMPOSER_ENABLE_ONEAUTH !== 'false');
