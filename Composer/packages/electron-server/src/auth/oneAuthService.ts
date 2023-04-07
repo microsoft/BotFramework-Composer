@@ -390,7 +390,7 @@ export class OneAuthInstance extends OneAuthBase {
   }
 }
 
-// oneAuth is enabled by default on supported platforms
+// OneAuth is enabled by default on supported platforms
 const isOneAuthEanabled = !(process.env.COMPOSER_ENABLE_ONEAUTH === 'false' || process.platform === 'linux');
 
 // dev: allow force disable the shim, use the shim by default to simplify dev setup

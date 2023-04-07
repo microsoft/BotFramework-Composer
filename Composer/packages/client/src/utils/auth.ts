@@ -339,7 +339,7 @@ export function getAccessTokenUrl(options: { clientId: string; redirectUrl: stri
 }
 
 export function userShouldProvideTokens(): boolean {
-  // If it is enabled, use oneAuth, otherwise ask user to manually enter tokens.
+  // If it is enabled, use OneAuth, otherwise ask user to manually enter tokens.
   if (isOneAuthEnabled()) {
     return false;
   } else return !(authConfig.clientId && authConfig.redirectUrl && authConfig.tenantId);
