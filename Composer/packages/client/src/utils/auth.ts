@@ -340,8 +340,8 @@ export function getAccessTokenUrl(options: { clientId: string; redirectUrl: stri
 }
 
 export function userShouldProvideTokens(): boolean {
-  // If it is enabled and platform is supported, use OneAuth otherwise ask user to manually enter tokens.
-  if (isOneAuthEnabled() && platform() === OS.Linux) {
+  // If it is enabled and platform is supported use OneAuth, otherwise ask user to manually enter tokens.
+  if (isOneAuthEnabled() && platform() !== OS.Linux) {
     return false;
   } else return !(authConfig.clientId && authConfig.redirectUrl && authConfig.tenantId);
 }
