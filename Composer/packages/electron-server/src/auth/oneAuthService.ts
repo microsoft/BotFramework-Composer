@@ -7,7 +7,7 @@ import { app } from 'electron';
 
 import fetch from '../utility/fetch';
 import ElectronWindow from '../electronWindow';
-import { isMac } from '../utility/platform';
+import { isMac, isLinux } from '../utility/platform';
 import logger from '../utility/logger';
 import { getUnpackedAsarPath } from '../utility/getUnpackedAsarPath';
 import { isDevelopment } from '../utility/env';
@@ -390,12 +390,12 @@ export class OneAuthInstance extends OneAuthBase {
   }
 }
 
-// OneAuth is enabled by default on supported platforms
-const isOneAuthEanabled = !(process.env.COMPOSER_ENABLE_ONEAUTH === 'false' || process.platform === 'linux');
+// OneAuth is enabled unless COMPOSER_ENABLE_ONEAUTH=false is set
+const isOneAuthEanabled = !(process.env.COMPOSER_ENABLE_ONEAUTH === 'false');
 
 // dev: allow force disable the shim, use the shim by default to simplify dev setup
 // prod: awllow force enable the shim, use genuine package if the OS is supported
-// fallback to the shim if OS is not supported in either way
-const useShim = (isDevelopment && process.env.COMPOSER_ENABLE_ONEAUTH !== 'true') || !isOneAuthEanabled;
+// fallback to the shim if OS is not supported in any case
+const useShim = (isDevelopment && process.env.COMPOSER_ENABLE_ONEAUTH !== 'true') || !isOneAuthEanabled || !isLinux();
 
 export const OneAuthService = useShim ? new OneAuthShim() : new OneAuthInstance();

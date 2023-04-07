@@ -3,7 +3,7 @@
 
 const { ipcRenderer, contextBridge } = require('electron'); // eslint-disable-line
 
-const isOneAuthEanabled = !(process.env.COMPOSER_ENABLE_ONEAUTH === 'false' || process.platform === 'linux');
+const isOneAuthEanabled = !(process.env.COMPOSER_ENABLE_ONEAUTH === 'false');
 
 // expose ipcRenderer to the browser
 contextBridge.exposeInMainWorld('ipcRenderer', {
