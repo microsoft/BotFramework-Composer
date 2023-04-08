@@ -1,8 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-// dev: allow force enable OneAuth, use shim by default to simplify dev setup
-// prod: awllow force enable the shim, use OneAuth by default
+// dev: allow force enable OneAuth, use shim by default
+// prod: allow to force enable the shim, use OneAuth by default
 // fallback to the shim if OS is not supported in any case
 export const isOneAuthEnabled =
   ['darwin', 'win32'].includes(process.platform) &&
