@@ -15,7 +15,6 @@ import { authConfig, authUrl } from '../constants';
 import storage from './storage';
 import httpClient from './httpUtil';
 import { isOneAuthEnabled } from './envUtil';
-import { OS, platform } from './os';
 
 export function decodeToken(token: string) {
   try {
@@ -340,8 +339,8 @@ export function getAccessTokenUrl(options: { clientId: string; redirectUrl: stri
 }
 
 export function userShouldProvideTokens(): boolean {
-  // If it is enabled and platform is supported use OneAuth, otherwise ask user to manually enter tokens.
-  if (isOneAuthEnabled() && platform() !== OS.Linux) {
+  // If it is enabled use OneAuth, otherwise ask user to manually enter tokens.
+  if (isOneAuthEnabled()) {
     return false;
   } else return !(authConfig.clientId && authConfig.redirectUrl && authConfig.tenantId);
 }

@@ -7,7 +7,7 @@ import { app } from 'electron';
 
 import fetch from '../utility/fetch';
 import ElectronWindow from '../electronWindow';
-import { isMac, isLinux } from '../utility/platform';
+import { isMac } from '../utility/platform';
 import logger from '../utility/logger';
 import { getUnpackedAsarPath } from '../utility/getUnpackedAsarPath';
 import { isDevelopment } from '../utility/env';
@@ -15,6 +15,7 @@ import { isDevelopment } from '../utility/env';
 import { OneAuth } from './oneauth';
 import { OneAuthShim } from './oneAuthShim';
 import { OneAuthBase } from './oneAuthBase';
+import { isOneAuthEnabled } from './isOneAuthEnabled';
 
 const log = logger.extend('one-auth');
 
@@ -390,12 +391,6 @@ export class OneAuthInstance extends OneAuthBase {
   }
 }
 
-// OneAuth is enabled unless COMPOSER_ENABLE_ONEAUTH=false is set
-const isOneAuthEanabled = !(process.env.COMPOSER_ENABLE_ONEAUTH === 'false');
-
-// dev: allow force disable the shim, use the shim by default to simplify dev setup
-// prod: awllow force enable the shim, use genuine package if the OS is supported
-// fallback to the shim if OS is not supported in any case
-const useShim = (isDevelopment && process.env.COMPOSER_ENABLE_ONEAUTH !== 'true') || !isOneAuthEanabled || !isLinux();
+const useShim = !isOneAuthEnabled;
 
 export const OneAuthService = useShim ? new OneAuthShim() : new OneAuthInstance();
