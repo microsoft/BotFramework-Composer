@@ -14,7 +14,7 @@ import { authConfig, authUrl } from '../constants';
 
 import storage from './storage';
 import httpClient from './httpUtil';
-import { isOneAuthEnabled } from './envUtil';
+import { isOneAuthEnabled } from './oneAuthUtil';
 
 export function decodeToken(token: string) {
   try {

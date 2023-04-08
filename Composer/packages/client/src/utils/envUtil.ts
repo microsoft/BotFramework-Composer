@@ -6,5 +6,3 @@ export enum BotEnvironments {
   PRODUCTION = 'production',
   INTEGRATION = 'integration',
 }
-
-export const isOneAuthEnabled = () => !!window.__ENABLE_ONEAUTH__;
