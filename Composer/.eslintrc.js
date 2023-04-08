@@ -48,7 +48,7 @@ module.exports = {
       'error',
       {
         // add special window.__foo__ names as exceptions here
-        allow: ['__nonce__', '__IS_ELECTRON__', '__ENABLE_ONEAUTH__'],
+        allow: ['__nonce__', '__IS_ELECTRON__'],
         // allow this._name so custom getters and setters can be written gracefully
         allowAfterThis: true,
         enforceInMethodNames: true,

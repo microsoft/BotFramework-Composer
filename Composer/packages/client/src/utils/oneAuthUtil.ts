@@ -3,4 +3,8 @@
 
 import { isElectron } from './electronUtil';
 
-export const isOneAuthEnabled = () => isElectron() && !!window.__ENABLE_ONEAUTH__;
+let isEnabled = false;
+
+export const isOneAuthEnabled = () => isElectron() && isEnabled;
+
+export const setOneAuthEnabled = (enabled: boolean) => (isEnabled = enabled);

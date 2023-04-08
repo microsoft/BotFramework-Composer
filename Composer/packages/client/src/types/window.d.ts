@@ -21,11 +21,6 @@ declare global {
     __IS_ELECTRON__?: boolean;
 
     /**
-     * Flag to enable OneAuth.
-     */
-    __ENABLE_ONEAUTH__?: boolean;
-
-    /**
      * Composer UI Extension API
      */
     Composer: {
