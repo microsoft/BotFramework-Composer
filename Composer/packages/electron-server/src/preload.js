@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-const { ipcRenderer, contextBridge } = require('electron');
+const { ipcRenderer, contextBridge } = require('electron'); // eslint-disable-line
 
 // expose ipcRenderer to the browser
 contextBridge.exposeInMainWorld('ipcRenderer', {
