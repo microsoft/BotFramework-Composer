@@ -46,6 +46,9 @@ export const App: React.FC = () => {
     ipcRenderer?.on('machine-info', (_event, info) => {
       setMachineInfo(info);
     });
+    ipcRenderer?.on('oneauth-state', (_event, enabled) => {
+      window.__ENABLE_ONEAUTH__ = enabled;
+    });
   }, []);
 
   return (

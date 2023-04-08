@@ -25,6 +25,7 @@ import { isLinux, isMac, isWindows } from './utility/platform';
 import { parseDeepLinkUrl } from './utility/url';
 import { getMachineId } from './utility/machineId';
 import { getSessionId } from './utility/sessionId';
+import { isOneAuthEnabled } from './auth/isOneAuthEnabled';
 
 const env = log.extend('env');
 env('%O', process.env);
@@ -306,6 +307,7 @@ async function run() {
     }
 
     mainWindow?.webContents.send('machine-info', { id: machineId, os: os.platform() });
+    mainWindow?.webContents.send('oneauth-state', isOneAuthEnabled);
   });
 
   // Quit when all windows are closed.
