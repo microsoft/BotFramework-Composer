@@ -44,13 +44,9 @@ export const App: React.FC = () => {
       performAppCleanupOnQuit();
     });
 
-    ipcRenderer?.send('app-init');
-    ipcRenderer?.on('machine-info', (_event, info) => {
-      setMachineInfo(info);
-    });
-
-    ipcRenderer?.on('oneauth-state', (_event, enabled) => {
-      setOneAuthEnabled(enabled);
+    ipcRenderer?.invoke('app-init').then(({ machineInfo, isOneAuthEnabled }) => {
+      setMachineInfo(machineInfo);
+      setOneAuthEnabled(isOneAuthEnabled);
     });
   }, []);
 

@@ -293,23 +293,29 @@ async function run() {
     await loadServer();
 
     initSettingsListeners();
+
+    const machineId = await getMachineId();
+    ipcMain.handle('app-init', () => {
+      return {
+        machineInfo: {
+          id: machineId,
+          os: os.platform(),
+        },
+        isOneAuthEnabled,
+      };
+    });
+
     await main();
 
     setTimeout(() => startApp(signalThatMainWindowIsShowing), 500);
 
     const mainWindow = getMainWindow();
-    const machineId = await getMachineId();
 
     mainWindow?.webContents.send('session-update', 'session-started');
 
     if (process.env.COMPOSER_DEV_TOOLS) {
       mainWindow?.webContents.openDevTools();
     }
-    // @ts-expect-error
-    mainWindow?.webContents.on('app-init', () => {
-      mainWindow?.webContents.send('machine-info', { id: machineId, os: os.platform() });
-      mainWindow?.webContents.send('oneauth-state', isOneAuthEnabled);
-    });
   });
 
   // Quit when all windows are closed.
