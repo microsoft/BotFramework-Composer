@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 import { readFile } from 'fs';
 import { promisify } from 'util';
+import path from 'path';
 
 import axios from 'axios';
 
@@ -39,12 +40,9 @@ export const getRemoteFile = async (url): Promise<string> => {
 };
 
 // convert zip folder name to skill name
-export const convertFolderNameToSkillName = (path, skillName) => {
-  const hasFolder = path.match(/(\w+)\//);
+export const convertFolderNameToSkillName = (pathStr, skillName) => {
+  const folderName = path.parse(pathStr).dir;
+  const relativePath = path.relative(folderName, pathStr);
 
-  if (hasFolder === null) {
-    return `${skillName}/${path}`;
-  }
-
-  return path.replace(hasFolder[0], `${skillName}/`);
+  return path.join(skillName, relativePath).replace('\\', '/');
 };
