@@ -305,9 +305,11 @@ async function run() {
     if (process.env.COMPOSER_DEV_TOOLS) {
       mainWindow?.webContents.openDevTools();
     }
-
-    mainWindow?.webContents.send('machine-info', { id: machineId, os: os.platform() });
-    mainWindow?.webContents.send('oneauth-state', isOneAuthEnabled);
+    // @ts-expect-error
+    mainWindow?.webContents.on('app-init', () => {
+      mainWindow?.webContents.send('machine-info', { id: machineId, os: os.platform() });
+      mainWindow?.webContents.send('oneauth-state', isOneAuthEnabled);
+    });
   });
 
   // Quit when all windows are closed.
