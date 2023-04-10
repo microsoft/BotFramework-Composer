@@ -6,7 +6,7 @@
 // for tests using Electron IPC to talk to main process
 (window as any).ipcRenderer = {
   on: jest.fn(),
-  invoke: jest.fn().mockReturnValue(Promise.resolve()),
+  invoke: jest.fn().mockReturnValue(Promise.resolve({})),
   send: jest.fn()
 };
 
