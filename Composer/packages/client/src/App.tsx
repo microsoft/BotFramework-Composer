@@ -11,6 +11,7 @@ import { dispatcherState, userSettingsState } from './recoilModel';
 import { loadLocale } from './utils/fileUtil';
 import { useInitializeLogger } from './telemetry/useInitializeLogger';
 import { setupIcons } from './setupIcons';
+import { setOneAuthEnabled } from './utils/oneAuthUtil';
 
 setupIcons();
 
@@ -43,8 +44,9 @@ export const App: React.FC = () => {
       performAppCleanupOnQuit();
     });
 
-    ipcRenderer?.on('machine-info', (_event, info) => {
-      setMachineInfo(info);
+    ipcRenderer?.invoke('app-init').then(({ machineInfo, isOneAuthEnabled }) => {
+      setMachineInfo(machineInfo);
+      setOneAuthEnabled(isOneAuthEnabled);
     });
   }, []);
 
