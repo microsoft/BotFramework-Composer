@@ -297,18 +297,6 @@ async function run() {
       mainWindow.webContents.openDevTools();
     }
 
-    let mainWindowClosed = false;
-    let mainWindowClosing = false;
-    mainWindow?.on('close', (event) => {
-      // hide window on the second attempt to close to not bother user with teardown screen
-      if (mainWindowClosing) {
-        mainWindow.hide();
-        return;
-      }
-      if (mainWindowClosed) {
-        return;
-      }
-
     mainWindow.on('close', (event) => {
       // when the window is not visible, it means that window.close
       // has been called by the handler, so it is time to proceed
@@ -318,18 +306,18 @@ async function run() {
 
       event.preventDefault();
       mainWindow.hide();
+      mainWindow.webContents.send('session-update', 'session-ended');
 
       // Give 30 seconds to close app gracefully, then proceed
       Promise.race([
         new Promise<void>((resolve) => setTimeout(resolve, 30000)),
         new Promise<void>((resolve) => ipcMain.once('closed', () => resolve())),
       ]).then(() => {
+        quitApp();
         mainWindow?.close();
         mainWindow = undefined;
-        quitApp();
       });
 
-      mainWindow.webContents.send('session-update', 'session-ended');
       mainWindow.webContents.send('closing');
     });
   };
