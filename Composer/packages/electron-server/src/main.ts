@@ -267,26 +267,6 @@ async function run() {
 
   const getMainWindow = () => ElectronWindow.getInstance().browserWindow;
 
-  const quitApp = async () => {
-    const mainWindow = getMainWindow();
-    const allWindowsClosed = new Promise<void>((resolve) => app.once('window-all-closed', resolve));
-    const webContentsDestroyed = mainWindow
-      ? new Promise<void>((resolve) =>
-          mainWindow.webContents.once('destroyed', () => {
-            ElectronWindow.destroy();
-            resolve();
-          })
-        )
-      : Promise.resolve();
-
-    await Promise.all([webContentsDestroyed, allWindowsClosed]);
-    // preserve app icon in the dock on MacOS
-    if (isMac()) return;
-
-    process.emit('beforeExit', 0);
-    app.quit();
-  };
-
   const initApp = async () => {
     let mainWindow = getMainWindow();
     if (!mainWindow) return;
@@ -313,9 +293,14 @@ async function run() {
         new Promise<void>((resolve) => setTimeout(resolve, 30000)),
         new Promise<void>((resolve) => ipcMain.once('closed', () => resolve())),
       ]).then(() => {
-        quitApp();
         mainWindow?.close();
         mainWindow = undefined;
+
+        // preserve app icon in the dock on MacOS
+        if (isMac()) return;
+
+        process.emit('beforeExit', 0);
+        app.quit();
       });
 
       mainWindow.webContents.send('closing');
