@@ -295,6 +295,7 @@ async function run() {
       ]).then(() => {
         mainWindow?.close();
         mainWindow = undefined;
+        ElectronWindow.destroy();
 
         // preserve app icon in the dock on MacOS
         if (isMac()) return;
