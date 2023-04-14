@@ -11,7 +11,7 @@
   "scripts": {
     "build": "yarn clean && yarn build:ts",
     "build:ts": "tsc --build tsconfig.build.json",
-    "clean": "rimraf lib",
+    "clean": "rimraf lib .swc",
     "prepublishOnly": "npm run build",
     "test": "jest",
     "lint": "eslint --quiet ./src",

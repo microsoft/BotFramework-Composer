@@ -11,7 +11,7 @@
     "lib/FormDialogSchemaEditor.d.ts"
   ],
   "scripts": {
-    "clean": "rimraf lib dist",
+    "clean": "rimraf lib dist .swc",
     "start": "node tools/devServer.js",
     "build": "yarn clean && yarn build:ts",
     "build:ts": "tsc --build ./tsconfig.lib.json",
