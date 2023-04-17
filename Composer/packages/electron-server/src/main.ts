@@ -209,10 +209,6 @@ async function main(show = false) {
           console.error('[Windows] Error while waiting for main window to show before processing deep link: ', e)
         );
     }
-
-    mainWindow.on('closed', () => {
-      ElectronWindow.destroy();
-    });
     log('Rendered application.');
   }
 }
@@ -269,13 +265,55 @@ async function run() {
     app.quit();
   }
 
+  const getMainWindow = () => ElectronWindow.getInstance().browserWindow;
+
+  const initApp = async () => {
+    let mainWindow = getMainWindow();
+    if (!mainWindow) return;
+
+    mainWindow.webContents.send('session-update', 'session-started');
+
+    if (process.env.COMPOSER_DEV_TOOLS) {
+      mainWindow.webContents.openDevTools();
+    }
+
+    mainWindow.on('close', (event) => {
+      // when the window is not visible, it means that window.close
+      // has been called by the handler, so it is time to proceed
+      if (!mainWindow?.isVisible) {
+        return;
+      }
+
+      event.preventDefault();
+      mainWindow.hide();
+      mainWindow.webContents.send('session-update', 'session-ended');
+
+      // Give 30 seconds to close app gracefully, then proceed
+      Promise.race([
+        new Promise<void>((resolve) => setTimeout(resolve, 30000)),
+        new Promise<void>((resolve) => ipcMain.once('closed', () => resolve())),
+      ]).then(() => {
+        mainWindow?.close();
+        mainWindow = undefined;
+        ElectronWindow.destroy();
+
+        // preserve app icon in the dock on MacOS
+        if (isMac()) return;
+
+        process.emit('beforeExit', 0);
+        app.quit();
+      });
+
+      mainWindow.webContents.send('closing');
+    });
+  };
+
   app.on('ready', async () => {
     log('App ready');
 
     log('Loading latest known locale');
     loadLocale(currentAppLocale);
 
-    const getMainWindow = () => ElectronWindow.getInstance().browserWindow;
     const { startApp, updateStatus } = await initSplashScreen({
       getMainWindow,
       icon: join(__dirname, '../resources/composerIcon_1024x1024.png'),
@@ -306,38 +344,16 @@ async function run() {
     });
 
     await main();
-
     setTimeout(() => startApp(signalThatMainWindowIsShowing), 500);
-
-    const mainWindow = getMainWindow();
-
-    mainWindow?.webContents.send('session-update', 'session-started');
-
-    if (process.env.COMPOSER_DEV_TOOLS) {
-      mainWindow?.webContents.openDevTools();
-    }
+    await initApp();
   });
 
-  // Quit when all windows are closed.
-  app.on('window-all-closed', () => {
-    // On OS X it is common for applications and their menu bar
-    // to stay active until the user quits explicitly with Cmd + Q
-    if (!isMac()) {
-      app.quit();
-    }
-  });
-
-  app.on('before-quit', () => {
-    const mainWindow = ElectronWindow.getInstance().browserWindow;
-    mainWindow?.webContents.send('session-update', 'session-ended');
-    mainWindow?.webContents.send('cleanup');
-  });
-
-  app.on('activate', () => {
+  app.on('activate', async () => {
     // On OS X it's common to re-create a window in the app when the
     // dock icon is clicked and there are no other windows open.
     if (!ElectronWindow.isBrowserWindowCreated) {
-      main(true);
+      await main(true);
+      initApp();
     }
   });
 
