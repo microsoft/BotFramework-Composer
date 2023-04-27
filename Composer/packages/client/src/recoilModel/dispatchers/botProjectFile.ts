@@ -8,13 +8,12 @@ import { CallbackInterface, useRecoilCallback } from 'recoil';
 import { produce } from 'immer';
 import { BotProjectFile, BotProjectSpaceSkill, Skill } from '@bfc/shared';
 
+import { isExternalLink } from '../../utils/urlUtil';
 import { botNameIdentifierState, botProjectFileState, dispatcherState, locationState, settingsState } from '../atoms';
 import { rootBotProjectIdSelector } from '../selectors';
 
 import { setRootBotSettingState } from './setting';
 import { addSkillFiles, deleteSkillFiles } from './utils/skills';
-
-const urlRegex = /^http[s]?:\/\/\w+/;
 
 export const botProjectFileDispatcher = () => {
   const addLocalSkill = useRecoilCallback(({ set, snapshot }: CallbackInterface) => async (skillId: string) => {
@@ -52,7 +51,7 @@ export const botProjectFileDispatcher = () => {
       }
       const botName = await snapshot.getPromise(botNameIdentifierState(skillId));
       let finalManifestUrl: string | undefined;
-      if (urlRegex.test(manifestUrl)) {
+      if (isExternalLink(manifestUrl)) {
         finalManifestUrl = manifestUrl;
       } else {
         const data = await addSkillFiles(rootBotProjectId, botName, manifestUrl, zipContent);

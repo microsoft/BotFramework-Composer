@@ -6,6 +6,7 @@ import formatMessage from 'format-message';
 import findIndex from 'lodash/findIndex';
 import { PublishTarget, QnABotTemplateId, RootBotManagedProperties } from '@bfc/shared';
 import get from 'lodash/get';
+import camelCase from 'lodash/camelCase';
 import { CallbackInterface, useRecoilCallback } from 'recoil';
 
 import { BotStatus, CreationFlowStatus, FEEDVERSION } from '../../constants';
@@ -196,6 +197,11 @@ export const projectDispatcher = () => {
         if (!rootBotProjectId) return;
 
         const manifestFromZip = getManifestJsonFromZip(zipContent);
+        let botNameIdentifier;
+        if (manifestFromZip.content?.name) {
+          botNameIdentifier = camelCase(manifestFromZip.content.name);
+          manifestFromZip.name = `skills/${botNameIdentifier}/${manifestFromZip.name}`;
+        }
         const botExists = await checkIfBotExistsInBotProjectFile(
           callbackHelpers,
           manifestFromZip.name ? manifestFromZip.name : manifestUrl,
@@ -213,6 +219,7 @@ export const projectDispatcher = () => {
           manifestUrl,
           manifestFromZip,
           rootBotProjectId,
+          botNameIdentifier,
         });
         set(botProjectIdsState, (current) => [...current, projectId]);
         await dispatcher.addRemoteSkillToBotProjectFile(projectId, manifestUrl, zipContent, endpointName);
