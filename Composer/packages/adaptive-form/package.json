@@ -11,7 +11,7 @@
     "start": "tsc --watch --preserveWatchOutput",
     "build": "yarn clean && yarn build:ts",
     "build:ts": "tsc --build ./tsconfig.build.json",
-    "clean": "rimraf lib demo/dist",
+    "clean": "rimraf lib demo/dist .swc",
     "lint": "eslint --quiet src",
     "lint:fix": "yarn lint --fix",
     "prepare": "yarn build"

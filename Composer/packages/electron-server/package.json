@@ -10,7 +10,7 @@
   },
   "scripts": {
     "build": "tsc -b tsconfig.build.json && ncp src/preload.js build/preload.js",
-    "clean": "rimraf build && rimraf dist && rimraf l10ntemp",
+    "clean": "rimraf build dist l10ntemp .swc",
     "copy-artifacts": "node scripts/copy-artifacts.js",
     "dist": "node scripts/electronBuilderDist.js",
     "dist:full": "yarn clean && yarn build && yarn run pack && yarn copy-artifacts && yarn dist",

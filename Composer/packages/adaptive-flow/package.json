@@ -15,7 +15,7 @@
   "scripts": {
     "build": "yarn clean && yarn build:ts",
     "build:ts": "tsc --build tsconfig.build.json",
-    "clean": "rimraf lib demo/dist",
+    "clean": "rimraf lib demo/dist .swc",
     "prepublishOnly": "npm run build",
     "start": "webpack-dev-server --config demo/webpack.config.demo.js --port 3002",
     "test": "jest --no-cache",

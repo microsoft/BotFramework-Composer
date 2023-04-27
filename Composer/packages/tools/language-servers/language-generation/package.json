@@ -7,7 +7,7 @@
     "build": "tsc --build tsconfig.build.json",
     "build:demo": "cd demo && tsc --build tsconfig.json",
     "prepublishOnly": "npm run build",
-    "clean": "rimraf lib demo/dist",
+    "clean": "rimraf lib demo/dist .swc",
     "start": "cd demo && cross-env NODE_ENV=test ts-node ./src/server.ts",
     "test": "jest",
     "lint": "eslint --quiet ./src ./__tests__",
