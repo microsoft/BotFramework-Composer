@@ -101,7 +101,7 @@ __metadata:
 
 "@bfc/extension-client@file:../../Composer/packages/extension-client::locator=package-manager%40workspace%3A.":
   version: 1.0.0
-  resolution: "@bfc/extension-client@file:../../Composer/packages/extension-client#../../Composer/packages/extension-client::hash=8dd52b&locator=package-manager%40workspace%3A."
+  resolution: "@bfc/extension-client@file:../../Composer/packages/extension-client#../../Composer/packages/extension-client::hash=dd3090&locator=package-manager%40workspace%3A."
   dependencies:
     debug: ^4.1.1
     lodash: ^4.17.19
@@ -110,7 +110,7 @@ __metadata:
     "@botframework-composer/types": "*"
     react: 16.13.1
     react-dom: 16.13.1
-  checksum: e915e895f8bddee9e70e18f12ba5ab4668bc6883ab3c9dd00833f3d7fb9be0e8cb0dbc35f686f4baf5baf31390f8e6bd037274219c68cea718b0d3f72d9ecc8a
+  checksum: fc7d4f2873f20135f09faebfaa750f3b795ccc741f4c39a42249e730a4ef79b4dda7f872587936c215001681d5b99368109d328a26191785940785eee419488e
   languageName: node
   linkType: hard
 
@@ -154,7 +154,7 @@ __metadata:
 
 "@botframework-composer/types@file:../../Composer/packages/types::locator=package-manager%40workspace%3A.":
   version: 0.0.2
-  resolution: "@botframework-composer/types@file:../../Composer/packages/types#../../Composer/packages/types::hash=a03b13&locator=package-manager%40workspace%3A."
+  resolution: "@botframework-composer/types@file:../../Composer/packages/types#../../Composer/packages/types::hash=d657f3&locator=package-manager%40workspace%3A."
   dependencies:
     "@types/express": 4.16.1
     "@types/passport": ^1.0.4
@@ -163,7 +163,7 @@ __metadata:
     express-serve-static-core: 0.1.1
     json-schema: 0.4.0
     tslib: 2.4.0
-  checksum: 042462523dc3e89a15817f431da9df2cfd64b5adcbc29b0fb7dfcebe2989dd7e76445890540be2919c7c230912826a5b83bd1bd90398ef3be4c7e35be78ed41d
+  checksum: b085f9dddc37d8e77c723814f40c0551dd68f9a45e40ef64cbe51ed956f7ff64a266ea4fcc35144e352cadf6a657ac9fa6d0f74b90ea362d39104a26cf88c643
   languageName: node
   linkType: hard
 
