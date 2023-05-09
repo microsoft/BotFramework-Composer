@@ -7,7 +7,7 @@ import { app } from 'electron';
 
 import fetch from '../utility/fetch';
 import ElectronWindow from '../electronWindow';
-import { isLinux, isMac } from '../utility/platform';
+import { isMac } from '../utility/platform';
 import logger from '../utility/logger';
 import { getUnpackedAsarPath } from '../utility/getUnpackedAsarPath';
 import { isDevelopment } from '../utility/env';
@@ -15,6 +15,7 @@ import { isDevelopment } from '../utility/env';
 import { OneAuth } from './oneauth';
 import { OneAuthShim } from './oneAuthShim';
 import { OneAuthBase } from './oneAuthBase';
+import { isOneAuthEnabled } from './isOneAuthEnabled';
 
 const log = logger.extend('one-auth');
 
@@ -390,7 +391,6 @@ export class OneAuthInstance extends OneAuthBase {
   }
 }
 
-// only use the shim in Linux, or dev environment without flag enabled
-const useShim = (isDevelopment && process.env.COMPOSER_ENABLE_ONEAUTH !== 'true') || isLinux();
+const useShim = !isOneAuthEnabled;
 
 export const OneAuthService = useShim ? new OneAuthShim() : new OneAuthInstance();

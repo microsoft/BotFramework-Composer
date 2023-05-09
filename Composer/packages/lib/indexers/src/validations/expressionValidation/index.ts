@@ -49,8 +49,12 @@ export const validateExpressions: ValidateFunc = (
     let errorMessage = '';
     let warningMessage = '';
     try {
-      newCache[value] = cache?.[value] ? cache[value] : checkExpression(value, required, types);
-      errorMessage = checkReturnType(newCache[value], types);
+      const valueToValidate = cache?.[path] ? cache[path] : checkExpression(value, required, types);
+      errorMessage = checkReturnType(valueToValidate, types);
+      if (!errorMessage) {
+        //First validate that the types of the value match and then store the type value in newCache using the path as key to avoid overwriting.
+        newCache[path] = valueToValidate;
+      }
     } catch (error) {
       //change the missing custom function error to warning
       warningMessage = filterCustomFunctionError(error.message, customFunctions);

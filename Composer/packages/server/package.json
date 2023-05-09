@@ -10,7 +10,7 @@
   "scripts": {
     "analyze": "source-map-explorer 'build/public/static/js/*.js'",
     "build": "tsc -p tsconfig.build.json && node scripts/build.js",
-    "clean": "rimraf build",
+    "clean": "rimraf build .swc",
     "prep:dist:electron": "yarn build --outDir ../electron-server/dist && node scripts/copyAssets.js",
     "start": "node --max-http-header-size=16000 build/init.js",
     "start:dev": "nodemon",
