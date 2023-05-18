@@ -259,7 +259,7 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
       // if a port (e.g. --port 5000) is configured in the custom runtime command try to parse and set this port
       if (settings.runtime.command && settings.runtime.command.includes('--port')) {
         try {
-          port = /--port (\d+)/.exec(settings.runtime.command)[1];
+          port = Number(/--port (\d+)/.exec(settings.runtime.command)[1]);
         } catch (err) {
           console.warn(`Custom runtime command has an invalid port argument.`);
         }
@@ -458,7 +458,11 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
       const bot = LocalPublisher.runningBots[botId];
       // Kill the bot process AND all child processes
       try {
-        process.kill(isWin ? bot.process.pid : -bot.process.pid);
+        if (isWin) {
+          spawn(`taskkill /pid ${bot.process.pid} /T /F`, { shell: true });
+        } else {
+          process.kill(-bot.process.pid);
+        }
       } catch (err) {
         // swallow this error which happens if the child process is already gone
       }
@@ -482,3 +486,5 @@ const cleanup = () => {
 (['SIGINT', 'SIGTERM', 'SIGQUIT'] as NodeJS.Signals[]).forEach((signal: NodeJS.Signals) => {
   process.on(signal, cleanup.bind(null, signal));
 });
+
+process.on('beforeExit', cleanup);

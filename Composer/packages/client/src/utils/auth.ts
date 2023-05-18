@@ -14,8 +14,7 @@ import { authConfig, authUrl } from '../constants';
 
 import storage from './storage';
 import httpClient from './httpUtil';
-import { isElectron } from './electronUtil';
-import { platform, OS } from './os';
+import { isOneAuthEnabled } from './oneAuthUtil';
 
 export function decodeToken(token: string) {
   try {
@@ -340,9 +339,8 @@ export function getAccessTokenUrl(options: { clientId: string; redirectUrl: stri
 }
 
 export function userShouldProvideTokens(): boolean {
-  // If it's electron build and not running on Linux use oneAuth, otherwise ask user to manually enter tokens.
-  const os = platform();
-  if (isElectron() && os !== OS.Linux) {
+  // If it is enabled use OneAuth, otherwise ask user to manually enter tokens.
+  if (isOneAuthEnabled()) {
     return false;
   } else return !(authConfig.clientId && authConfig.redirectUrl && authConfig.tenantId);
 }

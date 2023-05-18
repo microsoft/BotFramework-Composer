@@ -7,7 +7,7 @@ import { throwNotImplementedError } from '../throwNotImplementedError';
 
 const createLuisService = (token: string, subscriptionId: string) => {
   const tokenCredentials = new TokenCredentials(token);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  // @ts-expect-error
   const cognitiveServicesManagementClient = new CognitiveServicesManagementClient(tokenCredentials, subscriptionId);
 
   const checkNameAvailability = async () => {

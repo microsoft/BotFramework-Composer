@@ -76,8 +76,7 @@ export function createGetAttachmentHandler(state: DLServerState) {
               buffer = Buffer.from(attachmentBase64.toString(), 'base64');
             }
 
-            res.type(attachment.type);
-            res.send(StatusCodes.OK, buffer);
+            res.status(StatusCodes.OK).type(attachment.type).send(buffer);
           } else {
             handleDirectLineErrors(req, res, {
               status: StatusCodes.NOT_FOUND,

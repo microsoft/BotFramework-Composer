@@ -24,7 +24,7 @@ export const getManifestJsonFromZip = (zipContent) => {
   try {
     const manifestUrl = Object.keys(zipContent).find((key) => zipContent[key] && isManifestJson(zipContent[key]));
     return manifestUrl
-      ? { name: `skills/${manifestUrl}`, content: JSON.parse(zipContent[manifestUrl]) }
+      ? { name: manifestUrl, content: JSON.parse(zipContent[manifestUrl]) }
       : { name: '', content: null };
   } catch (e) {
     return { name: '', content: null };

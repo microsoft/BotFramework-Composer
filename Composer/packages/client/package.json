@@ -10,7 +10,7 @@
   "scripts": {
     "start": "node --max_old_space_size=6114 --max-http-header-size=16000 scripts/start.js",
     "build": "node --max_old_space_size=6114 scripts/build.js",
-    "clean": "rimraf build",
+    "clean": "rimraf build .swc",
     "test": "jest",
     "lint": "eslint --quiet --ext .js,.jsx,.ts,.tsx ./src ./__tests__",
     "lint:fix": "yarn lint --fix",
