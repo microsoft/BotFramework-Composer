@@ -15,6 +15,7 @@ import {
   PublishResponse,
   PublishResult,
   SDKKinds,
+  PublishProfile,
 } from '@botframework-composer/types';
 import { parseRuntimeKey, applyPublishingProfileToSettings } from '@bfc/shared';
 import { indexer } from '@bfc/indexers';
@@ -48,7 +49,7 @@ interface DeployResources {
   abs?: any;
 }
 
-interface PublishConfig {
+interface PublishConfig extends PublishProfile {
   fullSettings: any;
   profileName: string; //profile name
   [key: string]: any;
@@ -631,7 +632,7 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
 
     private isProfileProvisioned = (profile: PublishConfig): boolean => {
       //TODO: Post-migration we can check for profile?.tenantId
-      return profile?.resourceGroup && profile?.subscriptionId && profile?.region;
+      return !!(profile?.resourceGroup && profile?.subscriptionId && profile?.region);
     };
 
     // While the provisioning process may return more information for various resources than is checked here,
@@ -640,36 +641,36 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
       switch (resource.key) {
         case AzureResourceTypes.APPINSIGHTS:
           // InstrumentationKey is Pascal-cased for some unknown reason
-          return profile?.settings?.applicationInsights?.InstrumentationKey;
+          return !!profile?.settings?.applicationInsights?.InstrumentationKey;
         case AzureResourceTypes.APP_REGISTRATION:
           // MicrosoftAppId and MicrosoftAppPassword are Pascal-cased for some unknown reason
-          return profile?.settings?.MicrosoftAppId && profile?.settings?.MicrosoftAppPassword;
+          return !!(profile?.settings?.MicrosoftAppId && profile?.settings?.MicrosoftAppPassword);
         case AzureResourceTypes.BLOBSTORAGE:
           // name is not checked (not in schema.ts)
           // container property is not checked (empty may be a valid value)
-          return profile?.settings?.blobStorage?.connectionString;
+          return !!profile?.settings?.blobStorage?.connectionString;
         case AzureResourceTypes.BOT_REGISTRATION:
-          return profile?.botName;
+          return !!profile?.botName;
         case AzureResourceTypes.COSMOSDB:
           // collectionId is not checked (not in schema.ts)
           // databaseId and containerId are not checked (empty may be a valid value)
-          return profile?.settings?.cosmosDB?.authKey && profile?.settings?.cosmosDB?.cosmosDBEndpoint;
+          return !!(profile?.settings?.cosmosDb?.authKey && profile?.settings?.cosmosDb?.cosmosDBEndpoint);
         case AzureResourceTypes.LUIS_AUTHORING:
           // region is not checked (empty may be a valid value)
-          return profile?.settings?.luis?.authoringKey && profile?.settings?.luis?.authoringEndpoint;
+          return !!(profile?.settings?.luis?.authoringKey && profile?.settings?.luis?.authoringEndpoint);
         case AzureResourceTypes.LUIS_PREDICTION:
           // region is not checked (empty may be a valid value)
-          return profile?.settings?.luis?.endpointKey && profile?.settings?.luis?.endpoint;
+          return !!(profile?.settings?.luis?.endpointKey && profile?.settings?.luis?.endpoint);
         case AzureResourceTypes.QNA:
           // endpoint is not checked (it is in schema.ts and provision() returns the value, but it is not set in the config)
           // qnaRegion is not checked (empty may be a valid value)
-          return profile?.settings?.qna?.subscriptionKey;
+          return !!profile?.settings?.qna?.subscriptionKey;
         case AzureResourceTypes.SERVICE_PLAN:
           // no settings exist to verify the service plan was created
           return true;
         case AzureResourceTypes.AZUREFUNCTIONS:
         case AzureResourceTypes.WEBAPP:
-          return profile?.hostname;
+          return !!profile?.hostname;
         default:
           throw new Error(
             formatMessage('Azure resource type {resourceKey} is not handled.', { resourceKey: resource.key })

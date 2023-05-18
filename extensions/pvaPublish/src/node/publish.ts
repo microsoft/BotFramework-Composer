@@ -54,7 +54,7 @@ export const publish = async (
       botContentData.push(chunk);
       callback(); // let the internal write() call know that the _write() was successful
     };
-    await new Promise((resolve, reject) => {
+    await new Promise<void>((resolve, reject) => {
       project.exportToZip(
         { files: ['*.botproject'], directories: ['/knowledge-base/'] },
         (archive: NodeJS.ReadStream & { finalize: () => void; on: (ev, listener) => void }) => {
@@ -86,7 +86,7 @@ export const publish = async (
         ...getAuthHeaders(accessToken, tenantId),
         'Content-Type': 'application/zip',
         'Content-Length': botContent.buffer.byteLength.toString(),
-        'If-Match': project.eTag,
+        'If-Match': project.eTag ?? '',
       },
     });
     if (res.status === 202) {
@@ -124,7 +124,7 @@ export const publish = async (
     return {
       status: 500,
       result: {
-        message: e.message,
+        message: (e as Error)?.message,
       },
     };
   }
@@ -200,7 +200,7 @@ export const getStatus = async (
     return {
       status: 500,
       result: {
-        message: e.message,
+        message: (e as Error)?.message,
       },
     };
   }

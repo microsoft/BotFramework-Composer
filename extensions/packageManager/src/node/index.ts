@@ -311,8 +311,7 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
             packageName,
             version,
             source,
-            currentProject,
-            isPreview
+            currentProject
           );
 
           const manifestFile = runtime.identifyManifest(runtimePath, currentProject.name);
@@ -379,7 +378,9 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
               const newlyInstalledPlugin = installedComponents.find((c) => hasSchema(c) && c.name == packageName);
               if (
                 newlyInstalledPlugin &&
-                !currentProject.settings.runtimeSettings?.components?.find((p) => p.name === newlyInstalledPlugin.name)
+                !currentProject.settings.runtimeSettings?.components?.find(
+                  (p: { name: string }) => p.name === newlyInstalledPlugin.name
+                )
               ) {
                 const newSettings = await currentProject.getEnvSettings();
                 // guard against missing settings keys
@@ -478,7 +479,9 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
           });
 
           // update the settings.components array
-          if (currentProject.settings.runtimeSettings?.components?.find((p) => p.name === packageName)) {
+          if (
+            currentProject.settings.runtimeSettings?.components?.find((p: { name: string }) => p.name === packageName)
+          ) {
             const newSettings = await currentProject.getEnvSettings();
             newSettings.runtimeSettings.components = newSettings.runtimeSettings.components.filter(
               (p) => p.name !== packageName

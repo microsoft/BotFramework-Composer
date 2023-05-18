@@ -3,7 +3,7 @@
 
 import { IBotProject } from '@botframework-composer/types';
 
-export type ProvisionWorkingSet = Record<string, object>;
+export type ProvisionWorkingSet = Record<string, Record<string, string>>;
 
 export type OnProvisionProgress = (status: number, message: string) => void;
 

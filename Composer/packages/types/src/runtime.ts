@@ -15,7 +15,7 @@ type MakeDirectoryOptions = {
   recursive?: boolean;
 };
 
-type IFileStorage = {
+export type IFileStorage = {
   stat(path: string): Promise<Stat>;
   readFile(path: string): Promise<string>;
   readDir(path: string): Promise<string[]>;

@@ -211,7 +211,7 @@ const Library: React.FC = () => {
   };
 
   const getReadmeAPI = (packageName: string) => {
-    return httpClient.get(`${API_ROOT}/readme/${packageName}`);
+    return httpClient.get(`${API_ROOT}/readme/${encodeURIComponent(packageName)}`);
   };
 
   const uninstallComponentAPI = (projectId: string, packageName: string) => {
@@ -446,6 +446,8 @@ const Library: React.FC = () => {
         setWorking('');
         updateInstalledComponents(results.data.components);
 
+        await reloadProject();
+
         // find newly installed item
         // and pop up the readme if one exists.
         const newItem = results.data.components.find((i) => i.name === packageName);
@@ -453,8 +455,6 @@ const Library: React.FC = () => {
           setSelectedItem(newItem);
           setReadmeHidden(false);
         }
-
-        await reloadProject();
       }
     } catch (err) {
       telemetryClient.track('PackageInstallFailed', { package: packageName, version: version, isUpdate: isUpdating });
@@ -631,7 +631,7 @@ const Library: React.FC = () => {
       {selectedItem && (
         <DisplayMarkdownDialog
           content={selectedItem?.readme}
-          hidden={readmeHidden}
+          hidden={readmeHidden || !selectedItem?.readme}
           title={'Project Readme'}
           onDismiss={() => {
             setReadmeHidden(true);

@@ -3085,7 +3085,7 @@
                   "title": "speak"
                 },
                 "inputHint": {
-                  "description": "Indicates whether your bot is accepting,\nexpecting, or ignoring user input after the message is delivered to the client. Possible\nvalues include: 'acceptingInput', 'ignoringInput', 'expectingInput'",
+                  "description": "Indicates whether your bot is accepting,\nexpecting, or ignoring user input after the message is delivered to the client. Possible\nvalues include: 'acceptingInput', 'ignoringInput', 'expectingInput', 'ignoringSpeechInput', 'ignoringNonSpeechInput'",
                   "type": "string",
                   "title": "inputHint"
                 },

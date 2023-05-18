@@ -8,7 +8,7 @@
   ],
   "scripts": {
     "build": "yarn clean && tsc",
-    "clean": "rimraf lib",
+    "clean": "rimraf lib .swc",
     "lint": "eslint --quiet src",
     "prepublishOnly": "npm run lint && npm run build"
   },

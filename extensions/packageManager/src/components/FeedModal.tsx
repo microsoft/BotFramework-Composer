@@ -267,7 +267,7 @@ export const FeedModal: React.FC<WorkingModalProps> = (props) => {
     selection.setKeySelected(newItem.key, true, false);
     setSelection(selection);
 
-    telemetryClient.track('PackageFeedAdded', {});
+    telemetryClient.track('PackageFeedAdded');
 
     setEditRow(true);
   };
@@ -281,7 +281,7 @@ export const FeedModal: React.FC<WorkingModalProps> = (props) => {
     ) {
       setItems(items.filter((i) => i.key !== selectedItem.key));
       setSelectedItem(undefined);
-      telemetryClient.track('PackageFeedDeleted', {});
+      telemetryClient.track('PackageFeedDeleted');
     }
   };
 

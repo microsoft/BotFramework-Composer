@@ -13,7 +13,7 @@
     "build": "yarn clean && yarn build:css && yarn build:ts",
     "build:ts": "tsc --build tsconfig.build.json",
     "build:css": "copyfiles --up 1 \"src/**/*.css\" \"src/**/*.scss\" lib",
-    "clean": "rimraf lib demo/dist",
+    "clean": "rimraf lib demo/dist .swc",
     "prepublishOnly": "npm run build",
     "start": "webpack-dev-server --config demo/webpack.config.demo.js",
     "build:demo": "webpack --config demo/webpack.config.demo.js",
