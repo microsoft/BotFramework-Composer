@@ -16,18 +16,19 @@ import formatMessage from 'format-message';
 import { NeutralColors, FontSizes } from '@fluentui/theme';
 import { RouteComponentProps } from '@reach/router';
 import { LgTemplate } from '@bfc/shared';
-import { useRecoilValue } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import { lgUtil } from '@bfc/indexers';
 import { LgFile } from '@botframework-composer/types/src';
 
 import { EditableField } from '../../components/EditableField';
 import { navigateTo } from '../../utils/navigation';
 import { actionButton, editableFieldContainer } from '../language-understanding/styles';
-import { dispatcherState, localeState, settingsState, dialogsSelectorFamily } from '../../recoilModel';
+import { dispatcherState, localeState, settingsState, dialogsSelectorFamily, lgFileState } from '../../recoilModel';
 import { languageListTemplates } from '../../components/MultiLanguage';
 import TelemetryClient from '../../telemetry/TelemetryClient';
 import { lgFilesSelectorFamily } from '../../recoilModel/selectors/lg';
 import { CellFocusZone } from '../../components/CellFocusZone';
+import lgWorker from '../../recoilModel/parsers/lgWorker';
 
 interface TableViewProps extends RouteComponentProps<{ dialogId: string; skillId: string; projectId: string }> {
   projectId: string;
@@ -51,10 +52,27 @@ const TableView: React.FC<TableViewProps> = (props) => {
   );
 
   const { languages, defaultLanguage } = settings;
+  const [defaultLg, setDefaultLg] = useRecoilState(
+    lgFileState({ projectId: actualProjectId, lgFileId: `${dialogId}.${defaultLanguage}` })
+  );
 
-  const defaultLangFile = lgFileId
-    ? lgFiles.find(({ id }) => id === lgFileId)
-    : lgFiles.find(({ id }) => id === `${dialogId}.${defaultLanguage}`);
+  const getDefaultLangFile = () => {
+    let lgFile: LgFile | undefined;
+    if (lgFileId) {
+      lgFile = lgFiles.find(({ id }) => id === lgFileId);
+    } else {
+      lgFile = lgFiles.find(({ id }) => id === `${dialogId}.${defaultLanguage}`);
+    }
+    if (lgFile?.isContentUnparsed) {
+      lgWorker.parse(actualProjectId, defaultLg.id, defaultLg.content, lgFiles).then((result) => {
+        setDefaultLg(result as LgFile);
+        return defaultLg;
+      });
+    }
+    return lgFile;
+  };
+
+  const defaultLangFile = getDefaultLangFile();
 
   const [templates, setTemplates] = useState<LgTemplate[]>([]);
   const listRef = useRef(null);
