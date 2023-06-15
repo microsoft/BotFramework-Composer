@@ -1,9 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-// Copyright (c) Microsoft. All rights reserved.
-// Licensed under the MIT license.
-
 /** Hashes a file asynchronously */
 const path = require('path');
 const fs = require('fs');
