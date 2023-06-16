@@ -141,10 +141,10 @@ try {
   log.info('-------- Signing bundles. --------\n');
   for (const bundle of bundles) {
     log.info(
-      `codesign -s ******* --timestamp=none --force --options runtime --entitlements "${bundle.entitlements}" --entitlements-inherit "${bundle.entitlements}" "${bundle.path}"`
+      `codesign -s ******* --timestamp=none --force --options runtime --entitlements "${bundle.entitlements}" "${bundle.path}"`
     );
     execSync(
-      `codesign -s $DEV_CERT_ID --timestamp=none --force --options runtime --entitlements "${bundle.entitlements}" --entitlements-inherit "${bundle.entitlements}" "${bundle.path}"`,
+      `codesign -s $DEV_CERT_ID --timestamp=none --force --options runtime --entitlements "${bundle.entitlements}" "${bundle.path}"`,
       { stdio: 'inherit' }
     );
   }
