@@ -1,0 +1,24 @@
+name: Composer Build
+trigger: [ develop, main, release/* ]
+
+pool:
+   vmImage: 'ubuntu-latest'
+
+ variables:
+   imageName: 'composer-beebot'
+   dockerRegistryServiceConnection: 'Container Registry'
+   tag: '$(Build.BuildId)'
+
+ steps:
+ - task: DockerInstaller@0
+   inputs:
+     dockerVersion: '17.09.0-ce'
+ - task: Docker@2
+   displayName: Build and publish
+   inputs:
+     repository: $(imageName)
+     command: buildAndPush
+     Dockerfile: app/Dockerfile
+     containerRegistry: $(dockerRegistryServiceConnection)
+     tags: |
+       $(tag)

@@ -1,3 +1,6 @@
+name: Composer E2E
+pr: [ develop, main, hotfix/* ]
+
 variables:
   YARN_CACHE_FOLDER: $(Pipeline.Workspace)/.yarn
 
