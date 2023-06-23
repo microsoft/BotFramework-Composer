@@ -3,7 +3,7 @@ trigger: [ develop, main, release/* ]
 
 variables:
   imageName: 'composer-beebot'
-  dockerRegistryServiceConnection: 'Container Registry'
+  dockerRegistryServiceConnection: 'BeeBot ACR'
   tag: '$(Build.BuildId)'
 
 jobs:
