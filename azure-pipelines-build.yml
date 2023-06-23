@@ -21,7 +21,7 @@ jobs:
       inputs:
         repository: $(imageName)
         command: buildAndPush
-        Dockerfile: app/Dockerfile
+        Dockerfile: ./Dockerfile
         containerRegistry: $(dockerRegistryServiceConnection)
         tags: |
           $(tag)
