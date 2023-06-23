@@ -2,7 +2,7 @@ name: Composer Build
 trigger: [ develop, main, release/* ]
 
 pool:
-   vmImage: 'ubuntu-latest'
+  vmImage: 'ubuntu-latest'
 
   variables:
     imageName: 'composer-beebot'
