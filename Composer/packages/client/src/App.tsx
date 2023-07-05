@@ -3,7 +3,10 @@
 
 import React, { Fragment, useEffect, useState } from 'react';
 import { useRecoilValue } from 'recoil';
+import { MsalAuthenticationTemplate, MsalProvider } from '@azure/msal-react';
+import * as msal from '@azure/msal-browser';
 
+import { msalApplication } from './msal';
 import { Header } from './components/Header';
 import { Announcement } from './components/AppComponents/Announcement';
 import { MainContainer } from './components/AppComponents/MainContainer';
@@ -26,6 +29,7 @@ export const App: React.FC = () => {
   const { appLocale } = useRecoilValue(userSettingsState);
 
   const [isClosing, setIsClosing] = useState(false);
+  const [msalInstance, setMsalInstance] = useState<msal.PublicClientApplication>(msalApplication);
 
   const {
     fetchExtensions,
@@ -58,11 +62,23 @@ export const App: React.FC = () => {
 
   return (
     <Fragment key={appLocale}>
-      {isClosing && <LoadingSpinner inModal message="Finishing closing the application. Performing cleanup." />}
-      <Logger />
-      <Announcement />
-      <Header />
-      <MainContainer />
+      <MsalProvider instance={msalInstance}>
+        <MsalAuthenticationTemplate
+          errorComponent={() => {
+            return <>ERROR</>;
+          }}
+          interactionType={msal.InteractionType.Redirect}
+          loadingComponent={() => {
+            return <>LOADING</>;
+          }}
+        >
+          {isClosing && <LoadingSpinner inModal message="Finishing closing the application. Performing cleanup." />}
+          <Logger />
+          <Announcement />
+          <Header />
+          <MainContainer />
+        </MsalAuthenticationTemplate>
+      </MsalProvider>
     </Fragment>
   );
 };

@@ -1,39 +1,60 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-const LocalStrategy = require('passport-local').Strategy;
+import { BearerStrategy } from 'passport-azure-ad';
+
+import { ExtensionRegistration } from '../../Composer/packages/extension/src/extensionRegistration';
 
 module.exports = {
-  initialize: (composer) => {
-    console.log('Register auth plugin');
+  initialize: (composer: ExtensionRegistration) => {
+    console.log('Register adb2c auth plugin');
+    const tenantName = 'beebotaiqatb2c';
+    const clientId = 'be67666f-387f-400c-b320-3f0bbcf0b5a8';
+    const policyName = 'B2C_1_SignIn';
+    const tenantIdGuid = '6d005c65-5a1f-40c8-a0f8-8785a7ed43ee';
+    const b2cTenantName = 'beebotaiqatb2c.onmicrosoft.com';
+    const b2cTenantInstance = 'beebotaiqatb2c.b2clogin.com';
 
-    composer.usePassportStrategy(
-      new LocalStrategy((username, password, done) => {
-        if (username === 'admin' && password === 'secret') {
-          done(null, {
-            name: 'admin',
-            id: 1,
-            roles: ['a', 'b', 'c'],
-          });
-        } else {
-          done(null, false, { message: 'Incorrect password' });
-        }
-      })
-    );
+    const options = {
+      identityMetadata: `https://${b2cTenantInstance}/${b2cTenantName}/${policyName}/v2.0/.well-known/openid-configuration/`,
+      clientID: clientId,
+      audience: clientId,
+      policyName: policyName,
+      isB2C: true,
+      validateIssuer: true,
+      loggingLevel: 'error',
+      passReqToCallback: false,
+    };
 
-    // define this BEFORE turning on the middleware...
-    composer.addWebRoute('get', '/login', (req, res) => {
-      res.send(
-        'LOGIN REQUIRED <form method="post" action="/login/submit"><input name="username" placeholder="username" value="admin" /><input name="password" type="password" value="secret" /><button type="submit">Login</button></form>'
+    //<ms_docref_init_azuread_lib>
+    const bearerStrategy = new BearerStrategy(options, (token, done) => {
+      done(
+        null,
+        {
+          customer: token.extension_CustomerId,
+          isAdmin: token.extension_IsAdmin,
+          isCreator: token.extension_IsCreator,
+          name: 'EXAMPLE NAME',
+        },
+        token
       );
     });
 
-    composer.addWebRoute(
-      'post',
-      '/login/submit',
-      composer.passport.authenticate('local', { successRedirect: '/', failureRedirect: '/login' })
-    );
+    composer.usePassportStrategy(bearerStrategy);
 
-    composer.addAllowedUrl('/login/submit');
+    composer.useAuthMiddleware((req, res, next) => {
+      console.log('accessing url ' + req.url);
+      if (req.isAuthenticated()) {
+        console.log('AUTHENTICATED');
+        next?.();
+        return;
+      } else {
+        console.log('UNAUTHENTICATED');
+        if (next) {
+          next?.();
+          return;
+        }
+      }
+    });
   },
 };

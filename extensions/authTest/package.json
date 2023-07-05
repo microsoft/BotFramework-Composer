@@ -8,11 +8,14 @@
     "watch": "yarn build --watch"
   },
   "composer": {
-    "enabled": false
+    "enabled": true
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "passport-local": "1.0.0"
+    "passport-azure-ad": "4.3.5"
+  },
+  "devDependencies": {
+    "@types/node": "20.3.1"
   }
 }
