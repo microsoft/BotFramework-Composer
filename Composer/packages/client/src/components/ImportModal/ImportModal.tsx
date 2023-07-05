@@ -8,8 +8,8 @@ import { navigate, RouteComponentProps } from '@reach/router';
 import { Dialog, DialogType } from '@fluentui/react/lib/Dialog';
 import { ExternalContentProviderType } from '@botframework-composer/types';
 import { useRecoilValue } from 'recoil';
-import { axios } from '@bfc/shared/lib/axios';
 
+import httpClient from '../../utils/httpUtil';
 import { dispatcherState } from '../../recoilModel';
 import { createNotification } from '../../recoilModel/dispatchers/notification';
 import { invalidNameCharRegex } from '../../constants';
@@ -56,7 +56,7 @@ export const signIn = async (
   setModalState
 ) => {
   try {
-    await axios.post(
+    await httpClient.post(
       `/api/import/${importSource}/authenticate?payload=${encodeURIComponent(JSON.stringify(importPayload))}`
     );
     setModalState('downloadingContent');
@@ -111,12 +111,12 @@ export const ImportModal: React.FC<RouteComponentProps> = (props) => {
       setModalState('copyingContent');
       try {
         // call server to do backup and then save to existing project
-        let res = await axios.post<{ path: string }>(`/api/projects/${existingProject.id}/backup`);
+        let res = await httpClient.post<{ path: string }>(`/api/projects/${existingProject.id}/backup`);
         const { path } = res.data;
         setBackupLocation(path);
 
         const { eTag, templateDir } = importedProjectInfo;
-        res = await axios.post(
+        res = await httpClient.post(
           `/api/projects/${existingProject.id}/copyTemplateToExisting`,
           { eTag, templateDir },
           { headers: { 'Content-Type': 'application/json' } }
@@ -153,7 +153,7 @@ export const ImportModal: React.FC<RouteComponentProps> = (props) => {
           try {
             const { description, name } = importPayload;
 
-            const res = await axios.post<{ alias: string; eTag: string; templateDir: string; urlSuffix: string }>(
+            const res = await httpClient.post<{ alias: string; eTag: string; templateDir: string; urlSuffix: string }>(
               `/api/import/${importSource}?payload=${encodeURIComponent(JSON.stringify(importPayload))}`
             );
             const { alias, eTag, templateDir, urlSuffix } = res.data;
@@ -170,7 +170,7 @@ export const ImportModal: React.FC<RouteComponentProps> = (props) => {
 
             if (alias) {
               // check to see if Composer currently has a bot project corresponding to the alias
-              const aliasRes = await axios.get<any>(`/api/projects/alias/${alias}`, {
+              const aliasRes = await httpClient.get<any>(`/api/projects/alias/${alias}`, {
                 validateStatus: (status) => {
                   // a 404 should fall through
                   if (status === 404) {

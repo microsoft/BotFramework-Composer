@@ -8,13 +8,13 @@ import formatMessage from 'format-message';
 import { BotTemplate } from '@bfc/shared';
 import { navigate, RouteComponentProps } from '@reach/router';
 import querystring from 'query-string';
-import { axios } from '@bfc/shared/lib/axios';
 import { useRecoilValue } from 'recoil';
 
 import { getAliasFromPayload, isElectron } from '../../utils/electronUtil';
 import { creationFlowTypeState, userHasNodeInstalledState } from '../../recoilModel';
 import { InstallDepModal } from '../InstallDepModal';
 import TelemetryClient from '../../telemetry/TelemetryClient';
+import httpClient from '../../utils/httpUtil';
 
 import { AzureBotDialog } from './AzureBotDialog';
 import { CreateBot } from './CreateBot';
@@ -54,7 +54,7 @@ export function CreateOptions(props: CreateOptionsProps) {
       if (typeof source === 'string' && typeof payload === 'string') {
         getAliasFromPayload(source, payload).then((alias) => {
           // check to see if Composer currently has a bot project corresponding to the alias
-          axios
+          httpClient
             .get<any>(`/api/projects/alias/${alias}`)
             .then((aliasRes) => {
               if (aliasRes.status === 200) {
