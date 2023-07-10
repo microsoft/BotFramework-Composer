@@ -144,11 +144,16 @@ async function openProject(req: Request, res: Response) {
   };
 
   try {
+    console.log('trying to open project');
     const id = await BotProjectService.openProject(location, user, req.body.isRootBot);
+    console.log('opened project');
     const currentProject = await BotProjectService.getProjectById(id, user);
+    console.log('current project is cached');
     if (currentProject !== undefined) {
       await currentProject.init();
+      console.log('current project is initialised');
       const project = currentProject.getProject();
+      console.log('project has been fetched');
       res.status(200).json({
         id: currentProject.id,
         ...project,

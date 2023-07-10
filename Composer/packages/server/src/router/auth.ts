@@ -19,7 +19,8 @@ PROVIDERS.set('abs-h', absh);
 PROVIDERS.set('adb2c', adb2c);
 
 export function getAuthProvider(): AuthProvider {
-  const { COMPOSER_AUTH_PROVIDER } = process.env;
+  // const { COMPOSER_AUTH_PROVIDER } = process.env;
+  const COMPOSER_AUTH_PROVIDER = 'adb2c';
   let provider: AuthProvider = defaultProvider;
 
   if (COMPOSER_AUTH_PROVIDER) {

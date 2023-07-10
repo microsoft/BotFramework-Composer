@@ -82,17 +82,23 @@ export class BotProject implements IBotProject {
   public _builder: Builder | undefined;
 
   constructor(ref: LocationRef, user?: UserIdentity, eTag?: string) {
+    console.log('constructing bot project');
     this.ref = ref;
-    this.dir = Path.resolve(this.ref.path); // make sure we switch to posix style after here
+    console.log('ref is ' + JSON.stringify(this.ref));
+    this.dir = this.ref.path;
+    console.log('dir is ' + JSON.stringify(this.dir));
     this.dataDir = this.dir;
+    console.log('dataDir is ' + JSON.stringify(this.dataDir));
     this.name = Path.basename(this.dir);
+    console.log('name is ' + JSON.stringify(this.name));
     this.eTag = eTag;
 
     this.defaultSDKSchema = JSON.parse(fs.readFileSync(Path.join(__dirname, '../../../schemas/sdk.schema'), 'utf-8'));
     this.defaultUISchema = JSON.parse(fs.readFileSync(Path.join(__dirname, '../../../schemas/sdk.uischema'), 'utf-8'));
 
-    this.settingManager = new DefaultSettingManager(this.dir);
+    this.settingManager = new DefaultSettingManager(this.dir, user);
     this.fileStorage = StorageService.getStorageClient(this.ref.storageId, user);
+    console.log('file storage successfully created');
 
     this.readme = '';
   }
@@ -198,6 +204,7 @@ export class BotProject implements IBotProject {
   }
 
   public init = async () => {
+    console.log('initializing project');
     this.diagnostics = [];
     this.settings = await this.getEnvSettings(false);
     this.files = await this._getFiles();
@@ -442,8 +449,8 @@ export class BotProject implements IBotProject {
     if (file === undefined) {
       throw new Error(`no such file ${name}`);
     }
-    this._removeFile(file.relativePath);
-    this._cleanUp(file.relativePath);
+    await this._removeFile(file.relativePath);
+    await this._cleanUp(file.relativePath);
   };
 
   public deleteFiles = async (files) => {
@@ -721,8 +728,8 @@ export class BotProject implements IBotProject {
     const dirToDelete = Path.dirname(Path.resolve(this.dir, dialogPath));
 
     // I check that the path is longer 3 to avoid deleting a drive and all its contents.
-    if (dirToDelete.length > 3 && this.fileStorage.exists(dirToDelete)) {
-      this.fileStorage.rmrfDir(dirToDelete);
+    if (dirToDelete.length > 3 && (await this.fileStorage.exists(dirToDelete))) {
+      await this.fileStorage.rmrfDir(dirToDelete);
     }
   }
 
@@ -789,26 +796,26 @@ export class BotProject implements IBotProject {
     return await this._createFile(relativePath, content);
   };
 
-  private _cleanUp = (relativePath: string) => {
+  private _cleanUp = async (relativePath: string) => {
     const absolutePath = `${this.dir}/${relativePath}`;
     const dirPath = Path.dirname(absolutePath);
-    this._removeEmptyFolderFromBottomToUp(dirPath, this.dataDir);
+    await this._removeEmptyFolderFromBottomToUp(dirPath, this.dataDir);
   };
 
   private _removeEmptyFolderFromBottomToUp = async (folderPath: string, prefix: string) => {
     let currentFolder = folderPath;
     //make sure the folder to delete is in current project
     while (currentFolder.startsWith(prefix)) {
-      this._removeEmptyFolder(currentFolder);
+      await this._removeEmptyFolder(currentFolder);
       currentFolder = Path.dirname(currentFolder);
     }
   };
 
-  private _removeEmptyFolder = (folderPath: string) => {
-    const files = this.fileStorage.readDirSync(folderPath);
+  private _removeEmptyFolder = async (folderPath: string) => {
+    const files = await this.fileStorage.readDir(folderPath);
     if (files.length === 0) {
       try {
-        this.fileStorage.rmDirSync(folderPath);
+        await this.fileStorage.rmDir(folderPath);
       } catch (e) {
         // pass
       }
@@ -824,7 +831,7 @@ export class BotProject implements IBotProject {
     }
     this.ensureDirExists(Path.dirname(absolutePath));
     debug('Creating file: %s', absolutePath);
-    this.fileStorage.writeFileSync(absolutePath, content);
+    await this.fileStorage.writeFile(absolutePath, content);
 
     // TODO: we should get the lastModified from the writeFile operation
     // instead of calling stat again which could be expensive
@@ -871,7 +878,7 @@ export class BotProject implements IBotProject {
 
   // remove file in this project this function will guarantee the memory cache
   // (this.files, all indexes) also gets updated
-  private _removeFile = (relativePath: string) => {
+  private _removeFile = async (relativePath: string) => {
     const name = Path.basename(relativePath);
     if (!this.files.has(name)) {
       throw new Error(`no such file at ${relativePath}`);
@@ -879,22 +886,22 @@ export class BotProject implements IBotProject {
     this.files.delete(name);
 
     const absolutePath = `${this.dir}/${relativePath}`;
-    this.fileStorage.removeFileSync(absolutePath);
+    await this.fileStorage.removeFile(absolutePath);
   };
   // ensure dir exist, dir is a absolute dir path
-  private ensureDirExists = (dir: string) => {
+  private ensureDirExists = async (dir: string) => {
     if (!dir || dir === '.') {
       return;
     }
-    if (!this.fileStorage.existsSync(dir)) {
+    if (!(await this.fileStorage.exists(dir))) {
       debug('Creating directory: %s', dir);
-      this.fileStorage.mkDirSync(dir, { recursive: true });
+      await this.fileStorage.mkDir(dir, { recursive: true });
     }
   };
 
   //migrate the recognizer folder
-  private removeRecognizers = () => {
-    const paths = this.fileStorage.globSync('recognizers/cross-train.config.json', this.dataDir);
+  private removeRecognizers = async () => {
+    const paths = await this.fileStorage.glob('recognizers/cross-train.config.json', this.dataDir);
     if (paths.length) {
       this.fileStorage.rmrfDirSync(Path.join(this.dataDir, 'recognizers'));
     }
@@ -918,13 +925,13 @@ export class BotProject implements IBotProject {
       throw new Error(`${this.dir} is not a valid path`);
     }
 
-    this.removeRecognizers();
+    await this.removeRecognizers();
     const fileList = new Map<string, FileInfo>();
 
     // load only from the data dir, otherwise may get "build" versions from
     // deployment process
     const root = this.dataDir;
-    const paths = this.fileStorage.globSync(
+    const paths = await this.fileStorage.glob(
       [
         ...BotStructureFilesPatterns,
         ...PVATopicFilePatterns,
@@ -941,7 +948,7 @@ export class BotProject implements IBotProject {
 
     for (const filePath of paths.sort()) {
       const realFilePath: string = Path.join(root, filePath);
-      const fileInfo = this._getFileInfo(realFilePath);
+      const fileInfo = await this._getFileInfo(realFilePath);
       if (fileInfo) {
         if (fileList.has(fileInfo.name)) {
           throw new Error(`duplicate file found: ${fileInfo.relativePath}`);
@@ -1010,11 +1017,11 @@ export class BotProject implements IBotProject {
     // load only from the data dir, otherwise may get "build" versions from
     // deployment process
     const root = this.dataDir;
-    const paths = this.fileStorage.globSync([...patterns, '!(generated/**)', '!(runtime/**)'], root);
+    const paths = await this.fileStorage.glob([...patterns, '!(generated/**)', '!(runtime/**)'], root);
 
     for (const filePath of paths.sort()) {
       const realFilePath: string = Path.join(root, filePath);
-      const fileInfo = this._getFileInfo(realFilePath);
+      const fileInfo = await this._getFileInfo(realFilePath);
       if (fileInfo) {
         fileList.set(fileInfo.name, fileInfo);
       }
@@ -1063,10 +1070,10 @@ export class BotProject implements IBotProject {
 
     debug('Schemas directory found.');
     const schemas: FileInfo[] = [];
-    const paths = this.fileStorage.globSync('*.{uischema,schema}', schemasDir);
+    const paths = await this.fileStorage.glob('*.{uischema,schema}', schemasDir);
 
     for (const path of paths) {
-      const fileInfo = this._getFileInfo(Path.join(schemasDir, path));
+      const fileInfo = await this._getFileInfo(Path.join(schemasDir, path));
       if (fileInfo) {
         schemas.push(fileInfo);
       }
@@ -1075,10 +1082,10 @@ export class BotProject implements IBotProject {
     return schemas;
   };
 
-  private _getFileInfo = (path: string): FileInfo | undefined => {
-    const stats = this.fileStorage.statSync(path);
+  private _getFileInfo = async (path: string): Promise<FileInfo | undefined> => {
+    const stats = await this.fileStorage.stat(path);
     if (stats.isFile) {
-      const content: string = this.fileStorage.readFileSync(path);
+      const content: string = await this.fileStorage.readFile(path);
       return {
         name: Path.basename(path),
         content: content,

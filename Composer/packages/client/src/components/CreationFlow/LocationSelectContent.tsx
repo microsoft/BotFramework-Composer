@@ -52,13 +52,18 @@ export const LocationSelectContent: React.FC<LocationSelectContentProps> = (prop
   const storage = storages[currentStorageIndex.current];
   const isWindows = storage?.platform === 'win32';
   const onFileChosen = (item: File) => {
+    console.log('file chosen in LocationSelectContent');
     if (item) {
       const { type, path } = item;
       const storageId = storage.id;
       if (type === FileTypes.FOLDER) {
+        console.log('opening folder');
         onCurrentPathUpdate(path, storageId);
       } else if (type === FileTypes.BOT && creationFlowStatus === CreationFlowStatus.OPEN) {
+        console.log('opening bot');
         onOpen?.(path, storageId);
+      } else {
+        console.log('neither bot not folder');
       }
     }
   };

@@ -20,8 +20,10 @@ class StorageService {
   private storageConnections: StorageConnection[] = [];
 
   constructor() {
+    console.log('in constructor');
     this.storageConnections = Store.get(this.STORE_KEY, []);
-    this.ensureDefaultBotFoldersExist();
+    console.log('finished constructor');
+    // this.ensureDefaultBotFoldersExist();
   }
 
   public getStorageClient = (storageId: string, user?: UserIdentity): IFileStorage => {
@@ -42,7 +44,7 @@ class StorageService {
     }
   };
 
-  public getStorageConnections = (): StorageConnection[] => {
+  public getStorageConnections = (user?: UserIdentity): StorageConnection[] => {
     const connections = this.storageConnections.map((s) => {
       const temp = Object.assign({}, s);
       // if the last accessed path exist
@@ -53,11 +55,12 @@ class StorageService {
       }
       return temp;
     });
-    this.ensureDefaultBotFoldersExist();
+    this.ensureDefaultBotFoldersExist(user);
     return connections;
   };
 
   public checkBlob = async (storageId: string, filePath: string, user?: UserIdentity): Promise<boolean> => {
+    console.log('checking blob at ' + filePath + ' for user ' + JSON.stringify(user));
     const storageClient = this.getStorageClient(storageId, user);
     return await storageClient.exists(filePath);
   };
@@ -72,6 +75,7 @@ class StorageService {
   // return children for dir
   public getBlob = async (storageId: string, filePath: string, user?: UserIdentity) => {
     if (filePath === '/' && settings.platform === 'win32') {
+      console.log('in the shortcut');
       return {
         name: '',
         parent: '/',
@@ -105,44 +109,53 @@ class StorageService {
   };
 
   public updateCurrentPath = (path: string, storageId: string) => {
+    console.log('updating path to ' + path);
     //A path in windows should never start with \, but the fs.existsSync() return true
     if (path?.startsWith('\\') && settings.platform === 'win32') {
+      console.log('path starts with backslash, cancelling');
       return this.storageConnections;
     }
     if (path?.endsWith(':')) {
       path = path + '/';
     }
-    if (Path.isAbsolute(path) && fs.existsSync(path) && fs.statSync(path).isDirectory()) {
-      const storage = this.storageConnections.find((s) => s.id === storageId);
-      if (storage) {
-        storage.path = path;
-        Store.set(this.STORE_KEY, this.storageConnections);
-      }
+    const storage = this.storageConnections.find((s) => s.id === storageId);
+    if (storage) {
+      storage.path = path;
+      Store.set(this.STORE_KEY, this.storageConnections);
     }
     return this.storageConnections;
   };
 
-  public validatePath = (path: string) => {
-    if (!fs.existsSync(path)) {
+  public validatePath = async (storageId: string, path: string, user?: UserIdentity) => {
+    const storageClient = this.getStorageClient(storageId, user);
+    if (!(await storageClient.exists(path))) {
       return 'The path does not exist';
-    } else if (!fs.statSync(path).isDirectory()) {
+    } else if (!(await storageClient.stat(path)).isDir) {
       return 'This is not a directory';
     } else {
       return '';
     }
   };
 
-  public createFolder = (path: string) => {
-    if (!fs.existsSync(path)) {
-      fs.mkdirSync(path);
+  public createFolder = (storageId: string, path: string, user?: UserIdentity) => {
+    const storageClient = this.getStorageClient(storageId, user);
+    if (!storageClient.existsSync(path)) {
+      storageClient.mkDirSync(path);
     }
   };
 
-  public updateFolder = (path: string, oldName: string, newName: string) => {
+  public updateFolder = async (
+    storageId: string,
+    path: string,
+    oldName: string,
+    newName: string,
+    user?: UserIdentity
+  ) => {
     const currentPath = Path.join(path, oldName);
     const newPath = Path.join(path, newName);
-    if (fs.existsSync(currentPath)) {
-      fs.renameSync(currentPath, newPath);
+    const storageClient = this.getStorageClient(storageId, user);
+    if (storageClient.existsSync(currentPath)) {
+      await storageClient.rename(currentPath, newPath);
     } else {
       throw new Error(`The folder ${currentPath} does not exist`);
     }
@@ -153,9 +166,10 @@ class StorageService {
     return await this.isBotFolder(storageClient, path);
   };
 
-  private ensureDefaultBotFoldersExist = () => {
+  private ensureDefaultBotFoldersExist = (user?: UserIdentity) => {
     this.storageConnections.forEach((s) => {
-      this.createFolderRecursively(s.defaultPath);
+      const client = StorageFactory.createStorageClient(s, user);
+      this.createFolderRecursively(s.defaultPath, client);
     });
   };
 
@@ -172,8 +186,10 @@ class StorageService {
 
   private getChildren = async (storage: IFileStorage, dirPath: string) => {
     // TODO: filter files, folder which have no read and write
+    console.log('getting children');
     const children = (
       await (await storage.readDir(dirPath)).filter((childName) => {
+        console.log('found child ' + childName);
         const regex = /^[.$]/;
         return !regex.test(childName);
       })
@@ -203,10 +219,10 @@ class StorageService {
     return result.filter((item) => !!item);
   };
 
-  private createFolderRecursively = (path: string) => {
-    if (!fs.existsSync(path)) {
-      this.createFolderRecursively(Path.dirname(path));
-      fs.mkdirSync(path);
+  private createFolderRecursively = (path: string, conn: IFileStorage) => {
+    if (!conn.existsSync(path)) {
+      this.createFolderRecursively(Path.dirname(path), conn);
+      conn.mkDirSync(path);
     }
   };
 }

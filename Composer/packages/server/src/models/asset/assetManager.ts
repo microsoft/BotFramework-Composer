@@ -6,7 +6,7 @@ import path from 'path';
 
 import find from 'lodash/find';
 import { UserIdentity, FileExtensions, RuntimeType } from '@bfc/extension';
-import { mkdirSync, readFile } from 'fs-extra';
+import { readFile } from 'fs-extra';
 import { BotTemplate, emptyBotNpmTemplateName, FeedName, QnABotTemplateId, firstPartyTemplateFeed } from '@bfc/shared';
 import { ServerWorker } from '@bfc/server-workers';
 import isArray from 'lodash/isArray';
@@ -113,6 +113,7 @@ export class AssetManager {
     user?: UserIdentity,
     isLocalGenerator?: boolean
   ): Promise<LocationRef> {
+    console.log('copying remote project template to V2');
     try {
       // user storage maybe diff from template storage
       const dstStorage = StorageService.getStorageClient(ref.storageId, user);
@@ -123,7 +124,7 @@ export class AssetManager {
       }
 
       log('About to create folder', dstDir);
-      mkdirSync(dstDir, { recursive: true });
+      dstStorage.mkDirSync(dstDir, { recursive: true });
 
       const npmPackageName = templateId === QnABotTemplateId ? emptyBotNpmTemplateName : templateId;
 
