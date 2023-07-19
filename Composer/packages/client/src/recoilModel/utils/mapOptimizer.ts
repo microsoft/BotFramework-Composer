@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 interface MapOptimizerTree<Key> {
   timestamp: number;
   references: Key[];
@@ -11,7 +14,7 @@ export class MapOptimizer<Key, Value> {
   public tree = new Map<Key, MapOptimizerTree<Key>>();
   private skipOptimize = new Set<Key>();
 
-  opUpdateCallback?: (key: Key, value: Value, ctx: OnUpdateMapOptimizerContext<Key>) => void;
+  onUpdateCallback?: (key: Key, value: Value, ctx: OnUpdateMapOptimizerContext<Key>) => void;
   onDeleteCallback?: (key: Key, value: Value) => void;
 
   constructor(private capacity: number, public list: Map<Key, Value>) {
@@ -19,7 +22,7 @@ export class MapOptimizer<Key, Value> {
   }
 
   onUpdate(callback: (key: Key, value: Value, ctx: OnUpdateMapOptimizerContext<Key>) => void) {
-    this.opUpdateCallback = callback;
+    this.onUpdateCallback = callback;
   }
 
   onDelete(callback: (key: Key, value: Value) => void) {
@@ -40,7 +43,7 @@ export class MapOptimizer<Key, Value> {
   private optimize(keyToAdd: Key, valueToAdd: Value) {
     const exists = this.tree.has(keyToAdd);
     const context: MapOptimizerTree<Key> = { timestamp: Date.now(), references: [] };
-    this.opUpdateCallback?.(keyToAdd, valueToAdd, {
+    this.onUpdateCallback?.(keyToAdd, valueToAdd, {
       setReferences: (references) => (context.references = references || []),
     });
     this.tree.set(keyToAdd, context);

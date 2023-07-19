@@ -45,12 +45,9 @@ class LgWorker extends BaseWorker<LgActionType> {
     }
   }
 
-  async flush(): Promise<boolean> {
-    return new Promise(async (resolve) => {
-      this.listeners.clear();
-      const result = await super.flush();
-      resolve(result);
-    });
+  flush(): Promise<boolean> {
+    this.listeners.clear();
+    return super.flush();
   }
 
   addProject(projectId: string) {

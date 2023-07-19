@@ -45,10 +45,10 @@ export const App: React.FC = () => {
   }, [appLocale]);
 
   useEffect(() => {
-    lgWorker.listen(LgEventType.OnUpdateLgFile, msg => {
+    lgWorker.listen(LgEventType.OnUpdateLgFile, (msg) => {
       const { projectId, payload } = msg.data;
       updateFile({ projectId, value: payload });
-    })
+    });
   });
 
   useEffect(() => {
