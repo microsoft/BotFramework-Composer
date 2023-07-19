@@ -2,17 +2,19 @@
 // Licensed under the MIT License.
 
 import React, { Fragment, useEffect, useState } from 'react';
-import { useRecoilValue } from 'recoil';
+import { useRecoilValue, useRecoilCallback, CallbackInterface } from 'recoil';
 
 import { Header } from './components/Header';
 import { Announcement } from './components/AppComponents/Announcement';
 import { MainContainer } from './components/AppComponents/MainContainer';
-import { dispatcherState, userSettingsState } from './recoilModel';
+import { dispatcherState, userSettingsState, lgFileState } from './recoilModel';
 import { loadLocale } from './utils/fileUtil';
 import { useInitializeLogger } from './telemetry/useInitializeLogger';
 import { setupIcons } from './setupIcons';
 import { setOneAuthEnabled } from './utils/oneAuthUtil';
 import { LoadingSpinner } from './components/LoadingSpinner';
+import lgWorker from './recoilModel/parsers/lgWorker';
+import { LgEventType } from './recoilModel/parsers/types';
 
 setupIcons();
 
@@ -34,10 +36,20 @@ export const App: React.FC = () => {
     performAppCleanupOnQuit,
     setMachineInfo,
   } = useRecoilValue(dispatcherState);
+  const updateFile = useRecoilCallback((callbackHelpers: CallbackInterface) => async ({ projectId, value }) => {
+    callbackHelpers.set(lgFileState({ projectId, lgFileId: value.id }), value);
+  });
 
   useEffect(() => {
     loadLocale(appLocale);
   }, [appLocale]);
+
+  useEffect(() => {
+    lgWorker.listen(LgEventType.OnUpdateLgFile, msg => {
+      const { projectId, payload } = msg.data;
+      updateFile({ projectId, value: payload });
+    })
+  });
 
   useEffect(() => {
     checkNodeVersion();
