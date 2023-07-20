@@ -41,7 +41,10 @@ export const publish = async (
   try {
     logger.log('Starting publish to Power Virtual Agents.');
     // authenticate with PVA
-    const base = baseUrl || getBaseUrl();
+    const base = baseUrl;
+    if (!base) {
+      throw new Error('Base URL is not supplied in published target');
+    }
     const creds = getAuthCredentials(base, tenantId);
     const accessToken = await getAccessToken(creds);
 
@@ -161,7 +164,10 @@ export const getStatus = async (
 
   try {
     // authenticate with PVA
-    const base = baseUrl || getBaseUrl();
+    const base = baseUrl;
+    if (!base) {
+      throw new Error('Base URL is not supplied in published target');
+    }
     const creds = getAuthCredentials(base, tenantId);
     const accessToken = await getAccessToken(creds);
 
