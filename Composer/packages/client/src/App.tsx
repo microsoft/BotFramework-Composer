@@ -15,6 +15,7 @@ import { setOneAuthEnabled } from './utils/oneAuthUtil';
 import { LoadingSpinner } from './components/LoadingSpinner';
 import lgWorker from './recoilModel/parsers/lgWorker';
 import { LgEventType } from './recoilModel/parsers/types';
+import { useMount, useUnmount } from '@fluentui/react-hooks';
 
 setupIcons();
 
@@ -28,6 +29,7 @@ export const App: React.FC = () => {
   const { appLocale } = useRecoilValue(userSettingsState);
 
   const [isClosing, setIsClosing] = useState(false);
+  const [listener, setListener] = useState<{ destroy(): boolean }>({} as any);
 
   const {
     fetchExtensions,
@@ -40,16 +42,19 @@ export const App: React.FC = () => {
     callbackHelpers.set(lgFileState({ projectId, lgFileId: value.id }), value);
   });
 
-  useEffect(() => {
-    loadLocale(appLocale);
-  }, [appLocale]);
-
-  useEffect(() => {
-    lgWorker.listen(LgEventType.OnUpdateLgFile, (msg) => {
+  useMount(() => {
+    const listener = lgWorker.listen(LgEventType.OnUpdateLgFile, (msg) => {
       const { projectId, payload } = msg.data;
       updateFile({ projectId, value: payload });
     });
+    setListener(listener);
   });
+
+  useUnmount(() => listener.destroy());
+
+  useEffect(() => {
+    loadLocale(appLocale);
+  }, [appLocale]);
 
   useEffect(() => {
     checkNodeVersion();

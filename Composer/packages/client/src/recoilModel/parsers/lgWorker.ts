@@ -43,6 +43,10 @@ class LgWorker extends BaseWorker<LgActionType> {
     } else {
       this.listeners.set(action, [callback]);
     }
+
+    return {
+      destroy: () => this.listeners.delete(action),
+    };
   }
 
   flush(): Promise<boolean> {
