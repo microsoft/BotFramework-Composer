@@ -14,7 +14,7 @@ interface MapOptimizerTree<Key> {
  */
 interface OnUpdateMapOptimizerContext<Key> {
   /**
-   * Sets the related Map keys references of an element, these references are take into account on the delete event.
+   * Sets the related Map keys references of an element, these references are taken into account on the delete event.
    * @param references The Map keys of a related element.
    */
   setReferences(references: Key[]): void;
