@@ -22,6 +22,19 @@ export const PVA_GOV_APP_ID = '9315aedd-209b-43b3-b149-2abff6a95d59';
 export const PVA_GCC_HIGH_APP_ID = '69c6e40c-465f-4154-987d-da5cba10734e';
 
 export type PowerVirtualAgentsMetadata = IContentProviderMetadata & {
+  clusterCategory:
+    | 'Dev'
+    | 'Prv'
+    | 'Test'
+    | 'Preprod'
+    | 'FirstRelease'
+    | 'Prod'
+    | 'Gov'
+    | 'High'
+    | 'DoD'
+    | 'Mooncake'
+    | 'Ex'
+    | 'Rx';
   baseUrl: string;
   botId: string;
   dialogId?: string;
@@ -32,22 +45,29 @@ export type PowerVirtualAgentsMetadata = IContentProviderMetadata & {
 };
 
 const getAuthCredentials = (baseUrl: string, metadata: PowerVirtualAgentsMetadata) => {
+  const clusterCategory =
+    (process.env.COMPOSER_PVA_CLUSTER as typeof metadata.clusterCategory) ?? metadata.clusterCategory;
   const url = new URL(baseUrl);
-  if (url.hostname.includes('.int.') || url.hostname.includes('.ppe.')) {
+  if (
+    ['Test', 'Preprod', 'Dev'].includes(clusterCategory) ||
+    url.hostname.includes('.int.') ||
+    url.hostname.includes('.ppe.') ||
+    url.hostname.includes('.test.')
+  ) {
     log('Using INT / PPE auth credentials.');
     return {
       clientId: COMPOSER_1P_APP_ID,
       scopes: [`${PVA_TEST_APP_ID}/.default`],
       targetResource: PVA_TEST_APP_ID,
     };
-  } else if (url.hostname.includes('gcc.api.powerva.microsoft.us')) {
+  } else if (['Gov'].includes(clusterCategory) && url.hostname.includes('gcc.api.powerva.microsoft.us')) {
     log('Using GCC auth credentials.');
     return {
       clientId: COMPOSER_1P_APP_ID,
       scopes: [`${PVA_GOV_APP_ID}/.default`],
       targetResource: PVA_GOV_APP_ID,
     };
-  } else if (url.hostname.includes('high.api.powerva.microsoft.us')) {
+  } else if (['High'].includes(clusterCategory) || url.hostname.includes('high.api.powerva.microsoft.us')) {
     log('Using GCC High auth credentials.');
     return {
       authority: `https://login.microsoftonline.us/${metadata.tenantId}`,
@@ -56,53 +76,12 @@ const getAuthCredentials = (baseUrl: string, metadata: PowerVirtualAgentsMetadat
       targetResource: PVA_GCC_HIGH_APP_ID,
     };
   }
-  log('Using PROD auth credentials.');
+  log(`Using PROD auth credentials.\nCategory: ${clusterCategory}\nURL: ${baseUrl}`);
   return {
     clientId: COMPOSER_1P_APP_ID,
     scopes: [`${PVA_PROD_APP_ID}/.default`],
     targetResource: PVA_PROD_APP_ID,
   };
-};
-
-const getBaseUrl = () => {
-  const pvaEnv = (process.env.COMPOSER_PVA_ENV || '').toLowerCase();
-  switch (pvaEnv) {
-    case 'prod': {
-      const url = 'https://powerva.microsoft.com/api/botmanagement/v1';
-      log('PROD env detected, grabbing PVA content from %s', url);
-      return url;
-    }
-
-    case 'ppe': {
-      const url = 'https://bots.ppe.customercareintelligence.net/api/botmanagement/v1';
-      log('PPE env detected, grabbing PVA content from %s', url);
-      return url;
-    }
-
-    case 'int': {
-      const url = 'https://bots.int.customercareintelligence.net/api/botmanagement/v1';
-      log('INT env detected, grabbing PVA content from %s', url);
-      return url;
-    }
-
-    case 'gcc': {
-      const url = 'https://gcc.api.powerva.microsoft.us/api/botmanagement/v1';
-      log('GCC env detected, grabbing PVA content from %s', url);
-      return url;
-    }
-
-    case 'gcc-high': {
-      const url = 'https://high.api.powerva.microsoft.us/api/botmanagement/v1';
-      log('GCC High env detected, grabbing PVA content from %s', url);
-      return url;
-    }
-
-    default: {
-      const url = 'https://bots.int.customercareintelligence.net/api/botmanagement/v1';
-      log('No env flag detected, grabbing PVA content from %s', url);
-      return url;
-    }
-  }
 };
 
 function prettyPrintError(err: string | Error): string {
@@ -177,7 +156,7 @@ export class PowerVirtualAgentsProvider extends ExternalContentProvider<PowerVir
     try {
       // login to the 1P app and get an access token
       const { baseUrl } = this.metadata;
-      const authCredentials = getAuthCredentials(baseUrl || getBaseUrl(), this.metadata);
+      const authCredentials = getAuthCredentials(baseUrl, this.metadata);
       const accessToken = await authService.getAccessToken(authCredentials);
       if (accessToken === '') {
         throw 'User cancelled login flow.';
@@ -190,7 +169,7 @@ export class PowerVirtualAgentsProvider extends ExternalContentProvider<PowerVir
 
   private getContentUrl(): string {
     const { envId, baseUrl, botId } = this.metadata;
-    return `${baseUrl || getBaseUrl()}/environments/${envId}/bots/${botId}/composer/content?includeTopics=true`;
+    return `${baseUrl}/environments/${envId}/bots/${botId}/composer/content?includeTopics=true`;
   }
 
   private async getRequestHeaders() {
