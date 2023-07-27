@@ -3,6 +3,7 @@
 
 import React, { Fragment, useEffect, useState } from 'react';
 import { useRecoilValue, useRecoilCallback, CallbackInterface } from 'recoil';
+import { useMount, useUnmount } from '@fluentui/react-hooks';
 
 import { Header } from './components/Header';
 import { Announcement } from './components/AppComponents/Announcement';
@@ -15,7 +16,6 @@ import { setOneAuthEnabled } from './utils/oneAuthUtil';
 import { LoadingSpinner } from './components/LoadingSpinner';
 import lgWorker from './recoilModel/parsers/lgWorker';
 import { LgEventType } from './recoilModel/parsers/types';
-import { useMount, useUnmount } from '@fluentui/react-hooks';
 
 setupIcons();
 
