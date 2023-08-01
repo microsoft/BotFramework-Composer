@@ -11,7 +11,7 @@ import { RequestInit } from 'node-fetch';
 
 import fetch from './fetch';
 import { PVAPublishJob, PublishConfig, UserIdentity, PublishState, PublishHistory, PullResponse } from './types';
-import { getAuthCredentials, getBaseUrl } from './utils';
+import { getAuthCredentials } from './utils';
 import { logger } from './logger';
 import { API_VERSION } from './constants';
 
@@ -228,7 +228,7 @@ export const history = async (
 
   try {
     // authenticate with PVA
-    const base = baseUrl || getBaseUrl();
+    const base = baseUrl;
     const creds = getAuthCredentials(base, tenantId);
     const accessToken = await getAccessToken(creds);
 
@@ -262,7 +262,7 @@ export const pull = async (
   } = config;
   try {
     // authenticate with PVA
-    const base = baseUrl || getBaseUrl();
+    const base = baseUrl;
     const creds = getAuthCredentials(base, tenantId);
     const accessToken = await getAccessToken(creds);
 

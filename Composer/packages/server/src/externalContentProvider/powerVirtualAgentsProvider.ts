@@ -60,7 +60,7 @@ const getAuthCredentials = (baseUrl: string, metadata: PowerVirtualAgentsMetadat
       scopes: [`${PVA_TEST_APP_ID}/.default`],
       targetResource: PVA_TEST_APP_ID,
     };
-  } else if (['Gov'].includes(clusterCategory) && url.hostname.includes('gcc.api.powerva.microsoft.us')) {
+  } else if (['Gov'].includes(clusterCategory) || url.hostname.includes('gcc.api.powerva.microsoft.us')) {
     log('Using GCC auth credentials.');
     return {
       clientId: COMPOSER_1P_APP_ID,
@@ -185,7 +185,7 @@ export class PowerVirtualAgentsProvider extends ExternalContentProvider<PowerVir
   private getDeepLink(): string {
     // use metadata (if provided) to create a deep link to a specific dialog / trigger / action etc. after opening bot.
     let deepLink = '';
-    const { dialogId, triggerId, actionId = '' } = this.metadata;
+    const { dialogId, triggerId, actionId = '', clusterCategory } = this.metadata;
 
     if (dialogId) {
       deepLink += `dialogs/${dialogId}`;
@@ -197,6 +197,9 @@ export class PowerVirtualAgentsProvider extends ExternalContentProvider<PowerVir
       deepLink += `&focused=triggers[${encodeURIComponent(`"${triggerId}"`)}].actions[${encodeURIComponent(
         `"${actionId}"`
       )}]`;
+    }
+    if (clusterCategory) {
+      deepLink += dialogId && triggerId ? '&' : '?' + `cluster=${clusterCategory}`;
     }
     // base64 encode to make parsing on the client side easier
     return Buffer.from(deepLink, 'utf-8').toString('base64');
