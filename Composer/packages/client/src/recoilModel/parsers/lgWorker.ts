@@ -6,6 +6,7 @@ import Worker from './workers/lgParser.worker.ts';
 import { BaseWorker } from './baseWorker';
 import {
   LgActionType,
+  LgEventType,
   LgParsePayload,
   LgUpdateTemplatePayload,
   LgCreateTemplatePayload,
@@ -20,6 +21,39 @@ import {
 
 // Wrapper class
 class LgWorker extends BaseWorker<LgActionType> {
+  private listeners = new Map<LgEventType, ((msg: MessageEvent) => void)[]>();
+
+  constructor(worker: Worker) {
+    super(worker);
+
+    worker.onmessage = (msg) => {
+      const { type } = msg.data;
+
+      if (type === LgEventType.OnUpdateLgFile) {
+        this.listeners.get(type)?.forEach((cb) => cb(msg));
+      } else {
+        this.handleMsg(msg);
+      }
+    };
+  }
+
+  listen(action: LgEventType, callback: (msg: MessageEvent) => void) {
+    if (this.listeners.has(action)) {
+      this.listeners.get(action)!.push(callback);
+    } else {
+      this.listeners.set(action, [callback]);
+    }
+
+    return {
+      destroy: () => this.listeners.delete(action),
+    };
+  }
+
+  flush(): Promise<boolean> {
+    this.listeners.clear();
+    return super.flush();
+  }
+
   addProject(projectId: string) {
     return this.sendMsg<LgNewCachePayload>(LgActionType.NewCache, { projectId });
   }
