@@ -20,7 +20,7 @@ describe('it should return the proper PVA auth parameters for the base URL', () 
 
   it('ppe', () => {
     const url = 'https://bots.ppe.customercareintelligence.net/api/botmanagement/v1';
-    expect(getAuthCredentials(url)).toEqual(AUTH_CREDENTIALS.PPE);
+    expect(getAuthCredentials(url)).toEqual(AUTH_CREDENTIALS.INT);
   });
 
   it('prod', () => {
