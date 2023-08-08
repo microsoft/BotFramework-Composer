@@ -14,10 +14,12 @@ import { ClusterCategory } from './types';
 export const getAuthCredentials = (baseUrl = '', tenantId?: string, clusterCategory?: ClusterCategory) => {
   const host = new URL(baseUrl).host;
   clusterCategory = (process.env.COMPOSER_PVA_CLUSTER as ClusterCategory) ?? clusterCategory;
-  if (['Test', 'Preprod', 'Dev'].includes(clusterCategory) || host === 'bots.int.customercareintelligence.net') {
-    logger.log('Using INT / PPE auth credentials.');
-    return AUTH_CREDENTIALS.INT;
-  } else if (host === 'bots.ppe.customercareintelligence.net') {
+  if (
+    ['Test', 'Preprod', 'Dev'].includes(clusterCategory) ||
+    host.includes('.int.') ||
+    host.includes('.ppe.') ||
+    host.includes('.test.')
+  ) {
     logger.log('Using INT / PPE auth credentials.');
     return AUTH_CREDENTIALS.INT;
   } else if (['Gov'].includes(clusterCategory) || host === 'gcc.api.powerva.microsoft.us') {

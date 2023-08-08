@@ -22,7 +22,7 @@ export const PVA_GOV_APP_ID = '9315aedd-209b-43b3-b149-2abff6a95d59';
 export const PVA_GCC_HIGH_APP_ID = '69c6e40c-465f-4154-987d-da5cba10734e';
 
 export type PowerVirtualAgentsMetadata = IContentProviderMetadata & {
-  clusterCategory:
+  clusterCategory?:
     | 'Dev'
     | 'Prv'
     | 'Test'
@@ -199,7 +199,7 @@ export class PowerVirtualAgentsProvider extends ExternalContentProvider<PowerVir
       )}]`;
     }
     if (clusterCategory) {
-      deepLink += dialogId && triggerId ? '&' : '?' + `cluster=${clusterCategory}`;
+      deepLink += deepLink.includes('?') ? '&' : '?' + `cluster=${clusterCategory}`;
     }
     // base64 encode to make parsing on the client side easier
     return Buffer.from(deepLink, 'utf-8').toString('base64');

@@ -35,6 +35,7 @@ export const publish = async (
     envId,
     tenantId,
     deleteMissingDependencies = false, // publish behavior
+    clusterCategory,
   } = config;
   const { comment = '' } = metadata;
 
@@ -45,7 +46,7 @@ export const publish = async (
     if (!base) {
       throw new Error('Base URL is not supplied in published target');
     }
-    const creds = getAuthCredentials(base, tenantId);
+    const creds = getAuthCredentials(base, tenantId, clusterCategory);
     const accessToken = await getAccessToken(creds);
 
     // write the .zip to a buffer in memory
@@ -148,6 +149,7 @@ export const getStatus = async (
     botId,
     envId,
     tenantId,
+    clusterCategory,
   } = config;
   const botProjectId = project.id || '';
 
@@ -168,7 +170,7 @@ export const getStatus = async (
     if (!base) {
       throw new Error('Base URL is not supplied in published target');
     }
-    const creds = getAuthCredentials(base, tenantId);
+    const creds = getAuthCredentials(base, tenantId, clusterCategory);
     const accessToken = await getAccessToken(creds);
 
     // check the status for the publish job
@@ -224,12 +226,13 @@ export const history = async (
     botId,
     envId,
     tenantId,
+    clusterCategory,
   } = config;
 
   try {
     // authenticate with PVA
     const base = baseUrl;
-    const creds = getAuthCredentials(base, tenantId);
+    const creds = getAuthCredentials(base, tenantId, clusterCategory);
     const accessToken = await getAccessToken(creds);
 
     // get the publish history for the bot
@@ -259,11 +262,12 @@ export const pull = async (
     botId,
     envId,
     tenantId,
+    clusterCategory,
   } = config;
   try {
     // authenticate with PVA
     const base = baseUrl;
-    const creds = getAuthCredentials(base, tenantId);
+    const creds = getAuthCredentials(base, tenantId, clusterCategory);
     const accessToken = await getAccessToken(creds);
 
     // fetch zip containing bot content
