@@ -49,7 +49,7 @@ const getAuthCredentials = (baseUrl: string, metadata: PowerVirtualAgentsMetadat
     (process.env.COMPOSER_PVA_CLUSTER as typeof metadata.clusterCategory) ?? metadata.clusterCategory;
   const url = new URL(baseUrl);
   if (
-    ['Test', 'Preprod', 'Dev'].includes(clusterCategory) ||
+    (clusterCategory && ['Test', 'Preprod', 'Dev'].includes(clusterCategory)) ||
     url.hostname.includes('.int.') ||
     url.hostname.includes('.ppe.') ||
     url.hostname.includes('.test.')
@@ -60,14 +60,20 @@ const getAuthCredentials = (baseUrl: string, metadata: PowerVirtualAgentsMetadat
       scopes: [`${PVA_TEST_APP_ID}/.default`],
       targetResource: PVA_TEST_APP_ID,
     };
-  } else if (['Gov'].includes(clusterCategory) || url.hostname.includes('gcc.api.powerva.microsoft.us')) {
+  } else if (
+    (clusterCategory && ['Gov'].includes(clusterCategory)) ||
+    url.hostname.includes('gcc.api.powerva.microsoft.us')
+  ) {
     log('Using GCC auth credentials.');
     return {
       clientId: COMPOSER_1P_APP_ID,
       scopes: [`${PVA_GOV_APP_ID}/.default`],
       targetResource: PVA_GOV_APP_ID,
     };
-  } else if (['High'].includes(clusterCategory) || url.hostname.includes('high.api.powerva.microsoft.us')) {
+  } else if (
+    (clusterCategory && ['High'].includes(clusterCategory)) ||
+    url.hostname.includes('high.api.powerva.microsoft.us')
+  ) {
     log('Using GCC High auth credentials.');
     return {
       authority: `https://login.microsoftonline.us/${metadata.tenantId}`,
