@@ -211,7 +211,7 @@ export class SettingDiagnostic extends DiagnosticInfo {
     super(rootProjectId, projectId, id, location, diagnostic);
     this.message = `${replaceDialogDiagnosticLabel(diagnostic.path)} ${diagnostic.message}`;
     this.dialogPath = diagnostic.path;
-    this.friendlyLocationBreadcrumbItems = ['Settings'];
+    this.friendlyLocationBreadcrumbItems = ['Configure'];
   }
   getUrl = (hash?: string) => {
     return createBotSettingUrl(this.rootProjectId, this.projectId, hash);

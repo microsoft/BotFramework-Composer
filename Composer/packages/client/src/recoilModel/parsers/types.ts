@@ -156,6 +156,10 @@ export enum LgActionType {
   ParseAll = 'parse-all',
 }
 
+export enum LgEventType {
+  OnUpdateLgFile = 'on-update-lgfile',
+}
+
 export enum IndexerActionType {
   Index = 'index',
 }

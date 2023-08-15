@@ -373,7 +373,7 @@ const DiagnosticIcons = (props: {
         {errors.map((item) => {
           let linkText = item.source;
           if (item.source === 'appsettings.json') {
-            linkText = 'Fix in bot settings';
+            linkText = 'Fix in Configure your bot';
           }
           return (
             <div key={item.message} css={diagnosticLink}>
