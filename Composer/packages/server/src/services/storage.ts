@@ -1,8 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import * as fs from 'fs';
-
 import { UserIdentity } from '@bfc/extension';
 
 import { Path } from '../utility/path';
@@ -20,9 +18,9 @@ class StorageService {
   private storageConnections: StorageConnection[] = [];
 
   constructor() {
-    console.log('in constructor');
+    console.log('in storage constructor');
     this.storageConnections = Store.get(this.STORE_KEY, []);
-    console.log('finished constructor');
+    console.log('finished storage constructor. connections are ' + JSON.stringify(this.storageConnections));
     // this.ensureDefaultBotFoldersExist();
   }
 
@@ -46,12 +44,13 @@ class StorageService {
 
   public getStorageConnections = (user?: UserIdentity): StorageConnection[] => {
     const connections = this.storageConnections.map((s) => {
+      const storageClient = StorageFactory.createStorageClient(s, user);
       const temp = Object.assign({}, s);
       // if the last accessed path exist
-      if (fs.existsSync(s.path)) {
-        temp.path = Path.resolve(s.path); // resolve path if path is relative, and change it to unix pattern
+      if (storageClient.existsSync(s.path)) {
+        temp.path = s.path; // resolve path if path is relative, and change it to unix pattern
       } else {
-        temp.path = Path.resolve(s.defaultPath);
+        temp.path = s.defaultPath;
       }
       return temp;
     });

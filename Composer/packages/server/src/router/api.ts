@@ -23,12 +23,14 @@ import OrchestratorController from '../controllers/orchestrator';
 
 import { UtilitiesController } from './../controllers/utilities';
 
-const router: Router = express.Router({});
+const unprotectedRouterConfig: Router = express.Router({});
 
 // Routes bellow are NOT CSRF protected
 // Place only routes loaded by browser script tags and navigation
-router.get('/extensions/settings/schema.json', ExtensionsController.getSettingsSchema);
-router.get('/extensions/:id/:bundleId', ExtensionsController.getBundleForView);
+unprotectedRouterConfig.get('/settings/schema.json', ExtensionsController.getSettingsSchema);
+unprotectedRouterConfig.get('/:id/:bundleId', ExtensionsController.getBundleForView);
+
+const router: Router = express.Router({});
 
 router.use(csrfProtection);
 
@@ -167,3 +169,4 @@ const errorHandler = (handler: RequestHandler) => (req: Request, res: Response, 
 });
 
 export const apiRouter = router;
+export const unprotectedRouter = unprotectedRouterConfig;

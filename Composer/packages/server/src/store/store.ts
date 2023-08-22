@@ -28,6 +28,7 @@ export class JsonStore<T = any> {
   private filePath: string;
 
   constructor(jsonFilePath: string, initialValue: T) {
+    console.log('initializing store with data ' + JSON.stringify(initialValue) + ' at location ' + jsonFilePath);
     this.filePath = path.resolve(jsonFilePath);
     this.data = initialValue;
     this.ensureStore();

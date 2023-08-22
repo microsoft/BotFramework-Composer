@@ -31,7 +31,7 @@ export const PublishController = {
         .filter((extension) => extension.plugin.name !== defaultPublishConfig.type)
         .map((extension) => {
           const { plugin, methods } = extension;
-
+          console.log(JSON.stringify(plugin));
           return {
             name: plugin.name,
             description: plugin.description,
@@ -53,18 +53,23 @@ export const PublishController = {
     );
   },
   publish: async (req, res) => {
+    console.log('publish hit');
     const target: string = req.params.target;
     const user = await ExtensionContext.getUserFromRequest(req);
+    console.log('user is ' + JSON.stringify(user));
     const { accessToken = '', metadata, sensitiveSettings, publishTarget } = req.body;
     const projectId: string = req.params.projectId;
     currentPublishTarget = publishTarget;
     const currentProject = await BotProjectService.getProjectById(projectId, user);
+    console.log('got project');
 
     // deal with publishTargets not exist in settings
     const publishTargets = currentProject.settings?.publishTargets || [];
     const allTargets = [defaultPublishConfig, ...publishTargets];
 
     const profiles = allTargets.filter((t) => t.name === target);
+
+    console.log('got profiles ' + JSON.stringify(profiles));
     let profile: PublishTarget = profiles[0];
     if (!profile) {
       profile = publishTarget;

@@ -241,17 +241,21 @@ export class ExtensionManagerImp {
    * @param bundleId The id of the desired extension's bundle
    */
   public getBundle(id: string, bundleId: string): string | null {
+    console.log('getting bundle for ' + id + ' with bundleId ' + bundleId);
     const info = this.find(id);
 
+    console.log('found info ' + JSON.stringify(info));
     if (!info) {
       throw new Error('extension not found');
     }
 
     const bundle = info.bundles.find((b) => b.id === bundleId);
+    console.log('found bundle ' + JSON.stringify(bundle));
 
     if (!bundle) {
       throw new Error('bundle not found');
     }
+    console.log('found bundle ' + JSON.stringify(bundle));
 
     return bundle.path;
   }

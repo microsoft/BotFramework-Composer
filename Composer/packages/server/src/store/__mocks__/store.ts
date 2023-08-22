@@ -7,8 +7,8 @@ export const Store = jest.fn(() => {
       {
         id: 'default',
         name: 'This PC',
-        type: 'LocalDisk',
-        path: '.',
+        type: 'AzureFileStorage',
+        path: 'bots',
         defaultPath: 'bots',
       },
     ],

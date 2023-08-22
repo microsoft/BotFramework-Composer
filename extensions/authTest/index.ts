@@ -15,6 +15,13 @@ module.exports = {
     const b2cTenantName = 'beebotaiqatb2c.onmicrosoft.com';
     const b2cTenantInstance = 'beebotaiqatb2c.b2clogin.com';
 
+    // const tenantName = 'beebotaiuatb2c';
+    // const clientId = '4ff50f6a-23bc-412b-a54f-4c96deac5fa3';
+    // const policyName = 'B2C_1_SignIn';
+    // const tenantIdGuid = '349fc997-2466-45ff-9867-a9f94a76268c';
+    // const b2cTenantName = 'beebotaiuatb2c.onmicrosoft.com';
+    // const b2cTenantInstance = 'beebotaiuatb2c.b2clogin.com';
+
     const options = {
       identityMetadata: `https://${b2cTenantInstance}/${b2cTenantName}/${policyName}/v2.0/.well-known/openid-configuration/`,
       clientID: clientId,

@@ -22,9 +22,14 @@ export const newMsalConfig: msal.Configuration = {
   },
 };
 
+export const isAuthenticated = () => {
+  const account = msalApplication.getAllAccounts()[0];
+  return account !== null && account !== undefined;
+};
+
 export const msalApplication = new msal.PublicClientApplication(newMsalConfig);
 
-const getToken = async () => {
+export const getToken = async () => {
   console.log('generating token');
   const msal = msalApplication;
   const account = msal.getAllAccounts()[0];

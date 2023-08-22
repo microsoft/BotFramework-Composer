@@ -16,9 +16,9 @@ export default {
       id: 'default',
       name: 'This PC',
       type: 'AzureBlobStorage',
-      path: '', // this is used as last accessed path, if it is invalid, use defaultPath
+      path: 'bots', // this is used as last accessed path, if it is invalid, use defaultPath
       platform: settings.platform,
-      defaultPath: settings.botsFolder,
+      defaultPath: 'bots',
     },
   ] as StorageConnection[],
   recentBotProjects: [] as LocationRef[],
