@@ -383,7 +383,6 @@ export const Header = () => {
             />
           </TooltipHost>
         )}
-        <AuthCard />
       </div>
       {teachingBubbleVisibility && (
         <Callout

@@ -10,7 +10,7 @@ import { Dialog } from '@fluentui/react/lib/Dialog';
 import { Link } from '@fluentui/react/lib/Link';
 import { useRecoilValue } from 'recoil';
 
-import { getTenantIdFromCache, setTenantId } from '../../../utils/auth';
+import { getTenantIdFromCache, getTokenFromCache, setTenantId } from '../../../utils/auth';
 import { PublishType } from '../../../recoilModel/types';
 import { PluginAPI } from '../../../plugins/api';
 import { PluginHost } from '../../../components/PluginHost/PluginHost';
@@ -108,6 +108,10 @@ export const PublishProfileDialog: React.FC<PublishProfileDialogProps> = (props)
     };
     PluginAPI.publish.getRequiredRecognizers = () => {
       return requiresRecognizers;
+    };
+    PluginAPI.publish.getTokenFromCache = () => {
+      const token = getTokenFromCache('accessToken');
+      return { accessToken: token, graphToken: '' };
     };
   }, []);
 

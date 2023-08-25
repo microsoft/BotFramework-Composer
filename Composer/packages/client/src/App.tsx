@@ -26,28 +26,13 @@ const Logger = () => {
 
 const { ipcRenderer } = window;
 export const App: React.FC = () => {
-  const { appLocale } = useRecoilValue(userSettingsState);
-
   const [isClosing, setIsClosing] = useState(false);
   const [msalInstance, setMsalInstance] = useState<msal.PublicClientApplication>(msalApplication);
+  const { appLocale } = useRecoilValue(userSettingsState);
 
-  const {
-    fetchExtensions,
-    fetchFeatureFlags,
-    checkNodeVersion,
-    performAppCleanupOnQuit,
-    setMachineInfo,
-  } = useRecoilValue(dispatcherState);
+  const { performAppCleanupOnQuit, setMachineInfo } = useRecoilValue(dispatcherState);
 
   useEffect(() => {
-    loadLocale(appLocale);
-  }, [appLocale]);
-
-  useEffect(() => {
-    checkNodeVersion();
-    fetchExtensions();
-    fetchFeatureFlags();
-
     ipcRenderer?.invoke('app-init').then(({ machineInfo, isOneAuthEnabled }) => {
       setMachineInfo(machineInfo);
       setOneAuthEnabled(isOneAuthEnabled);

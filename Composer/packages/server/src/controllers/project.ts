@@ -234,6 +234,7 @@ async function getFeed(req: Request, res: Response) {
 }
 async function generateProjectId(req: Request, res: Response) {
   try {
+    console.log('generate project Id called');
     const location = req.query.location;
     const projectId = await BotProjectService.generateProjectId(location);
     res.status(200).json(projectId);

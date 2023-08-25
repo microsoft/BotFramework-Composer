@@ -278,7 +278,9 @@ export class BotProjectService {
   };
 
   public static generateProjectId = async (path: string): Promise<string> => {
-    const projectId = (Math.random() * 100000).toString();
+    console.log('generating projectId for path ' + path);
+    const pathSegments = path.split('/');
+    const projectId = pathSegments[pathSegments.length - 1];
     BotProjectService.projectLocationMap[projectId] = { eTag: '', path };
     return projectId;
   };
