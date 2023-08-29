@@ -31,7 +31,7 @@ export class RuntimeLogServer {
   private static hostname: string;
 
   public static getRuntimeLogStreamingUrl(projectId: string): string {
-    return `ws://${this.hostname}:${this.port}/ws/runtimeLog/${projectId}`;
+    return `wss://${this.hostname}:${this.port}/ws/runtimeLog/${projectId}`;
   }
 
   public static async init({

@@ -47,13 +47,21 @@ export function createLanguageClient(
       documentSelector,
       // disable the default error handler
       errorHandler: {
-        error: () => ErrorAction.Continue,
-        closed: () => CloseAction.DoNotRestart,
+        error: (error, message) => {
+          console.log(error);
+          console.log('language server error ' + message);
+          return ErrorAction.Continue;
+        },
+        closed: () => {
+          console.log('language server closed. Not restarting');
+          return CloseAction.DoNotRestart;
+        },
       },
     },
     // create a language client connection from the JSON RPC connection on demand
     connectionProvider: {
       get: (errorHandler, closeHandler) => {
+        console.log('connection provider get');
         return Promise.resolve(createConnection(connection, errorHandler, closeHandler));
       },
     },

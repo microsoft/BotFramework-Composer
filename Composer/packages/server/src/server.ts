@@ -241,11 +241,15 @@ export async function start(electronContext?: ElectronContext): Promise<number |
   });
 
   attachLSPServer(wss, server, '/lu-language-server', (webSocket) => {
+    console.log('starting ls server');
     // launch language server when the web socket is opened
     if (webSocket.readyState === webSocket.OPEN) {
+      console.log('socket open in ready state, starting');
       launchLuLanguageServer(webSocket);
     } else {
+      console.log('socket not yet open, registering callback');
       webSocket.on('open', () => {
+        console.log('socket callback');
         launchLuLanguageServer(webSocket);
       });
     }
