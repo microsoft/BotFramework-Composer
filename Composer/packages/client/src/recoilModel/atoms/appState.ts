@@ -3,6 +3,7 @@
 import { atom, atomFamily } from 'recoil';
 import { FormDialogSchemaTemplate, FeatureFlagMap, BotTemplate, UserSettings, ExtensionSettings } from '@bfc/shared';
 import { ExtensionMetadata } from '@bfc/extension-client';
+import * as msal from '@azure/msal-browser';
 
 import {
   StorageFolder,
@@ -379,4 +380,9 @@ export const selectedTemplateVersionState = atom<string>({
 export const templateFeedUrlState = atom<string>({
   key: getFullyQualifiedKey('templateFeedUrlState'),
   default: '',
+});
+
+export const msalState = atom<msal.PublicClientApplication | null>({
+  key: getFullyQualifiedKey('msal'),
+  default: null,
 });

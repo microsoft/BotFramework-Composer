@@ -35,16 +35,22 @@ module.exports = {
 
     //<ms_docref_init_azuread_lib>
     const bearerStrategy = new BearerStrategy(options, (token, done) => {
-      done(
-        null,
-        {
-          customer: token.extension_CustomerId,
-          isAdmin: token.extension_IsAdmin,
-          isCreator: token.extension_IsCreator,
-          name: 'EXAMPLE NAME',
-        },
-        token
-      );
+      if (token.extension_IsCreator) {
+        console.log('creator user');
+        done(
+          null,
+          {
+            customer: token.extension_CustomerId,
+            isAdmin: token.extension_IsAdmin,
+            isCreator: token.extension_IsCreator,
+            name: 'EXAMPLE NAME',
+          },
+          token
+        );
+      } else {
+        console.log('non-creator user');
+        done(new Error('Non-creator user'));
+      }
     });
 
     composer.usePassportStrategy(bearerStrategy);

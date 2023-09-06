@@ -42,7 +42,7 @@ router.get('/projects/recent', ProjectController.getRecentProjects);
 router.get('/projects/feed', ProjectController.getFeed);
 router.get('/projects/generateProjectId', ProjectController.generateProjectId);
 
-router.get('/projects/:projectId', ProjectController.getProjectById);
+router.get('/projects/:projectId', ProjectController.openAndGetProjectById);
 router.put('/projects/open', ProjectController.openProject);
 router.delete('/projects/:projectId', ProjectController.removeProject);
 router.put('/projects/:projectId/files/:name', ProjectController.updateFile);

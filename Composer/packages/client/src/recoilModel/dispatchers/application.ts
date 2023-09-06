@@ -5,6 +5,7 @@
 import { CallbackInterface, useRecoilCallback } from 'recoil';
 import debounce from 'lodash/debounce';
 import formatMessage from 'format-message';
+import { PublicClientApplication } from '@azure/msal-browser';
 
 import {
   appUpdateState,
@@ -24,6 +25,7 @@ import {
   showWarningDiagnosticsState,
   projectsForDiagnosticsFilterState,
   templateFeedUrlState,
+  msalState,
 } from '../atoms/appState';
 import { AppUpdaterStatus, CreationFlowStatus, CreationFlowType } from '../../constants';
 import OnboardingState from '../../utils/onboardingStorage';
@@ -204,6 +206,10 @@ export const applicationDispatcher = () => {
     set(projectsForDiagnosticsFilterState, projectIds);
   });
 
+  const setMsalState = useRecoilCallback(({ set }: CallbackInterface) => (info: PublicClientApplication) => {
+    set(msalState, info);
+  });
+
   return {
     checkNodeVersion,
     setAppUpdateStatus,
@@ -227,5 +233,6 @@ export const applicationDispatcher = () => {
     setProjectsForDiagnosticsFilter,
     fetchTemplateFeedUrl,
     setTemplateFeedUrl,
+    setMsalState,
   };
 };
