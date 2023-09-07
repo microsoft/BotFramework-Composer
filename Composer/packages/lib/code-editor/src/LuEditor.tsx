@@ -255,7 +255,7 @@ const LuEditor: React.FC<LULSPEditorProps> = (props) => {
     return () => {
       console.log('closing websocket for lu server');
       // eslint-disable-next-line no-underscore-dangle
-      if ((window?.monacoLGEditorInstance as any)?._state !== State.Running) {
+      if ((window?.monacoLUEditorInstance as any)?._state !== State.Running) {
         window.monacoLUEditorInstance = undefined;
       }
       webSocket?.close();

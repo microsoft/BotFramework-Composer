@@ -47,6 +47,9 @@ export const storageDispatcher = () => {
     (callbackHelpers: CallbackInterface) => async (path: string, storageId: string) => {
       const { set } = callbackHelpers;
       try {
+        if (path == '.' || path == '' || path == './') {
+          return;
+        }
         const response = await httpClient.put(`/storages/currentPath`, { path, storageId });
         if (isArray(response.data)) {
           set(storagesState, [...response.data]);
