@@ -7,28 +7,34 @@ import { ExtensionContext } from '../models/extension/extensionContext';
 import StorageService from '../services/storage';
 import { Path } from '../utility/path';
 
-function getStorageConnections(req: Request, res: Response) {
-  res.status(200).json(StorageService.getStorageConnections());
+async function getStorageConnections(req: Request, res: Response) {
+  const user = await ExtensionContext.getUserFromRequest(req);
+  res.status(200).json(StorageService.getStorageConnections(user));
 }
 
-function createStorageConnection(req: Request, res: Response) {
+async function createStorageConnection(req: Request, res: Response) {
   StorageService.createStorageConnection(req.body);
-  res.status(200).json(StorageService.getStorageConnections());
+  const user = await ExtensionContext.getUserFromRequest(req);
+  res.status(200).json(StorageService.getStorageConnections(user));
 }
 
 function updateCurrentPath(req: Request, res: Response) {
   res.status(200).json(StorageService.updateCurrentPath(req.body.path, req.body.storageId));
 }
 
-function validatePath(req: Request, res: Response) {
-  res.status(200).json({ errorMsg: StorageService.validatePath(req.params.path) });
+async function validatePath(req: Request, res: Response) {
+  const storageId = 'default';
+  const user = await ExtensionContext.getUserFromRequest(req);
+  res.status(200).json({ errorMsg: await StorageService.validatePath(storageId, req.params.path, user) });
 }
 
 async function createFolder(req: Request, res: Response) {
   const path = req.body.path;
   const folderName = req.body.name;
+  const storageId = req.params.storageId;
+  const user = await ExtensionContext.getUserFromRequest(req);
   try {
-    StorageService.createFolder(Path.join(path, folderName));
+    StorageService.createFolder(storageId, Path.join(path, folderName), user);
     res.status(200).json({ message: 'success' });
   } catch (e) {
     res.status(400).json({ message: e.message });
@@ -39,8 +45,10 @@ async function updateFolder(req: Request, res: Response) {
   const path = req.body.path;
   const oldFolderName = req.body.oldName;
   const newFolderName = req.body.newName;
+  const storageId = req.params.storageId;
+  const user = await ExtensionContext.getUserFromRequest(req);
   try {
-    StorageService.updateFolder(path, oldFolderName, newFolderName);
+    StorageService.updateFolder(storageId, path, oldFolderName, newFolderName, user);
     res.status(200).json({ message: 'success' });
   } catch (e) {
     res.status(400).json({ message: e.message });
@@ -56,9 +64,6 @@ async function getBlob(req: Request, res: Response) {
       throw new Error('path missing from query');
     }
     const reqpath = decodeURIComponent(req.query.path);
-    if (!Path.isAbsolute(reqpath)) {
-      throw new Error('path must be absolute');
-    }
     res.status(200).json(await StorageService.getBlob(storageId, reqpath, user));
   } catch (e) {
     res.status(400).json({

@@ -44,6 +44,7 @@ export const OpenProject: React.FC<OpenProjectProps> = (props) => {
     }
   }
   const handleOpen = async (path: string, storage: string) => {
+    console.log('handle open in OpenProject');
     const dataToOpen: OpenProjectFormData = { path, storage };
     dataToOpen.path = path;
     if (location?.search) {

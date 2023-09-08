@@ -8,7 +8,7 @@ import { FluentTheme, NeutralColors } from '@fluentui/theme';
 import formatMessage from 'format-message';
 import get from 'lodash/get';
 import omit from 'lodash/omit';
-import { MonacoLanguageClient, MonacoServices } from 'monaco-languageclient';
+import { MonacoLanguageClient, MonacoServices, State } from 'monaco-languageclient';
 import { Icon } from '@fluentui/react/lib/Icon';
 import { Link } from '@fluentui/react/lib/Link';
 import { Stack } from '@fluentui/react/lib/Stack';
@@ -95,7 +95,7 @@ const defaultLUServer = {
 declare global {
   interface Window {
     monacoServiceInstance: MonacoServices;
-    monacoLUEditorInstance: MonacoLanguageClient;
+    monacoLUEditorInstance?: MonacoLanguageClient;
   }
 }
 
@@ -214,17 +214,25 @@ const LuEditor: React.FC<LULSPEditorProps> = (props) => {
 
           sendRequestWithRetry(languageClient, 'initializeDocuments', { luOption, uri });
 
-          languageClient.onReady().then(() =>
-            languageClient.onNotification('addUnlabelUtterance', (result) => {
+          languageClient.onReady().then(() => {
+            window.monacoLUEditorInstance = languageClient;
+            return languageClient.onNotification('addUnlabelUtterance', (result) => {
               const edits = result.edits.map((e) => {
                 return convertEdit(e);
               });
               editor.executeEdits(uri, edits);
-            })
-          );
+            });
+          });
+
+          languageClient.onDidChangeState((e) => {
+            console.log('changed state from ' + e.oldState + ' to ' + e.newState);
+          });
 
           const disposable = languageClient.start();
-          connection.onClose(() => disposable.dispose());
+          connection.onClose(() => {
+            console.log('connection for language server closed');
+            return disposable.dispose();
+          });
           window.monacoLUEditorInstance = languageClient;
         },
       });
@@ -245,6 +253,11 @@ const LuEditor: React.FC<LULSPEditorProps> = (props) => {
     }
 
     return () => {
+      console.log('closing websocket for lu server');
+      // eslint-disable-next-line no-underscore-dangle
+      if ((window?.monacoLGEditorInstance as any)?._state !== State.Running) {
+        window.monacoLUEditorInstance = undefined;
+      }
       webSocket?.close();
     };
   }, [editor, onNavigateToLuPage]);

@@ -38,6 +38,7 @@ To build and run the Composer project locally as a web application, clone the so
 ### Prerequisites
 - [Git](https://git-scm.com/downloads).
 - [Node.js](https://nodejs.org/) LTS 14.x.
+- - Make sure you're acctually running 14.x
 - [Yarn](https://yarnpkg.com/en/docs/install).
 - [.NET Core SDK 3.1](https://dotnet.microsoft.com/download/dotnet-core) or later.
 - On Windows, install the latest [Visual C++ Redistributable for Visual Studio 2015, 2017 and 2019](https://support.microsoft.com/topic/the-latest-supported-visual-c-downloads-2647da03-1eea-4433-9aff-95f26a218cc0).

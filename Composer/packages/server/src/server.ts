@@ -23,7 +23,7 @@ import { ExtensionManager } from './services/extensionManager';
 import { ExtensionContext } from './models/extension/extensionContext';
 import { BotProjectService } from './services/project';
 import { getAuthProvider } from './router/auth';
-import { apiRouter } from './router/api';
+import { apiRouter, unprotectedRouter } from './router/api';
 import { BASEURL } from './constants';
 import { attachLSPServer } from './utility/attachLSP';
 import log from './logger';
@@ -123,6 +123,7 @@ export async function start(electronContext?: ElectronContext): Promise<number |
   }
 
   // always authorize all api routes, it will be a no-op if no auth provider set
+  app.use(`${BASEURL}/api/extensions`, unprotectedRouter);
   app.use(`${BASEURL}/api`, authorize, apiRouter);
 
   const addCORSHeaders = (req: Request, res: Response, next?: NextFunction) => {
@@ -240,11 +241,15 @@ export async function start(electronContext?: ElectronContext): Promise<number |
   });
 
   attachLSPServer(wss, server, '/lu-language-server', (webSocket) => {
+    console.log('starting ls server');
     // launch language server when the web socket is opened
     if (webSocket.readyState === webSocket.OPEN) {
+      console.log('socket open in ready state, starting');
       launchLuLanguageServer(webSocket);
     } else {
+      console.log('socket not yet open, registering callback');
       webSocket.on('open', () => {
+        console.log('socket callback');
         launchLuLanguageServer(webSocket);
       });
     }

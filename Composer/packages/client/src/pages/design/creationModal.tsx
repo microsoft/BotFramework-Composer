@@ -140,6 +140,7 @@ export const CreationModal: React.FC<CreationModalProps> = (props) => {
   };
 
   const openBot = async (botFolder) => {
+    console.log('open bot in creationModal');
     handleDismiss();
     if (creationFlowType === 'Skill') {
       addExistingSkillToBotProject(botFolder.path, botFolder.storage);

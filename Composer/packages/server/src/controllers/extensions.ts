@@ -127,21 +127,28 @@ export async function searchExtensions(req: SearchExtensionsRequest, res: Respon
 }
 
 export async function getBundleForView(req: ExtensionViewBundleRequest, res: Response) {
+  console.log('getting bundle for view called');
   const { id, bundleId } = req.params;
 
   const extension = ExtensionManager.find(id);
 
   if (extension) {
+    console.log('found extension ' + id);
     try {
       const bundle = ExtensionManager.getBundle(id, bundleId);
       if (bundle) {
         res.sendFile(bundle);
         return;
+      } else {
+        console.log('no bundle for ' + id);
       }
     } catch (err) {
       if (err.message && err.message.includes('not found')) {
+        console.log('bundle not found');
         res.status(404).json({ error: 'bundle not found' });
         return;
+      } else {
+        console.log(JSON.stringify(err));
       }
     }
   }

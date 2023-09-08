@@ -7,9 +7,9 @@ export const Store = jest.fn(() => {
       {
         id: 'default',
         name: 'This PC',
-        type: 'LocalDisk',
-        path: '.',
-        defaultPath: '.',
+        type: 'AzureFileStorage',
+        path: 'bots',
+        defaultPath: 'bots',
       },
     ],
     recentBotProjects: [] as any[],

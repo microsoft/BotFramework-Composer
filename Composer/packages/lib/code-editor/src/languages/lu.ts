@@ -41,7 +41,7 @@ export function registerLULanguage(monaco: Monaco) {
         [/^\s*>\s*[\s\S]*$/, { token: 'comments' }],
         [/^\s*-/, { token: 'utterance-identifier', next: 'utterance' }],
         [
-          /(@\s*)(prebuilt\s+)(age|datetimeV2|dimension|email|geographyV2|keyPhrase|money|number|ordinal|ordinalV2|percentage|personName|phonenumber|temperature|url|datetime)(\s+[\w_,\s]+)/,
+          /(@\s*)(prebuilt\s+)(age|datetimeV2|dimension|email|geographyV2|money|number|ordinal|percentage|personName|phonenumber|temperature|url|datetime)(\s+[\w_,\s]+)/,
           ['intent-identifier', 'entity-type', 'prebuilt-type', 'entity-name'],
         ],
         [

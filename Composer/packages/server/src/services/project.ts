@@ -278,7 +278,9 @@ export class BotProjectService {
   };
 
   public static generateProjectId = async (path: string): Promise<string> => {
-    const projectId = (Math.random() * 100000).toString();
+    console.log('generating projectId for path ' + path);
+    const pathSegments = path.split('/');
+    const projectId = pathSegments[pathSegments.length - 1];
     BotProjectService.projectLocationMap[projectId] = { eTag: '', path };
     return projectId;
   };
@@ -305,9 +307,13 @@ export class BotProjectService {
   };
 
   public static getProjectById = async (projectId: string, user?: UserIdentity): Promise<BotProject> => {
+    console.log('getting project by Id ' + projectId);
+    console.log('user is ' + JSON.stringify(user));
     BotProjectService.initialize();
+    console.log('BotProjectService initialized');
 
     const projectLoc = BotProjectService.projectLocationMap[projectId];
+    console.log('project loc is ' + JSON.stringify(projectLoc));
 
     if (!projectLoc || projectLoc.path == null) {
       throw new Error(`project ${projectId} not found in cache`);
@@ -319,7 +325,9 @@ export class BotProjectService {
         BotProjectService.removeProjectIdFromCache(projectId);
         throw new Error(`${path} doesn't seem to be exist any longer`);
       }
+      console.log('bot exists at path ' + path);
       const project = new BotProject({ storageId: 'default', path: path }, user, eTag);
+      console.log('bot project constructed');
       await project.init();
       project.id = projectId;
       // update current indexed bot projects
@@ -613,7 +621,7 @@ export class BotProjectService {
         BackgroundProcessManager.updateProcess(jobId, 500, 'Could not find source project to migrate.');
       }
     } catch (err) {
-      BackgroundProcessManager.updateProcess(jobId, 500, err instanceof Error ? err.message : err, err);
+      BackgroundProcessManager.updateProcess(jobId, 500, err instanceof Error ? err.message : (err as string), err);
       TelemetryService.trackEvent('CreateNewBotProjectCompleted', {
         template: '@microsoft/generator-microsoft-bot-adaptive',
         status: 500,
@@ -645,6 +653,7 @@ export class BotProjectService {
     const user = await ExtensionContext.getUserFromRequest(req);
 
     const createFromPva = !!templateDir;
+    console.log('createFromPva is ' + createFromPva);
 
     // populate template if none was passed
     if (templateId === '') {
@@ -667,6 +676,7 @@ export class BotProjectService {
 
     // location to store the bot project
     const locationRef = getLocationRef(location, storageId, name);
+    console.log('locationRef is ' + JSON.stringify(locationRef));
     try {
       await BotProjectService.cleanProject(locationRef);
 
@@ -774,7 +784,7 @@ export class BotProjectService {
       log('Cleaning up failed project at ', locationRef.path);
       const storage = StorageService.getStorageClient(locationRef.storageId, user);
       await storage.rmrfDir(locationRef.path);
-      BackgroundProcessManager.updateProcess(jobId, 500, err instanceof Error ? err.message : err, err);
+      BackgroundProcessManager.updateProcess(jobId, 500, err instanceof Error ? err.message : (err as string), err);
       TelemetryService.trackEvent('CreateNewBotProjectFailed', {
         reason: err instanceof Error ? err.message : err,
         template: templateId,

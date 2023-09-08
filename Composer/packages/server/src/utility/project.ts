@@ -1,8 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import * as fs from 'fs';
-
 import { remove } from 'fs-extra';
 import formatMessage from 'format-message';
 import { UserIdentity } from '@botframework-composer/types';
@@ -24,11 +22,7 @@ export function getLocationRef(location: string, storageId: string, name: string
   // however, if path is specified as part of post body, use that one.
   // this allows developer to specify a custom home for their bot.
   if (location) {
-    // validate that this path exists
-    // prettier-ignore
-    if (fs.existsSync(location)) { // lgtm [js/path-injection]
-      path = location;
-    }
+    path = location;
   }
   const locationRef: LocationRef = {
     storageId,

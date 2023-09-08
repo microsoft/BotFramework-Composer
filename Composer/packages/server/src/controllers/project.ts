@@ -43,6 +43,46 @@ async function getProjectById(req: Request, res: Response) {
   }
 }
 
+async function openAndGetProjectById(req: Request, res: Response) {
+  const projectId = req.params.projectId;
+  const user = await ExtensionContext.getUserFromRequest(req);
+  try {
+    const currentProject = await BotProjectService.getProjectById(projectId, user);
+
+    if (currentProject !== undefined && (await currentProject.exists())) {
+      const project = currentProject.getProject();
+      res.status(200).json({
+        id: projectId,
+        ...project,
+      });
+    } else {
+      res.status(404).json({
+        message: 'No such bot project opened',
+      });
+    }
+  } catch (error) {
+    if (error.message && error.message.includes('not found in cache')) {
+      const location = {
+        path: `bots/${projectId}`,
+        storageId: 'default',
+      };
+
+      const id = await BotProjectService.openProject(location, user, true);
+      const currentProject = await BotProjectService.getProjectById(id, user);
+      if (currentProject !== undefined && (await currentProject.exists())) {
+        const project = currentProject.getProject();
+        res.status(200).json({
+          id: projectId,
+          ...project,
+        });
+      }
+    }
+    res.status(404).json({
+      message: error.message,
+    });
+  }
+}
+
 async function getProjectByAlias(req: Request, res: Response) {
   const alias = req.params.alias;
   if (!alias) {
@@ -144,11 +184,16 @@ async function openProject(req: Request, res: Response) {
   };
 
   try {
+    console.log('trying to open project');
     const id = await BotProjectService.openProject(location, user, req.body.isRootBot);
+    console.log('opened project');
     const currentProject = await BotProjectService.getProjectById(id, user);
+    console.log('current project is cached');
     if (currentProject !== undefined) {
       await currentProject.init();
+      console.log('current project is initialised');
       const project = currentProject.getProject();
+      console.log('project has been fetched');
       res.status(200).json({
         id: currentProject.id,
         ...project,
@@ -229,6 +274,7 @@ async function getFeed(req: Request, res: Response) {
 }
 async function generateProjectId(req: Request, res: Response) {
   try {
+    console.log('generate project Id called');
     const location = req.query.location;
     const projectId = await BotProjectService.generateProjectId(location);
     res.status(200).json(projectId);
@@ -621,6 +667,7 @@ async function getVariablesByProjectId(req: Request, res: Response) {
 
 export const ProjectController = {
   getProjectById,
+  openAndGetProjectById,
   openProject,
   removeProject,
   updateFile,
