@@ -1852,7 +1852,7 @@ __metadata:
 
 "@bfc/code-editor@file:../../Composer/packages/lib/code-editor::locator=azurePublish%40workspace%3A.":
   version: 0.0.0
-  resolution: "@bfc/code-editor@file:../../Composer/packages/lib/code-editor#../../Composer/packages/lib/code-editor::hash=07c6d0&locator=azurePublish%40workspace%3A."
+  resolution: "@bfc/code-editor@file:../../Composer/packages/lib/code-editor#../../Composer/packages/lib/code-editor::hash=d67a7a&locator=azurePublish%40workspace%3A."
   dependencies:
     "@emotion/react": ^11.1.3
     "@emotion/styled": ^11.1.3
@@ -1875,7 +1875,7 @@ __metadata:
     "@bfc/ui-shared": "*"
     react: 16.13.1
     react-dom: 16.13.1
-  checksum: 17ec934ff7d24101788eb9211670c44ed8307209d0c385bbc9c63bf9ad13fad3ebb3eb7f23e5c885f165efb7069b95fe036119ffcea7a7344b6edf91bb04e991
+  checksum: 3b687f062f4fdb5bc61a9ff75141d23df1c2505559605893961962806efd6e126956ecafb325e3399a4b2d7809510b54a89e07fd104af809af8c45778726917b
   languageName: node
   linkType: hard
 

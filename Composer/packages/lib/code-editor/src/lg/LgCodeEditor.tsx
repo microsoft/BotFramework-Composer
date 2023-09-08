@@ -7,7 +7,7 @@ import { FluentTheme, NeutralColors } from '@fluentui/theme';
 import formatMessage from 'format-message';
 import get from 'lodash/get';
 import omit from 'lodash/omit';
-import { MonacoLanguageClient, MonacoServices } from 'monaco-languageclient';
+import { MonacoLanguageClient, MonacoServices, State } from 'monaco-languageclient';
 import { Icon } from '@fluentui/react/lib/Icon';
 import { Link } from '@fluentui/react/lib/Link';
 import { Stack } from '@fluentui/react/lib/Stack';
@@ -77,7 +77,7 @@ const defaultLGServer = {
 declare global {
   interface Window {
     monacoServiceInstance: MonacoServices;
-    monacoLGEditorInstance: MonacoLanguageClient;
+    monacoLGEditorInstance?: MonacoLanguageClient;
   }
 }
 
@@ -152,29 +152,38 @@ export const LgCodeEditor = (props: LgCodeEditorProps) => {
           connection.onClose(() => disposable.dispose());
           window.monacoLGEditorInstance = languageClient;
 
-          languageClient.onReady().then(() =>
+          languageClient.onReady().then(() => {
+            window.monacoLGEditorInstance = languageClient;
             languageClient.onNotification('GotoDefinition', (result) => {
               if (lgOption?.projectId) {
                 onNavigateToLgPage?.(result.fileId, { templateId: result.templateId, line: result.line });
               }
-            })
-          );
+            });
+          });
         },
       });
     } else {
       if (!props.options?.readOnly) {
         sendRequestWithRetry(window.monacoLGEditorInstance, 'initializeDocuments', { lgOption, uri });
       }
-      window.monacoLGEditorInstance.onReady().then(() =>
+      window.monacoLGEditorInstance.onReady().then(() => {
+        if (!window.monacoLGEditorInstance) {
+          throw Error("monacoLGEditorInstance became null while it's getting ready");
+        }
         window.monacoLGEditorInstance.onNotification('GotoDefinition', (result) => {
           if (lgOption?.projectId) {
             onNavigateToLgPage?.(result.fileId, { templateId: result.templateId, line: result.line });
           }
-        })
-      );
+        });
+      });
     }
 
     return () => {
+      console.log('closing websocket for lg server');
+      // eslint-disable-next-line no-underscore-dangle
+      if ((window?.monacoLGEditorInstance as any)?._state !== State.Running) {
+        window.monacoLGEditorInstance = undefined;
+      }
       webSocket?.close();
     };
   }, [editor, onNavigateToLgPage]);
