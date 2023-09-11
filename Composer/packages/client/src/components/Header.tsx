@@ -347,42 +347,6 @@ export const Header = () => {
             />
           </TooltipHost>
         )}
-        <NotificationButton buttonStyles={buttonStyles} />
-        {isShow && (
-          <TooltipHost content={rocketLabel} directionalHint={DirectionalHint.bottomCenter}>
-            <IconButton
-              ariaLabel={rocketLabel}
-              iconProps={{ iconName: 'Rocket' }}
-              id="rocketButton"
-              styles={buttonStyles}
-              onClick={() => toggleGetStarted(!showGetStarted)}
-            />
-          </TooltipHost>
-        )}
-        {isShow && showStartBotTeachingBubble && (
-          <TeachingBubble
-            hasCloseButton
-            hasCondensedHeadline
-            calloutProps={{ directionalHint: DirectionalHint.bottomAutoEdge }}
-            headline={formatMessage('You’re ready to go!')}
-            target="#startBotPanelElement"
-            onDismiss={hideTeachingBubble}
-          >
-            {formatMessage(
-              'Click start and your bot will be up and running. Once it’s running, you can select “Open in WebChat” to test.'
-            )}
-          </TeachingBubble>
-        )}
-        {showUpdateAvailableIcon && (
-          <TooltipHost content={updateLabel} directionalHint={DirectionalHint.bottomCenter}>
-            <IconButton
-              iconProps={{ iconName: 'History' }}
-              styles={buttonStyles}
-              title={updateLabel}
-              onClick={onUpdateAvailableClick}
-            />
-          </TooltipHost>
-        )}
       </div>
       {teachingBubbleVisibility && (
         <Callout

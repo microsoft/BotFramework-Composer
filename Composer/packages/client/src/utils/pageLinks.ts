@@ -33,26 +33,11 @@ export const topLinks = (
 
   const links: PageLink[] = [
     {
-      to: '/home',
-      iconName: 'Home',
-      labelName: formatMessage('Home'),
-      disabled: false,
-      isDisabledForPVA: false,
-    },
-    {
       to: linkBase + `dialogs/${openedDialogId}`,
       iconName: 'SplitObject',
       labelName: formatMessage('Create'),
       disabled: !botLoaded,
       match: /(bot\/[0-9.]+)$|(bot\/[0-9.]+\/skill\/[0-9.]+)$/,
-      isDisabledForPVA: false,
-    },
-    {
-      to: `/bot/${rootProjectId || projectId}/botProjectsSettings`,
-      iconName: 'BotProjectsSettings',
-      labelName: formatMessage('Configure'),
-      disabled: !botLoaded,
-      match: /botProjectsSettings/,
       isDisabledForPVA: false,
     },
     {
@@ -72,25 +57,6 @@ export const topLinks = (
       isDisabledForPVA: false,
     },
     {
-      to: linkBase + `knowledge-base/${openedDialogId}`,
-      iconName: 'QnAIcon',
-      labelName: formatMessage('Knowledge base'),
-      disabled: !botLoaded || skillIsRemote,
-      match: /knowledge-base\/[a-zA-Z0-9_-]+$/,
-      isDisabledForPVA: isPVASchema,
-    },
-    ...(showFormDialog
-      ? [
-          {
-            to: `/bot/${projectId}/forms`,
-            iconName: 'Table',
-            labelName: formatMessage('Forms (preview)'),
-            disabled: !botLoaded || skillIsRemote,
-            isDisabledForPVA: isPVASchema,
-          },
-        ]
-      : []),
-    {
       to: `/bot/${rootProjectId || projectId}/publish`,
       iconName: 'CloudUpload',
       labelName: formatMessage('Publish'),
@@ -99,33 +65,10 @@ export const topLinks = (
     },
   ];
 
-  if (pluginPages.length > 0) {
-    pluginPages.forEach((p) => {
-      let disablePluginForPva = false;
-      if (p.bundleId === 'package-manager' && isPVASchema) {
-        disablePluginForPva = true;
-      }
-      links.push({
-        to: linkBase + `plugin/${p.id}/${p.bundleId}`,
-        iconName: p.icon ?? 'StatusCircleQuestionMark',
-        labelName: p.label,
-        disabled: !projectId,
-        isDisabledForPVA: disablePluginForPva,
-      });
-    });
-  }
-
   return links;
 };
 
 export const bottomLinks: PageLink[] = [
-  {
-    to: `/settings`,
-    iconName: 'Settings',
-    labelName: formatMessage('Composer settings'),
-    disabled: false,
-    isDisabledForPVA: false,
-  },
   // {
   //   to: `/extensions`,
   //   iconName: 'OEM',

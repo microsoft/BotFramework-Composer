@@ -6,7 +6,6 @@ import { Router } from '@reach/router';
 import { useRecoilValue } from 'recoil';
 import { useCallback, useEffect } from 'react';
 
-import { NotificationContainer } from '../Notifications/NotificationContainer';
 import { currentUserState, dispatcherState, userSettingsState } from '../../recoilModel';
 import { getToken, msalApplication } from '../../msal';
 import { loadLocale } from '../../utils/fileUtil';
@@ -86,7 +85,6 @@ export const MainContainer = () => {
       </Router>
       <RightPanel />
       <Assistant />
-      <NotificationContainer />
     </div>
   );
 };

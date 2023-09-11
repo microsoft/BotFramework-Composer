@@ -10,7 +10,6 @@ import { Split, SplitMeasuredSizes } from '@geoffcox/react-splitter';
 import { dispatcherState } from '../../recoilModel';
 import { renderThinSplitter } from '../../components/Split/ThinSplitter';
 import { Conversation } from '../../components/Conversation';
-import { useSurveyNotification } from '../../components/Notifications/useSurveyNotification';
 
 import SideBar from './SideBar';
 import CommandBar from './CommandBar';
@@ -37,8 +36,6 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   };
 
   const activeBot = skillId ?? projectId;
-
-  useSurveyNotification();
 
   return (
     <div css={contentWrapper} role="main">

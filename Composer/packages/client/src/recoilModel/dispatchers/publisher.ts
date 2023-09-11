@@ -30,7 +30,6 @@ import { ClientStorage } from '../../utils/storage';
 import { RuntimeOutputData } from '../types';
 import { checkIfFunctionsMissing, missingFunctionsError } from '../../utils/runtimeErrors';
 import TelemetryClient from '../../telemetry/TelemetryClient';
-import { TunnelingSetupNotification } from '../../components/Notifications/TunnelingSetupNotification';
 
 import { BotStatus, Text, defaultBotEndpoint, defaultBotPort } from './../../constants';
 import httpClient from './../../utils/httpUtil';
@@ -127,15 +126,6 @@ export const publisherDispatcher = () => {
             !notificationCache[rootBotId] &&
             Object.values(rootBotProjectFile?.content?.skills ?? []).some((s) => s.remote)
           ) {
-            const notification = createNotification({
-              type: 'info',
-              title: formatMessage('Setup tunneling software to test your remote skill'),
-              onRenderCardContent: TunnelingSetupNotification,
-              data: {
-                port,
-              },
-            });
-            addNotificationInternal(callbackHelpers, notification);
             publishStorage.set('notifications', {
               ...notificationCache,
               [rootBotId]: true,
