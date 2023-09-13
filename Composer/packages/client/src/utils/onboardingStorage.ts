@@ -39,6 +39,7 @@ class OnboardingState {
   }
 
   setComplete(complete: boolean) {
+    complete = true;
     if (complete) {
       this._all = { complete };
     } else {

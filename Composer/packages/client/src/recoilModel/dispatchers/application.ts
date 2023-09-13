@@ -114,7 +114,7 @@ export const applicationDispatcher = () => {
   const onboardingSetComplete = useRecoilCallback(({ set }: CallbackInterface) => (isComplete: boolean) => {
     set(onboardingState, (onboardingObj) => ({
       ...onboardingObj,
-      complete: isComplete,
+      complete: true,
     }));
     OnboardingState.setComplete(isComplete);
   });

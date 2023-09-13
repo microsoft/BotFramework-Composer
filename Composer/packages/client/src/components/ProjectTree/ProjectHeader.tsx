@@ -12,7 +12,6 @@ import { Diagnostic } from '@bfc/shared';
 import { BotStatus } from '../../constants';
 import { perProjectDiagnosticsSelectorFamily, botStatusState, rootBotProjectIdSelector } from '../../recoilModel';
 import TelemetryClient from '../../telemetry/TelemetryClient';
-import { createBotSettingUrl, navigateTo } from '../../utils/navigation';
 import { usePVACheck } from '../../hooks/usePVACheck';
 
 import { isChildDialogLinkSelected, doesLinkMatch } from './helpers';
@@ -51,8 +50,6 @@ export const ProjectHeader = (props: ProjectHeaderProps) => {
     name,
     botError,
     isRemote,
-    isRootBot,
-    onBotStart,
     onErrorClick,
     textWidth,
     selectedLink,
@@ -60,9 +57,6 @@ export const ProjectHeader = (props: ProjectHeaderProps) => {
     setMenuOpen,
     onBotRemoveSkill,
     onBotCreateDialog,
-    onBotStop,
-    onBotExportZip,
-    onBotEditManifest,
     handleOnSelect,
     options = {},
   } = props;
@@ -97,44 +91,6 @@ export const ProjectHeader = (props: ProjectHeaderProps) => {
         },
         isDisableForPVA: false,
       },
-      {
-        label: isRunning ? formatMessage('Stop this bot') : formatMessage('Start this bot'),
-        icon: isRunning ? 'CircleStopSolid' : 'TriangleSolidRight12',
-        onClick: () => {
-          isRunning ? onBotStop(projectId) : onBotStart(projectId);
-          TelemetryClient.track(isRunning ? 'StopBotButtonClicked' : 'StartBotButtonClicked', {
-            projectId,
-            location: 'projectTree',
-            isRoot: projectId === rootProjectId,
-          });
-        },
-        isDisableForPVA: true,
-      },
-      {
-        label: '',
-        onClick: () => {},
-      },
-      {
-        label: formatMessage('Export as skill'),
-        onClick: () => {
-          onBotEditManifest(projectId);
-        },
-        isDisableForPVA: true,
-      },
-      {
-        label: formatMessage('Export as .zip'),
-        onClick: () => {
-          onBotExportZip(projectId);
-        },
-        isDisableForPVA: false,
-      },
-      {
-        label: formatMessage('Bot settings'),
-        onClick: () => {
-          navigateTo(createBotSettingUrl(link.projectId, link.skillId));
-        },
-        isDisableForPVA: false,
-      },
     ];
 
     const removeSkillItem = {
@@ -146,10 +102,6 @@ export const ProjectHeader = (props: ProjectHeaderProps) => {
 
     if (isRemote || botError) {
       return [removeSkillItem];
-    }
-
-    if (!isRootBot) {
-      menuItems.splice(3, 0, removeSkillItem);
     }
 
     if (isPVABot) {

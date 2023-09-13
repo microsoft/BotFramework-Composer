@@ -28,12 +28,20 @@ function onRenderBlankVisual(isTriggerEmpty, onClickAddTrigger, isRemoteSkill) {
       <div css={middleTriggerElements}>
         {isRemoteSkill ? (
           <React.Fragment>
-            <img alt={formatMessage('bot framework composer icon gray')} src={grayComposerIcon} />
+            <img
+              alt={formatMessage('bot framework composer icon gray')}
+              src="/transparant-icon.png"
+              style={{ filter: 'invert(47%) sepia(6%) saturate(34%) hue-rotate(131deg) brightness(94%) contrast(85%)' }}
+            />
             {formatMessage('Remote skill')}
           </React.Fragment>
         ) : isTriggerEmpty ? (
           <React.Fragment>
-            <img alt={formatMessage('bot framework composer icon gray')} src={grayComposerIcon} />
+            <img
+              alt={formatMessage('bot framework composer icon gray')}
+              src="/transparant-icon.png"
+              style={{ filter: 'invert(47%) sepia(6%) saturate(34%) hue-rotate(131deg) brightness(94%) contrast(85%)' }}
+            />
             {formatMessage(`This dialog has no trigger yet.`)}
             <ActionButton
               css={triggerButton}
@@ -46,7 +54,11 @@ function onRenderBlankVisual(isTriggerEmpty, onClickAddTrigger, isRemoteSkill) {
           </React.Fragment>
         ) : (
           <React.Fragment>
-            <img alt={formatMessage('bot framework composer icon gray')} src={grayComposerIcon} />
+            <img
+              alt={formatMessage('bot framework composer icon gray')}
+              src="/transparant-icon.png"
+              style={{ filter: 'invert(47%) sepia(6%) saturate(34%) hue-rotate(131deg) brightness(94%) contrast(85%)' }}
+            />
             {formatMessage.rich('Select a trigger in the left<br />navigation to see actions', {
               br: <br key="break-icon-gray-alt" />,
             })}

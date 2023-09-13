@@ -48,7 +48,7 @@ export const actionButton = css`
 // -------------------- Styles -------------------- //
 const headerContainer = css`
   position: relative;
-  background: ${SharedColors.cyanBlue10};
+  background: #1b3240;
   height: 50px;
   display: flex;
   flex-direction: row;
@@ -138,6 +138,7 @@ const calloutDescription = css`
 
 const logo = css`
   margin-left: 9px;
+  height: 50px;
   @media screen and (max-width: 480px) /* 300% zoom */ {
     display: none;
   }
@@ -285,7 +286,7 @@ export const Header = () => {
 
   return (
     <div css={headerContainer} role="banner">
-      <img alt={logoLabel} aria-label={logoLabel} css={logo} src={composerIcon} />
+      <img alt={logoLabel} aria-label={logoLabel} css={logo} src="/transparant-icon.png" />
       <div css={headerTextContainer}>
         {projectName && (
           <Fragment>
@@ -310,42 +311,6 @@ export const Header = () => {
               </span>
             )}
           </Fragment>
-        )}
-      </div>
-      <div css={rightSection}>
-        {isShow && (
-          <div css={searchArea}>
-            <BotController
-              isControllerHidden={hideBotController}
-              onHideController={(isHidden: boolean) => {
-                hideBotStartController(isHidden);
-                if (!isHidden) {
-                  setWebChatPanelVisibility(false);
-                }
-              }}
-            />
-          </div>
-        )}
-        {isShow && (
-          <TooltipHost content={testLabel} directionalHint={DirectionalHint.bottomCenter}>
-            <IconButton
-              ariaDescription={testLabel}
-              disabled={!webchatEssentials?.botUrl}
-              iconProps={{
-                iconName: 'OfficeChat',
-              }}
-              styles={buttonStyles}
-              onClick={() => {
-                const currentWebChatVisibility = !isWebChatPanelVisible;
-                setWebChatPanelVisibility(currentWebChatVisibility);
-                if (currentWebChatVisibility) {
-                  TelemetryClient.track('WebChatPaneOpened');
-                } else {
-                  TelemetryClient.track('WebChatPaneClosed');
-                }
-              }}
-            />
-          </TooltipHost>
         )}
       </div>
       {teachingBubbleVisibility && (

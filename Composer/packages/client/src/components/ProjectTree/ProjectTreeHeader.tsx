@@ -7,14 +7,8 @@ import { useEffect, useRef, useState } from 'react';
 import { FontSizes, NeutralColors } from '@fluentui/theme';
 import formatMessage from 'format-message';
 import { CommandButton, IButton } from '@fluentui/react/lib/Button';
-import { IOverflowSetItemProps } from '@fluentui/react/lib/OverflowSet';
 import { ISearchBox, ISearchBoxStyles, SearchBox } from '@fluentui/react/lib/SearchBox';
-import { useRecoilValue } from 'recoil';
 import { usePrevious } from '@fluentui/react-hooks';
-
-import { DisableFeatureToolTip } from '../DisableFeatureToolTip';
-import { usePVACheck } from '../../hooks/usePVACheck';
-import { rootBotProjectIdSelector } from '../../recoilModel';
 
 const searchBox: ISearchBoxStyles = {
   root: {
@@ -64,7 +58,6 @@ export interface ProjectTreeHeaderProps {
 }
 
 export const ProjectTreeHeader: React.FC<ProjectTreeHeaderProps> = ({
-  menu,
   filterValue,
   onFilter = () => {},
   placeholder = '',
@@ -72,28 +65,12 @@ export const ProjectTreeHeader: React.FC<ProjectTreeHeaderProps> = ({
 }) => {
   const [showFilter, setShowFilter] = useState(false);
   const searchBoxRef = useRef<ISearchBox>(null);
-  const rootBotId = useRecoilValue(rootBotProjectIdSelector) ?? '';
-  const isPVABot = usePVACheck(rootBotId);
 
   useEffect(() => {
     if (showFilter && searchBoxRef.current) {
       searchBoxRef.current.focus();
     }
   }, [showFilter]);
-
-  const overflowMenu = menu.map((item) => {
-    return {
-      key: item.label,
-      ariaLabel: item.label,
-      text: item.label,
-      style: { fontSize: FontSizes.size12 },
-      iconProps: {
-        iconName: item.icon,
-        styles: { root: { fontSize: FontSizes.size12, display: item.icon ? 'inherit' : 'none' } },
-      },
-      onClick: item.onClick,
-    };
-  }) as IOverflowSetItemProps[];
 
   const handleSearchBoxBlur = () => {
     if (!filterValue) {
@@ -113,26 +90,6 @@ export const ProjectTreeHeader: React.FC<ProjectTreeHeaderProps> = ({
     }
   }, [prevShowFilter, showFilter]);
 
-  const addCommandBtn = (
-    <CommandButton
-      data-is-focusable
-      ariaLabel={formatMessage('Add actions')}
-      className="project-tree-header-more-btn"
-      css={buttonStyle}
-      data-testid="projectTreeHeaderMoreButton"
-      disabled={isPVABot}
-      iconProps={{ iconName: 'Add' }}
-      menuProps={{ items: overflowMenu }}
-      tabIndex={0}
-      text={formatMessage('Add')}
-      onKeyDown={(e) => {
-        if (e.key === 'Enter') {
-          e.stopPropagation();
-        }
-      }}
-    />
-  );
-
   return (
     <div css={headerText}>
       {showFilter ? (
@@ -149,9 +106,6 @@ export const ProjectTreeHeader: React.FC<ProjectTreeHeaderProps> = ({
         />
       ) : (
         <div css={commands}>
-          {overflowMenu.length ? (
-            <DisableFeatureToolTip isPVABot={isPVABot}>{addCommandBtn}</DisableFeatureToolTip>
-          ) : null}
           <CommandButton
             ariaLabel={formatMessage('Filter')}
             componentRef={filterButtonRef}

@@ -73,7 +73,7 @@ const classNames = mergeStyleSets({
   subComponentStyles: {
     startButton: {
       root: {
-        backgroundColor: CommunicationColors.tint10,
+        backgroundColor: NeutralColors.gray210,
         display: 'flex',
         alignItems: 'center',
         minWidth: '100px',
@@ -269,73 +269,8 @@ const BotController: React.FC<BotControllerProps> = ({ onHideController, isContr
             'Power Virtual Agents bots cannot be run at the moment. Publish the bot to Power Virtual Agents and test it there.'
           )}
           isPVABot={isPVABot}
-        >
-          <TooltipHost
-            content={startPanelButtonText}
-            hostClassName={classNames.startButtonOverflow}
-            overflowMode={TooltipOverflowMode.Self}
-            styles={classNames.subComponentStyles.startButtonTooltip}
-          >
-            <DefaultButton
-              primary
-              aria-roledescription={formatMessage('Bot Controller')}
-              data-testid={'startBotButton'}
-              disabled={disableStartBots || areBotsProcessing}
-              iconProps={{
-                iconName: statusIconClass,
-                styles: {
-                  root: {
-                    color: `${NeutralColors.white}`,
-                  },
-                },
-              }}
-              id={'startBotPanelElement'}
-              menuAs={() => null}
-              styles={classNames.subComponentStyles.startButton({})}
-              onClick={handleClick}
-            >
-              {areBotsProcessing && (
-                <Spinner
-                  size={SpinnerSize.small}
-                  styles={{
-                    root: {
-                      marginRight: '5px',
-                    },
-                  }}
-                />
-              )}
-              <span style={{ margin: '0 0 2px 5px' }}>{startPanelButtonText}</span>
-            </DefaultButton>
-          </TooltipHost>
-        </DisableFeatureToolTip>
-        <div ref={onboardRef} css={[iconSectionContainer, disableStartBots ? disabledStyle : '']}>
-          <TooltipHost content={startStopLabel} directionalHint={DirectionalHint.bottomCenter}>
-            <IconButton
-              ariaDescription={startStopLabel}
-              data-testid="StartBotsPanel"
-              disabled={disableStartBots}
-              iconProps={{
-                iconName: 'List',
-              }}
-              styles={{
-                root: {
-                  color: NeutralColors.white,
-                  height: '36px',
-                  background: isControllerHidden ? CommunicationColors.tint10 : transparentBackground,
-                  selectors: {
-                    ':disabled .ms-Button-icon': {
-                      opacity: 0.6,
-                      backgroundColor: CommunicationColors.tint10,
-                      color: `${NeutralColors.white}`,
-                    },
-                  },
-                },
-                rootHovered: { background: transparentBackground, color: NeutralColors.white },
-              }}
-              onClick={onSplitButtonClick}
-            />
-          </TooltipHost>
-        </div>
+        ></DisableFeatureToolTip>
+        <div ref={onboardRef} css={[iconSectionContainer, disableStartBots ? disabledStyle : '']}></div>
       </div>
       <BotControllerMenu
         ref={startPanelTarget}

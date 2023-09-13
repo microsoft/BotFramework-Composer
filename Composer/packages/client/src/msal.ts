@@ -10,15 +10,15 @@ import jwtDecode from 'jwt-decode';
 // const tenantName = 'beebotaiqatb2c.onmicrosoft.com';
 // const signUpSignInPolicy = 'B2C_1_SignIn';
 
-// const instance = 'https://beebotaiuatb2c.b2clogin.com/';
-// const clientId = '4ff50f6a-23bc-412b-a54f-4c96deac5fa3';
-// const tenantName = 'beebotaiuatb2c.onmicrosoft.com';
-// const signUpSignInPolicy = 'B2C_1_SignIn';
-
-const instance = 'https://beebotaib2c.b2clogin.com/';
-const clientId = 'f82292cb-b1a9-4925-a1b3-bb01f85a707b';
-const tenantName = 'beebotaib2c.onmicrosoft.com';
+const instance = 'https://beebotaiuatb2c.b2clogin.com/';
+const clientId = '4ff50f6a-23bc-412b-a54f-4c96deac5fa3';
+const tenantName = 'beebotaiuatb2c.onmicrosoft.com';
 const signUpSignInPolicy = 'B2C_1_SignIn';
+
+// const instance = 'https://beebotaib2c.b2clogin.com/';
+// const clientId = 'f82292cb-b1a9-4925-a1b3-bb01f85a707b';
+// const tenantName = 'beebotaib2c.onmicrosoft.com';
+// const signUpSignInPolicy = 'B2C_1_SignIn';
 
 export const newMsalConfig: msal.Configuration = {
   auth: {

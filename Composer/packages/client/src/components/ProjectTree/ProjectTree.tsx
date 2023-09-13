@@ -234,19 +234,6 @@ export const ProjectTree: React.FC<Props> = ({
       },
     ];
 
-    const QnAMenuItem = {
-      label: formatMessage('Add QnA Maker knowledge base'),
-      icon: 'Add',
-      onClick: () => {
-        createQnADialogBegin({ projectId: skillId, dialogId: dialog.id });
-        TelemetryClient.track('AddNewKnowledgeBaseStarted');
-      },
-    };
-
-    if (!isPvaSchema) {
-      menu.splice(1, 0, QnAMenuItem);
-    }
-
     const isFormDialog = dialogIsFormDialog(dialog);
     const showEditSchema = formDialogSchemaExists(skillId, dialog);
 
@@ -283,7 +270,7 @@ export const ProjectTree: React.FC<Props> = ({
             isMenuOpen={isMenuOpen}
             itemType={isFormDialog ? 'form dialog' : 'dialog'}
             link={dialogLink}
-            menu={options.showMenu ? menu : options.showQnAMenu ? [QnAMenuItem] : []}
+            menu={options.showMenu ? menu : []}
             menuOpenCallback={setMenuOpen}
             showErrors={false}
             textWidth={leftSplitWidth - TREE_PADDING}

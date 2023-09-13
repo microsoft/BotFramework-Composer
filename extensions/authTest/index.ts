@@ -15,19 +15,19 @@ module.exports = {
     // const b2cTenantName = 'beebotaiqatb2c.onmicrosoft.com';
     // const b2cTenantInstance = 'beebotaiqatb2c.b2clogin.com';
 
-    // const tenantName = 'beebotaiuatb2c';
-    // const clientId = '4ff50f6a-23bc-412b-a54f-4c96deac5fa3';
-    // const policyName = 'B2C_1_SignIn';
-    // const tenantIdGuid = '349fc997-2466-45ff-9867-a9f94a76268c';
-    // const b2cTenantName = 'beebotaiuatb2c.onmicrosoft.com';
-    // const b2cTenantInstance = 'beebotaiuatb2c.b2clogin.com';
-
-    const tenantName = 'beebotaib2c';
-    const clientId = 'f82292cb-b1a9-4925-a1b3-bb01f85a707b';
+    const tenantName = 'beebotaiuatb2c';
+    const clientId = '4ff50f6a-23bc-412b-a54f-4c96deac5fa3';
     const policyName = 'B2C_1_SignIn';
-    const tenantIdGuid = '862e9884-ebf8-4e26-b238-f8af3c8bec80';
-    const b2cTenantName = 'beebotaib2c.onmicrosoft.com';
-    const b2cTenantInstance = 'beebotaib2c.b2clogin.com';
+    const tenantIdGuid = '349fc997-2466-45ff-9867-a9f94a76268c';
+    const b2cTenantName = 'beebotaiuatb2c.onmicrosoft.com';
+    const b2cTenantInstance = 'beebotaiuatb2c.b2clogin.com';
+
+    // const tenantName = 'beebotaib2c';
+    // const clientId = 'f82292cb-b1a9-4925-a1b3-bb01f85a707b';
+    // const policyName = 'B2C_1_SignIn';
+    // const tenantIdGuid = '862e9884-ebf8-4e26-b238-f8af3c8bec80';
+    // const b2cTenantName = 'beebotaib2c.onmicrosoft.com';
+    // const b2cTenantInstance = 'beebotaib2c.b2clogin.com';
 
     const options = {
       identityMetadata: `https://${b2cTenantInstance}/${b2cTenantName}/${policyName}/v2.0/.well-known/openid-configuration/`,
