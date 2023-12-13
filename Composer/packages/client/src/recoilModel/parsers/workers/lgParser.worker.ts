@@ -5,6 +5,7 @@ import { lgImportResolverGenerator, LgFile } from '@bfc/shared';
 
 import {
   LgActionType,
+  LgEventType,
   LgParsePayload,
   LgUpdateTemplatePayload,
   LgCreateTemplatePayload,
@@ -16,6 +17,7 @@ import {
   LgCleanCachePayload,
   LgParseAllPayload,
 } from '../types';
+import { MapOptimizer } from '../../utils/mapOptimizer';
 
 const ctx: Worker = self as any;
 
@@ -197,6 +199,11 @@ export const handleMessage = (msg: LgMessageEvent) => {
     case LgActionType.Parse: {
       const { id, content, lgFiles, projectId } = msg.payload;
 
+      const cachedFile = cache.get(projectId, id);
+      if (cachedFile?.isContentUnparsed === false && cachedFile?.content === content) {
+        return filterParseResult(cachedFile);
+      }
+
       const lgFile = lgUtil.parse(id, content, lgFiles);
       cache.set(projectId, lgFile);
       payload = filterParseResult(lgFile);
@@ -206,12 +213,20 @@ export const handleMessage = (msg: LgMessageEvent) => {
     case LgActionType.ParseAll: {
       const { lgResources, projectId } = msg.payload;
       // We'll do the parsing when the file is required. Save empty LG instead.
-      payload = lgResources.map(({ id, content }) => {
-        const emptyLg = emptyLgFile(id, content);
-        cache.set(projectId, emptyLg);
-        return filterParseResult(emptyLg);
-      });
+      payload = lgResources.map(({ id, content }) => [id, emptyLgFile(id, content)]);
+      const resources = new Map<string, LgFile>(payload);
+      cache.projects.set(projectId, resources);
 
+      const optimizer = new MapOptimizer(10, resources);
+      optimizer.onUpdate((_, value, ctx) => {
+        const refs = value.parseResult?.references?.map(({ name }) => name);
+        ctx.setReferences(refs);
+      });
+      optimizer.onDelete((_, value) => {
+        const lgFile = emptyLgFile(value.id, value.content);
+        cache.set(projectId, lgFile);
+        ctx.postMessage({ type: LgEventType.OnUpdateLgFile, projectId, payload: lgFile });
+      });
       break;
     }
 
