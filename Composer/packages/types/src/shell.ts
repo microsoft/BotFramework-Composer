@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import type { AxiosInstance } from 'axios';
+import type { AxiosInstance, CancelToken } from 'axios';
 
 import { IDiagnostic } from './diagnostic';
 import type {
@@ -150,7 +150,7 @@ export type LgContextApi = {
 };
 
 export type ProjectContextApi = {
-  getMemoryVariables: (projectId: string, options?: { signal: AbortSignal }) => Promise<string[]>;
+  getMemoryVariables: (projectId: string, options?: { cancelToken: CancelToken }) => Promise<string[]>;
   getDialog: (dialogId: string) => any;
   saveDialog: (dialogId: string, newDialogData: any) => any;
   reloadProject: () => void;
