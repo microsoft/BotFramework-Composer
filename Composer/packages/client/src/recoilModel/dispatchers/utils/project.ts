@@ -34,10 +34,9 @@ import { stringify } from 'query-string';
 import { CallbackInterface } from 'recoil';
 import { v4 as uuid } from 'uuid';
 import isEmpty from 'lodash/isEmpty';
-import { CancelToken } from 'axios';
 
 import { checkIfDotnetVersionMissing, checkIfFunctionsMissing } from '../../../utils/runtimeErrors';
-import { BotStatus } from '../../../constants';
+import { BASEURL, BotStatus } from '../../../constants';
 import settingStorage from '../../../utils/dialogSettingStorage';
 import { getUniqueName } from '../../../utils/fileUtil';
 import httpClient from '../../../utils/httpUtil';
@@ -912,7 +911,13 @@ export const checkIfBotExistsInBotProjectFile = async (
   return false;
 };
 
-export const getMemoryVariables = async (projectId: string, options?: { cancelToken: CancelToken }) => {
-  const res = await httpClient.get(`/projects/${projectId}/variables`, { cancelToken: options?.cancelToken });
-  return res?.data?.variables ?? [];
+export const getMemoryVariables = async (projectId: string, options?: { signal: AbortSignal }) => {
+  // eslint-disable-next-line no-underscore-dangle
+  const fetchHeaders = { 'X-CSRF-Token': window.__csrf__ };
+  const res = await fetch(`${BASEURL}/projects/${projectId}/variables`, {
+    headers: fetchHeaders,
+    signal: options?.signal,
+  });
+  const json = (await res.json()) as { variables: string[] };
+  return json.variables ?? [];
 };

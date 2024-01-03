@@ -6,7 +6,6 @@ import React from 'react';
 import { Callout } from '@fluentui/react/lib/Callout';
 import { FieldToolbar } from '@bfc/code-editor';
 import { useShellApi } from '@bfc/extension-client';
-import axios from 'axios';
 
 const inputs = ['input', 'textarea'];
 
@@ -27,10 +26,10 @@ export const ExpressionFieldToolbar = (props: Props) => {
   const [memoryVariables, setMemoryVariables] = React.useState<string[] | undefined>();
 
   React.useEffect(() => {
-    const source = axios.CancelToken.source();
+    const abortController = new AbortController();
     (async () => {
       try {
-        const variables = await shellApi.getMemoryVariables(projectId, { cancelToken: source.token });
+        const variables = await shellApi.getMemoryVariables(projectId, { signal: abortController.signal });
         setMemoryVariables(variables);
       } catch (e) {
         // error can be due to abort

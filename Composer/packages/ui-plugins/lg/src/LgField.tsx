@@ -15,7 +15,6 @@ import { Stack } from '@fluentui/react/lib/Stack';
 import { Text } from '@fluentui/react/lib/Text';
 import { TooltipHost } from '@fluentui/react/lib/Tooltip';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import axios from 'axios';
 
 import { locateLgTemplatePosition } from './locateLgTemplatePosition';
 
@@ -84,10 +83,10 @@ const LgField: React.FC<FieldProps<string>> = (props) => {
   const [memoryVariables, setMemoryVariables] = useState<string[] | undefined>();
 
   useEffect(() => {
-    const source = axios.CancelToken.source();
+    const abortController = new AbortController();
     (async () => {
       try {
-        const variables = await shellApi.getMemoryVariables(projectId, { cancelToken: source.token });
+        const variables = await shellApi.getMemoryVariables(projectId, { signal: abortController.signal });
         setMemoryVariables(variables);
       } catch (e) {
         // error can be due to abort
@@ -96,7 +95,7 @@ const LgField: React.FC<FieldProps<string>> = (props) => {
 
     // clean up pending async request
     return () => {
-      source.cancel();
+      abortController.abort();
     };
   }, [projectId]);
 

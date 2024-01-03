@@ -14,7 +14,6 @@ import get from 'lodash/get';
 import querystring from 'query-string';
 import React, { Fragment, useCallback, useEffect, useMemo, useState } from 'react';
 import { useRecoilValue } from 'recoil';
-import axios from 'axios';
 
 import { dispatcherState, userSettingsState } from '../../recoilModel';
 import { dialogState, localeState, settingsState } from '../../recoilModel/atoms/botState';
@@ -89,10 +88,10 @@ const CodeEditor: React.FC<CodeEditorProps> = (props) => {
   };
 
   useEffect(() => {
-    const source = axios.CancelToken.source();
+    const abortController = new AbortController();
     (async () => {
       try {
-        const variables = await getMemoryVariables(projectId, { cancelToken: source.token });
+        const variables = await getMemoryVariables(projectId, { signal: abortController.signal });
         setMemoryVariables(variables);
       } catch (e) {
         // error can be due to abort
@@ -101,7 +100,7 @@ const CodeEditor: React.FC<CodeEditorProps> = (props) => {
 
     // clean up pending async request
     return () => {
-      source.cancel();
+      abortController.abort();
     };
   }, [projectId]);
 
