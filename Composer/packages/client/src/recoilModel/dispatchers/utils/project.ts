@@ -912,7 +912,12 @@ export const checkIfBotExistsInBotProjectFile = async (
 };
 
 export const getMemoryVariables = async (projectId: string, options?: { signal: AbortSignal }) => {
-  const res = await fetch(`${BASEURL}/projects/${projectId}/variables`, { signal: options?.signal });
+  // eslint-disable-next-line no-underscore-dangle
+  const fetchHeaders = { 'X-CSRF-Token': window.__csrf__ };
+  const res = await fetch(`${BASEURL}/projects/${projectId}/variables`, {
+    headers: fetchHeaders,
+    signal: options?.signal,
+  });
   const json = (await res.json()) as { variables: string[] };
   return json.variables ?? [];
 };
