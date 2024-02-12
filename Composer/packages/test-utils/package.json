@@ -8,6 +8,11 @@
   "files": [
     "lib"
   ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/microsoft/BotFramework-Composer.git",
+    "directory": "Composer/packages/test-utils"
+  },
   "scripts": {
     "build": "rimraf lib && tsc",
     "prepublishOnly": "npm run build"

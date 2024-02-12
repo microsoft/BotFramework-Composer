@@ -11,6 +11,11 @@
     "lint": "eslint --quiet cypress",
     "cypress": "cypress run"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/microsoft/BotFramework-Composer.git",
+    "directory": "Composer/packages/integration-tests"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",

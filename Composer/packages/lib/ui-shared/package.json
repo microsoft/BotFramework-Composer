@@ -19,6 +19,11 @@
     "botframework",
     "composer"
   ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/microsoft/BotFramework-Composer.git",
+    "directory": "Composer/packages/lib/ui-shared"
+  },
   "author": "zeye@microsoft.com",
   "license": "MIT",
   "peerDependencies": {

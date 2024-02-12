@@ -14,6 +14,11 @@
     "prepare": "yarn build",
     "extract": "cross-env NODE_ENV=production format-message extract -g underscored_crc32 -o locales/en-US.json src/**/*.ts src/**/*.tsx"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/microsoft/BotFramework-Composer.git",
+    "directory": "Composer/packages/ui-plugins/select-dialog"
+  },
   "keywords": [
     "botframework",
     "composer"
