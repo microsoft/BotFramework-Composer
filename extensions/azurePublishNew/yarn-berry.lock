@@ -2010,7 +2010,7 @@ __metadata:
 
 "@botframework-composer/types@file:../../Composer/packages/types::locator=azure-publish-new%40workspace%3A.":
   version: 0.0.2
-  resolution: "@botframework-composer/types@file:../../Composer/packages/types#../../Composer/packages/types::hash=d657f3&locator=azure-publish-new%40workspace%3A."
+  resolution: "@botframework-composer/types@file:../../Composer/packages/types#../../Composer/packages/types::hash=2909ff&locator=azure-publish-new%40workspace%3A."
   dependencies:
     "@types/express": 4.16.1
     "@types/passport": ^1.0.4
@@ -2019,7 +2019,7 @@ __metadata:
     express-serve-static-core: 0.1.1
     json-schema: 0.4.0
     tslib: 2.4.0
-  checksum: b085f9dddc37d8e77c723814f40c0551dd68f9a45e40ef64cbe51ed956f7ff64a266ea4fcc35144e352cadf6a657ac9fa6d0f74b90ea362d39104a26cf88c643
+  checksum: fd6940e2285d573e323dfebdcd18d5c1324dfc239ef326c9a291327976a8fda765bfdedcda051fecf38ab0ea59d3f9dead856d1aaa8b34240820b248979c33a0
   languageName: node
   linkType: hard
 
