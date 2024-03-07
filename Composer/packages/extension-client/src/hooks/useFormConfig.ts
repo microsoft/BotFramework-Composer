@@ -29,6 +29,9 @@ export function useFormConfig() {
     Object.entries(result)
       .filter(([$kind, options]) => options && isTrigger($kind))
       .forEach(([, options]) => {
+        if (!options) {
+          return;
+        }
         if (!options.hidden) {
           options.hidden = ['actions'];
         } else if (Array.isArray(options.hidden) && !options.hidden.some((x) => x === 'actions')) {

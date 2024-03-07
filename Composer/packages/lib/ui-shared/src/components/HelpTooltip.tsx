@@ -16,7 +16,7 @@ import { mergeStyleSets, getFocusStyle, getTheme, ITheme, IStyle } from '@fluent
 import { IStyleFunctionOrObject } from '@fluentui/react/lib/Utilities';
 import { IIconProps } from '@fluentui/react/lib/Icon';
 
-const getClassNames = (theme: ITheme, props: Pick<HelpTooltipProps, 'styles'>) =>
+const getClassNames = (theme: ITheme, props: Partial<HelpTooltipProps>) =>
   mergeStyleSets(
     {
       root: {
@@ -51,7 +51,8 @@ export type HelpTooltipProps = Omit<ITooltipHostProps, 'styles'> & {
   styles?: HelpTooltipStyles;
 };
 
-const useClassNames = <Styles,>(styles: Styles) => useMemo(() => getClassNames(getTheme(), { styles }), [styles]);
+const useClassNames = <Styles extends HelpTooltipProps['styles'],>(styles: Styles) =>
+  useMemo(() => getClassNames(getTheme(), { styles }), [styles]);
 
 export const HelpTooltip: React.FC<HelpTooltipProps> = ({ iconProps, ...props }) => {
   const classNames = useClassNames(props.styles);

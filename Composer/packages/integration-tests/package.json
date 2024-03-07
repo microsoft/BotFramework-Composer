@@ -19,7 +19,7 @@
     "chalk": "^4.0.0",
     "cypress": "^7.5.0",
     "eslint-plugin-cypress": "2.11.1",
-    "tslib": "2.4.0"
+    "tslib": "2.6.2"
   },
   "devDependencies": {
     "@types/fs-extra": "^9.0.11",

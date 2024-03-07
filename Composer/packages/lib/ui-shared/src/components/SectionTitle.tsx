@@ -5,10 +5,11 @@
 import { jsx, css } from '@emotion/react';
 import { FluentTheme } from '@fluentui/theme';
 import { Text } from '@fluentui/react/lib/Text';
+import { type PropsWithChildren } from 'react';
 
-interface SectionTitleProps {
+type SectionTitleProps = PropsWithChildren<{
   level: 1 | 2 | 3 | 4 | 5 | 6;
-}
+}>
 
 export const SectionTitle: React.FC<SectionTitleProps> = ({ level, ...props }) => (
   <Text

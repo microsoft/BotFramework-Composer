@@ -35,7 +35,7 @@ const ArrayField: React.FC<FieldProps<unknown[]>> = (props) => {
     addItem(undefined);
   }, [addItem]);
 
-  if (!itemSchema || itemSchema === true) {
+  if (!itemSchema || (itemSchema as unknown) === true) {
     return <UnsupportedField {...props} />;
   }
 

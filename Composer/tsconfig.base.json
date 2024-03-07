@@ -15,6 +15,7 @@
     "sourceMap": true,
     "strict": true,
     "target": "es5",
+    "useUnknownInCatchVariables": false,
     "plugins": [
       {
         "name": "typescript-styled-plugin",

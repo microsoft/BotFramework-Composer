@@ -183,10 +183,6 @@ export const conceptLabels: () => { [key in ConceptLabelKey]?: LabelOverride } =
     title: formatMessage('Message reaction'),
     subtitle: formatMessage('Message reaction activity'),
   },
-  [SDKKinds.OnMessageUpdateActivity]: {
-    title: formatMessage('Message updated'),
-    subtitle: formatMessage('Message updated activity'),
-  },
   [SDKKinds.UpdateActivity]: {
     title: formatMessage('Update activity'),
     subtitle: formatMessage('Update a an activity previously sent during the conversation'),

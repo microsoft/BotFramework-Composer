@@ -607,7 +607,7 @@ export class LGServer {
         if (property in tempVariable) {
           tempVariable = tempVariable[property];
         } else if (normalizedAnyPattern in tempVariable) {
-          tempVariable = tempVariable[normalizedAnyPattern];
+          tempVariable = tempVariable[normalizedAnyPattern] as any;
         } else {
           tempVariable = {};
         }

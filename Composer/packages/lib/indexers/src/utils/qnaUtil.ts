@@ -199,7 +199,7 @@ export function removeSection(qnaFile: QnAFile, sectionId: string): QnAFile {
  * @param sectionContent
  */
 export function insertSection(qnaFile: QnAFile, position: number | string, sectionContent: string): QnAFile {
-  if (position < 0) return qnaFile;
+  if (Number(position) < 0) return qnaFile;
   const { resource } = qnaFile;
 
   const result = new sectionOperator(resource).insertSection(position, sectionContent);

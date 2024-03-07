@@ -19,8 +19,6 @@ type LabelWithTooltipProps<Props, Styles> = Omit<Props, 'styles'> & {
   tooltipIconProps?: HelpTooltipProps['iconProps'];
   styles?: IStyleFunctionOrObject<
     never,
-    // @ts-expect-error: subComponentStyles won't match the exact component's interface
-    // but the resulting type is still valid
     Styles & {
       subComponentStyles: {
         /** Styling for HelpTooltip child component */
@@ -54,7 +52,8 @@ const getClassNames = (
     props.styles
   );
 
-const useClassNames = <Styles,>(styles: Styles) => useMemo(() => getClassNames(getTheme(), { styles }), [styles]);
+const useClassNames = <Styles extends IStyleFunctionOrObject<unknown, any> | undefined,>(styles: Styles) =>
+  useMemo(() => getClassNames(getTheme(), { styles }), [styles]);
 
 const useOnRenderLabelWithHelpTooltip = <Props, Styles>(props: LabelWithTooltipProps<Props, Styles>) => {
   const classNames = useClassNames(props.styles);
