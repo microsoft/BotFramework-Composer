@@ -605,7 +605,7 @@ const Library: React.FC = () => {
     updateFeeds(response.data);
   };
 
-  const InstallButton = versionOptions != undefined ? SplitButton : DefaultButton;
+  const InstallButton = (versionOptions != undefined ? SplitButton : DefaultButton) as typeof DefaultButton;
 
   return (
     <ScrollablePane scrollbarVisibility={ScrollbarVisibility.auto}>

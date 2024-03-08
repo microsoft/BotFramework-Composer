@@ -90,7 +90,7 @@ export const publish = async (
       },
     });
     if (res.status === 202) {
-      const job: PVAPublishJob = await res.json();
+      const job = await res.json() as PVAPublishJob;
       logger.log('Publish job started: %O', job);
 
       // transform the PVA job to a publish response
@@ -174,7 +174,7 @@ export const getStatus = async (
         'If-None-Match': project.eTag || '',
       },
     });
-    const job: PVAPublishJob = await res.json();
+    const job = await res.json() as PVAPublishJob;
     logger.log('Got updated status from publish job: %O', job);
 
     // transform the PVA job to a publish response
@@ -232,7 +232,7 @@ export const history = async (
       method: 'GET',
       headers: getAuthHeaders(accessToken, tenantId),
     });
-    const jobs: PVAPublishJob[] = await res.json();
+    const jobs = await res.json() as PVAPublishJob[];
 
     // return the first 20
     return jobs.map((job) => xformJobToResult(job)).slice(0, 19);
