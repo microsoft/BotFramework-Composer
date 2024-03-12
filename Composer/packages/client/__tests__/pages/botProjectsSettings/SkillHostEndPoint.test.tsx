@@ -29,7 +29,7 @@ describe('SkillHostEndPoint', () => {
     };
     const { getByTestId } = renderWithRecoilAndCustomDispatchers(
       <SkillHostEndPoint projectId={state.projectId} />,
-      initRecoilState
+      initRecoilState,
     );
     const textField = getByTestId('SkillHostEndPointTextField');
     await act(async () => {

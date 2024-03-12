@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 module.exports = {
-  extends: ['./.eslintrc.js', 'plugin:react/recommended', 'plugin:security/recommended'],
+  extends: ['./.eslintrc.js', 'plugin:react/recommended', 'plugin:security/recommended-legacy'],
   plugins: ['react-hooks', 'format-message', '@emotion', 'jsx-a11y', 'security'],
   settings: {
     react: {
@@ -31,7 +31,7 @@ module.exports = {
     'react/no-danger': 'error',
     'react/no-deprecated': 'warn',
     'react/prop-types': 'warn',
-    'react/no-unknown-property': 'error',
+    'react/no-unknown-property': ['error', { 'ignore': ['css'] }],
     'react/jsx-boolean-value': ['error', 'never'],
     'react/jsx-filename-extension': ['error', { extensions: ['.jsx', '.tsx'] }],
     // https://github.com/yannickcr/eslint-plugin-react/blob/HEAD/docs/rules/jsx-sort-props.md

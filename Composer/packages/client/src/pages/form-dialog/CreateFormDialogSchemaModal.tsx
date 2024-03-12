@@ -55,7 +55,7 @@ const CreateFormDialogSchemaModal: React.FC<Props> = (props) => {
 
       onSubmit(formData.name);
     },
-    [hasErrors, formData]
+    [hasErrors, formData],
   );
 
   return (

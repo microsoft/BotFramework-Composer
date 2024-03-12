@@ -28,7 +28,7 @@ const IntentField: React.FC<FieldProps> = (props) => {
   let helpLink = uiOptions.helpLink;
   if (isLuisRecognizer(currentDialog)) {
     description = formatMessage(
-      'Trigger phrases are inputs from users that will be used to train your LUIS model. This follows .lu file format.'
+      'Trigger phrases are inputs from users that will be used to train your LUIS model. This follows .lu file format.',
     );
     helpLink = luisEntityHelpUrl;
   }

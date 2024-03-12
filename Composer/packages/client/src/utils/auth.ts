@@ -1,7 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-/* eslint-disable @typescript-eslint/camelcase */
 import { randomBytes } from 'crypto';
 
 import querystring from 'query-string';
@@ -101,7 +100,7 @@ export function prepareAxios() {
         }
 
         return Promise.reject(err);
-      }
+      },
     );
   }
 }
@@ -211,7 +210,7 @@ export function createPopupWindow(loginUrl: string): Window | null {
   const popup = window.open(
     loginUrl,
     formatMessage('Login to Azure'),
-    `width=483, height=600, top=${top}, left=${left}`
+    `width=483, height=600, top=${top}, left=${left}`,
   );
 
   // if popups are blocked, use a redirect flow
@@ -236,7 +235,7 @@ export function createHiddenIframe(url: string): HTMLIFrameElement {
 export async function monitorWindowForQueryParam(
   popup: Window,
   queryParam: string,
-  redirectUrl: string
+  redirectUrl: string,
 ): Promise<string | null> {
   return new Promise((resolve) => {
     const startTime = Date.now();

@@ -105,7 +105,7 @@ describe('QnA creation flow', () => {
         qnaFiles={state.qnaFiles}
         onSubmit={handleSubmit}
       />,
-      initRecoilState
+      initRecoilState,
     );
 
     const nameField = getByTestId('knowledgeLocationTextField-name');
@@ -131,7 +131,7 @@ describe('QnA creation flow', () => {
         qnaFiles={state.qnaFiles}
         onSubmit={handleSubmit}
       />,
-      initRecoilState
+      initRecoilState,
     );
 
     const nameField = getByTestId('knowledgeLocationTextField-name');
@@ -155,7 +155,7 @@ describe('QnA creation flow', () => {
         qnaFiles={state.qnaFiles}
         onSubmit={handleSubmit}
       />,
-      initRecoilState
+      initRecoilState,
     );
 
     const nameField = getByTestId('knowledgeLocationTextField-name');

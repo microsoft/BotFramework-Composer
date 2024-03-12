@@ -196,19 +196,19 @@ class FilePersistence {
     const changes = await Promise.all(
       files.map(async (item) => {
         return await this.getFilesChanges(item[0], item[1], item[2]);
-      })
+      }),
     );
 
     const settingChanges = this.getSettingsChanges(currentAssets.setting, previousAssets.setting);
 
     const botProjectFileChanges = this.getBotProjectFileChanges(
       currentAssets.botProjectFile,
-      previousAssets.botProjectFile
+      previousAssets.botProjectFile,
     );
 
     const crossTrainFileChanges = this.getCrossTrainConfigChanges(
       currentAssets.crossTrainConfig,
-      previousAssets.crossTrainConfig
+      previousAssets.crossTrainConfig,
     );
 
     const fileChanges: IFileChange[] = [...settingChanges, ...botProjectFileChanges, ...crossTrainFileChanges];

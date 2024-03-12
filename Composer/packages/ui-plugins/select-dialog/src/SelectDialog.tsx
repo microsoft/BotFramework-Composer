@@ -58,7 +58,7 @@ export const SelectDialog: React.FC<FieldProps> = (props) => {
         setShowIntellisenseField(false);
       }
     },
-    [value, onBlur]
+    [value, onBlur],
   );
 
   return showIntellisenseField ? (

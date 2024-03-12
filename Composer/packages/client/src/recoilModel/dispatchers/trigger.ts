@@ -44,7 +44,7 @@ const getNewDialogWithTrigger = async (
   dialogId: string,
   formData: TriggerFormData,
   createLuIntent,
-  createLgTemplates
+  createLgTemplates,
 ) => {
   const { snapshot } = callbackHelpers;
   const lgFiles = await snapshot.getPromise(lgFilesSelectorFamily(projectId));
@@ -68,11 +68,11 @@ const getNewDialogWithTrigger = async (
   } else if (formData.$kind === qnaMatcherKey) {
     const designerId1 = getDesignerIdFromDialogPath(
       newDialog,
-      `content.triggers[${index}].actions[0].actions[1].prompt`
+      `content.triggers[${index}].actions[0].actions[1].prompt`,
     );
     const designerId2 = getDesignerIdFromDialogPath(
       newDialog,
-      `content.triggers[${index}].actions[0].elseActions[0].activity`
+      `content.triggers[${index}].actions[0].elseActions[0].activity`,
     );
     const lgTemplates: LgTemplate[] = [
       LgTemplateSamples.TextInputPromptForQnAMatcher(designerId1) as LgTemplate,
@@ -83,7 +83,7 @@ const getNewDialogWithTrigger = async (
     const designerId1 = getDesignerIdFromDialogPath(newDialog, `content.triggers[${index}].actions[2].prompt`);
     const designerId2 = getDesignerIdFromDialogPath(
       newDialog,
-      `content.triggers[${index}].actions[3].elseActions[0].activity`
+      `content.triggers[${index}].actions[3].elseActions[0].activity`,
     );
     const lgTemplates: LgTemplate[] = [
       LgTemplateSamples.textInputPromptForOnChooseIntent(designerId1) as LgTemplate,
@@ -108,33 +108,29 @@ const getNewDialogWithTrigger = async (
 
 export const triggerDispatcher = () => {
   const createTrigger = useRecoilCallback(
-    (callbackHelpers: CallbackInterface) => async (
-      projectId: string,
-      dialogId: string,
-      formData: TriggerFormData,
-      autoSelected = true
-    ) => {
-      try {
-        const { snapshot } = callbackHelpers;
-        const dispatcher = await snapshot.getPromise(dispatcherState);
-        const { createLuIntent, createLgTemplates, updateDialog, selectTo } = dispatcher;
-        const dialogPayload = await getNewDialogWithTrigger(
-          callbackHelpers,
-          projectId,
-          dialogId,
-          formData,
-          createLuIntent,
-          createLgTemplates
-        );
-        await updateDialog(dialogPayload);
-        if (autoSelected) {
-          const index = get(dialogPayload.content, 'triggers', []).length - 1;
-          await selectTo(projectId, dialogPayload.id, `triggers[${index}]`);
+    (callbackHelpers: CallbackInterface) =>
+      async (projectId: string, dialogId: string, formData: TriggerFormData, autoSelected = true) => {
+        try {
+          const { snapshot } = callbackHelpers;
+          const dispatcher = await snapshot.getPromise(dispatcherState);
+          const { createLuIntent, createLgTemplates, updateDialog, selectTo } = dispatcher;
+          const dialogPayload = await getNewDialogWithTrigger(
+            callbackHelpers,
+            projectId,
+            dialogId,
+            formData,
+            createLuIntent,
+            createLgTemplates,
+          );
+          await updateDialog(dialogPayload);
+          if (autoSelected) {
+            const index = get(dialogPayload.content, 'triggers', []).length - 1;
+            await selectTo(projectId, dialogPayload.id, `triggers[${index}]`);
+          }
+        } catch (ex) {
+          setError(callbackHelpers, ex);
         }
-      } catch (ex) {
-        setError(callbackHelpers, ex);
-      }
-    }
+      },
   );
 
   const deleteTrigger = useRecoilCallback(
@@ -162,75 +158,66 @@ export const triggerDispatcher = () => {
             actions,
             (templateNames: string[]) => removeLgTemplates({ id: `${dialogId}.${locale}`, templateNames, projectId }),
             (intentNames: string[]) =>
-              Promise.all(intentNames.map((intentName) => removeLuIntent({ id: luFile.id, intentName, projectId })))
+              Promise.all(intentNames.map((intentName) => removeLuIntent({ id: luFile.id, intentName, projectId }))),
           );
       } catch (ex) {
         setError(callbackHelpers, ex);
       }
-    }
+    },
   );
 
   const createQnATrigger = useRecoilCallback(
-    (callbackHelpers: CallbackInterface) => async (
-      projectId: string,
-      dialogId: string,
-      autoSelectTrigger?: boolean
-    ) => {
-      try {
-        const { snapshot } = callbackHelpers;
-        const dispatcher = await snapshot.getPromise(dispatcherState);
-        const dialogs = await snapshot.getPromise(dialogsSelectorFamily(projectId));
+    (callbackHelpers: CallbackInterface) =>
+      async (projectId: string, dialogId: string, autoSelectTrigger?: boolean) => {
+        try {
+          const { snapshot } = callbackHelpers;
+          const dispatcher = await snapshot.getPromise(dispatcherState);
+          const dialogs = await snapshot.getPromise(dialogsSelectorFamily(projectId));
 
-        const targetDialog = dialogs.find((item) => item.id === dialogId);
-        if (!targetDialog) throw new Error(`dialog ${dialogId} not found`);
-        const existedQnATrigger = get(targetDialog, 'content.triggers', []).find(
-          (item) => item.$kind === SDKKinds.OnQnAMatch
-        );
-        if (!existedQnATrigger) {
-          await dispatcher.createTrigger(projectId, dialogId, defaultQnATriggerData, autoSelectTrigger);
+          const targetDialog = dialogs.find((item) => item.id === dialogId);
+          if (!targetDialog) throw new Error(`dialog ${dialogId} not found`);
+          const existedQnATrigger = get(targetDialog, 'content.triggers', []).find(
+            (item) => item.$kind === SDKKinds.OnQnAMatch,
+          );
+          if (!existedQnATrigger) {
+            await dispatcher.createTrigger(projectId, dialogId, defaultQnATriggerData, autoSelectTrigger);
+          }
+        } catch (ex) {
+          setError(callbackHelpers, ex);
         }
-      } catch (ex) {
-        setError(callbackHelpers, ex);
-      }
-    }
+      },
   );
 
   const createTriggerForRemoteSkill = useRecoilCallback(
-    (callbackHelpers: CallbackInterface) => async (
-      projectId: string,
-      dialogId: string,
-      formData: TriggerFormData,
-      skillId: string,
-      autoSelected = true
-    ) => {
-      try {
-        const { snapshot } = callbackHelpers;
-        const { createLuIntent, createLgTemplates, updateDialog, selectTo } = await snapshot.getPromise(
-          dispatcherState
-        );
-        const dialogPayload = await getNewDialogWithTrigger(
-          callbackHelpers,
-          projectId,
-          dialogId,
-          formData,
-          createLuIntent,
-          createLgTemplates
-        );
-        const index = get(dialogPayload.content, 'triggers', []).length - 1;
-        const skillsByProjectId = await snapshot.getPromise(skillNameIdentifierByProjectIdSelector);
-        const skillIdentifier = skillsByProjectId[skillId];
-        const actions: any = [];
-        actions.push(createActionFromManifest(skillIdentifier));
-        dialogPayload.content.triggers[index].actions = actions;
+    (callbackHelpers: CallbackInterface) =>
+      async (projectId: string, dialogId: string, formData: TriggerFormData, skillId: string, autoSelected = true) => {
+        try {
+          const { snapshot } = callbackHelpers;
+          const { createLuIntent, createLgTemplates, updateDialog, selectTo } =
+            await snapshot.getPromise(dispatcherState);
+          const dialogPayload = await getNewDialogWithTrigger(
+            callbackHelpers,
+            projectId,
+            dialogId,
+            formData,
+            createLuIntent,
+            createLgTemplates,
+          );
+          const index = get(dialogPayload.content, 'triggers', []).length - 1;
+          const skillsByProjectId = await snapshot.getPromise(skillNameIdentifierByProjectIdSelector);
+          const skillIdentifier = skillsByProjectId[skillId];
+          const actions: any = [];
+          actions.push(createActionFromManifest(skillIdentifier));
+          dialogPayload.content.triggers[index].actions = actions;
 
-        await updateDialog(dialogPayload);
-        if (autoSelected) {
-          await selectTo(projectId, dialogPayload.id, `triggers[${index}]`);
+          await updateDialog(dialogPayload);
+          if (autoSelected) {
+            await selectTo(projectId, dialogPayload.id, `triggers[${index}]`);
+          }
+        } catch (ex) {
+          setError(callbackHelpers, ex);
         }
-      } catch (ex) {
-        setError(callbackHelpers, ex);
-      }
-    }
+      },
   );
   return {
     createTrigger,

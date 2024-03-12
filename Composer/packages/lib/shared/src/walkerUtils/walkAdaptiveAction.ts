@@ -22,7 +22,7 @@ export const walkAdaptiveAction = (input, visit: AdaptiveActionVisitor): void =>
     return;
   }
 
-  if (!input || !input.$kind) {
+  if (!input?.$kind) {
     return;
   }
 

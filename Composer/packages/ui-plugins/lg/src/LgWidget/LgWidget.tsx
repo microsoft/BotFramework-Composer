@@ -61,7 +61,7 @@ const StructuredResponseRow = React.memo(
         </OneLinerText>
       </Stack>
     );
-  }
+  },
 );
 
 export interface LgWidgetProps extends WidgetContainerProps {

@@ -86,10 +86,10 @@ export const FormDialogPropertyCard = React.memo((props: FormDialogPropertyCardP
   } = props;
 
   const templates = useRecoilValue(formDialogTemplatesAtom);
-  const selectedTemplate = React.useMemo(() => templates.find((t) => t.id === propertyCardData.propertyType), [
-    propertyCardData,
-    templates,
-  ]);
+  const selectedTemplate = React.useMemo(
+    () => templates.find((t) => t.id === propertyCardData.propertyType),
+    [propertyCardData, templates],
+  );
 
   // Indicates if the form in the card has been touched by the user.
   const touchedRef = React.useRef(!!propertyCardData.name);
@@ -103,7 +103,7 @@ export const FormDialogPropertyCard = React.memo((props: FormDialogPropertyCardP
     (_: React.FormEvent<HTMLElement | HTMLInputElement>, checked: boolean) => {
       onChangeArray(checked);
     },
-    [onChangeArray]
+    [onChangeArray],
   );
 
   const changeName = React.useCallback(
@@ -111,7 +111,7 @@ export const FormDialogPropertyCard = React.memo((props: FormDialogPropertyCardP
       onChangeName(value);
       touchedRef.current = true;
     },
-    [onChangeName]
+    [onChangeName],
   );
 
   const deactivateItem = React.useCallback(() => {
@@ -124,12 +124,12 @@ export const FormDialogPropertyCard = React.memo((props: FormDialogPropertyCardP
       (props: any, defaultRender?: (props: any) => JSX.Element | null) => (
         <FieldLabel defaultRender={defaultRender(props)} helpText={helpText} tooltipId={tooltipId} />
       ),
-    []
+    [],
   );
 
   const renderOverflowItem = React.useCallback(
     (item: IOverflowSetItemProps) => <CommandBarButton aria-label={item.name} role="menuitem" onClick={item.onClick} />,
-    []
+    [],
   );
 
   const renderOverflowButton = React.useCallback(
@@ -143,7 +143,7 @@ export const FormDialogPropertyCard = React.memo((props: FormDialogPropertyCardP
         role="menuitem"
       />
     ),
-    []
+    [],
   );
 
   /**
@@ -155,10 +155,10 @@ export const FormDialogPropertyCard = React.memo((props: FormDialogPropertyCardP
         ? !value
           ? formatMessage('Property name is required!')
           : !nameRegex.test(value)
-          ? formatMessage('Spaces and special characters are not allowed. Use letters, numbers, -, or _.')
-          : ''
+            ? formatMessage('Spaces and special characters are not allowed. Use letters, numbers, -, or _.')
+            : ''
         : '',
-    [touchedRef.current]
+    [touchedRef.current],
   );
 
   return (
@@ -177,9 +177,9 @@ export const FormDialogPropertyCard = React.memo((props: FormDialogPropertyCardP
             onGetErrorMessage={validateName}
             onRenderLabel={onRenderLabel(
               formatMessage(
-                `A property is a piece of information that your bot will collect. The property name is the name used in Composer; it is not necessarily the same text that will appear in your bot's messages.`
+                `A property is a piece of information that your bot will collect. The property name is the name used in Composer; it is not necessarily the same text that will appear in your bot's messages.`,
               ),
-              propertyNameTooltipId
+              propertyNameTooltipId,
             )}
           />
           <Stack
@@ -236,7 +236,7 @@ export const FormDialogPropertyCard = React.memo((props: FormDialogPropertyCardP
                   onChange={changeArray}
                   onRenderLabel={onRenderLabel(
                     formatMessage('This option allows your users to give multiple values for this property.'),
-                    `${selectedTemplate.id}-array`
+                    `${selectedTemplate.id}-array`,
                   )}
                 />
               )}
@@ -249,7 +249,7 @@ export const FormDialogPropertyCard = React.memo((props: FormDialogPropertyCardP
                   label={selectedTemplate?.$generator.array?.uniqueItems.title}
                   onRenderLabel={onRenderLabel(
                     selectedTemplate?.$generator.array?.uniqueItems.description,
-                    `${selectedTemplate.id}-unique`
+                    `${selectedTemplate.id}-unique`,
                   )}
                 />
               )}

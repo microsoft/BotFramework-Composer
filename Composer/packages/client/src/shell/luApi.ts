@@ -17,7 +17,7 @@ const INTENT_ERROR = formatMessage('intentName is missing or empty');
 function createLuApi(
   state: { dialogId: string; projectId: string },
   dispatchers: Dispatcher,
-  luFileResolver: (id: string) => LuFile | undefined
+  luFileResolver: (id: string) => LuFile | undefined,
 ): LuContextApi {
   const updateLuFile = async (id: string, content: string) => {
     const file = luFileResolver(id);

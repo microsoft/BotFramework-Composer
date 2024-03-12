@@ -31,7 +31,7 @@ export const getFieldsets = (baseSchema: JSONSchema7, baseUiOptions: UIOptions, 
   if (
     !baseFieldsets.every(
       ({ fields = ['*'] }) =>
-        fields.every((field) => typeof field === 'string') || fields.every((field) => typeof field === 'object')
+        fields.every((field) => typeof field === 'string') || fields.every((field) => typeof field === 'object'),
     )
   ) {
     throw new Error(formatMessage('fields must be either all strings or all fieldset objects'));

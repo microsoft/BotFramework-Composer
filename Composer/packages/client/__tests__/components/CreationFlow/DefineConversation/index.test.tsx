@@ -47,7 +47,7 @@ describe('<DefineConversation/>', () => {
       ({ set }) => {
         set(focusedStorageFolderState, {} as StorageFolder);
         set(storagesState, [{ id: 'default' }]);
-      }
+      },
     );
   }
 

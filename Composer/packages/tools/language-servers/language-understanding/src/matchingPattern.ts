@@ -84,7 +84,8 @@ export function isSeperatedEntityDef(content: string): boolean {
 }
 
 export function isEntityName(content: string): boolean {
-  const hasNameEntifyDef = /^\s*@\s*(ml|list|regex|prebuilt|composite|Pattern\.any|phraseList)\s*([\w._]+|"[\w._\s]+")\s*$/;
+  const hasNameEntifyDef =
+    /^\s*@\s*(ml|list|regex|prebuilt|composite|Pattern\.any|phraseList)\s*([\w._]+|"[\w._\s]+")\s*$/;
   const hasTypeEntityDef = /^\s*@\s*(ml|list|regex|prebuilt|composite|Pattern\.any|phraseList|intent)\s*$/;
   const hasNameEntifyDef2 = /^\s*@\s*([\w._]+|"[\w._\s]+")\s*$/;
   return hasNameEntifyDef.test(content) || (!hasTypeEntityDef.test(content) && hasNameEntifyDef2.test(content));

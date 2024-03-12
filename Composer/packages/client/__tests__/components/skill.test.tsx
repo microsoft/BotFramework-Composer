@@ -135,7 +135,7 @@ describe('<SkillForm />', () => {
           projectId={projectId}
           onDismiss={onDismiss}
         />,
-        recoilInitState
+        recoilInitState,
       );
 
       const nextButton = getByTestId('SetAppIdNext');
@@ -153,7 +153,7 @@ describe('<SkillForm />', () => {
       });
 
       expect(urlInput.getAttribute('value')).toBe(
-        'https://onenote-dev.azurewebsites.net/manifests/OneNoteSync-2-1-preview-1-manifest.json'
+        'https://onenote-dev.azurewebsites.net/manifests/OneNoteSync-2-1-preview-1-manifest.json',
       );
     } finally {
       jest.runOnlyPendingTimers();
@@ -186,7 +186,7 @@ describe('<SkillForm />', () => {
       expect(setFormDataErrors).toBeCalledWith(
         expect.objectContaining({
           manifestUrl: 'URL should start with http:// or https:// or file path of your system',
-        })
+        }),
       );
       expect(setSkillManifest).not.toBeCalled();
     });
@@ -257,7 +257,7 @@ describe('<SkillForm />', () => {
       expect(setFormDataErrors).toBeCalledWith(
         expect.objectContaining({
           manifestUrl: 'Manifest URL can not be accessed',
-        })
+        }),
       );
     });
   });

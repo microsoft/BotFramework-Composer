@@ -49,7 +49,7 @@ export const LgSpeechModalityToolbar = React.memo((props: Props) => {
         })}
       />
     ),
-    []
+    [],
   );
 
   const subMenuProps = React.useMemo(
@@ -66,12 +66,13 @@ export const LgSpeechModalityToolbar = React.memo((props: Props) => {
         { text: 'audio', key: 'audio', onClick: () => onInsertSSMLTag('audio'), style: menuItemStyles },
       ],
     }),
-    [renderHeaderContent, onInsertSSMLTag]
+    [renderHeaderContent, onInsertSSMLTag],
   );
 
-  const moreToolbarItems = React.useMemo(() => [{ key: 'ssmlTag', text: formatMessage('SSML tag'), subMenuProps }], [
-    subMenuProps,
-  ]);
+  const moreToolbarItems = React.useMemo(
+    () => [{ key: 'ssmlTag', text: formatMessage('SSML tag'), subMenuProps }],
+    [subMenuProps],
+  );
 
   return <FieldToolbar {...restProps} moreToolbarItems={moreToolbarItems} />;
 });

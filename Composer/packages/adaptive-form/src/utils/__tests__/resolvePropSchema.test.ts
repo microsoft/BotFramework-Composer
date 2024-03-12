@@ -37,7 +37,7 @@ describe('resolvePropSchema', () => {
       },
     };
 
-    // @ts-ignore
+    // @ts-expect-error test
     const resolved = resolvePropSchema(schema, 'foo', definitions);
     expect(resolveRef).toBeCalledWith(schema.properties.foo, definitions);
 

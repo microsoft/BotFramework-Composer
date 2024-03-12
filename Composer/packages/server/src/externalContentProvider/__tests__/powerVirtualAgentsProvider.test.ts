@@ -35,7 +35,12 @@ jest.mock('../../services/auth/auth', () => ({
 }));
 
 const mockFetch = jest.fn();
-jest.mock('../../utility/fetch', () => async (...args) => await mockFetch(...args));
+jest.mock(
+  '../../utility/fetch',
+  () =>
+    async (...args) =>
+      await mockFetch(...args),
+);
 
 describe('Power Virtual Agents provider', () => {
   const envBackup = { ...process.env };
@@ -106,8 +111,8 @@ describe('Power Virtual Agents provider', () => {
     mockFetch.mockResolvedValueOnce(mockResult);
     expect(async () => await provider.downloadBotContent()).rejects.toThrowError(
       new Error(
-        'Error while trying to download the bot content: Did not receive zip back from PVA: No .zip found for bot'
-      )
+        'Error while trying to download the bot content: Did not receive zip back from PVA: No .zip found for bot',
+      ),
     );
   });
 
@@ -127,7 +132,7 @@ describe('Power Virtual Agents provider', () => {
     };
     mockFetch.mockResolvedValueOnce(mockResult);
     expect(async () => await provider.downloadBotContent()).rejects.toThrowError(
-      new Error('Error while trying to download the bot content: Response containing zip does not have a body')
+      new Error('Error while trying to download the bot content: Response containing zip does not have a body'),
     );
   });
 
@@ -136,7 +141,7 @@ describe('Power Virtual Agents provider', () => {
     mockFetch.mockRejectedValueOnce(error);
 
     expect(async () => await provider.downloadBotContent()).rejects.toThrowError(
-      new Error(`Error while trying to download the bot content: ${error.message}`)
+      new Error(`Error while trying to download the bot content: ${error.message}`),
     );
   });
 

@@ -19,49 +19,55 @@ import { qnaFilesSelectorFamily } from './qna';
 
 export const trackBotStatusesSelector = selectorFamily({
   key: 'trackBotStatusesSelector',
-  get: (trackedProjectIds: string[]) => ({ get }) => {
-    if (trackedProjectIds.length === 0) {
-      return false;
-    }
-    const areBotsRunning = trackedProjectIds.find((projectId: string) => {
-      const currentStatus = get(botStatusState(projectId));
-      return currentStatus !== BotStatus.connected && currentStatus !== BotStatus.failed;
-    });
-    return areBotsRunning;
-  },
+  get:
+    (trackedProjectIds: string[]) =>
+    ({ get }) => {
+      if (trackedProjectIds.length === 0) {
+        return false;
+      }
+      const areBotsRunning = trackedProjectIds.find((projectId: string) => {
+        const currentStatus = get(botStatusState(projectId));
+        return currentStatus !== BotStatus.connected && currentStatus !== BotStatus.failed;
+      });
+      return areBotsRunning;
+    },
 });
 
 export const botBuildRequiredSelector = selectorFamily({
   key: 'botBuildRequiredSelector',
-  get: (projectId: string) => ({ get }) => {
-    const dialogs = get(dialogsSelectorFamily(projectId));
-    return !isAbsHosted() && needsBuild(dialogs);
-  },
+  get:
+    (projectId: string) =>
+    ({ get }) => {
+      const dialogs = get(dialogsSelectorFamily(projectId));
+      return !isAbsHosted() && needsBuild(dialogs);
+    },
 });
 
 export const buildEssentialsSelector = selectorFamily({
   key: 'buildEssentialsSelector',
-  get: (projectId: string) => ({ get }) => {
-    const settings = get(settingsState(projectId));
-    const configuration = {
-      luis: settings.luis,
-      qna: settings.qna,
-      orchestrator: settings.orchestrator,
-    };
-    const dialogs = get(dialogsSelectorFamily(projectId));
-    const luFiles = get(luFilesSelectorFamily(projectId));
-    const qnaFiles = get(qnaFilesSelectorFamily(projectId));
-    const buildRequired = get(botBuildRequiredSelector(projectId));
-    const status = get(botStatusState(projectId));
+  get:
+    (projectId: string) =>
+    ({ get }) => {
+      const settings = get(settingsState(projectId));
+      const configuration = {
+        luis: settings.luis,
+        qna: settings.qna,
+        orchestrator: settings.orchestrator,
+      };
+      const dialogs = get(dialogsSelectorFamily(projectId));
+      const luFiles = get(luFilesSelectorFamily(projectId));
+      const qnaFiles = get(qnaFilesSelectorFamily(projectId));
+      const buildRequired = get(botBuildRequiredSelector(projectId));
+      const status = get(botStatusState(projectId));
 
-    return {
-      isConfigurationComplete: isBuildConfigurationComplete(configuration, dialogs, luFiles, qnaFiles),
-      configuration,
-      buildRequired,
-      projectId,
-      status,
-    };
-  },
+      return {
+        isConfigurationComplete: isBuildConfigurationComplete(configuration, dialogs, luFiles, qnaFiles),
+        configuration,
+        buildRequired,
+        projectId,
+        status,
+      };
+    },
 });
 
 export const buildConfigurationSelector = selector({

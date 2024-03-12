@@ -83,7 +83,7 @@ class LgWorker extends BaseWorker<LgActionType> {
     lgFile: LgFile,
     templateName: string,
     template: { name?: string; parameters?: string[]; body?: string },
-    lgFiles: LgFile[]
+    lgFiles: LgFile[],
   ) {
     return this.sendMsg<LgUpdateTemplatePayload>(LgActionType.UpdateTemplate, {
       lgFile,

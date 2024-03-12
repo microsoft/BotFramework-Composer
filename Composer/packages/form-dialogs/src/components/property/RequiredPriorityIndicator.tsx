@@ -28,7 +28,7 @@ const usePropertyPriority = (required: boolean, propertyId: string) => {
 
   return React.useMemo(
     () => (required ? requiredPropertyIds.indexOf(propertyId) : optionalPropertyIds.indexOf(propertyId)),
-    [required, propertyId, requiredPropertyIds, optionalPropertyIds]
+    [required, propertyId, requiredPropertyIds, optionalPropertyIds],
   );
 };
 
@@ -36,9 +36,10 @@ export const RequiredPriorityIndicator = React.memo((props: Props) => {
   const { required, propertyId } = props;
   const priority = usePropertyPriority(required, propertyId) + 1;
 
-  const requiredText = React.useMemo(() => (required ? formatMessage('Required') : formatMessage('Optional')), [
-    required,
-  ]);
+  const requiredText = React.useMemo(
+    () => (required ? formatMessage('Required') : formatMessage('Optional')),
+    [required],
+  );
 
   const content = React.useMemo(
     () =>
@@ -56,10 +57,10 @@ export const RequiredPriorityIndicator = React.memo((props: Props) => {
                   tooltipId={`${propertyId}-priority-tooltip`}
                 />
               ),
-            }
+            },
           )
         : formatMessage('{requiredText}', { requiredText }),
-    [requiredText, priority]
+    [requiredText, priority],
   );
 
   return (

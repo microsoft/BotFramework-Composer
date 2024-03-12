@@ -89,33 +89,33 @@ interface INavTreeProps {
 const NavTree: React.FC<INavTreeProps> = (props) => {
   const { navLinks, regionName } = props;
 
-  const onRenderOverflowButton = (isSelected: boolean, item) => (
-    menuItems: IOverflowSetItemProps[] | undefined
-  ): JSX.Element => {
-    const buttonStyles: Partial<IButtonStyles> = {
-      root: {
-        minWidth: 0,
-        padding: '0 4px',
-        alignSelf: 'stretch',
-        height: 'auto',
-        background: isSelected ? NeutralColors.gray20 : NeutralColors.white,
-        selectors: {
-          '.ms-Icon': {
-            visibility: isSelected ? 'inherit' : 'hidden',
+  const onRenderOverflowButton =
+    (isSelected: boolean, item) =>
+    (menuItems: IOverflowSetItemProps[] | undefined): JSX.Element => {
+      const buttonStyles: Partial<IButtonStyles> = {
+        root: {
+          minWidth: 0,
+          padding: '0 4px',
+          alignSelf: 'stretch',
+          height: 'auto',
+          background: isSelected ? NeutralColors.gray20 : NeutralColors.white,
+          selectors: {
+            '.ms-Icon': {
+              visibility: isSelected ? 'inherit' : 'hidden',
+            },
           },
         },
-      },
+      };
+      return (
+        <CommandBarButton
+          ariaLabel={formatMessage('Menu items')}
+          menuIconProps={item.menuIconProps as IIconProps}
+          menuProps={{ items: menuItems as IContextualMenuItem[] }}
+          role="menuitem"
+          styles={buttonStyles}
+        />
+      );
     };
-    return (
-      <CommandBarButton
-        ariaLabel={formatMessage('Menu items')}
-        menuIconProps={item.menuIconProps as IIconProps}
-        menuProps={{ items: menuItems as IContextualMenuItem[] }}
-        role="menuitem"
-        styles={buttonStyles}
-      />
-    );
-  };
 
   return (
     <div aria-label={regionName} className="ProjectTree" css={root} data-testid="ProjectTree" role="region">

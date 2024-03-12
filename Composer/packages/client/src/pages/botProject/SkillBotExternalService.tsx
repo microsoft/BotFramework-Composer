@@ -168,7 +168,7 @@ export const SkillBotExternalService: React.FC<SkillBotExternalServiceProps> = (
                 {children}
               </Link>
             ),
-          }
+          },
         )}
       </div>
       <div css={externalServiceContainerStyle}>
@@ -223,7 +223,7 @@ export const SkillBotExternalService: React.FC<SkillBotExternalServiceProps> = (
                 <Link
                   key="qna-skill-settings-page"
                   aria-label={formatMessage(
-                    'Learn more about configuring Azure publishing on the "Publishing Profiles" page'
+                    'Learn more about configuring Azure publishing on the "Publishing Profiles" page',
                   )}
                   href={'https://www.qnamaker.ai/'}
                   target="_blank"
@@ -241,7 +241,7 @@ export const SkillBotExternalService: React.FC<SkillBotExternalServiceProps> = (
                   {children}
                 </Link>
               ),
-            }
+            },
           )}
         </div>
         <div ref={qnaKeyFieldRef}>

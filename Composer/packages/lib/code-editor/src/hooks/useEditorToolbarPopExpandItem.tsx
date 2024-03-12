@@ -36,7 +36,7 @@ export const useEditorToolbarPopExpandItem = (
   },
   options?: {
     customClassName?: string;
-  }
+  },
 ) => {
   const [isExpanded, setIsExpanded] = React.useState(false);
 
@@ -59,7 +59,7 @@ export const useEditorToolbarPopExpandItem = (
             },
           } as ICommandBarItemProps)
         : undefined,
-    [popExpandOptions]
+    [popExpandOptions],
   );
 
   const dismiss = React.useCallback(() => {

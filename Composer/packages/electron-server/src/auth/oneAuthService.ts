@@ -91,19 +91,19 @@ export class OneAuthInstance extends OneAuthBase {
         COMPOSER_APP_VERSION,
         DEFAULT_LOCALE,
         'Please login',
-        window.getNativeWindowHandle()
+        window.getNativeWindowHandle(),
       );
       const msaConfig = new this.oneAuth.MsaConfiguration(
         COMPOSER_CLIENT_ID,
         COMPOSER_REDIRECT_URI,
         GRAPH_RESOURCE + '/Application.ReadWrite.All',
-        undefined
+        undefined,
       );
       const aadConfig = new this.oneAuth.AadConfiguration(
         COMPOSER_CLIENT_ID,
         COMPOSER_REDIRECT_URI,
         GRAPH_RESOURCE,
-        false // prefer broker
+        false, // prefer broker
       );
       this.oneAuth.setFlights([Flight.UseMsalforMsa]);
       this.oneAuth.initialize(appConfig, msaConfig, aadConfig, undefined);
@@ -115,7 +115,7 @@ export class OneAuthInstance extends OneAuthBase {
   }
 
   public async getAccessToken(
-    params: ElectronAuthParameters
+    params: ElectronAuthParameters,
   ): Promise<{ accessToken: string; acquiredAt: number; expiryTime: number }> {
     try {
       if (!this.initialized) {
@@ -150,10 +150,10 @@ export class OneAuthInstance extends OneAuthBase {
         params.authority || DEFAULT_AUTH_AUTHORITY,
         params.targetResource,
         this.signedInAccount.realm,
-        ''
+        '',
       );
       const result = await this.oneAuth.acquireCredentialSilently(this.signedInAccount?.id, reqParams, '');
-      if (result.credential && result.credential.value) {
+      if (result.credential?.value) {
         log('Acquired access token. %s', result.credential.value);
         return {
           accessToken: result.credential.value,
@@ -172,10 +172,10 @@ export class OneAuthInstance extends OneAuthBase {
           params.authority || DEFAULT_AUTH_AUTHORITY,
           params.targetResource,
           this.signedInAccount.realm,
-          ''
+          '',
         );
         const result = await this.oneAuth.acquireCredentialInteractively(this.signedInAccount?.id, reqParams, '');
-        if (result.credential && result.credential.value) {
+        if (result.credential?.value) {
           log('Acquired access token interactively. %s', result.credential.value);
           return {
             accessToken: result.credential.value,
@@ -246,10 +246,10 @@ export class OneAuthInstance extends OneAuthBase {
         `https://login.microsoftonline.com/${tenantId}`,
         ARM_RESOURCE,
         '',
-        ''
+        '',
       );
       const result = await this.oneAuth.acquireCredentialSilently(this.signedInARMAccount.id, tokenParams, '');
-      if (result.credential && result.credential.value && Date.now() <= result.credential.expiresOn) {
+      if (result.credential?.value && Date.now() <= result.credential.expiresOn) {
         log('Acquired ARM token for tenant: %s', result.credential.value);
         return result.credential.value;
       }
@@ -258,7 +258,7 @@ export class OneAuthInstance extends OneAuthBase {
         log(
           'There was an error trying to silently get an ARM token for tenant %s: %O. Trying again interactively to get access token.',
           tenantId,
-          e
+          e,
         );
 
         // use the signed in account to acquire a token
@@ -267,10 +267,10 @@ export class OneAuthInstance extends OneAuthBase {
           `https://login.microsoftonline.com/${tenantId}`,
           ARM_RESOURCE,
           '',
-          ''
+          '',
         );
         const result = await this.oneAuth.acquireCredentialInteractively(this.signedInARMAccount?.id, reqParams, '');
-        if (result.credential && result.credential.value && Date.now() <= result.credential.expiresOn) {
+        if (result.credential?.value && Date.now() <= result.credential.expiresOn) {
           log('Acquired ARM token interactively. %s', result.credential.value);
           return result.credential.value;
         }
@@ -286,7 +286,7 @@ export class OneAuthInstance extends OneAuthBase {
         `https://login.microsoftonline.com/${tenantId}`,
         ARM_RESOURCE,
         '',
-        ''
+        '',
       );
       const result = await this.oneAuth.acquireCredentialInteractively(this.signedInARMAccount.id, tokenParams, '');
       if (!result.credential.value) {
@@ -336,7 +336,7 @@ export class OneAuthInstance extends OneAuthBase {
   /** Temporary workaround on Mac until we figure out how to enable keychain access on a dev build. */
   // eslint-disable-next-line
   private async TEMPORARY_getAccessTokenOnMacDev(
-    params: ElectronAuthParameters
+    params: ElectronAuthParameters,
   ): Promise<{ accessToken: string; acquiredAt: number; expiryTime: number }> {
     try {
       // sign-in every time with auth parameters to get a token
@@ -345,7 +345,7 @@ export class OneAuthInstance extends OneAuthBase {
         params.authority || DEFAULT_AUTH_AUTHORITY,
         params.targetResource,
         '',
-        ''
+        '',
       );
       const result = await this.oneAuth.signInInteractively(undefined, reqParams, '');
       if (result?.credential?.value) {
@@ -367,7 +367,7 @@ export class OneAuthInstance extends OneAuthBase {
     if (!this._oneAuth) {
       log('Attempting to load oneauth module from %s.', this.oneauthPath);
       try {
-        // eslint-disable-next-line security/detect-non-literal-require
+        // eslint-disable-next-line @typescript-eslint/no-var-requires, security/detect-non-literal-require
         this._oneAuth = require(this.oneauthPath) as typeof OneAuth;
       } catch (e) {
         log('Error loading oneauth module. %O', e);

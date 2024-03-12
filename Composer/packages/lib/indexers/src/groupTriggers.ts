@@ -51,7 +51,7 @@ const getTriggerPropertyReferences = (trigger: ITrigger, isValidProperty: (name:
  */
 export const groupTriggersByPropertyReference = (
   dialog: DialogInfo,
-  options?: { allowMultiParent?: boolean; validProperties?: string[] }
+  options?: { allowMultiParent?: boolean; validProperties?: string[] },
 ): Record<string, ITrigger[]> => {
   const result = {} as Record<string, ITrigger[]>;
 

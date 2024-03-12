@@ -25,7 +25,7 @@ describe('<DisableFeatureToolTip />', () => {
             },
           },
         });
-      }
+      },
     );
     const tooltipElement = container.querySelector('#pva-disable-tooltip0');
     expect(tooltipElement).toBeDefined();
@@ -46,7 +46,7 @@ describe('<DisableFeatureToolTip />', () => {
             },
           },
         });
-      }
+      },
     );
     const tooltipElement = container.querySelector('#pva-disable-tooltip0');
     expect(tooltipElement).toBeNull();

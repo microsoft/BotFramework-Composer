@@ -36,7 +36,7 @@ class LuWorker extends BaseWorker<LuActionType> {
     intentName: string,
     intent: { Name?: string; Body?: string },
     luFeatures,
-    luFiles: LuFile[]
+    luFiles: LuFile[],
   ) {
     const payload = { luFile, intentName, intent, luFeatures, luFiles };
     return this.sendMsg<LuUpdateIntentPayload>(LuActionType.UpdateIntent, payload);

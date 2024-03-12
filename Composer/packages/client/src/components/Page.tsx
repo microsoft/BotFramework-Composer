@@ -172,7 +172,7 @@ const Page: React.FC<IPageProps> = (props) => {
           };
         })
         .filter((item) => Boolean(item)) as IToolbarItem[],
-    []
+    [],
   );
   const displayedToolbarItems = toolbarItems.concat(debugItems);
 

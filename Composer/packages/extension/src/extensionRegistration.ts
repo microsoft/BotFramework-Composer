@@ -32,7 +32,7 @@ export class ExtensionRegistration implements IExtensionRegistration {
     public context: IExtensionContext,
     metadata: ExtensionMetadata,
     private _getSettings: () => ExtensionSettings,
-    private _dataDir: string
+    private _dataDir: string,
   ) {
     this._name = metadata.id;
     this._description = metadata.description;

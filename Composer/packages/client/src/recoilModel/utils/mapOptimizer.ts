@@ -35,7 +35,10 @@ export class MapOptimizer<Key, Value> {
    * @param capacity The capacity limit to trigger the optimization steps.
    * @param list The Map object to optimize.
    */
-  constructor(private capacity: number, public list: Map<Key, Value>) {
+  constructor(
+    private capacity: number,
+    public list: Map<Key, Value>,
+  ) {
     this.attach();
   }
 

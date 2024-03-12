@@ -35,19 +35,23 @@ const skillIds = ['1234.123', '234.234'];
 describe('skill dispatcher', () => {
   const skillsDataSelector = selectorFamily({
     key: 'skillSelector-skill',
-    get: (skillId: string) => ({ get }) => {
-      return {
-        skillNameIdentifier: get(botNameIdentifierState(skillId)),
-        location: get(locationState(skillId)),
-      };
-    },
-    set: (skillId: string) => ({ set }, stateUpdater: any) => {
-      const { botNameIdentifier, location, displayName, settings } = stateUpdater;
-      set(botNameIdentifierState(skillId), botNameIdentifier);
-      set(locationState(skillId), location);
-      set(settingsState(skillId), settings);
-      set(botDisplayNameState(skillId), displayName);
-    },
+    get:
+      (skillId: string) =>
+      ({ get }) => {
+        return {
+          skillNameIdentifier: get(botNameIdentifierState(skillId)),
+          location: get(locationState(skillId)),
+        };
+      },
+    set:
+      (skillId: string) =>
+      ({ set }, stateUpdater: any) => {
+        const { botNameIdentifier, location, displayName, settings } = stateUpdater;
+        set(botNameIdentifierState(skillId), botNameIdentifier);
+        set(locationState(skillId), location);
+        set(settingsState(skillId), settings);
+        set(botDisplayNameState(skillId), displayName);
+      },
   });
 
   const useRecoilTestHook = () => {

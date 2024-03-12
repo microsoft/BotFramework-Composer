@@ -10,7 +10,7 @@ type LgFieldHandler = (actionId: string, lgFieldName: string, lgFieldValue: stri
 
 const findLgFields = (action: any, handleLgField: LgFieldHandler) => {
   if (typeof action === 'string') return;
-  if (!action || !action.$kind) return;
+  if (!action?.$kind) return;
 
   const onFound = (fieldName: string) => {
     action[fieldName] && handleLgField(get(action, '$designer.id', ''), fieldName, action[fieldName]);

@@ -21,7 +21,7 @@ describe('Test the generated recognizer dialogs', () => {
       ],
       'qna',
       false,
-      QnALocales
+      QnALocales,
     );
 
     expect(result.id).toBe('test.qna.dialog');
@@ -34,7 +34,7 @@ describe('Test the generated recognizer dialogs', () => {
     const result = getCrossTrainedRecognizerDialog(
       'test',
       [{ id: 'test.en-us', empty: false }] as LuFile[],
-      [{ id: 'test.en-us', empty: false }] as QnAFile[]
+      [{ id: 'test.en-us', empty: false }] as QnAFile[],
     );
     expect(result.id).toBe('test.lu.qna.dialog');
     expect(result.content.recognizers[0]).toBe('test.lu');
@@ -108,7 +108,7 @@ describe('Test the generated recognizer dialogs', () => {
       [
         { id: 'test.en-us', content: 'test' },
         { id: 'test.fr-fr', empty: false },
-      ]
+      ],
     );
 
     expect(result.length).toBe(1);

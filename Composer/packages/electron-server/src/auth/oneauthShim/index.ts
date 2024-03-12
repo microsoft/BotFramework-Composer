@@ -3,7 +3,7 @@
 
 import { OneAuth } from '../oneauth';
 
-export const oneauthShim = ({
+export const oneauthShim = {
   initialize() {},
   shutdown() {},
   setLogPiiEnabled() {},
@@ -15,5 +15,5 @@ export const oneauthShim = ({
   AuthParameters() {},
   AuthResult() {},
   Account() {},
-} as unknown) as typeof OneAuth;
+} as unknown as typeof OneAuth;
 export default oneauthShim;

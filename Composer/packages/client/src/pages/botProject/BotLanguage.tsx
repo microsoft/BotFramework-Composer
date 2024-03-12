@@ -121,14 +121,8 @@ export const BotLanguage: React.FC<BotLanguageProps> = (props) => {
   const mergedSettings = mergePropertiesManagedByRootBot(projectId, rootBotProjectId, settings);
   const locale = useRecoilValue(localeState(projectId));
   const showAddLanguageModal = useRecoilValue(showAddLanguageModalState(projectId));
-  const {
-    addLanguageDialogBegin,
-    setSettings,
-    deleteLanguages,
-    setLocale,
-    addLanguageDialogCancel,
-    addLanguages,
-  } = useRecoilValue(dispatcherState);
+  const { addLanguageDialogBegin, setSettings, deleteLanguages, setLocale, addLanguageDialogCancel, addLanguages } =
+    useRecoilValue(dispatcherState);
 
   const languageListOptions = useMemo(() => {
     const languageList = languageListTemplates(languages, locale, defaultLanguage);
@@ -170,7 +164,7 @@ export const BotLanguage: React.FC<BotLanguageProps> = (props) => {
       <div css={botLanguageContainerStyle}>
         <div css={headerText}>
           {formatMessage(
-            'List of languages that bot will be able to understand (User input) and respond to (Bot responses). To make this bot available in other languages, click ‘Manage languages’ to create a copy of the default language, and translate the content into the new language.'
+            'List of languages that bot will be able to understand (User input) and respond to (Bot responses). To make this bot available in other languages, click ‘Manage languages’ to create a copy of the default language, and translate the content into the new language.',
           )}
         </div>
         <div

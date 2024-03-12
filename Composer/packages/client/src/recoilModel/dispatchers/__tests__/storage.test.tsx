@@ -63,7 +63,7 @@ describe('Storage dispatcher', () => {
             storageDispatcher,
           },
         },
-      }
+      },
     );
     renderedComponent = rendered.result;
     dispatcher = renderedComponent.current.currentDispatcher;

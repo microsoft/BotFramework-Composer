@@ -88,7 +88,7 @@ export const Version1To2Content: React.FC<BreakingUpdateProps> = (props) => {
     >
       <p>
         {formatMessage(
-          'Bot Framework Composer 2.0 provides more built-in capabilities so you can build complex bots quickly. Update to Composer 2.0 for advanced bot templates, prebuilt components, and a runtime that is fully extensible through packages.'
+          'Bot Framework Composer 2.0 provides more built-in capabilities so you can build complex bots quickly. Update to Composer 2.0 for advanced bot templates, prebuilt components, and a runtime that is fully extensible through packages.',
         )}
       </p>
 
@@ -102,7 +102,7 @@ export const Version1To2Content: React.FC<BreakingUpdateProps> = (props) => {
                 {children}
               </Link>
             ),
-          }
+          },
         )}
       </p>
       <div css={buttonRow}>
@@ -131,7 +131,7 @@ export const Version1To2Content: React.FC<BreakingUpdateProps> = (props) => {
       <p css={updateCancelledCopy}>
         {formatMessage.rich(
           'Update cancelled. Auto-update has been turned off for this release. You can update at any time by selecting <b>Help > Check for updates.</b>',
-          { b: ({ children }) => <b key="v2-breaking-changes-re-enable-auto-updates">{children}</b> }
+          { b: ({ children }) => <b key="v2-breaking-changes-re-enable-auto-updates">{children}</b> },
         )}
       </p>
       <div css={buttonRow}>

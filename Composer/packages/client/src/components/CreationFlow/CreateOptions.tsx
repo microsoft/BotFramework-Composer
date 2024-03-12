@@ -27,21 +27,14 @@ type CreateOptionsProps = {
   onDismiss: () => void;
   onNext: (templateName: string, templateLanguage: string, urlData?: string) => void;
   onJumpToOpenModal: (search?: string) => void;
-  fetchReadMe: (moduleName: string) => {};
+  fetchReadMe: (moduleName: string) => any;
 } & RouteComponentProps<{}>;
 
 export function CreateOptions(props: CreateOptionsProps) {
   const [isOpenOptionsModal, setIsOpenOptionsModal] = useState(true);
   const [isOpenCreateModal, setIsOpenCreateModal] = useState(false);
-  const {
-    templates,
-    onDismiss,
-    onNext,
-    onJumpToOpenModal,
-    fetchReadMe,
-    onUpdateLocalTemplatePath,
-    localTemplatePath,
-  } = props;
+  const { templates, onDismiss, onNext, onJumpToOpenModal, fetchReadMe, onUpdateLocalTemplatePath, localTemplatePath } =
+    props;
   const [showNodeModal, setShowNodeModal] = useState(false);
   const userHasNode = useRecoilValue(userHasNodeInstalledState);
   const creationFlowType = useRecoilValue(creationFlowTypeState);
@@ -106,7 +99,7 @@ export function CreateOptions(props: CreateOptionsProps) {
           downloadLink={'https://nodejs.org/en/download/'}
           downloadLinkText={formatMessage('Install Node.js')}
           text={formatMessage(
-            'Bot Framework Composer requires Node.js in order to create and run a new bot. Click “Install Node.js” to install the latest version. You will need to restart Composer after installing Node.'
+            'Bot Framework Composer requires Node.js in order to create and run a new bot. Click “Install Node.js” to install the latest version. You will need to restart Composer after installing Node.',
           )}
           title={formatMessage('Node.js required')}
           onDismiss={() => setShowNodeModal(false)}

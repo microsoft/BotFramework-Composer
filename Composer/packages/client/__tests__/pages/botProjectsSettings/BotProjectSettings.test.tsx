@@ -57,7 +57,7 @@ describe('<BotProjectSettings />', () => {
   it('should toggle JSON view', async () => {
     const component = renderWithRecoilAndCustomDispatchers(
       <BotProjectSettings projectId={projectId} />,
-      initRecoilState
+      initRecoilState,
     );
     const jsonToggleNode = await component.findByTestId('advancedSettingsToggle');
     await act(async () => {
@@ -82,7 +82,7 @@ describe('<BotProjectSettingsTabView />', () => {
   it('should nav to all tabs', async () => {
     const component = renderWithRecoilAndCustomDispatchers(
       <BotProjectSettings projectId={projectId} />,
-      initRecoilState
+      initRecoilState,
     );
     const overviewTabNode = await component.findByText('Overview');
     await act(async () => {

@@ -41,7 +41,7 @@ describe('<TriggerCreationModal/>', () => {
           onDismiss={onDismissMock}
           onSubmit={onSubmitMock}
         />
-      </EditorExtension>
+      </EditorExtension>,
     );
   }
 

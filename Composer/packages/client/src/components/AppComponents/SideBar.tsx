@@ -113,7 +113,11 @@ export const SideBar: React.FC<RouteComponentProps> = () => {
             );
 
             if (link.isDisabledForPVA) {
-              return <DisableFeatureToolTip isPVABot={isPVABot}>{navItem}</DisableFeatureToolTip>;
+              return (
+                <DisableFeatureToolTip key={'NavLeftBar' + index} isPVABot={isPVABot}>
+                  {navItem}
+                </DisableFeatureToolTip>
+              );
             }
             return navItem;
           })}

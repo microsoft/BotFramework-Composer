@@ -30,7 +30,7 @@ export const createReplyToActivityHandler = (req: express.Request, res: express.
     ) {
       const oAuthException: DirectLineError = {
         message: formatMessage(
-          'OAuth activities are not available for testing in Composer yet. Please continue using Bot Framework Emulator for testing OAuth actions.'
+          'OAuth activities are not available for testing in Composer yet. Please continue using Bot Framework Emulator for testing OAuth actions.',
         ),
         status: StatusCodes.NOT_IMPLEMENTED,
       };

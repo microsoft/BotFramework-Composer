@@ -35,7 +35,7 @@ const getClassNames = (theme: ITheme, props: Partial<HelpTooltipProps>) =>
         }),
       ],
     },
-    props.styles
+    props.styles,
   );
 
 export type HelpTooltipStyles = IStyleFunctionOrObject<
@@ -51,7 +51,7 @@ export type HelpTooltipProps = Omit<ITooltipHostProps, 'styles'> & {
   styles?: HelpTooltipStyles;
 };
 
-const useClassNames = <Styles extends HelpTooltipProps['styles'],>(styles: Styles) =>
+const useClassNames = <Styles extends HelpTooltipProps['styles']>(styles: Styles) =>
   useMemo(() => getClassNames(getTheme(), { styles }), [styles]);
 
 export const HelpTooltip: React.FC<HelpTooltipProps> = ({ iconProps, ...props }) => {

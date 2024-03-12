@@ -27,8 +27,8 @@ function renderSubject(overrides = {}, shellOverrides = {}) {
         },
         focusedSteps: [],
       },
-      shellOverrides
-    )
+      shellOverrides,
+    ),
   );
 
   const props = assign({}, fieldProps(), overrides);
@@ -55,7 +55,7 @@ describe('<RegexIntentField />', () => {
     const updateRegExIntent = jest.fn();
     const { getByDisplayValue } = renderSubject(
       { value: 'FirstIntent' },
-      { shellApi: { updateRegExIntent }, currentDialog: { id: 'current-dialog-id', content: dialog } }
+      { shellApi: { updateRegExIntent }, currentDialog: { id: 'current-dialog-id', content: dialog } },
     );
 
     const input = getByDisplayValue('first-pattern');
@@ -68,7 +68,7 @@ describe('<RegexIntentField />', () => {
   it('still renders if no intents found', () => {
     const { container } = renderSubject(
       { value: 'FirstIntent' },
-      { currentDialog: { id: 'current-dialog-id', content: {} } }
+      { currentDialog: { id: 'current-dialog-id', content: {} } },
     );
 
     expect(container).not.toBeEmptyDOMElement();

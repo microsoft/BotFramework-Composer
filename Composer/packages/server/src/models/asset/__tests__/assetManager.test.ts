@@ -158,7 +158,7 @@ describe('assetManager', () => {
       const mockLocRef = { path: '/path/to/bot', storageId: 'default' };
 
       expect(
-        async () => await assetManager.copyRemoteProjectTemplateTo('tempDir', mockLocRef, undefined, undefined)
+        async () => await assetManager.copyRemoteProjectTemplateTo('tempDir', mockLocRef, undefined, undefined),
       ).rejects.toThrowError(new Error('already have this folder, please give another name'));
     });
   });
@@ -213,7 +213,7 @@ describe('assetManager', () => {
         mockLocRef,
         '0',
         'webapp',
-        'dotnet'
+        'dotnet',
       );
       expect(newBotLocationRef).toStrictEqual({
         path: '/path/to/npmbot',

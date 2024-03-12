@@ -7,6 +7,7 @@ const projectId = '2123.2234as';
 
 jest.mock('../../parsers/fileDiffCalculator', () => {
   return {
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
     difference: require('../../parsers/workers/calculator.worker').getDifferenceItems,
   };
 });
@@ -29,7 +30,7 @@ describe('test persistence layer', () => {
 
     const current = {
       projectId: 'test',
-      dialogs: ([{ id: 'a', content: { a: 'create' } }] as unknown) as DialogInfo[],
+      dialogs: [{ id: 'a', content: { a: 'create' } }] as unknown as DialogInfo[],
       dialogSchemas: [{ id: 'a', content: { a: 'new schema' } }] as DialogSchemaFile[],
       lgFiles: [{ id: 'a.en-us', content: 'a.lg' }] as LgFile[],
       luFiles: [{ id: 'a.en-us', content: 'a.lu' }] as LuFile[],
@@ -38,7 +39,7 @@ describe('test persistence layer', () => {
 
     const last = {
       projectId: 'test',
-      dialogs: ([{ id: 'a', content: { a: 'update' } }] as unknown) as DialogInfo[],
+      dialogs: [{ id: 'a', content: { a: 'update' } }] as unknown as DialogInfo[],
       dialogSchemas: [{ id: 'a', content: { a: 'new schema' } }] as DialogSchemaFile[],
       lgFiles: [{ id: 'a.en-us', content: 'a.lg' }] as LgFile[],
       luFiles: [{ id: 'a.en-us', content: 'a.lu' }] as LuFile[],
@@ -61,7 +62,7 @@ describe('test persistence layer', () => {
   it('test notify create', async () => {
     const previous = {
       projectId: 'test',
-      dialogs: ([{ id: 'a', content: { a: 'a' } }] as unknown) as DialogInfo[],
+      dialogs: [{ id: 'a', content: { a: 'a' } }] as unknown as DialogInfo[],
       dialogSchemas: [{ id: 'a', content: { a: 'a' } }] as DialogSchemaFile[],
       lgFiles: [{ id: 'a.en-us', content: 'a' }] as LgFile[],
       luFiles: [{ id: 'a.en-us', content: 'a' }] as LuFile[],
@@ -69,10 +70,10 @@ describe('test persistence layer', () => {
 
     const current = {
       projectId: 'test',
-      dialogs: ([
+      dialogs: [
         { id: 'a', content: { a: 'a' } },
         { id: 'b', content: { b: 'b' } },
-      ] as unknown) as DialogInfo[],
+      ] as unknown as DialogInfo[],
       dialogSchemas: [
         { id: 'a', content: { a: 'a' } },
         { id: 'b', content: { b: 'b' } },
@@ -100,10 +101,10 @@ describe('test persistence layer', () => {
   it('test notify remove', async () => {
     const previous = {
       projectId: 'test',
-      dialogs: ([
+      dialogs: [
         { id: 'a', content: { a: 'a' } },
         { id: 'b', content: { b: 'b.pre' } },
-      ] as unknown) as DialogInfo[],
+      ] as unknown as DialogInfo[],
       dialogSchemas: [
         { id: 'a', content: { a: 'a' } },
         { id: 'b', content: { b: 'b.pre' } },
@@ -120,7 +121,7 @@ describe('test persistence layer', () => {
 
     const current = {
       projectId: 'test',
-      dialogs: ([{ id: 'a', content: { a: 'a' } }] as unknown) as DialogInfo[],
+      dialogs: [{ id: 'a', content: { a: 'a' } }] as unknown as DialogInfo[],
       dialogSchemas: [{ id: 'a', content: { a: 'a' } }] as DialogSchemaFile[],
       lgFiles: [{ id: 'a.en-us', content: 'a' }] as LgFile[],
       luFiles: [{ id: 'a.en-us', content: 'a' }] as LuFile[],

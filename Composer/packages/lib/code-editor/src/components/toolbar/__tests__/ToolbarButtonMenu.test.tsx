@@ -201,7 +201,7 @@ describe('<ToolbarButtonMenu />', () => {
 
     expect(functionPayload.data.onSelectFunction).toBeCalledWith(
       getBuiltInFunctionInsertText(functionName),
-      'function'
+      'function',
     );
   });
 });

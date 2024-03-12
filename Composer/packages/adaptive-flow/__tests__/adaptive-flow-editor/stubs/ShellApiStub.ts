@@ -3,7 +3,7 @@
 
 import { ShellApi } from '@bfc/shared';
 
-const fn = () => ({} as any);
+const fn = () => ({}) as any;
 const fnList = () => [] as any[];
 const fnPromise = () => Promise.resolve({} as any);
 

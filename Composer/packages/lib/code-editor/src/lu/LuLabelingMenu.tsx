@@ -36,9 +36,10 @@ export const LuLabelingMenu = ({
     onMenuToggled?.(!!menuTargetElm);
   }, [menuTargetElm]);
 
-  const menuCalloutProps = React.useMemo(() => (shouldRenderBelowFabricLayer ? calloutProps : undefined), [
-    shouldRenderBelowFabricLayer,
-  ]);
+  const menuCalloutProps = React.useMemo(
+    () => (shouldRenderBelowFabricLayer ? calloutProps : undefined),
+    [shouldRenderBelowFabricLayer],
+  );
 
   const callback = React.useCallback(
     (data?: { selectedDomElement: HTMLElement; selectedText: string; lineContent: string; selection: any }) => {
@@ -58,7 +59,7 @@ export const LuLabelingMenu = ({
         setMenuTargetElm(null);
       }
     },
-    []
+    [],
   );
 
   useMonacoSelectedTextDom(editor, callback);
@@ -98,7 +99,7 @@ export const LuLabelingMenu = ({
       }
       setMenuTargetElm(null);
     },
-    [onInsertEntity]
+    [onInsertEntity],
   );
 
   const { menuProps, noEntities } = useLabelingMenuProps('filter', luFile, itemClick, {

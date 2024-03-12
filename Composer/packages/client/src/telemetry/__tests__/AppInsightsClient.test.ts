@@ -31,7 +31,7 @@ describe('Application Insights Logger', () => {
             },
           }),
         ]),
-      })
+      }),
     );
   });
 
@@ -65,7 +65,7 @@ describe('Application Insights Logger', () => {
             },
           }),
         ]),
-      })
+      }),
     );
   });
 

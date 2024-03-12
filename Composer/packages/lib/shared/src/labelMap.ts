@@ -19,7 +19,7 @@ type ConceptLabelKey = SDKKinds | 'Activity';
 export const conceptLabels: () => { [key in ConceptLabelKey]?: LabelOverride } = () => ({
   Activity: {
     description: formatMessage(
-      'What your Bot says to the user. Visit <a target="_blank" href="https://aka.ms/bf-composer-docs-lg"> the documentation</a> a reference of capabilities.'
+      'What your Bot says to the user. Visit <a target="_blank" href="https://aka.ms/bf-composer-docs-lg"> the documentation</a> a reference of capabilities.',
     ),
     title: formatMessage('Language Generation'),
   },
@@ -100,7 +100,7 @@ export const conceptLabels: () => { [key in ConceptLabelKey]?: LabelOverride } =
   },
   [SDKKinds.LuisRecognizer]: {
     description: formatMessage(
-      "To understand what the user says, your dialog needs an 'IRecognizer' that includes example words and sentences that users may use."
+      "To understand what the user says, your dialog needs an 'IRecognizer' that includes example words and sentences that users may use.",
     ),
     title: formatMessage('Language Understanding'),
   },
@@ -109,7 +109,7 @@ export const conceptLabels: () => { [key in ConceptLabelKey]?: LabelOverride } =
   },
   [SDKKinds.MultiLanguageRecognizer]: {
     description: formatMessage(
-      "To understand what the user says, your dialog needs an 'IRecognizer' that includes example words and sentences that users may use."
+      "To understand what the user says, your dialog needs an 'IRecognizer' that includes example words and sentences that users may use.",
     ),
     title: formatMessage('Language Understanding'),
   },

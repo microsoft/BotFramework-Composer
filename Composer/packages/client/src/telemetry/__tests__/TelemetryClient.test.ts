@@ -21,7 +21,7 @@ describe('TelemetryClient', () => {
       expect.objectContaining({
         prop1: 'prop1',
         name: 'test',
-      })
+      }),
     );
   });
 
@@ -35,7 +35,7 @@ describe('TelemetryClient', () => {
       expect.objectContaining({
         prop1: 'prop1',
         name: 'test',
-      })
+      }),
     );
   });
 });

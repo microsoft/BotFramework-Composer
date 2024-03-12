@@ -19,7 +19,7 @@ export function sequentialLayouter(nodes: GraphNode[], withHeadEdge = true, with
   const box = calculateSequenceBoundary(
     nodes.map((x) => x.boundary),
     withHeadEdge,
-    withTrailingEdge
+    withTrailingEdge,
   );
 
   nodes.reduce((offsetY, node) => {

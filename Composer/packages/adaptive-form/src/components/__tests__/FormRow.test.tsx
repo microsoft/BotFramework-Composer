@@ -63,7 +63,7 @@ describe('getRowProps', () => {
 
   it('gets the correct rawErrors', () => {
     expect(getRowProps({ ...field, rawErrors: { single: 'single errors' } }, 'single').rawErrors).toEqual(
-      'single errors'
+      'single errors',
     );
   });
 

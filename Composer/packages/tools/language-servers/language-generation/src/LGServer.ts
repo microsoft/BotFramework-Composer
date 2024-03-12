@@ -72,7 +72,7 @@ export class LGServer {
     protected readonly connection: IConnection,
     protected readonly getLgResources: (projectId?: string) => ResolverResource[],
     protected readonly memoryResolver?: MemoryResolver,
-    protected readonly entitiesResolver?: MemoryResolver
+    protected readonly entitiesResolver?: MemoryResolver,
   ) {
     this.documents.listen(this.connection);
     this.documents.onDidChangeContent((change) => {
@@ -114,7 +114,7 @@ export class LGServer {
     this.connection.onHover(async (params) => await this.hover(params));
     this.connection.onDocumentOnTypeFormatting((docTypingParams) => this.docTypeFormat(docTypingParams));
     this.connection.onFoldingRanges((foldingRangeParams: FoldingRangeParams) =>
-      this.foldingRangeHandler(foldingRangeParams)
+      this.foldingRangeHandler(foldingRangeParams),
     );
 
     this.connection.onRequest((method, params) => {
@@ -172,7 +172,7 @@ export class LGServer {
     if (curFileResult?.range) {
       return Location.create(
         params.textDocument.uri,
-        Range.create(curFileResult.range.start.line - 1, 0, curFileResult.range.end.line, 0)
+        Range.create(curFileResult.range.start.line - 1, 0, curFileResult.range.end.line, 0),
       );
     }
 
@@ -243,7 +243,7 @@ export class LGServer {
     this.connection.console.log(diagnostics.join('\n'));
     this.sendDiagnostics(
       document,
-      diagnostics.map((errorMsg) => generateDiagnostic(errorMsg, DiagnosticSeverity.Error, document))
+      diagnostics.map((errorMsg) => generateDiagnostic(errorMsg, DiagnosticSeverity.Error, document)),
     );
   }
 
@@ -366,7 +366,7 @@ export class LGServer {
           `Parameters: ${get(functionEntity, 'Params', []).join(', ')}`,
           `Documentation: ${get(functionEntity, 'Introduction', '')}`,
           `ReturnType: ${this.getExplicitReturnType(get(functionEntity, 'Returntype', '').valueOf() as number).join(
-            ' | '
+            ' | ',
           )}`,
         ],
       };
@@ -415,7 +415,7 @@ export class LGServer {
 
   private matchStructuredLG(
     params: TextDocumentPositionParams,
-    templateId: string | undefined
+    templateId: string | undefined,
   ): LGCursorState | undefined {
     const state: LGCursorState[] = [];
     const document = this.documents.get(params.textDocument.uri);
@@ -441,7 +441,7 @@ export class LGServer {
 
   private matchCurLineState(
     params: TextDocumentPositionParams,
-    templateId: string | undefined
+    templateId: string | undefined,
   ): LGCursorState | undefined {
     const state: LGCursorState[] = [];
     const document = this.documents.get(params.textDocument.uri);
@@ -500,7 +500,7 @@ export class LGServer {
 
   private findLastStructureLGProps(
     params: TextDocumentPositionParams,
-    templateId: string | undefined
+    templateId: string | undefined,
   ): string[] | undefined {
     const state: LGCursorState[] = [];
     const document = this.documents.get(params.textDocument.uri);
@@ -535,7 +535,7 @@ export class LGServer {
 
   private matchState(
     params: TextDocumentPositionParams,
-    curLineState: LGCursorState | undefined
+    curLineState: LGCursorState | undefined,
   ): LGCursorState | undefined {
     const state: LGCursorState[] = [];
     const document = this.documents.get(params.textDocument.uri);
@@ -936,7 +936,7 @@ export class LGServer {
       {},
       this.memoryVariables,
       this._curDefinedVariblesInLG,
-      this._otherDefinedVariblesInLG
+      this._otherDefinedVariblesInLG,
     );
   }
 
@@ -947,7 +947,7 @@ export class LGServer {
       setTimeout(async () => {
         this.pendingValidationRequests.delete(document.uri);
         await this.doValidate(document);
-      })
+      }),
     );
   }
 

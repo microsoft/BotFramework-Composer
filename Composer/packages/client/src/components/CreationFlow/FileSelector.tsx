@@ -501,8 +501,8 @@ export const FileSelector: React.FC<FileSelectorProps> = (props) => {
     return pathError
       ? pathError
       : operationMode.write && !focusedStorageFolder.writable
-      ? formatMessage('You do not have permission to save bots here')
-      : '';
+        ? formatMessage('You do not have permission to save bots here')
+        : '';
   };
 
   return (

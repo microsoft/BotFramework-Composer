@@ -27,7 +27,8 @@ type Props = {
 };
 
 const renderField = (variable: string, info: Record<string, any>, value: any, onChange: (value: any) => void) => {
-  const renderLabel = (helpText: string, tooltipId: string) =>
+  const renderLabel =
+    (helpText: string, tooltipId: string) =>
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (props: any, defaultRender?: (props: any) => JSX.Element | null) => (
       <FieldLabel defaultRender={defaultRender(props)} helpText={helpText} tooltipId={tooltipId} />

@@ -84,7 +84,7 @@ export const migrateSkillsForExistingBots = (botProjectFile: BotProjectSpace, ro
 export const fetchEndpointNameForSkill = (
   rootBotSettings: DialogSetting,
   skillNameIdentifier: string,
-  manifestData
+  manifestData,
 ) => {
   const endpointUrl = get(rootBotSettings, `skill[${skillNameIdentifier}].endpointUrl`);
   if (endpointUrl) {
@@ -125,7 +125,7 @@ export const isUsingAdaptiveRuntime = (runtime?: DialogSetting['runtime']): bool
  * @default { isUsingAdaptiveRuntime: false, runtimeLanguage: 'dotnet', runtimeType: 'webapp'}
  */
 export const parseRuntimeKey = (
-  runtimeKey?: string
+  runtimeKey?: string,
 ): { isUsingAdaptiveRuntime: boolean; runtimeLanguage?: string; runtimeType?: string } => {
   const isAdaptive = isUsingAdaptiveRuntimeKey(runtimeKey);
 

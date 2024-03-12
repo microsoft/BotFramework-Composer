@@ -88,7 +88,7 @@ export const initSplashScreen = async ({
    */
   const updateStatus = async (status: string) => {
     await splashScreenWindow.webContents.executeJavaScript(
-      `document.querySelector('#${statusElmId}').textContent = '${status}';`
+      `document.querySelector('#${statusElmId}').textContent = '${status}';`,
     );
   };
 

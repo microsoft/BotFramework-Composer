@@ -52,7 +52,7 @@ describe('dialog schema dispatcher', () => {
       await dispatcher.updateDialogSchema({ id: '100', content: 'abcde' }, projectId);
     });
     expect(renderedComponent.current.dialogSchemas.find((dialogSchema) => dialogSchema.id === '100').content).toEqual(
-      'abcde'
+      'abcde',
     );
   });
 });

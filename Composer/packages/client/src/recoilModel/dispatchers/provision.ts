@@ -58,58 +58,59 @@ export const provisionDispatcher = () => {
   };
 
   const provisionToTarget = useRecoilCallback(
-    (callbackHelpers: CallbackInterface) => async (
-      config: any,
-      type: string,
-      projectId: string,
-      armToken = '',
-      graphToken = '',
-      currentProfile: PublishTarget | undefined = undefined
-    ) => {
-      try {
-        TelemetryClient.track('NewPublishingProfileStarted');
-        const result = await httpClient.post(`/provision/${projectId}/${type}`, {
-          ...config,
-          graphToken: graphToken,
-          currentProfile,
-          accessToken: armToken,
-        });
-        // set notification
-        const notification = createNotification(getProvisionPendingNotification(result.data.message));
-        addNotificationInternal(callbackHelpers, notification);
-        // initialize this profile's provision status state
-        callbackHelpers.set(provisionStatusState(projectId), (provisionStatus) => {
-          const newStat = {
-            ...provisionStatus,
-            [result.data.processName]: {
-              ...result.data,
-              notificationId: notification.id,
-            },
-          };
-          return newStat;
-        });
+    (callbackHelpers: CallbackInterface) =>
+      async (
+        config: any,
+        type: string,
+        projectId: string,
+        armToken = '',
+        graphToken = '',
+        currentProfile: PublishTarget | undefined = undefined,
+      ) => {
+        try {
+          TelemetryClient.track('NewPublishingProfileStarted');
+          const result = await httpClient.post(`/provision/${projectId}/${type}`, {
+            ...config,
+            graphToken: graphToken,
+            currentProfile,
+            accessToken: armToken,
+          });
+          // set notification
+          const notification = createNotification(getProvisionPendingNotification(result.data.message));
+          addNotificationInternal(callbackHelpers, notification);
+          // initialize this profile's provision status state
+          callbackHelpers.set(provisionStatusState(projectId), (provisionStatus) => {
+            const newStat = {
+              ...provisionStatus,
+              [result.data.processName]: {
+                ...result.data,
+                notificationId: notification.id,
+              },
+            };
+            return newStat;
+          });
 
-        // call provision status api interval to update the state.
-        await updateProvisionStatus(
-          callbackHelpers,
-          result.data.id,
-          projectId,
-          result.data.processName,
-          type,
-          notification.id
-        );
-      } catch (error) {
-        TelemetryClient.track('ProvisioningProfileCreateFailure', {
-          message: error.response?.data || 'Error when provision target',
-        });
+          // call provision status api interval to update the state.
+          await updateProvisionStatus(
+            callbackHelpers,
+            result.data.id,
+            projectId,
+            result.data.processName,
+            type,
+            notification.id,
+          );
+        } catch (error) {
+          TelemetryClient.track('ProvisioningProfileCreateFailure', {
+            message: error.response?.data || 'Error when provision target',
+          });
 
-        // set notification
-        const notification = createNotification(
-          getProvisionFailureNotification(error.response?.data || 'Error when provision target')
-        );
-        addNotificationInternal(callbackHelpers, notification);
-      }
-    }
+          // set notification
+          const notification = createNotification(
+            getProvisionFailureNotification(error.response?.data || 'Error when provision target'),
+          );
+          addNotificationInternal(callbackHelpers, notification);
+        }
+      },
   );
 
   // update provision status interval
@@ -119,7 +120,7 @@ export const provisionDispatcher = () => {
     projectId: string,
     targetName: string,
     targetType: string,
-    notificationId: string
+    notificationId: string,
   ) => {
     const timer = setInterval(async () => {
       let notification,

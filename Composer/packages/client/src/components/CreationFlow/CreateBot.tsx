@@ -126,7 +126,7 @@ type CreateBotProps = {
   onUpdateLocalTemplatePath: (path: string) => void;
   onDismiss: () => void;
   onNext: (templateName: string, templateLanguage: string, urlData?: string) => void;
-  fetchReadMe: (moduleName: string) => {};
+  fetchReadMe: (moduleName: string) => any;
 };
 
 export function CreateBot(props: CreateBotProps) {
@@ -326,7 +326,7 @@ export function CreateBot(props: CreateBotProps) {
                     {children}
                   </Link>
                 ),
-              }
+              },
             )}
           </Text>
         </div>

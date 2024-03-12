@@ -33,9 +33,10 @@ const headerContentStyles = { root: { height: 32 } };
 const styles = {
   dropdown: {
     root: {
-      ':hover .ms-Dropdown-title, :active .ms-Dropdown-title, :hover .ms-Dropdown-caretDown, :active .ms-Dropdown-caretDown': {
-        color: FluentTheme.palette.themeDarker,
-      },
+      ':hover .ms-Dropdown-title, :active .ms-Dropdown-title, :hover .ms-Dropdown-caretDown, :active .ms-Dropdown-caretDown':
+        {
+          color: FluentTheme.palette.themeDarker,
+        },
       ':focus-within .ms-Dropdown-title, :focus-within .ms-Dropdown-caretDown': {
         color: FluentTheme.palette.accent,
       },
@@ -115,7 +116,7 @@ export const ModalityEditorContainer: React.FC<Props> = ({
               formatMessage('Removing content from action node'),
               formatMessage(
                 'You are about to remove {modalityTitle} content from this action node. Are you sure you want to proceed?',
-                { modalityTitle }
+                { modalityTitle },
               ),
               {
                 confirmText: formatMessage('Delete'),
@@ -125,12 +126,12 @@ export const ModalityEditorContainer: React.FC<Props> = ({
                     ? {
                         kind: 'additionalConfirm',
                         label: formatMessage(
-                          'I want to keep the template content in the file, just want to dereference from this response (hint: keep the content if you currently, or plan to re-use in another location)'
+                          'I want to keep the template content in the file, just want to dereference from this response (hint: keep the content if you currently, or plan to re-use in another location)',
                         ),
                         defaultChecked: false,
                       }
                     : undefined,
-              }
+              },
             );
             if (confirm) {
               onRemoveModality(modalityType, !!confirm.additionalConfirm);
@@ -139,7 +140,7 @@ export const ModalityEditorContainer: React.FC<Props> = ({
         },
       },
     ],
-    [modalityType, modalityTitle, menuItems, disableRemoveModality, removeModalityOptionText, onRemoveModality]
+    [modalityType, modalityTitle, menuItems, disableRemoveModality, removeModalityOptionText, onRemoveModality],
   );
 
   const renderTitle = React.useCallback(
@@ -149,13 +150,13 @@ export const ModalityEditorContainer: React.FC<Props> = ({
         {defaultRender?.(optionProps)}
       </Text>
     ),
-    [dropdownPrefix]
+    [dropdownPrefix],
   );
 
   const renderOption = React.useCallback(
     (
       itemProps?: IDropdownOption,
-      defaultRender?: (props?: IDropdownOption) => JSX.Element | null
+      defaultRender?: (props?: IDropdownOption) => JSX.Element | null,
     ): JSX.Element | null =>
       itemProps?.itemType === DropdownMenuItemType.Header ? (
         <ItemWithTooltip
@@ -167,7 +168,7 @@ export const ModalityEditorContainer: React.FC<Props> = ({
       ) : (
         defaultRender?.(itemProps) ?? null
       ),
-    []
+    [],
   );
 
   return (
