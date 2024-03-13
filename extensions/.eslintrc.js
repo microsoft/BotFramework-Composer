@@ -6,9 +6,7 @@ module.exports = {
   extends: [
     'eslint:recommended',
     'plugin:prettier/recommended',
-    'plugin:@typescript-eslint/recommended',
     'plugin:@typescript-eslint/eslint-recommended',
-    'prettier/@typescript-eslint',
     'plugin:react/recommended',
   ],
   plugins: ['import', 'notice', 'security', 'lodash'],
@@ -39,7 +37,6 @@ module.exports = {
     ],
 
     // typescript
-    '@typescript-eslint/ban-ts-ignore': 'warn',
     '@typescript-eslint/explicit-function-return-type': 'off',
     '@typescript-eslint/interface-name-prefix': 'off',
     '@typescript-eslint/no-empty-function': 'off',

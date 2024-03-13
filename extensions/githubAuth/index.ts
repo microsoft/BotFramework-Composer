@@ -3,7 +3,6 @@
 
 const GitHubStrategy = require('passport-github').Strategy;
 
-// eslint-disable-next-line @typescript-eslint/no-var-requires
 const { GITHUB_CLIENT_ID, GITHUB_CLIENT_SECRET, BASE_URL } = require('./config.json');
 
 module.exports = {
