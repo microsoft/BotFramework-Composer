@@ -17,8 +17,8 @@
   "dependencies": {
     "@emotion/eslint-plugin": "11.11.0",
     "@types/fs-extra": "11.0.4",
-    "@typescript-eslint/eslint-plugin": "7.1.1",
-    "@typescript-eslint/parser": "7.1.1",
+    "@typescript-eslint/eslint-plugin": "5.62.0",
+    "@typescript-eslint/parser": "5.62.0",
     "esbuild": "0.20.1",
     "esbuild-plugin-globals": "0.2.0",
     "eslint": "8.57.0",

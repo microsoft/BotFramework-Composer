@@ -1892,7 +1892,7 @@ __metadata:
 
 "@bfc/extension-client@file:../../Composer/packages/extension-client::locator=pva-publish-composer%40workspace%3A.":
   version: 1.0.0
-  resolution: "@bfc/extension-client@file:../../Composer/packages/extension-client#../../Composer/packages/extension-client::hash=26efde&locator=pva-publish-composer%40workspace%3A."
+  resolution: "@bfc/extension-client@file:../../Composer/packages/extension-client#../../Composer/packages/extension-client::hash=5e1b50&locator=pva-publish-composer%40workspace%3A."
   dependencies:
     debug: ^4.1.1
     lodash: ^4.17.19
@@ -1901,7 +1901,7 @@ __metadata:
     "@botframework-composer/types": "*"
     react: 16.13.1
     react-dom: 16.13.1
-  checksum: 1ba954ecb4f9bbf9ea2dcf99e509c57da8e7d9a2967d1d1edbbcf814191a9c3c4de1947f2a5a4a22947a5208bd9bceb2f62c273385f7dd336bd0bf638ab4ee22
+  checksum: f8d4ffbeb3e8d1f9043fcb31484c678cfc068118f3cd3fd358de6669f922e1df2566be4740fb80999182a6abda722814946646dd0193dad7341bc592c7f03d8e
   languageName: node
   linkType: hard
 
@@ -1928,7 +1928,7 @@ __metadata:
 
 "@botframework-composer/types@file:../../Composer/packages/types::locator=pva-publish-composer%40workspace%3A.":
   version: 0.0.2
-  resolution: "@botframework-composer/types@file:../../Composer/packages/types#../../Composer/packages/types::hash=c48524&locator=pva-publish-composer%40workspace%3A."
+  resolution: "@botframework-composer/types@file:../../Composer/packages/types#../../Composer/packages/types::hash=ef4b28&locator=pva-publish-composer%40workspace%3A."
   dependencies:
     "@types/express": 4.16.1
     "@types/passport": ^1.0.4
@@ -1937,7 +1937,7 @@ __metadata:
     express-serve-static-core: 0.1.1
     json-schema: 0.4.0
     tslib: 2.6.2
-  checksum: a734fcc8afed6b9a50f6e068c18d5886cb77fa9ddc284abcffeff119fd40a69952de52d784619631a339f93ca2ab020efcabc9b250af45fd79ec8b9a9b017c8c
+  checksum: 66745edf7c165c79d255e020ca48451e183e2d8590ca0401664c3d02d587ca5dccece134be71382bf6cec92da49151397231332197d0c0b5654ff18ad7e292bb
   languageName: node
   linkType: hard
 
