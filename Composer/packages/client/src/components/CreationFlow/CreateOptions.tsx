@@ -28,7 +28,7 @@ type CreateOptionsProps = {
   onNext: (templateName: string, templateLanguage: string, urlData?: string) => void;
   onJumpToOpenModal: (search?: string) => void;
   fetchReadMe: (moduleName: string) => any;
-} & RouteComponentProps<{}>;
+} & RouteComponentProps<unknown>;
 
 export function CreateOptions(props: CreateOptionsProps) {
   const [isOpenOptionsModal, setIsOpenOptionsModal] = useState(true);
