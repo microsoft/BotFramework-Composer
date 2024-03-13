@@ -49,9 +49,9 @@ export const useEditorToolbarPopExpandItem = (
             className: options?.customClassName,
             ariaLabel: formatMessage('Pop out editor: open editor'),
             onRenderIcon: () => {
-              let PopExpandIcon = createSvgIcon({ svg: () => popExpandSvgIcon, displayName: 'PopExpandIcon' });
-              PopExpandIcon = withTooltip({ content: formatMessage('Pop out editor') }, PopExpandIcon);
-              return <PopExpandIcon style={svgIconStyle} />;
+              const PopExpandIcon = createSvgIcon({ svg: () => popExpandSvgIcon, displayName: 'PopExpandIcon' });
+              const PopExpandIconComp = withTooltip({ content: formatMessage('Pop out editor') }, PopExpandIcon);
+              return <PopExpandIconComp style={svgIconStyle} />;
             },
             onClick: () => {
               setIsExpanded(true);

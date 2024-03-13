@@ -14,7 +14,7 @@ export const SkillEndpointField: React.FC<FieldProps> = (props) => {
   const { updateSkill } = shellApi;
 
   const id = getSkillNameFromSetting(value?.skillEndpoint);
-  const skill: Skill = skills[id] || {};
+  const skill: Partial<Skill> = skills[id] || {};
 
   const { endpointUrl: endpointUrlInSettings, msAppId: msAppIdInSettings } = skillsSettings[id] || {};
 

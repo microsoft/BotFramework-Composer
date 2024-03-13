@@ -7,7 +7,7 @@ import { ITooltipHostProps, TooltipHost } from '@fluentui/react/lib/Tooltip';
 export type WithTooltipProps = ITooltipHostProps;
 
 export const withTooltip =
-  <P extends Record<string, unknown>>(
+  <P extends NonNullable<unknown>>(
     tooltipProps: WithTooltipProps,
     Component: React.FC<P> | React.ComponentType<P>,
   ) =>
