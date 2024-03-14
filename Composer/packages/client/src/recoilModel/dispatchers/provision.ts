@@ -127,11 +127,7 @@ export const provisionDispatcher = () => {
         isCleanTimer = false;
       try {
         const response = await httpClient.get(`/provision/${projectId}/status/${targetType}/${targetName}/${jobId}`);
-        if (
-          (response.data?.status === 200 || response.data?.status === 206) &&
-          response.data.config &&
-          response.data.config != {}
-        ) {
+        if ((response.data?.status === 200 || response.data?.status === 206) && response.data.config) {
           // delete provisionStatus
           callbackHelpers.set(provisionStatusState(projectId), (status) => {
             const newStatus = { ...status };

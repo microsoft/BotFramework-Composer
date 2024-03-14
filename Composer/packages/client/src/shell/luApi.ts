@@ -83,7 +83,6 @@ function createLuApi(
     getLuIntents,
     getLuIntent,
     updateLuIntent,
-    // @ts-expect-error debounce is typed in a way that allows returning undefined which conflicts with debouncedUpdateLuIntent type
     debouncedUpdateLuIntent: debounce(updateLuIntent, 250),
     renameLuIntent,
     removeLuIntent,

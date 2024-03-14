@@ -167,7 +167,7 @@ export type ProjectContextApi = {
   createTrigger: (id: string, formData, autoSelected?: boolean) => void;
   createQnATrigger: (id: string) => void;
   stopBot: (projectId: string) => void;
-  updateSkill: (skillId: string, skillsData: { skill: Partial<Skill>; selectedEndpointIndex: number }) => Promise<void>;
+  updateSkill: (skillId: string, skillsData: { skill: Skill; selectedEndpointIndex: number }) => Promise<void>;
   updateRecognizer: (projectId: string, dialogId: string, kind: LuProviderType) => void;
 };
 

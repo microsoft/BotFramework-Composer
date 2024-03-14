@@ -70,7 +70,7 @@ export const SkillEndpointField: React.FC<FieldProps> = (props) => {
 
   const handleChange = (_: React.FormEvent<HTMLDivElement>, option?: IDropdownOption) => {
     if (option) {
-      updateSkill(id, { skill: { ...skill }, selectedEndpointIndex: Number(option.key) });
+      updateSkill(id, { skill: { ...skill } as Skill, selectedEndpointIndex: Number(option.key) });
     }
   };
 

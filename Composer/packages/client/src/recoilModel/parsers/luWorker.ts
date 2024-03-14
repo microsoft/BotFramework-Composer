@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 import { LuIntentSection, LuFile, TextFile, ILUFeaturesConfig } from '@bfc/shared';
 
+// @ts-expect-error used for creating worker (adjusted by Webpack)
 import Worker from './workers/luParser.worker.ts';
 import { BaseWorker } from './baseWorker';
 import {

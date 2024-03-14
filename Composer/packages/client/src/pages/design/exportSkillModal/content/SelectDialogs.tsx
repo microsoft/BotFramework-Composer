@@ -44,7 +44,7 @@ export const SelectDialogs: React.FC<ContentProps> = ({ selectedDialogs, setSele
   );
 
   const selectionRef = useRef(
-    new Selection({
+    new Selection<any>({
       getKey: (item) => item.id,
       onSelectionChanged: () => {
         const selectedItems = selectionRef.current.getSelection();
