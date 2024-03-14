@@ -66,7 +66,7 @@ const getFriendlyPath = (dialogPath: string | undefined, dialogs: DialogInfo[]) 
 
       if (matchedDialog && triggerPath) {
         breadcrumb.push(matchedDialog.displayName);
-        const trigger =(get(matchedDialog, triggerPath, '') as unknown) as ITrigger;
+        const trigger = get(matchedDialog, triggerPath, '') as unknown as ITrigger;
         if (trigger.displayName) {
           breadcrumb.push(trigger.displayName);
         }
