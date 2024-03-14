@@ -25,7 +25,7 @@ export class NuGetFeed implements IFeed {
   constructor(
     private composer: IExtensionRegistration,
     private packageSource?: IPackageSource,
-    private data?: INuGetSearchResult | INuGetServiceIndex
+    private data?: INuGetSearchResult | INuGetServiceIndex,
   ) {}
 
   /**
@@ -50,7 +50,7 @@ export class NuGetFeed implements IFeed {
     let serviceIndex: INuGetServiceIndex = this.data as INuGetServiceIndex;
 
     // If we don't have a service index provided at construction, get it from the url
-    if (!serviceIndex || !serviceIndex.resources) {
+    if (!serviceIndex?.resources) {
       const httpResponse = await axios.get(this.packageSource.url);
       serviceIndex = httpResponse?.data;
     }

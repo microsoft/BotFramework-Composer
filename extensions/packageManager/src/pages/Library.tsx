@@ -148,19 +148,19 @@ const Library: React.FC = () => {
     recentlyUsedCategory: formatMessage('Recently Used'),
     installedCategory: formatMessage('Installed'),
     updateConfirmationPrompt: formatMessage(
-      'Any changes you made to this package will be lost! Are you sure you want to continue?'
+      'Any changes you made to this package will be lost! Are you sure you want to continue?',
     ),
     updateConfirmationTitle: formatMessage('Update Package'),
     conflictConfirmationTitle: formatMessage('Conflicting changes detected'),
     conflictConfirmationPrompt: formatMessage(
-      'This operation will overwrite changes made to previously imported files. Do you want to proceed?'
+      'This operation will overwrite changes made to previously imported files. Do you want to proceed?',
     ),
     removeConfirmationTitle: formatMessage('Remove Package'),
     removeConfirmationPrompt: formatMessage(
-      'Any changes you made to this package will be lost! In addition, this may leave your bot in a broken state. Are you sure you want to continue?'
+      'Any changes you made to this package will be lost! In addition, this may leave your bot in a broken state. Are you sure you want to continue?',
     ),
     requireEject: formatMessage(
-      'To install components, this project must have an ejected runtime. Please navigate to the project settings page, custom runtime section.'
+      'To install components, this project must have an ejected runtime. Please navigate to the project settings page, custom runtime section.',
     ),
     ejectRuntime: formatMessage('Eject Runtime'),
     noComponentsInstalled: formatMessage('No packages installed'),
@@ -182,7 +182,7 @@ const Library: React.FC = () => {
     packageName: string,
     version: string,
     isUpdating: boolean,
-    source: string
+    source: string,
   ) => {
     return httpClient.post(`${API_ROOT}/projects/${projectId}/import`, {
       package: packageName,
@@ -303,7 +303,7 @@ const Library: React.FC = () => {
         let availversions;
         let setversion;
 
-        if (selectedItem.versions && selectedItem.versions.length) {
+        if (selectedItem?.versions?.length) {
           availversions = selectedItem.versions;
         } else {
           availversions = [selectedItem.version];
@@ -501,7 +501,7 @@ const Library: React.FC = () => {
     } catch (err) {
       setApplicationLevelError({
         status: err.response.status,
-        message: err.response && err.response.data.message ? err.response.data.message : err,
+        message: err?.response?.data?.message ?? err,
         summary: strings.libraryError,
       });
     } finally {
@@ -519,7 +519,7 @@ const Library: React.FC = () => {
       } catch (err) {
         setApplicationLevelError({
           status: err.response.status,
-          message: err.response && err.response.data.message ? err.response.data.message : err,
+          message: err?.response?.data?.message ?? err,
           summary: strings.libraryError,
         });
       }
@@ -563,7 +563,7 @@ const Library: React.FC = () => {
           if (err.response) {
             setApplicationLevelError({
               status: err.response.status,
-              message: err.response && err.response.data.message ? err.response.data.message : err,
+              message: err?.response?.data?.message ?? err,
               summary: strings.importError,
             });
           } else {

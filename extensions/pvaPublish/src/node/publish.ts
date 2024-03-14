@@ -23,7 +23,7 @@ export const publish = async (
   project: IBotProject,
   metadata: any,
   _user?: UserIdentity,
-  getAccessToken?
+  getAccessToken?,
 ): Promise<PublishResponse> => {
   const {
     // these are provided by Composer
@@ -68,7 +68,7 @@ export const publish = async (
             resolve();
           });
           archive.pipe(botContentWriter);
-        }
+        },
       );
     });
     const botContent = Buffer.concat(botContentData);
@@ -90,7 +90,7 @@ export const publish = async (
       },
     });
     if (res.status === 202) {
-      const job = await res.json() as PVAPublishJob;
+      const job = (await res.json()) as PVAPublishJob;
       logger.log('Publish job started: %O', job);
 
       // transform the PVA job to a publish response
@@ -134,7 +134,7 @@ export const getStatus = async (
   config: PublishConfig,
   project: IBotProject,
   user?: UserIdentity,
-  getAccessToken?
+  getAccessToken?,
 ): Promise<PublishResponse> => {
   const {
     // these are provided by Composer
@@ -174,7 +174,7 @@ export const getStatus = async (
         'If-None-Match': project.eTag || '',
       },
     });
-    const job = await res.json() as PVAPublishJob;
+    const job = (await res.json()) as PVAPublishJob;
     logger.log('Got updated status from publish job: %O', job);
 
     // transform the PVA job to a publish response
@@ -210,7 +210,7 @@ export const history = async (
   config: PublishConfig,
   _project: IBotProject,
   _user?: UserIdentity,
-  getAccessToken?
+  getAccessToken?,
 ): Promise<PublishResult[]> => {
   const {
     // these are specific to the PVA publish profile shape
@@ -232,7 +232,7 @@ export const history = async (
       method: 'GET',
       headers: getAuthHeaders(accessToken, tenantId),
     });
-    const jobs = await res.json() as PVAPublishJob[];
+    const jobs = (await res.json()) as PVAPublishJob[];
 
     // return the first 20
     return jobs.map((job) => xformJobToResult(job)).slice(0, 19);
@@ -245,7 +245,7 @@ export const pull = async (
   config: PublishConfig,
   _project: IBotProject,
   _user?: UserIdentity,
-  getAccessToken?
+  getAccessToken?,
 ): Promise<PullResponse> => {
   const {
     // these are specific to the PVA publish profile shape
@@ -281,6 +281,7 @@ export const pull = async (
       const zipDir = join(process.env.COMPOSER_TEMP_DIR as string, 'pva-publish');
       ensureDirSync(zipDir);
       const zipPath = join(zipDir, `bot-assets-${Date.now()}.zip`);
+      // eslint-disable-next-line security/detect-non-literal-fs-filename
       const writeStream = createWriteStream(zipPath);
       await new Promise((resolve, reject) => {
         writeStream.once('finish', resolve);
@@ -342,11 +343,7 @@ const ensurePublishProfileHistory = (botProjectId: string, profileName: string) 
 };
 
 const getOperationIdOfLastJob = (botProjectId: string, profileName: string): string => {
-  if (
-    publishHistory[botProjectId] &&
-    publishHistory[botProjectId][profileName] &&
-    !!publishHistory[botProjectId][profileName].length
-  ) {
+  if (publishHistory?.[botProjectId]?.[profileName]?.length) {
     const mostRecentJob = publishHistory[botProjectId][profileName][0];
     return mostRecentJob.id || '';
   }

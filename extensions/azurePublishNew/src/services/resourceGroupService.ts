@@ -7,7 +7,7 @@ import { throwNotImplementedError } from './throwNotImplementedError';
 
 const createResourceGroupService = (token: string, subscriptionId: string) => {
   const tokenCredentials = new TokenCredentials(token);
-  // @ts-expect-error
+  // @ts-expect-error types missmatch
   const client = new ResourceManagementClient(tokenCredentials, subscriptionId);
 
   const list = async () => {

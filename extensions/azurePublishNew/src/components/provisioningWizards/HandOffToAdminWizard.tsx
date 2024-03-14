@@ -62,7 +62,7 @@ export const HandOffToAdminWizard = React.memo((props: Props) => {
                 {children}
               </a>
             ),
-          }
+          },
         ),
         onRenderContent: () => (
           <ChooseResourcesStep enabledResources={resources} onChangeSelection={setEnabledHandOffResources} />
@@ -85,7 +85,7 @@ export const HandOffToAdminWizard = React.memo((props: Props) => {
       {showHandOff && (
         <ProvisionHandoff
           developerInstructions={formatMessage(
-            'If Azure resources and subscription are managed by others, use the following information to request creation of the resources that you need to build and run your bot.'
+            'If Azure resources and subscription are managed by others, use the following information to request creation of the resources that you need to build and run your bot.',
           )}
           handoffInstructions={handOffInstructions}
           hidden={!showHandOff}

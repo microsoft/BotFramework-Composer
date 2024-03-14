@@ -9,7 +9,7 @@ import express, { Request, Response } from 'express';
 import WS from 'ws';
 import { Debugger } from 'debug';
 
-const { Server: WSServer } = WS
+const { Server: WSServer } = WS;
 
 interface WebSocket {
   close(): void;
@@ -105,7 +105,7 @@ export class RuntimeLogServer {
       JSON.stringify({
         standardOutput,
         standardError,
-      })
+      }),
     );
   }
 }

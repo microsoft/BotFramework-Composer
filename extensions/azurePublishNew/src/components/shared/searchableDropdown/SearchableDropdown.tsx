@@ -239,7 +239,7 @@ const getNextIteratorValue = (iterator: number, direction: 'forward' | 'backward
 const getNextSelectableItem = (
   items: IContextualMenuItem[],
   selectedIndex: number,
-  direction: 'forward' | 'backward'
+  direction: 'forward' | 'backward',
 ) => {
   if (!items.length) {
     return undefined;
@@ -423,9 +423,10 @@ export const SearchableDropdown = (props: SearchableDropdownProps) => {
    */
   const calloutTarget = rootRef.current?.querySelector('.ms-TextField-wrapper');
 
-  const createNewItem = React.useMemo(() => creationItem ?? { key: 'CREATE_NEW', text: formatMessage('Create New') }, [
-    creationItem,
-  ]);
+  const createNewItem = React.useMemo(
+    () => creationItem ?? { key: 'CREATE_NEW', text: formatMessage('Create New') },
+    [creationItem],
+  );
 
   if (allowCreation) {
     filteredItems.unshift(createNewItem);
@@ -690,7 +691,7 @@ export const SearchableDropdown = (props: SearchableDropdownProps) => {
    * utilize it.
    */
   const onRenderTextFieldLabel = () => {
-    if (!textFieldProps || !textFieldProps.label) {
+    if (!textFieldProps?.label) {
       return;
     }
 

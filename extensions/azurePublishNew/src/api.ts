@@ -35,7 +35,7 @@ export const getSubscriptions = async (token: string): Promise<Array<Subscriptio
     let message = JSON.stringify(err, Object.getOwnPropertyNames(err));
     if (err?.code === 12 && err?.message?.match(/Bearer/gi)) {
       message = formatMessage(
-        'There was an authentication problem retrieving subscriptions. Verify your login session has not expired and you have permission to list subscriptions in this account.'
+        'There was an authentication problem retrieving subscriptions. Verify your login session has not expired and you have permission to list subscriptions in this account.',
       );
     }
 
@@ -82,7 +82,7 @@ export const getDeployLocations = async (token: string, subscriptionId: string) 
       `https://management.azure.com/subscriptions/${subscriptionId}/locations?api-version=2019-10-01`,
       {
         headers: { Authorization: `Bearer ${token}` },
-      }
+      },
     );
     return result.data.value;
   } catch (error) {
@@ -98,7 +98,7 @@ export const getDeployLocations = async (token: string, subscriptionId: string) 
 export const checkWebAppNameAvailability = async (
   token: string,
   webAppName: string,
-  subscriptionId: string
+  subscriptionId: string,
 ): Promise<ResourceNameAvailability> => {
   try {
     if (!webAppName) {
@@ -125,7 +125,7 @@ export const checkWebAppNameAvailability = async (
     const webSiteManagementClient = new WebSiteManagementClient(credentials, subscriptionId);
     const getCheckNameAvailabilityResult = await webSiteManagementClient.checkNameAvailability(
       webAppName,
-      'Microsoft.Web/sites'
+      'Microsoft.Web/sites',
     );
     if (getCheckNameAvailabilityResult._response.status >= 300) {
       logger({

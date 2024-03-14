@@ -12,9 +12,10 @@ export const handOffToAdminDispatcher = () => {
   });
 
   const setRequiredHandOffResources = useRecoilCallback(
-    ({ set }: CallbackInterface) => (resources: ResourcesItem[]) => {
-      set(requiredHandOffResourcesState, resources);
-    }
+    ({ set }: CallbackInterface) =>
+      (resources: ResourcesItem[]) => {
+        set(requiredHandOffResourcesState, resources);
+      },
   );
 
   return {

@@ -6,6 +6,7 @@ module.exports = {
   extends: [
     'eslint:recommended',
     'plugin:prettier/recommended',
+    'plugin:@typescript-eslint/recommended',
     'plugin:@typescript-eslint/eslint-recommended',
     'plugin:react/recommended',
   ],
@@ -41,6 +42,7 @@ module.exports = {
     '@typescript-eslint/interface-name-prefix': 'off',
     '@typescript-eslint/no-empty-function': 'off',
     '@typescript-eslint/no-unnecessary-type-assertion': 'off',
+    '@typescript-eslint/no-var-requires': 0,
     '@typescript-eslint/no-use-before-define': 'warn',
     '@typescript-eslint/prefer-optional-chain': 'error',
 
@@ -110,7 +112,7 @@ module.exports = {
     'react/no-danger': 'error',
     'react/no-deprecated': 'warn',
     'react/prop-types': 'off',
-    'react/no-unknown-property': 'error',
+    'react/no-unknown-property': ['error', { 'ignore': ['css'] }],
     'react/jsx-boolean-value': ['error', 'never'],
     'react/jsx-filename-extension': ['error', { extensions: ['.jsx', '.tsx'] }],
     // https://github.com/yannickcr/eslint-plugin-react/blob/HEAD/docs/rules/jsx-sort-props.md

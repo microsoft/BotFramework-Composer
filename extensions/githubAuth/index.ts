@@ -22,8 +22,8 @@ module.exports = {
             token: accessToken,
             profile: profile,
           });
-        }
-      )
+        },
+      ),
     );
 
     // define this BEFORE turning on the middleware...
@@ -45,7 +45,7 @@ module.exports = {
         console.log('login complete!');
         // Successful authentication, redirect home.
         res.redirect('/home');
-      }
+      },
     );
 
     composer.addAllowedUrl('/logout');
@@ -60,7 +60,7 @@ module.exports = {
       (user, done) => {
         console.log('DESERIALIZE USER!', user);
         done(null, JSON.parse(user));
-      }
+      },
     );
   },
 };

@@ -21,9 +21,10 @@ export const resourceConfigurationDispatcher = () => {
   });
 
   const setResourceGroup = useRecoilCallback(
-    ({ set }: CallbackInterface) => (resourceGroupName: string, isNew: boolean) => {
-      set(resourceGroupState, { name: resourceGroupName, isNew });
-    }
+    ({ set }: CallbackInterface) =>
+      (resourceGroupName: string, isNew: boolean) => {
+        set(resourceGroupState, { name: resourceGroupName, isNew });
+      },
   );
 
   const setDeployLocation = useRecoilCallback(({ set }: CallbackInterface) => (deployLocation: string) => {

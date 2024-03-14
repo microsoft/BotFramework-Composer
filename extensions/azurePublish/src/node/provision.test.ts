@@ -3,7 +3,7 @@
 
 import { BotProjectProvision, ProvisionConfig } from './provision';
 
-const mockConfig = ({
+const mockConfig = {
   logger: console.log,
   accessToken: 'accessToken',
   graphToken: 'graphToken',
@@ -18,7 +18,7 @@ const mockConfig = ({
   name: 'profileName',
   type: 'azurepublish',
   subscription: 'test',
-} as unknown) as ProvisionConfig;
+} as unknown as ProvisionConfig;
 
 const azProvision = new BotProjectProvision(mockConfig);
 
