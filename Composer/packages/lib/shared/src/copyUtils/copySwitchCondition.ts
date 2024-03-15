@@ -7,10 +7,7 @@ import { ExternalApi } from './ExternalApi';
 import { copyAdaptiveActionList } from './copyAdaptiveActionList';
 import { shallowCopyAdaptiveAction } from './shallowCopyAdaptiveAction';
 
-export const copySwitchCondition = async (
-  input: SwitchCondition,
-  externalApi: ExternalApi,
-): Promise<SwitchCondition> => {
+export async function copySwitchCondition(input: SwitchCondition, externalApi: ExternalApi): Promise<SwitchCondition> {
   const copy = shallowCopyAdaptiveAction(input, externalApi);
 
   if (Array.isArray(input.default)) {
@@ -29,4 +26,4 @@ export const copySwitchCondition = async (
   }
 
   return copy;
-};
+}
