@@ -3990,6 +3990,7 @@ __metadata:
   resolution: "@bfc/built-in-functions@workspace:packages/tools/built-in-functions"
   dependencies:
     "@botframework-composer/test-utils": "*"
+    rimraf: 3.0.2
     tslib: 2.6.2
   languageName: unknown
   linkType: soft
