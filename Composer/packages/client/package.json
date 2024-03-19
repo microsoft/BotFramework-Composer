@@ -115,7 +115,6 @@
     "dotenv-expand": "4.2.0",
     "esbuild-loader": "^2.8.0",
     "eslint-config-react-app": "5.2.1",
-    "eslint-loader": "4.0.0",
     "file-loader": "4.2.0",
     "format-message-cli": "6.2.4",
     "fs-extra": "7.0.1",

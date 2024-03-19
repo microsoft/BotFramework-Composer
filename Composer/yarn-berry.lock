@@ -4063,7 +4063,6 @@ __metadata:
     dotenv-expand: 4.2.0
     esbuild-loader: ^2.8.0
     eslint-config-react-app: 5.2.1
-    eslint-loader: 4.0.0
     file-loader: 4.2.0
     format-message: 6.2.4
     format-message-cli: 6.2.4
@@ -15977,22 +15976,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-loader@npm:4.0.0":
-  version: 4.0.0
-  resolution: "eslint-loader@npm:4.0.0"
-  dependencies:
-    fs-extra: ^9.0.0
-    loader-fs-cache: ^1.0.3
-    loader-utils: ^2.0.0
-    object-hash: ^2.0.3
-    schema-utils: ^2.6.5
-  peerDependencies:
-    eslint: ^6.0.0 || ^7.0.0
-    webpack: ^4.0.0 || ^5.0.0
-  checksum: 7369fb81976f4e511319322b6d557c93b48a031dfa7ca288f710674721b493a317466026fa11f3161de5249f154b764314bbf1d7f30b011f6ddee8a02f108f3d
-  languageName: node
-  linkType: hard
-
 "eslint-module-utils@npm:^2.8.0":
   version: 2.8.1
   resolution: "eslint-module-utils@npm:2.8.1"
@@ -17041,17 +17024,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"find-cache-dir@npm:^0.1.1":
-  version: 0.1.1
-  resolution: "find-cache-dir@npm:0.1.1"
-  dependencies:
-    commondir: ^1.0.1
-    mkdirp: ^0.5.1
-    pkg-dir: ^1.0.0
-  checksum: b5d9d68c1ff8c222124bb19089a405be9a3d0333e713ae989d980342c35690dfddd05f0fb456ec11846579e30e0f0e18293d20632662506cd2fa2c7237783479
-  languageName: node
-  linkType: hard
-
 "find-cache-dir@npm:^2.0.0":
   version: 2.1.0
   resolution: "find-cache-dir@npm:2.1.0"
@@ -17087,16 +17059,6 @@ __metadata:
   dependencies:
     locate-path: ^3.0.0
   checksum: 38eba3fe7a66e4bc7f0f5a1366dc25508b7cfc349f852640e3678d26ad9a6d7e2c43eff0a472287de4a9753ef58f066a0ea892a256fa3636ad51b3fe1e17fae9
-  languageName: node
-  linkType: hard
-
-"find-up@npm:^1.0.0":
-  version: 1.1.2
-  resolution: "find-up@npm:1.1.2"
-  dependencies:
-    path-exists: ^2.0.0
-    pinkie-promise: ^2.0.0
-  checksum: a2cb9f4c9f06ee3a1e92ed71d5aed41ac8ae30aefa568132f6c556fac7678a5035126153b59eaec68da78ac409eef02503b2b059706bdbf232668d7245e3240a
   languageName: node
   linkType: hard
 
@@ -22330,16 +22292,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"loader-fs-cache@npm:^1.0.3":
-  version: 1.0.3
-  resolution: "loader-fs-cache@npm:1.0.3"
-  dependencies:
-    find-cache-dir: ^0.1.1
-    mkdirp: ^0.5.1
-  checksum: 39781412e10bb0d6b5ca1afa9a4bd65e1827c5c51ef9ff746ae3fe8ce0e2cfa3fb96492d6619d8ab305407d20be82a9b244c439df0207f6ced4b98f2861bd372
-  languageName: node
-  linkType: hard
-
 "loader-runner@npm:^2.4.0":
   version: 2.4.0
   resolution: "loader-runner@npm:2.4.0"
@@ -24219,13 +24171,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"object-hash@npm:^2.0.3":
-  version: 2.2.0
-  resolution: "object-hash@npm:2.2.0"
-  checksum: 55ba841e3adce9c4f1b9b46b41983eda40f854e0d01af2802d3ae18a7085a17168d6b81731d43fdf1d6bcbb3c9f9c56d22c8fea992203ad90a38d7d919bc28f1
-  languageName: node
-  linkType: hard
-
 "object-inspect@npm:^1.11.0, object-inspect@npm:^1.9.0":
   version: 1.12.0
   resolution: "object-inspect@npm:1.12.0"
@@ -24965,15 +24910,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"path-exists@npm:^2.0.0":
-  version: 2.1.0
-  resolution: "path-exists@npm:2.1.0"
-  dependencies:
-    pinkie-promise: ^2.0.0
-  checksum: fdb734f1d00f225f7a0033ce6d73bff6a7f76ea08936abf0e5196fa6e54a645103538cd8aedcb90d6d8c3fa3705ded0c58a4da5948ae92aa8834892c1ab44a84
-  languageName: node
-  linkType: hard
-
 "path-exists@npm:^3.0.0":
   version: 3.0.0
   resolution: "path-exists@npm:3.0.0"
@@ -25200,15 +25136,6 @@ __metadata:
   version: 4.0.4
   resolution: "pirates@npm:4.0.4"
   checksum: 6b7187d526fd025a2b91e8fd289c78d88c4adc3ea947b9facbe9cb300a896b0ec00f3e77b36a043001695312a8debbf714453495283bd8a4eaad3bc0c38df425
-  languageName: node
-  linkType: hard
-
-"pkg-dir@npm:^1.0.0":
-  version: 1.0.0
-  resolution: "pkg-dir@npm:1.0.0"
-  dependencies:
-    find-up: ^1.0.0
-  checksum: ce49878797dd81a5cee1cb7f05fdd431729309e4854c9f83d7748491b9d25c5f8ef04b3b7658134361fa036934c0aaa7fc7f984e46970dd227aa490f3869d36a
   languageName: node
   linkType: hard
 
@@ -28308,7 +28235,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"schema-utils@npm:^2.0.0, schema-utils@npm:^2.0.1, schema-utils@npm:^2.4.1, schema-utils@npm:^2.6.5, schema-utils@npm:^2.6.6, schema-utils@npm:^2.7.0":
+"schema-utils@npm:^2.0.0, schema-utils@npm:^2.0.1, schema-utils@npm:^2.4.1, schema-utils@npm:^2.6.6, schema-utils@npm:^2.7.0":
   version: 2.7.1
   resolution: "schema-utils@npm:2.7.1"
   dependencies:
