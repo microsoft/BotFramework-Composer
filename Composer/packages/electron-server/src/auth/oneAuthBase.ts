@@ -4,7 +4,7 @@
 import { ElectronAuthParameters } from '@botframework-composer/types';
 
 export abstract class OneAuthBase {
-  abstract async getAccessToken(
+  abstract getAccessToken(
     params: ElectronAuthParameters,
   ): Promise<{ accessToken: string; acquiredAt: number; expiryTime: number }>;
   abstract shutdown();
