@@ -6,7 +6,9 @@ import englishLowercase from 'nanoid-dictionary/lowercase';
 import numbers from 'nanoid-dictionary/numbers';
 import englishUppercase from 'nanoid-dictionary/uppercase';
 
-export const IDDictionnary = [].concat(englishLowercase.split(''), englishUppercase.split(''), numbers.split('')).join('');
+export const IDDictionnary = []
+  .concat(englishLowercase.split(''), englishUppercase.split(''), numbers.split(''))
+  .join('');
 export function generateDesignerId() {
   const nanoid = customAlphabet(IDDictionnary, 6);
   return nanoid();
