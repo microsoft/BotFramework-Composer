@@ -150,7 +150,6 @@
     "@bfc/eslint-plugin-bfcomposer": "workspace:*",
     "@emotion/babel-preset-css-prop": "11.11.0",
     "@emotion/eslint-plugin": "11.11.0",
-    "@swc/core": "1.4.8",
     "@typescript-eslint/eslint-plugin": "5.62.0",
     "@typescript-eslint/parser": "5.62.0",
     "concurrently": "8.2.2",
@@ -182,8 +181,5 @@
     "typescript": "5.4.2",
     "wait-on": "7.2.0",
     "wsrun": "5.2.4"
-  },
-  "dependencies": {
-    "@swc/jest": "0.2.36"
   }
 }
