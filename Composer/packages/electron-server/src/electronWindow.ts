@@ -4,7 +4,7 @@
 
 import { join } from 'path';
 
-import { app, BrowserWindow, screen, shell, HandlerDetails } from 'electron';
+import { app, BrowserWindow, screen, shell } from 'electron';
 
 import { isLinux } from './utility/platform';
 import { isDevelopment } from './utility/env';
@@ -36,6 +36,7 @@ export default class ElectronWindow {
         nodeIntegrationInWorker: false,
         nodeIntegration: false,
         preload: join(__dirname, 'preload.js'),
+        nativeWindowOpen: true,
       },
       show: false,
       title: `Bot Framework Composer (v${app.getVersion()})`,
@@ -47,7 +48,7 @@ export default class ElectronWindow {
     }
     this.currentBrowserWindow = new BrowserWindow(browserWindowOptions);
     this.currentBrowserWindow.on('page-title-updated', (ev) => ev.preventDefault()); // preserve explicit window title
-    this.currentBrowserWindow.webContents.setWindowOpenHandler(this.onOpenNewWindow);
+    this.currentBrowserWindow.webContents.on('new-window', this.onOpenNewWindow.bind(this));
     log('Rendered Electron window dimensions: ', this.currentBrowserWindow.getSize());
   }
 
@@ -72,12 +73,12 @@ export default class ElectronWindow {
   }
 
   /** Intercepts any requests to open a new browser window (window.open or <a target="_blank">) */
-  private onOpenNewWindow = (details: HandlerDetails) => {
-    if (this.isExternalLink(details.url)) {
+  private onOpenNewWindow(event: Event, url: string) {
+    if (this.isExternalLink(url)) {
       // do not open a new Electron browser window, and instead open in the user's default browser
-      shell.openExternal(details.url, { activate: true });
-      return { action: 'deny' } as const;
+      event.preventDefault();
+      shell.openExternal(url, { activate: true });
     }
-    return { action: 'allow' } as const;
-  };
+    // fall through to normal behavior
+  }
 }
