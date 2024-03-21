@@ -3,6 +3,20 @@
 
 import { PublishResult } from '@botframework-composer/types';
 
+export type ClusterCategory =
+  | 'Dev'
+  | 'Prv'
+  | 'Test'
+  | 'Preprod'
+  | 'FirstRelease'
+  | 'Prod'
+  | 'Gov'
+  | 'High'
+  | 'DoD'
+  | 'Mooncake'
+  | 'Ex'
+  | 'Rx';
+
 export type PVAPublishJob = {
   comment: string;
   diagnostics: DiagnosticInfo[];
@@ -38,6 +52,7 @@ export type PublishConfig = {
   fullSettings: any;
   profileName: string;
   tenantId: string;
+  clusterCategory: ClusterCategory;
 };
 
 export type PublishState =

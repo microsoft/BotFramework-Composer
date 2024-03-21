@@ -15,11 +15,6 @@ export const AUTH_CREDENTIALS = {
     // electron auth flow
     targetResource: 'a522f059-bb65-47c0-8934-7db6e5286414',
   },
-  PPE: {
-    clientId: COMPOSER_1P_APP_ID,
-    scopes: ['a522f059-bb65-47c0-8934-7db6e5286414/.default'],
-    targetResource: 'a522f059-bb65-47c0-8934-7db6e5286414',
-  },
   PROD: {
     clientId: COMPOSER_1P_APP_ID,
     scopes: ['96ff4394-9197-43aa-b393-6a41652e21f8/.default'],
@@ -35,12 +30,4 @@ export const AUTH_CREDENTIALS = {
     scopes: ['69c6e40c-465f-4154-987d-da5cba10734e/.default'],
     targetResource: '69c6e40c-465f-4154-987d-da5cba10734e',
   },
-};
-
-export const BASE_URLS = {
-  INT: 'https://bots.int.customercareintelligence.net/',
-  PPE: 'https://bots.ppe.customercareintelligence.net/',
-  PROD: 'https://powerva.microsoft.com/',
-  GCC: 'https://gcc.api.powerva.microsoft.us/',
-  GCC_HIGH: 'https://high.api.powerva.microsoft.us/',
 };

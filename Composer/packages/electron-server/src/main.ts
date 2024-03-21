@@ -343,6 +343,11 @@ async function run() {
       };
     });
 
+    ipcMain.handle('deeplink', async (evt, url: string) => {
+      const deeplink = parseDeepLinkUrl(url);
+      await getMainWindow()?.webContents.loadURL(getBaseUrl() + deeplink);
+    });
+
     await main();
     setTimeout(() => startApp(signalThatMainWindowIsShowing), 500);
     await initApp();
