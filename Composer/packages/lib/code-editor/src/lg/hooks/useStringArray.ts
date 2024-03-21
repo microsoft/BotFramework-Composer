@@ -30,6 +30,13 @@ const getInitialItems = <T extends ArrayBasedStructuredResponseItem>(
 const fixMultilineItems = (items: TemplateBodyItem[]) => {
   return items.map((item) => {
     if (item.kind === 'variation' && /\r?\n/g.test(item.value)) {
+      // if it's an SSML tag, remove the line breaks.
+      if (/^<speak/g.test(item.value.trim())) {
+        return {
+          ...item,
+          value: item.value.replace(/[\r\n]+/g, ''),
+        };
+      }
       return {
         ...item,
         // Escape all un-escaped -
