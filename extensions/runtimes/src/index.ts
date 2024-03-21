@@ -68,6 +68,12 @@ const isSkillHostUpdateRequired = (skillHostEndpoint?: string) => {
   return !skillHostEndpoint || isLocalhostUrl(skillHostEndpoint);
 };
 
+const csprojName = (project: IBotProject) => {
+  const botProject: { [key: string]: any } = project.getProject();
+  const csprojFile = botProject.files.find((file) => file.name.endsWith('csproj'));
+  return csprojFile.name;
+};
+
 export default async (composer: any): Promise<void> => {
   /**
    * these are the new 2.0 adaptive runtime definitions
@@ -79,8 +85,10 @@ export default async (composer: any): Promise<void> => {
       composer.log(`BUILD THIS C# WEBAPP PROJECT! at ${runtimePath}...`);
       composer.log('Run dotnet user-secrets init...');
 
+      const csproj = csprojName(project);
+
       // TODO: capture output of this and store it somewhere useful
-      const { stderr: initErr } = await execAsync(`dotnet user-secrets init --project ${project.name}.csproj`, {
+      const { stderr: initErr } = await execAsync(`dotnet user-secrets init --project ${csproj}`, {
         cwd: runtimePath,
       });
       if (initErr) {
@@ -88,7 +96,7 @@ export default async (composer: any): Promise<void> => {
       }
 
       composer.log('Run dotnet build...');
-      const { stderr: buildErr } = await execAsync(`dotnet build ${project.name}.csproj`, { cwd: runtimePath });
+      const { stderr: buildErr } = await execAsync(`dotnet build ${csproj}`, { cwd: runtimePath });
       if (buildErr) {
         throw new Error(buildErr);
       }
@@ -103,7 +111,7 @@ export default async (composer: any): Promise<void> => {
       isPreview = false
     ): Promise<string> => {
       // run dotnet install on the project
-      const command = `dotnet add ${project.name}.csproj package "${packageName}"${
+      const command = `dotnet add ${csprojName(project)} package "${packageName}"${
         version ? ' --version="' + version + '"' : ''
       }${source ? ' --source="' + source + '"' : ''}${isPreview ? ' --prerelease' : ''}`;
       composer.log('EXEC:', command);
@@ -116,10 +124,11 @@ export default async (composer: any): Promise<void> => {
       return installOutput;
     },
     uninstallComponent: async (runtimePath: string, packageName: string, project: IBotProject): Promise<string> => {
+      const csproj = csprojName(project);
       // run dotnet install on the project
-      composer.log(`EXECUTE: dotnet remove ${project.name}.csproj package ${packageName}`);
+      composer.log(`EXECUTE: dotnet remove ${csproj} package ${packageName}`);
       const { stderr: installError, stdout: installOutput } = await execAsync(
-        `dotnet remove  ${project.name}.csproj package ${packageName}`,
+        `dotnet remove  ${csproj} package ${packageName}`,
         {
           cwd: path.join(runtimePath),
         }
@@ -129,8 +138,8 @@ export default async (composer: any): Promise<void> => {
       }
       return installOutput;
     },
-    identifyManifest: (runtimePath: string, projName?: string): string => {
-      return path.join(runtimePath, `${projName}.csproj`);
+    identifyManifest: (runtimePath: string, project?: IBotProject): string => {
+      return path.join(runtimePath, csprojName(project));
     },
     run: async (project: IBotProject, localDisk: IFileStorage) => {
       composer.log('RUN THIS C# PROJECT!');
@@ -145,8 +154,7 @@ export default async (composer: any): Promise<void> => {
 
       // find publishing profile in list
       const profile = project.settings.publishTargets.find((p) => p.name === profileName);
-
-      const csproj = `${project.name}.csproj`;
+      const csproj = csprojName(project);
       const publishFolder = path.join(runtimePath, 'bin', 'release', 'publishTarget');
       const deployFilePath = path.join(runtimePath, '.deployment');
       const dotnetProjectPath = path.join(runtimePath, csproj);
@@ -215,13 +223,15 @@ export default async (composer: any): Promise<void> => {
       composer.log(`BUILD THIS C# FUNCTIONS PROJECT! at ${runtimePath}...`);
       composer.log('Run dotnet user-secrets init...');
 
+      const csproj = csprojName(project);
+
       if (fullSettings && port) {
         // we need to update the local.settings.json file with sensitive settings
         await writeAllLocalFunctionsSettings(fullSettings, port, runtimePath, composer.log);
       }
 
       // TODO: capture output of this and store it somewhere useful
-      const { stderr: initErr } = await execAsync(`dotnet user-secrets init --project ${project.name}.csproj`, {
+      const { stderr: initErr } = await execAsync(`dotnet user-secrets init --project ${csproj}`, {
         cwd: runtimePath,
       });
       if (initErr) {
@@ -229,7 +239,7 @@ export default async (composer: any): Promise<void> => {
       }
 
       composer.log('Run dotnet build...');
-      const { stderr: buildErr } = await execAsync(`dotnet build ${project.name}.csproj`, { cwd: runtimePath });
+      const { stderr: buildErr } = await execAsync(`dotnet build ${csproj}`, { cwd: runtimePath });
       if (buildErr) {
         throw new Error(buildErr);
       }
@@ -244,7 +254,7 @@ export default async (composer: any): Promise<void> => {
       isPreview = false
     ): Promise<string> => {
       // run dotnet install on the project
-      const command = `dotnet add ${project.name}.csproj package "${packageName}"${
+      const command = `dotnet add ${csprojName(project)} package "${packageName}"${
         version ? ' --version="' + version + '"' : ''
       }${source ? ' --source="' + source + '"' : ''}${isPreview ? ' --prerelease' : ''}`;
       composer.log('EXEC:', command);
@@ -257,10 +267,11 @@ export default async (composer: any): Promise<void> => {
       return installOutput;
     },
     uninstallComponent: async (runtimePath: string, packageName: string, project: IBotProject): Promise<string> => {
+      const csproj = csprojName(project);
       // run dotnet install on the project
-      composer.log(`EXECUTE: dotnet remove ${project.name}.csproj package ${packageName}`);
+      composer.log(`EXECUTE: dotnet remove ${csproj} package ${packageName}`);
       const { stderr: installError, stdout: installOutput } = await execAsync(
-        `dotnet remove  ${project.name}.csproj package ${packageName}`,
+        `dotnet remove  ${csproj} package ${packageName}`,
         {
           cwd: path.join(runtimePath),
         }
@@ -270,8 +281,8 @@ export default async (composer: any): Promise<void> => {
       }
       return installOutput;
     },
-    identifyManifest: (runtimePath: string, projName?: string): string => {
-      return path.join(runtimePath, `${projName}.csproj`);
+    identifyManifest: (runtimePath: string, project?: IBotProject): string => {
+      return path.join(runtimePath, csprojName(project));
     },
     run: async (project: IBotProject, localDisk: IFileStorage) => {
       composer.log('RUN THIS C# PROJECT!');
@@ -286,7 +297,7 @@ export default async (composer: any): Promise<void> => {
 
       // find publishing profile in list
       const profile = project.settings.publishTargets.find((p) => p.name === profileName);
-      const csproj = `${project.name}.csproj`;
+      const csproj = csprojName(project);
       const publishFolder = path.join(runtimePath, 'bin', 'release', 'publishTarget');
       const deployFilePath = path.join(runtimePath, '.deployment');
       const dotnetProjectPath = path.join(runtimePath, csproj);
@@ -374,7 +385,7 @@ export default async (composer: any): Promise<void> => {
       }
       return installOutput;
     },
-    identifyManifest: (runtimePath: string, projName?: string): string => {
+    identifyManifest: (runtimePath: string, project?: IBotProject): string => {
       return path.join(runtimePath, 'package.json');
     },
     buildDeploy: async (
@@ -452,7 +463,7 @@ export default async (composer: any): Promise<void> => {
       }
       return installOutput;
     },
-    identifyManifest: (runtimePath: string, projName?: string): string => {
+    identifyManifest: (runtimePath: string, project?: IBotProject): string => {
       return path.join(runtimePath, 'package.json');
     },
     buildDeploy: async (
