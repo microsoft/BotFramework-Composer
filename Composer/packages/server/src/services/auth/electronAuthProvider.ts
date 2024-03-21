@@ -140,6 +140,6 @@ export class ElectronAuthProvider extends AuthProvider {
   }
 
   private getTokenHash(params: AuthParameters): string {
-    return params.targetResource || '';
+    return JSON.stringify(params);
   }
 }
