@@ -101,7 +101,7 @@ export type PublishPlugin<Config = any> = {
     config: Config,
     project: IBotProject,
     user?: UserIdentity,
-    getAccessToken?: GetAccessToken
+    getAccessToken?: GetAccessToken,
   ) => Promise<ProcessStatus>;
   getProvisionStatus?: (
     target: string,
