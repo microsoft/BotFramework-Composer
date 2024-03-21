@@ -5969,15 +5969,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@microsoft/orchestrator-core@npm:~4.14.0":
-  version: 4.14.2
-  resolution: "@microsoft/orchestrator-core@npm:4.14.2"
+"@microsoft/orchestrator-core@npm:^4.14.4":
+  version: 4.14.4
+  resolution: "@microsoft/orchestrator-core@npm:4.14.4"
   dependencies:
     "@mapbox/node-pre-gyp": ^1.0.3
     bindings: 1.2.1
     node-addon-api: ^3.1.0
     node-gyp: ^8.0.0
-  checksum: 6f385e9b4b94cd25eb81b875f8e657f29b2a9fd61a26dcaec2d2411619bad36c8651c2f7d36d0cdda51d3521fdb462c0399b4e1c58dd5a277dfe3a3dce3c4dfb
+  checksum: 780915651a226eff0bf93090164335df003eb0cac53c3ca66608943c948dede4b5143bef91e22b2eb71c20430356f23aa987ec6ab7ef2fa3df8b8f9d6bdcba13
   conditions: (os=darwin | os=linux | os=win32) & (cpu=x64 | cpu=ia32)
   languageName: node
   linkType: hard
