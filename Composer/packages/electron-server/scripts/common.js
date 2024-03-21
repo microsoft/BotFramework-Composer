@@ -1,12 +1,14 @@
-// Copyright (c) Microsoft. All rights reserved.
-// Licensed under the MIT license.
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
 
 /** Hashes a file asynchronously */
 const path = require('path');
-const fsp = require('fs-extra');
-const yaml = require('js-yaml');
 const fs = require('fs');
 const crypto = require('crypto');
+
+const fsp = require('fs-extra');
+const yaml = require('js-yaml');
+
 const packageJson = require('../package.json');
 
 async function writeToDist(err, files, fileName) {
@@ -26,7 +28,7 @@ async function writeToDist(err, files, fileName) {
     path: releaseFileName,
     sha512,
   };
-  const ymlStr = yaml.safeDump(ymlInfo);
+  const ymlStr = yaml.dump(ymlInfo);
   const ymlPath = path.join(__dirname, `../dist/${fileName}`);
   fsp.writeFileSync(ymlPath, ymlStr);
 }
