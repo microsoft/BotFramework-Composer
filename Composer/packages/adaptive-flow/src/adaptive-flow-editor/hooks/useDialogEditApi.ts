@@ -21,7 +21,7 @@ export function useDialogEditApi(shellApi: ShellApi) {
     dialogData: MicrosoftIDialog,
     targetArrayPath: string,
     targetArrayPosition: number,
-    actionsToInsert: MicrosoftIDialog[]
+    actionsToInsert: MicrosoftIDialog[],
   ): Promise<MicrosoftIDialog> {
     const newNodes = await constructActions(dialogId, actionsToInsert);
     return insertNodes(dialogData, targetArrayPath, targetArrayPosition, newNodes) as MicrosoftIDialog;
@@ -32,7 +32,7 @@ export function useDialogEditApi(shellApi: ShellApi) {
     dialogData: MicrosoftIDialog,
     targetArrayPath: string,
     targetArrayPosition: number,
-    actionToInsert: MicrosoftIDialog
+    actionToInsert: MicrosoftIDialog,
   ): Promise<MicrosoftIDialog> {
     return insertActions(dialogId, dialogData, targetArrayPath, targetArrayPosition, [actionToInsert]);
   }
@@ -41,7 +41,7 @@ export function useDialogEditApi(shellApi: ShellApi) {
     dialogId: string,
     dialogData: MicrosoftIDialog,
     targetId: string,
-    actionsToInsert: MicrosoftIDialog[]
+    actionsToInsert: MicrosoftIDialog[],
   ): Promise<MicrosoftIDialog> {
     const newNodes = await constructActions(dialogId, actionsToInsert);
     return appendNodesAfter(dialogData, targetId, newNodes) as MicrosoftIDialog;
@@ -50,7 +50,7 @@ export function useDialogEditApi(shellApi: ShellApi) {
   function deleteSelectedAction(
     dialogId: string,
     dialogData: MicrosoftIDialog,
-    actionId: string
+    actionId: string,
   ): Promise<MicrosoftIDialog> {
     return deleteNode(dialogData, actionId, (node) => deleteAction(dialogId, node));
   }
@@ -58,7 +58,7 @@ export function useDialogEditApi(shellApi: ShellApi) {
   function deleteSelectedActions(
     dialogId: string,
     dialogData: MicrosoftIDialog,
-    actionIds: string[]
+    actionIds: string[],
   ): Promise<MicrosoftIDialog> {
     return deleteNodes(dialogData, actionIds, (nodes) => deleteActions(dialogId, nodes));
   }
@@ -66,7 +66,7 @@ export function useDialogEditApi(shellApi: ShellApi) {
   function disableSelectedActions(
     dialogId: string,
     dialogData: MicrosoftIDialog,
-    actionIds: string[]
+    actionIds: string[],
   ): MicrosoftIDialog {
     return disableNodes(dialogData, actionIds);
   }
@@ -74,14 +74,14 @@ export function useDialogEditApi(shellApi: ShellApi) {
   function enableSelectedActions(
     dialogId: string,
     dialogData: MicrosoftIDialog,
-    actionIds: string[]
+    actionIds: string[],
   ): MicrosoftIDialog {
     return enableNodes(dialogData, actionIds);
   }
   async function copySelectedActions(
     dialogId: string,
     dialogData: MicrosoftIDialog,
-    actionIds: string[]
+    actionIds: string[],
   ): Promise<MicrosoftIDialog[]> {
     const actions = queryNodes(dialogData, actionIds);
     return copyActions(dialogId, actions);
@@ -90,7 +90,7 @@ export function useDialogEditApi(shellApi: ShellApi) {
   async function cutSelectedActions(
     dialogId: string,
     dialogData: MicrosoftIDialog,
-    actionIds: string[]
+    actionIds: string[],
   ): Promise<{ dialog: MicrosoftIDialog; cutActions: MicrosoftIDialog[] }> {
     const cutActions = await copySelectedActions(dialogId, dialogData, actionIds);
     const newDialog = await deleteSelectedActions(dialogId, dialogData, actionIds);
@@ -100,7 +100,7 @@ export function useDialogEditApi(shellApi: ShellApi) {
   function updateRecognizer(
     dialogId: string,
     dialogData: MicrosoftIDialog,
-    recognizer: MicrosoftIRecognizer | string
+    recognizer: MicrosoftIRecognizer | string,
   ): MicrosoftIDialog {
     dialogData.recognizer = recognizer;
     return dialogData;

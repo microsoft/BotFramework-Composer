@@ -54,7 +54,7 @@ describe('lgUtils', () => {
             children: expect.arrayContaining([expect.objectContaining({ name: 'value' })]),
           }),
         ]),
-      })
+      }),
     );
   });
 });
@@ -98,7 +98,7 @@ it('getAllNodes: should return levels', () => {
         children: expect.arrayContaining([expect.objectContaining({ id: '8', name: 'foo' })]),
       }),
       expect.objectContaining({ id: '8', name: 'foo' }),
-    ])
+    ]),
   );
 });
 

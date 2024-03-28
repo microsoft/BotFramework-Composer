@@ -126,7 +126,7 @@ export async function deleteNode(inputDialog, path, callbackOnRemovedData?: (rem
 export async function deleteNodes(
   inputDialog,
   nodeIds: string[],
-  callbackOnRemovedNodes?: (nodes: any[]) => Promise<any>
+  callbackOnRemovedNodes?: (nodes: any[]) => Promise<any>,
 ) {
   const dialog = cloneDeep(inputDialog);
 

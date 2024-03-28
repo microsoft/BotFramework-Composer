@@ -97,7 +97,7 @@ export const Description: React.FC<ContentProps> = ({
           properties: { ...properties, [key]: { field: InlineLabelField, hideError: true, serializer } },
         };
       },
-      { hidden: [], properties: {} } as any
+      { hidden: [], properties: {} } as any,
     );
   }, [schema]);
 

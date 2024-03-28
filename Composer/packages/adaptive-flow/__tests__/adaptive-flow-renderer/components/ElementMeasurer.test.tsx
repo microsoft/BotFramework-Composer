@@ -11,7 +11,7 @@ describe('<ElementMeasurer />', () => {
     const ele = render(
       <ElementMeasurer onResize={() => null}>
         <div data-testid="measurer-content" />
-      </ElementMeasurer>
+      </ElementMeasurer>,
     );
 
     expect(ele.getByTestId('measurer-content')).toBeTruthy();

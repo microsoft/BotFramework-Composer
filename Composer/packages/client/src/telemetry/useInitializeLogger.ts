@@ -24,7 +24,7 @@ export const useInitializeLogger = () => {
       ...acc,
       [camelCase(key)]: enabled,
     }),
-    {}
+    {},
   );
 
   const {

@@ -8,7 +8,7 @@ import { ExternalApi } from './ExternalApi';
 
 export async function copyAdaptiveActionList(
   actions: MicrosoftIDialog[],
-  externalApi: ExternalApi
+  externalApi: ExternalApi,
 ): Promise<MicrosoftIDialog[]> {
   if (!Array.isArray(actions)) return [];
 

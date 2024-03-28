@@ -67,7 +67,7 @@ export const PropertyList = (props: Props) => {
   const helpText =
     kind === 'required'
       ? formatMessage(
-          'Required properties are properties that your bot will ask the user to provide. The user must provide values for all required properties.'
+          'Required properties are properties that your bot will ask the user to provide. The user must provide values for all required properties.',
         )
       : formatMessage('Optional properties are properties the bot accepts if given but does not ask for.');
 

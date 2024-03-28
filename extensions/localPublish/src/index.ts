@@ -110,7 +110,7 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
     RuntimeLogServer.sendRuntimeLogToSubscribers(
       botId,
       LocalPublisher.runningBots[botId].result.runtimeLog ?? '',
-      LocalPublisher.runningBots[botId].result.runtimeError ?? ''
+      LocalPublisher.runningBots[botId].result.runtimeError ?? '',
     );
   };
 
@@ -257,7 +257,7 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
     // get port, and stop previous bot if exist
     try {
       // if a port (e.g. --port 5000) is configured in the custom runtime command try to parse and set this port
-      if (settings.runtime.command && settings.runtime.command.includes('--port')) {
+      if (settings.runtime?.command?.includes?.('--port')) {
         try {
           port = Number(/--port (\d+)/.exec(settings.runtime.command)[1]);
         } catch (err) {
@@ -340,7 +340,7 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
           },
           (err) => {
             reject(`Bot on localhost:${port} not working, error message: ${err.message}`);
-          }
+          },
         );
       } catch (err) {
         reject(err);
@@ -387,20 +387,18 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
     child: ChildProcess,
     botId: string,
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    logger: (...args: any[]) => void
+    logger: (...args: any[]) => void,
   ) => {
     let errOutput = '';
-    child.stdout &&
-      child.stdout.on('data', (data: any) => {
-        const runtimeData = data.toString();
-        this.appendRuntimeLogs(botId, runtimeData);
-        logger('%s', data.toString());
-      });
+    child.stdout?.on?.('data', (data: any) => {
+      const runtimeData = data.toString();
+      this.appendRuntimeLogs(botId, runtimeData);
+      logger('%s', data.toString());
+    });
 
-    child.stderr &&
-      child.stderr.on('data', (err: any) => {
-        errOutput += err.toString();
-      });
+    child.stderr?.on?.('data', (err: any) => {
+      errOutput += err.toString();
+    });
 
     child.on('exit', (code) => {
       if (code !== 0) {

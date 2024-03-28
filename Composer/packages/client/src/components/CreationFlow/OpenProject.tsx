@@ -26,7 +26,7 @@ interface OpenProjectFormData {
   alias?: string; // identifier that is used to track bots between imports
 }
 
-interface OpenProjectProps extends RouteComponentProps<{}> {
+interface OpenProjectProps extends RouteComponentProps<unknown> {
   focusedStorageFolder: StorageFolder;
   onOpen: (formData: OpenProjectFormData) => void;
   onCurrentPathUpdate: (newPath?: string, storageId?: string) => void;

@@ -14,7 +14,7 @@ export type WebAppConfig = ResourceConfig & {
   location: string;
   resourceGroupName: string;
 };
-export type AppServiceConfig = ResourceDefinition & {};
+export type AppServiceConfig = ResourceDefinition & NonNullable<unknown>;
 
 export type BotChannelResult = {
   botName: string;

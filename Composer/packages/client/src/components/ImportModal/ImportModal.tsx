@@ -53,11 +53,11 @@ const CONNECTING_STATUS_DISPLAY_TIME = 2000;
 export const signIn = async (
   importSource: ExternalContentProviderType | undefined,
   importPayload: ImportPayload,
-  setModalState
+  setModalState,
 ) => {
   try {
     await axios.post(
-      `/api/import/${importSource}/authenticate?payload=${encodeURIComponent(JSON.stringify(importPayload))}`
+      `/api/import/${importSource}/authenticate?payload=${encodeURIComponent(JSON.stringify(importPayload))}`,
     );
     setModalState('downloadingContent');
   } catch (e) {
@@ -119,7 +119,7 @@ export const ImportModal: React.FC<RouteComponentProps> = (props) => {
         res = await axios.post(
           `/api/projects/${existingProject.id}/copyTemplateToExisting`,
           { eTag, templateDir },
-          { headers: { 'Content-Type': 'application/json' } }
+          { headers: { 'Content-Type': 'application/json' } },
         );
 
         // open project and create a notification saying that import was complete
@@ -154,7 +154,7 @@ export const ImportModal: React.FC<RouteComponentProps> = (props) => {
             const { description, name } = importPayload;
 
             const res = await axios.post<{ alias: string; eTag: string; templateDir: string; urlSuffix: string }>(
-              `/api/import/${importSource}?payload=${encodeURIComponent(JSON.stringify(importPayload))}`
+              `/api/import/${importSource}?payload=${encodeURIComponent(JSON.stringify(importPayload))}`,
             );
             const { alias, eTag, templateDir, urlSuffix } = res.data;
             const projectInfo = {

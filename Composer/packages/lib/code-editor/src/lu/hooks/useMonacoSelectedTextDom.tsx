@@ -15,7 +15,7 @@ export const useMonacoSelectedTextDom = (
     selectedText: string;
     lineContent: string;
     selection: any;
-  }) => void
+  }) => void,
 ) => {
   React.useEffect(() => {
     let observer: MutationObserver;

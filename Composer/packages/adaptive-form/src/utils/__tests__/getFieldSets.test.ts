@@ -234,7 +234,7 @@ describe('getFieldsets', () => {
     };
 
     expect(() => getFieldsets(schema, uiOptions, {})).toThrow(
-      'fields must be either all strings or all fieldset objects'
+      'fields must be either all strings or all fieldset objects',
     );
   });
 

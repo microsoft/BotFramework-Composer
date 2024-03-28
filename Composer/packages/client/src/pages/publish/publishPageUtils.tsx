@@ -46,7 +46,7 @@ const findSkillManifestUrl = (skillManifests: SkillManifestFile[], hostname: str
 export const generateBotStatusList = (
   botList: Bot[],
   botPropertyData: BotPropertyType,
-  botPublishHistoryList: BotPublishHistory
+  botPublishHistoryList: BotPublishHistory,
 ): BotStatus[] => {
   const bots = botList.map((bot) => {
     const botStatus: BotStatus = Object.assign({ skillManifestUrl: '' }, bot);
@@ -70,7 +70,7 @@ export const generateBotStatusList = (
           botStatus.skillManifestUrl = findSkillManifestUrl(
             botPropertyData[bot.id].skillManifests,
             config.hostname,
-            appId
+            appId,
           );
         }
       }

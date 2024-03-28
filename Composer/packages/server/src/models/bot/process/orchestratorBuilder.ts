@@ -22,7 +22,7 @@ class OrchestratorBuilder {
     projectId: string,
     files: FileInfo[],
     modelPath: string,
-    generatedFolderPath: string
+    generatedFolderPath: string,
   ): Promise<Record<string, string>> {
     const msgId = uniqueId();
     const msg = { id: msgId, payload: { projectId, files, type: 'build', modelPath, generatedFolderPath } };

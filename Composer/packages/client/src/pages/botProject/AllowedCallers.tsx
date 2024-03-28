@@ -117,13 +117,15 @@ export const AllowedCallers: React.FC<Props> = ({ projectId }) => {
       };
       setSettings(projectId, updatedSetting);
     },
-    [mergedSettings, projectId, runtimeSettings?.skills]
+    [mergedSettings, projectId, runtimeSettings?.skills],
   );
 
-  const { arrayItems: allowedCallers = [], addItem, handleChange, handleResetCache } = useArrayItems(
-    runtimeSettings?.skills?.allowedCallers || [],
-    updateAllowedCallers
-  );
+  const {
+    arrayItems: allowedCallers = [],
+    addItem,
+    handleChange,
+    handleResetCache,
+  } = useArrayItems(runtimeSettings?.skills?.allowedCallers || [], updateAllowedCallers);
 
   // Reset array cache when user switches between project settings
   const didMount = React.useRef(false);
@@ -144,16 +146,17 @@ export const AllowedCallers: React.FC<Props> = ({ projectId }) => {
       updatedAllowedCallers.splice(index, 1);
       handleChange(updatedAllowedCallers);
     },
-    [allowedCallers, handleChange]
+    [allowedCallers, handleChange],
   );
 
   const onChange = React.useCallback(
-    (index: number) => (_: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, newValue = '') => {
-      const updatedAllowedCallers = allowedCallers.slice();
-      updatedAllowedCallers[index].value = newValue;
-      handleChange(updatedAllowedCallers);
-    },
-    [allowedCallers, handleChange]
+    (index: number) =>
+      (_: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, newValue = '') => {
+        const updatedAllowedCallers = allowedCallers.slice();
+        updatedAllowedCallers[index].value = newValue;
+        handleChange(updatedAllowedCallers);
+      },
+    [allowedCallers, handleChange],
   );
 
   const onBlur = React.useCallback(() => {
@@ -177,7 +180,7 @@ export const AllowedCallers: React.FC<Props> = ({ projectId }) => {
                 {children}
               </Link>
             ),
-          }
+          },
         )}
       </div>
       <ItemContainer role="list">

@@ -167,7 +167,7 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
       profileName: string,
       jobId: string,
       resourcekey: string,
-      customizeConfiguration: DeployResources
+      customizeConfiguration: DeployResources,
     ) => {
       const { accessToken, name, environment, hostname, luisResource, abs } = customizeConfiguration;
 
@@ -251,7 +251,7 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
           profileName,
           jobId,
           resourcekey,
-          customizeConfiguration
+          customizeConfiguration,
         );
       } catch (err) {
         this.logger('%O', err);
@@ -259,7 +259,7 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
         await this.updateHistory(
           project.id,
           profileName,
-          publishResultFromStatus(BackgroundProcessManager.getStatus(jobId)).result
+          publishResultFromStatus(BackgroundProcessManager.getStatus(jobId)).result,
         );
         BackgroundProcessManager.removeProcess(jobId);
       }
@@ -408,7 +408,7 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
         project.id,
         profileName,
         'Accepted for publishing...',
-        metadata.comment
+        metadata.comment,
       );
 
       // resource key to map to one provision resource
@@ -420,8 +420,8 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
           throw new Error(
             formatMessage(
               'There was a problem publishing {projectName}/{profileName}. The profile has not been provisioned yet.',
-              { projectName: project.name, profileName }
-            )
+              { projectName: project.name, profileName },
+            ),
           );
         }
 
@@ -440,8 +440,8 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
           throw new Error(
             formatMessage(
               'There was a problem publishing {projectName}/{profileName}. These required resources have not been provisioned: {missingResourcesText}',
-              { projectName: project.name, profileName, missingResourcesText }
-            )
+              { projectName: project.name, profileName, missingResourcesText },
+            ),
           );
         }
 
@@ -522,7 +522,7 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
       processName: string,
       project: IBotProject,
       user,
-      jobId = ''
+      jobId = '',
     ): Promise<ProcessStatus> => {
       const botId = project.id;
       // get status by Job ID first.
@@ -554,7 +554,7 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
       const hasLuContent = luResources.some((luResource) => luResource.content?.trim() !== '');
 
       const hasLuisRecognizers = recognizers.some(
-        (recognizer) => recognizer.content?.$kind === SDKKinds.LuisRecognizer
+        (recognizer) => recognizer.content?.$kind === SDKKinds.LuisRecognizer,
       );
 
       const requiresLUIS = hasLuContent && hasLuisRecognizers;
@@ -673,7 +673,7 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
           return !!profile?.hostname;
         default:
           throw new Error(
-            formatMessage('Azure resource type {resourceKey} is not handled.', { resourceKey: resource.key })
+            formatMessage('Azure resource type {resourceKey} is not handled.', { resourceKey: resource.key }),
           );
       }
     };

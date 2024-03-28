@@ -67,7 +67,7 @@ const AddLanguageModal: React.FC<IAddLanguageModalProps> = (props) => {
   const onDefaultLanguageChange = (
     _event: React.FormEvent<HTMLDivElement>,
     option?: IDropdownOption,
-    _index?: number
+    _index?: number,
   ) => {
     const selectedLang = option?.key as string;
     if (selectedLang && selectedLang !== formData.defaultLang) {
@@ -91,7 +91,7 @@ const AddLanguageModal: React.FC<IAddLanguageModalProps> = (props) => {
       setFormData(initialFormData);
       props.onSubmit(formData);
     },
-    [formData]
+    [formData],
   );
 
   const onDismiss = (e) => {
@@ -183,7 +183,7 @@ const AddLanguageModal: React.FC<IAddLanguageModalProps> = (props) => {
                       other {# languages found}
                   }
               `,
-                  { searchKeywords, hasFilter: !!searchKeywords, languagesCount: languageCheckBoxList.length }
+                  { searchKeywords, hasFilter: !!searchKeywords, languagesCount: languageCheckBoxList.length },
                 )}
               />
               <Announced
@@ -194,7 +194,7 @@ const AddLanguageModal: React.FC<IAddLanguageModalProps> = (props) => {
                       =1 {One language selected}
                       other {# languages selected}
                   }`,
-                  { languagesCount: formData.languages.length }
+                  { languagesCount: formData.languages.length },
                 )}
               />
               <div className={screenReaderOnly}>

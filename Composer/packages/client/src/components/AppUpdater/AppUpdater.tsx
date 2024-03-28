@@ -95,10 +95,9 @@ type BreakingUpdateMetaData = {
 
 // -------------------- AppUpdater -------------------- //
 
-export const AppUpdater: React.FC<{}> = () => {
-  const { setAppUpdateError, setAppUpdateProgress, setAppUpdateShowing, setAppUpdateStatus } = useRecoilValue(
-    dispatcherState
-  );
+export const AppUpdater: React.FC = () => {
+  const { setAppUpdateError, setAppUpdateProgress, setAppUpdateShowing, setAppUpdateStatus } =
+    useRecoilValue(dispatcherState);
   const { downloadSizeInBytes, error, progressPercent, showing, status, version } = useRecoilValue(appUpdateState);
   const [downloadOption, setDownloadOption] = useState(downloadOptions.installAndUpdate);
   const [breakingMetaData, setBreakingMetaData] = useState<BreakingUpdateMetaData | undefined>(undefined);
@@ -189,7 +188,7 @@ export const AppUpdater: React.FC<{}> = () => {
           default:
             break;
         }
-      }
+      },
     );
   }, []);
 

@@ -12,6 +12,7 @@ jest.mock('./../workers/luParser.worker.ts', () => {
     onmessage = (data) => data;
 
     postMessage = (data) => {
+      // eslint-disable-next-line @typescript-eslint/no-var-requires
       const payload = require('../workers/luParser.worker').handleMessage(data);
       this.onmessage({ data: { id: data.id, payload } });
     };
@@ -24,7 +25,7 @@ const getLuIntent = (Name, Body): LuIntentSection =>
   ({
     Name,
     Body,
-  } as LuIntentSection);
+  }) as LuIntentSection;
 
 let luFile;
 describe('test lu worker', () => {
@@ -74,7 +75,7 @@ hi
       luFile,
       [getLuIntent('New1', '-IntentValue1'), getLuIntent('New2', '-IntentValue2')],
       luFeatures,
-      []
+      [],
     );
     const expected = {
       Body: '-IntentValue2',

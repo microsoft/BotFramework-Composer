@@ -8,11 +8,12 @@
     "test": "jest"
   },
   "devDependencies": {
-    "@botframework-composer/test-utils": "*"
+    "@botframework-composer/test-utils": "*",
+    "rimraf": "3.0.2"
   },
   "author": "Microsoft",
   "license": "MIT",
   "dependencies": {
-    "tslib": "2.4.0"
+    "tslib": "2.6.2"
   }
 }

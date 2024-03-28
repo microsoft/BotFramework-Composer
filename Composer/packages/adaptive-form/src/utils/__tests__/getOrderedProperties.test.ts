@@ -36,9 +36,9 @@ describe('getOrderedProperties', () => {
     const order = ['one', 'three', ['four', 'five'], 'six', 'seven'];
     const expectedResult = ['one', 'three', ['four', 'five'], 'six', 'seven', 'two'];
 
-    // @ts-expect-error
+    // @ts-expect-error: test
     expect(getOrderedProperties(schema, { order, hidden: ['two'] }, data)).toEqual(expectedResult);
-    // @ts-expect-error
+    // @ts-expect-error: test
     expect(getOrderedProperties(schema, { order, hidden: () => ['two'] }, data)).toEqual(expectedResult);
   });
 
@@ -46,9 +46,9 @@ describe('getOrderedProperties', () => {
     const expectedResult = ['three', 'one', 'four', ['five', 'six'], 'seven', 'two'];
     const order = ['three', '*', ['five', 'six'], ['seven'], 'two'];
 
-    // @ts-expect-error
+    // @ts-expect-error: test
     expect(getOrderedProperties(schema, { order }, data)).toEqual(expectedResult);
-    // @ts-expect-error
+    // @ts-expect-error: test
     expect(getOrderedProperties(schema, { order: () => order }, data)).toEqual(expectedResult);
   });
 
@@ -59,13 +59,13 @@ describe('getOrderedProperties', () => {
 
   it('does not throw an exception for no wildcard if all fields are ordered', () => {
     const order = ['three', 'one', 'four', ['five', 'six'], ['seven'], 'two'];
-    // @ts-expect-error
+    // @ts-expect-error: test
     expect(() => getOrderedProperties(schema, { order }, data)).not.toThrow();
   });
 
   it('does not include wildcard in ordered fields if all fields are present', () => {
     const order = ['three', 'one', 'four', '*', ['five', 'six'], ['seven'], 'two'];
-    // @ts-expect-error
+    // @ts-expect-error: test
     expect(getOrderedProperties(schema, { order }, data)).not.toContain('*');
   });
 
@@ -75,7 +75,7 @@ describe('getOrderedProperties', () => {
 
   it('throws an exception if there are multiple wildcards in order option', () => {
     expect(() => getOrderedProperties(schema, { order: ['three', '*', 'two', '*'] }, data)).toThrow(
-      'multiple wildcards'
+      'multiple wildcards',
     );
   });
 });

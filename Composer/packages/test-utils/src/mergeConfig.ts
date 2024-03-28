@@ -6,7 +6,7 @@ import mergeWith from 'lodash/mergeWith';
 import isArray from 'lodash/isArray';
 import cloneDeep from 'lodash/cloneDeep';
 
-function mergeConfig<T extends object>(base: T, overrides?: T) {
+function mergeConfig<T extends object>(base: T, overrides?: T): any {
   if (!overrides) {
     return base;
   }

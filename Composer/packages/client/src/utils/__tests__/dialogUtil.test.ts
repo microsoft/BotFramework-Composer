@@ -38,7 +38,7 @@ const dialogsMap = {
   },
 };
 
-const dialogs = ([
+const dialogs = [
   {
     content: {
       $kind: 'kind1',
@@ -57,7 +57,7 @@ const dialogs = ([
     displayName: 'toBeCleaned',
     id: 'id3',
   },
-] as unknown) as DialogInfo[];
+] as unknown as DialogInfo[];
 
 describe('getDialogData', () => {
   it('return empty string if no dialogId', () => {

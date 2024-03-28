@@ -18,10 +18,15 @@ const luFeatures = {};
 jest.mock('../../parsers/luWorker', () => {
   return {
     parse: (id: string, content, luFeatures) => ({ id, content, luFeatures }),
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
     addIntent: require('@bfc/indexers/lib/utils/luUtil').addIntent,
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
     addIntents: require('@bfc/indexers/lib/utils/luUtil').addIntents,
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
     updateIntent: require('@bfc/indexers/lib/utils/luUtil').updateIntent,
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
     removeIntent: require('@bfc/indexers/lib/utils/luUtil').removeIntent,
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
     removeIntents: require('@bfc/indexers/lib/utils/luUtil').removeIntents,
   };
 });
@@ -37,7 +42,7 @@ const getLuIntent = (Name, Body): LuIntentSection =>
   ({
     Name,
     Body,
-  } as LuIntentSection);
+  }) as LuIntentSection;
 
 describe('Lu dispatcher', () => {
   const useRecoilTestHook = () => {

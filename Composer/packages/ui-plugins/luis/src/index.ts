@@ -20,7 +20,7 @@ const config: PluginConfig = {
         displayName: () => formatMessage('LUIS'),
         description: () =>
           formatMessage(
-            'Gives your bot the ability to extract intent and entity data from an utterance based on luis modal'
+            'Gives your bot the ability to extract intent and entity data from an utterance based on luis modal',
           ),
         intentEditor: 'LuIntentEditor',
         isSelected: (data) => {

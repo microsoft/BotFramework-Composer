@@ -190,7 +190,7 @@ describe('WebSocketServer', () => {
             id: 'a',
           },
         ],
-      })
+      }),
     );
     expect(mocksSend).toHaveBeenNthCalledWith(
       3,
@@ -200,7 +200,7 @@ describe('WebSocketServer', () => {
             id: 'c',
           },
         ],
-      })
+      }),
     );
   });
 });

@@ -105,7 +105,7 @@ export const CreateQnAFromUrl: React.FC<CreateQnAFromFormProps> = (props) => {
         <p>
           <span css={subText}>
             {formatMessage(
-              'Select this option if you want to create a knowledge base from content hosted online such as an FAQ or document link (.csv, .xls or .doc format)'
+              'Select this option if you want to create a knowledge base from content hosted online such as an FAQ or document link (.csv, .xls or .doc format)',
             )}
           </span>
         </p>

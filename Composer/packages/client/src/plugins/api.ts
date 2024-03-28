@@ -7,9 +7,9 @@ import { AuthClient } from '../utils/authClient';
 
 interface IAPI {
   auth: AuthAPI;
-  page?: {};
+  page?: any;
   publish: PublishAPI;
-  storage?: {};
+  storage?: any;
 }
 
 interface PublishConfig {

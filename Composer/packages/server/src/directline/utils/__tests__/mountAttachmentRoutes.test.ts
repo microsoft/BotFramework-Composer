@@ -21,13 +21,13 @@ describe('mountAttachmentRoutes', () => {
       1,
       '/v3/attachments/:attachmentId',
       expect.any(Function),
-      expect.any(Function)
+      expect.any(Function),
     );
     expect(router.get).toHaveBeenNthCalledWith(
       2,
       '/v3/attachments/:attachmentId/views/:viewId',
       expect.any(Function),
-      expect.any(Function)
+      expect.any(Function),
     );
   });
 });

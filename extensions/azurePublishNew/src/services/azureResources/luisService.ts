@@ -7,7 +7,7 @@ import { throwNotImplementedError } from '../throwNotImplementedError';
 
 const createLuisService = (token: string, subscriptionId: string) => {
   const tokenCredentials = new TokenCredentials(token);
-  // @ts-expect-error
+  // @ts-expect-error types missmatch
   const cognitiveServicesManagementClient = new CognitiveServicesManagementClient(tokenCredentials, subscriptionId);
 
   const checkNameAvailability = async () => {

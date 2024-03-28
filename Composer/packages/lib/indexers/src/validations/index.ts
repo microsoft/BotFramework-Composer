@@ -18,7 +18,7 @@ export function validateDialog(
   settings: DialogSetting,
   lgFiles: LgFile[],
   luFiles: LuFile[],
-  cache?: ExpressionParseResult
+  cache?: ExpressionParseResult,
 ): { diagnostics: Diagnostic[] | null; cache?: ExpressionParseResult } {
   const { id, content } = dialog;
   try {
@@ -47,7 +47,7 @@ export function validateDialog(
             settings,
             lgFiles,
             luFiles,
-            cache
+            cache,
           );
           if (result.diagnostics) {
             diagnostics.push(...result.diagnostics);

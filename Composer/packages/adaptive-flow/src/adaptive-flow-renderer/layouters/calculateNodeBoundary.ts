@@ -18,7 +18,7 @@ import { calculateBranchNodesIntervalX } from './sharedLayouterUtils';
 export function calculateSequenceBoundary(
   boundaries: Boundary[],
   widthHeadEdge = true,
-  widthTailEdge = true
+  widthTailEdge = true,
 ): Boundary {
   const box = new Boundary();
   if (!Array.isArray(boundaries) || boundaries.length === 0) {
@@ -40,7 +40,7 @@ export function calculateForeachBoundary(
   foreachBoundary: Boundary | null,
   stepsBoundary: Boundary | null,
   loopBeginBoundary: Boundary,
-  loopEndBoundary: Boundary
+  loopEndBoundary: Boundary,
 ): Boundary {
   const box = new Boundary();
 
@@ -64,7 +64,7 @@ export function calculateIfElseBoundary(
   conditionBoundary: Boundary | null,
   choiceBoundary: Boundary | null,
   ifBoundary: Boundary,
-  elseBoundary: Boundary
+  elseBoundary: Boundary,
 ): Boundary {
   if (!conditionBoundary || !choiceBoundary) return new Boundary();
 
@@ -76,7 +76,7 @@ export function calculateIfElseBoundary(
 export function calculateSwitchCaseBoundary(
   conditionBoundary: Boundary | null,
   choiceBoundary: Boundary | null,
-  branchBoundaries: Boundary[] = []
+  branchBoundaries: Boundary[] = [],
 ): Boundary {
   if (!conditionBoundary || !choiceBoundary) return new Boundary();
 
@@ -86,7 +86,7 @@ export function calculateSwitchCaseBoundary(
 function measureBranchingContainerBoundary(
   conditionBoundary: Boundary | null,
   choiceBoundary: Boundary | null,
-  branchBoundaries: Boundary[] = []
+  branchBoundaries: Boundary[] = [],
 ): Boundary {
   if (!conditionBoundary || !choiceBoundary) return new Boundary();
 
@@ -113,7 +113,7 @@ function measureBranchingContainerBoundary(
     Math.max(
       conditionBoundary.width - conditionBoundary.axisX,
       choiceBoundary.width - choiceBoundary.axisX,
-      branchGroupBoundary.width - branchGroupBoundary.axisX
+      branchGroupBoundary.width - branchGroupBoundary.axisX,
     ) +
     BranchingNodeMarginRight;
 
@@ -132,7 +132,7 @@ export function calculateBaseInputBoundary(botAsksBoundary: Boundary, userAnswer
     boundary.axisX +
     Math.max(
       botAsksBoundary.width - botAsksBoundary.axisX,
-      userAnswersBoundary.width - userAnswersBoundary.axisX + IconBrickSize.width + LoopEdgeMarginLeft + BoxMargin
+      userAnswersBoundary.width - userAnswersBoundary.axisX + IconBrickSize.width + LoopEdgeMarginLeft + BoxMargin,
     );
   boundary.height = botAsksBoundary.height + ElementInterval.y + userAnswersBoundary.height + ElementInterval.y / 2;
 

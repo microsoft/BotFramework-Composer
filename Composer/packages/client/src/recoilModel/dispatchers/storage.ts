@@ -55,7 +55,7 @@ export const storageDispatcher = () => {
         // TODO: Handle exceptions
         logMessage(callbackHelpers, `Error updating current path for storage: ${ex}`);
       }
-    }
+    },
   );
 
   const addNewStorage = useRecoilCallback((callbackHelpers: CallbackInterface) => async (storageData: string) => {
@@ -110,35 +110,37 @@ export const storageDispatcher = () => {
         logMessage(callbackHelpers, `Error fetching focussed storage folder: ${ex}`);
         setStorageFileLoadingStatus('failure');
       }
-    }
+    },
   );
 
   const createFolder = useRecoilCallback<[string, string], Promise<void>>(
-    ({ set }: CallbackInterface) => async (path, name) => {
-      const storageId = 'default';
-      try {
-        await httpClient.post(`/storages/folder`, { path, name, storageId });
-      } catch (err) {
-        set(applicationErrorState, {
-          message: err.message,
-          summary: formatMessage('Create Folder Error'),
-        });
-      }
-    }
+    ({ set }: CallbackInterface) =>
+      async (path, name) => {
+        const storageId = 'default';
+        try {
+          await httpClient.post(`/storages/folder`, { path, name, storageId });
+        } catch (err) {
+          set(applicationErrorState, {
+            message: err.message,
+            summary: formatMessage('Create Folder Error'),
+          });
+        }
+      },
   );
 
   const updateFolder = useRecoilCallback<[string, string, string], Promise<void>>(
-    ({ set }: CallbackInterface) => async (path, oldName, newName) => {
-      const storageId = 'default';
-      try {
-        await httpClient.put(`/storages/folder`, { path, oldName, newName, storageId });
-      } catch (err) {
-        set(applicationErrorState, {
-          message: err.message,
-          summary: formatMessage('Update Folder Name Error'),
-        });
-      }
-    }
+    ({ set }: CallbackInterface) =>
+      async (path, oldName, newName) => {
+        const storageId = 'default';
+        try {
+          await httpClient.put(`/storages/folder`, { path, oldName, newName, storageId });
+        } catch (err) {
+          set(applicationErrorState, {
+            message: err.message,
+            summary: formatMessage('Update Folder Name Error'),
+          });
+        }
+      },
   );
 
   const fetchTemplates = useRecoilCallback(({ set }: CallbackInterface) => async (feedUrls?: string[]) => {
@@ -176,7 +178,7 @@ export const storageDispatcher = () => {
         // TODO: Handle exceptions
         logMessage(callbackHelpers, `Error fetching runtime templates: ${ex}`);
       }
-    }
+    },
   );
 
   const fetchFeatureFlags = useRecoilCallback<[], Promise<void>>((callbackHelpers: CallbackInterface) => async () => {
@@ -195,19 +197,20 @@ export const storageDispatcher = () => {
   });
 
   const toggleFeatureFlag = useRecoilCallback(
-    ({ set }: CallbackInterface) => async (featureName: FeatureFlagKey, enabled: boolean) => {
-      let newFeatureFlags: FeatureFlagMap = {} as FeatureFlagMap;
-      // update local
-      set(featureFlagsState, (featureFlagsState) => {
-        newFeatureFlags = { ...featureFlagsState };
-        newFeatureFlags[featureName] = { ...featureFlagsState[featureName], enabled: enabled };
-        return newFeatureFlags;
-      });
-      // update server
-      await httpClient.post(`/featureFlags`, { featureFlags: newFeatureFlags });
+    ({ set }: CallbackInterface) =>
+      async (featureName: FeatureFlagKey, enabled: boolean) => {
+        let newFeatureFlags: FeatureFlagMap = {} as FeatureFlagMap;
+        // update local
+        set(featureFlagsState, (featureFlagsState) => {
+          newFeatureFlags = { ...featureFlagsState };
+          newFeatureFlags[featureName] = { ...featureFlagsState[featureName], enabled: enabled };
+          return newFeatureFlags;
+        });
+        // update server
+        await httpClient.post(`/featureFlags`, { featureFlags: newFeatureFlags });
 
-      TelemetryClient.track('FeatureFlagChanged', { featureFlag: featureName, enabled });
-    }
+        TelemetryClient.track('FeatureFlagChanged', { featureFlag: featureName, enabled });
+      },
   );
 
   return {

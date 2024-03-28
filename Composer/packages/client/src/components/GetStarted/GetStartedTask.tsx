@@ -35,8 +35,8 @@ export const GetStartedTask: React.FC<TaskProps> = (props) => {
   const color = props.step.checked
     ? FluentTheme.palette.green
     : props.step.required
-    ? SharedColors.orange20
-    : SharedColors.cyanBlue10;
+      ? SharedColors.orange20
+      : SharedColors.cyanBlue10;
   return (
     <div css={getStartedStepStyle(props.step.hideFeatureStep)}>
       <ActionButton

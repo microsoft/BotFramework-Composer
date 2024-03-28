@@ -51,11 +51,11 @@ export class LUServer {
     protected readonly importResolver?: (
       source: string,
       resourceId: string,
-      projectId: string
+      projectId: string,
     ) => {
       content: string;
       id: string;
-    }
+    },
   ) {
     this.documents.listen(this.connection);
     this.documents.onDidChangeContent((change) => this.validate(change.document));
@@ -91,7 +91,7 @@ export class LUServer {
     this.connection.onDocumentOnTypeFormatting((docTypingParams) => this.docTypeFormat(docTypingParams));
     this.connection.onDefinition((params: TextDocumentPositionParams) => this.definitionHandler(params));
     this.connection.onFoldingRanges((foldingRangeParams: FoldingRangeParams) =>
-      this.foldingRangeHandler(foldingRangeParams)
+      this.foldingRangeHandler(foldingRangeParams),
     );
     this.connection.onRequest((method, params) => {
       if (method === LABELEXPERIENCEREQUEST) {
@@ -174,7 +174,7 @@ export class LUServer {
     this.connection.console.log(diagnostics.join('\n'));
     this.sendDiagnostics(
       document,
-      diagnostics.map((errorMsg) => generateDiagnostic(errorMsg, DiagnosticSeverity.Error, document))
+      diagnostics.map((errorMsg) => generateDiagnostic(errorMsg, DiagnosticSeverity.Error, document)),
     );
   }
 
@@ -252,7 +252,7 @@ export class LUServer {
   protected async findAllImportedEntities(
     imports: { id: string; path: string; description: string }[],
     importResolver: (source: string, id: string) => Promise<{ id: string; content: any }>,
-    luFeatures: any
+    luFeatures: any,
   ): Promise<string[]> {
     let content = '';
     let result: string[] = [];
@@ -332,7 +332,7 @@ export class LUServer {
     const edits: TextEdit[] = [];
     const curLineNumber = params.position.line;
     const luDoc = this.getLUDocument(document);
-    const text = (await (luDoc?.index()).content) || document.getText();
+    const text = (await luDoc?.index?.()?.content) || document.getText();
     const lines = text.split('\n');
     const position = params.position;
     const textBeforeCurLine = lines.slice(0, curLineNumber).join('\n');
@@ -487,7 +487,7 @@ export class LUServer {
     const range = Range.create(position.line, 0, position.line, position.character);
     const curLineContent = document.getText(range);
     const luDoc = this.getLUDocument(document);
-    const text = (await luDoc?.index()).content || document.getText();
+    const text = (await luDoc?.index?.())?.content || document.getText();
     const lines = text.split('\n');
     const curLineNumber = params.position.line;
     //const textBeforeCurLine = lines.slice(0, curLineNumber).join('\n');
@@ -577,7 +577,7 @@ export class LUServer {
     }
 
     const suggestionEntityList = uniq(
-      util.getSuggestionEntities(luisJson, util.suggestionAllEntityTypes).concat(this._importedEntities)
+      util.getSuggestionEntities(luisJson, util.suggestionAllEntityTypes).concat(this._importedEntities),
     );
     const regexEntityList = util.getRegexEntities(luisJson);
 
@@ -759,7 +759,7 @@ export class LUServer {
           Name: sectionId,
           Body: text,
         },
-        true
+        true,
       );
       // error in section.
       if (isValid(sectionDiags) === false) {

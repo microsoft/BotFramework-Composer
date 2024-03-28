@@ -18,7 +18,7 @@ export const DefaultRecognizerSchema: RecognizerUISchema = {
     displayName: () => formatMessage('Regular expression'),
     description: () =>
       formatMessage(
-        'Gives your bot the ability to extract intent and entity data from an utterance based on regular expression patterns.'
+        'Gives your bot the ability to extract intent and entity data from an utterance based on regular expression patterns.',
       ),
     intentEditor: RegexIntentField,
     renameIntent: (intentName, newIntentName, shellData, shellApi) => {

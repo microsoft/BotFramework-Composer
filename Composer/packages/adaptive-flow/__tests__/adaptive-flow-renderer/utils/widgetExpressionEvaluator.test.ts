@@ -64,7 +64,7 @@ describe('evaluateWidgetProp()', () => {
     expect(evaluate('=concat(a.x, " and ", a.y)', { a: { X: 'X', Y: 'Y' } })).toEqual('X and Y');
     expect(evaluate('=concat(a.x, " and ", a.y)', { a: { x: 1 } })).toEqual('1 and ');
     expect(evaluate('=concat(string(a.x), " and ", string(a.y))', { a: { x: { val: 1 }, y: [1] } })).toEqual(
-      '{"val":1} and [1]'
+      '{"val":1} and [1]',
     );
   });
 
@@ -73,10 +73,10 @@ describe('evaluateWidgetProp()', () => {
       expect(
         evaluate('=concat("Each value in ", coalesce(action.itemsProperty, "?"))', {
           action: { itemsProperty: 'user.names' },
-        })
+        }),
       ).toEqual('Each value in user.names');
       expect(evaluate('=concat("Each value in ", coalesce(action.itemsProperty, "?"))', { action: {} })).toEqual(
-        'Each value in ?'
+        'Each value in ?',
       );
     });
 
@@ -89,7 +89,7 @@ describe('evaluateWidgetProp()', () => {
               { property: 'b', value: '2' },
             ],
           },
-        })
+        }),
       ).toEqual(['a : 1', 'b : 2']);
     });
   });

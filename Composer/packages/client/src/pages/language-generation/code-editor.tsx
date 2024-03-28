@@ -25,7 +25,7 @@ import { DiffCodeEditor } from '../language-understanding/diff-editor';
 
 const lspServerPath = '/lg-language-server';
 
-interface CodeEditorProps extends RouteComponentProps<{}> {
+interface CodeEditorProps extends RouteComponentProps<unknown> {
   dialogId: string;
   projectId: string;
   skillId?: string;
@@ -66,8 +66,8 @@ const CodeEditor: React.FC<CodeEditorProps> = (props) => {
   const templateId = Array.isArray(searchTemplateName)
     ? searchTemplateName[0]
     : typeof searchTemplateName === 'string'
-    ? searchTemplateName
-    : undefined;
+      ? searchTemplateName
+      : undefined;
   const template = templateId && file ? file.templates.find(({ name }) => name === templateId) : undefined;
 
   const hash = props.location?.hash ?? '';
@@ -131,7 +131,7 @@ const CodeEditor: React.FC<CodeEditorProps> = (props) => {
         };
         updateLgTemplateDispatcher(payload);
       }, 500),
-    [file, template, actualProjectId]
+    [file, template, actualProjectId],
   );
 
   const updateLgFile = useMemo(
@@ -146,7 +146,7 @@ const CodeEditor: React.FC<CodeEditorProps> = (props) => {
         };
         updateLgFileDispatcher(payload);
       }, 500),
-    [file, actualProjectId]
+    [file, actualProjectId],
   );
 
   const onChange = useCallback(
@@ -163,7 +163,7 @@ const CodeEditor: React.FC<CodeEditorProps> = (props) => {
         updateLgFile(value);
       }
     },
-    [file, template, actualProjectId]
+    [file, template, actualProjectId],
   );
 
   const handleSettingsChange = (settings: Partial<CodeEditorSettings>) => {
@@ -191,7 +191,7 @@ const CodeEditor: React.FC<CodeEditorProps> = (props) => {
       }
       navigateTo(url);
     },
-    [actualProjectId, locale]
+    [actualProjectId, locale],
   );
 
   const currentLanguageFileEditor = useMemo(() => {

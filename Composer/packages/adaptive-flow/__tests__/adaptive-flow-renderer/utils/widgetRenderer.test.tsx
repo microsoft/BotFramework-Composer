@@ -24,7 +24,7 @@ describe('renderUIWidget', () => {
     const ele = renderWidget(
       schema,
       { TestWidget },
-      { id: '', data: { $kind: 'Kind' }, onEvent: () => null, onResize: () => null }
+      { id: '', data: { $kind: 'Kind' }, onEvent: () => null, onResize: () => null },
     );
     expect(ele.getByTestId('test-widget')).toBeTruthy();
     expect(ele.getAllByText('test')).toHaveLength(1);
@@ -39,7 +39,7 @@ describe('renderUIWidget', () => {
     const ele = renderWidget(
       schema,
       { TestWidget },
-      { id: '', data: { $kind: 'Kind', value: 'testValue' } as any, onEvent: () => null, onResize: () => null }
+      { id: '', data: { $kind: 'Kind', value: 'testValue' } as any, onEvent: () => null, onResize: () => null },
     );
 
     expect(ele.getByTestId('test-widget')).toBeTruthy();

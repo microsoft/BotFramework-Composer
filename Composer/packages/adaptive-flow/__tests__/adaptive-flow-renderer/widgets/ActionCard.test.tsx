@@ -10,7 +10,7 @@ import { AdaptiveKinds } from '../../../src/adaptive-flow-renderer/constants/Ada
 describe('ActionCard', () => {
   it('can be rendered.', () => {
     const card = render(
-      <ActionCard adaptiveSchema={{}} data={{ $kind: AdaptiveKinds.SendActivity }} id="test" onEvent={() => null} />
+      <ActionCard adaptiveSchema={{}} data={{ $kind: AdaptiveKinds.SendActivity }} id="test" onEvent={() => null} />,
     );
     expect(card).toBeTruthy();
   });
@@ -25,7 +25,7 @@ describe('ActionCard', () => {
         header={<span data-testid="test-header">Header</span>}
         id="test"
         onEvent={() => null}
-      />
+      />,
     );
     expect(card.getByTestId('test-header')).toBeTruthy();
     expect(card.getByTestId('test-body')).toBeTruthy();

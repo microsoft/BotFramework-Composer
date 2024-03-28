@@ -46,5 +46,5 @@ export default mergePluginConfigs(
   lu,
   orchestrator,
   crossTrained,
-  schemaEditor
+  schemaEditor,
 );

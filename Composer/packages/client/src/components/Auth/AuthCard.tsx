@@ -51,9 +51,8 @@ const styles = {
 
 export const AuthCard: React.FC = () => {
   const [authCardVisible, setAuthCardVisible] = useState<boolean>(false);
-  const { refreshLoginStatus, requireUserLogin, logoutUser, setShowAuthDialog, setShowTenantDialog } = useRecoilValue(
-    dispatcherState
-  );
+  const { refreshLoginStatus, requireUserLogin, logoutUser, setShowAuthDialog, setShowTenantDialog } =
+    useRecoilValue(dispatcherState);
   const isAuthenticated = useRecoilValue(isAuthenticatedState);
   const currentUser = useRecoilValue(currentUserState);
   const showAuthDialog = useRecoilValue(showAuthDialogState);

@@ -15,7 +15,7 @@ export type LanguageTemplate = {
 export const languageListTemplatesSorted = (
   languages: string[],
   locale: string,
-  defaultLanguage: string
+  defaultLanguage: string,
 ): LanguageTemplate[] => {
   const defaultLanguageTemplate =
     Locales.find((lang) => lang.locale === defaultLanguage) || Locales.find((lang) => lang.locale === 'en-us');
@@ -41,7 +41,7 @@ export const languageListTemplatesSorted = (
 export const languageListTemplates = (
   languages: string[],
   locale: string,
-  defaultLanguage: string
+  defaultLanguage: string,
 ): LanguageTemplate[] => {
   const languageList = Locales.map((lang) => {
     const isEnabled = languages.includes(lang.locale);

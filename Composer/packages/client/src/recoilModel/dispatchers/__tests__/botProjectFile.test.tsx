@@ -30,11 +30,13 @@ describe('Bot Project File dispatcher', () => {
   const skillsDataSelector = selectorFamily({
     key: 'skillsDataSelector-botProjectFile',
     get: (skillId: string) => noop,
-    set: (skillId: string) => ({ set }, stateUpdater: any) => {
-      const { botNameIdentifier, location } = stateUpdater;
-      set(botNameIdentifierState(skillId), botNameIdentifier);
-      set(locationState(skillId), location);
-    },
+    set:
+      (skillId: string) =>
+      ({ set }, stateUpdater: any) => {
+        const { botNameIdentifier, location } = stateUpdater;
+        set(botNameIdentifierState(skillId), botNameIdentifier);
+        set(locationState(skillId), location);
+      },
   });
 
   const botStatesSelector = selector({
@@ -118,7 +120,7 @@ describe('Bot Project File dispatcher', () => {
             settingsDispatcher,
           },
         },
-      }
+      },
     );
     renderedComponent = rendered.result;
     dispatcher = renderedComponent.current.currentDispatcher;
@@ -137,7 +139,7 @@ describe('Bot Project File dispatcher', () => {
     });
 
     expect(renderedComponent.current.botProjectFile.content.skills.todoSkill.workspace).toMatch(
-      /\.\.(\/|\\)Todo-Skill/
+      /\.\.(\/|\\)Todo-Skill/,
     );
     expect(renderedComponent.current.botProjectFile.content.skills.todoSkill.remote).toBeFalsy();
   });

@@ -37,12 +37,14 @@ const qnaContentStyle = css`
   padding: 0px;
 `;
 
-const QnAPage: React.FC<RouteComponentProps<{
-  dialogId: string;
-  projectId: string;
-  skillId: string;
-  qnaFileId: string;
-}>> = (props) => {
+const QnAPage: React.FC<
+  RouteComponentProps<{
+    dialogId: string;
+    projectId: string;
+    skillId: string;
+    qnaFileId: string;
+  }>
+> = (props) => {
   const { dialogId = '', projectId = '', skillId, qnaFileId = '' } = props;
 
   const actualProjectId = skillId ?? projectId;
@@ -89,7 +91,7 @@ const QnAPage: React.FC<RouteComponentProps<{
       navigateTo(url);
       TelemetryClient.track('EditModeToggled', { jsonView: !edit });
     },
-    [dialogId, actualProjectId, edit]
+    [dialogId, actualProjectId, edit],
   );
 
   const onChangeLocale = (locale) => {

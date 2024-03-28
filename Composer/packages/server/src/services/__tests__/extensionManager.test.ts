@@ -10,7 +10,7 @@ import { search, downloadPackage } from '../../utility/npm';
 import { ExtensionManagerImp, ExtensionManifest } from '../extensionManager';
 import { JsonStore } from '../../store/store';
 
-const mockManifest = ({
+const mockManifest = {
   extension1: {
     id: 'extension1',
     builtIn: true,
@@ -31,7 +31,7 @@ const mockManifest = ({
     id: 'extension3',
     enabled: false,
   },
-} as unknown) as ExtensionManifest;
+} as unknown as ExtensionManifest;
 
 jest.mock('globby', () => jest.fn());
 
@@ -50,7 +50,7 @@ let updateManifestSpy: jest.SpyInstance;
 
 beforeEach(() => {
   manager = new ExtensionManagerImp(
-    new JsonStore(process.env.COMPOSER_EXTENSION_MANIFEST as string, { ...mockManifest })
+    new JsonStore(process.env.COMPOSER_EXTENSION_MANIFEST as string, { ...mockManifest }),
   );
   loadSpy = jest.spyOn(manager, 'load');
   updateManifestSpy = jest.spyOn(manager, 'updateManifest');
@@ -131,14 +131,14 @@ describe('#loadAll', () => {
 
 describe('#loadFromDir', () => {
   it('finds all package.json files in dir', async () => {
-    ((glob as unknown) as jest.Mock).mockReturnValue([]);
+    (glob as unknown as jest.Mock).mockReturnValue([]);
 
     await manager.loadFromDir('/some/dir');
     expect(glob).toHaveBeenCalledWith('*/package.json', { cwd: '/some/dir' });
   });
 
   it('updates the extension manifest and loads each extension found', async () => {
-    ((glob as unknown) as jest.Mock).mockReturnValue(['extension1/package.json', 'extension2/package.json']);
+    (glob as unknown as jest.Mock).mockReturnValue(['extension1/package.json', 'extension2/package.json']);
     (readJson as jest.Mock).mockImplementation((path) => {
       if (path.includes('extension1')) {
         return {
@@ -168,7 +168,7 @@ describe('#loadFromDir', () => {
   });
 
   it('removes the extension from the manifest if not enabled', async () => {
-    ((glob as unknown) as jest.Mock).mockReturnValue(['extension1/package.json']);
+    (glob as unknown as jest.Mock).mockReturnValue(['extension1/package.json']);
     (readJson as jest.Mock).mockResolvedValue({
       name: 'extension1',
       composer: {
@@ -208,7 +208,7 @@ describe('#installRemote', () => {
     expect(downloadPackage).toHaveBeenCalledWith(
       'extension1',
       'latest',
-      path.join(process.env.COMPOSER_REMOTE_EXTENSIONS_DIR as string, 'extension1')
+      path.join(process.env.COMPOSER_REMOTE_EXTENSIONS_DIR as string, 'extension1'),
     );
 
     expect(updateManifestSpy).toHaveBeenCalledWith('extension1', expect.objectContaining({ id: 'extension1' }));

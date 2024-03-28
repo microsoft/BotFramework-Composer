@@ -97,7 +97,7 @@ export class Builder {
     qnaFiles: FileInfo[],
     allFiles: FileInfo[],
     emptyFiles: { [key: string]: boolean },
-    directVersionPublish: boolean
+    directVersionPublish: boolean,
   ) => {
     const userAgent = getUserAgent();
     setEnvDefault('LUIS_USER_AGENT', userAgent);
@@ -130,7 +130,7 @@ export class Builder {
       // (A free search is limited to 3 indexes, which can be used up quickly)
       if (error.text === 'Qnamaker build failed: Runtime error.') {
         throw new Error(
-          'QnA Maker build failed: This error may indicate that your Search service requires an upgrade. For information about the Search service limits, see here: https://docs.microsoft.com/en-us/azure/search/search-limits-quotas-capacity'
+          'QnA Maker build failed: This error may indicate that your Search service requires an upgrade. For information about the Search service limits, see here: https://docs.microsoft.com/en-us/azure/search/search-limits-quotas-capacity',
         );
       } else {
         throw new Error(error.message ?? error.text ?? 'Error publishing to LUIS or QNA.');
@@ -144,7 +144,7 @@ export class Builder {
         file.content = file.content.replace('DeferToRecognizer_LUIS', 'DeferToRecognizer_ORCHESTRATOR');
         this.storage.writeFile(file.path, file.content);
         return file;
-      })
+      }),
     );
   };
 
@@ -161,7 +161,7 @@ export class Builder {
   public setBuildConfig(
     config: IConfig,
     downSamplingConfig?: DownSamplingConfig,
-    crossTrainingSetting?: { inter?: boolean; intra?: boolean }
+    crossTrainingSetting?: { inter?: boolean; intra?: boolean },
   ) {
     this.config = config;
     if (downSamplingConfig) this.downSamplingConfig = downSamplingConfig;
@@ -180,7 +180,7 @@ export class Builder {
 
   public getModelPathAsync = async () => {
     let appDataPath = '';
-    if (process?.versions?.hasOwnProperty('electron')) {
+    if (process?.versions && 'electron' in process.versions) {
       const { app } = await import('electron');
       appDataPath = app.getPath('appData');
     } else {
@@ -202,7 +202,7 @@ export class Builder {
     if (!luFiles.filter((file) => !emptyFiles[file.name]).length) return;
 
     const [enLuFiles, multiLangLuFiles] = partition(luFiles, (f) =>
-      f.name.split('.')?.[1]?.toLowerCase()?.startsWith('en')
+      f.name.split('.')?.[1]?.toLowerCase()?.startsWith('en'),
     );
 
     const nlrList = await this.runOrchestratorNlrList();
@@ -259,7 +259,7 @@ export class Builder {
   public buildOrchestratorSnapshots = async (
     modelPath: string,
     luFiles: FileInfo[],
-    emptyFiles: { [key: string]: boolean }
+    emptyFiles: { [key: string]: boolean },
   ) => {
     if (!luFiles.filter((file) => !emptyFiles[file.name]).length) return {};
     // build snapshots from LU files
@@ -291,7 +291,7 @@ export class Builder {
     },
     onFinish: IOrchestratorProgress = (status) => {
       log(status);
-    }
+    },
   ): Promise<void> {
     if (!(await pathExists(modelPath))) {
       await Orchestrator.baseModelGetAsync(modelPath, nlrId, onProgress, onFinish);
@@ -444,7 +444,7 @@ export class Builder {
     //downsize the interruption utterances to ratio*the minimum length of normal intent utterances
     const reservoirSampler = new ComposerReservoirSampler(
       interruptionItems,
-      this.downSamplingConfig.maxImbalanceRatio * minNum
+      this.downSamplingConfig.maxImbalanceRatio * minNum,
     );
     const finalItems = [...normalItems, ...reservoirSampler.getSampledUtterances()];
     luObject.utterances = finalItems.filter((item) => !has(item, 'pattern'));
@@ -463,7 +463,7 @@ export class Builder {
         }
 
         return luContent;
-      })
+      }),
     );
   }
 
@@ -476,7 +476,7 @@ export class Builder {
         const fileName = `${key}.${fileExtension}`;
         const newFileId = Path.join(this.interruptionFolderPath, fileName);
         await this.storage.writeFile(newFileId, crossTrainResult.get(key).Content);
-      })
+      }),
     );
   }
 
@@ -494,7 +494,7 @@ export class Builder {
     await Promise.all(
       luContents.map(async ({ path, content }) => {
         return await this.storage.writeFile(path, content);
-      })
+      }),
     );
   }
 
@@ -547,7 +547,7 @@ export class Builder {
   }
 
   private writeLuisSettings = async (contents, out: string, directVersionPublish: boolean) => {
-    const settingsContents = contents.filter((c) => c.id && c.id.endsWith('.json'));
+    const settingsContents = contents.filter((c) => c.id?.endsWith('.json'));
     if (settingsContents && settingsContents.length > 0) {
       const outPath = Path.join(Path.resolve(out), settingsContents[0].id);
 
