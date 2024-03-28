@@ -95,7 +95,7 @@
     "dotenv": "^8.1.0",
     "download-npm-package": "^3.1.12",
     "ejs": "3.1.8",
-    "express": "4.17.3",
+    "express": "4.19.2",
     "express-serve-static-core": "0.1.1",
     "express-session": "^1.17.0",
     "extract-zip": "2.0.1",
