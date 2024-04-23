@@ -267,7 +267,7 @@ export function useShell(source: EventSource, projectId: string): Shell {
           (newDialog: string | null) => {
             resolve(newDialog);
           },
-          projectId
+          projectId,
         );
       });
     },

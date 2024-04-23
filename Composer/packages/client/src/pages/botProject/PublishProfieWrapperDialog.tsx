@@ -28,7 +28,7 @@ export const PublishProfileWrapperDialog: React.FC<PublishProfileWrapperDialogPr
   const [showPublishProfileDialog, setShowPublishProfileDialog] = useState(false);
 
   const [currentPublishProfile, setCurrentPublishProfile] = useState<{ index: number; item: PublishTarget } | null>(
-    null
+    null,
   );
 
   useEffect(() => {

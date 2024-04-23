@@ -7,6 +7,7 @@ import {
   ResourceConfig,
   ResourceDefinition,
   ResourceProvisionService,
+  ProvisionWorkingSet,
 } from './types';
 import {
   appInsightsDefinition,
@@ -218,7 +219,7 @@ export const setUpProvisionService = (config: ProvisionServiceConfig, onProgress
   const provisionServices = getProvisionServices(config);
 
   const provision = (selectedResources: ResourceConfig[]): void => {
-    let workingSet: Record<string, object> = {};
+    let workingSet: ProvisionWorkingSet = {};
 
     selectedResources.forEach(async (resourceConfig) => {
       const service: ResourceProvisionService = provisionServices[resourceConfig.key];

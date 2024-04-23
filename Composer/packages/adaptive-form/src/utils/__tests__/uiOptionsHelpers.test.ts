@@ -87,13 +87,13 @@ describe('getUiPlaceholder', () => {
   it('falls back to prop placeholder or schema examples', () => {
     expect(getUiPlaceholder(props)).toEqual('prop placeholder');
     expect(getUiPlaceholder({ ...props, placeholder: undefined, schema: { examples: ['one', 'two'] } })).toEqual(
-      'ex. one, two'
+      'ex. one, two',
     );
   });
 
   it('correctly display examples for non string types', () => {
     expect(
-      getUiPlaceholder({ ...props, placeholder: undefined, schema: { examples: [true, 5, { arg1: 'test' }] } })
+      getUiPlaceholder({ ...props, placeholder: undefined, schema: { examples: [true, 5, { arg1: 'test' }] } }),
     ).toEqual('ex. true, 5, {"arg1":"test"}');
   });
 });

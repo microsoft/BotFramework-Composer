@@ -122,7 +122,7 @@ export const TemplateDetailView: React.FC<TemplateDetailViewProps> = (props) => 
     // result is a dir path
     onValidateLocalTemplatePath(false);
     return formatMessage(
-      "Generator not found. Please enter the full path to the generator's index.js file including the filename"
+      "Generator not found. Please enter the full path to the generator's index.js file including the filename",
     );
   };
 
@@ -143,7 +143,7 @@ export const TemplateDetailView: React.FC<TemplateDetailViewProps> = (props) => 
                 {children}
               </Link>
             ),
-          }
+          },
         )}
       </Text>
       <TextField

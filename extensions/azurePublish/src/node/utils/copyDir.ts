@@ -4,14 +4,14 @@
 
 import Path from 'path';
 
-import { IFileStorage } from './interface';
+import { IFileStorage } from '@botframework-composer/types';
 
 export async function copyDir(
   srcDir: string,
   srcStorage: IFileStorage,
   dstDir: string,
   dstStorage: IFileStorage,
-  pathsToExclude?: Set<string>
+  pathsToExclude?: Set<string>,
 ) {
   if (!(await srcStorage.exists(srcDir)) || !(await srcStorage.stat(srcDir)).isDir) {
     throw new Error(`No such dir ${srcDir}}`);

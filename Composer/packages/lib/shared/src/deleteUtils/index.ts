@@ -10,7 +10,7 @@ import { walkAdaptiveActionList } from '../walkerUtils/walkAdaptiveActionList';
 // TODO: (ze) considering refactoring it with the `walkLgResources` util
 const collectLgTemplates = (action: any, outputTemplates: string[]) => {
   if (typeof action === 'string') return;
-  if (!action || !action.$kind) return;
+  if (!action?.$kind) return;
 
   switch (action.$kind) {
     case SDKKinds.SendActivity:
@@ -31,7 +31,7 @@ const collectLgTemplates = (action: any, outputTemplates: string[]) => {
 // TODO: (ze) considering refactoring it by implementing a new `walkLuResources` util
 const collectLuIntents = (action: any, outputTemplates: string[]) => {
   if (typeof action === 'string') return;
-  if (!action || !action.$kind) return;
+  if (!action?.$kind) return;
 
   switch (action.$kind) {
     case SDKKinds.AttachmentInput:
@@ -51,7 +51,7 @@ const collectLuIntents = (action: any, outputTemplates: string[]) => {
 export const deleteAdaptiveAction = async (
   data: MicrosoftIDialog,
   deleteLgTemplates: (lgTemplates: string[]) => Promise<void>,
-  deleteLuIntents: (luIntents: string[]) => Promise<void>
+  deleteLuIntents: (luIntents: string[]) => Promise<void>,
 ) => {
   const lgTemplates: string[] = [];
   const luIntents: string[] = [];
@@ -66,7 +66,7 @@ export const deleteAdaptiveAction = async (
 export const deleteAdaptiveActionList = async (
   data: MicrosoftIDialog[],
   deleteLgTemplates: (lgTemplates: string[]) => Promise<void>,
-  deleteLuIntents: (luIntents: string[]) => Promise<void>
+  deleteLuIntents: (luIntents: string[]) => Promise<void>,
 ) => {
   const lgTemplates: string[] = [];
   const luIntents: string[] = [];

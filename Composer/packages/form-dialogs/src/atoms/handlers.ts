@@ -29,25 +29,18 @@ import { createSchemaStoreFromJson, getDuplicateName } from './utils';
 
 const getHandlers = () => {
   const importSchemaString = useRecoilCallback(
-    ({ set }) => async ({
-      id,
-      content,
-      templates,
-    }: {
-      id: string;
-      content: string;
-      templates: FormDialogSchemaTemplate[];
-    }) => {
-      const schema = createSchemaStoreFromJson(id, content, templates);
+    ({ set }) =>
+      async ({ id, content, templates }: { id: string; content: string; templates: FormDialogSchemaTemplate[] }) => {
+        const schema = createSchemaStoreFromJson(id, content, templates);
 
-      set(formDialogSchemaAtom, {
-        id: schema.name,
-        name: schema.name,
-        requiredPropertyIds: schema.properties.filter((p) => p.isRequired).map((p) => p.id),
-        optionalPropertyIds: schema.properties.filter((p) => !p.isRequired).map((p) => p.id),
-      });
-      schema.properties.forEach((property) => set(propertyCardDataAtom(property.id), property));
-    }
+        set(formDialogSchemaAtom, {
+          id: schema.name,
+          name: schema.name,
+          requiredPropertyIds: schema.properties.filter((p) => p.isRequired).map((p) => p.id),
+          optionalPropertyIds: schema.properties.filter((p) => !p.isRequired).map((p) => p.id),
+        });
+        schema.properties.forEach((property) => set(propertyCardDataAtom(property.id), property));
+      },
   );
 
   const importSchema = useRecoilCallback(({ snapshot }) => async ({ id, file }: { id: string; file: File }) => {
@@ -77,80 +70,84 @@ const getHandlers = () => {
   });
 
   const changePropertyType = useRecoilCallback(
-    ({ set }) => ({ id, propertyType }: { id: string; propertyType: string }) => {
-      set(propertyCardDataAtom(id), (currentPropertyCardData) => {
-        const basicCardData = pick(currentPropertyCardData, ['id', 'name', 'isRequired', 'isArray']);
-        return { ...basicCardData, propertyType };
-      });
-    }
+    ({ set }) =>
+      ({ id, propertyType }: { id: string; propertyType: string }) => {
+        set(propertyCardDataAtom(id), (currentPropertyCardData) => {
+          const basicCardData = pick(currentPropertyCardData, ['id', 'name', 'isRequired', 'isArray']);
+          return { ...basicCardData, propertyType };
+        });
+      },
   );
 
   const changePropertyRequired = useRecoilCallback(
-    ({ set }) => ({ id, isRequired }: { id: string; isRequired: boolean }) => {
-      set(propertyCardDataAtom(id), (currentPropertyCardData) => {
-        return { ...currentPropertyCardData, isRequired };
-      });
-    }
+    ({ set }) =>
+      ({ id, isRequired }: { id: string; isRequired: boolean }) => {
+        set(propertyCardDataAtom(id), (currentPropertyCardData) => {
+          return { ...currentPropertyCardData, isRequired };
+        });
+      },
   );
 
   const changePropertyName = useRecoilCallback(
-    ({ set, snapshot }) => async ({ id, name }: { id: string; name: string }) => {
-      const locale = await snapshot.getPromise(formDialogLocale);
-      set(propertyCardDataAtom(id), (currentPropertyCardData) => {
-        const currentName = currentPropertyCardData.name;
-        const cardData = { ...currentPropertyCardData, name } as PropertyCardData;
+    ({ set, snapshot }) =>
+      async ({ id, name }: { id: string; name: string }) => {
+        const locale = await snapshot.getPromise(formDialogLocale);
+        set(propertyCardDataAtom(id), (currentPropertyCardData) => {
+          const currentName = currentPropertyCardData.name;
+          const cardData = { ...currentPropertyCardData, name } as PropertyCardData;
 
-        // Change the name of the entity for examples if the type is enum
-        if (cardData.propertyType === 'enum' && cardData.$examples?.[locale]?.[`${currentName}Value`]) {
-          const examples = cloneDeep(cardData.$examples);
-          examples[locale][`${name}Value`] = { ...examples[locale][`${currentName}Value`] };
-          delete examples[locale][`${currentName}Value`];
+          // Change the name of the entity for examples if the type is enum
+          if (cardData.propertyType === 'enum' && cardData.$examples?.[locale]?.[`${currentName}Value`]) {
+            const examples = cloneDeep(cardData.$examples);
+            examples[locale][`${name}Value`] = { ...examples[locale][`${currentName}Value`] };
+            delete examples[locale][`${currentName}Value`];
 
-          cardData.$examples = examples;
-        }
+            cardData.$examples = examples;
+          }
 
-        return cardData;
-      });
-    }
+          return cardData;
+        });
+      },
   );
 
   const changePropertyCardData = useRecoilCallback(
-    ({ set, snapshot }) => async ({ id, data }: { id: string; data: Record<string, any> }) => {
-      const locale = await snapshot.getPromise(formDialogLocale);
-      set(propertyCardDataAtom(id), (currentPropertyCardData) => {
-        const hadEnum = !!currentPropertyCardData.enum?.length;
-        const cardData = { ...currentPropertyCardData, ...data } as PropertyCardData;
+    ({ set, snapshot }) =>
+      async ({ id, data }: { id: string; data: Record<string, any> }) => {
+        const locale = await snapshot.getPromise(formDialogLocale);
+        set(propertyCardDataAtom(id), (currentPropertyCardData) => {
+          const hadEnum = !!currentPropertyCardData.enum?.length;
+          const cardData = { ...currentPropertyCardData, ...data } as PropertyCardData;
 
-        if (cardData.propertyType === 'enum') {
-          // If $examples is empty, deleted current locale examples
-          if (hadEnum && !cardData.$examples?.[locale]) {
+          if (cardData.propertyType === 'enum') {
+            // If $examples is empty, deleted current locale examples
+            if (hadEnum && !cardData.$examples?.[locale]) {
+              return cardData;
+            }
+
+            const defaultExamples = {
+              [locale]: {
+                [`${cardData.name}Value`]: (cardData?.enum ?? []).reduce((acc, e) => {
+                  acc[e] = [];
+                  return acc;
+                }, {}),
+              },
+            };
+
+            const newExamples = data?.$examples?.[locale]?.[`${cardData.name}Value`] ? data.$examples : defaultExamples;
+
+            // Merge default, old and new and only keep the examples for current enum values
+            const mergedExamples = pick(
+              merge(defaultExamples, newExamples),
+              cardData.enum.map((e: string) => `${locale}.${cardData.name}Value.${e}`),
+            );
+            cardData.$examples = mergedExamples;
+
             return cardData;
           }
 
-          const defaultExamples = {
-            [locale]: {
-              [`${cardData.name}Value`]: (cardData?.enum ?? []).reduce((acc, e) => {
-                acc[e] = [];
-                return acc;
-              }, {}),
-            },
-          };
-
-          const newExamples = data?.$examples?.[locale]?.[`${cardData.name}Value`] ? data.$examples : defaultExamples;
-
-          // Merge default, old and new and only keep the examples for current enum values
-          const mergedExamples = pick(
-            merge(defaultExamples, newExamples),
-            cardData.enum.map((e: string) => `${locale}.${cardData.name}Value.${e}`)
-          );
-          cardData.$examples = mergedExamples;
-
           return cardData;
-        }
-
-        return cardData;
-      });
-    }
+        });
+      },
   );
 
   const changePropertyArray = useRecoilCallback(({ set }) => ({ id, isArray }: { id: string; isArray: boolean }) => {
@@ -160,56 +157,56 @@ const getHandlers = () => {
   });
 
   const moveProperty = useRecoilCallback(
-    ({ set }) => ({
-      id,
-      source,
-      destination,
-      fromIndex,
-      toIndex,
-    }: {
-      id: string;
-      source: PropertyRequiredKind;
-      destination: PropertyRequiredKind;
-      fromIndex: number;
-      toIndex: number;
-    }) => {
-      const toggleRequired = source !== destination;
+    ({ set }) =>
+      ({
+        id,
+        source,
+        destination,
+        fromIndex,
+        toIndex,
+      }: {
+        id: string;
+        source: PropertyRequiredKind;
+        destination: PropertyRequiredKind;
+        fromIndex: number;
+        toIndex: number;
+      }) => {
+        const toggleRequired = source !== destination;
 
-      if (toggleRequired) {
-        changePropertyRequired({ id, isRequired: source === 'optional' });
-      }
-
-      set(formDialogSchemaAtom, (currentSchema) => {
         if (toggleRequired) {
-          //Move between two lists
-          const requiredPropertyIds = currentSchema.requiredPropertyIds.slice();
-          const optionalPropertyIds = currentSchema.optionalPropertyIds.slice();
-
-          if (source === 'required') {
-            requiredPropertyIds.splice(fromIndex, 1);
-            optionalPropertyIds.splice(toIndex, 0, id);
-          } else {
-            optionalPropertyIds.splice(fromIndex, 1);
-            requiredPropertyIds.splice(toIndex, 0, id);
-          }
-
-          return { ...currentSchema, requiredPropertyIds, optionalPropertyIds };
-        } else {
-          // Move within a list
-          const propertyIds = (source === 'required'
-            ? currentSchema.requiredPropertyIds
-            : currentSchema.optionalPropertyIds
-          ).slice();
-
-          propertyIds.splice(fromIndex, 1);
-          propertyIds.splice(toIndex, 0, id);
-
-          return source === 'required'
-            ? { ...currentSchema, requiredPropertyIds: propertyIds }
-            : { ...currentSchema, optionalPropertyIds: propertyIds };
+          changePropertyRequired({ id, isRequired: source === 'optional' });
         }
-      });
-    }
+
+        set(formDialogSchemaAtom, (currentSchema) => {
+          if (toggleRequired) {
+            //Move between two lists
+            const requiredPropertyIds = currentSchema.requiredPropertyIds.slice();
+            const optionalPropertyIds = currentSchema.optionalPropertyIds.slice();
+
+            if (source === 'required') {
+              requiredPropertyIds.splice(fromIndex, 1);
+              optionalPropertyIds.splice(toIndex, 0, id);
+            } else {
+              optionalPropertyIds.splice(fromIndex, 1);
+              requiredPropertyIds.splice(toIndex, 0, id);
+            }
+
+            return { ...currentSchema, requiredPropertyIds, optionalPropertyIds };
+          } else {
+            // Move within a list
+            const propertyIds = (
+              source === 'required' ? currentSchema.requiredPropertyIds : currentSchema.optionalPropertyIds
+            ).slice();
+
+            propertyIds.splice(fromIndex, 1);
+            propertyIds.splice(toIndex, 0, id);
+
+            return source === 'required'
+              ? { ...currentSchema, requiredPropertyIds: propertyIds }
+              : { ...currentSchema, optionalPropertyIds: propertyIds };
+          }
+        });
+      },
   );
 
   const removeProperty = useRecoilCallback(({ set, reset, snapshot }) => async ({ id }: { id: string }) => {
@@ -242,9 +239,8 @@ const getHandlers = () => {
     const name = getDuplicateName(propertyCardData.name, propertyNames);
 
     set(formDialogSchemaAtom, (currentSchema) => {
-      const propertyIds = (propertyCardData.isRequired
-        ? currentSchema.requiredPropertyIds
-        : currentSchema.optionalPropertyIds
+      const propertyIds = (
+        propertyCardData.isRequired ? currentSchema.requiredPropertyIds : currentSchema.optionalPropertyIds
       ).slice();
 
       if (propertyCardData.isRequired) {

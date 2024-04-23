@@ -74,7 +74,7 @@ describe('Root Bot External Service', () => {
 
     const { getByTestId, findByText } = renderWithRecoilAndCustomDispatchers(
       <RootBotExternalService projectId={state.projectId} />,
-      initRecoilState
+      initRecoilState,
     );
 
     const textFieldAuthoring = getByTestId('rootLUISAuthoringKey');

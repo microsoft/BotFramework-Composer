@@ -6,9 +6,7 @@ import multimatch from 'multimatch';
 
 import { Path } from './path';
 
-// eslint-disable-next-line @typescript-eslint/no-var-requires
 const luObject = require('@microsoft/bf-lu/lib/parser/lu/lu.js');
-// eslint-disable-next-line @typescript-eslint/no-var-requires
 const luOptions = require('@microsoft/bf-lu/lib/parser/lu/luOptions.js');
 
 function isWildcardPattern(str: string): boolean {
@@ -101,7 +99,7 @@ export function luImportResolverGenerator(files: FileInfo[]) {
         const targetFullPath = Path.resolve(sourceFileDir, targetPath.replace(fragmentReg, ''));
         const targetFullPath2 = Path.resolve(
           sourceFileDir,
-          targetPath.replace(fragmentReg, '').replace(extReg, `.${locale}${ext}`)
+          targetPath.replace(fragmentReg, '').replace(extReg, `.${locale}${ext}`),
         );
         targetFile =
           files.find(({ path }) => path === targetFullPath) || files.find(({ path }) => path === targetFullPath2);

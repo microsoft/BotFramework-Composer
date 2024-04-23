@@ -119,7 +119,7 @@ export const ReviewResourcesStep = () => {
         isPadded: true,
       },
     ],
-    []
+    [],
   );
 
   const reviewListItems = React.useMemo(() => {

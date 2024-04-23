@@ -22,7 +22,7 @@ export const topLinks = (
   showFormDialog: boolean,
   schema: any,
   skillIsRemote: boolean,
-  rootProjectId?: string
+  rootProjectId?: string,
 ) => {
   const isPVASchema = checkForPVASchema(schema);
   const botLoaded = !!projectId;

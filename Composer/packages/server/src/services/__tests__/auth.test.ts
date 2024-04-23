@@ -14,7 +14,6 @@ describe('auth service', () => {
 
   it('should generate a CSRF token in the production environment', () => {
     Object.assign(process.env, { ...process.env, NODE_ENV: 'production' });
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
     const { authService } = require('../auth/auth');
 
     // eslint-disable-next-line no-underscore-dangle
@@ -23,7 +22,6 @@ describe('auth service', () => {
 
   it('should use template as a CSRF token in the development environment', () => {
     Object.assign(process.env, { ...process.env, NODE_ENV: 'development' });
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
     const { authService } = require('../auth/auth');
 
     // eslint-disable-next-line no-underscore-dangle
@@ -34,7 +32,6 @@ describe('auth service', () => {
     const mockProvider = {
       getAccessToken: jest.fn().mockResolvedValue('accessToken'),
     };
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
     const { authService } = require('../auth/auth');
     (authService as any).provider = mockProvider;
     const token = await authService.getAccessToken({});

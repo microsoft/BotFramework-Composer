@@ -17,7 +17,7 @@ export const lgCardAttachmentTemplates = [
   'animation',
 ] as const;
 
-export type LgCardTemplateType = typeof lgCardAttachmentTemplates[number];
+export type LgCardTemplateType = (typeof lgCardAttachmentTemplates)[number];
 
 export const cardTemplates: Record<LgCardTemplateType, string> = {
   adaptive: `> To learn more Adaptive Cards format, read the documentation at

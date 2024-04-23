@@ -60,7 +60,7 @@ export const SkillHostEndPoint: React.FC<SkillHostEndPointProps> = (props) => {
                 {children}
               </Link>
             ),
-          }
+          },
         )}
       </div>
       <TextField

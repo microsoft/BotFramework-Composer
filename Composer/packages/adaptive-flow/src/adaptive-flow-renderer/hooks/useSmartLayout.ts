@@ -17,7 +17,7 @@ export type GraphNodeMap<T extends string> = MapWithEnumKey<T, GraphNode>;
 export function useSmartLayout<T extends string>(
   nodeMap: GraphNodeMap<T>,
   layouter: (nodeMap: GraphNodeMap<T>) => GraphLayout,
-  onResize: (boundary: Boundary) => void
+  onResize: (boundary: Boundary) => void,
 ): {
   layout: GraphLayout;
   updateNodeBoundary: (nodeName: T, boundary: Boundary) => void;

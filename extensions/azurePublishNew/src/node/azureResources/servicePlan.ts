@@ -41,7 +41,7 @@ const appServiceProvisionMethod = (provisionConfig: ProvisionServiceConfig) => {
 
   return async (
     resourceConfig: ServicePlanResourceConfig,
-    workingSet: ProvisionWorkingSet
+    workingSet: ProvisionWorkingSet,
   ): Promise<ProvisionWorkingSet> => {
     const operatingSystem = resourceConfig.operatingSystem ? resourceConfig.operatingSystem : 'windows';
     try {
@@ -60,7 +60,7 @@ const appServiceProvisionMethod = (provisionConfig: ProvisionServiceConfig) => {
             family: 'S',
             capacity: 1,
           },
-        }
+        },
       );
       return { ...workingSet, appService: { appServicePlanName: appServiceResult.name } };
     } catch (err) {

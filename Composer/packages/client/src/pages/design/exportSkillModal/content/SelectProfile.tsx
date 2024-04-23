@@ -110,7 +110,7 @@ export const SelectProfile: React.FC<ContentProps> = ({
       });
       setCurrentTarget(target);
     },
-    [publishingTargets]
+    [publishingTargets],
   );
 
   useEffect(() => {
@@ -147,22 +147,17 @@ export const SelectProfile: React.FC<ContentProps> = ({
     try {
       const config = JSON.parse(publishTarget.configuration);
 
-      return (
-        config.settings &&
-        config.settings.MicrosoftAppId &&
-        config.hostname &&
-        config.settings.MicrosoftAppId.length > 0 &&
-        config.hostname.length > 0
-      );
+      return config.settings?.MicrosoftAppId?.length > 0 && config.hostname?.length > 0;
     } catch (err) {
       console.log(err.message);
       return false;
     }
   };
 
-  const hasValidProfile = useMemo(() => !!publishingTargets.some((target) => isValidProfile(target)), [
-    publishingTargets,
-  ]);
+  const hasValidProfile = useMemo(
+    () => !!publishingTargets.some((target) => isValidProfile(target)),
+    [publishingTargets],
+  );
 
   const publishingOptions = useMemo(() => {
     return publishingTargets.map((t) => ({

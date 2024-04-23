@@ -16,12 +16,12 @@ export const validateSchema = (dialogId: string, dialogData: BaseSchema, schema:
         new Diagnostic(
           formatMessage(
             'Components of $kind "{kind}" are not supported. Replace with a different component or create a custom component.',
-            { kind: $kind }
+            { kind: $kind },
           ),
           `${dialogId}.dialog`,
           DiagnosticSeverity.Error,
-          path
-        )
+          path,
+        ),
       );
     }
     return true;

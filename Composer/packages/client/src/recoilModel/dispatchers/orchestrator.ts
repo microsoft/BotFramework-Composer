@@ -42,7 +42,7 @@ const pollUntilDone = (predicate: () => Promise<boolean>, pollingIntervalMs: num
 export const downloadModel = async (
   addr: string,
   modelRequest: OrchestratorModelRequest,
-  notificationStartCallback: () => void
+  notificationStartCallback: () => void,
 ) => {
   const resp = await httpClient.post(addr, { modelData: modelRequest });
 
@@ -58,17 +58,17 @@ export const downloadModel = async (
 
 export const getAvailableLanguageModels = async (
   recognizerFiles: RecognizerFile[],
-  botSettings?: DialogSetting
+  botSettings?: DialogSetting,
 ): Promise<OrchestratorModelRequest[]> => {
   const dialogsUsingOrchestrator = recognizerFiles.filter(
-    ({ content }) => content.$kind === SDKKinds.OrchestratorRecognizer
+    ({ content }) => content.$kind === SDKKinds.OrchestratorRecognizer,
   );
   let languageModels: OrchestratorModelRequest[] = [];
 
   if (dialogsUsingOrchestrator.length) {
     // pull out languages that Orchestrator has to support
     const [enLuFiles, multiLangLuFiles] = partition(dialogsUsingOrchestrator, (f) =>
-      f.id.split('.')?.[1]?.toLowerCase()?.startsWith('en')
+      f.id.split('.')?.[1]?.toLowerCase()?.startsWith('en'),
     );
 
     if (enLuFiles.length) {
@@ -96,7 +96,7 @@ export const getAvailableLanguageModels = async (
         const modelList = resp.data;
         if (modelList?.defaults) {
           languageModels = languageModels.map((r) =>
-            r.name === 'default' ? { ...r, name: modelList.defaults[r.kind] } : r
+            r.name === 'default' ? { ...r, name: modelList.defaults[r.kind] } : r,
           );
         }
       }
@@ -143,14 +143,14 @@ export const orchestratorDispatcher = () => {
           filePersistence.flush();
         } catch (err) {
           const errorNotification = createNotification(
-            orchestratorDownloadErrorProps(err?.response?.data?.message || err.message)
+            orchestratorDownloadErrorProps(err?.response?.data?.message || err.message),
           );
           addNotification(errorNotification);
         } finally {
           deleteNotification(downloadNotification.id);
         }
       }
-    }
+    },
   );
 
   return {

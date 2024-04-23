@@ -20,7 +20,7 @@ describe('<FieldLabel />', () => {
 
   it('renders a description tooltip', async () => {
     const { findByTestId } = render(
-      <FieldLabel description="my description" helpLink="https://aka.ms" label="My Label" />
+      <FieldLabel description="my description" helpLink="https://aka.ms" label="My Label" />,
     );
 
     expect(await findByTestId('FieldLabelHelpIcon')).toBeInTheDocument();

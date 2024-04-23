@@ -45,18 +45,17 @@ function typecheck(extPath) {
 const getBundleConfigs = (extPath, packageJSON, watch = false) => {
   const buildConfigs = [];
 
-  const watchCb = (entry) =>
-    watch
-      ? {
-          onRebuild(error, result) {
-            if (error) {
-              console.error('watch build failed:', error);
-            } else {
-              console.info('[%s] successfully rebuilt', entry);
-            }
-          },
-        }
-      : false;
+  const watchPlugin = {
+    name: 'watch-plugin',
+    setup(build) {
+      if (!watch) return
+      let count = 0;
+      build.onEnd(result => {
+        if (count++ === 0) console.log('first build:', result);
+        else console.log('subsequent build:', result);
+      });
+    },
+  };
 
   const defaultConfig = Object.assign(
     {
@@ -78,8 +77,8 @@ const getBundleConfigs = (extPath, packageJSON, watch = false) => {
             entryPoints: [p],
             outfile: path.join(extPath, 'dist/extension.js'),
             platform: 'node',
+            plugins: [watchPlugin],
             target: ['node12.13.0'],
-            watch: watchCb('node'),
           }
         )
       );
@@ -104,8 +103,8 @@ const getBundleConfigs = (extPath, packageJSON, watch = false) => {
               outdir: path.join(extPath, './dist'),
               entryPoints: [cPath],
               target: ['es2015'],
-              watch: watchCb(contrib.name),
               plugins: [
+                watchPlugin,
                 GlobalsPlugin({
                   react: 'React',
                   'react-dom': 'ReactDOM',
@@ -142,12 +141,11 @@ const compile = async (name, extPath, watch = false) => {
 
   console.log('[%s] compiling', name);
   const work = [];
-  const service = await esbuild.startService();
+  const service = esbuild;
 
   try {
     await cleanDist(name, extPath);
-    // fixme: temproary skip untill release
-    // work.push(typecheck(extPath));
+    work.push(typecheck(extPath));
     for (const config of getBundleConfigs(extPath, packageJSON, watch)) {
       work.push(service.build(config));
     }

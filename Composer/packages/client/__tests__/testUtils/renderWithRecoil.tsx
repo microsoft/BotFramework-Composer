@@ -12,13 +12,13 @@ export function renderWithRecoil(subject, initRecoilState: (mutableSnapshot: Mut
   return render(
     <RecoilRoot initializeState={initRecoilState}>
       <DispatcherWrapper>{subject}</DispatcherWrapper>
-    </RecoilRoot>
+    </RecoilRoot>,
   );
 }
 
 export function renderWithRecoilAndCustomDispatchers(
   subject,
-  initRecoilState: (mutableSnapshot: MutableSnapshot) => void = noop
+  initRecoilState: (mutableSnapshot: MutableSnapshot) => void = noop,
 ) {
   return render(<RecoilRoot initializeState={initRecoilState}>{subject}</RecoilRoot>);
 }

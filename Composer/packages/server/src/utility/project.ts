@@ -43,7 +43,7 @@ export async function getNewProjRef(
   templateId: string,
   locationRef: LocationRef,
   user?: UserIdentity,
-  locale?: string
+  locale?: string,
 ) {
   const createFromRemoteTemplate = !!templateDir;
   let newProjRef;

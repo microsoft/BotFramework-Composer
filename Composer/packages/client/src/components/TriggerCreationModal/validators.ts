@@ -23,7 +23,7 @@ const validateDupRegExIntent = (
   selectedType: string,
   intent: string,
   isRegEx: boolean,
-  regExIntents: [{ intent: string; pattern: string }]
+  regExIntents: [{ intent: string; pattern: string }],
 ): string | undefined => {
   if (selectedType === SDKKinds.OnIntent && isRegEx && regExIntents.find((ri) => ri.intent === intent)) {
     return formatMessage(`RegEx {intent} is already defined`, { intent });
@@ -53,7 +53,7 @@ const validateTriggerPhrases = (
   selectedType: string,
   isRegEx: boolean,
   intent: string,
-  triggerPhrases: string
+  triggerPhrases: string,
 ): string | undefined => {
   if (selectedType === SDKKinds.OnIntent && !isRegEx && triggerPhrases) {
     return getLuDiagnostics(intent, triggerPhrases);
@@ -64,7 +64,7 @@ export const validateForm = (
   selectedType: string,
   data: TriggerFormData,
   isRegEx: boolean,
-  regExIntents: [{ intent: string; pattern: string }]
+  regExIntents: [{ intent: string; pattern: string }],
 ): TriggerFormDataErrors => {
   const errors: TriggerFormDataErrors = {};
   const { $kind, event: eventName, intent, regEx, triggerPhrases } = data;

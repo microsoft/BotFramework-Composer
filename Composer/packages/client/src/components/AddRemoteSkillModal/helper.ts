@@ -12,7 +12,7 @@ import TelemetryClient from '../../telemetry/TelemetryClient';
 
 const conflictConfirmationTitle = formatMessage('Conflicting changes detected');
 const conflictConfirmationPrompt = formatMessage(
-  'This operation will overwrite changes made to previously imported files. Do you want to proceed?'
+  'This operation will overwrite changes made to previously imported files. Do you want to proceed?',
 );
 
 /**
@@ -24,7 +24,7 @@ export const importOrchestrator = async (
   projectId: string,
   runtime: DialogSetting['runtime'],
   reloadProject,
-  setApplicationLevelError
+  setApplicationLevelError,
 ) => {
   const runtimeInfo = parseRuntimeKey(runtime?.key);
 
@@ -70,7 +70,7 @@ export const importOrchestrator = async (
     TelemetryClient.track('PackageInstallFailed', { ...reqBody, isUpdate: reqBody.isUpdating });
     setApplicationLevelError({
       status: err.response.status,
-      message: err.response && err.response.data.message ? err.response.data.message : err,
+      message: err.response?.data?.message ?? err,
       summary: formatMessage('Install Error'),
     });
   }

@@ -142,7 +142,7 @@ describe('<OrchestratorForSkillsDialog />', () => {
       'rootBotId',
       { key: 'adaptive-runtime-dotnet-webapp' },
       expect.anything(),
-      expect.anything()
+      expect.anything(),
     );
   });
 
@@ -183,7 +183,7 @@ describe('<OrchestratorForSkillsDialog />', () => {
         command: expect.anything(),
       },
       expect.anything(),
-      expect.anything()
+      expect.anything(),
     );
   });
 

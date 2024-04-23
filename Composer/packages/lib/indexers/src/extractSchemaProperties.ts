@@ -17,7 +17,7 @@ export const extractSchemaProperties = (dialog: DialogInfo, jsonSchemaFiles: Jso
       schema = schemaRef;
     } else {
       schema = jsonSchemaFiles.find(
-        (file) => file.id === getBaseName(schemaRef as string) || file.id === dialog.content.schema
+        (file) => file.id === getBaseName(schemaRef as string) || file.id === dialog.content.schema,
       )?.content;
     }
 

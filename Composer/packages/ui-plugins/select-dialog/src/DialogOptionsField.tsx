@@ -30,15 +30,16 @@ const BorderedStack = styled(Stack)(({ border }: { border: boolean }) =>
     ? {
         borderBottom: `1px solid ${NeutralColors.gray30}`,
       }
-    : {}
+    : {},
 );
 
 const styles = {
   dropdown: {
     root: {
-      ':hover .ms-Dropdown-title, :active .ms-Dropdown-title, :hover .ms-Dropdown-caretDown, :active .ms-Dropdown-caretDown': {
-        color: FluentTheme.palette.themeDarker,
-      },
+      ':hover .ms-Dropdown-title, :active .ms-Dropdown-title, :hover .ms-Dropdown-caretDown, :active .ms-Dropdown-caretDown':
+        {
+          color: FluentTheme.palette.themeDarker,
+        },
       ':focus-within .ms-Dropdown-title, :focus-within .ms-Dropdown-caretDown': {
         color: FluentTheme.palette.accent,
       },
@@ -58,7 +59,7 @@ const dropdownCalloutProps = { styles: { root: { minWidth: 140 } } };
 const getSelectedKey = (
   value?: string | Record<string, unknown>,
   schema?: JSONSchema7,
-  validSchema = false
+  validSchema = false,
 ): string => {
   if (typeof value !== 'string' && schema && validSchema) {
     return 'form';
@@ -84,18 +85,21 @@ const DialogOptionsField: React.FC<FieldProps> = ({
   const { dialogSchemas, topics } = useShellApi();
 
   const topicIdMap = React.useMemo(() => {
-    return topics.reduce((all, t) => {
-      if (t.content?.id) {
-        all[t.content.id] = t.id;
-      }
-      return all;
-    }, {} as Record<string, string>);
+    return topics.reduce(
+      (all, t) => {
+        if (t.content?.id) {
+          all[t.content.id] = t.id;
+        }
+        return all;
+      },
+      {} as Record<string, string>,
+    );
   }, [topics]);
 
   const dialogId = (dialog && topicIdMap[dialog]) ?? dialog;
   const { content: rawSchema }: { content?: JSONSchema7 } = React.useMemo(
     () => dialogSchemas.find(({ id }) => id === dialogId) || {},
-    [dialog, dialogSchemas]
+    [dialog, dialogSchemas],
   );
   const [schema, setSchema] = React.useState<JSONSchema7 | undefined>(undefined);
 
@@ -151,7 +155,7 @@ const DialogOptionsField: React.FC<FieldProps> = ({
     (newOptions?: string | Record<string, any>) => {
       onChange({ ...value, options: newOptions });
     },
-    [value, onChange]
+    [value, onChange],
   );
 
   const onDropdownChange = React.useCallback(
@@ -168,7 +172,7 @@ const DialogOptionsField: React.FC<FieldProps> = ({
         setSelectedKey(option.key as string);
       }
     },
-    [change, selectedKey]
+    [change, selectedKey],
   );
 
   const typeOptions = React.useMemo<IDropdownOption[]>(() => {

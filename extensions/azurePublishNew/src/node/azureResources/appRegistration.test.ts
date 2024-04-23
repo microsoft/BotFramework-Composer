@@ -26,7 +26,8 @@ describe('appRegistration', () => {
   describe('getAppRegistrationProvisionService', () => {
     it('returns the app registration service', () => {
       const appRegistrationProvisionService = getAppRegistrationProvisionService({
-        token: mockToken,
+        accessToken: mockToken,
+        key: 'appRegistration',
         graphToken: mockGraphToken,
         subscriptionId: mockSubscriptionId,
       });
@@ -37,7 +38,8 @@ describe('appRegistration', () => {
   describe('provision', () => {
     it('should return appRegistration result on success', async () => {
       const appRegistrationProvisionService = getAppRegistrationProvisionService({
-        token: mockToken,
+        accessToken: mockToken,
+        key: 'appRegistration',
         graphToken: mockGraphToken,
         subscriptionId: mockSubscriptionId,
       });

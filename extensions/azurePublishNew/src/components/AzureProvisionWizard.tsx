@@ -30,7 +30,7 @@ const Root = styled.div<RootStyleProps>(
       grid-template-columns: 1fr;
       grid-auto-rows: auto;
     }
-  `
+  `,
 );
 
 export const AzureProvisionWizard = () => {

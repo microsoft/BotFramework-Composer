@@ -25,7 +25,7 @@ const splitContainer = css`
 `;
 
 const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: string; skillId?: string }>> = (
-  props
+  props,
 ) => {
   const { projectId = '', skillId, location } = props;
 

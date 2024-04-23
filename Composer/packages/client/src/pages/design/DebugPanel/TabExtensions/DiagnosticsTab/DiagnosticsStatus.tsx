@@ -32,7 +32,7 @@ export const DiagnosticsStatus = () => {
         =1 {One error}
       other {# errors}
     }`,
-    { errorsCount }
+    { errorsCount },
   );
 
   const warningLabel = formatMessage(
@@ -42,7 +42,7 @@ export const DiagnosticsStatus = () => {
         =1 {One warning}
       other {# warnings}
     }`,
-    { warningsCount }
+    { warningsCount },
   );
 
   return (

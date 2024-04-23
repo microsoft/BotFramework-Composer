@@ -150,7 +150,7 @@ export const defaultFilePath = (
   options: {
     endpoint?: string; // <endpoint>/<file-path>
     rootDialogId?: string;
-  }
+  },
 ): string => {
   const BOTNAME = botName.toLowerCase();
   const CommonFileId = 'common';

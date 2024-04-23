@@ -7,7 +7,7 @@ import { resolveRef } from './resolveRef';
 export function resolvePropSchema(
   schema: JSONSchema7,
   path: string,
-  definitions: SchemaDefinitions = {}
+  definitions: SchemaDefinitions = {},
 ): JSONSchema7 | undefined {
   const propSchema = schema.properties?.[path];
 

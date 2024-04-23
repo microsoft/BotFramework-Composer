@@ -34,7 +34,7 @@ export const PreviewFeatureToggle: React.FC = () => {
             featureFlagKey={key as FeatureFlagKey}
             featureFlagName={featureFlag.displayName}
             toggleFeatureFlag={toggleFeatureFlag}
-          />
+          />,
         );
       }
     });
@@ -42,7 +42,7 @@ export const PreviewFeatureToggle: React.FC = () => {
       result.push(
         <span key={'noPreviewFeatureText'} css={noFeatureFlagText}>
           {formatMessage('There are no preview features at this time.')}
-        </span>
+        </span>,
       );
     }
     return <div css={featureFlagGroupContainer}>{result}</div>;
@@ -54,7 +54,7 @@ export const PreviewFeatureToggle: React.FC = () => {
         hideToggle
         checked={featureFlagVisible}
         description={formatMessage(
-          'Try new features in preview and help us make Composer better. You can turn them on or off at any time.'
+          'Try new features in preview and help us make Composer better. You can turn them on or off at any time.',
         )}
         image={images.previewFeatures}
         title={formatMessage('Preview features')}

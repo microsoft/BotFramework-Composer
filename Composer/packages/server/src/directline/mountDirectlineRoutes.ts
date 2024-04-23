@@ -29,7 +29,7 @@ export const mountDirectLineRoutes = (dLServerContext: DLServerContext): express
     logNetworkTraffic,
     getBotEndpoint,
     getConversation,
-    createPostActivityHandler(state)
+    createPostActivityHandler(state),
   );
 
   router.post(
@@ -37,7 +37,7 @@ export const mountDirectLineRoutes = (dLServerContext: DLServerContext): express
     logNetworkTraffic,
     getBotEndpoint,
     getConversation,
-    createUploadHandler(state)
+    createUploadHandler(state),
   );
 
   return router;

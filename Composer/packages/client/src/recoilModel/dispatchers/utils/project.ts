@@ -103,7 +103,7 @@ import { getPublishProfileFromPayload } from '../../../utils/electronUtil';
 import { crossTrainConfigState, projectIndexingState } from './../../atoms/botState';
 import { recognizersSelectorFamily } from './../../selectors/recognizers';
 
-export const resetBotStates = async ({ reset }: CallbackInterface, projectId: string) => {
+export const resetBotStates = ({ reset }: CallbackInterface, projectId: string) => {
   const botStates = Object.keys(botstates);
   botStates.forEach((state) => {
     const currentRecoilAtom: any = botstates[state];
@@ -118,7 +118,7 @@ export const setErrorOnBotProject = async (
   callbackHelpers: CallbackInterface,
   projectId: string,
   botName: string,
-  payload: any
+  payload: any,
 ) => {
   const { set } = callbackHelpers;
   if (payload?.response?.data?.message) {
@@ -137,13 +137,15 @@ export const flushExistingTasks = async (callbackHelpers: CallbackInterface) => 
   reset(botProjectSpaceLoadedState);
   reset(botProjectIdsState);
 
-  for (const projectId of projectIds) {
-    botRuntimeOperations?.stopBot(projectId);
+  const result = projectIds.map(async (projectId) => {
+    await botRuntimeOperations?.stopBot(projectId);
     resetBotStates(callbackHelpers, projectId);
-  }
+  });
 
-  const workers = [lgWorker, luWorker, qnaWorker];
-  return Promise.all([workers.map((w) => w.flush())]);
+  const workers = [lgWorker, luWorker, qnaWorker].map(async (worker) => {
+    await worker.flush();
+  });
+  await Promise.all([...result, ...workers]);
 };
 
 // merge sensitive values in localStorage
@@ -214,7 +216,7 @@ export const navigateToBot = (
   callbackHelpers: CallbackInterface,
   projectId: string,
   mainDialog?: string,
-  urlSuffix?: string
+  urlSuffix?: string,
 ) => {
   if (projectId) {
     const { set } = callbackHelpers;
@@ -293,7 +295,7 @@ const parseAllAssets = async ({ set }: CallbackInterface, projectId: string, bot
   const luFeaturesMap: { [key: string]: ILUFeaturesConfig } = {};
   for (const { id } of luFiles) {
     const isOrchestartor = recognizers.some(
-      (f) => f.id === `${id}.lu.dialog` && f.content.$kind === SDKKinds.OrchestratorRecognizer
+      (f) => f.id === `${id}.lu.dialog` && f.content.$kind === SDKKinds.OrchestratorRecognizer,
     );
     const luFeatures = { ...mergedSettings.luFeatures, isOrchestartor };
     luFeaturesMap[id] = luFeatures;
@@ -367,7 +369,7 @@ export const loadProjectData = async (data) => {
 export const fetchProjectDataByPath = async (
   path: string,
   storageId,
-  isRootBot: boolean
+  isRootBot: boolean,
 ): Promise<{ botFiles: any; projectData: any; error: any }> => {
   try {
     const response = await httpClient.put(`/projects/open`, { path, storageId, isRootBot });
@@ -444,7 +446,7 @@ export const updateLuFilesStatus = (projectId: string, luFiles: LuFile[]) => {
 export const initLuFilesStatus = (projectId: string, luFiles: LuFile[], dialogs: DialogInfo[]) => {
   luFileStatusStorage.checkFileStatus(
     projectId,
-    getReferredLuFiles(luFiles, dialogs).map((file) => file.id)
+    getReferredLuFiles(luFiles, dialogs).map((file) => file.id),
   );
   return updateLuFilesStatus(projectId, luFiles);
 };
@@ -463,7 +465,7 @@ export const updateQnaFilesStatus = (projectId: string, qnaFiles: QnAFile[]) => 
 export const initQnaFilesStatus = (projectId: string, qnaFiles: QnAFile[], dialogs: DialogInfo[]) => {
   qnaFileStatusStorage.checkFileStatus(
     projectId,
-    getReferredQnaFiles(qnaFiles, dialogs).map((file) => file.id)
+    getReferredQnaFiles(qnaFiles, dialogs).map((file) => file.id),
   );
   return updateQnaFilesStatus(projectId, qnaFiles);
 };
@@ -527,7 +529,7 @@ export const initBotState = async (callbackHelpers: CallbackInterface, data: any
   // Form dialogs
   set(
     formDialogSchemaIdsState(projectId),
-    formDialogSchemas.map((f) => f.id)
+    formDialogSchemas.map((f) => f.id),
   );
   formDialogSchemas.forEach(({ id, content }) => {
     set(formDialogSchemaState({ projectId, schemaId: id }), { id, content });
@@ -575,7 +577,7 @@ export const removeRecentProject = async (callbackHelpers: CallbackInterface, pa
 
 export const openRemoteSkill = async (
   callbackHelpers: CallbackInterface,
-  { manifestUrl, manifestFromZip = { name: '', content: {} }, rootBotProjectId = '', botNameIdentifier = '' }
+  { manifestUrl, manifestFromZip = { name: '', content: {} }, rootBotProjectId = '', botNameIdentifier = '' },
 ) => {
   const { set } = callbackHelpers;
 
@@ -594,7 +596,7 @@ export const openRemoteSkill = async (
 
     manifestResponseData = (
       await httpClient.get(
-        `/projects/${rootBotProjectId}/skill/retrieveSkillManifest?${stringified}&ignoreProjectValidation=true`
+        `/projects/${rootBotProjectId}/skill/retrieveSkillManifest?${stringified}&ignoreProjectValidation=true`,
       )
     ).data;
   }
@@ -651,7 +653,7 @@ export const migrateToV2 = async (
   description: string,
   location: string,
   runtimeLanguage: string,
-  runtimeType: string
+  runtimeType: string,
 ) => {
   const jobId = await httpClient.post(`projects/migrate`, {
     storageId: 'default',
@@ -715,7 +717,7 @@ export const openRootBotAndSkills = async (callbackHelpers: CallbackInterface, d
     if (mergedSettings.skill) {
       const { botProjectFile, skillSettings } = migrateSkillsForExistingBots(
         currentBotProjectFileIndexed.content,
-        mergedSettings.skill
+        mergedSettings.skill,
       );
       if (!isEmpty(skillSettings)) {
         setRootBotSettingState(callbackHelpers, rootBotProjectId, {
@@ -797,7 +799,7 @@ export const postRootBotCreation = async (
   templateId,
   profile,
   source,
-  projectIdCache
+  projectIdCache,
 ) => {
   if (settingStorage.get(projectId)) {
     settingStorage.remove(projectId);
@@ -863,7 +865,7 @@ export const saveProject = async (callbackHelpers, oldProjectData) => {
 
 export const getSkillNameIdentifier = async (
   callbackHelpers: CallbackInterface,
-  displayName: string
+  displayName: string,
 ): Promise<string> => {
   const { snapshot } = callbackHelpers;
   const rootBotProjectId = await snapshot.getPromise(rootBotProjectIdSelector);
@@ -877,7 +879,7 @@ export const getSkillNameIdentifier = async (
 export const checkIfBotExistsInBotProjectFile = async (
   callbackHelpers: CallbackInterface,
   pathOrManifest: string,
-  remote?: boolean
+  remote?: boolean,
 ) => {
   const { snapshot } = callbackHelpers;
   const rootBotProjectId = await snapshot.getPromise(rootBotProjectIdSelector);
@@ -910,7 +912,12 @@ export const checkIfBotExistsInBotProjectFile = async (
 };
 
 export const getMemoryVariables = async (projectId: string, options?: { signal: AbortSignal }) => {
-  const res = await fetch(`${BASEURL}/projects/${projectId}/variables`, { signal: options?.signal });
+  // eslint-disable-next-line no-underscore-dangle
+  const fetchHeaders = { 'X-CSRF-Token': window.__csrf__ };
+  const res = await fetch(`${BASEURL}/projects/${projectId}/variables`, {
+    headers: fetchHeaders,
+    signal: options?.signal,
+  });
   const json = (await res.json()) as { variables: string[] };
   return json.variables ?? [];
 };

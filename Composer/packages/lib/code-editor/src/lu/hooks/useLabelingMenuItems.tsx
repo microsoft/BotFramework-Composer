@@ -53,11 +53,11 @@ export const useLabelingMenuProps = (
   nonMlEntityMode: 'disable' | 'filter' | 'none',
   luFile?: LuFile,
   onItemClick?: IContextualMenuItem['onClick'],
-  options: Partial<{ menuHeaderText: string }> = {}
+  options: Partial<{ menuHeaderText: string }> = {},
 ): { menuProps: IContextualMenuProps; noEntities: boolean } => {
   const filterPredicate = React.useMemo(
     () => (e) => e.Type === 'ml' || (nonMlEntityMode !== 'filter' && (e.Type === 'prebuilt' || e.Type === 'list')),
-    [nonMlEntityMode]
+    [nonMlEntityMode],
   );
   const { menuHeaderText } = options;
   const entities = useLuEntities(luFile, filterPredicate);
@@ -68,12 +68,12 @@ export const useLabelingMenuProps = (
         <Header>{menuHeaderText || formatMessage('Insert defined entity')}</Header>
       </Stack>
     ),
-    [menuHeaderText]
+    [menuHeaderText],
   );
 
   const { onRenderMenuList, query, onReset } = useSearchableMenuListCallback(
     formatMessage('Search entities'),
-    searchHeaderRenderer
+    searchHeaderRenderer,
   );
 
   const noSearchResultsMenuItem = useNoSearchResultMenuItem(formatMessage('no entities found'));

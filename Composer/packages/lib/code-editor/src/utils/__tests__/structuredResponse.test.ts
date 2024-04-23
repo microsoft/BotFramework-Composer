@@ -53,7 +53,7 @@ describe('structuresResponse', () => {
           kind: 'SuggestedActions',
           value: ['option1', 'option2', 'option3'],
         },
-      })
+      }),
     );
   });
 

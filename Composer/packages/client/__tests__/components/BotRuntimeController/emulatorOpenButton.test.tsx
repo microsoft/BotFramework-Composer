@@ -35,11 +35,13 @@ jest.mock('@fluentui/react/lib/Tooltip', () => ({
 
 const projectId = '123.abc';
 
-const initialState = ({ currentStatus = BotStatus.connected } = {}) => ({ set }) => {
-  set(botStatusState(projectId), currentStatus);
-  set(botEndpointsState, { [projectId]: 'http://open-in-emulator/api/messages' });
-  set(settingsState(projectId), {});
-};
+const initialState =
+  ({ currentStatus = BotStatus.connected } = {}) =>
+  ({ set }) => {
+    set(botStatusState(projectId), currentStatus);
+    set(botEndpointsState, { [projectId]: 'http://open-in-emulator/api/messages' });
+    set(settingsState(projectId), {});
+  };
 
 describe('<OpenEmulatorButton />', () => {
   it('should show the button to open emulator', async () => {
@@ -56,7 +58,7 @@ describe('<OpenEmulatorButton />', () => {
   it('should not show the button if the status is not `BotStatus.connected`', () => {
     const { container } = renderWithRecoil(
       <OpenEmulatorButton isRootBot projectId={projectId} />,
-      initialState({ currentStatus: BotStatus.pending })
+      initialState({ currentStatus: BotStatus.pending }),
     );
     expect(container).not.toHaveTextContent('Test in Emulator');
   });

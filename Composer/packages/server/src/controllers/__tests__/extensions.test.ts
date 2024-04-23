@@ -25,11 +25,11 @@ const req: Request = {} as Request;
 let res: Response = {} as Response;
 
 beforeEach(() => {
-  res = ({
+  res = {
     json: jest.fn(),
     status: jest.fn().mockReturnThis(),
     sendFile: jest.fn().mockReturnThis(),
-  } as unknown) as Response;
+  } as unknown as Response;
 });
 
 const mockExtension1 = {
@@ -318,7 +318,7 @@ describe('getting a view bundle', () => {
     (ExtensionManager.find as jest.Mock).mockReturnValue(null);
     await ExtensionsController.getBundleForView(
       { params: { id: 'does-not-exist', bundleId: 'some-id' } } as Request,
-      res
+      res,
     );
 
     expect(res.status).toHaveBeenCalledWith(404);

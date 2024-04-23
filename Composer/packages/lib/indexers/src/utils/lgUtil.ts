@@ -72,7 +72,7 @@ function getLgResource(lgFile: LgFile, importResolver?: ImportResolverDelegate) 
 
 export function convertTemplatesToLgFile(id = '', content: string, parseResult: Templates): LgFile {
   parseResult.diagnostics = parseResult.diagnostics.filter(
-    (diag) => !diag.message.includes('LG file must have at least one template definition.')
+    (diag) => !diag.message.includes('LG file must have at least one template definition.'),
   );
   const diagnostics = parseResult.diagnostics.map((d: LGDiagnostic) => {
     return convertLGDiagnostic(d, id);
@@ -118,7 +118,7 @@ export function updateTemplate(
   lgFile: LgFile,
   templateName: string,
   template: { name?: string; parameters?: string[]; body?: string },
-  importResolver?: ImportResolverDelegate
+  importResolver?: ImportResolverDelegate,
 ): LgFile {
   const { id } = lgFile;
   const { name, parameters, body } = template;
@@ -142,7 +142,7 @@ export function updateTemplate(
       templateName,
       templateToUpdate.name,
       templateToUpdate.parameters,
-      templateToUpdate.body
+      templateToUpdate.body,
     );
   }
 
@@ -153,7 +153,7 @@ export function updateTemplate(
 export function addTemplate(
   lgFile: LgFile,
   { name, parameters = [], body }: LgTemplate,
-  importResolver?: ImportResolverDelegate
+  importResolver?: ImportResolverDelegate,
 ): LgFile {
   const { id } = lgFile;
   const resource = getLgResource(lgFile, importResolver);
@@ -175,7 +175,7 @@ export function addTemplates(lgFile: LgFile, templates: LgTemplate[], importReso
 export function addTemplateAnyway(
   lgFile: LgFile,
   { name = 'TemplateName', parameters = [], body = '-TemplateBody' }: LgTemplate,
-  importResolver?: ImportResolverDelegate
+  importResolver?: ImportResolverDelegate,
 ): LgFile {
   const { id } = lgFile;
   const resource = getLgResource(lgFile, importResolver);
@@ -190,7 +190,7 @@ export function copyTemplate(
   lgFile: LgFile,
   fromTemplateName: string,
   toTemplateName: string,
-  importResolver?: ImportResolverDelegate
+  importResolver?: ImportResolverDelegate,
 ): LgFile {
   const { id } = lgFile;
   const resource = getLgResource(lgFile, importResolver);
@@ -209,7 +209,7 @@ export function copyTemplateAnyway(
   lgFile: LgFile,
   fromTemplateName: string,
   toTemplateName?: string,
-  importResolver?: ImportResolverDelegate
+  importResolver?: ImportResolverDelegate,
 ): LgFile {
   const { id } = lgFile;
   const resource = getLgResource(lgFile, importResolver);
@@ -238,7 +238,7 @@ export function removeTemplate(lgFile: LgFile, templateName: string, importResol
 export function removeTemplates(
   lgFile: LgFile,
   templateNames: string[],
-  importResolver?: ImportResolverDelegate
+  importResolver?: ImportResolverDelegate,
 ): LgFile {
   const { id } = lgFile;
   let resource = getLgResource(lgFile, importResolver);

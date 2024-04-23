@@ -13,7 +13,7 @@ export const expressionGroupingsToMenuItems = (
   expressionGroupings: ExpressionGroupingType[],
   menuItemSelectedHandler: (key: string) => void,
   onLayerMounted: () => void,
-  maxHeight?: number
+  maxHeight?: number,
 ): IContextualMenuItem[] => {
   const menuItems: IContextualMenuItem[] =
     expressionGroupings?.map((grouping: ExpressionGroupingType) => {

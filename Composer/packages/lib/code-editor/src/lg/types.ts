@@ -34,13 +34,19 @@ export type CommonModalityEditorProps = {
 /**
  * Structured response types.
  */
-export const acceptedInputHintValues = ['expectingInput', 'ignoringInput', 'acceptingInput'] as const;
+export const acceptedInputHintValues = [
+  'expectingInput',
+  'ignoringInput',
+  'acceptingInput',
+  'ignoringSpeechInput',
+  'ignoringNonSpeechInput',
+] as const;
 export const acceptedAttachmentLayout = ['carousel', 'list'] as const;
 
 export const modalityTypes = ['Text', 'Speak', 'Attachments', 'SuggestedActions'] as const;
 export const structuredResponseKeys = [...modalityTypes, 'AttachmentLayout', 'InputHint'] as const;
 
-export type ModalityType = typeof modalityTypes[number];
+export type ModalityType = (typeof modalityTypes)[number];
 
 export type TextStructuredResponseItem = { kind: 'Text'; value: string[]; valueType: 'template' | 'direct' };
 export type SpeechStructuredResponseItem = { kind: 'Speak'; value: string[]; valueType: 'template' | 'direct' };
@@ -51,9 +57,9 @@ export type AttachmentsStructuredResponseItem = {
 };
 export type AttachmentLayoutStructuredResponseItem = {
   kind: 'AttachmentLayout';
-  value: typeof acceptedAttachmentLayout[number];
+  value: (typeof acceptedAttachmentLayout)[number];
 };
-export type InputHintStructuredResponseItem = { kind: 'InputHint'; value: typeof acceptedInputHintValues[number] };
+export type InputHintStructuredResponseItem = { kind: 'InputHint'; value: (typeof acceptedInputHintValues)[number] };
 export type SuggestedActionsStructuredResponseItem = { kind: 'SuggestedActions'; value: string[] };
 
 export type StructuredResponseItem =
