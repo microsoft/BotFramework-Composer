@@ -101,7 +101,7 @@
     "extract-zip": "2.0.1",
     "form-data": "^2.3.3",
     "format-message": "6.2.4",
-    "formidable": "1.2.2",
+    "formidable": "3.2.4",
     "globby": "^11.0.1",
     "http-errors": "^1.7.2",
     "http-status-codes": "^2.1.4",
