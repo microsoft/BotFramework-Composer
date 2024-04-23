@@ -9,7 +9,7 @@ import { CIRCULAR_REFS, isCircular } from './circular';
 export function dereference<S extends JSONSchema7 | JSONSchema7[]>(
   schema: S,
   definitions: SchemaDefinitions,
-  cache: DefinitionCache
+  cache: DefinitionCache,
 ): S extends JSONSchema7[] ? JSONSchema7[] : JSONSchema7 {
   if (Array.isArray(schema)) {
     const arraySchema: JSONSchema7[] = [];

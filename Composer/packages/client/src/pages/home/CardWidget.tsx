@@ -54,8 +54,8 @@ export const CardWidget: React.FC<CardWidgetProps> = ({
     rest.styles || cardType === 'resource'
       ? home.cardItem
       : imageCover
-      ? home.mediaCardItem
-      : home.mediaCardNoCoverItem;
+        ? home.mediaCardItem
+        : home.mediaCardNoCoverItem;
 
   const onImageLoading = (state: ImageLoadState) => {
     if (state === ImageLoadState.error) {

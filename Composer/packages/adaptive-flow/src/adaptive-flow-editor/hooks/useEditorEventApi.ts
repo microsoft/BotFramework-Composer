@@ -26,7 +26,7 @@ export const useEditorEventApi = (
     nodeContext: NodeRendererContextValue;
     selectionContext: SelectionContextData;
   },
-  shellApi: ShellApi
+  shellApi: ShellApi,
 ) => {
   const { actionsContainLuIntent, getDialog, saveDialog, createDialog } = shellApi;
   const {
@@ -167,7 +167,7 @@ export const useEditorEventApi = (
             onChange(value, undefined, async () => {
               await onFocusSteps([]);
               announce(ScreenReaderMessage.ActionDeleted);
-            })
+            }),
           );
         };
         break;
@@ -264,7 +264,7 @@ export const useEditorEventApi = (
             newDialogData,
             `${'triggers'}[0].${'actions'}`,
             0,
-            actionsToBeMoved
+            actionsToBeMoved,
           );
           if (actionsContainLuIntent(actionsToBeMoved)) {
             // auto assign recognizer type to lu
@@ -285,7 +285,7 @@ export const useEditorEventApi = (
             deleteResult,
             placeholderPosition.arrayPath,
             placeholderPosition.arrayIndex,
-            placeholderAction
+            placeholderAction,
           );
           onChange(insertResult, undefined, async () => {
             await onFocusSteps([]);
@@ -301,7 +301,7 @@ export const useEditorEventApi = (
             onChange(value, undefined, async () => {
               await onFocusSteps([]);
               announce(ScreenReaderMessage.ActionsDeleted);
-            })
+            }),
           );
         };
         break;

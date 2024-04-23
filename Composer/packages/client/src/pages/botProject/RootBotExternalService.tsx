@@ -155,7 +155,9 @@ export const RootBotExternalService: React.FC<RootBotExternalServiceProps> = (pr
       setLocalRootLuisKey(value);
     } else {
       setLuisKeyErrorMsg(
-        formatMessage('LUIS key is required with the current recognizer setting to start your bot locally, and publish')
+        formatMessage(
+          'LUIS key is required with the current recognizer setting to start your bot locally, and publish',
+        ),
       );
       setLocalRootLuisKey('');
     }
@@ -185,8 +187,8 @@ export const RootBotExternalService: React.FC<RootBotExternalServiceProps> = (pr
     if (!localRootLuisKey) {
       setLuisKeyErrorMsg(
         formatMessage(
-          'LUIS authoring key is required with the current recognizer setting to start your bot locally, and publish'
-        )
+          'LUIS authoring key is required with the current recognizer setting to start your bot locally, and publish',
+        ),
       );
     } else {
       setLuisKeyErrorMsg('');
@@ -252,7 +254,9 @@ export const RootBotExternalService: React.FC<RootBotExternalServiceProps> = (pr
   const handleRootLuisAuthoringKeyOnBlur = () => {
     if (!localRootLuisKey) {
       setLuisKeyErrorMsg(
-        formatMessage('LUIS key is required with the current recognizer setting to start your bot locally, and publish')
+        formatMessage(
+          'LUIS key is required with the current recognizer setting to start your bot locally, and publish',
+        ),
       );
     }
     setSettings(projectId, {
@@ -325,7 +329,7 @@ export const RootBotExternalService: React.FC<RootBotExternalServiceProps> = (pr
                 {children}
               </Link>
             ),
-          }
+          },
         )}
       </div>
       <div css={externalServiceContainerStyle}>
@@ -393,7 +397,7 @@ export const RootBotExternalService: React.FC<RootBotExternalServiceProps> = (pr
                   <Link
                     key="luis-endpoint-key-info"
                     aria-label={formatMessage(
-                      'Learn more about configuring Azure publishing on the "Publishing Profiles" page'
+                      'Learn more about configuring Azure publishing on the "Publishing Profiles" page',
                     )}
                     href={linkToPublishProfile}
                   >
@@ -410,7 +414,7 @@ export const RootBotExternalService: React.FC<RootBotExternalServiceProps> = (pr
                     {children}
                   </Link>
                 ),
-              }
+              },
             )}
           </MessageBar>
         )}
@@ -439,7 +443,7 @@ export const RootBotExternalService: React.FC<RootBotExternalServiceProps> = (pr
                   {children}
                 </Link>
               ),
-            }
+            },
           )}
         </div>
         <div ref={qnaKeyFieldRef}>

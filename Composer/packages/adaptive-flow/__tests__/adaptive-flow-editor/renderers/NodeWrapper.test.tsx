@@ -20,7 +20,7 @@ describe('<ActionNodeWrapper>', () => {
         }}
       >
         <ActionNodeWrapper data={{}} id="test" onEvent={mockOnEvent} />
-      </EditorExtensionContext.Provider>
+      </EditorExtensionContext.Provider>,
     );
     expect(ele.getByTestId('ActionNodeWrapper')).toBeTruthy();
 

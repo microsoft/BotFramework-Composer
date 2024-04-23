@@ -35,6 +35,6 @@ export const useNoSearchResultMenuItem = (message?: string): IContextualMenuItem
         </Stack>
       ),
     }),
-    [message]
+    [message],
   );
 };

@@ -23,7 +23,7 @@ function transformDirectionToVectorAttrs(direction: Direction): Record<string, a
 function transformVectorToElement(vectors: ElementVector[], elements: SelectorElement[]): SelectorElement[] {
   const results: SelectorElement[] = [];
   vectors.forEach((vector) =>
-    results.push(elements.find((element) => vector.selectedId === element.selectedId) as SelectorElement)
+    results.push(elements.find((element) => vector.selectedId === element.selectedId) as SelectorElement),
   );
   return results;
 }
@@ -32,7 +32,7 @@ function calculateElementVector(
   currentElement: SelectorElement,
   elements: SelectorElement[],
   boundRectKey: BoundRect,
-  assistAxle: Axle
+  assistAxle: Axle,
 ): ElementVector[] {
   const currentElementBounds = currentElement.bounds;
   const elementVectors: ElementVector[] = [];
@@ -48,7 +48,7 @@ function calculateElementVector(
         distance = currentElementBounds[boundRectKey] - bounds[boundRectKey];
       }
       assistDistance = Math.abs(
-        currentElementBounds.left + currentElementBounds.width / 2 - (bounds.left + bounds.width / 2)
+        currentElementBounds.left + currentElementBounds.width / 2 - (bounds.left + bounds.width / 2),
       );
     } else {
       if (boundRectKey === BoundRect.Left) {
@@ -63,7 +63,7 @@ function calculateElementVector(
           (bounds[boundRectKey] - bounds.width / 2);
       }
       assistDistance = Math.abs(
-        currentElementBounds.top + currentElementBounds.height / 2 - (bounds.top + bounds.height / 2)
+        currentElementBounds.top + currentElementBounds.height / 2 - (bounds.top + bounds.height / 2),
       );
     }
     elementVectors.push({
@@ -78,7 +78,7 @@ function calculateElementVector(
 export function sortElementsByVector(
   currentElement: SelectorElement,
   elements: SelectorElement[],
-  direction: Direction
+  direction: Direction,
 ): SelectorElement[] {
   const { assistAxle, boundRectKey } = transformDirectionToVectorAttrs(direction);
   const elementVectors = calculateElementVector(currentElement, elements, boundRectKey, assistAxle);
@@ -90,7 +90,7 @@ export function sortElementsByVector(
 export function filterElementsByVector(
   currentElement: SelectorElement,
   elements: SelectorElement[],
-  direction: Direction
+  direction: Direction,
 ): SelectorElement[] {
   const { assistAxle, boundRectKey } = transformDirectionToVectorAttrs(direction);
   const elementVectors = calculateElementVector(currentElement, elements, boundRectKey, assistAxle);

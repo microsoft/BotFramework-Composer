@@ -178,7 +178,7 @@ export const editorSteps: { [key in ManifestEditorSteps]: EditorStep } = {
     title: () => formatMessage('Export your bot'),
     subText: () =>
       formatMessage(
-        'A skill is a bot that can perform a set of tasks one or more bots.  To make your bot available as a skill, it needs a manifest - a JSON file that describes the actions the skill can perform.'
+        'A skill is a bot that can perform a set of tasks one or more bots.  To make your bot available as a skill, it needs a manifest - a JSON file that describes the actions the skill can perform.',
       ),
     validate,
   },
@@ -190,13 +190,7 @@ export const editorSteps: { [key in ManifestEditorSteps]: EditorStep } = {
         disabled: ({ publishTarget }) => {
           try {
             const config = JSON.parse(publishTarget.configuration);
-            return !(
-              config.settings &&
-              config.settings.MicrosoftAppId &&
-              config.hostname &&
-              config.settings.MicrosoftAppId.length > 0 &&
-              config.hostname.length > 0
-            );
+            return !(config.settings?.MicrosoftAppId?.length > 0 && config.hostname?.length > 0);
           } catch (err) {
             console.log(err.message);
             return true;
@@ -205,11 +199,13 @@ export const editorSteps: { [key in ManifestEditorSteps]: EditorStep } = {
 
         primary: true,
         text: () => formatMessage('Generate and Publish'),
-        onClick: ({ generateManifest, onNext, onPublish }) => () => {
-          generateManifest();
-          onNext({ dismiss: true, save: true });
-          onPublish();
-        },
+        onClick:
+          ({ generateManifest, onNext, onPublish }) =>
+          () => {
+            generateManifest();
+            onNext({ dismiss: true, save: true });
+            onPublish();
+          },
       },
     ],
     editJson: false,
@@ -225,17 +221,19 @@ export const editorSteps: { [key in ManifestEditorSteps]: EditorStep } = {
       {
         primary: true,
         text: () => formatMessage('Next'),
-        onClick: ({ onNext, onSaveSkill }) => () => {
-          onSaveSkill();
-          onNext();
-        },
+        onClick:
+          ({ onNext, onSaveSkill }) =>
+          () => {
+            onSaveSkill();
+            onNext();
+          },
       },
     ],
     editJson: false,
     content: AddCallers,
     subText: () =>
       formatMessage(
-        'To ensure a secure connection, provide the App ID of the bots that can connect to your skill.  If you don’t have this information, you can also add this information in Skill Configuration.'
+        'To ensure a secure connection, provide the App ID of the bots that can connect to your skill.  If you don’t have this information, you can also add this information in Skill Configuration.',
       ),
     title: () => formatMessage('Which bots can connect to this skill?'),
     helpLink,
@@ -268,7 +266,7 @@ export const editorSteps: { [key in ManifestEditorSteps]: EditorStep } = {
     editJson: false,
     subText: () =>
       formatMessage(
-        'The capabilities of your bot are defined in its dialogs and triggers. Selected dialogs will be included in the manifest. Internal dialogs or actions may not be relevant to other bots.'
+        'The capabilities of your bot are defined in its dialogs and triggers. Selected dialogs will be included in the manifest. Internal dialogs or actions may not be relevant to other bots.',
       ),
     title: () => formatMessage('Select dialogs'),
     helpLink,
@@ -280,9 +278,11 @@ export const editorSteps: { [key in ManifestEditorSteps]: EditorStep } = {
       {
         primary: true,
         text: () => formatMessage('Next'),
-        onClick: ({ onNext }) => () => {
-          onNext();
-        },
+        onClick:
+          ({ onNext }) =>
+          () => {
+            onNext();
+          },
       },
     ],
     content: SelectTriggers,

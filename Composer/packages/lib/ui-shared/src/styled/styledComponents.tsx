@@ -10,10 +10,9 @@ import { VisualEditorColors as Colors } from '../constants/VisualEditorColors';
 import { DivProps } from './styledComponents.types';
 import { StandardFontCSS, TruncatedCSS, MultilineCSS } from './sharedCSS';
 
-const dynamicStyle = (props) =>
-  css`
-    color: ${props.color || Colors.Black};
-  `;
+const dynamicStyle = (props) => css`
+  color: ${props.color || Colors.Black};
+`;
 
 export const LinkBtn = styled<any>(Link)((props) => ({
   color: props.color || Colors.AzureBlue,
@@ -35,7 +34,7 @@ export const BorderedDiv = styled.div<DivProps>(
     color: props.color || Colors.Black,
     width: props.width,
     height: props.height,
-  })
+  }),
 );
 
 export const SingleLineDiv = styled.div<DivProps>`
@@ -56,10 +55,9 @@ export const Text = styled.span(
   css`
     ${StandardFontCSS};
   `,
-  ({ color }) =>
-    css`
-      color: ${color};
-    `
+  ({ color }) => css`
+    color: ${color};
+  `,
 );
 export const MultilineTextWithEllipsis = styled.div`
   ${StandardFontCSS};
@@ -79,7 +77,7 @@ export const TruncatedText = styled.div<{ lines?: number }>(
     -webkit-line-clamp: ${lines || 3};
     -webkit-box-orient: vertical;
     white-space: pre-line;
-  `
+  `,
 );
 
 export const FixedInfo = styled.span`

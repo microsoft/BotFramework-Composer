@@ -12,7 +12,7 @@ import { TokenCredentials } from '@azure/ms-rest-js';
 import { DialogSetting } from '@botframework-composer/types';
 
 import { BotProjectDeployConfig, BotProjectDeployLoggerType } from './types';
-import { build, publishLuisToPrediction } from './luisAndQnA';
+import { build, BuildSettingType, publishLuisToPrediction } from './luisAndQnA';
 import { AzurePublishErrors, createCustomizeError, stringifyError } from './utils/errorHandler';
 import { copyDir } from './utils/copyDir';
 import { KeyVaultApi } from './keyvaultHelper/keyvaultApi';
@@ -45,13 +45,13 @@ export class BotProjectDeploy {
    */
   public async deploy(
     project: any,
-    settings: DialogSetting,
+    settings: BuildSettingType<DialogSetting>,
     profileName: string,
     name: string,
     environment: string,
     hostname?: string,
     luisResource?: string,
-    absSettings?: any
+    absSettings?: any,
   ) {
     try {
       this.logger(absSettings);
@@ -101,7 +101,6 @@ export class BotProjectDeploy {
         luisResource,
         this.projPath,
         this.logger,
-        settings?.runtime
       );
 
       const qnaConfig = await project.builder.getQnaConfig();
@@ -128,14 +127,14 @@ export class BotProjectDeploy {
           path.join(pathToArtifacts, 'manifests'),
           project.fileStorage,
           path.join(pathToArtifacts, 'wwwroot', 'manifests'),
-          project.fileStorage
+          project.fileStorage,
         );
         // Update skill endpoint url in skill manifest.
         await this.updateSkillSettings(
           profileName,
           hostname,
           settings.MicrosoftAppId,
-          path.join(pathToArtifacts, 'wwwroot', 'manifests')
+          path.join(pathToArtifacts, 'wwwroot', 'manifests'),
         );
       }
 
@@ -189,7 +188,7 @@ export class BotProjectDeploy {
             hostname,
             absSettings.subscriptionId,
             absSettings.resourceGroup,
-            linuxFxVersion
+            linuxFxVersion,
           );
         }
       }
@@ -247,7 +246,7 @@ export class BotProjectDeploy {
       const archive = archiver('zip', { zlib: { level: 9 } });
       // eslint-disable-next-line security/detect-non-literal-fs-filename
       const stream = fs.createWriteStream(out);
-      return new Promise((resolve, reject) => {
+      return new Promise<void>((resolve, reject) => {
         archive
           .glob('**/*', {
             cwd: source,
@@ -320,7 +319,7 @@ export class BotProjectDeploy {
     name: string,
     env: string,
     hostname?: string,
-    scmHostDomain?: string
+    scmHostDomain?: string,
   ) {
     this.logger({
       status: BotProjectDeployLoggerType.DEPLOY_INFO,
@@ -352,7 +351,7 @@ export class BotProjectDeploy {
       const errorMessage = JSON.stringify(err, Object.getOwnPropertyNames(err));
       throw createCustomizeError(
         AzurePublishErrors.DEPLOY_ZIP_ERROR,
-        `There was a problem publishing bot assets (zip deploy). ${errorMessage}`
+        `There was a problem publishing bot assets (zip deploy). ${errorMessage}`,
       );
     }
   }
@@ -371,7 +370,7 @@ export class BotProjectDeploy {
     hostname: string,
     subscriptionId: string,
     resourceGroup: string,
-    linuxFxVersion: string
+    linuxFxVersion: string,
   ) {
     try {
       const updateEndpoint = this.buildUpdateEndpoint(hostname, name, env, subscriptionId, resourceGroup);
@@ -380,7 +379,7 @@ export class BotProjectDeploy {
         {
           properties: { linuxFxVersion: linuxFxVersion },
         },
-        { headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' } }
+        { headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' } },
       );
 
       if (response.status === 200) {
@@ -393,7 +392,7 @@ export class BotProjectDeploy {
       const errorMessage = JSON.stringify(err, Object.getOwnPropertyNames(err));
       throw createCustomizeError(
         AzurePublishErrors.DEPLOY_ZIP_ERROR,
-        `There was a problem updating the bot's settings. ${errorMessage}`
+        `There was a problem updating the bot's settings. ${errorMessage}`,
       );
     }
   }
@@ -403,7 +402,7 @@ export class BotProjectDeploy {
     name: string,
     env: string,
     subscriptionId: string,
-    resourceGroupName: string
+    resourceGroupName: string,
   ) => {
     const hostnameResult = hostname ? hostname : name + (env ? '-' + env : '');
     return `https://management.azure.com/subscriptions/${subscriptionId}/resourceGroups/${resourceGroupName}/providers/Microsoft.Web/sites/${hostnameResult}/config/web?api-version=2022-03-01`;
@@ -554,7 +553,7 @@ export class BotProjectDeploy {
   private async getTenantId(accessToken: string, subId: string) {
     if (!accessToken) {
       throw new Error(
-        'Error: Missing access token. Please provide a non-expired Azure access token. Tokens can be obtained by running az account get-access-token'
+        'Error: Missing access token. Please provide a non-expired Azure access token. Tokens can be obtained by running az account get-access-token',
       );
     }
     if (!subId) {

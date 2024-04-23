@@ -90,7 +90,7 @@ describe('LG LSP server test', () => {
     await send(`{"jsonrpc":"2.0","method":"initialized","params":{}}`, []);
     await send(
       `{"jsonrpc":"2.0","method":"textDocument/didOpen","params": {"textDocument":{"uri":"inmemory://model/1","languageId":"botbuilderlg","version":2,"text": "${content}" }}}`,
-      []
+      [],
     );
   });
 
@@ -116,7 +116,7 @@ describe('LG LSP server test', () => {
           expect(response.id).toEqual(2);
           expect(response.result.contents.value).toContain('-Good evening');
         },
-      ]
+      ],
     );
   });
 
@@ -143,7 +143,7 @@ describe('LG LSP server test', () => {
           response.result.items
             .slice(0, 3)
             .map((item) => item.label)
-            .join(',')
+            .join(','),
         ).toEqual(['Greeting1', 'Greeting2', 'Greeting3'].join(','));
       },
     ]);

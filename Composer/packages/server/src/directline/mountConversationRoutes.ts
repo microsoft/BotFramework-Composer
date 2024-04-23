@@ -31,7 +31,7 @@ export const mountConversationsRoutes = (dlServerState: DLServerContext): expres
     logNetworkTraffic,
     verifyBotFramework,
     createCreateBotEndpointHandler(state),
-    createNewConversationHandler(state)
+    createNewConversationHandler(state),
   );
 
   router.post(
@@ -39,14 +39,14 @@ export const mountConversationsRoutes = (dlServerState: DLServerContext): expres
     logNetworkTraffic,
     verifyBotFramework,
     fetchConversation,
-    createReplyToActivityHandler
+    createReplyToActivityHandler,
   );
 
   router.post(
     '/v3/conversations/:conversationId/attachments',
     logNetworkTraffic,
     verifyBotFramework,
-    createUploadAttachmentHandler(state)
+    createUploadAttachmentHandler(state),
   );
 
   router.get('/conversations/ws/port', getWebSocketPort);
@@ -56,7 +56,7 @@ export const mountConversationsRoutes = (dlServerState: DLServerContext): expres
     '/conversations/:conversationId/updateConversation',
     verifyBotFramework,
     fetchConversation,
-    createUpdateConversationHandler(state)
+    createUpdateConversationHandler(state),
   );
 
   router.post('/conversations/:conversationId/saveTranscript', fetchConversation, saveTranscriptHandler(state));

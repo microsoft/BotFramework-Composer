@@ -170,7 +170,7 @@ export const FormDialogPropertiesEditor = React.memo((props: Props) => {
       onClick: async () => {
         const result = await OpenConfirmModal(
           formatMessage('Start over?'),
-          formatMessage('Are you sure you want to start over? Your progress will be lost.')
+          formatMessage('Are you sure you want to start over? Your progress will be lost.'),
         );
 
         if (result) {

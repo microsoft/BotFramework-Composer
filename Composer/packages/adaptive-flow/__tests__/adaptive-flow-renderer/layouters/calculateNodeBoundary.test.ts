@@ -60,7 +60,7 @@ describe('calculateIfElseBoundary', () => {
 
     expect(bdWithBothBranch.height - bdWithNoBranch.height).toEqual(ifBoundary.height);
     expect(bdWithBothBranch.height).toBeGreaterThan(
-      conditionBoundary.height + choiceBoundary.height + Math.max(ifBoundary.height, elseBoundary.height)
+      conditionBoundary.height + choiceBoundary.height + Math.max(ifBoundary.height, elseBoundary.height),
     );
     expect(bdWithBothBranch.width).toBeGreaterThan(ifBoundary.width + elseBoundary.width);
   });
@@ -107,7 +107,7 @@ describe('calculateForeachBoundary', () => {
       axisY: 0,
     };
     expect(calculateForeachBoundary(foreachBoundary, stepsBoundary, loopBeginBoundary, loopEndBoundary)).toEqual(
-      returnBoundary
+      returnBoundary,
     );
   });
 });

@@ -35,7 +35,7 @@ describe('composer url util', () => {
         selected: 'triggers[0]',
         focused: 'triggers[0].actions[0]',
         promptTab: PromptTab.BOT_ASKS,
-      }
+      },
     );
     expect(result1).toEqual(true);
     const result2 = checkUrl(`test`, projectId, skillId, {
@@ -57,7 +57,7 @@ describe('composer url util', () => {
         selected: 'triggers[0]',
         focused: 'triggers[0].actions[0]',
         promptTab: PromptTab.BOT_ASKS,
-      }
+      },
     );
     expect(result1).toEqual(true);
     const result2 = checkUrl(`test`, projectId, skillId, {
@@ -74,16 +74,16 @@ describe('composer url util', () => {
     expect(result1).toEqual(`/bot/${projectId}/skill/${skillId}/dialogs/main`);
     const result2 = convertPathToUrl(projectId, skillId, 'main', 'main.triggers[0].actions[0]');
     expect(result2).toEqual(
-      `/bot/${projectId}/skill/${skillId}/dialogs/main?selected=triggers[0]&focused=triggers[0].actions[0]`
+      `/bot/${projectId}/skill/${skillId}/dialogs/main?selected=triggers[0]&focused=triggers[0].actions[0]`,
     );
     const result3 = convertPathToUrl(
       projectId,
       skillId,
       'main',
-      'main.triggers[0].actions[0]#Microsoft.TextInput#prompt'
+      'main.triggers[0].actions[0]#Microsoft.TextInput#prompt',
     );
     expect(result3).toEqual(
-      `/bot/${projectId}/skill/${skillId}/dialogs/main?selected=triggers[0]&focused=triggers[0].actions[0]#botAsks`
+      `/bot/${projectId}/skill/${skillId}/dialogs/main?selected=triggers[0]&focused=triggers[0].actions[0]#botAsks`,
     );
     const result4 = convertPathToUrl(projectId, null, 'main');
     expect(result4).toEqual(`/bot/${projectId}/dialogs/main`);

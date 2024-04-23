@@ -30,7 +30,7 @@ import { OpenProject } from './OpenProject';
 import { CreateOptions } from './CreateOptions';
 import DefineConversation from './DefineConversation';
 
-type CreationFlowProps = RouteComponentProps<{}>;
+type CreationFlowProps = RouteComponentProps<unknown>;
 
 const CreationFlow: React.FC<CreationFlowProps> = () => {
   const {
@@ -130,7 +130,7 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
       { profile: formData.profile, source: formData.source, alias: formData.alias },
       (projectId) => {
         TelemetryClient.track('BotProjectOpened', { method: 'toolbar', projectId });
-      }
+      },
     );
   };
 
@@ -178,7 +178,7 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
       formData.description,
       formData.location,
       formData.runtimeLanguage,
-      formData.runtimeType
+      formData.runtimeType,
     );
   };
 

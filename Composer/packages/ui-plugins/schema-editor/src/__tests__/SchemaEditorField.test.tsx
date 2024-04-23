@@ -27,7 +27,7 @@ const renderSchemaEditor = ({ updateDialogSchema = jest.fn() } = {}) => {
   return render(
     <EditorExtension plugins={{}} projectId="" shell={shell}>
       <SchemaEditorField />
-    </EditorExtension>
+    </EditorExtension>,
   );
 };
 
@@ -64,7 +64,7 @@ describe('Schema Editor', () => {
             },
           }),
         }),
-      })
+      }),
     );
   });
 
@@ -102,7 +102,7 @@ describe('Schema Editor', () => {
             }),
           }),
         }),
-      })
+      }),
     );
   });
 });

@@ -62,7 +62,7 @@ function measureSwitchConditionBoundary(json): Boundary {
   return calculateSwitchCaseBoundary(
     measureJsonBoundary(condition.json),
     measureJsonBoundary(choice.json),
-    branches.map((x) => measureJsonBoundary(x.json))
+    branches.map((x) => measureJsonBoundary(x.json)),
   );
 }
 
@@ -87,7 +87,7 @@ export function measurePropertyAssignmentBoundary(data): Boundary {
             ? data.assignments.length * (PropertyAssignmentSize.height + AssignmentMarginTop)
             : 4 * (PropertyAssignmentSize.height + AssignmentMarginTop)) + AssignmentMarginBottom
         : 0),
-    InitNodeSize.height
+    InitNodeSize.height,
   );
   return new Boundary(width, height);
 }
@@ -99,7 +99,7 @@ function measureBaseInputBoundary(data): Boundary {
 
 export function measureJsonBoundary(json): Boundary {
   let boundary = new Boundary();
-  if (!json || !json.$kind) return boundary;
+  if (!json?.$kind) return boundary;
 
   const cachedBoundary = designerCache.loadBounary(json);
   if (cachedBoundary) {

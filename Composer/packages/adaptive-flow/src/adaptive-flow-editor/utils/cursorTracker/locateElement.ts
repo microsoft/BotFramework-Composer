@@ -16,7 +16,7 @@ export function locateNearestElement(
   currentElement: SelectorElement,
   elements: SelectorElement[],
   direction: Direction,
-  filterAttrs?: string[]
+  filterAttrs?: string[],
 ): SelectorElement {
   // Get elements that meet the filter criteria
   let elementArr = elements.filter((element) => !filterAttrs || filterAttrs?.find((key) => !!element[key]));

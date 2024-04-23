@@ -15,7 +15,7 @@ describe('ForeachWidget', () => {
         id="test"
         loop={<span data-testid="test-loop">Loop Head</span>}
         onEvent={() => null}
-      />
+      />,
     );
     expect(foreachNode).toBeTruthy();
     expect(foreachNode.getByTestId('test-loop')).toBeTruthy();

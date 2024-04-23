@@ -155,7 +155,7 @@ class MongoStorage implements IFileStorage {
           resolve(
             files.map((item) => {
               return item.path.replace(path, '');
-            })
+            }),
           );
         }
       });
@@ -270,7 +270,7 @@ class MongoStorage implements IFileStorage {
           resolve(
             files.map((item) => {
               return item.path.replace(path, '');
-            })
+            }),
           );
         }
       });

@@ -7,7 +7,7 @@ import { getUIOptions } from '../getUIOptions';
 
 describe('getUIOptions', () => {
   it('returns empty object when type schema not found', () => {
-    // @ts-ignore - Intentionally passing in an invalid value
+    // @ts-expect-error - Intentionally passing in an invalid value
     expect(getUIOptions('SomeDialog')).toEqual({});
   });
 

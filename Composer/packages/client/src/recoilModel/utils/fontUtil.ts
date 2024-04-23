@@ -15,8 +15,8 @@ export const getDefaultFontSettings = () => {
       platformName === OS.MacOS
         ? DEFAULT_MAC_FONT_FAMILY
         : platformName === OS.Linux
-        ? DEFAULT_LINUX_FONT_FAMILY
-        : DEFAULT_WINDOWS_FONT_FAMILY,
+          ? DEFAULT_LINUX_FONT_FAMILY
+          : DEFAULT_WINDOWS_FONT_FAMILY,
     fontWeight: 'normal',
     fontSize: '14px',
     lineHeight: 0,

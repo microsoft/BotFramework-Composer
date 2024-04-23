@@ -36,7 +36,7 @@ const DataCollectionDialog: React.FC = () => {
     >
       <p>
         {formatMessage(
-          'Composer includes a telemetry feature that collects usage information. It is important that the Composer team understands how the tool is being used so that it can be improved.'
+          'Composer includes a telemetry feature that collects usage information. It is important that the Composer team understands how the tool is being used so that it can be improved.',
         )}
       </p>
       <p>{formatMessage('You can turn data collection on or off at any time in the Application Settings.')}</p>

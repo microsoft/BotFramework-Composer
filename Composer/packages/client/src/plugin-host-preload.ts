@@ -33,7 +33,7 @@ if (!document.getElementById('plugin-host-default-styles')) {
         flex-flow: column nowrap;
         height: 100%;
       }
-  `)
+  `),
   );
   document.head.appendChild(styles);
 }

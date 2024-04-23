@@ -3,6 +3,7 @@
 
 import * as jwt from 'jsonwebtoken';
 import * as express from 'express';
+import { decode } from 'jsonwebtoken';
 import { StatusCodes } from 'http-status-codes';
 
 import { authentication, usGovernmentAuthentication, v31Authentication, v32Authentication } from '../utils/constants';
@@ -21,7 +22,7 @@ export const createBotFrameworkAuthenticationMiddleware = () => {
     }
 
     const [authMethod, token] = authorization.trim().split(' ');
-    const decoded: any = /^bearer$/i.test(authMethod) && token && jwt.decode(token, { complete: true });
+    const decoded: any = /^bearer$/i.test(authMethod) && token && decode(token, { complete: true });
 
     if (!decoded) {
       res.status(StatusCodes.UNAUTHORIZED).end();

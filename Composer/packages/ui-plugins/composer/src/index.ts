@@ -32,7 +32,7 @@ const DefaultFormSchema: FormUISchema = {
         label: () => formatMessage('Language Understanding'),
         description: () =>
           formatMessage(
-            'To understand what the user says, your dialog needs a "Recognizer"; that includes example words and sentences that users may use.'
+            'To understand what the user says, your dialog needs a "Recognizer"; that includes example words and sentences that users may use.',
           ),
       },
     },
@@ -176,7 +176,7 @@ const synthesizeUISchema = (
   menuSchema: MenuUISchema,
   flowSchema: FlowUISchema,
   triggerSchema: TriggerUISchema,
-  recognizerSchema: RecognizerUISchema
+  recognizerSchema: RecognizerUISchema,
 ): UISchema => {
   let uischema: UISchema = {};
   uischema = mergeWith(uischema, formSchema, (origin, formOption) => ({ ...origin, form: formOption }));
@@ -193,7 +193,7 @@ const config: PluginConfig = {
     DefaultMenuSchema,
     DefaultFlowSchema,
     DefaultTriggerSchema,
-    DefaultRecognizerSchema
+    DefaultRecognizerSchema,
   ),
 };
 

@@ -19,8 +19,7 @@ export const missingFunctionsError = {
   message: formatMessage('To run this bot, Composer needs Azure Functions Core Tools.'),
   linkAfterMessage: {
     text: formatMessage('Learn more'),
-    url:
-      'https://docs.microsoft.com/en-us/azure/azure-functions/functions-run-local#install-the-azure-functions-core-tools',
+    url: 'https://docs.microsoft.com/en-us/azure/azure-functions/functions-run-local#install-the-azure-functions-core-tools',
   },
   link: {
     text: formatMessage('Install Azure Functions'),

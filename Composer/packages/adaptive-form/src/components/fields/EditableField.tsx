@@ -77,7 +77,7 @@ const EditableField: React.FC<EditableFieldProps> = (props) => {
                 },
               },
             },
-            styles
+            styles,
           ) as Partial<ITextFieldStyles>
         }
         value={localValue}

@@ -31,7 +31,7 @@ describe('<WatchTabContent />', () => {
             isRootBot: true,
             isRemote: false,
           });
-        }
+        },
       );
       const addButton = await findByText('Add property');
       const removeButton = await findByText('Remove from list');

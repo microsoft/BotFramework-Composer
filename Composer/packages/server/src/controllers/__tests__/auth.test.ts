@@ -43,7 +43,7 @@ describe('auth controller', () => {
 
     expect(mockRes.status).toHaveBeenCalledWith(400);
     expect(chainedRes.send).toHaveBeenCalledWith(
-      'Must pass a "targetResource" parameter to perform authentication in Electron environment.'
+      'Must pass a "targetResource" parameter to perform authentication in Electron environment.',
     );
   });
 
@@ -58,7 +58,7 @@ describe('auth controller', () => {
 
     expect(mockRes.status).toHaveBeenCalledWith(400);
     expect(chainedRes.send).toHaveBeenCalledWith(
-      'Must pass a "clientId" parameter to perform authentication in a Web environment.'
+      'Must pass a "clientId" parameter to perform authentication in a Web environment.',
     );
   });
 

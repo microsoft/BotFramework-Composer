@@ -31,7 +31,7 @@ const SuggestedActionsModalityEditor = React.memo(
         setItems(newValues);
         onUpdateResponseTemplate({ SuggestedActions: { kind: 'SuggestedActions', value: newValues } });
       },
-      [onUpdateResponseTemplate]
+      [onUpdateResponseTemplate],
     );
 
     return (
@@ -56,7 +56,7 @@ const SuggestedActionsModalityEditor = React.memo(
         />
       </ModalityEditorContainer>
     );
-  }
+  },
 );
 
 export { SuggestedActionsModalityEditor };

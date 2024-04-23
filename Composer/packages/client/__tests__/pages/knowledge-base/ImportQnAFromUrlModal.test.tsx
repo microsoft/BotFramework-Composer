@@ -24,7 +24,7 @@ const qnaFile = {
 describe('QnA page all up view', () => {
   it('should render QnA page table view', () => {
     const { getByText, getByTestId } = renderWithRecoil(
-      <ImportQnAFromUrlModal qnaFile={qnaFile} onDismiss={() => {}} onSubmit={handleSubmit} />
+      <ImportQnAFromUrlModal qnaFile={qnaFile} onDismiss={() => {}} onSubmit={handleSubmit} />,
     );
     const urlField = getByTestId('ImportNewUrlToOverwriteQnAFile');
     fireEvent.change(urlField, { target: { value: 'http://newUrl.pdf' } });

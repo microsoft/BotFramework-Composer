@@ -1,21 +1,33 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import http from 'http';
+import http, { IncomingMessage } from 'http';
+import type { Duplex } from 'stream';
 
 import portfinder from 'portfinder';
 import express, { Request, Response } from 'express';
-import { Server as WSServer } from 'ws';
+import WS from 'ws';
 import { Debugger } from 'debug';
+
+const { Server: WSServer } = WS;
 
 interface WebSocket {
   close(): void;
   send(data: string, cb?: (err?: Error) => void): void;
 }
 
+interface CustomHttpReq extends Request {
+  params: Record<string, string>;
+  claimUpgrade?: () => {
+    socket: Duplex;
+    head: Buffer;
+  };
+}
+type CustomReq = CustomHttpReq | IncomingMessage;
+
 export class RuntimeLogServer {
   private static restServer: http.Server;
-  private static servers: WSServer = {};
+  private static servers: typeof WSServer = {};
   private static sockets: Record<string, WebSocket> = {};
   private static port: number;
   private static hostname: string;
@@ -37,7 +49,7 @@ export class RuntimeLogServer {
       const app = express();
       this.restServer = http.createServer(app);
 
-      this.restServer.on('upgrade', (req, socket, head) => {
+      this.restServer.on('upgrade', (req: any, socket, head) => {
         req.claimUpgrade = () => ({
           head,
           socket,
@@ -53,21 +65,21 @@ export class RuntimeLogServer {
       log(`Using ${port} port for runtime-log`);
       this.restServer.listen(port, boundHost);
 
-      app.use('/ws/runtimeLog/:projectId', (req: Request, res: Response) => {
-        if (!(req as any).claimUpgrade) {
-          return (res as any).status(426).send('Connection must upgrade for web sockets.');
+      app.use('/ws/runtimeLog/:projectId', (req: CustomHttpReq, res) => {
+        if (!req.claimUpgrade) {
+          return res.status(426).send('Connection must upgrade for web sockets.');
         }
 
-        const projectId = (req as any).params.projectId;
+        const projectId = req.params.projectId;
         // initialize a new web socket server for each new projectId
         if (projectId && !this.servers[projectId]) {
-          const { head, socket } = (req as any).claimUpgrade();
+          const { head, socket } = req.claimUpgrade();
 
           const wsServer = new WSServer({
             noServer: true,
           });
 
-          wsServer.on('connection', (socket, req) => {
+          wsServer.on('connection', (socket) => {
             this.sockets[projectId] = socket;
             socket.on('close', () => {
               delete this.servers[projectId];
@@ -76,7 +88,7 @@ export class RuntimeLogServer {
           });
 
           // upgrade the connection to a ws connection
-          wsServer.handleUpgrade(req as any, socket, head, (socket) => {
+          wsServer.handleUpgrade(req, socket, head, (socket) => {
             wsServer.emit('connection', socket, req);
           });
           this.servers[projectId] = wsServer;
@@ -93,7 +105,7 @@ export class RuntimeLogServer {
       JSON.stringify({
         standardOutput,
         standardError,
-      })
+      }),
     );
   }
 }

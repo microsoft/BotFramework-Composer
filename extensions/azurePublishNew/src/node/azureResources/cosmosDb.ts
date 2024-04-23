@@ -64,7 +64,7 @@ const cosmosDbProvisionMethod = (provisionConfig: ProvisionServiceConfig): Provi
             failoverPriority: 0,
           },
         ],
-      }
+      },
     );
   };
 
@@ -78,7 +78,7 @@ const cosmosDbProvisionMethod = (provisionConfig: ProvisionServiceConfig): Provi
           id: config.databaseName,
         },
         options: {},
-      }
+      },
     );
   };
 
@@ -115,7 +115,7 @@ const cosmosDbProvisionMethod = (provisionConfig: ProvisionServiceConfig): Provi
           },
         },
         options: {},
-      }
+      },
     );
   };
 
@@ -123,32 +123,31 @@ const cosmosDbProvisionMethod = (provisionConfig: ProvisionServiceConfig): Provi
     return await cosmosDBManagementClient.databaseAccounts.listKeys(config.resourceGroupName, config.displayName);
   };
 
-  const provision = () => async (
-    config: CosmosDbConfig,
-    workingSet: ProvisionWorkingSet
-  ): Promise<ProvisionWorkingSet> => {
-    try {
-      const { documentEndpoint } = await createDbAccount(config);
-      await createDb(config);
-      await createContainer(config);
-      const { primaryMasterKey } = await getAuthKey(config);
+  const provision =
+    () =>
+    async (config: CosmosDbConfig, workingSet: ProvisionWorkingSet): Promise<ProvisionWorkingSet> => {
+      try {
+        const { documentEndpoint } = await createDbAccount(config);
+        await createDb(config);
+        await createContainer(config);
+        const { primaryMasterKey } = await getAuthKey(config);
 
-      const provisionResult: CosmosDbProvisionResult = {
-        authKey: primaryMasterKey,
-        cosmosDbEndpoint: documentEndpoint,
-        databaseId: config.databaseName,
-        containerId: config.containerName,
-        collectionId: 'botstate-collection',
-      };
+        const provisionResult: CosmosDbProvisionResult = {
+          authKey: primaryMasterKey,
+          cosmosDbEndpoint: documentEndpoint,
+          databaseId: config.databaseName,
+          containerId: config.containerName,
+          collectionId: 'botstate-collection',
+        };
 
-      return {
-        ...workingSet,
-        cosmosDb: provisionResult,
-      };
-    } catch (err) {
-      throw createCustomizeError(ProvisionErrors.CREATE_COSMOSDB_ERROR, stringifyError(err));
-    }
-  };
+        return {
+          ...workingSet,
+          cosmosDb: provisionResult,
+        };
+      } catch (err) {
+        throw createCustomizeError(ProvisionErrors.CREATE_COSMOSDB_ERROR, stringifyError(err));
+      }
+    };
 
   return provision();
 };

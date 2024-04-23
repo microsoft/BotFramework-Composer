@@ -102,7 +102,7 @@ export const WebChatLogContent: React.FC<DebugPanelTabHeaderProps> = ({ isActive
           setWebChatInspectionData(currentProjectId, { item: trafficItem });
         }
       }
-    }, 500)
+    }, 500),
   ).current;
 
   const inspectLatestLogMessage = () => {
@@ -139,7 +139,7 @@ export const WebChatLogContent: React.FC<DebugPanelTabHeaderProps> = ({ isActive
         setWebChatInspectionData(currentProjectId, data);
       }
     },
-    [currentProjectId]
+    [currentProjectId],
   );
 
   const renderLogItem = useCallback(
@@ -180,7 +180,7 @@ export const WebChatLogContent: React.FC<DebugPanelTabHeaderProps> = ({ isActive
           return null;
       }
     },
-    [onClickTraffic]
+    [onClickTraffic],
   );
 
   const displayedTraffic = useMemo(() => {
@@ -222,7 +222,7 @@ export const WebChatLogContent: React.FC<DebugPanelTabHeaderProps> = ({ isActive
                   {children}
                 </ActionButton>
               ),
-            }
+            },
           )}
         </div>
       );

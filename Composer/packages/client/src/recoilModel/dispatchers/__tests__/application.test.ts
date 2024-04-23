@@ -55,7 +55,7 @@ describe('application dispatchers', () => {
             applicationDispatcher,
           },
         },
-      }
+      },
     );
     renderedComponent = rendered.result;
     dispatcher = renderedComponent.current.dispatcher;

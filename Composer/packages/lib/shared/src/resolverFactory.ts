@@ -20,7 +20,7 @@ function getFileName(path: string): string {
 export function luImportResolverGenerator(
   resources: ResolverResource[],
   ext = '',
-  defaultLocale = 'en-us'
+  defaultLocale = 'en-us',
 ): LUImportResolverDelegate {
   /**
    *  @param source current file id
@@ -62,7 +62,7 @@ export function luImportResolverGenerator(
 export function lgImportResolverGenerator(
   resources: ResolverResource[],
   ext = '',
-  defaultLocale = 'en-us'
+  defaultLocale = 'en-us',
 ): ImportResolverDelegate {
   /**
    *  @param source current file id

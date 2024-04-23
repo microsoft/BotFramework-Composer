@@ -90,7 +90,7 @@ const azureFunctionsProvisionMethod = (provisionConfig: ProvisionServiceConfig):
               },
             ],
           },
-        }
+        },
       );
 
       const hostname = azureFunctionsResult?.hostNames?.[0];

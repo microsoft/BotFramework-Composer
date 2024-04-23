@@ -48,7 +48,7 @@ describe('<GetAppInfoFromPublishProfile />', () => {
         onCancel={onCancelMock}
         onOK={onOkayMock}
       />,
-      initRecoilState
+      initRecoilState,
     );
     const errorNode = await component.findByText('No profiles were found containing a Microsoft App ID.');
     expect(errorNode).toBeTruthy();
@@ -72,7 +72,7 @@ describe('<GetAppInfoFromPublishProfile />', () => {
         onCancel={onCancelMock}
         onOK={onOkayMock}
       />,
-      initRecoilState
+      initRecoilState,
     );
     const dropdown = component.getByTestId('publishProfileDropdown');
     fireEvent.click(dropdown);

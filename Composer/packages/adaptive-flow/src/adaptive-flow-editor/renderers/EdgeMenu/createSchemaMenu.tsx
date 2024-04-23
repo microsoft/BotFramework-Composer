@@ -40,7 +40,7 @@ const createBaseActionMenu = (
   menuSchema: MenuUISchema,
   onClick: ActionMenuItemClickHandler,
   forceDisabledActions: DisabledMenuActions[],
-  filter?: ActionKindFilter
+  filter?: ActionKindFilter,
 ): IContextualMenuItem[] => {
   const menuTree: MenuTree = Object.entries(menuSchema).reduce((result, [$kind, options]) => {
     if (filter && !filter($kind as SDKKinds)) return result;
@@ -97,7 +97,7 @@ const get$kindFrom$ref = ($ref: string): SDKKinds => {
 const createCustomActionSubMenu = (
   customizedActionGroups: DefinitionSummary[][],
   onClick: ActionMenuItemClickHandler,
-  filter?: ($kind: SDKKinds) => boolean
+  filter?: ($kind: SDKKinds) => boolean,
 ): IContextualMenuItem[] => {
   if (!Array.isArray(customizedActionGroups) || customizedActionGroups.length === 0) {
     return [];
@@ -112,7 +112,7 @@ const createCustomActionSubMenu = (
             key: get$kindFrom$ref($ref),
             name: title,
             onClick: (e, itemData) => onClick(itemData),
-          } as IContextualMenuItem)
+          }) as IContextualMenuItem,
       );
       if (filter) {
         return items.filter(({ key }) => filter(key as SDKKinds));
@@ -135,7 +135,7 @@ const createCustomActionSubMenu = (
 const createPasteButtonItem = (
   menuItemCount: number,
   disabled: boolean,
-  onClick: ActionMenuItemClickHandler
+  onClick: ActionMenuItemClickHandler,
 ): IContextualMenuItem => {
   return {
     key: 'Paste',
@@ -190,7 +190,7 @@ const createSubMenu = (
   label: string,
   onClick: ActionMenuItemClickHandler,
   subItems: IContextualMenuItem[],
-  forceDisabledActions: DisabledMenuActions[]
+  forceDisabledActions: DisabledMenuActions[],
 ): IContextualMenuItem => {
   const subMenuItems = subItems.map((subMenuItem: IContextualMenuItem) => {
     let additionalProps: Partial<IContextualMenuItem> = {};
@@ -234,7 +234,7 @@ export const createActionMenu = (
   options: ActionMenuOptions,
   forceDisabledActions: DisabledMenuActions[],
   menuSchema?: MenuUISchema,
-  customActionGroups?: DefinitionSummary[][]
+  customActionGroups?: DefinitionSummary[][],
 ) => {
   const resultItems: IContextualMenuItem[] = [];
   const menuOptions = menuSchema || {};
@@ -244,7 +244,7 @@ export const createActionMenu = (
     menuOptions,
     onClick,
     forceDisabledActions,
-    options.isSelfHosted ? ($kind: SDKKinds) => $kind !== SDKKinds.LogAction : undefined
+    options.isSelfHosted ? ($kind: SDKKinds) => $kind !== SDKKinds.LogAction : undefined,
   );
   resultItems.push(...baseMenuItems);
 

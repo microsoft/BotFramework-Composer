@@ -36,7 +36,7 @@ describe('<ActivityHighlightWrapper />', () => {
             trafficType: 'activity',
           },
         });
-      }
+      },
     );
     getByTestId('composer-wc-activity-selected');
   });
@@ -60,7 +60,7 @@ describe('<ActivityHighlightWrapper />', () => {
             trafficType: 'activity',
           },
         });
-      }
+      },
     );
     getByTestId('composer-wc-activity');
   });

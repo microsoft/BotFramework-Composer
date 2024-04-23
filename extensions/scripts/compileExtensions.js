@@ -13,6 +13,7 @@ const fs = require('fs-extra');
 const { compile } = require('./build');
 
 const FORCE = process.argv.includes('--force') || process.argv.includes('-f');
+const UPDATE = process.argv.includes('--update') || process.argv.includes('-f');
 
 const extensionsDir = process.env.COMPOSER_BUILTIN_EXTENSIONS_DIR || path.resolve(__dirname, '..');
 const buildCachePath = path.resolve(extensionsDir, '.build-cache.json');
@@ -100,6 +101,55 @@ const install = async (name, extPath) => {
   execSync('yarn install', { cwd: extPath, stdio: 'inherit' });
 };
 
+const updateIgnorePackages = [
+  '@botframework-composer/types',
+  '@botframework-composer/TypeFlags',
+  '@botframework-composer/test-utilsTypeFlags',
+  '@bfc/built-in-functions',
+  '@bfc/code-editor',
+  '@bfc/extension-client',
+  '@bfc/indexers',
+  '@bfc/extension',
+  '@bfc/shared',
+  '@bfc/ui-shared',
+  '@azure/arm-appinsights',
+  '@azure/arm-appservice',
+  '@azure/arm-appservice-profile-2019-03-01-hybrid',
+  '@azure/arm-botservice',
+  '@azure/arm-cognitiveservices',
+  '@azure/arm-cosmosdb',
+  '@azure/arm-deploymentmanager',
+  '@azure/arm-keyvault',
+  '@azure/arm-keyvault-profile-2020-09-01-hybrid',
+  '@azure/arm-resources',
+  '@azure/arm-search',
+  '@azure/arm-storage',
+  '@azure/arm-subscriptions',
+  '@azure/cognitiveservices-luis-authoring',
+  '@azure/cosmos',
+  '@azure/graph',
+  '@azure/keyvault-secrets',
+  '@azure/ms-rest-browserauth',
+  '@azure/ms-rest-js',
+  '@azure/ms-rest-nodeauth',
+  '@fluentui/react',
+  'axios',
+  'minimist',
+  'react-dom',
+  'react',
+  'rimraf',
+  'uuid',
+  'jwt-decode',
+  'https-proxy-agent',
+  '@types/react', '@types/react-dom' // until fluent update
+]
+
+const upAll = async (name, extPath) => {
+  // yarn berry (v2+)
+  console.log('[%s] yarn up-all', name);
+  execSync(`yarn up-all --exclude "${updateIgnorePackages.join(' ')}"`, { cwd: extPath, stdio: 'inherit' });
+};
+
 async function main() {
   checkComposerLibs();
 
@@ -120,6 +170,13 @@ async function main() {
 
   const errors = [];
 
+  if (UPDATE) {
+    const nonBFCPackages = updateIgnorePackages.filter(
+      pkgName => !pkgName.startsWith('@bfc') && !pkgName.startsWith('@botframework')
+    );
+    console.log('The following packages are known for broken things and will not be updated automatically:\n' + ' - ' + nonBFCPackages.join('\n - '))
+  }
+
   for (const entry of allExtensions) {
     if (entry.isDirectory()) {
       const extPath = path.join(extensionsDir, entry.name);
@@ -133,6 +190,7 @@ async function main() {
       const lastModified = getLastModified(extPath);
       if (FORCE || missingMain(extPath, packageJSON) || hasChanges(entry.name, lastModified)) {
         try {
+          UPDATE && await upAll(entry.name, extPath);
           await install(entry.name, extPath);
           await compile(entry.name, extPath);
           writeToCache(entry.name, lastModified);

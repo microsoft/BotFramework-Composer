@@ -68,7 +68,7 @@ const icon = (active: boolean, disabled: boolean) =>
       fontSize: `${FontSizes.size16}`,
       width: '40px',
     },
-  } as IButtonStyles);
+  }) as IButtonStyles;
 
 // -------------------- NavItem -------------------- //
 
@@ -99,9 +99,10 @@ export const NavItem: React.FC<INavItemProps> = (props) => {
 
   const active = (pathname.startsWith(to) || match?.test(pathname)) ?? false;
 
-  const addRef = useCallback((ref) => onboardingAddCoachMarkRef({ [`nav${labelName.replace(' ', '')}`]: ref }), [
-    labelName,
-  ]);
+  const addRef = useCallback(
+    (ref) => onboardingAddCoachMarkRef({ [`nav${labelName.replace(' ', '')}`]: ref }),
+    [labelName],
+  );
 
   const getIcon = (iconName: string) => {
     let navIcon;

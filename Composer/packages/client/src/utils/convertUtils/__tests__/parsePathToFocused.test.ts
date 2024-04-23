@@ -9,7 +9,7 @@ describe('parsePathToFocused', () => {
     expect(parsePathToFocused('main.triggers[0].actions[0]')).toBe('triggers[0].actions[0]');
     expect(parsePathToFocused('main.triggers[0].actions[0].actions[1]')).toBe('triggers[0].actions[0].actions[1]');
     expect(parsePathToFocused('main.triggers[0].actions[0].elseActions[1]')).toBe(
-      'triggers[0].actions[0].elseActions[1]'
+      'triggers[0].actions[0].elseActions[1]',
     );
   });
 });

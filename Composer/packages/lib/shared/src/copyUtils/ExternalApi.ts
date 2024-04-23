@@ -8,7 +8,7 @@ export type FieldProcessor<T> = (
   fromAction: BaseSchema,
   toActionId: string,
   toAction: BaseSchema,
-  fieldName: string
+  fieldName: string,
 ) => T;
 
 export type FieldProcessorAsync<T> = (
@@ -16,7 +16,7 @@ export type FieldProcessorAsync<T> = (
   fromAction: BaseSchema,
   toActionId: string,
   toAction: BaseSchema,
-  fieldName: string
+  fieldName: string,
 ) => Promise<T>;
 
 export interface ExternalApi {

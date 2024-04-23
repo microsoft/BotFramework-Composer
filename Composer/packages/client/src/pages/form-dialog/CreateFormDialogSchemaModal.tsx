@@ -55,7 +55,7 @@ const CreateFormDialogSchemaModal: React.FC<Props> = (props) => {
 
       onSubmit(formData.name);
     },
-    [hasErrors, formData]
+    [hasErrors, formData],
   );
 
   return (
@@ -74,7 +74,6 @@ const CreateFormDialogSchemaModal: React.FC<Props> = (props) => {
             autoComplete="off"
             errorMessage={formErrors.name}
             label={formatMessage('Name')}
-            styles={name}
             value={formData.name}
             onChange={(_e, val) => updateField('name', val)}
           />

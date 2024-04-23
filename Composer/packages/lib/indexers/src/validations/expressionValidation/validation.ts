@@ -76,7 +76,7 @@ export const checkExpression = (exp: any, required: boolean, types: number[]): n
     case 'string': {
       returnType = checkStringExpression(
         exp,
-        types.some((type) => type & ReturnType.String)
+        types.some((type) => type & ReturnType.String),
       );
       break;
     }

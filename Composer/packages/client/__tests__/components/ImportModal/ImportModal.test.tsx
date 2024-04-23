@@ -21,7 +21,7 @@ describe('<ImportModal />', () => {
     const { findByTestId } = render(
       <RecoilRoot initializeState={initRecoilState}>
         <ImportModal location={locationMock}></ImportModal>
-      </RecoilRoot>
+      </RecoilRoot>,
     );
 
     // connecting state
