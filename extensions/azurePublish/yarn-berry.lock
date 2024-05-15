@@ -1941,10 +1941,10 @@ __metadata:
 
 "@bfc/built-in-functions@file:../../Composer/packages/tools/built-in-functions::locator=azurePublish%40workspace%3A.":
   version: 1.0.0
-  resolution: "@bfc/built-in-functions@file:../../Composer/packages/tools/built-in-functions#../../Composer/packages/tools/built-in-functions::hash=0c6f19&locator=azurePublish%40workspace%3A."
+  resolution: "@bfc/built-in-functions@file:../../Composer/packages/tools/built-in-functions#../../Composer/packages/tools/built-in-functions::hash=c3f7bb&locator=azurePublish%40workspace%3A."
   dependencies:
     tslib: 2.6.2
-  checksum: 6e7ca8ed2cba36d4b6e1bcf50795017737c95178134c03bbb58bd45ffb510e6ef2043bc4b51708a52bb26c63033f89895de9572bb06c2d7048b2ae44945120a5
+  checksum: b47290f91ceb19638dcd5e88f0c74bf35d8c347d6135836b8b3909fe417a5e84db5143b5650fe416f0cb07a08ccad7283d606a6040a6b958f60070ea5445d52c
   languageName: node
   linkType: hard
 
