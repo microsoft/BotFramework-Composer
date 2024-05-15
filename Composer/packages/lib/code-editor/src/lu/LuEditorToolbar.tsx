@@ -30,7 +30,7 @@ type Props = {
   labelingMenuVisible: boolean;
   onDefineEntity: (
     entityType: ToolbarLuEntityType,
-    data: Partial<{ entityName: string; entityDefinition: string }>
+    data: Partial<{ entityName: string; entityDefinition: string }>,
   ) => void;
   onInsertEntity: (entityName: string, entityType: string) => void;
   options?: Partial<{
@@ -53,7 +53,7 @@ export const LuEditorToolbar = React.memo((props: Props) => {
         editor.onDidChangeCursorSelection((e) => {
           setInsertEntityDisabled(!canInsertEntityBySelection(editor, e.selection as MonacoRange));
           setTagEntityDisabled(!canTagEntityBySelection(editor, e.selection as MonacoRange));
-        })
+        }),
       );
     }
 

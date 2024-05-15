@@ -15,7 +15,7 @@ const multiLineBlockSymbol = '```';
 const getInitialItems = <T extends ArrayBasedStructuredResponseItem>(
   response: T,
   lgTemplates?: readonly LgTemplate[],
-  focusOnMount?: boolean
+  focusOnMount?: boolean,
 ): TemplateBodyItem[] => {
   const templateId = getTemplateId(response);
   const template = lgTemplates?.find(({ name }) => name === templateId);
@@ -60,7 +60,7 @@ export const useStringArray = <T extends ArrayBasedStructuredResponseItem>(
     focusOnMount?: boolean;
     lgOption?: LGOption;
     lgTemplates?: readonly LgTemplate[];
-  }
+  },
 ) => {
   const newTemplateNameSuffix = React.useMemo(() => kind.toLowerCase(), [kind]);
 
@@ -69,7 +69,7 @@ export const useStringArray = <T extends ArrayBasedStructuredResponseItem>(
 
   const [templateId, setTemplateId] = React.useState(getTemplateId(structuredResponse));
   const [items, setItems] = React.useState<TemplateBodyItem[]>(
-    getInitialItems(structuredResponse, lgTemplates, focusOnMount)
+    getInitialItems(structuredResponse, lgTemplates, focusOnMount),
   );
 
   const onChange = React.useCallback(
@@ -89,7 +89,7 @@ export const useStringArray = <T extends ArrayBasedStructuredResponseItem>(
         onTemplateChange(id, templateBodyItemsToString(fixedNewItems));
       }
     },
-    [kind, newTemplateNameSuffix, lgOption, templateId, onRemoveTemplate, onTemplateChange, onUpdateResponseTemplate]
+    [kind, newTemplateNameSuffix, lgOption, templateId, onRemoveTemplate, onTemplateChange, onUpdateResponseTemplate],
   );
 
   return { items, onChange };

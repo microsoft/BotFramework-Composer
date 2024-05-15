@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/camelcase */
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
@@ -20,7 +19,7 @@ export class BotEndpoint {
     public botId: string,
     public botUrl: string,
     public msaAppId?: string,
-    public msaPassword?: string
+    public msaPassword?: string,
   ) {}
 
   private async getAccessToken(forceRefresh = false): Promise<string | undefined> {

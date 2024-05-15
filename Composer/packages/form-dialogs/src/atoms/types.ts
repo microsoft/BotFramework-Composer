@@ -19,7 +19,7 @@ export type TypedPropertyPayload = {
 
 const builtInFormats = ['date-time', 'date', 'time', 'email', 'uri', 'iri'] as const;
 
-export type BuiltInStringFormat = typeof builtInFormats[number];
+export type BuiltInStringFormat = (typeof builtInFormats)[number];
 
 export type StringFormatItem = { displayName: string; value: BuiltInStringFormat };
 

@@ -22,7 +22,7 @@ import { DiffCodeEditor } from './diff-editor';
 
 const lspServerPath = '/lu-language-server';
 
-interface CodeEditorProps extends RouteComponentProps<{}> {
+interface CodeEditorProps extends RouteComponentProps<unknown> {
   dialogId: string;
   projectId: string;
   skillId?: string;
@@ -60,8 +60,8 @@ const CodeEditor: React.FC<CodeEditorProps> = (props) => {
   const sectionId = Array.isArray(searchSectionName)
     ? searchSectionName[0]
     : typeof searchSectionName === 'string'
-    ? searchSectionName
-    : undefined;
+      ? searchSectionName
+      : undefined;
   const intent = sectionId && file ? file.intents.find(({ Name }) => Name === sectionId) : undefined;
 
   const hash = props.location?.hash ?? '';
@@ -105,7 +105,7 @@ const CodeEditor: React.FC<CodeEditorProps> = (props) => {
         };
         updateLuIntentDispatcher(payload);
       }, 500),
-    [file, intent, actualProjectId]
+    [file, intent, actualProjectId],
   );
 
   const updateLuFile = useMemo(
@@ -120,7 +120,7 @@ const CodeEditor: React.FC<CodeEditorProps> = (props) => {
         };
         updateLuFileDispatcher(payload);
       }, 500),
-    [file, actualProjectId]
+    [file, actualProjectId],
   );
 
   const onChange = useCallback(
@@ -132,7 +132,7 @@ const CodeEditor: React.FC<CodeEditorProps> = (props) => {
         updateLuFile(value);
       }
     },
-    [file, intent, actualProjectId]
+    [file, intent, actualProjectId],
   );
 
   const luFeatures = settings?.luFeatures || {};
@@ -157,7 +157,7 @@ const CodeEditor: React.FC<CodeEditorProps> = (props) => {
         : `/bot/${projectId}/language-understanding/${fileId}${sectionId ? `/edit?t=${sectionId}` : ''}`;
       navigateTo(url);
     },
-    [projectId, locale, currentDialog]
+    [projectId, locale, currentDialog],
   );
 
   const currentLanguageFileEditor = useMemo(() => {

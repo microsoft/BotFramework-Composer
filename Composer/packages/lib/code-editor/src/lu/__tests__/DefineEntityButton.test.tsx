@@ -64,7 +64,7 @@ describe('<DefineEntityButton />', () => {
     });
 
     expect(
-      screen.getByLabelText('Learn more about Define new entity', { selector: '.ms-Tooltip' })
+      screen.getByLabelText('Learn more about Define new entity', { selector: '.ms-Tooltip' }),
     ).toBeInTheDocument();
   });
 });

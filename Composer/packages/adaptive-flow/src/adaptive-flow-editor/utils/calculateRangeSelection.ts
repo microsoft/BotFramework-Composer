@@ -4,7 +4,7 @@
 export const calculateRangeSelection = (
   focusedId: string,
   clickedId: string,
-  orderedSelectableIds: string[]
+  orderedSelectableIds: string[],
 ): string[] => {
   const range = [focusedId, clickedId].map((id) => orderedSelectableIds.findIndex((x) => x === id));
   const [fromIndex, toIndex] = range.sort();

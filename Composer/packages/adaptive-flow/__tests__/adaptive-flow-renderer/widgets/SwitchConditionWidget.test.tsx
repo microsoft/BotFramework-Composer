@@ -15,7 +15,7 @@ describe('SwitchConditionWidget', () => {
         id="test"
         judgement={<span data-testid="test-judgement">Condition Judgement</span>}
         onEvent={() => null}
-      />
+      />,
     );
     expect(switchCondition).toBeTruthy();
     expect(switchCondition.getByTestId('test-judgement')).toBeTruthy();

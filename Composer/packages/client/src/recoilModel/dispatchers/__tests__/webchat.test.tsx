@@ -53,7 +53,7 @@ describe('web chat dispatcher', () => {
       activity: {} as any,
       id: '',
       timestamp: Date.now(),
-      trafficType: 'activity' as 'activity',
+      trafficType: 'activity' as const,
     };
     await act(async () => {
       await dispatcher.appendWebChatTraffic(projectId, trafficItem);
@@ -67,13 +67,13 @@ describe('web chat dispatcher', () => {
       activity: {} as any,
       id: '',
       timestamp: Date.now(),
-      trafficType: 'activity' as 'activity',
+      trafficType: 'activity' as const,
     };
     const trafficItem2 = {
       activity: {} as any,
       id: '',
       timestamp: Date.now() + 5,
-      trafficType: 'activity' as 'activity',
+      trafficType: 'activity' as const,
     };
     await act(async () => {
       await dispatcher.appendWebChatTraffic(projectId, [trafficItem1, trafficItem2]);
@@ -87,7 +87,7 @@ describe('web chat dispatcher', () => {
       activity: {} as any,
       id: '',
       timestamp: Date.now(),
-      trafficType: 'activity' as 'activity',
+      trafficType: 'activity' as const,
     };
     await act(async () => {
       await dispatcher.appendWebChatTraffic(projectId, trafficItem);
@@ -105,7 +105,7 @@ describe('web chat dispatcher', () => {
   it('should set inspection data state', async () => {
     const inspectionData = {
       item: {} as any,
-      mode: 'request' as 'request',
+      mode: 'request' as const,
     };
     await act(async () => {
       await dispatcher.setWebChatInspectionData(projectId, inspectionData);

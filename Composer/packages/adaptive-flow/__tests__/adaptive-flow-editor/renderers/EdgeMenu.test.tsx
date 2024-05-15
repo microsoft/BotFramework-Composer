@@ -31,7 +31,7 @@ describe('createActionMenu()', () => {
           label: 'Begin skill',
           submenu: [SDKKinds.BeginSkill],
         },
-      }
+      },
     );
     const sdkBeginSkill = menuItems.find((item) => item.key === SDKKinds.BeginSkill);
 
@@ -61,7 +61,7 @@ describe('createActionMenu()', () => {
       { isSelfHosted: false, enablePaste: false },
       [],
       {},
-      []
+      [],
     );
     expect(menuItemsWithoutCustomActions.findIndex((x) => x.key === 'Custom Actions')).toEqual(-1);
 
@@ -74,7 +74,7 @@ describe('createActionMenu()', () => {
       { isSelfHosted: false, enablePaste: false },
       [],
       {},
-      customActions
+      customActions,
     );
     expect(withCustomActions.findIndex((x) => x.key === 'Custom Actions')).toEqual(withCustomActions.length - 1);
     expect(withCustomActions[withCustomActions.length - 1].subMenuProps?.items.length).toEqual(3); // 2 action labels + 1 sep line

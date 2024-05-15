@@ -101,8 +101,8 @@ export const PublishTargets: React.FC<PublishTargetsProps> = (props) => {
         formatMessage('Delete?'),
         formatMessage(
           'Are you sure you want to remove {targetName}? This will remove only the profile and will not delete provisioned resources.',
-          { targetName }
-        )
+          { targetName },
+        ),
       );
       if (confirmed) {
         const newPublishTargets = publishTargets.filter((t) => t.name !== targetName);

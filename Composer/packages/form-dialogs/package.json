@@ -23,7 +23,7 @@
     "@bfc/shared": "*",
     "@bfc/ui-shared": "*",
     "react-beautiful-dnd": "^13.0.0",
-    "tslib": "2.4.0"
+    "tslib": "2.6.2"
   },
   "peerDependencies": {
     "@emotion/react": "^11.1.3",

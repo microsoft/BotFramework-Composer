@@ -78,7 +78,7 @@ export const FeedModal: React.FC<WorkingModalProps> = (props) => {
           setSelectedItem(undefined);
         }
       },
-    })
+    }),
   );
 
   useEffect(() => {
@@ -276,7 +276,7 @@ export const FeedModal: React.FC<WorkingModalProps> = (props) => {
     if (
       await confirm(
         formatMessage('Delete this feed?'),
-        formatMessage('Are you sure you want to remove this feed source?')
+        formatMessage('Are you sure you want to remove this feed source?'),
       )
     ) {
       setItems(items.filter((i) => i.key !== selectedItem.key));

@@ -150,7 +150,7 @@ const DefineConversation: React.FC<DefineConversationProps> = (props) => {
         currentTemplate.name
           .trim()
           .replace(/bot|maker/gi, '')
-          .replace(/-/g, ' ')
+          .replace(/-/g, ' '),
       );
       return upperFirst(camelCasedName);
     } else if (templateId && inBotMigration) {
@@ -327,7 +327,7 @@ const DefineConversation: React.FC<DefineConversationProps> = (props) => {
       dataToSubmit.isLocalGenerator = isLocalGenerator;
       onSubmit({ ...dataToSubmit }, generatorName || '');
     },
-    [hasErrors, formData]
+    [hasErrors, formData],
   );
 
   const onCurrentPathUpdateWrap = (newPath: string, storageId?: string) => {
@@ -349,7 +349,7 @@ const DefineConversation: React.FC<DefineConversationProps> = (props) => {
     text: formatMessage('Azure Web App'),
     data: {
       description: formatMessage(
-        'Fully managed compute platform that is optimized for hosting websites and web applications.'
+        'Fully managed compute platform that is optimized for hosting websites and web applications.',
       ),
     },
   };
@@ -359,7 +359,7 @@ const DefineConversation: React.FC<DefineConversationProps> = (props) => {
     text: formatMessage('Azure Functions'),
     data: {
       description: formatMessage(
-        'Azure Functions is a solution for easily running small pieces of code, or "functions," in the cloud. '
+        'Azure Functions is a solution for easily running small pieces of code, or "functions," in the cloud. ',
       ),
     },
   };
@@ -446,7 +446,7 @@ const DefineConversation: React.FC<DefineConversationProps> = (props) => {
                         dropdownItemSelected: { height: 'auto' },
                       }}
                       tooltip={formatMessage(
-                        'Azure offers a number of ways to host your application code. The runtime type refers to the hosting model for the computing resources that your application runs on.'
+                        'Azure offers a number of ways to host your application code. The runtime type refers to the hosting model for the computing resources that your application runs on.',
                       )}
                       onChange={(_e, option) => updateField('runtimeType', option?.key.toString())}
                       onRenderOption={renderRuntimeDropdownOption}

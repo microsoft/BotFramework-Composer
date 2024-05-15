@@ -20,7 +20,7 @@ function renderSubject(overrides = {}) {
       onRemove: jest.fn(),
     },
     fieldProps(),
-    overrides
+    overrides,
   );
 
   return render(<ArrayFieldItem {...props} />);

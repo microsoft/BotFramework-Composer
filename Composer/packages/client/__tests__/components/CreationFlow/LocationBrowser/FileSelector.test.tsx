@@ -43,7 +43,7 @@ describe('<FileSelector/>', () => {
         updateFolder={updateFolder}
         onCurrentPathUpdate={onCurrentPathUpdate}
         onFileChosen={onFileChosen}
-      />
+      />,
     );
   }
 
@@ -99,7 +99,7 @@ describe('<FileSelector/>', () => {
     //locally this should be 'C:\\test-folder\\Desktop', but online it should be 'C:/test-folder/Desktop'
     expect(
       createFolder.mock.calls[0][0] === 'C:/test-folder/Desktop' ||
-        createFolder.mock.calls[0][0] === 'C:\\test-folder\\Desktop'
+        createFolder.mock.calls[0][0] === 'C:\\test-folder\\Desktop',
     ).toBeTruthy();
     expect(createFolder.mock.calls[0][1]).toBe('newFolder');
   });

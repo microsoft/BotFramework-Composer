@@ -36,7 +36,7 @@ export const CreatePublishProfileDialog: React.FC<CreatePublishProfileDialogProp
   const dialogTitle = {
     title: formatMessage('Create a publish profile to continue'),
     subText: formatMessage(
-      'To make your bot available as a remote skill you will need to provision Azure resources . This process may take a few minutes depending on the resources you select.'
+      'To make your bot available as a remote skill you will need to provision Azure resources . This process may take a few minutes depending on the resources you select.',
     ),
   };
 

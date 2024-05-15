@@ -11,13 +11,13 @@ type VisitAdaptiveComponentFn = (
   $kind: SDKKinds | string,
   data: BaseSchema,
   currentPath: string,
-  parentPath: string
+  parentPath: string,
 ) => boolean;
 
 export const walkAdaptiveDialog = (
   adaptiveDialog: BaseSchema,
   sdkSchema: SchemaDefinitions,
-  fn: VisitAdaptiveComponentFn
+  fn: VisitAdaptiveComponentFn,
 ): boolean => {
   return walkWithPath(adaptiveDialog, sdkSchema, '', '', fn);
 };
@@ -39,7 +39,7 @@ const walkWithPath = (
   sdkSchema: SchemaDefinitions,
   currentPath: string,
   parentPath: string,
-  fn: VisitAdaptiveComponentFn
+  fn: VisitAdaptiveComponentFn,
 ): boolean => {
   const { $kind } = adaptiveData;
   // Visit current data before schema validation to make sure all $kind blocks are visited.
@@ -74,7 +74,7 @@ const walkWithPath = (
         sdkSchema,
         joinPath(currentPath, `${path}[${i}]`),
         currentPath,
-        fn
+        fn,
       );
       if (!shouldContinue) return false;
     }

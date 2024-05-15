@@ -206,7 +206,7 @@ export const WatchVariablePicker = React.memo((props: WatchVariablePickerProps) 
           setItems(menuItems);
         }
       }, 500),
-    [getFilterPredicate, menuItems]
+    [getFilterPredicate, menuItems],
   );
 
   const onInputChange = useCallback(
@@ -214,7 +214,7 @@ export const WatchVariablePicker = React.memo((props: WatchVariablePickerProps) 
       setQuery(val ?? '');
       performDebouncedSearch(val);
     },
-    [performDebouncedSearch]
+    [performDebouncedSearch],
   );
 
   const onTextBoxFocus = (event: FocusEvent<HTMLInputElement>) => {
@@ -238,7 +238,7 @@ export const WatchVariablePicker = React.memo((props: WatchVariablePickerProps) 
         }
       }
     },
-    [currentProjectId, onHideContextualMenu, variableId, query, watchedVariables]
+    [currentProjectId, onHideContextualMenu, variableId, query, watchedVariables],
   );
 
   const onDismiss = useCallback(() => {

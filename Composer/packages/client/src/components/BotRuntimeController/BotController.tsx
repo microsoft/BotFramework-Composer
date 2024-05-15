@@ -154,7 +154,7 @@ const BotController: React.FC<BotControllerProps> = ({ onHideController, isContr
     setBotsProcessing(botsProcessing);
 
     const botOperationsCompleted = projectCollection.some(
-      ({ status }) => status === BotStatus.connected || status === BotStatus.failed
+      ({ status }) => status === BotStatus.connected || status === BotStatus.failed,
     );
     setBotsStartOperationCompleted(botOperationsCompleted);
 
@@ -169,8 +169,8 @@ const BotController: React.FC<BotControllerProps> = ({ onHideController, isContr
               =1 {Stopping bot..}
             other {Stopping bots.. ({running}/{total} running)}
           }`,
-            { running: runningBots.projectIds.length, total: runningBots.totalBots }
-          )
+            { running: runningBots.projectIds.length, total: runningBots.totalBots },
+          ),
         );
       } else {
         setStartPanelButtonText(
@@ -180,8 +180,8 @@ const BotController: React.FC<BotControllerProps> = ({ onHideController, isContr
               =1 {Starting bot..}
             other {Starting bots.. ({running}/{total} running)}
           }`,
-            { running: runningBots.projectIds.length, total: runningBots.totalBots }
-          )
+            { running: runningBots.projectIds.length, total: runningBots.totalBots },
+          ),
         );
       }
       return;
@@ -199,7 +199,7 @@ const BotController: React.FC<BotControllerProps> = ({ onHideController, isContr
           formatMessage(`{ total, plural, =1 {Restart bot}other {Restart all bots ({running}/{total} running)}}`, {
             running: runningBots.projectIds.length,
             total: runningBots.totalBots,
-          })
+          }),
         );
         return;
       }
@@ -213,8 +213,8 @@ const BotController: React.FC<BotControllerProps> = ({ onHideController, isContr
           =1 {Start bot}
           other {Start all}
       }`,
-        { total: runningBots.totalBots }
-      )
+        { total: runningBots.totalBots },
+      ),
     );
   }, [runningBots, startAllBotsOperationQueued]);
 
@@ -223,7 +223,7 @@ const BotController: React.FC<BotControllerProps> = ({ onHideController, isContr
     (event: React.MouseEvent<HTMLElement>) => {
       onHideController(true);
       event.stopPropagation();
-    }
+    },
   );
 
   const handleClick = async () => {
@@ -266,7 +266,7 @@ const BotController: React.FC<BotControllerProps> = ({ onHideController, isContr
       <div ref={botControllerMenuTarget} css={[startPanelsContainer]}>
         <DisableFeatureToolTip
           content={formatMessage(
-            'Power Virtual Agents bots cannot be run at the moment. Publish the bot to Power Virtual Agents and test it there.'
+            'Power Virtual Agents bots cannot be run at the moment. Publish the bot to Power Virtual Agents and test it there.',
           )}
           isPVABot={isPVABot}
         >

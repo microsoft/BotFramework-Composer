@@ -252,7 +252,7 @@ export const handleMessage = (msg: LgMessageEvent) => {
         getTargetFile(projectId, lgFile, lgFiles),
         templateName,
         template,
-        lgFileResolver(lgFiles)
+        lgFileResolver(lgFiles),
       );
       cache.set(projectId, result);
       payload = filterParseResult(result);
@@ -264,7 +264,7 @@ export const handleMessage = (msg: LgMessageEvent) => {
       const result = lgUtil.removeTemplate(
         getTargetFile(projectId, lgFile, lgFiles),
         templateName,
-        lgFileResolver(lgFiles)
+        lgFileResolver(lgFiles),
       );
       cache.set(projectId, result);
       payload = filterParseResult(result);
@@ -276,7 +276,7 @@ export const handleMessage = (msg: LgMessageEvent) => {
       const result = lgUtil.removeTemplates(
         getTargetFile(projectId, lgFile, lgFiles),
         templateNames,
-        lgFileResolver(lgFiles)
+        lgFileResolver(lgFiles),
       );
       cache.set(projectId, result);
       payload = filterParseResult(result);
@@ -289,7 +289,7 @@ export const handleMessage = (msg: LgMessageEvent) => {
         getTargetFile(projectId, lgFile, lgFiles),
         fromTemplateName,
         toTemplateName,
-        lgFileResolver(lgFiles)
+        lgFileResolver(lgFiles),
       );
       cache.set(projectId, result);
       payload = filterParseResult(result);

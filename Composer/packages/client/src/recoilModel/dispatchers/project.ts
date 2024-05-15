@@ -98,14 +98,14 @@ export const projectDispatcher = () => {
         // remove the same identifier trigger in root bot
         if (rootBotProjectId && rootDialog && rootDialog.triggers.length > 0) {
           const index = rootDialog.triggers.findIndex(
-            (item) => item.displayName === triggerName.replace(skillNameRegex, '')
+            (item) => item.displayName === triggerName.replace(skillNameRegex, ''),
           );
           if (index >= 0) {
             const content = DialogdeleteTrigger(
               projectDialogsMap[rootBotProjectId],
               rootDialog?.id,
               index,
-              async (trigger) => await dispatcher.deleteTrigger(rootBotProjectId, rootDialog?.id, trigger)
+              async (trigger) => await dispatcher.deleteTrigger(rootBotProjectId, rootDialog?.id, trigger),
             );
             if (content) {
               await dispatcher.updateDialog({ id: rootDialog?.id, content, projectId: rootBotProjectId });
@@ -119,119 +119,114 @@ export const projectDispatcher = () => {
       } catch (ex) {
         setError(callbackHelpers, ex);
       }
-    }
+    },
   );
 
   const replaceSkillInBotProject = useRecoilCallback(
-    (callbackHelpers: CallbackInterface) => async (projectIdToRemove: string, path: string, storageId = 'default') => {
-      try {
-        const { snapshot } = callbackHelpers;
-        const dispatcher = await snapshot.getPromise(dispatcherState);
-        const projectIds = await snapshot.getPromise(botProjectIdsState);
-        const indexToReplace = findIndex(projectIds, (id) => id === projectIdToRemove);
-        if (indexToReplace === -1) {
-          return;
+    (callbackHelpers: CallbackInterface) =>
+      async (projectIdToRemove: string, path: string, storageId = 'default') => {
+        try {
+          const { snapshot } = callbackHelpers;
+          const dispatcher = await snapshot.getPromise(dispatcherState);
+          const projectIds = await snapshot.getPromise(botProjectIdsState);
+          const indexToReplace = findIndex(projectIds, (id) => id === projectIdToRemove);
+          if (indexToReplace === -1) {
+            return;
+          }
+          await dispatcher.removeSkillFromBotProject(projectIdToRemove);
+          await dispatcher.addExistingSkillToBotProject(path, storageId);
+        } catch (ex) {
+          setError(callbackHelpers, ex);
         }
-        await dispatcher.removeSkillFromBotProject(projectIdToRemove);
-        await dispatcher.addExistingSkillToBotProject(path, storageId);
-      } catch (ex) {
-        setError(callbackHelpers, ex);
-      }
-    }
+      },
   );
 
   const addExistingSkillToBotProject = useRecoilCallback(
-    (callbackHelpers: CallbackInterface) => async (
-      path: string,
-      storageId = 'default',
-      templateId?: string
-    ): Promise<void> => {
-      const { set, snapshot } = callbackHelpers;
-      try {
-        set(botOpeningState, true);
-        const dispatcher = await snapshot.getPromise(dispatcherState);
-        const rootBotProjectId = await snapshot.getPromise(rootBotProjectIdSelector);
-        if (!rootBotProjectId) return;
+    (callbackHelpers: CallbackInterface) =>
+      async (path: string, storageId = 'default', templateId?: string): Promise<void> => {
+        const { set, snapshot } = callbackHelpers;
+        try {
+          set(botOpeningState, true);
+          const dispatcher = await snapshot.getPromise(dispatcherState);
+          const rootBotProjectId = await snapshot.getPromise(rootBotProjectIdSelector);
+          if (!rootBotProjectId) return;
 
-        const botExists = await checkIfBotExistsInBotProjectFile(callbackHelpers, path);
-        if (botExists) {
-          throw new Error(
-            formatMessage('This operation cannot be completed. The bot is already part of the Bot Project')
-          );
+          const botExists = await checkIfBotExistsInBotProjectFile(callbackHelpers, path);
+          if (botExists) {
+            throw new Error(
+              formatMessage('This operation cannot be completed. The bot is already part of the Bot Project'),
+            );
+          }
+          const skillNameIdentifier: string = await getSkillNameIdentifier(callbackHelpers, getFileNameFromPath(path));
+
+          const { projectId, mainDialog } = await openLocalSkill(callbackHelpers, path, storageId, skillNameIdentifier);
+          if (!mainDialog) {
+            const error = await snapshot.getPromise(botErrorState(projectId));
+            throw error;
+          }
+
+          if (templateId === QnABotTemplateId) {
+            callbackHelpers.set(createQnAOnState, { projectId, dialogId: mainDialog });
+            callbackHelpers.set(showCreateQnADialogState(projectId), true);
+          }
+
+          set(botProjectIdsState, (current) => [...current, projectId]);
+          await dispatcher.addLocalSkillToBotProjectFile(projectId);
+          navigateToSkillBot(rootBotProjectId, projectId, mainDialog);
+          callbackHelpers.set(orchestratorForSkillsDialogState, true);
+        } catch (ex) {
+          handleProjectFailure(callbackHelpers, ex);
+        } finally {
+          set(botOpeningState, false);
         }
-        const skillNameIdentifier: string = await getSkillNameIdentifier(callbackHelpers, getFileNameFromPath(path));
-
-        const { projectId, mainDialog } = await openLocalSkill(callbackHelpers, path, storageId, skillNameIdentifier);
-        if (!mainDialog) {
-          const error = await snapshot.getPromise(botErrorState(projectId));
-          throw error;
-        }
-
-        if (templateId === QnABotTemplateId) {
-          callbackHelpers.set(createQnAOnState, { projectId, dialogId: mainDialog });
-          callbackHelpers.set(showCreateQnADialogState(projectId), true);
-        }
-
-        set(botProjectIdsState, (current) => [...current, projectId]);
-        await dispatcher.addLocalSkillToBotProjectFile(projectId);
-        navigateToSkillBot(rootBotProjectId, projectId, mainDialog);
-        callbackHelpers.set(orchestratorForSkillsDialogState, true);
-      } catch (ex) {
-        handleProjectFailure(callbackHelpers, ex);
-      } finally {
-        set(botOpeningState, false);
-      }
-    }
+      },
   );
 
   const addRemoteSkillToBotProject = useRecoilCallback(
-    (callbackHelpers: CallbackInterface) => async (
-      manifestUrl: string,
-      endpointName: string,
-      zipContent: Record<string, any>
-    ) => {
-      const { set, snapshot } = callbackHelpers;
-      try {
-        const dispatcher = await snapshot.getPromise(dispatcherState);
-        const rootBotProjectId = await snapshot.getPromise(rootBotProjectIdSelector);
-        if (!rootBotProjectId) return;
+    (callbackHelpers: CallbackInterface) =>
+      async (manifestUrl: string, endpointName: string, zipContent: Record<string, any>) => {
+        const { set, snapshot } = callbackHelpers;
+        try {
+          const dispatcher = await snapshot.getPromise(dispatcherState);
+          const rootBotProjectId = await snapshot.getPromise(rootBotProjectIdSelector);
+          if (!rootBotProjectId) return;
 
-        const manifestFromZip = getManifestJsonFromZip(zipContent);
-        let botNameIdentifier;
-        if (manifestFromZip.content?.name) {
-          botNameIdentifier = camelCase(manifestFromZip.content.name);
-          manifestFromZip.name = `skills/${botNameIdentifier}/${manifestFromZip.name}`;
-        }
-        const botExists = await checkIfBotExistsInBotProjectFile(
-          callbackHelpers,
-          manifestFromZip.name ? manifestFromZip.name : manifestUrl,
-          true
-        );
-        if (botExists) {
-          throw new Error(
-            formatMessage('This operation cannot be completed. The skill is already part of the Bot Project')
+          const manifestFromZip = getManifestJsonFromZip(zipContent);
+          let botNameIdentifier;
+          if (manifestFromZip.content?.name) {
+            botNameIdentifier = camelCase(manifestFromZip.content.name);
+            manifestFromZip.name = `skills/${botNameIdentifier}/${manifestFromZip.name}`;
+          }
+          const botExists = await checkIfBotExistsInBotProjectFile(
+            callbackHelpers,
+            manifestFromZip.name ? manifestFromZip.name : manifestUrl,
+            true,
           );
+          if (botExists) {
+            throw new Error(
+              formatMessage('This operation cannot be completed. The skill is already part of the Bot Project'),
+            );
+          }
+
+          set(botOpeningState, true);
+
+          const { projectId } = await openRemoteSkill(callbackHelpers, {
+            manifestUrl,
+            manifestFromZip,
+            rootBotProjectId,
+            botNameIdentifier,
+          });
+          set(botProjectIdsState, (current) => [...current, projectId]);
+          await dispatcher.addRemoteSkillToBotProjectFile(projectId, manifestUrl, zipContent, endpointName);
+          // update appsetting
+          await dispatcher.setSkillAndAllowCaller(rootBotProjectId, projectId, endpointName);
+          navigateToSkillBot(rootBotProjectId, projectId);
+        } catch (ex) {
+          handleProjectFailure(callbackHelpers, ex);
+        } finally {
+          set(botOpeningState, false);
         }
-
-        set(botOpeningState, true);
-
-        const { projectId } = await openRemoteSkill(callbackHelpers, {
-          manifestUrl,
-          manifestFromZip,
-          rootBotProjectId,
-          botNameIdentifier,
-        });
-        set(botProjectIdsState, (current) => [...current, projectId]);
-        await dispatcher.addRemoteSkillToBotProjectFile(projectId, manifestUrl, zipContent, endpointName);
-        // update appsetting
-        await dispatcher.setSkillAndAllowCaller(rootBotProjectId, projectId, endpointName);
-        navigateToSkillBot(rootBotProjectId, projectId);
-      } catch (ex) {
-        handleProjectFailure(callbackHelpers, ex);
-      } finally {
-        set(botOpeningState, false);
-      }
-    }
+      },
   );
 
   const forceMigrate = useRecoilCallback(
@@ -242,86 +237,87 @@ export const projectDispatcher = () => {
       } else {
         navigateTo(`/home`);
       }
-    }
+    },
   );
 
   const openProject = useRecoilCallback(
-    (callbackHelpers: CallbackInterface) => async (
-      path: string,
-      storageId = 'default',
-      navigate = true,
-      absData?: any,
-      callback?: (projectId: string) => void
-    ) => {
-      const { reset, set, snapshot } = callbackHelpers;
-      try {
-        set(botOpeningState, true);
+    (callbackHelpers: CallbackInterface) =>
+      async (
+        path: string,
+        storageId = 'default',
+        navigate = true,
+        absData?: any,
+        callback?: (projectId: string) => void,
+      ) => {
+        const { reset, set, snapshot } = callbackHelpers;
+        try {
+          set(botOpeningState, true);
 
-        await flushExistingTasks(callbackHelpers);
-        const { projectId, mainDialog, requiresMigrate, hasOldCustomRuntime } = await openRootBotAndSkillsByPath(
-          callbackHelpers,
-          path,
-          storageId
-        );
-        reset(watchedVariablesState(projectId));
+          await flushExistingTasks(callbackHelpers);
+          const { projectId, mainDialog, requiresMigrate, hasOldCustomRuntime } = await openRootBotAndSkillsByPath(
+            callbackHelpers,
+            path,
+            storageId,
+          );
+          reset(watchedVariablesState(projectId));
 
-        if (requiresMigrate) {
-          await forceMigrate(projectId, hasOldCustomRuntime);
-          return;
-        }
+          if (requiresMigrate) {
+            await forceMigrate(projectId, hasOldCustomRuntime);
+            return;
+          }
 
-        // ABS open Flow, update publishProfile & set alias for project after open project
-        if (absData) {
-          const { profile, source, alias } = absData;
+          // ABS open Flow, update publishProfile & set alias for project after open project
+          if (absData) {
+            const { profile, source, alias } = absData;
 
-          if (profile && alias) {
-            const dispatcher = await snapshot.getPromise(dispatcherState);
-            const { publishTargets } = await snapshot.getPromise(settingsState(projectId));
-            const newProfile = await getPublishProfileFromPayload(profile, source);
-            if (newProfile) {
-              const newPublishTargets = publishTargets
-                ? publishTargets.filter((item) => item.name !== newProfile.name)
-                : [];
-              newPublishTargets.push(newProfile);
-              dispatcher.setPublishTargets(newPublishTargets, projectId);
+            if (profile && alias) {
+              const dispatcher = await snapshot.getPromise(dispatcherState);
+              const { publishTargets } = await snapshot.getPromise(settingsState(projectId));
+              const newProfile = await getPublishProfileFromPayload(profile, source);
+              if (newProfile) {
+                const newPublishTargets = publishTargets
+                  ? publishTargets.filter((item) => item.name !== newProfile.name)
+                  : [];
+                newPublishTargets.push(newProfile);
+                dispatcher.setPublishTargets(newPublishTargets, projectId);
+              }
+              await httpClient.post(`/projects/${projectId}/alias/set`, { alias });
             }
-            await httpClient.post(`/projects/${projectId}/alias/set`, { alias });
           }
-        }
 
-        // Post project creation
-        set(projectMetaDataState(projectId), {
-          isRootBot: true,
-          isRemote: false,
-        });
-        projectIdCache.set(projectId);
+          // Post project creation
+          set(projectMetaDataState(projectId), {
+            isRootBot: true,
+            isRemote: false,
+          });
+          projectIdCache.set(projectId);
 
-        //migration on some sensitive property in browser local storage
-        for (const property of RootBotManagedProperties) {
-          const settings = settingStorage.get(projectId);
-          const value = get(settings, property, '');
-          if (!value.root && value.root !== '') {
-            const newValue = { root: value };
-            settingStorage.setField(projectId, property, newValue);
+          //migration on some sensitive property in browser local storage
+          for (const property of RootBotManagedProperties) {
+            const settings = settingStorage.get(projectId);
+            const value = get(settings, property, '');
+            if (!value.root && value.root !== '') {
+              const newValue = { root: value };
+              settingStorage.setField(projectId, property, newValue);
+            }
           }
-        }
 
-        if (navigate) {
-          navigateToBot(callbackHelpers, projectId, mainDialog);
-        }
+          if (navigate) {
+            navigateToBot(callbackHelpers, projectId, mainDialog);
+          }
 
-        if (typeof callback === 'function') {
-          callback(projectId);
+          if (typeof callback === 'function') {
+            callback(projectId);
+          }
+        } catch (ex) {
+          set(botProjectIdsState, []);
+          removeRecentProject(callbackHelpers, path);
+          handleProjectFailure(callbackHelpers, ex);
+          navigateTo('/home');
+        } finally {
+          set(botOpeningState, false);
         }
-      } catch (ex) {
-        set(botProjectIdsState, []);
-        removeRecentProject(callbackHelpers, path);
-        handleProjectFailure(callbackHelpers, ex);
-        navigateTo('/home');
-      } finally {
-        set(botOpeningState, false);
-      }
-    }
+      },
   );
 
   const fetchProjectById = useRecoilCallback((callbackHelpers: CallbackInterface) => async (projectId: string) => {
@@ -331,7 +327,7 @@ export const projectDispatcher = () => {
       set(botOpeningState, true);
       const { requiresMigrate, hasOldCustomRuntime } = await openRootBotAndSkillsByProjectId(
         callbackHelpers,
-        projectId
+        projectId,
       );
       if (requiresMigrate) {
         await forceMigrate(projectId, hasOldCustomRuntime);
@@ -445,43 +441,44 @@ export const projectDispatcher = () => {
       } finally {
         set(botOpeningState, false);
       }
-    }
+    },
   );
 
   const migrateProjectTo = useRecoilCallback(
-    (callbackHelpers: CallbackInterface) => async (
-      oldProjectId: string,
-      name: string,
-      description: string,
-      location: string,
-      runtimeLanguage: string,
-      runtimeType: string
-    ) => {
-      const { set, snapshot } = callbackHelpers;
-      try {
-        const dispatcher = await snapshot.getPromise(dispatcherState);
-        set(botOpeningState, true);
+    (callbackHelpers: CallbackInterface) =>
+      async (
+        oldProjectId: string,
+        name: string,
+        description: string,
+        location: string,
+        runtimeLanguage: string,
+        runtimeType: string,
+      ) => {
+        const { set, snapshot } = callbackHelpers;
+        try {
+          const dispatcher = await snapshot.getPromise(dispatcherState);
+          set(botOpeningState, true);
 
-        // starts the creation process and stores the jobID in state for tracking
-        const response = await migrateToV2(
-          callbackHelpers,
-          oldProjectId,
-          name,
-          description,
-          location,
-          runtimeLanguage,
-          runtimeType
-        );
+          // starts the creation process and stores the jobID in state for tracking
+          const response = await migrateToV2(
+            callbackHelpers,
+            oldProjectId,
+            name,
+            description,
+            location,
+            runtimeLanguage,
+            runtimeType,
+          );
 
-        if (response.data.jobId) {
-          dispatcher.updateCreationMessage(response.data.jobId);
+          if (response.data.jobId) {
+            dispatcher.updateCreationMessage(response.data.jobId);
+          }
+        } catch (ex) {
+          set(botProjectIdsState, []);
+          handleProjectFailure(callbackHelpers, ex);
+          navigateTo('/home');
         }
-      } catch (ex) {
-        set(botProjectIdsState, []);
-        handleProjectFailure(callbackHelpers, ex);
-        navigateTo('/home');
-      }
-    }
+      },
   );
 
   const deleteBot = useRecoilCallback((callbackHelpers: CallbackInterface) => async (projectId: string) => {
@@ -532,15 +529,17 @@ export const projectDispatcher = () => {
   });
 
   const setBotStatus = useRecoilCallback<[string, BotStatus], void>(
-    ({ set }: CallbackInterface) => (projectId: string, status: BotStatus) => {
-      set(botStatusState(projectId), status);
-    }
+    ({ set }: CallbackInterface) =>
+      (projectId: string, status: BotStatus) => {
+        set(botStatusState(projectId), status);
+      },
   );
 
   const updateCurrentTarget = useRecoilCallback<[string, PublishTarget], void>(
-    ({ set }: CallbackInterface) => (projectId: string, currentTarget) => {
-      set(currentPublishTargetState(projectId), currentTarget);
-    }
+    ({ set }: CallbackInterface) =>
+      (projectId: string, currentTarget) => {
+        set(currentPublishTargetState(projectId), currentTarget);
+      },
   );
 
   const saveTemplateId = useRecoilCallback<[string], void>(({ set }: CallbackInterface) => (templateId) => {
@@ -581,64 +580,59 @@ export const projectDispatcher = () => {
   });
 
   const updateCreationMessage = useRecoilCallback(
-    (callbackHelpers: CallbackInterface) => async (
-      jobId: string,
-      templateId?: string,
-      urlSuffix?: string,
-      profile?: any,
-      source?: any
-    ) => {
-      const timer = setInterval(async () => {
-        try {
-          const response = await httpClient.get(`/status/${jobId}`);
-          if (response.data?.httpStatusCode === 200 && response.data.result) {
-            // Bot creation successful
-            clearInterval(timer);
-            const creationFlowType = await callbackHelpers.snapshot.getPromise(creationFlowTypeState);
-
-            callbackHelpers.set(botOpeningMessage, response.data.latestMessage);
-            const { botFiles, projectData } = await loadProjectData(response.data.result);
-            const projectId = response.data.result.id;
-
-            if (creationFlowType === 'Skill') {
-              // Skill Creation
-              await addExistingSkillToBotProject(projectData.location, 'default', templateId);
-            } else {
-              // Root Bot Creation
-              await postRootBotCreation(
-                callbackHelpers,
-                projectId,
-                botFiles,
-                projectData,
-                templateId,
-                profile,
-                source,
-                projectIdCache
-              );
-            }
-            callbackHelpers.set(botOpeningMessage, '');
-            callbackHelpers.set(botOpeningState, false);
-          } else {
-            if (response.data.httpStatusCode !== 500) {
-              // pending
-              callbackHelpers.set(botOpeningMessage, response.data.latestMessage);
-            } else {
-              // failure
-              callbackHelpers.set(botOpeningState, false);
-
-              callbackHelpers.set(botOpeningMessage, response.data.latestMessage);
+    (callbackHelpers: CallbackInterface) =>
+      async (jobId: string, templateId?: string, urlSuffix?: string, profile?: any, source?: any) => {
+        const timer = setInterval(async () => {
+          try {
+            const response = await httpClient.get(`/status/${jobId}`);
+            if (response.data?.httpStatusCode === 200 && response.data.result) {
+              // Bot creation successful
               clearInterval(timer);
+              const creationFlowType = await callbackHelpers.snapshot.getPromise(creationFlowTypeState);
+
+              callbackHelpers.set(botOpeningMessage, response.data.latestMessage);
+              const { botFiles, projectData } = await loadProjectData(response.data.result);
+              const projectId = response.data.result.id;
+
+              if (creationFlowType === 'Skill') {
+                // Skill Creation
+                await addExistingSkillToBotProject(projectData.location, 'default', templateId);
+              } else {
+                // Root Bot Creation
+                await postRootBotCreation(
+                  callbackHelpers,
+                  projectId,
+                  botFiles,
+                  projectData,
+                  templateId,
+                  profile,
+                  source,
+                  projectIdCache,
+                );
+              }
+              callbackHelpers.set(botOpeningMessage, '');
+              callbackHelpers.set(botOpeningState, false);
+            } else {
+              if (response.data.httpStatusCode !== 500) {
+                // pending
+                callbackHelpers.set(botOpeningMessage, response.data.latestMessage);
+              } else {
+                // failure
+                callbackHelpers.set(botOpeningState, false);
+
+                callbackHelpers.set(botOpeningMessage, response.data.latestMessage);
+                clearInterval(timer);
+              }
             }
+          } catch (err) {
+            clearInterval(timer);
+            callbackHelpers.set(botProjectIdsState, []);
+            handleProjectFailure(callbackHelpers, err);
+            callbackHelpers.set(botOpeningState, false);
+            navigateTo('/home');
           }
-        } catch (err) {
-          clearInterval(timer);
-          callbackHelpers.set(botProjectIdsState, []);
-          handleProjectFailure(callbackHelpers, err);
-          callbackHelpers.set(botOpeningState, false);
-          navigateTo('/home');
-        }
-      }, 5000);
-    }
+        }, 5000);
+      },
   );
 
   const setCurrentProjectId = useRecoilCallback(({ set }: CallbackInterface) => async (projectId: string) => {
@@ -659,7 +653,7 @@ export const projectDispatcher = () => {
       handleProjectFailure(callbackHelpers, err);
       callbackHelpers.set(
         selectedTemplateReadMeState,
-        `### ${formatMessage('Error encountered when getting template read-me file')}`
+        `### ${formatMessage('Error encountered when getting template read-me file')}`,
       );
     } finally {
       callbackHelpers.set(fetchReadMePendingState, false);
@@ -681,7 +675,7 @@ export const projectDispatcher = () => {
   const setSelectedTemplateVersion = useRecoilCallback(
     (callbackHelpers: CallbackInterface) => (selectedVersion: string) => {
       callbackHelpers.set(selectedTemplateVersionState, selectedVersion);
-    }
+    },
   );
 
   return {

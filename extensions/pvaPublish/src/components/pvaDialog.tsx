@@ -113,7 +113,7 @@ export const PVADialog: FC = () => {
         setBot(bot);
       }
     },
-    [bots, env]
+    [bots, env],
   );
 
   useEffect(() => {

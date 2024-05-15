@@ -18,7 +18,7 @@ import { calculateBranchNodesIntervalX } from './sharedLayouterUtils';
 export function switchCaseLayouter(
   conditionNode: GraphNode | null,
   choiceNode: GraphNode,
-  branchNodes: GraphNode[] = []
+  branchNodes: GraphNode[] = [],
 ): GraphLayout {
   if (!conditionNode) {
     return new GraphLayout();
@@ -27,7 +27,7 @@ export function switchCaseLayouter(
   const containerBoundary = calculateSwitchCaseBoundary(
     conditionNode.boundary,
     choiceNode.boundary,
-    branchNodes.map((x) => x.boundary)
+    branchNodes.map((x) => x.boundary),
   );
 
   /** Calulate nodes position */
@@ -80,7 +80,7 @@ export function switchCaseLayouter(
         x: x.offset.x + x.boundary.axisX,
         y: x.offset.y + x.boundary.height,
         length: BottomelinePositionY - x.offset.y - x.boundary.height,
-      }
+      },
     );
   });
 
@@ -102,7 +102,7 @@ export function switchCaseLayouter(
         x: containerBoundary.axisX,
         y: BottomelinePositionY,
         length: baseLineLength,
-      }
+      },
     );
   }
 

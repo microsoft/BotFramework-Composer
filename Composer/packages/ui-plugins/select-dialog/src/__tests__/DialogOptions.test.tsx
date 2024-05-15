@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
 
 import React from 'react';
@@ -91,7 +92,7 @@ const renderDialogOptionsField = ({ value } = {}) => {
   return render(
     <EditorExtension shell={{ api: shell, data: shellData }}>
       <DialogOptionsField {...props} />
-    </EditorExtension>
+    </EditorExtension>,
   );
 };
 

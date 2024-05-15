@@ -19,7 +19,7 @@ if (!isMainThread) {
     false,
     log.extend('info'),
     log.extend('warn'),
-    log.extend('error')
+    log.extend('error'),
   );
 
   realMerge

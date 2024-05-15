@@ -10,7 +10,11 @@ export class Store<T extends StoreData = StoreData> {
   private path: string;
   private data: Partial<T>;
 
-  public constructor(storePath: string, private defaultValue: T, private _log?: debug.Debugger) {
+  public constructor(
+    storePath: string,
+    private defaultValue: T,
+    private _log?: debug.Debugger,
+  ) {
     this.path = storePath;
     this.data = { ...defaultValue };
 

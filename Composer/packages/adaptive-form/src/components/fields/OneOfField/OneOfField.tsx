@@ -43,9 +43,10 @@ const styles = {
   },
   nestedDropdown: {
     root: {
-      ':hover .ms-Dropdown-title, :active .ms-Dropdown-title, :hover .ms-Dropdown-caretDown, :active .ms-Dropdown-caretDown': {
-        color: FluentTheme.palette.themeDarker,
-      },
+      ':hover .ms-Dropdown-title, :active .ms-Dropdown-title, :hover .ms-Dropdown-caretDown, :active .ms-Dropdown-caretDown':
+        {
+          color: FluentTheme.palette.themeDarker,
+        },
       ':focus-within .ms-Dropdown-title, :focus-within .ms-Dropdown-caretDown': {
         color: FluentTheme.palette.accent,
       },
@@ -88,7 +89,7 @@ const OneOfField: React.FC<FieldProps> = (props) => {
   const { options, isNested } = useMemo(() => getOptions(schema, definitions), [schema, definitions]);
   const initialSelectedOption = useMemo(
     () => getSelectedOption(value, options) || ({ key: '', data: { schema: undefined } } as IDropdownOption),
-    []
+    [],
   );
 
   const [

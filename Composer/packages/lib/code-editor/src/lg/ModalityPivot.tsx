@@ -50,7 +50,7 @@ const getModalityTooltipText = (modality: ModalityType) => {
   switch (modality) {
     case 'Attachments':
       return formatMessage(
-        'List of attachments with their type. Used by channels to render as UI cards or other generic file attachment types.'
+        'List of attachments with their type. Used by channels to render as UI cards or other generic file attachment types.',
       );
     case 'Speak':
       return formatMessage('Spoken text used by the channel to render audibly.');
@@ -162,7 +162,7 @@ const renderModalityEditor = ({
 
 const getInitialModalities = (structuredResponse?: PartialStructuredResponse): ModalityType[] => {
   const modalities = Object.keys(structuredResponse || {}).filter((m) =>
-    modalityTypes.includes(m as ModalityType)
+    modalityTypes.includes(m as ModalityType),
   ) as ModalityType[];
 
   if (structuredResponse?.InputHint && !structuredResponse.Speak) {
@@ -224,7 +224,7 @@ export const ModalityPivot = React.memo((props: Props) => {
           tooltipText={getModalityTooltipText(itemProps.item.key as ModalityType)}
         />
       ),
-    []
+    [],
   );
 
   const items = useMemo<IContextualMenuItem[]>(
@@ -260,7 +260,7 @@ export const ModalityPivot = React.memo((props: Props) => {
         style: menuItemStyle,
       },
     ],
-    [renderMenuItemContent]
+    [renderMenuItemContent],
   );
 
   const pivotItems = useMemo(
@@ -269,12 +269,12 @@ export const ModalityPivot = React.memo((props: Props) => {
         .filter((m) => modalities.includes(m))
         .map((modality) => items.find(({ key }) => key === modality))
         .filter(Boolean) as IContextualMenuItem[],
-    [items, modalities]
+    [items, modalities],
   );
-  const menuItems = useMemo(() => items.filter(({ key }) => !modalities.includes(key as ModalityType)), [
-    items,
-    modalities,
-  ]);
+  const menuItems = useMemo(
+    () => items.filter(({ key }) => !modalities.includes(key as ModalityType)),
+    [items, modalities],
+  );
 
   const onRemoveModality = useCallback(
     (modality: ModalityType, keepReferencedTemplates = false) => {
@@ -320,7 +320,7 @@ export const ModalityPivot = React.memo((props: Props) => {
         telemetryClient.track('LGEditorModalityDeleted', { modality });
       }
     },
-    [lgOption, modalities, structuredResponse, telemetryClient, onRemoveTemplate, onTemplateChange]
+    [lgOption, modalities, structuredResponse, telemetryClient, onRemoveTemplate, onTemplateChange],
   );
 
   const onModalityAddMenuItemClick = useCallback(
@@ -331,7 +331,7 @@ export const ModalityPivot = React.memo((props: Props) => {
         telemetryClient.track('LGEditorModalityAdded', { modality: item.key });
       }
     },
-    [telemetryClient]
+    [telemetryClient],
   );
 
   const onPivotChange = useCallback((item?: PivotItem) => {
@@ -354,7 +354,7 @@ export const ModalityPivot = React.memo((props: Props) => {
         onTemplateChange(lgOption.templateId, mappedResponse);
       }
     },
-    [lgOption, structuredResponse, onTemplateChange]
+    [lgOption, structuredResponse, onTemplateChange],
   );
 
   const onAttachmentLayoutChange = useCallback(
@@ -363,7 +363,7 @@ export const ModalityPivot = React.memo((props: Props) => {
         AttachmentLayout: { kind: 'AttachmentLayout', value: layout } as AttachmentLayoutStructuredResponseItem,
       });
     },
-    [onUpdateResponseTemplate]
+    [onUpdateResponseTemplate],
   );
 
   const onInputHintChange = useCallback(
@@ -375,7 +375,7 @@ export const ModalityPivot = React.memo((props: Props) => {
         } as InputHintStructuredResponseItem,
       });
     },
-    [onUpdateResponseTemplate]
+    [onUpdateResponseTemplate],
   );
 
   const addMenuProps = React.useMemo<IContextualMenuProps>(
@@ -383,7 +383,7 @@ export const ModalityPivot = React.memo((props: Props) => {
       items: menuItems,
       onItemClick: onModalityAddMenuItemClick,
     }),
-    [menuItems, onModalityAddMenuItemClick]
+    [menuItems, onModalityAddMenuItemClick],
   );
 
   return (

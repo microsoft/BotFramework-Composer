@@ -20,18 +20,20 @@ import lgWorker from '../../recoilModel/parsers/lgWorker';
 import TableView from './table-view';
 const CodeEditor = React.lazy(() => import('./code-editor'));
 
-const LGPage: React.FC<RouteComponentProps<{
-  dialogId: string;
-  projectId: string;
-  skillId: string;
-  lgFileId: string;
-}>> = (props) => {
+const LGPage: React.FC<
+  RouteComponentProps<{
+    dialogId: string;
+    projectId: string;
+    skillId: string;
+    lgFileId: string;
+  }>
+> = (props) => {
   const { dialogId = '', projectId = '', skillId, lgFileId = '' } = props;
   const actualProjectId = skillId ?? projectId;
   const locale = useRecoilValue(localeState(actualProjectId));
   const lgFiles = useRecoilValue(lgFilesSelectorFamily(skillId ?? projectId));
   const [currentLg, setCurrentLg] = useRecoilState(
-    lgFileState({ projectId: actualProjectId, lgFileId: `${dialogId}.${locale}` })
+    lgFileState({ projectId: actualProjectId, lgFileId: `${dialogId}.${locale}` }),
   );
   const path = props.location?.pathname ?? '';
 
@@ -71,7 +73,7 @@ const LGPage: React.FC<RouteComponentProps<{
       navigateTo(url);
       TelemetryClient.track('EditModeToggled', { jsonView: !edit });
     },
-    [dialogId, projectId, edit, lgFileId, baseURL]
+    [dialogId, projectId, edit, lgFileId, baseURL],
   );
 
   const onRenderHeaderContent = () => {

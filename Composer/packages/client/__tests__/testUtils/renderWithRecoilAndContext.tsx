@@ -10,11 +10,11 @@ import { DispatcherWrapper } from '../../src/recoilModel';
 
 export function renderWithRecoilAndContext(
   subject,
-  initRecoilState: (mutableSnapshot: MutableSnapshot) => void = noop
+  initRecoilState: (mutableSnapshot: MutableSnapshot) => void = noop,
 ) {
   return render(
     <RecoilRoot initializeState={initRecoilState}>
       <DispatcherWrapper>{subject}</DispatcherWrapper>
-    </RecoilRoot>
+    </RecoilRoot>,
   );
 }

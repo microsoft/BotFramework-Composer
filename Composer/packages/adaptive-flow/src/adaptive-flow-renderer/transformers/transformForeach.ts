@@ -11,7 +11,7 @@ const StepsKey = AdaptiveFieldNames.Actions;
 
 export function transformForeach(
   input: any,
-  jsonpath: string
+  jsonpath: string,
 ): { foreachDetail: IndexedNode; stepGroup: IndexedNode; loopBegin: IndexedNode; loopEnd: IndexedNode } | null {
   if (!input || typeof input !== 'object') return null;
 

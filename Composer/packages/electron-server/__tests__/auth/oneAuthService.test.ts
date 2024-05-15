@@ -153,8 +153,7 @@ describe('OneAuth Serivce', () => {
 
   it('should return the shim on Linux', async () => {
     Object.assign(process.env, { ...process.env, COMPOSER_ENABLE_ONEAUTH: 'true', TEST_IS_LINUX: 'true' });
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
-    const { OneAuthService: service } = require('../../src/auth/oneAuthService');
+        const { OneAuthService: service } = require('../../src/auth/oneAuthService');
     const result = await service.getAccessToken({});
 
     expect(result).toEqual({ accessToken: '', acquiredAt: 0, expiryTime: 99999999999 });
@@ -167,8 +166,7 @@ describe('OneAuth Serivce', () => {
       NODE_ENV: 'development',
       TEST_IS_LINUX: 'false',
     });
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
-    const { OneAuthService: service } = require('../../src/auth/oneAuthService');
+        const { OneAuthService: service } = require('../../src/auth/oneAuthService');
     const result = await service.getAccessToken({});
 
     expect(result).toEqual({ accessToken: '', acquiredAt: 0, expiryTime: 99999999999 });

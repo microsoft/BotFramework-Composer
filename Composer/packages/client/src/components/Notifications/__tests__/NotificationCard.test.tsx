@@ -26,7 +26,7 @@ describe('<NotificationCard />', () => {
     const onDismiss = jest.fn();
     const handleHide = jest.fn();
     const { container } = renderWithRecoil(
-      <NotificationCard cardProps={cardProps} id="test" onDismiss={onDismiss} onHide={handleHide} />
+      <NotificationCard cardProps={cardProps} id="test" onDismiss={onDismiss} onHide={handleHide} />,
     );
 
     expect(container).toHaveTextContent('There was error creating your knowledge base');
@@ -43,7 +43,7 @@ describe('<NotificationCard />', () => {
     const onDismiss = jest.fn();
     const handleHide = jest.fn();
     const { container } = renderWithRecoil(
-      <NotificationCard cardProps={cardProps} id="test" onDismiss={onDismiss} onHide={handleHide} />
+      <NotificationCard cardProps={cardProps} id="test" onDismiss={onDismiss} onHide={handleHide} />,
     );
 
     expect(container).toHaveTextContent('customized');

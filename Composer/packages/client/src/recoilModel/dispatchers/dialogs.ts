@@ -42,22 +42,23 @@ export const dialogsDispatcher = () => {
       await removeLuFileState(callbackHelpers, { id, projectId });
       await removeQnAFileState(callbackHelpers, { id, projectId });
       removeDialogSchema(callbackHelpers, { id, projectId });
-    }
+    },
   );
 
   const updateDialog = useRecoilCallback(
-    ({ snapshot, set }: CallbackInterface) => async ({ id, content, projectId }) => {
-      // migration: add id for dialog
-      if (typeof content === 'object' && !content.id) {
-        content.id = id;
-      }
+    ({ snapshot, set }: CallbackInterface) =>
+      async ({ id, content, projectId }) => {
+        // migration: add id for dialog
+        if (typeof content === 'object' && !content.id) {
+          content.id = id;
+        }
 
-      const fixedContent = JSON.parse(autofixReferInDialog(id, JSON.stringify(content)));
+        const fixedContent = JSON.parse(autofixReferInDialog(id, JSON.stringify(content)));
 
-      const dialog = await snapshot.getPromise(dialogState({ projectId, dialogId: id }));
-      const newDialog: DialogInfo = { ...dialog, ...dialogIndexer.parse(dialog.id, fixedContent) };
-      set(dialogState({ projectId, dialogId: id }), newDialog);
-    }
+        const dialog = await snapshot.getPromise(dialogState({ projectId, dialogId: id }));
+        const newDialog: DialogInfo = { ...dialog, ...dialogIndexer.parse(dialog.id, fixedContent) };
+        set(dialogState({ projectId, dialogId: id }), newDialog);
+      },
   );
 
   const createDialogBegin = useRecoilCallback(
@@ -66,7 +67,7 @@ export const dialogsDispatcher = () => {
       set(actionsSeedState(projectId), actions);
       set(onCreateDialogCompleteState(projectId), { func: onComplete });
       set(showCreateDialogModalState, true);
-    }
+    },
   );
 
   const createDialogCancel = useRecoilCallback((callbackHelpers: CallbackInterface) => async (projectId: string) => {

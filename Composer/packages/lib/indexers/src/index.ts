@@ -33,7 +33,7 @@ class Indexer {
         [FileExtensions.Manifest]: [],
         [FileExtensions.BotProjectSpace]: [],
         [FileExtensions.CrossTrainConfig]: [],
-      }
+      },
     );
   }
 
@@ -47,7 +47,7 @@ class Indexer {
         }
         return result;
       },
-      { dialogs: [], recognizers: [] }
+      { dialogs: [], recognizers: [] },
     );
   };
 
@@ -61,7 +61,7 @@ class Indexer {
         }
         return result;
       },
-      { crossTrainConfigs: [], skillManifestFiles: [] }
+      { crossTrainConfigs: [], skillManifestFiles: [] },
     );
   };
 

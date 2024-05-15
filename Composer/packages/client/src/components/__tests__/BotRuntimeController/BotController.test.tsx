@@ -63,7 +63,7 @@ describe('<BotController />', () => {
     };
     const { findAllByText } = renderWithRecoil(
       <BotController isControllerHidden={false} onHideController={jest.fn()} />,
-      initRecoilState
+      initRecoilState,
     );
     await findAllByText('Restart all bots (2/3 running)');
   });
@@ -78,7 +78,7 @@ describe('<BotController />', () => {
     };
     const { findByText } = renderWithRecoil(
       <BotController isControllerHidden={false} onHideController={jest.fn()} />,
-      initRecoilState
+      initRecoilState,
     );
     await findByText('Start all');
   });
@@ -93,7 +93,7 @@ describe('<BotController />', () => {
     };
     const { findByTestId } = renderWithRecoil(
       <BotController isControllerHidden={false} onHideController={jest.fn()} />,
-      initRecoilState
+      initRecoilState,
     );
     const button = await findByTestId('button');
 
@@ -113,7 +113,7 @@ describe('<BotController />', () => {
     };
     const { findByTestId } = renderWithRecoil(
       <BotController isControllerHidden={false} onHideController={jest.fn()} />,
-      initRecoilState
+      initRecoilState,
     );
     const button = await findByTestId('button');
 
@@ -135,7 +135,7 @@ describe('<BotController />', () => {
     };
     const { findByText } = renderWithRecoil(
       <BotController isControllerHidden={false} onHideController={jest.fn()} />,
-      initRecoilState
+      initRecoilState,
     );
     await findByText('Starting bots.. (1/4 running)');
   });
@@ -151,7 +151,7 @@ describe('<BotController />', () => {
     };
     const { findByText } = renderWithRecoil(
       <BotController isControllerHidden={false} onHideController={jest.fn()} />,
-      initRecoilState
+      initRecoilState,
     );
     await findByText('Stopping bots.. (2/4 running)');
   });

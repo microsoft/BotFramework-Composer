@@ -17,7 +17,7 @@ describe('resolveFieldWidget', () => {
         type: 'string' as const,
       };
 
-      // @ts-ignore
+      // @ts-expect-error test
       const { field: ReturnedField } = resolveFieldWidget({ schema, uiOptions });
       expect(ReturnedField).toEqual(TestField);
     });

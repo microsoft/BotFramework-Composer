@@ -91,7 +91,7 @@ export const ProfileFormDialog: React.FC<ProfileFormDialogProps> = (props) => {
         setTargetType(type.name);
       }
     },
-    [types]
+    [types],
   );
 
   const saveDisabled = useMemo(() => {

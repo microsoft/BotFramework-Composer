@@ -18,7 +18,7 @@ export const substringSearchStrategy = <T, K extends keyof T>(
   haystack: T[],
   needle: string,
   keyParam?: K,
-  searchFn?: (item: T, query: string) => boolean
+  searchFn?: (item: T, query: string) => boolean,
 ): T[] => {
   const query = (needle || '').toLocaleLowerCase();
 

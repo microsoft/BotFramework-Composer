@@ -6,8 +6,10 @@ import type { Duplex } from 'stream';
 
 import portfinder from 'portfinder';
 import express, { Request, Response } from 'express';
-import { Server as WSServer } from 'ws';
+import WS from 'ws';
 import { Debugger } from 'debug';
+
+const { Server: WSServer } = WS;
 
 interface WebSocket {
   close(): void;
@@ -25,7 +27,7 @@ type CustomReq = CustomHttpReq | IncomingMessage;
 
 export class RuntimeLogServer {
   private static restServer: http.Server;
-  private static servers: WSServer = {};
+  private static servers: typeof WSServer = {};
   private static sockets: Record<string, WebSocket> = {};
   private static port: number;
   private static hostname: string;
@@ -103,7 +105,7 @@ export class RuntimeLogServer {
       JSON.stringify({
         standardOutput,
         standardError,
-      })
+      }),
     );
   }
 }

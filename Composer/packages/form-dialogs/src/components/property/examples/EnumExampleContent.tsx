@@ -68,7 +68,7 @@ export const EnumExampleContent = (props: Props) => {
       exampleData[currentLocale] && Object.keys(exampleData[currentLocale])
         ? Object.keys(exampleData[currentLocale])[0]
         : `${propertyName}Value`,
-    [exampleData, currentLocale, propertyName]
+    [exampleData, currentLocale, propertyName],
   );
 
   const addLocale = () => {

@@ -8,6 +8,7 @@ import { createMissingLgTemplatesForDialogs } from '../lgUtil';
 jest.mock('../../recoilModel/parsers/lgWorker', () => {
   return {
     addTemplates: (projectId, lgFile, templatesToAdd, lgFiles) =>
+      // eslint-disable-next-line @typescript-eslint/no-var-requires
       require('@bfc/indexers/lib/utils/lgUtil').addTemplates(lgFile, templatesToAdd),
   };
 });

@@ -58,12 +58,12 @@ const qnAProvisionMethod = (provisionConfig: ProvisionServiceConfig): ProvisionM
   const tokenCredentials = new TokenCredentials(provisionConfig.accessToken);
   const applicationInsightsManagementClient = new ApplicationInsightsManagementClient(
     tokenCredentials,
-    provisionConfig.subscriptionId
+    provisionConfig.subscriptionId,
   );
   const webSiteManagementClient = new WebSiteManagementClient(tokenCredentials, provisionConfig.subscriptionId);
   const cognitiveServicesManagementClient = new CognitiveServicesManagementClient(
     tokenCredentials,
-    provisionConfig.subscriptionId
+    provisionConfig.subscriptionId,
   );
 
   const createOrUpdateSearchService = async (config: QnAResourceConfig, qnaMakerSearchName: string) => {
@@ -102,7 +102,7 @@ const qnAProvisionMethod = (provisionConfig: ProvisionServiceConfig): ProvisionM
   const createOrUpdateQnAAccount = async (
     config: QnAResourceConfig,
     qnaMakerServiceName: string,
-    qnaEndpoint: string
+    qnaEndpoint: string,
   ) => {
     return await cognitiveServicesManagementClient.accounts.create(config.resourceGroupName, qnaMakerServiceName, {
       kind: 'QnAMaker',
@@ -121,7 +121,7 @@ const qnAProvisionMethod = (provisionConfig: ProvisionServiceConfig): ProvisionM
   const getSubscriptionKey = async (config: QnAResourceConfig, qnaMakerServiceName: string) => {
     const keys = await cognitiveServicesManagementClient.accounts.listKeys(
       config.resourceGroupName,
-      qnaMakerServiceName
+      qnaMakerServiceName,
     );
     return keys?.key1 ?? '';
   };
@@ -132,11 +132,11 @@ const qnAProvisionMethod = (provisionConfig: ProvisionServiceConfig): ProvisionM
     servicePlanName: string,
     qnaMakerSearchName: string,
     azureSearchAdminKey: string,
-    appInsightsName: string
+    appInsightsName: string,
   ) => {
     const appInsightsComponent = await applicationInsightsManagementClient.components.get(
       config.resourceGroupName,
-      appInsightsName
+      appInsightsName,
     );
     const userAppInsightsKey = appInsightsComponent.instrumentationKey;
     const userAppInsightsName = appInsightsName;
@@ -236,7 +236,7 @@ const qnAProvisionMethod = (provisionConfig: ProvisionServiceConfig): ProvisionM
         servicePlanResult.name,
         qnaMakerSearchName,
         azureSearchAdminKey,
-        qnaAppInsightsName
+        qnaAppInsightsName,
       );
 
       // Create qna account

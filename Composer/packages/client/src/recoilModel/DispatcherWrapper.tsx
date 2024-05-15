@@ -2,7 +2,6 @@
 // Licensed under the MIT License.
 
 import React, { useRef, useState, Fragment, useLayoutEffect, MutableRefObject } from 'react';
-// eslint-disable-next-line @typescript-eslint/camelcase
 import { useRecoilTransactionObserver_UNSTABLE, Snapshot, useRecoilState } from 'recoil';
 import once from 'lodash/once';
 import { BotAssets } from '@bfc/shared';
