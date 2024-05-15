@@ -22,7 +22,7 @@ describe('<ExternalService />', () => {
   it('should render root external service view', async () => {
     const component = renderWithRecoilAndCustomDispatchers(
       <ExternalService projectId={mockRootProjId} />,
-      initRecoilState
+      initRecoilState,
     );
     const skillBotTextNode = await component.queryByTestId('skillQnaAuthoringBtn');
     expect(skillBotTextNode).toBeFalsy();
@@ -31,7 +31,7 @@ describe('<ExternalService />', () => {
   it('should render skill external service view', async () => {
     const component = renderWithRecoilAndCustomDispatchers(
       <ExternalService projectId={mockSkillProjId} />,
-      initRecoilState
+      initRecoilState,
     );
     const skillBotTextNode = await component.queryByTestId('skillQnaAuthoringBtn');
     expect(skillBotTextNode).toBeTruthy();

@@ -38,177 +38,168 @@ export const navigationDispatcher = () => {
       const focusPath = `${dialogId}#${focused ? `.${focused}` : selected ? `.${selected}` : ''}`;
       set(focusPathState(projectId), focusPath);
       set(designPageLocationState(projectId), location);
-    }
+    },
   );
 
   const navTo = useRecoilCallback(
-    (callbackInterface: CallbackInterface) => async (
-      skillId: string | null,
-      dialogId: string | null,
-      trigger?: string
-    ) => {
-      const { set, snapshot } = callbackInterface;
-      const rootBotProjectId = await snapshot.getPromise(rootBotProjectIdSelector);
-      if (rootBotProjectId == null) return;
+    (callbackInterface: CallbackInterface) =>
+      async (skillId: string | null, dialogId: string | null, trigger?: string) => {
+        const { set, snapshot } = callbackInterface;
+        const rootBotProjectId = await snapshot.getPromise(rootBotProjectIdSelector);
+        if (rootBotProjectId == null) return;
 
-      const projectId = skillId ?? rootBotProjectId;
-      const topics = await snapshot.getPromise(topicsSelectorFamily(projectId));
+        const projectId = skillId ?? rootBotProjectId;
+        const topics = await snapshot.getPromise(topicsSelectorFamily(projectId));
 
-      await setCurrentProjectId(callbackInterface, projectId);
+        await setCurrentProjectId(callbackInterface, projectId);
 
-      // check to see if navigating to PVA topic
-      const topic = topics.find((t) => t.content?.id === dialogId);
-      if (topic) {
-        if (topic?.content?.$designer?.link) {
-          // eslint-disable-next-line security/detect-non-literal-fs-filename
-          window.open(topic.content.$designer.link as string, '_blank');
+        // check to see if navigating to PVA topic
+        const topic = topics.find((t) => t.content?.id === dialogId);
+        if (topic) {
+          if (topic?.content?.$designer?.link) {
+            // eslint-disable-next-line security/detect-non-literal-fs-filename
+            window.open(topic.content.$designer.link as string, '_blank');
+          }
+          // no-op even if topic has no link
+          return;
         }
-        // no-op even if topic has no link
-        return;
-      }
 
-      const currentUri =
-        trigger == null
-          ? convertPathToUrl(rootBotProjectId, skillId, dialogId)
-          : convertPathToUrl(rootBotProjectId, skillId, dialogId, `selected=triggers[${trigger}]`);
+        const currentUri =
+          trigger == null
+            ? convertPathToUrl(rootBotProjectId, skillId, dialogId)
+            : convertPathToUrl(rootBotProjectId, skillId, dialogId, `selected=triggers[${trigger}]`);
 
-      set(designPageLocationState(projectId), {
-        dialogId: dialogId ?? '',
-        selected: trigger ?? '',
-        focused: '',
-        promptTab: undefined,
-      });
-      navigateTo(currentUri);
-    }
+        set(designPageLocationState(projectId), {
+          dialogId: dialogId ?? '',
+          selected: trigger ?? '',
+          focused: '',
+          promptTab: undefined,
+        });
+        navigateTo(currentUri);
+      },
   );
 
   const selectTo = useRecoilCallback(
-    (callbackInterface: CallbackInterface) => async (
-      skillId: string | null,
-      destinationDialogId: string | null,
-      selectPath: string
-    ) => {
-      if (!selectPath) return;
+    (callbackInterface: CallbackInterface) =>
+      async (skillId: string | null, destinationDialogId: string | null, selectPath: string) => {
+        if (!selectPath) return;
 
-      const { set, snapshot } = callbackInterface;
-      const rootBotProjectId = await snapshot.getPromise(rootBotProjectIdSelector);
-      if (rootBotProjectId == null) return;
+        const { set, snapshot } = callbackInterface;
+        const rootBotProjectId = await snapshot.getPromise(rootBotProjectIdSelector);
+        if (rootBotProjectId == null) return;
 
-      const projectId = skillId ?? rootBotProjectId;
+        const projectId = skillId ?? rootBotProjectId;
 
-      await setCurrentProjectId(callbackInterface, projectId);
+        await setCurrentProjectId(callbackInterface, projectId);
 
-      const designPageLocation = await snapshot.getPromise(designPageLocationState(projectId));
+        const designPageLocation = await snapshot.getPromise(designPageLocationState(projectId));
 
-      // target dialogId, projectId maybe empty string  ""
-      const dialogId = destinationDialogId ?? designPageLocation.dialogId ?? 'Main';
+        // target dialogId, projectId maybe empty string  ""
+        const dialogId = destinationDialogId ?? designPageLocation.dialogId ?? 'Main';
 
-      const dialogs = await snapshot.getPromise(dialogsSelectorFamily(projectId));
-      const currentDialog = dialogs.find(({ id }) => id === dialogId);
-      const encodedSelectPath = encodeArrayPathToDesignerPath(currentDialog?.content, selectPath);
-      const currentUri = convertPathToUrl(rootBotProjectId, skillId, dialogId, encodedSelectPath);
+        const dialogs = await snapshot.getPromise(dialogsSelectorFamily(projectId));
+        const currentDialog = dialogs.find(({ id }) => id === dialogId);
+        const encodedSelectPath = encodeArrayPathToDesignerPath(currentDialog?.content, selectPath);
+        const currentUri = convertPathToUrl(rootBotProjectId, skillId, dialogId, encodedSelectPath);
 
-      if (checkUrl(currentUri, rootBotProjectId, skillId, designPageLocation)) return;
-      set(designPageLocationState(projectId), {
-        dialogId,
-        selected: selectPath,
-        focused: '',
-        promptTab: undefined,
-      });
-      navigateTo(currentUri);
-    }
+        if (checkUrl(currentUri, rootBotProjectId, skillId, designPageLocation)) return;
+        set(designPageLocationState(projectId), {
+          dialogId,
+          selected: selectPath,
+          focused: '',
+          promptTab: undefined,
+        });
+        navigateTo(currentUri);
+      },
   );
 
   const focusTo = useRecoilCallback(
-    (callbackInterface: CallbackInterface) => async (
-      projectId: string,
-      skillId: string | null,
-      focusPath: string,
-      fragment: string
-    ) => {
-      const { set, snapshot } = callbackInterface;
-      await setCurrentProjectId(callbackInterface, skillId ?? projectId);
+    (callbackInterface: CallbackInterface) =>
+      async (projectId: string, skillId: string | null, focusPath: string, fragment: string) => {
+        const { set, snapshot } = callbackInterface;
+        await setCurrentProjectId(callbackInterface, skillId ?? projectId);
 
-      const designPageLocation = await snapshot.getPromise(designPageLocationState(skillId ?? projectId));
-      const { dialogId, selected } = designPageLocation;
+        const designPageLocation = await snapshot.getPromise(designPageLocationState(skillId ?? projectId));
+        const { dialogId, selected } = designPageLocation;
 
-      const dialogs = await snapshot.getPromise(dialogsSelectorFamily(projectId));
-      const currentDialog = dialogs.find(({ id }) => id === dialogId);
-
-      const encodedSelectPath = encodeArrayPathToDesignerPath(currentDialog?.content, selected);
-
-      let currentUri =
-        skillId == null || skillId === projectId
-          ? `/bot/${projectId}/dialogs/${dialogId}`
-          : `/bot/${projectId}/skill/${skillId}/dialogs/${dialogId}`;
-
-      if (focusPath) {
-        const dialogs = await snapshot.getPromise(dialogsSelectorFamily(skillId ?? projectId));
+        const dialogs = await snapshot.getPromise(dialogsSelectorFamily(projectId));
         const currentDialog = dialogs.find(({ id }) => id === dialogId);
-        const encodedFocusPath = encodeArrayPathToDesignerPath(currentDialog?.content, focusPath);
 
-        const targetSelected = getSelected(encodedFocusPath);
+        const encodedSelectPath = encodeArrayPathToDesignerPath(currentDialog?.content, selected);
 
-        currentUri = `${currentUri}?selected=${targetSelected}&focused=${encodedFocusPath}`;
-      } else {
-        currentUri = `${currentUri}?selected=${encodedSelectPath}`;
-      }
-
-      if (fragment && typeof fragment === 'string') {
-        currentUri += `#${fragment}`;
-      }
-      if (checkUrl(currentUri, projectId, skillId, designPageLocation)) return;
-
-      set(designPageLocationState(skillId || projectId), {
-        dialogId,
-        selected: getSelected(focusPath) || encodedSelectPath,
-        focused: focusPath ?? '',
-        promptTab: Object.values(PromptTab).find((value) => fragment === value),
-      });
-      navigateTo(currentUri);
-    }
-  );
-
-  const selectAndFocus = useRecoilCallback(
-    ({ snapshot, set }: CallbackInterface) => async (
-      projectId: string,
-      skillId: string | null,
-      dialogId: string,
-      selectPath: string,
-      focusPath: string,
-      fragment?: string
-    ) => {
-      set(currentProjectIdState, projectId);
-
-      const dialogs = await snapshot.getPromise(dialogsSelectorFamily(projectId));
-      const currentDialog = dialogs.find(({ id }) => id === dialogId)?.content;
-      const encodedSelectPath = encodeArrayPathToDesignerPath(currentDialog, selectPath);
-      const encodedFocusPath = encodeArrayPathToDesignerPath(currentDialog, focusPath);
-      const search = getUrlSearch(encodedSelectPath, encodedFocusPath);
-      const designPageLocation = await snapshot.getPromise(designPageLocationState(projectId));
-      if (search) {
         let currentUri =
           skillId == null || skillId === projectId
-            ? `/bot/${projectId}/dialogs/${dialogId}${search}`
-            : `/bot/${projectId}/skill/${skillId}/dialogs/${dialogId}${search}`;
+            ? `/bot/${projectId}/dialogs/${dialogId}`
+            : `/bot/${projectId}/skill/${skillId}/dialogs/${dialogId}`;
+
+        if (focusPath) {
+          const dialogs = await snapshot.getPromise(dialogsSelectorFamily(skillId ?? projectId));
+          const currentDialog = dialogs.find(({ id }) => id === dialogId);
+          const encodedFocusPath = encodeArrayPathToDesignerPath(currentDialog?.content, focusPath);
+
+          const targetSelected = getSelected(encodedFocusPath);
+
+          currentUri = `${currentUri}?selected=${targetSelected}&focused=${encodedFocusPath}`;
+        } else {
+          currentUri = `${currentUri}?selected=${encodedSelectPath}`;
+        }
 
         if (fragment && typeof fragment === 'string') {
           currentUri += `#${fragment}`;
         }
-
         if (checkUrl(currentUri, projectId, skillId, designPageLocation)) return;
 
-        set(designPageLocationState(projectId), {
+        set(designPageLocationState(skillId || projectId), {
           dialogId,
-          selected: getSelected(focusPath) || selectPath,
+          selected: getSelected(focusPath) || encodedSelectPath,
           focused: focusPath ?? '',
           promptTab: Object.values(PromptTab).find((value) => fragment === value),
         });
         navigateTo(currentUri);
-      } else {
-        navTo(skillId ?? projectId, dialogId);
-      }
-    }
+      },
+  );
+
+  const selectAndFocus = useRecoilCallback(
+    ({ snapshot, set }: CallbackInterface) =>
+      async (
+        projectId: string,
+        skillId: string | null,
+        dialogId: string,
+        selectPath: string,
+        focusPath: string,
+        fragment?: string,
+      ) => {
+        set(currentProjectIdState, projectId);
+
+        const dialogs = await snapshot.getPromise(dialogsSelectorFamily(projectId));
+        const currentDialog = dialogs.find(({ id }) => id === dialogId)?.content;
+        const encodedSelectPath = encodeArrayPathToDesignerPath(currentDialog, selectPath);
+        const encodedFocusPath = encodeArrayPathToDesignerPath(currentDialog, focusPath);
+        const search = getUrlSearch(encodedSelectPath, encodedFocusPath);
+        const designPageLocation = await snapshot.getPromise(designPageLocationState(projectId));
+        if (search) {
+          let currentUri =
+            skillId == null || skillId === projectId
+              ? `/bot/${projectId}/dialogs/${dialogId}${search}`
+              : `/bot/${projectId}/skill/${skillId}/dialogs/${dialogId}${search}`;
+
+          if (fragment && typeof fragment === 'string') {
+            currentUri += `#${fragment}`;
+          }
+
+          if (checkUrl(currentUri, projectId, skillId, designPageLocation)) return;
+
+          set(designPageLocationState(projectId), {
+            dialogId,
+            selected: getSelected(focusPath) || selectPath,
+            focused: focusPath ?? '',
+            promptTab: Object.values(PromptTab).find((value) => fragment === value),
+          });
+          navigateTo(currentUri);
+        } else {
+          navTo(skillId ?? projectId, dialogId);
+        }
+      },
   );
 
   return {

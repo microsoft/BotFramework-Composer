@@ -7,7 +7,7 @@ import { throwNotImplementedError } from '../throwNotImplementedError';
 
 export const createCosmosDBService = (token: string, subscriptionId: string) => {
   const tokenCredentials = new TokenCredentials(token);
-  // @ts-expect-error
+  // @ts-expect-error types missmatch
   const cosmosDBManagementClient = new CosmosDBManagementClient(tokenCredentials, subscriptionId);
 
   const checkNameAvailability = async () => {

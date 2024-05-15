@@ -102,7 +102,7 @@ export const ContentEditable = (props: ContentEditableProps) => {
         return;
       }
     },
-    [removeOnBackspace, onRemove, focusInputRef]
+    [removeOnBackspace, onRemove, focusInputRef],
   );
 
   return (

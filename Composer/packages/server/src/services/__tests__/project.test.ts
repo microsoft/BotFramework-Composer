@@ -69,7 +69,7 @@ describe('test BotProjectService', () => {
     const projectId = await BotProjectService.openProject(location1);
     const otherId = '12345.678';
     await expect(BotProjectService.getProjectById(otherId)).rejects.toThrowError(
-      `project ${otherId} not found in cache`
+      `project ${otherId} not found in cache`,
     );
     expect((await BotProjectService.getProjectById(projectId)).dir).toBe(projPath);
   });
@@ -107,7 +107,7 @@ describe('test BotProjectService', () => {
       const error = new Error('There was a project cloning the files.');
       mockProject.cloneFiles.mockRejectedValueOnce(error);
       expect(async () => await BotProjectService.backupProject(mockProject)).rejects.toThrowError(
-        new Error(`Failed to backup project ${mockProject.id}: ${error}`)
+        new Error(`Failed to backup project ${mockProject.id}: ${error}`),
       );
     });
   });

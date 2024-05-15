@@ -35,7 +35,7 @@ const createObjectItem = <ValueType = unknown>(propertyName = '', propertyValue?
 export const getPropertyItemProps = <ValueType = unknown>(
   items: ObjectItem<ValueType>[],
   index: number,
-  onChange: any
+  onChange: any,
 ) => {
   const handlePropertyNameChange = (propertyName: string) => {
     const updated = items.map((item, idx) => (idx === index ? { ...item, propertyName } : item));
@@ -60,7 +60,7 @@ export const getPropertyItemProps = <ValueType = unknown>(
 
 export function useObjectItems<ValueType = unknown>(
   items: ItemType<ValueType>,
-  onChange: ChangeHandler<ItemType<ValueType>>
+  onChange: ChangeHandler<ItemType<ValueType>>,
 ): ObjectItemState<ValueType> {
   const [cache, setCache] = useState(generateObjectEntries(items));
 

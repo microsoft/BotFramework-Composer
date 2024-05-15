@@ -58,5 +58,5 @@ export const SearchableDropdownTextField = React.forwardRef(
         onKeyDown={interceptKeyDown}
       />
     );
-  }
+  },
 );

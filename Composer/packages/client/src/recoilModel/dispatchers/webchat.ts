@@ -26,33 +26,31 @@ export const webChatLogDispatcher = () => {
   });
 
   const appendWebChatTraffic = useRecoilCallback(
-    (callbackHelpers: CallbackInterface) => (
-      projectId: string,
-      traffic: ConversationTrafficItem | ConversationTrafficItem[]
-    ) => {
-      const { set } = callbackHelpers;
-      set(webChatTrafficState(projectId), (currentTraffic) => {
-        if (Array.isArray(traffic)) {
-          return [...currentTraffic, ...traffic].sort((t1, t2) => t1.timestamp - t2.timestamp);
-        } else {
-          return [...currentTraffic, traffic].sort((t1, t2) => t1.timestamp - t2.timestamp);
-        }
-      });
-    }
+    (callbackHelpers: CallbackInterface) =>
+      (projectId: string, traffic: ConversationTrafficItem | ConversationTrafficItem[]) => {
+        const { set } = callbackHelpers;
+        set(webChatTrafficState(projectId), (currentTraffic) => {
+          if (Array.isArray(traffic)) {
+            return [...currentTraffic, ...traffic].sort((t1, t2) => t1.timestamp - t2.timestamp);
+          } else {
+            return [...currentTraffic, traffic].sort((t1, t2) => t1.timestamp - t2.timestamp);
+          }
+        });
+      },
   );
 
   const setWebChatInspectionData = useRecoilCallback(
     (callbackHelpers: CallbackInterface) => (projectId: string, inspectionData: WebChatInspectionData) => {
       const { set } = callbackHelpers;
       set(webChatInspectionDataState(projectId), inspectionData);
-    }
+    },
   );
 
   const setWatchedVariables = useRecoilCallback(
     (callbackHelpers: CallbackInterface) => (projectId: string, variables: Record<string, string>) => {
       const { set } = callbackHelpers;
       set(watchedVariablesState(projectId), variables);
-    }
+    },
   );
 
   return {

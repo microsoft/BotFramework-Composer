@@ -79,7 +79,7 @@ const CreateActionContent = () => {
       <Summary>
         <Text>
           {formatMessage(
-            'Select this option when you want to provision new Azure resources and publish a bot. A subscription to'
+            'Select this option when you want to provision new Azure resources and publish a bot. A subscription to',
           )}
         </Text>
         &nbsp;
@@ -138,14 +138,14 @@ const ImportActionContent = () => {
         <p>
           <Text>
             {formatMessage(
-              'Select this option if you have access to existing Azure resources and their associated values.'
+              'Select this option if you have access to existing Azure resources and their associated values.',
             )}
           </Text>
         </p>
         <p>
           <Text>
             {formatMessage(
-              'Copy and paste the JSON file containing the values of your existing Azure resources, from the Azure portal. This file includes values for some or all of the following:'
+              'Copy and paste the JSON file containing the values of your existing Azure resources, from the Azure portal. This file includes values for some or all of the following:',
             )}
           </Text>
         </p>
@@ -190,7 +190,7 @@ const GenerateActionContent = () => {
       <Summary>
         <Text>
           {formatMessage(
-            'Select this option to request your Azure admin to provision resources on your behalf, for example, when you don’t have proper permissions to use Azure or you want to generate resources from a sovereign cloud.'
+            'Select this option to request your Azure admin to provision resources on your behalf, for example, when you don’t have proper permissions to use Azure or you want to generate resources from a sovereign cloud.',
           )}
         </Text>
       </Summary>
@@ -200,7 +200,7 @@ const GenerateActionContent = () => {
           <InstructionDetails>
             <Text>
               {formatMessage(
-                'Add resources you need for the bot and generate a resource request to share with your Azure admin.'
+                'Add resources you need for the bot and generate a resource request to share with your Azure admin.',
               )}
             </Text>
           </InstructionDetails>
@@ -210,7 +210,7 @@ const GenerateActionContent = () => {
           <InstructionDetails>
             <Text>
               {formatMessage(
-                'Once you get the resource details from your Azure admin, use them to import existing resources.'
+                'Once you get the resource details from your Azure admin, use them to import existing resources.',
               )}
             </Text>
           </InstructionDetails>

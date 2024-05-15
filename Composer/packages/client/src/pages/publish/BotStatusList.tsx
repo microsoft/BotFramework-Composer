@@ -101,13 +101,12 @@ export const BotStatusList: React.FC<BotStatusListProps> = ({
 
   const getPublishTargetOptions = (item: BotStatus): IDropdownOption[] => {
     const options: IDropdownOption[] = [];
-    item.publishTargets &&
-      item.publishTargets.forEach((target, index) => {
-        options.push({
-          key: target.name,
-          text: target.name,
-        });
+    item.publishTargets?.forEach((target, index) => {
+      options.push({
+        key: target.name,
+        text: target.name,
       });
+    });
     options.push({
       key: 'manageProfiles',
       text: formatMessage('Manage profiles'),
@@ -130,7 +129,7 @@ export const BotStatusList: React.FC<BotStatusListProps> = ({
   const handleChangePublishTarget = (
     event: React.FormEvent<HTMLDivElement>,
     item: BotStatus,
-    option?: IDropdownOption
+    option?: IDropdownOption,
   ): void => {
     if (option) {
       if (option.key === 'manageProfiles') {

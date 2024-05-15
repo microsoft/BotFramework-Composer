@@ -55,7 +55,7 @@ export class KeyVaultApi {
     vaultName: string,
     email: string,
     objectId: string,
-    tenantId: string
+    tenantId: string,
   ) {
     const keyVaultManagementClient = new KeyVaultManagementClient(this.creds, this.subscriptionId);
     const setResult = await keyVaultManagementClient.vaults.update(resourceGroupName, vaultName, {
@@ -129,7 +129,7 @@ export class KeyVaultApi {
         properties: {
           MicrosoftAppPassword: `@Microsoft.KeyVault(SecretUri=${secretUri})`,
         },
-      }
+      },
     );
     if (updateResult._response.status >= 300) {
       this.logger({
@@ -149,7 +149,7 @@ export class KeyVaultApi {
         properties: {
           MicrosoftAppPassword: secretValue,
         },
-      }
+      },
     );
     if (updateResult._response.status >= 300) {
       this.logger({

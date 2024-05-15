@@ -14,7 +14,7 @@ export function ifElseLayouter(
   conditionNode: GraphNode | null,
   choiceNode: GraphNode | null,
   ifNode: GraphNode,
-  elseNode: GraphNode
+  elseNode: GraphNode,
 ): GraphLayout {
   if (!conditionNode || !choiceNode) return new GraphLayout();
 
@@ -22,7 +22,7 @@ export function ifElseLayouter(
     conditionNode.boundary,
     choiceNode.boundary,
     ifNode.boundary,
-    elseNode.boundary
+    elseNode.boundary,
   );
 
   const leftNode = ifNode || new GraphNode();
@@ -141,7 +141,7 @@ export function ifElseLayouter(
         x: containerBoundary.axisX,
         y: containerBoundary.height,
         length: rightNode.offset.x + rightNode.boundary.axisX - containerBoundary.axisX,
-      }
+      },
     );
   } else {
     edgeList.push(
@@ -165,7 +165,7 @@ export function ifElseLayouter(
         x: containerBoundary.axisX,
         y: containerBoundary.height,
         length: containerBoundary.width - containerBoundary.axisX,
-      }
+      },
     );
   }
 
@@ -185,7 +185,7 @@ export function ifElseLayouter(
         x: containerBoundary.axisX,
         y: leftNode.offset.y + leftNode.boundary.height,
         length: containerBoundary.height - (leftNode.offset.y + leftNode.boundary.height),
-      }
+      },
     );
   } else {
     edgeList.push({

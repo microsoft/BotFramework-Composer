@@ -1,6 +1,6 @@
 {
   "short_name": "Composer",
-  "name": "BotFramework Composer",
+  "name": "Bot Framework Composer",
   "icons": [
     {
       "src": "composerfavicon.ico",

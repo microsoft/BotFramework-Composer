@@ -62,10 +62,12 @@ enum PivotItemKey {
 
 // -------------------- BotProjectSettingsTabView -------------------- //
 
-export const BotProjectSettingsTabView: React.FC<RouteComponentProps<{
-  projectId: string;
-  scrollToSectionId: string;
-}>> = (props) => {
+export const BotProjectSettingsTabView: React.FC<
+  RouteComponentProps<{
+    projectId: string;
+    scrollToSectionId: string;
+  }>
+> = (props) => {
   const { projectId = '', scrollToSectionId = '' } = props;
   const botProjects = useRecoilValue(localBotsDataSelector);
   const botProject = botProjects.find((b) => b.projectId === projectId);

@@ -24,12 +24,12 @@ export const UNDO_LIMIT = 10;
 export const Tips = {
   get PROJECT_NAME() {
     return formatMessage(
-      `Create a name for the project which will be used to name the application: (projectname-environment-LUfilename)`
+      `Create a name for the project which will be used to name the application: (projectname-environment-LUfilename)`,
     );
   },
   get ENVIRONMENT() {
     return formatMessage(
-      `When multiple people are working with models you want to be able to work with models independently from each other tied to the source control.`
+      `When multiple people are working with models you want to be able to work with models independently from each other tied to the source control.`,
     );
   },
   get AUTHORING_KEY() {
@@ -46,7 +46,7 @@ export const Tips = {
   },
   get DEFAULT_LANGUAGE() {
     return formatMessage(
-      `Configures default language model to use if there is no culture code in the file name (Default: en-us)`
+      `Configures default language model to use if there is no culture code in the file name (Default: en-us)`,
     );
   },
 };
@@ -77,12 +77,12 @@ export const Text = {
   },
   get LUISDEPLOY() {
     return formatMessage(
-      `If you already have a LUIS account, provide the information below. If you do not have an account yet, create a (free) account first.`
+      `If you already have a LUIS account, provide the information below. If you do not have an account yet, create a (free) account first.`,
     );
   },
   get QNADEPLOY() {
     return formatMessage(
-      `If you already have a QNA account, provide the information below. If you do not have an account yet, create a (free) account first.`
+      `If you already have a QNA account, provide the information below. If you do not have an account yet, create a (free) account first.`,
     );
   },
   get LUISDEPLOYSUCCESS() {
@@ -202,7 +202,7 @@ export const DialogCreationCopy = {
     return {
       title: formatMessage('Choose a bot project for your Azure Bot'),
       subText: formatMessage(
-        'Use your Azure Bot resource with a new or existing bot project. You can publish your bot project directly to Azure using the publishing profile created for you.'
+        'Use your Azure Bot resource with a new or existing bot project. You can publish your bot project directly to Azure using the publishing profile created for you.',
       ),
     };
   },
@@ -222,7 +222,7 @@ export const DialogCreationCopy = {
     return {
       title: formatMessage('Define conversation objective'),
       subText: formatMessage(
-        `What can the user accomplish through this conversation? For example, BookATable, OrderACoffee etc.`
+        `What can the user accomplish through this conversation? For example, BookATable, OrderACoffee etc.`,
       ),
     };
   },
@@ -260,7 +260,7 @@ export const DialogCreationCopy = {
     return {
       title: formatMessage('Add QnA Maker knowledge base'),
       subText: formatMessage(
-        'Extract question-and-answer pairs from an online FAQ, product manuals, or other files. Supported formats are .tsv, .pdf, .doc, .docx, .xlsx, containing questions and answers in sequence. Learn more about knowledge base sources. Skip this step to add questions and answers manually after creation. The number of sources and file size you can add depends on the QnA service SKU you choose. Learn more about QnA Maker SKUs.'
+        'Extract question-and-answer pairs from an online FAQ, product manuals, or other files. Supported formats are .tsv, .pdf, .doc, .docx, .xlsx, containing questions and answers in sequence. Learn more about knowledge base sources. Skip this step to add questions and answers manually after creation. The number of sources and file size you can add depends on the QnA service SKU you choose. Learn more about QnA Maker SKUs.',
       ),
     };
   },
@@ -281,7 +281,7 @@ export const DialogDeleting = {
   },
   get CONTENT() {
     return formatMessage(
-      `The dialog you have tried to delete is currently used in the below dialog(s). Removing this dialog will cause your Bot to malfunction without additional action.`
+      `The dialog you have tried to delete is currently used in the below dialog(s). Removing this dialog will cause your Bot to malfunction without additional action.`,
     );
   },
   get CONFIRM_CONTENT() {
@@ -294,15 +294,15 @@ export const MultiLanguagesDialog = {
     return {
       title: formatMessage('Copy content for translation'),
       subText: formatMessage(
-        `Composer cannot yet translate your bot automatically.\nTo create a translation manually, Composer will create a copy of your bot’s content with the name of the additional language. This content can then be translated without affecting the original bot logic or flow and you can switch between languages to ensure the responses are correctly and appropriately translated.`
+        `Composer cannot yet translate your bot automatically.\nTo create a translation manually, Composer will create a copy of your bot’s content with the name of the additional language. This content can then be translated without affecting the original bot logic or flow and you can switch between languages to ensure the responses are correctly and appropriately translated.`,
       ),
       selectDefaultLangTitle: formatMessage(
-        'This language will be copied and used as the basis (and fallback language) for the translation.'
+        'This language will be copied and used as the basis (and fallback language) for the translation.',
       ),
       selectionTitle: formatMessage('To which language will you be translating your bot?'),
       searchPlaceHolder: formatMessage('Search'),
       whenDoneText: formatMessage(
-        'When done, switch to the newly created language and start the (manual) translation process.'
+        'When done, switch to the newly created language and start the (manual) translation process.',
       ),
     };
   },
@@ -310,7 +310,7 @@ export const MultiLanguagesDialog = {
     return {
       title: formatMessage('Select language to delete'),
       subText: formatMessage(
-        `When deleting a language, only the content will be removed. The flow and logic of the conversation and dialog will remain functional.`
+        `When deleting a language, only the content will be removed. The flow and logic of the conversation and dialog will remain functional.`,
       ),
     };
   },
@@ -321,7 +321,7 @@ export const addSkillDialog = {
     return {
       title: formatMessage('Connect to a skill'),
       subText: formatMessage(
-        "To connect to a skill, your bot needs the information captured in the skill’s manifest, and, for secure access, the skill needs to know your bot's App ID. Follow the steps below to proceed."
+        "To connect to a skill, your bot needs the information captured in the skill’s manifest, and, for secure access, the skill needs to know your bot's App ID. Follow the steps below to proceed.",
       ),
     };
   },
@@ -343,7 +343,7 @@ export const addSkillDialog = {
                 {children}
               </Link>
             ),
-          }
+          },
         ),
     };
   },
@@ -380,7 +380,7 @@ export const enableOrchestratorDialog = {
   },
   get subText() {
     return formatMessage(
-      'A bot that consists of multiple bots or connects to skills (multi-bot project) needs Orchestrator to detect and route user input to the appropriate bot or skill.'
+      'A bot that consists of multiple bots or connects to skills (multi-bot project) needs Orchestrator to detect and route user input to the appropriate bot or skill.',
     );
   },
 };
@@ -396,10 +396,10 @@ export const removeSkillDialog = () => {
   return {
     title: formatMessage('Warning'),
     subText: formatMessage(
-      'The skill you tried to remove from the project is currently used in the below bot(s). Removing this skill won’t delete the files, but it will cause your Bot to malfunction without additional action.'
+      'The skill you tried to remove from the project is currently used in the below bot(s). Removing this skill won’t delete the files, but it will cause your Bot to malfunction without additional action.',
     ),
     subTextNoUse: formatMessage(
-      'You are about to remove the skill from this project. Removing this skill won’t delete the files.'
+      'You are about to remove the skill from this project. Removing this skill won’t delete the files.',
     ),
     footerText: formatMessage('Do you wish to continue?'),
   };
@@ -471,7 +471,7 @@ export const authUrl = `https://login.microsoftonline.com/${authConfig.tenantId}
 
 export const triggerNotSupportedWarning = () =>
   formatMessage(
-    'This trigger type is not supported by the RegEx recognizer. To ensure this trigger is fired, change the recognizer type.'
+    'This trigger type is not supported by the RegEx recognizer. To ensure this trigger is fired, change the recognizer type.',
   );
 
 // TODO: replace language options with available languages pertinent to the selected template (issue #5554)

@@ -8,9 +8,9 @@ import { throwNotImplementedError } from '../throwNotImplementedError';
 
 const createQNAService = (token: string, subscriptionId: string) => {
   const tokenCredentials = new TokenCredentials(token);
-  // @ts-expect-error
+  // @ts-expect-error types missmatch
   const searchManagementClient = new SearchManagementClient(tokenCredentials, subscriptionId);
-  // @ts-expect-error
+  // @ts-expect-error types missmatch
   const webSiteManagementClient = new WebSiteManagementClient(tokenCredentials, subscriptionId);
 
   const checkNameAvailability = async () => {

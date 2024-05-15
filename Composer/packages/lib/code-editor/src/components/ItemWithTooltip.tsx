@@ -33,5 +33,5 @@ export const ItemWithTooltip = React.memo(
         }}
       />
     </Stack>
-  )
+  ),
 );

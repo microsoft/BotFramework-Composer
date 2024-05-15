@@ -5,6 +5,7 @@ import { lgImportResolverGenerator, LgFile } from '@bfc/shared';
 
 import {
   LgActionType,
+  LgEventType,
   LgParsePayload,
   LgUpdateTemplatePayload,
   LgCreateTemplatePayload,
@@ -16,6 +17,7 @@ import {
   LgCleanCachePayload,
   LgParseAllPayload,
 } from '../types';
+import { MapOptimizer } from '../../utils/mapOptimizer';
 
 const ctx: Worker = self as any;
 
@@ -153,11 +155,30 @@ const filterParseResult = (lgFile: LgFile) => {
   return cloned;
 };
 
-const getTargetFile = (projectId: string, lgFile: LgFile) => {
+const getTargetFile = (projectId: string, lgFile: LgFile, lgFiles: LgFile[]) => {
   const cachedFile = cache.get(projectId, lgFile.id);
+
+  if (cachedFile?.isContentUnparsed) {
+    const lgFile = lgUtil.parse(cachedFile.id, cachedFile.content, lgFiles);
+    lgFile.isContentUnparsed = false;
+    cache.set(projectId, lgFile);
+    return filterParseResult(lgFile);
+  }
 
   // Instead of compare content, just use cachedFile as single truth of fact, because all updates are supposed to be happen in worker, and worker will always update cache.
   return cachedFile ?? lgFile;
+};
+
+const emptyLgFile = (id: string, content: string): LgFile => {
+  return {
+    id,
+    content,
+    diagnostics: [],
+    templates: [],
+    allTemplates: [],
+    imports: [],
+    isContentUnparsed: true,
+  };
 };
 
 export const handleMessage = (msg: LgMessageEvent) => {
@@ -178,6 +199,11 @@ export const handleMessage = (msg: LgMessageEvent) => {
     case LgActionType.Parse: {
       const { id, content, lgFiles, projectId } = msg.payload;
 
+      const cachedFile = cache.get(projectId, id);
+      if (cachedFile?.isContentUnparsed === false && cachedFile?.content === content) {
+        return filterParseResult(cachedFile);
+      }
+
       const lgFile = lgUtil.parse(id, content, lgFiles);
       cache.set(projectId, lgFile);
       payload = filterParseResult(lgFile);
@@ -186,19 +212,27 @@ export const handleMessage = (msg: LgMessageEvent) => {
 
     case LgActionType.ParseAll: {
       const { lgResources, projectId } = msg.payload;
+      // We'll do the parsing when the file is required. Save empty LG instead.
+      payload = lgResources.map(({ id, content }) => [id, emptyLgFile(id, content)]);
+      const resources = new Map<string, LgFile>(payload);
+      cache.projects.set(projectId, resources);
 
-      payload = lgResources.map(({ id, content }) => {
-        const lgFile = lgUtil.parse(id, content, lgResources);
-        cache.set(projectId, lgFile);
-        return filterParseResult(lgFile);
+      const optimizer = new MapOptimizer(10, resources);
+      optimizer.onUpdate((_, value, ctx) => {
+        const refs = value.parseResult?.references?.map(({ name }) => name);
+        ctx.setReferences(refs);
       });
-
+      optimizer.onDelete((_, value) => {
+        const lgFile = emptyLgFile(value.id, value.content);
+        cache.set(projectId, lgFile);
+        ctx.postMessage({ type: LgEventType.OnUpdateLgFile, projectId, payload: lgFile });
+      });
       break;
     }
 
     case LgActionType.AddTemplate: {
       const { lgFile, template, lgFiles, projectId } = msg.payload;
-      const result = lgUtil.addTemplate(getTargetFile(projectId, lgFile), template, lgFileResolver(lgFiles));
+      const result = lgUtil.addTemplate(getTargetFile(projectId, lgFile, lgFiles), template, lgFileResolver(lgFiles));
       cache.set(projectId, result);
       payload = filterParseResult(result);
       break;
@@ -206,7 +240,7 @@ export const handleMessage = (msg: LgMessageEvent) => {
 
     case LgActionType.AddTemplates: {
       const { lgFile, templates, lgFiles, projectId } = msg.payload;
-      const result = lgUtil.addTemplates(getTargetFile(projectId, lgFile), templates, lgFileResolver(lgFiles));
+      const result = lgUtil.addTemplates(getTargetFile(projectId, lgFile, lgFiles), templates, lgFileResolver(lgFiles));
       cache.set(projectId, result);
       payload = filterParseResult(result);
       break;
@@ -215,10 +249,10 @@ export const handleMessage = (msg: LgMessageEvent) => {
     case LgActionType.UpdateTemplate: {
       const { lgFile, templateName, template, lgFiles, projectId } = msg.payload;
       const result = lgUtil.updateTemplate(
-        getTargetFile(projectId, lgFile),
+        getTargetFile(projectId, lgFile, lgFiles),
         templateName,
         template,
-        lgFileResolver(lgFiles)
+        lgFileResolver(lgFiles),
       );
       cache.set(projectId, result);
       payload = filterParseResult(result);
@@ -227,7 +261,11 @@ export const handleMessage = (msg: LgMessageEvent) => {
 
     case LgActionType.RemoveTemplate: {
       const { lgFile, templateName, lgFiles, projectId } = msg.payload;
-      const result = lgUtil.removeTemplate(getTargetFile(projectId, lgFile), templateName, lgFileResolver(lgFiles));
+      const result = lgUtil.removeTemplate(
+        getTargetFile(projectId, lgFile, lgFiles),
+        templateName,
+        lgFileResolver(lgFiles),
+      );
       cache.set(projectId, result);
       payload = filterParseResult(result);
       break;
@@ -235,7 +273,11 @@ export const handleMessage = (msg: LgMessageEvent) => {
 
     case LgActionType.RemoveAllTemplates: {
       const { lgFile, templateNames, lgFiles, projectId } = msg.payload;
-      const result = lgUtil.removeTemplates(getTargetFile(projectId, lgFile), templateNames, lgFileResolver(lgFiles));
+      const result = lgUtil.removeTemplates(
+        getTargetFile(projectId, lgFile, lgFiles),
+        templateNames,
+        lgFileResolver(lgFiles),
+      );
       cache.set(projectId, result);
       payload = filterParseResult(result);
       break;
@@ -244,10 +286,10 @@ export const handleMessage = (msg: LgMessageEvent) => {
     case LgActionType.CopyTemplate: {
       const { lgFile, toTemplateName, fromTemplateName, lgFiles, projectId } = msg.payload;
       const result = lgUtil.copyTemplate(
-        getTargetFile(projectId, lgFile),
+        getTargetFile(projectId, lgFile, lgFiles),
         fromTemplateName,
         toTemplateName,
-        lgFileResolver(lgFiles)
+        lgFileResolver(lgFiles),
       );
       cache.set(projectId, result);
       payload = filterParseResult(result);

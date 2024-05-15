@@ -76,7 +76,7 @@ describe('QnA page all up view', () => {
   it('should render QnA page table view', () => {
     const { getByTestId, getByText } = renderWithRecoil(
       <TableView dialogId={'dialog1'} locale={state.locale} projectId={state.projectId} />,
-      initRecoilState
+      initRecoilState,
     );
     const more = getByTestId('knowledgeBaseMore');
     fireEvent.click(more);

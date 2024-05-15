@@ -97,9 +97,9 @@ export async function warmUpCache(generatedFolderPath: string, projectId: string
         async (f) =>
           [f.replace('.blu', '.lu'), new Uint8Array(await readFile(Path.join(generatedFolderPath, f)))] as [
             string,
-            Uint8Array
-          ]
-      )
+            Uint8Array,
+          ],
+      ),
     );
 
     if (modelData.model && snapshotData.length) {
@@ -109,7 +109,7 @@ export async function warmUpCache(generatedFolderPath: string, projectId: string
         modelData.model,
         '',
         new Map(snapshotData),
-        false
+        false,
       );
       if (labelResolverMap) {
         for (const [key, labelResolver] of labelResolverMap.entries()) {
@@ -138,7 +138,7 @@ export async function orchestratorBuilder(
   files: FileInfo[],
   modelPath: string,
   isDialog = true,
-  fullEmbedding = false
+  fullEmbedding = false,
 ): Promise<IOrchestratorBuildOutput> {
   const orchestratorLabelResolvers = cache.get(projectId);
 
@@ -172,7 +172,7 @@ export async function orchestratorBuilder(
     isDialog,
     '',
     null,
-    fullEmbedding
+    fullEmbedding,
   );
   cache.set(projectId, orchestratorLabelResolvers);
   return result;

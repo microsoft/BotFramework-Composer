@@ -55,7 +55,7 @@ describe('<Onboarding />', () => {
         <OnboardingContext.Provider value={onboardingValue}>
           <TeachingBubbles />
         </OnboardingContext.Provider>,
-        onboardingDefaultState
+        onboardingDefaultState,
       );
       expect(rendered.baseElement).toHaveTextContent('Main dialog');
     });
@@ -67,7 +67,7 @@ describe('<Onboarding />', () => {
         <OnboardingContext.Provider value={onboardingValue}>
           <WelcomeModal />
         </OnboardingContext.Provider>,
-        onboardingDefaultState
+        onboardingDefaultState,
       );
 
       for (const { title } of stepSets) {
@@ -81,7 +81,7 @@ describe('<Onboarding />', () => {
         <OnboardingContext.Provider value={onboardingValue}>
           <WelcomeModal />
         </OnboardingContext.Provider>,
-        onboardingDefaultState
+        onboardingDefaultState,
       );
       await findByText('Welcome');
     });

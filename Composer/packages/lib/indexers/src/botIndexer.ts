@@ -86,7 +86,7 @@ const checkSetting = (
     qnaFiles: QnAFile[];
     setting: DialogSetting;
   },
-  rootSetting?: DialogSetting
+  rootSetting?: DialogSetting,
 ): Diagnostic[] => {
   const { dialogs, setting, luFiles, qnaFiles } = assets;
   const diagnostics: Diagnostic[] = [];
@@ -104,7 +104,7 @@ const checkSetting = (
   if (useLUIS) {
     if (!get(setting, 'luis.authoringRegion') && !get(rootSetting, 'luis.authoringRegion')) {
       diagnostics.push(
-        new Diagnostic('Missing LUIS region', 'appsettings.json', DiagnosticSeverity.Error, '#luisRegion')
+        new Diagnostic('Missing LUIS region', 'appsettings.json', DiagnosticSeverity.Error, '#luisRegion'),
       );
     }
   }
@@ -113,7 +113,7 @@ const checkSetting = (
   if (useQnA) {
     if (!get(setting, 'qna.subscriptionKey') && !get(rootSetting, 'qna.subscriptionKey')) {
       diagnostics.push(
-        new Diagnostic('Missing QnA Maker subscription key', 'appsettings.json', DiagnosticSeverity.Error, '#qnaKey')
+        new Diagnostic('Missing QnA Maker subscription key', 'appsettings.json', DiagnosticSeverity.Error, '#qnaKey'),
       );
     }
   }
@@ -185,8 +185,8 @@ const checkSkillSetting = (assets: { dialogs: DialogInfo[]; botProjectFile: BotP
           new Diagnostic(
             `'${skillName}' does not exist in this project and is currently referenced in '${dialog.displayName}'.`,
             dialog.id,
-            DiagnosticSeverity.Error
-          )
+            DiagnosticSeverity.Error,
+          ),
         );
       }
     });
@@ -208,7 +208,7 @@ const validate = (
     isRemote?: boolean;
     isRootBot?: boolean;
   },
-  rootSetting?: DialogSetting
+  rootSetting?: DialogSetting,
 ): Diagnostic[] => {
   if (assets.isRemote) return [];
   const settingDiagnostics = [
@@ -225,7 +225,7 @@ const filterLUISFilesToPublish = (luFiles: LuFile[], dialogFiles: DialogInfo[]):
   return luFiles.filter((file) => {
     if (
       dialogFiles.some(
-        (dialog) => dialog.luFile === getBaseName(file.id) && dialog.luProvider === SDKKinds.OrchestratorRecognizer
+        (dialog) => dialog.luFile === getBaseName(file.id) && dialog.luProvider === SDKKinds.OrchestratorRecognizer,
       )
     ) {
       return true;

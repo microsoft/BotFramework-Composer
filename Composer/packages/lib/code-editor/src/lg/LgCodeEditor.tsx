@@ -31,7 +31,7 @@ import { jsLgToolbarMenuClassName } from './constants';
 const placeholder = formatMessage(
   `> To learn more about the LG file format, read the documentation at
 > {lgHelp}`,
-  { lgHelp: LG_HELP }
+  { lgHelp: LG_HELP },
 );
 
 const linkStyles = {
@@ -60,7 +60,7 @@ const LgTemplateLink = withTooltip(
       </Text>
     ),
   },
-  Link
+  Link,
 );
 
 const templateLinkTokens = { childrenGap: 4 };
@@ -144,7 +144,7 @@ export const LgCodeEditor = (props: LgCodeEditorProps) => {
           const languageClient = createLanguageClient(
             formatMessage('LG Language Client'),
             ['botbuilderlg'],
-            connection
+            connection,
           );
 
           sendRequestWithRetry(languageClient, 'initializeDocuments', { lgOption, uri });
@@ -157,7 +157,7 @@ export const LgCodeEditor = (props: LgCodeEditorProps) => {
               if (lgOption?.projectId) {
                 onNavigateToLgPage?.(result.fileId, { templateId: result.templateId, line: result.line });
               }
-            })
+            }),
           );
         },
       });
@@ -170,7 +170,7 @@ export const LgCodeEditor = (props: LgCodeEditorProps) => {
           if (lgOption?.projectId) {
             onNavigateToLgPage?.(result.fileId, { templateId: result.templateId, line: result.line });
           }
-        })
+        }),
       );
     }
 
@@ -208,7 +208,7 @@ export const LgCodeEditor = (props: LgCodeEditorProps) => {
         location: 'LGCodeEditor',
       });
     },
-    [editor, telemetryClient]
+    [editor, telemetryClient],
   );
 
   const navigateToLgPage = React.useCallback(() => {
@@ -220,7 +220,7 @@ export const LgCodeEditor = (props: LgCodeEditorProps) => {
       editor?.getModel()?.setValue(newValue);
       onChange(newValue);
     },
-    [editor, onChange]
+    [editor, onChange],
   );
 
   const change = React.useCallback(
@@ -230,7 +230,7 @@ export const LgCodeEditor = (props: LgCodeEditorProps) => {
         onChange(newValue);
       }
     },
-    [onChange]
+    [onChange],
   );
 
   return (

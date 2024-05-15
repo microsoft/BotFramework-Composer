@@ -12,9 +12,11 @@ import { AddButton } from '../../AddButton';
 
 import { ObjectItem } from './ObjectItem';
 
-const OpenObjectField: React.FC<FieldProps<{
-  [key: string]: unknown;
-}>> = (props) => {
+const OpenObjectField: React.FC<
+  FieldProps<{
+    [key: string]: unknown;
+  }>
+> = (props) => {
   const {
     definitions,
     description,

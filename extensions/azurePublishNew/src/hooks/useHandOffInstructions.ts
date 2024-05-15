@@ -45,7 +45,7 @@ export const useHandOffInstructions = () => {
         'Provisoning Command:\n' +
         '{command}\n\n' +
         'Detailed instructions:\nhttps://aka.ms/how-to-complete-provision-handoff',
-      { command: provisionComposer }
+      { command: provisionComposer },
     );
   }, [resources, subscriptionId, hostName, deployRegion, resourceGroupName]);
 };

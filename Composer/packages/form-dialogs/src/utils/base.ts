@@ -24,7 +24,7 @@ export class Lifetime implements Disposable {
     this._disposables = [];
   }
 
-  public add(disposable: Disposable | Function, options?: DisposableAdditionOptions) {
+  public add(disposable: Disposable | (() => void), options?: DisposableAdditionOptions) {
     const { ignoreAfterDisposal } = options || { ignoreAfterDisposal: false };
 
     if (this._isDisposed) {

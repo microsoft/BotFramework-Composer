@@ -44,7 +44,7 @@ const luisPredictionProvisionMethod = (provisionConfig: ProvisionServiceConfig):
   const tokenCredentials = new TokenCredentials(provisionConfig.accessToken);
   const cognitiveServicesManagementClient = new CognitiveServicesManagementClient(
     tokenCredentials,
-    provisionConfig.subscriptionId
+    provisionConfig.subscriptionId,
   );
 
   return async (config: LuisPredictionConfig, workingSet: ProvisionWorkingSet): Promise<ProvisionWorkingSet> => {
@@ -64,7 +64,7 @@ const luisPredictionProvisionMethod = (provisionConfig: ProvisionServiceConfig):
             name: config.sku ?? 'S0',
           },
           location: authoringLocation,
-        }
+        },
       );
 
       const endpoint = deployResult.properties?.endpoint ?? '';

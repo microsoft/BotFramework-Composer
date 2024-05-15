@@ -36,7 +36,7 @@ describe('<ErrorBoundary/>', () => {
         setApplicationLevelError={setApplicationErrorStub}
       >
         <div>test</div>
-      </ErrorBoundary>
+      </ErrorBoundary>,
     );
     expect(container).toHaveTextContent('test');
   });
@@ -52,7 +52,7 @@ describe('<ErrorBoundary/>', () => {
           <ProblemChild />
         </ErrorBoundary>
         <div> will not crash</div>
-      </div>
+      </div>,
     );
 
     expect(container).toHaveTextContent('will not crash');
@@ -65,8 +65,8 @@ describe('<ErrorBoundary/>', () => {
         <div>
           <ProblemChild />
           <div> will not crash</div>
-        </div>
-      )
+        </div>,
+      ),
     ).toThrow();
   });
 });

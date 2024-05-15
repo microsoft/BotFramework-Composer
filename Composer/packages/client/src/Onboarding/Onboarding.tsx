@@ -115,8 +115,8 @@ const Onboarding: React.FC = () => {
     const result = await OpenConfirmModal(
       formatMessage('Leave Product Tour?'),
       formatMessage(
-        'Are you sure you want to exit the Onboarding Product Tour? You can restart the tour in the onboarding settings.'
-      )
+        'Are you sure you want to exit the Onboarding Product Tour? You can restart the tour in the onboarding settings.',
+      ),
     );
 
     if (result) {

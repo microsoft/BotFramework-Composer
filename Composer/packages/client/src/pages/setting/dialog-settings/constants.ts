@@ -10,10 +10,11 @@ export const BotSettings = {
   botSettings: formatMessage('Settings'),
   generalTitle: formatMessage('General'),
   botSettingDescription: formatMessage(
-    'Settings contains detailed information about your bot. For security reasons, they are hidden by default. To test your bot or publish to Azure, you may need to provide these settings.'
+    'Settings contains detailed information about your bot. For security reasons, they are hidden by default. To test your bot or publish to Azure, you may need to provide these settings.',
   ),
   languageTitle: formatMessage('Bot language'),
-  languagesubTitle: formatMessage(`Select the language that bot will be able to understand (User input) and respond to (Bot responses).
+  languagesubTitle:
+    formatMessage(`Select the language that bot will be able to understand (User input) and respond to (Bot responses).
     To make this bot available in other languages, click “Add’ to create a copy of the default language, and translate the content into the new language.`),
   languageBotLanauge: formatMessage('Bot language (active)'),
   languageDefaultLanauge: formatMessage('Default language'),

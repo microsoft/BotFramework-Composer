@@ -9,9 +9,8 @@ import { NodeRendererContext } from '../../../src/adaptive-flow-editor/contexts/
 
 describe('NodeRendererContext', () => {
   const CtxtConsumer = () => {
-    const { focusedId, focusedEvent, focusedTab, clipboardActions, dialogFactory, customSchemas } = useContext(
-      NodeRendererContext
-    );
+    const { focusedId, focusedEvent, focusedTab, clipboardActions, dialogFactory, customSchemas } =
+      useContext(NodeRendererContext);
 
     return (
       <div>
@@ -37,7 +36,7 @@ describe('NodeRendererContext', () => {
         }}
       >
         <CtxtConsumer />
-      </NodeRendererContext.Provider>
+      </NodeRendererContext.Provider>,
     );
 
     expect(ele.getByTestId('focusedId-value').textContent).toEqual('id1');

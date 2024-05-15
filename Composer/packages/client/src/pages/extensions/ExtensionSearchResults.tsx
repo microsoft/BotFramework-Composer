@@ -42,7 +42,7 @@ const ExtensionSearchResults: React.FC<ExtensionSearchResultsProps> = (props) =>
       onSelectionChanged: () => {
         onSelect(selection.getSelection()[0] as ExtensionSearchResult);
       },
-    })
+    }),
   ).current;
 
   const searchColumns: IColumn[] = [

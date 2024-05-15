@@ -25,7 +25,7 @@ export const SelectSkillDialogField: React.FC<FieldProps> = (props) => {
   const { displayManifestModal } = shellApi;
 
   const skillNameIdentifier = getSkillNameFromSetting(value?.skillEndpoint);
-  const { manifest, name }: Skill = skills[skillNameIdentifier] || {};
+  const { manifest, name }: Partial<Skill> = skills[skillNameIdentifier] || {};
 
   const options: IDropdownOption[] = [];
   for (const key in skills) {

@@ -192,7 +192,7 @@ export namespace OneAuth {
       appVersion: string,
       languageCode: string,
       signInWindowTitle: string | undefined,
-      parentWindow: any | undefined
+      parentWindow: any | undefined,
     );
     readonly appId: string;
     readonly appName: string;
@@ -212,7 +212,7 @@ export namespace OneAuth {
       clientId: string,
       redirectUri: string,
       defaultSignInScope: string,
-      useMsalFlight: boolean | undefined // deprecated
+      useMsalFlight: boolean | undefined, // deprecated
     );
     readonly clientId: string;
     readonly redirectUri: string;
@@ -237,7 +237,7 @@ export namespace OneAuth {
     appConfiguration: AppConfiguration,
     msaConfiguration: MsaConfiguration | undefined,
     aadConfiguration: AadConfiguration | undefined,
-    telemetryConfiguration: TelemetryConfiguration | undefined
+    telemetryConfiguration: TelemetryConfiguration | undefined,
   ): boolean;
 
   /// Cancels all outstanding tasks, closes the authentication UI if any, and shuts down the OneAuth authenticator.
@@ -313,7 +313,7 @@ export namespace OneAuth {
   export function signInInteractively(
     accountHint: string | undefined,
     authParameters: AuthParameters | undefined,
-    correlationId: string
+    correlationId: string,
   ): Promise<AuthResult>;
 
   /// Sign in a user to the app silently with an account inferred from the underlying OS infrastructure, if such
@@ -350,7 +350,7 @@ export namespace OneAuth {
   /// @see {@link AuthResult}
   export function signInSilently(
     authParameters: AuthParameters | undefined,
-    correlationId: string
+    correlationId: string,
   ): Promise<AuthResult>;
 
   /// Show a prompt for the given account and parameters.
@@ -388,7 +388,7 @@ export namespace OneAuth {
   export function acquireCredentialInteractively(
     accountId: string,
     authParameters: AuthParameters,
-    correlationId: string
+    correlationId: string,
   ): Promise<AuthResult>;
 
   /// Acquire a credential silently for the given account and parameters.
@@ -424,7 +424,7 @@ export namespace OneAuth {
   export function acquireCredentialSilently(
     accountId: string,
     authParameters: AuthParameters,
-    correlationId: string
+    correlationId: string,
   ): Promise<AuthResult>;
 
   /// Cancels all ongoing tasks and dismisses the UI (if any).
@@ -542,7 +542,7 @@ export namespace OneAuth {
       audienceType: AudienceType,
       sessionId: string,
       dispatcher: TelemetryDispatcher | undefined,
-      allowedResources: string[]
+      allowedResources: string[],
     ): TelemetryConfiguration;
   }
 

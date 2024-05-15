@@ -19,14 +19,8 @@ type Props = {
 } & Omit<SearchableDropdownProps, 'items' | 'onSubmit' | 'creationProps'>;
 
 export const ResourceGroupPicker = React.memo((props: Props) => {
-  const {
-    onChangeResourceGroup,
-    accessToken,
-    subscriptionId,
-    value,
-    isNewResourceGroup,
-    onValidateResourceGroupName,
-  } = props;
+  const { onChangeResourceGroup, accessToken, subscriptionId, value, isNewResourceGroup, onValidateResourceGroupName } =
+    props;
 
   const [resourceGroups, setResourceGroups] = useState<ResourceGroup[]>([]);
   const [errorMessage, setErrorMessage] = useState<string>('');
@@ -42,8 +36,8 @@ export const ResourceGroupPicker = React.memo((props: Props) => {
       if (debouncedNewName && !debouncedNewName.match(/^[-\w._()]+$/)) {
         setNewNameErrorMessage(
           formatMessage(
-            'Resource group names only allow alphanumeric characters, periods, underscores, hyphens and parenthesis and cannot end in a period.'
-          )
+            'Resource group names only allow alphanumeric characters, periods, underscores, hyphens and parenthesis and cannot end in a period.',
+          ),
         );
       } else if (alreadyExists) {
         setNewNameErrorMessage(formatMessage('A resource with this name already exists.'));
@@ -83,12 +77,12 @@ export const ResourceGroupPicker = React.memo((props: Props) => {
       placeholder: formatMessage('Select Resource Group'),
       errorMessage,
     }),
-    [errorMessage]
+    [errorMessage],
   );
 
   const creationItem = React.useMemo(
     () => ({ key: 'CREATE_NEW_RESOURCE_GROUP', text: formatMessage('Create new resource group') }),
-    []
+    [],
   );
 
   return (

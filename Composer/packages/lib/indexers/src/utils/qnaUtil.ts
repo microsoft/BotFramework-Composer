@@ -122,7 +122,7 @@ export function convertQnAParseResultToQnAFile(id = '', resource: LuParseResourc
         description: Description,
         path: Path,
       };
-    }
+    },
   );
 
   const optionRegExp = new RegExp(/@source\.(\w+)\s*=\s*(.*)/);
@@ -199,7 +199,7 @@ export function removeSection(qnaFile: QnAFile, sectionId: string): QnAFile {
  * @param sectionContent
  */
 export function insertSection(qnaFile: QnAFile, position: number | string, sectionContent: string): QnAFile {
-  if (position < 0) return qnaFile;
+  if (Number(position) < 0) return qnaFile;
   const { resource } = qnaFile;
 
   const result = new sectionOperator(resource).insertSection(position, sectionContent);
@@ -250,7 +250,7 @@ export function updateQnASection(qnaFile: QnAFile, sectionId: string, changes: Q
 
   let updatedQuestions = orginSection.Questions;
   let updatedAnswer = orginSection.Answer;
-  if (changes.Questions && changes.Questions.length) {
+  if (changes?.Questions?.length) {
     const questionsToRemove = changes.Questions.filter(({ id, content }) => id && !content);
     const questionsToAdd = changes.Questions.filter(({ id, content }) => !id && content) as {
       id: string;
@@ -334,7 +334,7 @@ export function updateQnAAnswer(qnaFile: QnAFile, sectionId: string, answerConte
 export function addImport(qnaFile: QnAFile, path: string) {
   const importContent = `[import](${path})`;
   const firstImportSection = qnaFile.resource.Sections.find(
-    ({ SectionType }) => SectionType === SectionTypes.ImportSection
+    ({ SectionType }) => SectionType === SectionTypes.ImportSection,
   );
   const position = firstImportSection ? firstImportSection.Id : 0;
   return insertSection(qnaFile, position, importContent);
@@ -345,7 +345,7 @@ export function removeImport(qnaFile: QnAFile, id: string) {
     qnaFile.imports.find((item) => item.id === id) || qnaFile.imports.find((item) => item.id === `${id}.qna`);
   if (!targetImport) return qnaFile;
   const targetImportSection = qnaFile.resource.Sections.filter(
-    ({ SectionType }) => SectionType === SectionTypes.ImportSection
+    ({ SectionType }) => SectionType === SectionTypes.ImportSection,
   ).find(({ Path }) => Path === targetImport.path);
   if (!targetImportSection) return qnaFile;
 

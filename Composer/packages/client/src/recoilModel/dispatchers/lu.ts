@@ -38,14 +38,14 @@ const updateLuFiles = (
     deletes?: LuFile[];
     updates?: LuFile[];
   },
-  getLatestFile?: (current: LuFile, changed: LuFile) => LuFile
+  getLatestFile?: (current: LuFile, changed: LuFile) => LuFile,
 ) => {
   const { updates, adds, deletes } = changes;
 
   // updates
   updates?.forEach((luFile) => {
     set(luFileState({ projectId, luFileId: luFile.id }), (oldLuFile) =>
-      getLatestFile ? getLatestFile(oldLuFile, luFile) : luFile
+      getLatestFile ? getLatestFile(oldLuFile, luFile) : luFile,
     );
   });
 
@@ -60,7 +60,7 @@ const updateLuFiles = (
     const addedIds = adds.map((file) => file.id);
     adds.forEach((luFile) => {
       set(luFileState({ projectId, luFileId: luFile.id }), (oldLuFile) =>
-        getLatestFile ? getLatestFile(oldLuFile, luFile) : luFile
+        getLatestFile ? getLatestFile(oldLuFile, luFile) : luFile,
       );
     });
     set(luFileIdsState(projectId), (ids) => [...ids, ...addedIds]);
@@ -70,7 +70,7 @@ const getRelatedLuFileChanges = async (
   originLuFiles: LuFile[],
   updatedLuFile: LuFile,
   projectId: string,
-  luFeatures: ILUFeaturesConfig
+  luFeatures: ILUFeaturesConfig,
 ): Promise<LuFile[]> => {
   const { id } = updatedLuFile;
   const dialogId = getBaseName(id);
@@ -108,7 +108,7 @@ const getRelatedLuFileChanges = async (
         newLuFile,
         deletedIntents.map(({ Name }) => Name),
         luFeatures,
-        luFiles
+        luFiles,
       )) as LuFile;
       changes.push(newLuFile);
     }
@@ -126,7 +126,7 @@ const getRelatedLuFileChanges = async (
 
 export const createLuFileState = async (
   callbackHelpers: CallbackInterface,
-  { id, content, projectId }: { id: string; content: string; projectId: string }
+  { id, content, projectId }: { id: string; content: string; projectId: string },
 ) => {
   const { snapshot } = callbackHelpers;
   const luFiles = await snapshot.getPromise(luFilesSelectorFamily(projectId));
@@ -155,7 +155,7 @@ export const createLuFileState = async (
 
 export const removeLuFileState = async (
   callbackHelpers: CallbackInterface,
-  { id, projectId }: { id: string; projectId: string }
+  { id, projectId }: { id: string; projectId: string },
 ) => {
   const { snapshot } = callbackHelpers;
   const luFiles = await snapshot.getPromise(luFilesSelectorFamily(projectId));
@@ -178,181 +178,162 @@ export const removeLuFileState = async (
 
 export const luDispatcher = () => {
   const batchUpdateLuFiles = useRecoilCallback(
-    (callbackHelpers: CallbackInterface) => async (
-      payloads: {
-        id: string;
-        content: string;
-        projectId: string;
-      }[]
-    ) => {
-      const { snapshot } = callbackHelpers;
-      payloads.map(async ({ id, content, projectId }) => {
+    (callbackHelpers: CallbackInterface) =>
+      async (
+        payloads: {
+          id: string;
+          content: string;
+          projectId: string;
+        }[],
+      ) => {
+        const { snapshot } = callbackHelpers;
+        payloads.map(async ({ id, content, projectId }) => {
+          const luFeatures = await snapshot.getPromise(luFileLuFeatureSelector({ projectId, id }));
+          try {
+            const updatedFile = (await luWorker.parse(id, content, luFeatures, [])) as LuFile;
+            // compare to drop expired change on current id file.
+            /**
+             * Why other methods do not need double check content?
+             * Because this method already did set content before call luFilesAtomUpdater.
+             */
+            updateLuFiles(callbackHelpers, projectId, { updates: [updatedFile] });
+          } catch (error) {
+            setError(callbackHelpers, error);
+          }
+        });
+      },
+  );
+
+  const updateLuFile = useRecoilCallback(
+    (callbackHelpers: CallbackInterface) =>
+      async ({ id, content, projectId }: { id: string; content: string; projectId: string }) => {
+        const { set, snapshot } = callbackHelpers;
+        //set content first
+        set(luFileState({ projectId, luFileId: id }), (prevLuFile) => {
+          return {
+            ...prevLuFile,
+            content,
+          };
+        });
+
+        const luFiles = await snapshot.getPromise(luFilesSelectorFamily(projectId));
         const luFeatures = await snapshot.getPromise(luFileLuFeatureSelector({ projectId, id }));
+
         try {
-          const updatedFile = (await luWorker.parse(id, content, luFeatures, [])) as LuFile;
+          const updatedFile = (await luWorker.parse(id, content, luFeatures, luFiles)) as LuFile;
+          const updatedFiles = await getRelatedLuFileChanges(luFiles, updatedFile, projectId, luFeatures);
           // compare to drop expired change on current id file.
           /**
            * Why other methods do not need double check content?
            * Because this method already did set content before call luFilesAtomUpdater.
            */
-          updateLuFiles(callbackHelpers, projectId, { updates: [updatedFile] });
+          updateLuFiles(callbackHelpers, projectId, { updates: updatedFiles }, (current, changed) => {
+            // compare to drop expired content already setted above.
+            if (current.id === id && current?.content !== changed?.content) return current;
+            return changed;
+          });
         } catch (error) {
           setError(callbackHelpers, error);
         }
-      });
-    }
-  );
-
-  const updateLuFile = useRecoilCallback(
-    (callbackHelpers: CallbackInterface) => async ({
-      id,
-      content,
-      projectId,
-    }: {
-      id: string;
-      content: string;
-      projectId: string;
-    }) => {
-      const { set, snapshot } = callbackHelpers;
-      //set content first
-      set(luFileState({ projectId, luFileId: id }), (prevLuFile) => {
-        return {
-          ...prevLuFile,
-          content,
-        };
-      });
-
-      const luFiles = await snapshot.getPromise(luFilesSelectorFamily(projectId));
-      const luFeatures = await snapshot.getPromise(luFileLuFeatureSelector({ projectId, id }));
-
-      try {
-        const updatedFile = (await luWorker.parse(id, content, luFeatures, luFiles)) as LuFile;
-        const updatedFiles = await getRelatedLuFileChanges(luFiles, updatedFile, projectId, luFeatures);
-        // compare to drop expired change on current id file.
-        /**
-         * Why other methods do not need double check content?
-         * Because this method already did set content before call luFilesAtomUpdater.
-         */
-        updateLuFiles(callbackHelpers, projectId, { updates: updatedFiles }, (current, changed) => {
-          // compare to drop expired content already setted above.
-          if (current.id === id && current?.content !== changed?.content) return current;
-          return changed;
-        });
-      } catch (error) {
-        setError(callbackHelpers, error);
-      }
-    }
+      },
   );
 
   const updateLuIntent = useRecoilCallback(
-    (callbackHelpers: CallbackInterface) => async ({
-      id,
-      intentName,
-      intent,
-      projectId,
-    }: {
-      id: string;
-      intentName: string;
-      intent: LuIntentSection;
-      projectId: string;
-    }) => {
-      const { snapshot } = callbackHelpers;
-      const luFiles = await snapshot.getPromise(luFilesSelectorFamily(projectId));
-      const luFeatures = await snapshot.getPromise(luFileLuFeatureSelector({ projectId, id }));
-      const luFile = luFiles.find((temp) => temp.id === id);
-      if (!luFile) return luFiles;
+    (callbackHelpers: CallbackInterface) =>
+      async ({
+        id,
+        intentName,
+        intent,
+        projectId,
+      }: {
+        id: string;
+        intentName: string;
+        intent: LuIntentSection;
+        projectId: string;
+      }) => {
+        const { snapshot } = callbackHelpers;
+        const luFiles = await snapshot.getPromise(luFilesSelectorFamily(projectId));
+        const luFeatures = await snapshot.getPromise(luFileLuFeatureSelector({ projectId, id }));
+        const luFile = luFiles.find((temp) => temp.id === id);
+        if (!luFile) return luFiles;
 
-      // create need sync to multi locale file.
-      const originIntent = luFile.intents.find(({ Name }) => Name === intentName);
-      if (!originIntent) {
-        await createLuIntent({ id, intent, projectId });
-        return;
-      }
-
-      try {
-        const sameIdOtherLocaleFiles = luFiles.filter((file) => getBaseName(file.id) === getBaseName(id));
-
-        // name change, need update cross multi locale file.
-        if (intent.Name !== intentName) {
-          const changes: LuFile[] = [];
-          for (const item of sameIdOtherLocaleFiles) {
-            const updatedFile = (await luWorker.updateIntent(
-              item,
-              intentName,
-              { Name: intent.Name },
-              luFeatures,
-              luFiles
-            )) as LuFile;
-            changes.push(updatedFile);
-          }
-          updateLuFiles(callbackHelpers, projectId, { updates: changes });
-          // body change, only update current locale file
-        } else {
-          const updatedFile = (await luWorker.updateIntent(
-            luFile,
-            intentName,
-            { Body: intent.Body },
-            luFeatures,
-            luFiles
-          )) as LuFile;
-          updateLuFiles(callbackHelpers, projectId, { updates: [updatedFile] });
+        // create need sync to multi locale file.
+        const originIntent = luFile.intents.find(({ Name }) => Name === intentName);
+        if (!originIntent) {
+          await createLuIntent({ id, intent, projectId });
+          return;
         }
-      } catch (error) {
-        setError(callbackHelpers, error);
-      }
-    }
+
+        try {
+          const sameIdOtherLocaleFiles = luFiles.filter((file) => getBaseName(file.id) === getBaseName(id));
+
+          // name change, need update cross multi locale file.
+          if (intent.Name !== intentName) {
+            const changes: LuFile[] = [];
+            for (const item of sameIdOtherLocaleFiles) {
+              const updatedFile = (await luWorker.updateIntent(
+                item,
+                intentName,
+                { Name: intent.Name },
+                luFeatures,
+                luFiles,
+              )) as LuFile;
+              changes.push(updatedFile);
+            }
+            updateLuFiles(callbackHelpers, projectId, { updates: changes });
+            // body change, only update current locale file
+          } else {
+            const updatedFile = (await luWorker.updateIntent(
+              luFile,
+              intentName,
+              { Body: intent.Body },
+              luFeatures,
+              luFiles,
+            )) as LuFile;
+            updateLuFiles(callbackHelpers, projectId, { updates: [updatedFile] });
+          }
+        } catch (error) {
+          setError(callbackHelpers, error);
+        }
+      },
   );
 
   const createLuIntent = useRecoilCallback(
-    (callbackHelpers: CallbackInterface) => async ({
-      id,
-      intent,
-      projectId,
-    }: {
-      id: string;
-      intent: LuIntentSection;
-      projectId: string;
-    }) => {
-      const { snapshot } = callbackHelpers;
-      const luFiles = await snapshot.getPromise(luFilesSelectorFamily(projectId));
-      const luFeatures = await snapshot.getPromise(luFileLuFeatureSelector({ projectId, id }));
+    (callbackHelpers: CallbackInterface) =>
+      async ({ id, intent, projectId }: { id: string; intent: LuIntentSection; projectId: string }) => {
+        const { snapshot } = callbackHelpers;
+        const luFiles = await snapshot.getPromise(luFilesSelectorFamily(projectId));
+        const luFeatures = await snapshot.getPromise(luFileLuFeatureSelector({ projectId, id }));
 
-      const file = luFiles.find((temp) => temp.id === id);
-      if (!file) return luFiles;
-      try {
-        const updatedFile = (await luWorker.addIntent(file, intent, luFeatures, luFiles)) as LuFile;
-        const updatedFiles = await getRelatedLuFileChanges(luFiles, updatedFile, projectId, luFeatures);
-        updateLuFiles(callbackHelpers, projectId, { updates: updatedFiles });
-      } catch (error) {
-        setError(callbackHelpers, error);
-      }
-    }
+        const file = luFiles.find((temp) => temp.id === id);
+        if (!file) return luFiles;
+        try {
+          const updatedFile = (await luWorker.addIntent(file, intent, luFeatures, luFiles)) as LuFile;
+          const updatedFiles = await getRelatedLuFileChanges(luFiles, updatedFile, projectId, luFeatures);
+          updateLuFiles(callbackHelpers, projectId, { updates: updatedFiles });
+        } catch (error) {
+          setError(callbackHelpers, error);
+        }
+      },
   );
 
   const removeLuIntent = useRecoilCallback(
-    (callbackHelpers: CallbackInterface) => async ({
-      id,
-      intentName,
-      projectId,
-    }: {
-      id: string;
-      intentName: string;
-      projectId: string;
-    }) => {
-      const { snapshot } = callbackHelpers;
-      const luFiles = await snapshot.getPromise(luFilesSelectorFamily(projectId));
-      const luFeatures = await snapshot.getPromise(luFileLuFeatureSelector({ projectId, id }));
+    (callbackHelpers: CallbackInterface) =>
+      async ({ id, intentName, projectId }: { id: string; intentName: string; projectId: string }) => {
+        const { snapshot } = callbackHelpers;
+        const luFiles = await snapshot.getPromise(luFilesSelectorFamily(projectId));
+        const luFeatures = await snapshot.getPromise(luFileLuFeatureSelector({ projectId, id }));
 
-      const file = luFiles.find((temp) => temp.id === id);
-      if (!file) return luFiles;
-      try {
-        const updatedFile = (await luWorker.removeIntent(file, intentName, luFeatures, luFiles)) as LuFile;
-        const updatedFiles = await getRelatedLuFileChanges(luFiles, updatedFile, projectId, luFeatures);
-        updateLuFiles(callbackHelpers, projectId, { updates: updatedFiles });
-      } catch (error) {
-        setError(callbackHelpers, error);
-      }
-    }
+        const file = luFiles.find((temp) => temp.id === id);
+        if (!file) return luFiles;
+        try {
+          const updatedFile = (await luWorker.removeIntent(file, intentName, luFeatures, luFiles)) as LuFile;
+          const updatedFiles = await getRelatedLuFileChanges(luFiles, updatedFile, projectId, luFeatures);
+          updateLuFiles(callbackHelpers, projectId, { updates: updatedFiles });
+        } catch (error) {
+          setError(callbackHelpers, error);
+        }
+      },
   );
 
   return {

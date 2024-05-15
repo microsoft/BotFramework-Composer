@@ -43,7 +43,7 @@ export type BotProjectLocationMap = Record<string, BotProjectMetadata>;
 
 /** Converts old bot project location maps to the new shape */
 function fixOldBotProjectMapEntries(
-  projectMap: BotProjectLocationMap | { [key: string]: string }
+  projectMap: BotProjectLocationMap | { [key: string]: string },
 ): BotProjectLocationMap {
   const map: BotProjectLocationMap = {};
   for (const botId in projectMap) {
@@ -174,7 +174,7 @@ export class BotProjectService {
 
   public static getProjectsDateModifiedDict = async (
     projects: LocationRef[],
-    user?: UserIdentity
+    user?: UserIdentity,
   ): Promise<{ dateModified: string; path: string }[]> => {
     const dateModifiedDict: { dateModified: string; path: string }[] = [];
     const promises = projects.map(async (project) => {
@@ -194,7 +194,7 @@ export class BotProjectService {
     BotProjectService.initialize();
     const dateModifiedDict = await BotProjectService.getProjectsDateModifiedDict(
       BotProjectService.recentBotProjects,
-      user
+      user,
     );
     const allRecentBots = BotProjectService.recentBotProjects;
 
@@ -233,7 +233,7 @@ export class BotProjectService {
     locationRef: LocationRef,
     user?: UserIdentity,
     isRootBot?: boolean,
-    options?: { allowPartialBots: boolean }
+    options?: { allowPartialBots: boolean },
   ): Promise<string> => {
     BotProjectService.initialize();
 
@@ -417,7 +417,7 @@ export class BotProjectService {
 
   public static deleteRecentProject = (path: string): void => {
     const recentBotProjects = BotProjectService.recentBotProjects.filter(
-      (ref) => Path.resolve(path) !== Path.resolve(ref.path)
+      (ref) => Path.resolve(path) !== Path.resolve(ref.path),
     );
     BotProjectService.recentBotProjects = recentBotProjects;
     Store.set('recentBotProjects', recentBotProjects);
@@ -426,7 +426,7 @@ export class BotProjectService {
   public static saveProjectAs = async (
     sourceProject: BotProject,
     locationRef: LocationRef,
-    user?: UserIdentity
+    user?: UserIdentity,
   ): Promise<string> => {
     BotProjectService.initialize();
     if (typeof sourceProject !== 'undefined') {
@@ -494,7 +494,7 @@ export class BotProjectService {
         {
           applicationSettingsDirectory: 'settings',
         },
-        user
+        user,
       );
 
       // update project ref to point at newly created folder
@@ -521,7 +521,7 @@ export class BotProjectService {
             await currentProject.migrateFile(
               originalFiles[f].name,
               originalFiles[f].content,
-              originalProject.rootDialogId
+              originalProject.rootDialogId,
             );
           }
         }
@@ -685,7 +685,7 @@ export class BotProjectService {
             runtimeLanguage,
             null,
             user,
-            isLocalGenerator
+            isLocalGenerator,
           );
 
       BackgroundProcessManager.updateProcess(jobId, 202, formatMessage('Bot files created'));
@@ -747,7 +747,7 @@ export class BotProjectService {
               return reject(err);
             }
           });
-        })
+        }),
       );
 
       const rootBot = botsToProcess.find((b) => b.name === name);
@@ -755,7 +755,7 @@ export class BotProjectService {
         const id = await BotProjectService.openProject(
           { storageId: rootBot?.storageId, path: rootBot.path },
           user,
-          creatingRootBot
+          creatingRootBot,
         );
         const currentProject = await BotProjectService.getProjectById(id, user);
         const project = currentProject.getProject();

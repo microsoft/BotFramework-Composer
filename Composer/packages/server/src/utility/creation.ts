@@ -27,7 +27,7 @@ export const sortTemplates = async (templates: BotTemplate[]): Promise<BotTempla
       'microsoft',
       'BotFramework-Composer',
       'main',
-      'templates.json'
+      'templates.json',
     );
     const templateSortOrderObj = JSON.parse(templateSortOrder);
     sortOrder = templateSortOrderObj && templateSortOrderObj?.length > 0 ? templateSortOrderObj : defaultSortOrder;

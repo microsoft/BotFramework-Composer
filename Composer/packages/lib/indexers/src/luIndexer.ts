@@ -14,7 +14,7 @@ function parse(
   content: string,
   id = '',
   luFeatures: ILUFeaturesConfig,
-  importResolver?: LUImportResolverDelegate
+  importResolver?: LUImportResolverDelegate,
 ): LuFile {
   const appliedConfig = merge(defaultLUFeatures, luFeatures);
   const result = luParser.parse(content);

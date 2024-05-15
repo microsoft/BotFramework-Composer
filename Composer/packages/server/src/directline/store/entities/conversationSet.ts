@@ -16,7 +16,7 @@ export class ConversationSet {
     user: User,
     mode: WebChatMode = 'livechat',
     locale = 'en-us',
-    conversationId = generateUniqueId()
+    conversationId = generateUniqueId(),
   ): Conversation {
     const conversation = new Conversation(botEndpoint, conversationId, user, mode, locale);
     if (!/(\|livechat|\|transcript)/.test(conversation.conversationId)) {

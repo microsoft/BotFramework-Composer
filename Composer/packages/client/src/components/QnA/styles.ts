@@ -115,13 +115,13 @@ export const subText = css`
 export const knowledgeBaseStyle = {
   root: {
     color: NeutralColors.gray160,
-    fontWeight: '600' as '600',
+    fontWeight: '600' as const,
   },
 };
 
 export const urlStackStyle = {
   root: {
-    overflowY: 'auto' as 'auto',
+    overflowY: 'auto' as const,
     marginBottom: 10,
   },
 };

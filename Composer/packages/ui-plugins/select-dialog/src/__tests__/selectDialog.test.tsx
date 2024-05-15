@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
 
 import React from 'react';
@@ -36,7 +37,7 @@ const renderSelectDialog = ({ createDialog, navTo, onChange } = {}) => {
   return render(
     <EditorExtension shell={{ api: shell, data: shellData }}>
       <SelectDialog {...props} />
-    </EditorExtension>
+    </EditorExtension>,
   );
 };
 

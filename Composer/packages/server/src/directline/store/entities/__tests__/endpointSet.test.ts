@@ -16,7 +16,7 @@ describe('EndpointSet', () => {
       'bot-1',
       'http://localhost:3978/api/messages',
       '123-MSD-324',
-      'asdas3234'
+      'asdas3234',
     );
 
     const endpoint2: BotEndpoint = new BotEndpoint(
@@ -24,7 +24,7 @@ describe('EndpointSet', () => {
       'bot-2',
       'http://localhost:3978/api/messages',
       '123-MSD-324',
-      'asdas3234'
+      'asdas3234',
     );
 
     endpoints.set('id-1', endpoint);

@@ -46,7 +46,7 @@ const writeAllLocalFunctionsSettings = async (fullSettings: DialogSetting, port:
     'luis:endpointKey',
     fullSettings.luis?.endpointKey || fullSettings.luis?.authoringKey,
     runtimePath,
-    log
+    log,
   );
   await writeLocalFunctionsSetting('qna:endpointKey', fullSettings.qna?.endpointKey, runtimePath, log);
   let skillHostEndpoint;
@@ -108,7 +108,7 @@ export default async (composer: any): Promise<void> => {
       version: string,
       source: string,
       project: IBotProject,
-      isPreview = false
+      isPreview = false,
     ): Promise<string> => {
       // run dotnet install on the project
       const command = `dotnet add ${csprojName(project)} package "${packageName}"${
@@ -131,7 +131,7 @@ export default async (composer: any): Promise<void> => {
         `dotnet remove  ${csproj} package ${packageName}`,
         {
           cwd: path.join(runtimePath),
-        }
+        },
       );
       if (installError) {
         throw new Error(installError);
@@ -148,7 +148,7 @@ export default async (composer: any): Promise<void> => {
       runtimePath: string,
       project: IBotProject,
       settings: DialogSetting,
-      profileName: string
+      profileName: string,
     ): Promise<string> => {
       composer.log('BUILD FOR DEPLOY TO AZURE!');
 
@@ -197,7 +197,7 @@ export default async (composer: any): Promise<void> => {
       dstStorage: IFileStorage,
       srcManifestDir: string,
       srcStorage: IFileStorage,
-      mode = 'azurewebapp' // set default as azurewebapp
+      mode = 'azurewebapp', // set default as azurewebapp
     ) => {
       // update manifst into runtime wwwroot
       if (mode === 'azurewebapp') {
@@ -251,7 +251,7 @@ export default async (composer: any): Promise<void> => {
       version: string,
       source: string,
       project: IBotProject,
-      isPreview = false
+      isPreview = false,
     ): Promise<string> => {
       // run dotnet install on the project
       const command = `dotnet add ${csprojName(project)} package "${packageName}"${
@@ -274,7 +274,7 @@ export default async (composer: any): Promise<void> => {
         `dotnet remove  ${csproj} package ${packageName}`,
         {
           cwd: path.join(runtimePath),
-        }
+        },
       );
       if (installError) {
         throw new Error(installError);
@@ -291,7 +291,7 @@ export default async (composer: any): Promise<void> => {
       runtimePath: string,
       project: IBotProject,
       settings: DialogSetting,
-      profileName: string
+      profileName: string,
     ): Promise<string> => {
       composer.log('BUILD FOR DEPLOY TO AZURE!');
 
@@ -358,14 +358,14 @@ export default async (composer: any): Promise<void> => {
       version: string,
       source: string,
       _project: IBotProject,
-      isPreview = false
+      isPreview = false,
     ): Promise<string> => {
       // run dotnet install on the project
       const { stderr: installError, stdout: installOutput } = await execAsync(
         `npm install --loglevel=error --save ${packageName}${version ? '@' + version : ''}`,
         {
           cwd: path.join(runtimePath),
-        }
+        },
       );
       if (installError) {
         throw new Error(installError);
@@ -378,7 +378,7 @@ export default async (composer: any): Promise<void> => {
         `npm uninstall --loglevel=error --save ${packageName}`,
         {
           cwd: path.join(runtimePath),
-        }
+        },
       );
       if (installError) {
         throw new Error(installError);
@@ -392,7 +392,7 @@ export default async (composer: any): Promise<void> => {
       runtimePath: string,
       project: IBotProject,
       settings: DialogSetting,
-      profileName: string
+      profileName: string,
     ): Promise<string> => {
       // do stuff
       composer.log(`BUILD THIS JS PROJECT in ${runtimePath}`);
@@ -436,14 +436,14 @@ export default async (composer: any): Promise<void> => {
       version: string,
       source: string,
       _project: IBotProject,
-      isPreview = false
+      isPreview = false,
     ): Promise<string> => {
       // run dotnet install on the project
       const { stderr: installError, stdout: installOutput } = await execAsync(
         `npm install --loglevel=error --save ${packageName}${version ? '@' + version : ''}`,
         {
           cwd: path.join(runtimePath),
-        }
+        },
       );
       if (installError) {
         throw new Error(installError);
@@ -456,7 +456,7 @@ export default async (composer: any): Promise<void> => {
         `npm uninstall --loglevel=error --save ${packageName}`,
         {
           cwd: path.join(runtimePath),
-        }
+        },
       );
       if (installError) {
         throw new Error(installError);
@@ -470,7 +470,7 @@ export default async (composer: any): Promise<void> => {
       runtimePath: string,
       project: IBotProject,
       settings: DialogSetting,
-      profileName: string
+      profileName: string,
     ): Promise<string> => {
       // do stuff
       composer.log(`BUILD THIS JS PROJECT in ${runtimePath}`);

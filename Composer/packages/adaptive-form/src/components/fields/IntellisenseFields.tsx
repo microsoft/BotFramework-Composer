@@ -85,7 +85,7 @@ export const IntellisenseExpressionField: React.FC<FieldProps<string>> = (props)
         setToolbarTargetElm(event.target as HTMLInputElement | HTMLTextAreaElement);
       }
     },
-    []
+    [],
   );
 
   const onClearTarget = React.useCallback(() => {

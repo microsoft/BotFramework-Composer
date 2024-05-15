@@ -24,7 +24,7 @@ type Resources = {
   qnaResources: Resource[];
 };
 
-export type BuildSettingType<T = {}> = {
+export type BuildSettingType<T = NonNullable<unknown>> = {
   [K in keyof T]: T[K];
 } & {
   luis: ILuisConfig;
@@ -87,7 +87,7 @@ export async function publishLuisToPrediction(
   luisSettings: ILuisConfig,
   luisResource: string,
   path: string,
-  logger
+  logger,
 ) {
   let {
     // eslint-disable-next-line prefer-const
@@ -153,7 +153,7 @@ export async function publishLuisToPrediction(
         const error = JSON.parse(err.error);
         if (error?.error?.message && error?.error?.message.indexOf('access token expiry') > 0) {
           throw new Error(
-            `Type: ${error?.error?.code}, Message: ${error?.error?.message}, run az account get-access-token, then replace the accessToken in your configuration`
+            `Type: ${error?.error?.code}, Message: ${error?.error?.message}, run az account get-access-token, then replace the accessToken in your configuration`,
           );
         } else {
           throw err;
@@ -200,7 +200,7 @@ export async function publishLuisToPrediction(
             const error = JSON.parse(err.error);
             if (error?.error?.message && error?.error?.message.indexOf('access token expiry') > 0) {
               throw new Error(
-                `Type: ${error?.error?.code}, Message: ${error?.error?.message}, run az account get-access-token, then replace the accessToken in your configuration`
+                `Type: ${error?.error?.code}, Message: ${error?.error?.message}, run az account get-access-token, then replace the accessToken in your configuration`,
               );
             }
           }
@@ -210,7 +210,7 @@ export async function publishLuisToPrediction(
           throw Error(
             `Failed to bind luis prediction resource to luis applications. Please check if your luisResource is set to luis prediction service name in your publish profile.
             ${luisDebugInfo}.
-            ${luisError}`
+            ${luisError}`,
           );
         }
       }

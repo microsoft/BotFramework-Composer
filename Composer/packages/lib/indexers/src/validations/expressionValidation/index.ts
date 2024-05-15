@@ -39,7 +39,7 @@ export const validateExpressions: ValidateFunc = (
   settings: DialogSetting,
   lgFiles: LgFile[],
   luFiles: LuFile[],
-  cache?: ExpressionParseResult
+  cache?: ExpressionParseResult,
 ) => {
   const expressions = searchExpressions(path, value, type, schema);
   const customFunctions = searchLgCustomFunction(lgFiles).concat(settings.customFunctions);

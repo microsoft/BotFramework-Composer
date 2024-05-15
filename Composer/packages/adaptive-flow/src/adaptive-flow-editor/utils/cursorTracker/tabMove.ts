@@ -39,13 +39,13 @@ export function handleTabMove(currentElement: SelectorElement, selectableElement
     (el) =>
       !selectableChildren.includes(el) &&
       el.bounds.top > currentElement.bounds.top - 10 &&
-      el.bounds.top < currentElement.bounds.top + 10
+      el.bounds.top < currentElement.bounds.top + 10,
   );
   const nextSibling = locateNearestElement(
     currentElement,
     selectableSiblings,
     command === KeyboardCommandTypes.Cursor.MoveNext ? Direction.Right : Direction.Left,
-    ['isNode', 'isEdgeMenu']
+    ['isNode', 'isEdgeMenu'],
   );
   const findElementWithSuffix = (suffix) => {
     return selectableElements.find((element) => element.selectedId === `${selectableParent?.selectedId}${suffix}`);

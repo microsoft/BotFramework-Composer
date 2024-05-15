@@ -28,7 +28,7 @@ describe.each([
         tooltipIconProps={{
           'data-testid': tooltipIconTestId,
         }}
-      />
+      />,
     );
     const icon = await findByTestId(tooltipIconTestId);
     expect(icon.getAttribute('aria-label')).toEqual(tooltipText);
@@ -43,7 +43,7 @@ describe.each([
         tooltipIconProps={{
           'data-testid': tooltipIconTestId,
         }}
-      />
+      />,
     );
     const icon = queryByTestId(tooltipIconTestId);
     expect(icon).toBeNull();

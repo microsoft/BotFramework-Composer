@@ -80,7 +80,7 @@ const ExportSkillModal: React.FC<ExportSkillModalProps> = ({ onSubmit, onDismiss
   const { setSettings } = useRecoilValue(dispatcherState);
   const isAdaptive = isUsingAdaptiveRuntime(runtime);
   const [callers, setCallers] = useState<string[]>(
-    !isAdaptive ? skillConfiguration?.allowedCallers : runtimeSettings?.skills?.allowedCallers ?? []
+    !isAdaptive ? skillConfiguration?.allowedCallers : runtimeSettings?.skills?.allowedCallers ?? [],
   );
 
   const [isCreateProfileFromSkill, setIsCreateProfileFromSkill] = useState(false);
@@ -92,7 +92,7 @@ const ExportSkillModal: React.FC<ExportSkillModalProps> = ({ onSubmit, onDismiss
   };
   // stop polling updater
   const stopUpdater = () => {
-    publishUpdaterRef.current && publishUpdaterRef.current.stop();
+    publishUpdaterRef.current?.stop?.();
     publishUpdaterRef.current = undefined;
     resetDialog();
   };
@@ -131,13 +131,7 @@ const ExportSkillModal: React.FC<ExportSkillModalProps> = ({ onSubmit, onDismiss
         if (!publishTargets || publishTargets.length === 0) return;
         const currentTarget = publishTargets.find((item) => {
           const config = JSON.parse(item.configuration);
-          return (
-            config.settings &&
-            config.settings.MicrosoftAppId &&
-            config.hostname &&
-            config.settings.MicrosoftAppId.length > 0 &&
-            config.hostname.length > 0
-          );
+          return config.settings?.MicrosoftAppId?.length > 0 && config.hostname?.length > 0;
         });
         if (isCreateProfileFromSkill && currentTarget) {
           handleGenerateManifest(currentTarget);
@@ -185,7 +179,7 @@ const ExportSkillModal: React.FC<ExportSkillModalProps> = ({ onSubmit, onDismiss
           };
       setSettings(projectId, updatedSetting);
     },
-    [mergedSettings, projectId, isAdaptive, skillConfiguration, runtimeSettings]
+    [mergedSettings, projectId, isAdaptive, skillConfiguration, runtimeSettings],
   );
 
   const handleGenerateManifest = (currentTarget?: PublishTarget) => {
@@ -199,7 +193,7 @@ const ExportSkillModal: React.FC<ExportSkillModalProps> = ({ onSubmit, onDismiss
       selectedTriggers,
       selectedDialogs,
       currentTarget || currentPublishTarget,
-      projectId
+      projectId,
     );
     setSkillManifest(manifest);
     if (manifest.content && manifest.id) {
@@ -233,7 +227,7 @@ const ExportSkillModal: React.FC<ExportSkillModalProps> = ({ onSubmit, onDismiss
       selectedTriggers,
       selectedDialogs,
       currentPublishTarget,
-      projectId
+      projectId,
     );
     if (manifest.content && manifest.id) {
       updateSkillManifest(manifest as SkillManifestFile, projectId);

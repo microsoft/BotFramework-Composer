@@ -129,7 +129,7 @@ const watchTableLayout: DetailsListLayoutMode = DetailsListLayoutMode.justified;
 // Ex. getValueFromBotTraceMemory('user.address.city', trace)
 export const getValueFromBotTraceMemory = (
   valuePath: string,
-  botTrace: Activity
+  botTrace: Activity,
 ): { value: any; propertyIsAvailable: boolean } => {
   const pathSegments = valuePath.split('.');
   if (pathSegments.length === 1) {
@@ -164,7 +164,7 @@ export const WatchTabContent: React.FC<DebugPanelTabHeaderProps> = ({ isActive }
         setSelectedVariables(watchedVariablesSelection.current.getSelection());
       },
       selectionMode: SelectionMode.multiple,
-    })
+    }),
   );
 
   // reset state when switching to a new project
@@ -174,7 +174,7 @@ export const WatchTabContent: React.FC<DebugPanelTabHeaderProps> = ({ isActive }
 
   const mostRecentBotState = useMemo(() => {
     const botStateTraffic = rawWebChatTraffic.filter(
-      (t) => t.trafficType === 'activity' && t.activity.type === 'trace' && t.activity.name === 'BotState'
+      (t) => t.trafficType === 'activity' && t.activity.type === 'trace' && t.activity.name === 'BotState',
     ) as ConversationActivityTrafficItem[];
     if (botStateTraffic.length) {
       return botStateTraffic[botStateTraffic.length - 1];
@@ -185,7 +185,7 @@ export const WatchTabContent: React.FC<DebugPanelTabHeaderProps> = ({ isActive }
     (item: { key: string; value: string }, index: number | undefined, column: IColumn | undefined) => {
       return <WatchVariablePicker key={item.key} path={item.value} variableId={item.key} />;
     },
-    []
+    [],
   );
 
   const onRenderVariableValue = useCallback(
@@ -221,7 +221,7 @@ export const WatchTabContent: React.FC<DebugPanelTabHeaderProps> = ({ isActive }
         ) : null;
       }
     },
-    [mostRecentBotState, userSettings, watchedVariables]
+    [mostRecentBotState, userSettings, watchedVariables],
   );
 
   // TODO: update to office-ui-fabric-react@7.170.x to gain access to "flexGrow" column property to distribute proprotional column widths
@@ -247,7 +247,7 @@ export const WatchTabContent: React.FC<DebugPanelTabHeaderProps> = ({ isActive }
         onRender: onRenderVariableValue,
       },
     ],
-    [onRenderVariableName, onRenderVariableValue]
+    [onRenderVariableName, onRenderVariableValue],
   );
 
   // we need to refresh the details list when we get a new bot state, add a new row, or submit a variable to watch
@@ -363,7 +363,7 @@ export const WatchTabContent: React.FC<DebugPanelTabHeaderProps> = ({ isActive }
                     <Link
                       key="watch-table-empty-state-link"
                       aria-label={formatMessage(
-                        'Learn more on how to test your bot in Bot Framework Composer Documentation'
+                        'Learn more on how to test your bot in Bot Framework Composer Documentation',
                       )}
                       href="https://aka.ms/bfcomposer-2-watch"
                       target="_blank"
@@ -371,7 +371,7 @@ export const WatchTabContent: React.FC<DebugPanelTabHeaderProps> = ({ isActive }
                       {children}
                     </Link>
                   ),
-                }
+                },
               )}
             </span>
           )}

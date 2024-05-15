@@ -34,10 +34,12 @@ const rootTextStyle = css`
   color: gray;
 `;
 
-export const BotProjectInfo: React.FC<RouteComponentProps<{
-  projectId?: string;
-  isRootBot?: boolean;
-}>> = (props) => {
+export const BotProjectInfo: React.FC<
+  RouteComponentProps<{
+    projectId?: string;
+    isRootBot?: boolean;
+  }>
+> = (props) => {
   const { projectId = '', isRootBot = false } = props;
   const botProjects = useRecoilValue(localBotsDataSelector);
   const botProject = botProjects.find((b) => b.projectId === projectId);

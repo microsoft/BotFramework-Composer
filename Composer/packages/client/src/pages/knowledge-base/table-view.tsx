@@ -162,7 +162,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
   const currentDialogImportedFileIds = qnaFile?.imports.map(({ id }) => `${getBaseName(id)}.${locale}`) || [];
   const currentDialogImportedFiles = qnaFiles.filter(({ id }) => currentDialogImportedFileIds.includes(id));
   const currentDialogImportedSourceFiles = currentDialogImportedFiles.filter(({ id }) =>
-    id.endsWith(qnaSuffix(locale))
+    id.endsWith(qnaSuffix(locale)),
   );
   const allSourceFiles = qnaFiles.filter(({ id }) => id.endsWith(qnaSuffix(locale)));
 
@@ -171,7 +171,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
 
     const allSections = flatMap(
       qnaFiles.filter(({ id }) => id.endsWith(qnaSuffix(locale))),
-      generateQnASections
+      generateQnASections,
     );
     if (dialogId === 'all') {
       return allSections;
@@ -188,7 +188,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
 
     const allSections = flatMap(
       qnaFiles.filter(({ id }) => id.endsWith(qnaSuffix(locale))),
-      generateQnASections
+      generateQnASections,
     );
     if (dialogId === 'all') {
       setQnASections(allSections);
@@ -297,7 +297,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
           name: name,
           projectId: actualProjectId,
         });
-      })
+      }),
     );
 
     if (!qnaFile) return;
@@ -309,7 +309,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
           newSourceId,
           projectId: actualProjectId,
         });
-      })
+      }),
     );
     setEditQnAFile(undefined);
   };
@@ -401,7 +401,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
           };
           const title = formatMessage('Warning');
           const subTitle = formatMessage(
-            'Deleting one source file will also delete qna files with the same name on other locales'
+            'Deleting one source file will also delete qna files with the same name on other locales',
           );
 
           setting = {
@@ -521,7 +521,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
 
       return null;
     },
-    [dialogId, qnaSections]
+    [dialogId, qnaSections],
   );
 
   const getTableColums = () => {
@@ -875,7 +875,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
         </div>
       );
     },
-    [dialogId]
+    [dialogId],
   );
 
   const onRenderRow = useCallback(
@@ -892,7 +892,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
       }
       return null;
     },
-    [dialogId, expandedIndex]
+    [dialogId, expandedIndex],
   );
 
   const existedImports = qnaFile?.imports.filter((item) => {

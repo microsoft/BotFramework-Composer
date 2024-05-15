@@ -143,12 +143,8 @@ export const ProjectTree: React.FC<Props> = ({
   headerAriaLabel = '',
   headerPlaceholder = '',
 }) => {
-  const {
-    onboardingAddCoachMarkRef,
-    navigateToFormDialogSchema,
-    setPageElementState,
-    createQnADialogBegin,
-  } = useRecoilValue(dispatcherState);
+  const { onboardingAddCoachMarkRef, navigateToFormDialogSchema, setPageElementState, createQnADialogBegin } =
+    useRecoilValue(dispatcherState);
   const treeRef = useRef<HTMLDivElement>(null);
 
   const pageElements = useRecoilValue(pageElementState).dialogs;
@@ -332,7 +328,7 @@ export const ProjectTree: React.FC<Props> = ({
     },
     dialog: DialogInfo,
     projectId: string,
-    dialogLink: TreeLink
+    dialogLink: TreeLink,
   ): React.ReactNode => {
     const link: TreeLink = {
       projectId: rootProjectId,
@@ -394,13 +390,13 @@ export const ProjectTree: React.FC<Props> = ({
         const index = getTriggerIndex(tr, dialog);
         const warningContent = triggerNotSupported(dialog, tr);
         const errorContent = notificationMap[projectId][dialog.id].some(
-          (diag) => diag.severity === DiagnosticSeverity.Error && diag.path?.match(RegExp(`triggers\\[${index}\\]`))
+          (diag) => diag.severity === DiagnosticSeverity.Error && diag.path?.match(RegExp(`triggers\\[${index}\\]`)),
         );
         return renderTrigger(
           { ...tr, index, displayName: getTriggerName(tr), warningContent, errorContent },
           dialog,
           projectId,
-          dialogLink
+          dialogLink,
         );
       });
   };
@@ -436,7 +432,7 @@ export const ProjectTree: React.FC<Props> = ({
     dialog: DialogInfo,
     groupName: string,
     triggers: ITrigger[],
-    startDepth: number
+    startDepth: number,
   ) => {
     const groupDisplayName =
       groupName === NoGroupingTriggerGroupName ? formatMessage('form-wide operations') : groupName;
@@ -625,7 +621,8 @@ export const ProjectTree: React.FC<Props> = ({
         ? dialogs
         : dialogs.filter(
             (dialog) =>
-              filterMatch(dialog.displayName) || dialog.triggers.some((trigger) => filterMatch(getTriggerName(trigger)))
+              filterMatch(dialog.displayName) ||
+              dialog.triggers.some((trigger) => filterMatch(getTriggerName(trigger))),
           );
     // eventually we will filter on topic trigger phrases
     const filteredTopics =
@@ -809,7 +806,7 @@ export const ProjectTree: React.FC<Props> = ({
                   0 {}
                 other {Press down arrow key to navigate the search results}
             }`,
-            { dialogNum: projectCollection.length, filter: filter, hasFilter: !!filter }
+            { dialogNum: projectCollection.length, filter: filter, hasFilter: !!filter },
           )}
         />
         <div css={tree}>{projectTree}</div>

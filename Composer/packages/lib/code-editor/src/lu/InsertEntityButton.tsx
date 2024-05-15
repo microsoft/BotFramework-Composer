@@ -20,9 +20,10 @@ const fontSizeStyle = {
 const buttonStyles = {
   root: {
     height: 32,
-    '&:hover .ms-Button-flexContainer i, &:active .ms-Button-flexContainer i, &.is-expanded .ms-Button-flexContainer i': {
-      color: FluentTheme.palette.black,
-    },
+    '&:hover .ms-Button-flexContainer i, &:active .ms-Button-flexContainer i, &.is-expanded .ms-Button-flexContainer i':
+      {
+        color: FluentTheme.palette.black,
+      },
   },
   menuIcon: { fontSize: 8, color: FluentTheme.palette.black },
   label: { ...fontSizeStyle },
@@ -60,24 +61,22 @@ export const InsertEntityButton = React.memo((props: Props) => {
         onInsertEntity(entity.Name, entity.Type);
       }
     },
-    [onInsertEntity]
+    [onInsertEntity],
   );
 
   const { menuProps, noEntities } = useLabelingMenuProps(labelingMenuVisible ? 'disable' : 'none', luFile, itemClick);
 
-  const isDisabled = React.useMemo(() => disabled || noEntities || insertEntityDisabled || labelingMenuVisible, [
-    disabled,
-    noEntities,
-    insertEntityDisabled,
-    tagEntityDisabled,
-    labelingMenuVisible,
-  ]);
+  const isDisabled = React.useMemo(
+    () => disabled || noEntities || insertEntityDisabled || labelingMenuVisible,
+    [disabled, noEntities, insertEntityDisabled, tagEntityDisabled, labelingMenuVisible],
+  );
 
   const { iconName, text } = React.useMemo(() => getLuToolbarItemTextAndIcon('useEntity'), []);
 
-  const CommandBarButton = React.useMemo(() => getCommandBarButton(tooltip || formatMessage('Insert defined entity')), [
-    tooltip,
-  ]);
+  const CommandBarButton = React.useMemo(
+    () => getCommandBarButton(tooltip || formatMessage('Insert defined entity')),
+    [tooltip],
+  );
 
   return (
     <CommandBarButton

@@ -3,7 +3,6 @@
 
 import { FormDialogSchemaTemplate } from '@bfc/shared';
 import * as React from 'react';
-// eslint-disable-next-line @typescript-eslint/camelcase
 import { RecoilRoot, useRecoilTransactionObserver_UNSTABLE, useRecoilValue } from 'recoil';
 
 import { formDialogSchemaJsonSelector, trackedAtomsSelector } from './atoms/appState';

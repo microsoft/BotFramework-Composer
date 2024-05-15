@@ -21,66 +21,73 @@ export type WebChatComposerProps = {
   isDisabled: boolean;
 };
 
-const createCardActionMiddleware = () => (next) => async ({ cardAction, getSignInUrl }) => {
-  const { type, value } = cardAction;
+const createCardActionMiddleware =
+  () =>
+  (next) =>
+  async ({ cardAction, getSignInUrl }) => {
+    const { type, value } = cardAction;
 
-  switch (type) {
-    case 'signin': {
-      // eslint-disable-next-line security/detect-non-literal-fs-filename
-      const popup = window.open();
-      const url = await getSignInUrl();
-      if (popup) {
-        popup.location.href = url;
+    switch (type) {
+      case 'signin': {
+        // eslint-disable-next-line security/detect-non-literal-fs-filename
+        const popup = window.open();
+        const url = await getSignInUrl();
+        if (popup) {
+          popup.location.href = url;
+        }
+        break;
       }
-      break;
+
+      case 'downloadFile':
+      //Fall through
+
+      case 'playAudio':
+      //Fall through
+
+      case 'playVideo':
+      //Fall through
+
+      case 'showImage':
+      //Fall through
+
+      case 'openUrl':
+        // eslint-disable-next-line security/detect-non-literal-fs-filename
+        window.open(value, '_blank');
+        break;
+
+      default:
+        return next({ cardAction, getSignInUrl });
     }
+  };
 
-    case 'downloadFile':
-    //Fall through
+const createActivityMiddleware =
+  () =>
+  (next: unknown) =>
+  (...setupArgs) =>
+  (...renderArgs) => {
+    const card = setupArgs[0];
+    switch (card.activity.type) {
+      case ActivityType.Trace:
+        return false;
 
-    case 'playAudio':
-    //Fall through
+      case ActivityType.EndOfConversation:
+        return false;
 
-    case 'playVideo':
-    //Fall through
-
-    case 'showImage':
-    //Fall through
-
-    case 'openUrl':
-      // eslint-disable-next-line security/detect-non-literal-fs-filename
-      window.open(value, '_blank');
-      break;
-
-    default:
-      return next({ cardAction, getSignInUrl });
-  }
-};
-
-const createActivityMiddleware = () => (next: unknown) => (...setupArgs) => (...renderArgs) => {
-  const card = setupArgs[0];
-  switch (card.activity.type) {
-    case ActivityType.Trace:
-      return false;
-
-    case ActivityType.EndOfConversation:
-      return false;
-
-    default:
-      if (typeof next === 'function') {
-        const middlewareResult = next(...setupArgs);
-        if (middlewareResult) {
-          return (
-            <ActivityHighlightWrapper activityId={card.activity.id}>
-              {middlewareResult(...renderArgs)}
-            </ActivityHighlightWrapper>
-          );
+      default:
+        if (typeof next === 'function') {
+          const middlewareResult = next(...setupArgs);
+          if (middlewareResult) {
+            return (
+              <ActivityHighlightWrapper activityId={card.activity.id}>
+                {middlewareResult(...renderArgs)}
+              </ActivityHighlightWrapper>
+            );
+          }
+          return false;
         }
         return false;
-      }
-      return false;
-  }
-};
+    }
+  };
 
 const areEqual = (prevProps: WebChatComposerProps, nextProps: WebChatComposerProps) => {
   const result =

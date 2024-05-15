@@ -37,7 +37,7 @@ export const setError = (callbackHelpers: CallbackInterface, payload) => {
     callbackHelpers.set(applicationErrorState, {
       status: 409,
       message: formatMessage(
-        'This version of the content is out of date, and your last change was rejected. The content will be automatically refreshed.'
+        'This version of the content is out of date, and your last change was rejected. The content will be automatically refreshed.',
       ),
       summary: formatMessage('Modification Rejected'),
     });
