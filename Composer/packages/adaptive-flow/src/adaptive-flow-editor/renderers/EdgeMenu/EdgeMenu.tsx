@@ -45,8 +45,8 @@ export const EdgeMenu: React.FC<EdgeMenuProps> = ({ id, onClick }) => {
   boxShadow += menuSelected
     ? `,0 0 0 2px ${ObiColors.AzureBlue}`
     : nodeSelected
-    ? `, 0 0 0 2px ${ObiColors.Black}`
-    : '';
+      ? `, 0 0 0 2px ${ObiColors.Black}`
+      : '';
 
   const handleMenuShow = (menuSelected) => {
     setMenuSelected(menuSelected);
@@ -65,7 +65,7 @@ export const EdgeMenu: React.FC<EdgeMenuProps> = ({ id, onClick }) => {
     forceDisabledActions,
     menuSchema,
     // Custom Action 'oneOf' arrays from schema file
-    customSchemas.map((x) => x.oneOf).filter((oneOf) => Array.isArray(oneOf) && oneOf.length) as DefinitionSummary[][]
+    customSchemas.map((x) => x.oneOf).filter((oneOf) => Array.isArray(oneOf) && oneOf.length) as DefinitionSummary[][],
   );
 
   const moreLabel = formatMessage('Add');

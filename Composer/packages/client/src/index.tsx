@@ -16,7 +16,7 @@ const appHostElm = document.getElementById('root');
 
 const emotionCache = createCache({
   key: 'client-cache',
-  // @ts-expect-error
+  // @ts-expect-error nonce is defined during initial page rendering
   nonce: window.__nonce__,
 });
 
@@ -32,7 +32,7 @@ const renderApp = (AppComponent: typeof App) => {
         </DispatcherWrapper>
       </CacheProvider>
     </RecoilRoot>,
-    appHostElm
+    appHostElm,
   );
 };
 
@@ -44,6 +44,7 @@ renderApp(App);
  */
 if (module.hot) {
   module.hot.accept('./App', () => {
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
     const NextApp = require<{ App: typeof App }>('./App').App;
     renderApp(NextApp);
   });

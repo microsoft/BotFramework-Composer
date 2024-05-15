@@ -83,7 +83,7 @@ export const RuntimeSettings: React.FC<RouteComponentProps<{ projectId: string }
       <TextField
         required
         data-testid="runtimeCommand"
-        disabled={!settings.runtime || !settings.runtime.customRuntime}
+        disabled={!settings.runtime?.customRuntime}
         errorMessage={errorElement(formDataErrors.command)}
         label={formatMessage('Start command')}
         styles={inputFieldStyles}

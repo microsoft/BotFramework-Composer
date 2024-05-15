@@ -58,7 +58,7 @@ const renderModalityPivot = ({
       telemetryClient={{ track: noop, pageView: noop }}
       onRemoveTemplate={onRemoveTemplate}
       onTemplateChange={onTemplateChange}
-    />
+    />,
   );
 };
 

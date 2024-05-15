@@ -7,7 +7,7 @@ import { RouteComponentProps } from '@reach/router';
 import { PluginHost } from '../../components/PluginHost/PluginHost';
 
 const PluginPageContainer: React.FC<RouteComponentProps<{ pluginId: string; bundleId: string; projectId: string }>> = (
-  props
+  props,
 ) => {
   const { pluginId, bundleId, projectId } = props;
 

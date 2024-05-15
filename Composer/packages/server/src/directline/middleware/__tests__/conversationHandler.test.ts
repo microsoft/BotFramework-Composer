@@ -223,7 +223,7 @@ describe('updateConversation handler', () => {
         id: 'user-old',
       },
       'livechat',
-      'en-us'
+      'en-us',
     );
 
     const state: any = {

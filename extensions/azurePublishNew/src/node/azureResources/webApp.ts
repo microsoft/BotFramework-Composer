@@ -45,7 +45,7 @@ const webAppProvisionMethod = (provisionConfig: ProvisionServiceConfig) => {
 
   return async (
     resourceConfig: WebAppResourceConfig,
-    workingSet: ProvisionWorkingSet
+    workingSet: ProvisionWorkingSet,
   ): Promise<ProvisionWorkingSet> => {
     const { resourceGroupName, webAppName, operatingSystem, location } = resourceConfig;
     try {

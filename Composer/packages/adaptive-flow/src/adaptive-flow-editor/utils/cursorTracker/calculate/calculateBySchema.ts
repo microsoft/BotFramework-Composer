@@ -38,7 +38,7 @@ function transformDefaultBranch(path) {
 export function filterPromptElementsBySchema(
   currentElement: SelectorElement,
   elements: SelectorElement[],
-  direction: Direction
+  direction: Direction,
 ): SelectorElement[] {
   let candidateElements: SelectorElement[] = elements;
 
@@ -46,7 +46,7 @@ export function filterPromptElementsBySchema(
     case Direction.Up:
       if (currentElement.tab === PromptTab.OTHER || currentElement.tab === PromptTab.USER_INPUT) {
         candidateElements = elements.filter(
-          (ele) => ele.selectedId === `${currentElement.focusedId}${PromptTab.BOT_ASKS}`
+          (ele) => ele.selectedId === `${currentElement.focusedId}${PromptTab.BOT_ASKS}`,
         );
       }
       break;
@@ -65,7 +65,7 @@ export function filterPromptElementsBySchema(
         candidateElements = elements.filter((ele) => ele.tab !== PromptTab.OTHER);
       } else if (currentElement.tab === PromptTab.BOT_ASKS || currentElement.tab === PromptTab.USER_INPUT) {
         candidateElements = elements.filter(
-          (ele) => ele.selectedId === `${currentElement.focusedId}${PromptTab.OTHER}`
+          (ele) => ele.selectedId === `${currentElement.focusedId}${PromptTab.OTHER}`,
         );
       }
       break;
@@ -120,7 +120,7 @@ function handlePrevMoveFilter(currentElement: SelectorElement, elements: Selecto
 
 function handleSwitchCasePrevMoveFilter(
   currentElement: SelectorElement,
-  elements: SelectorElement[]
+  elements: SelectorElement[],
 ): SelectorElement[] {
   const currentElementSelectors = parseSelector(transformDefaultBranch(currentElement.selectedId)) as string[];
   let swicthPosition = -1;
@@ -182,7 +182,7 @@ function handleSwitchCaseNextMoveFilter(currentElement: SelectorElement, element
 export function filterElementBySchema(
   currentElement: SelectorElement,
   elements: SelectorElement[],
-  direction: Direction
+  direction: Direction,
 ) {
   const currentElementSelectors = parseSelector(transformDefaultBranch(currentElement.selectedId)) as string[];
   let candidateElements = elements;

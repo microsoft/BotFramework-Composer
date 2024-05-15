@@ -17,12 +17,14 @@ import TableView from './table-view';
 
 const CodeEditor = React.lazy(() => import('./code-editor'));
 
-const LUPage: React.FC<RouteComponentProps<{
-  dialogId: string;
-  projectId: string;
-  skillId: string;
-  luFileId: string;
-}>> = (props) => {
+const LUPage: React.FC<
+  RouteComponentProps<{
+    dialogId: string;
+    projectId: string;
+    skillId: string;
+    luFileId: string;
+  }>
+> = (props) => {
   const { dialogId = '', projectId = '', skillId, luFileId = '' } = props;
   const actualProjectId = skillId ?? projectId;
   const locale = useRecoilValue(localeState(actualProjectId));

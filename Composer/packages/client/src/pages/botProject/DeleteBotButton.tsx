@@ -41,7 +41,7 @@ type DeleteBotButtonProps = {
 
 export const openDeleteBotModal = async (onConfirm: () => Promise<void>) => {
   const warningText = formatMessage(
-    'Are you sure you want to delete your bot? This action cannot be undone and your bot and all related files in the bot project folder will be permanently deleted. Your Azure resources will remain unchanged.'
+    'Are you sure you want to delete your bot? This action cannot be undone and your bot and all related files in the bot project folder will be permanently deleted. Your Azure resources will remain unchanged.',
   );
   const title = formatMessage('Delete Bot');
   const settings = {

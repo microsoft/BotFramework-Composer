@@ -166,8 +166,8 @@ export const ResourceConfigurationStep = (props: Props) => {
               </ConfigureResourcesPropertyLabel>
               {renderPropertyInfoIcon(
                 formatMessage(
-                  'A custom resource group name that you choose or create. Resource groups allow you to group Azure resources for access and management.'
-                )
+                  'A custom resource group name that you choose or create. Resource groups allow you to group Azure resources for access and management.',
+                ),
               )}
             </Stack>
             <ResourceGroupPicker
@@ -193,7 +193,7 @@ export const ResourceConfigurationStep = (props: Props) => {
                 {formatMessage('Operating System')}
               </ConfigureResourcesPropertyLabel>
               {renderPropertyInfoIcon(
-                formatMessage('Select the operating system that will host your application service.')
+                formatMessage('Select the operating system that will host your application service.'),
               )}
             </Stack>
             <OperatingSystemChoiceGroup

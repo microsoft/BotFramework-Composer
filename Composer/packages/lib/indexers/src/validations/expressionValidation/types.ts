@@ -26,7 +26,7 @@ export type ValidateFunc = (
   setting: DialogSetting,
   lgFiles: LgFile[],
   luFiles: LuFile[],
-  cache?: ExpressionParseResult
+  cache?: ExpressionParseResult,
 ) => { diagnostics: Diagnostic[] | null; cache: ExpressionParseResult }; // error msg
 
 export type ExpressionProperty = {

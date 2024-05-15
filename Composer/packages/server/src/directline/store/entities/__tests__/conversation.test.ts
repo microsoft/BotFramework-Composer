@@ -195,7 +195,7 @@ describe('Conversation class', () => {
     conversation.prepActivityToBeSentToUser('user-1', mockUserActivity);
     const transcripts = await conversation.getTranscript();
     const matchedActivity = transcripts.find(
-      (activity) => activity.conversation.id === mockUserActivity.conversation.id
+      (activity) => activity.conversation.id === mockUserActivity.conversation.id,
     );
     expect(matchedActivity).toBeDefined();
   });

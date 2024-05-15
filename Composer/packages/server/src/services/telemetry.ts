@@ -149,7 +149,7 @@ const timedEvents = {};
 const startEvent = <TN extends TelemetryEventName>(
   name: TN,
   id: string,
-  properties?: TelemetryEvents[TN] extends undefined ? never : TelemetryEvents[TN]
+  properties?: TelemetryEvents[TN] extends undefined ? never : TelemetryEvents[TN],
 ) => {
   timedEvents[id] = {
     name,

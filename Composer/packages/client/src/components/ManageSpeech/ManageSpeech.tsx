@@ -23,7 +23,7 @@ export const ManageSpeech = (props: ManageSpeechProps) => {
     subscriptionId: string,
     resourceGroupName: string,
     resourceName: string,
-    region: string
+    region: string,
   ): Promise<string> => {
     const cognitiveServicesManagementClient = new CognitiveServicesManagementClient(tokenCredentials, subscriptionId);
     await cognitiveServicesManagementClient.accounts.create(resourceGroupName, resourceName, {
@@ -46,7 +46,7 @@ export const ManageSpeech = (props: ManageSpeechProps) => {
     <ManageService
       createService={createService}
       handoffInstructions={formatMessage(
-        '1. Using the Azure portal, please create a Speech resource on my behalf.\n2. Once provisioned, securely share the resulting credentials with me as described in the link below.\n\nDetailed instructions:\nhttps://aka.ms/bfcomposerhandoffdls'
+        '1. Using the Azure portal, please create a Speech resource on my behalf.\n2. Once provisioned, securely share the resulting credentials with me as described in the link below.\n\nDetailed instructions:\nhttps://aka.ms/bfcomposerhandoffdls',
       )}
       hidden={props.hidden}
       introText={formatMessage('Use Speech to enable voice input and output for your bot.')}

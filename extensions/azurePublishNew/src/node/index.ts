@@ -34,7 +34,7 @@ const createAzurePublishPlugin = (): PublishPlugin<ProvisionServiceConfig> => {
           });
         }
         return resources;
-      }, [])
+      }, []),
     );
   };
 
@@ -90,7 +90,7 @@ const createAzurePublishPlugin = (): PublishPlugin<ProvisionServiceConfig> => {
     processName: string,
     project: IBotProject,
     _user,
-    jobId = ''
+    jobId = '',
   ): Promise<ProcessStatus> => {
     let status = processTracker.get(jobId);
     if (!status) {

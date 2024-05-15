@@ -62,7 +62,7 @@ function extractLgTemplates(id, dialog): LgTemplateJsonPath[] {
         templates.push(
           ...extractLgTemplateRefs(target.value).map((x) => {
             return { name: x.name, path: target.path };
-          })
+          }),
         );
       });
     }

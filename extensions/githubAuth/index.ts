@@ -3,7 +3,6 @@
 
 const GitHubStrategy = require('passport-github').Strategy;
 
-// eslint-disable-next-line @typescript-eslint/no-var-requires
 const { GITHUB_CLIENT_ID, GITHUB_CLIENT_SECRET, BASE_URL } = require('./config.json');
 
 module.exports = {
@@ -23,8 +22,8 @@ module.exports = {
             token: accessToken,
             profile: profile,
           });
-        }
-      )
+        },
+      ),
     );
 
     // define this BEFORE turning on the middleware...
@@ -46,7 +45,7 @@ module.exports = {
         console.log('login complete!');
         // Successful authentication, redirect home.
         res.redirect('/home');
-      }
+      },
     );
 
     composer.addAllowedUrl('/logout');
@@ -61,7 +60,7 @@ module.exports = {
       (user, done) => {
         console.log('DESERIALIZE USER!', user);
         done(null, JSON.parse(user));
-      }
+      },
     );
   },
 };

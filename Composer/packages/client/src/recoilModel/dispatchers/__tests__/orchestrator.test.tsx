@@ -44,63 +44,63 @@ describe('Orchestrator model picking logic', () => {
     expect(
       await getAvailableLanguageModels([
         { id: 'test.en-us.dialog', content: { $kind: SDKKinds.OrchestratorRecognizer } },
-      ])
+      ]),
     ).toEqual([enModel]);
     expect(
       await getAvailableLanguageModels([
         { id: 'test.EN-us.dialog', content: { $kind: SDKKinds.OrchestratorRecognizer } },
-      ])
+      ]),
     ).toEqual([enModel]);
     expect(
       await getAvailableLanguageModels([
         { id: 'test.en-US.dialog', content: { $kind: SDKKinds.OrchestratorRecognizer } },
-      ])
+      ]),
     ).toEqual([enModel]);
     expect(
-      await getAvailableLanguageModels([{ id: 'test.en.dialog', content: { $kind: SDKKinds.OrchestratorRecognizer } }])
+      await getAvailableLanguageModels([{ id: 'test.en.dialog', content: { $kind: SDKKinds.OrchestratorRecognizer } }]),
     ).toEqual([enModel]);
     expect(
       await getAvailableLanguageModels([
         { id: 'test.en-anything.dialog', content: { $kind: SDKKinds.OrchestratorRecognizer } },
-      ])
+      ]),
     ).toEqual([enModel]);
   });
 
   it('return multilang model under correct circumstances', async () => {
     const multilingualModel = { kind: 'multilingual_intent', name: 'default' };
     expect(
-      await getAvailableLanguageModels([{ id: 'test.it.dialog', content: { $kind: SDKKinds.OrchestratorRecognizer } }])
+      await getAvailableLanguageModels([{ id: 'test.it.dialog', content: { $kind: SDKKinds.OrchestratorRecognizer } }]),
     ).toEqual([multilingualModel]);
     expect(
-      await getAvailableLanguageModels([{ id: 'test.jp.dialog', content: { $kind: SDKKinds.OrchestratorRecognizer } }])
+      await getAvailableLanguageModels([{ id: 'test.jp.dialog', content: { $kind: SDKKinds.OrchestratorRecognizer } }]),
     ).toHaveLength(0);
     expect(
-      await getAvailableLanguageModels([{ id: 'test.ja.dialog', content: { $kind: SDKKinds.OrchestratorRecognizer } }])
+      await getAvailableLanguageModels([{ id: 'test.ja.dialog', content: { $kind: SDKKinds.OrchestratorRecognizer } }]),
     ).toHaveLength(1);
 
     expect(
       await getAvailableLanguageModels([
         { id: 'test.zh-cn.dialog', content: { $kind: SDKKinds.OrchestratorRecognizer } },
-      ])
+      ]),
     ).toEqual([multilingualModel]);
     expect(
       await getAvailableLanguageModels([
         { id: 'test.zh-CN.dialog', content: { $kind: SDKKinds.OrchestratorRecognizer } },
-      ])
+      ]),
     ).toEqual([multilingualModel]);
     expect(
       await getAvailableLanguageModels([
         { id: 'test.rwk-tz.dialog', content: { $kind: SDKKinds.OrchestratorRecognizer } },
-      ])
+      ]),
     ).toEqual([multilingualModel]);
     expect(
-      await getAvailableLanguageModels([{ id: 'test.pap', content: { $kind: SDKKinds.OrchestratorRecognizer } }])
+      await getAvailableLanguageModels([{ id: 'test.pap', content: { $kind: SDKKinds.OrchestratorRecognizer } }]),
     ).toEqual([multilingualModel]);
     expect(
-      await getAvailableLanguageModels([{ id: 'test.tr-cy', content: { $kind: SDKKinds.OrchestratorRecognizer } }])
+      await getAvailableLanguageModels([{ id: 'test.tr-cy', content: { $kind: SDKKinds.OrchestratorRecognizer } }]),
     ).toEqual([multilingualModel]);
     expect(
-      await getAvailableLanguageModels([{ id: 'test.nope', content: { $kind: SDKKinds.OrchestratorRecognizer } }])
+      await getAvailableLanguageModels([{ id: 'test.nope', content: { $kind: SDKKinds.OrchestratorRecognizer } }]),
     ).toHaveLength(0);
   });
 
@@ -131,8 +131,8 @@ describe('Orchestrator model picking logic', () => {
     (httpClient.get as jest.Mock).mockResolvedValueOnce({
       data: {
         defaults: {
-          en_intent: 'fake_english_model_name', // eslint-disable-line @typescript-eslint/camelcase
-          multilingual_intent: 'fake_multilingual_model_name', // eslint-disable-line @typescript-eslint/camelcase
+          en_intent: 'fake_english_model_name',
+          multilingual_intent: 'fake_multilingual_model_name',
         },
       },
     });

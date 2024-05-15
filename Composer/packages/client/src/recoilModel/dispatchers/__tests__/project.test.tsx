@@ -72,8 +72,8 @@ jest.mock('../../parsers/lgWorker', () => {
             const result = require('@bfc/indexers').lgUtil.parse(id, content, files);
             delete result.parseResult;
             return result;
-          })
-        )
+          }),
+        ),
       ),
   };
 });
@@ -83,7 +83,7 @@ jest.mock('../../parsers/luWorker', () => {
     flush: () => new Promise((resolve) => resolve(null)),
     parseAll: (files, luFeatures) =>
       new Promise((resolve) =>
-        resolve(files.map(({ id, content }) => require('@bfc/indexers').luUtil.parse(id, content, luFeatures)))
+        resolve(files.map(({ id, content }) => require('@bfc/indexers').luUtil.parse(id, content, luFeatures))),
       ),
   };
 });
@@ -93,7 +93,7 @@ jest.mock('../../parsers/qnaWorker', () => {
     flush: () => new Promise((resolve) => resolve(null)),
     parseAll: (files) =>
       new Promise((resolve) =>
-        resolve(files.map(({ id, content }) => require('@bfc/indexers').qnaUtil.parse(id, content)))
+        resolve(files.map(({ id, content }) => require('@bfc/indexers').qnaUtil.parse(id, content))),
       ),
   };
 });
@@ -209,7 +209,7 @@ describe('Project dispatcher', () => {
             settingsDispatcher,
           },
         },
-      }
+      },
     );
     renderedComponent = rendered.result;
     dispatcher = renderedComponent.current.currentDispatcher;
@@ -427,13 +427,13 @@ describe('Project dispatcher', () => {
       await dispatcher.addRemoteSkillToBotProject(
         'https://test-dev.azurewebsites.net/manifests/onenote-2-1-preview-1-manifest.json',
         'remote',
-        {}
+        {},
       );
     });
     expect(renderedComponent.current.botStates.oneNoteSync).toBeDefined();
     expect(renderedComponent.current.botStates.oneNoteSync.botDisplayName).toBe('OneNoteSync');
     expect(renderedComponent.current.botStates.oneNoteSync.location).toBe(
-      'https://test-dev.azurewebsites.net/manifests/onenote-2-1-preview-1-manifest.json'
+      'https://test-dev.azurewebsites.net/manifests/onenote-2-1-preview-1-manifest.json',
     );
     expect(navigateTo).toHaveBeenLastCalledWith(`/bot/${projectId}/skill/${skillId}`);
     mockImplementation.mockClear();
@@ -463,7 +463,7 @@ describe('Project dispatcher', () => {
       await dispatcher.addRemoteSkillToBotProject(
         'https://test-dev.azurewebsites.net/manifests/onenote-2-1-preview-1-manifest.json',
         'remote',
-        {}
+        {},
       );
     });
 

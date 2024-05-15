@@ -336,7 +336,7 @@ export const getDesignerId = (data?: DesignerData) => {
 export const deepCopyAction = async (
   data: MicrosoftIDialog,
   copyLgTemplate: FieldProcessorAsync<string>,
-  copyLuIntent: FieldProcessorAsync<LuIntentSection | string | undefined>
+  copyLuIntent: FieldProcessorAsync<LuIntentSection | string | undefined>,
 ) => {
   return await copyAdaptiveAction(data, {
     getDesignerId,
@@ -348,7 +348,7 @@ export const deepCopyAction = async (
 export const deepCopyActions = async (
   actions: MicrosoftIDialog[],
   copyLgTemplate: FieldProcessorAsync<string>,
-  copyLuIntent: FieldProcessorAsync<LuIntentSection | string | undefined>
+  copyLuIntent: FieldProcessorAsync<LuIntentSection | string | undefined>,
 ) => {
   // NOTES: underlying lg api for writing new lg template to file is not concurrency-safe,
   //        so we have to call them sequentially
@@ -365,7 +365,7 @@ export const deepCopyActions = async (
 export const deleteAction = (
   data: MicrosoftIDialog,
   deleteLgTemplates: (templates: string[]) => Promise<any>,
-  deleteLuIntents: (luIntents: string[]) => Promise<any>
+  deleteLuIntents: (luIntents: string[]) => Promise<any>,
 ) => {
   return deleteAdaptiveAction(data, deleteLgTemplates, deleteLuIntents);
 };
@@ -373,12 +373,12 @@ export const deleteAction = (
 export const deleteActions = (
   inputs: MicrosoftIDialog[],
   deleteLgTemplates: (templates: string[]) => Promise<any>,
-  deleteLuIntents: (luIntents: string[]) => Promise<any>
+  deleteLuIntents: (luIntents: string[]) => Promise<any>,
 ) => {
   return deleteAdaptiveActionList(inputs, deleteLgTemplates, deleteLuIntents);
 };
 
-const assignDefaults = (data: {}, currentSeed = {}) => {
+const assignDefaults = (data: Record<string, any>, currentSeed = {}) => {
   for (const field in data) {
     if (field !== '$designer' && data[field].type === 'object') {
       // recurse on subtree's properties
@@ -406,7 +406,7 @@ class DialogFactory {
     overrides: {
       $designer?: Partial<DesignerAttributes>;
       [key: string]: any;
-    } = {}
+    } = {},
   ) {
     if (!this.schema) {
       throw new Error(formatMessage('DialogFactory missing schema.'));
@@ -418,7 +418,7 @@ class DialogFactory {
       { $kind, $designer: merge({ id: generateDesignerId() }, $designer) },
       this.seedDefaults($kind),
       defaultProperties,
-      propertyOverrides
+      propertyOverrides,
     );
   }
 

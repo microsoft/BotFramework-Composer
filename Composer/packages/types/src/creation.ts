@@ -4,7 +4,7 @@
 export const csharpFeedKey = 'dotnet';
 export const nodeFeedKey = 'js';
 export const defaultFeeds = [nodeFeedKey, csharpFeedKey] as const;
-export type FeedName = typeof defaultFeeds[number];
+export type FeedName = (typeof defaultFeeds)[number];
 export type FeedType = 'npm' | 'nuget';
 
 type WebApplicationInfo = {
@@ -68,4 +68,4 @@ export type TeamsManifest = {
 export const webAppRuntimeKey = 'webapp';
 export const functionsRuntimeKey = 'functions';
 export const availableRunTimes = [webAppRuntimeKey, functionsRuntimeKey] as const;
-export type RuntimeType = typeof availableRunTimes[number];
+export type RuntimeType = (typeof availableRunTimes)[number];

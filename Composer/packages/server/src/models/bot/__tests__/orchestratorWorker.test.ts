@@ -42,7 +42,7 @@ describe('Orchestrator Warmup Cache', () => {
     (Orchestrator.getLabelResolversAsync as jest.Mock).mockImplementation(
       async (intentModelPath: string, _: string, snapshots: Map<string, Uint8Array>) => {
         return new Map<string, LabelResolver>();
-      }
+      },
     );
 
     (readdir as jest.Mock).mockClear();
@@ -75,7 +75,7 @@ describe('Orchestrator Warmup Cache', () => {
     (Orchestrator.getLabelResolversAsync as jest.Mock).mockImplementation(
       async (intentModelPath: string, _: string, snapshots: Map<string, Uint8Array>) => {
         return new Map<string, LabelResolver>();
-      }
+      },
     );
     (readJson as jest.Mock).mockImplementationOnce(async (file) => 'corrupted settings');
 
@@ -108,14 +108,14 @@ describe('Orchestrator Warmup Cache', () => {
       './model/en.onnx',
       '',
       new Map([['test.en.lu', new Uint8Array(Buffer.from('test blu file'))]]),
-      false
+      false,
     );
     expect(Orchestrator.getLabelResolversAsync).toHaveBeenNthCalledWith(
       2,
       './model/multilang.onnx',
       '',
       new Map([['test.zh-cn.lu', new Uint8Array(Buffer.from('test blu file'))]]),
-      false
+      false,
     );
   });
 
@@ -135,7 +135,7 @@ describe('Orchestrator Warmup Cache', () => {
         ['test.en-us.lu', new Uint8Array(Buffer.from('test blu file'))],
         ['test.en.lu', new Uint8Array(Buffer.from('test blu file'))],
       ]),
-      false
+      false,
     );
   });
 
@@ -155,7 +155,7 @@ describe('Orchestrator Warmup Cache', () => {
         ['test.zh-cn.lu', new Uint8Array(Buffer.from('test blu file'))],
         ['test.ja-jp.lu', new Uint8Array(Buffer.from('test blu file'))],
       ]),
-      false
+      false,
     );
   });
 

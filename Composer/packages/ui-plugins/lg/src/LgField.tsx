@@ -104,7 +104,7 @@ const LgField: React.FC<FieldProps<string>> = (props) => {
       (lgFiles.find((lgFile) => lgFile.id === lgFileId)?.allTemplates || [])
         .filter((t) => t.name !== lgTemplateRef?.name)
         .sort(),
-    [lgFileId, lgFiles]
+    [lgFileId, lgFiles],
   );
 
   const template = lgFile?.templates?.find((template) => {
@@ -117,17 +117,18 @@ const LgField: React.FC<FieldProps<string>> = (props) => {
 
   const diagnostics = lgFile ? filterTemplateDiagnostics(lgFile, template.name) : [];
 
-  const responseEditorLinkDisabled = useMemo(() => diagnostics.some((d) => d.severity === DiagnosticSeverity.Error), [
-    diagnostics,
-  ]);
+  const responseEditorLinkDisabled = useMemo(
+    () => diagnostics.some((d) => d.severity === DiagnosticSeverity.Error),
+    [diagnostics],
+  );
 
-  const allowResponseEditor = useMemo(() => !responseEditorLinkDisabled && validateStructuredResponse(template), [
-    template,
-    responseEditorLinkDisabled,
-  ]);
+  const allowResponseEditor = useMemo(
+    () => !responseEditorLinkDisabled && validateStructuredResponse(template),
+    [template, responseEditorLinkDisabled],
+  );
 
   const [editorMode, setEditorMode] = React.useState<LgEditorMode>(
-    allowResponseEditor ? 'responseEditor' : 'codeEditor'
+    allowResponseEditor ? 'responseEditor' : 'codeEditor',
   );
 
   const lgOption = {
@@ -154,7 +155,7 @@ const LgField: React.FC<FieldProps<string>> = (props) => {
         }
       }
     },
-    [designerId, shellApi, lgFileId, lgName, lgTemplateRef, props.onChange]
+    [designerId, shellApi, lgFileId, lgName, lgTemplateRef, props.onChange],
   );
 
   const handleSettingsChange = (settings: CodeEditorSettings) => {
@@ -167,7 +168,7 @@ const LgField: React.FC<FieldProps<string>> = (props) => {
         {text}
       </Stack>
     ),
-    []
+    [],
   );
 
   const modeChange = useCallback(async () => {
@@ -184,16 +185,16 @@ const LgField: React.FC<FieldProps<string>> = (props) => {
                 </Link>
               ),
               text: ({ children }) => <Text key="confirm_message_0">{children}</Text>,
-            }
+            },
           )}
           {formatMessage.rich(
             '<text>If you proceed to switch to Response editor, you will lose your current template content, and start with a blank response. Do you want to continue?</text>',
             {
               text: ({ children }) => <Text key="confirm_message_1">{children}</Text>,
-            }
+            },
           )}
         </React.Fragment>,
-        { confirmText: formatMessage('Confirm'), onRenderContent: renderConfirmDialogContent }
+        { confirmText: formatMessage('Confirm'), onRenderContent: renderConfirmDialogContent },
       );
 
       if (confirm) {
@@ -207,7 +208,7 @@ const LgField: React.FC<FieldProps<string>> = (props) => {
     }
 
     shellApi.telemetryClient.track(
-      editorMode === 'codeEditor' ? 'LGEditorSwitchToCodeEditor' : 'LGEditorSwitchToResponseEditor'
+      editorMode === 'codeEditor' ? 'LGEditorSwitchToCodeEditor' : 'LGEditorSwitchToResponseEditor',
     );
     setEditorMode(editorMode === 'codeEditor' ? 'responseEditor' : 'codeEditor');
   }, [editorMode, allowResponseEditor, props.onChange, shellApi.telemetryClient]);
@@ -229,7 +230,7 @@ const LgField: React.FC<FieldProps<string>> = (props) => {
 
       shellApi.navigateTo(url);
     },
-    [shellApi, projectId, locale]
+    [shellApi, projectId, locale],
   );
 
   const onTemplateChange = useCallback(
@@ -246,14 +247,14 @@ const LgField: React.FC<FieldProps<string>> = (props) => {
         }
       }
     },
-    [lgOption, shellApi, props.onChange]
+    [lgOption, shellApi, props.onChange],
   );
 
   const onRemoveTemplate = useCallback(
     (template: string) => {
       onTemplateChange(template);
     },
-    [onTemplateChange]
+    [onTemplateChange],
   );
 
   const popExpandOptions = React.useMemo(() => ({ popExpandTitle: label || formatMessage('Bot response') }), [label]);

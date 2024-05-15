@@ -26,7 +26,7 @@ export const useUndoKeyBinding = () => {
         }
       }
     },
-    [undo, redo, canRedo, canUndo]
+    [undo, redo, canRedo, canUndo],
   );
 
   useKeyBinding('keydown', callback);

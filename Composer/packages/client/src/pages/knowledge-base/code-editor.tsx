@@ -20,7 +20,7 @@ import TelemetryClient from '../../telemetry/TelemetryClient';
 
 import { backIcon } from './styles';
 import { qnaSuffix } from './table-view';
-interface CodeEditorProps extends RouteComponentProps<{}> {
+interface CodeEditorProps extends RouteComponentProps<unknown> {
   dialogId: string;
   projectId: string;
   locale: string;
@@ -84,7 +84,7 @@ const CodeEditor: React.FC<CodeEditorProps> = (props) => {
       debounce((newContent: string) => {
         actions.updateQnAFile({ id: targetFileId, content: newContent, projectId: actualProjectId });
       }, 500),
-    [actualProjectId]
+    [actualProjectId],
   );
 
   return (

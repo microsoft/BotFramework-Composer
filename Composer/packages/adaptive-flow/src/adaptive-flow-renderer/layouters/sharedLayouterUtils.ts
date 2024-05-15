@@ -14,7 +14,7 @@ export const calculateBranchNodesIntervalX = (leftNodeBound: Boundary, rightNode
 
   return Math.max(
     BranchIntervalX,
-    BranchAxisXIntervalMin - getRightWidth(leftNodeBound) - getLeftWidth(rightNodeBound)
+    BranchAxisXIntervalMin - getRightWidth(leftNodeBound) - getLeftWidth(rightNodeBound),
   );
 };
 

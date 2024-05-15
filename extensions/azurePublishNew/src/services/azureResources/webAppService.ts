@@ -8,7 +8,7 @@ import { throwNotImplementedError } from '../throwNotImplementedError';
 
 export const createWebAppService = (token: string, subscriptionId: string) => {
   const tokenCredentials = new TokenCredentials(token);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  // @ts-expect-error types missmatch
   const webSiteManagementClient = new WebSiteManagementClient(tokenCredentials, subscriptionId);
 
   const checkNameAvailability = async () => {

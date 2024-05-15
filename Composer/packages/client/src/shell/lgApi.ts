@@ -33,7 +33,7 @@ const memoizedDebounce = (func, wait, options = {}) => {
 function createLgApi(
   state: { dialogId: string; projectId: string },
   actions: Dispatcher,
-  lgFileResolver: (id: string) => LgFile | undefined
+  lgFileResolver: (id: string) => LgFile | undefined,
 ): LgContextApi {
   const getLgTemplates = (id) => {
     if (id === undefined) throw new Error('must have a file id');

@@ -7,7 +7,7 @@ import { throwNotImplementedError } from '../throwNotImplementedError';
 
 export const createABSService = (token: string, subscriptionId: string) => {
   const tokenCredentials = new TokenCredentials(token);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  // @ts-expect-error types missmatch
   const azureBotService = new AzureBotService(tokenCredentials, subscriptionId);
 
   const checkNameAvailability = async () => {

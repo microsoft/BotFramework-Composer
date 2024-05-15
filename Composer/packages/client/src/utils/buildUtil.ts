@@ -20,7 +20,7 @@ export function createCrossTrainConfig(dialogs: DialogInfo[], luFiles: LuFile[],
     if (!luFile) return result;
 
     const filtered = intentTriggers.filter((intentTrigger) =>
-      luFile.intents.find((intent) => intent.Name === intentTrigger.intent || intentTrigger.intent === '')
+      luFile.intents.find((intent) => intent.Name === intentTrigger.intent || intentTrigger.intent === ''),
     );
 
     if (!filtered.length) return result;

@@ -6,7 +6,7 @@ import { IndexedNode } from '../models/IndexedNode';
 
 export function transformBaseInput(
   input: any,
-  jsonpath: string
+  jsonpath: string,
 ): { botAsks: IndexedNode; userAnswers: IndexedNode; invalidPrompt: IndexedNode } {
   return {
     botAsks: new IndexedNode(jsonpath, {

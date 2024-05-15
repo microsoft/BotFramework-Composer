@@ -34,7 +34,7 @@ export const useEmptyPropsHandler = (
   projectId: string,
   location?: WindowLocation,
   skillId?: string,
-  dialogId?: string
+  dialogId?: string,
 ) => {
   const activeBot = skillId ?? projectId;
 
@@ -42,13 +42,13 @@ export const useEmptyPropsHandler = (
   const locale = useRecoilValue(localeState(activeBot));
   const settings = useRecoilValue(settingsState(activeBot));
   const [currentLg, setCurrentLg] = useRecoilState(
-    lgFileState({ projectId: activeBot, lgFileId: `${dialogId}.${locale}` })
+    lgFileState({ projectId: activeBot, lgFileId: `${dialogId}.${locale}` }),
   );
   const [currentLu, setCurrentLu] = useRecoilState(
-    luFileState({ projectId: activeBot, luFileId: `${dialogId}.${locale}` })
+    luFileState({ projectId: activeBot, luFileId: `${dialogId}.${locale}` }),
   );
   const [currentQna, setCurrentQna] = useRecoilState(
-    qnaFileState({ projectId: activeBot, qnaFileId: `${dialogId}.${locale}` })
+    qnaFileState({ projectId: activeBot, qnaFileId: `${dialogId}.${locale}` }),
   );
   const lgFiles = useRecoilValue(lgFilesSelectorFamily(projectId));
   const luFiles = useRecoilValue(luFilesSelectorFamily(projectId));
@@ -143,8 +143,8 @@ export const useEmptyPropsHandler = (
     });
 
     /* eslint-disable no-underscore-dangle */
-    // @ts-ignore
-    globalHistory._onTransitionComplete();
+    // @ts-expect-error undocumented API
+    globalHistory?._onTransitionComplete();
     /* eslint-enable */
   }, [location, activeBot, currentDialog, dialogId]);
 };

@@ -44,7 +44,7 @@ function generateResourcePageUrl(
   skillId: string | null,
   resourceType: ResourceType,
   resourceId: string,
-  line = 0
+  line = 0,
 ) {
   let uri = `/bot/${rootProjectId}`;
   if (skillId !== null && skillId !== rootProjectId) {
@@ -60,13 +60,13 @@ const getFriendlyPath = (dialogPath: string | undefined, dialogs: DialogInfo[]) 
     if (!dialogPath) {
       return [];
     }
-    const [dialogName, triggerPath, ...actionPaths] = dialogPath.split('#')[0]?.split('.');
+    const [dialogName, triggerPath, ...actionPaths] = dialogPath.split('#')[0]?.split('.') ?? [];
     if (dialogName) {
       const matchedDialog = dialogs.find(({ displayName }) => displayName === dialogName);
 
       if (matchedDialog && triggerPath) {
         breadcrumb.push(matchedDialog.displayName);
-        const trigger: ITrigger = get(matchedDialog, triggerPath, '');
+        const trigger = get(matchedDialog, triggerPath, '') as unknown as ITrigger;
         if (trigger.displayName) {
           breadcrumb.push(trigger.displayName);
         }
@@ -151,7 +151,7 @@ export class DialogDiagnostic extends DiagnosticInfo {
     id: string,
     location: string,
     diagnostic: Diagnostic,
-    dialogs: DialogInfo[]
+    dialogs: DialogInfo[],
   ) {
     super(rootProjectId, projectId, id, location, diagnostic);
     this.message = `In ${replaceDialogDiagnosticLabel(diagnostic.path)} ${diagnostic.message}`;
@@ -178,7 +178,7 @@ export class SchemaDiagnostic extends DialogDiagnostic {
     id: string,
     location: string,
     diagnostic: Diagnostic,
-    dialogs: DialogInfo[]
+    dialogs: DialogInfo[],
   ) {
     super(rootProjectId, projectId, id, location, diagnostic, dialogs);
     this.message = diagnostic.message;
@@ -211,7 +211,7 @@ export class SettingDiagnostic extends DiagnosticInfo {
     super(rootProjectId, projectId, id, location, diagnostic);
     this.message = `${replaceDialogDiagnosticLabel(diagnostic.path)} ${diagnostic.message}`;
     this.dialogPath = diagnostic.path;
-    this.friendlyLocationBreadcrumbItems = ['Settings'];
+    this.friendlyLocationBreadcrumbItems = ['Configure'];
   }
   getUrl = (hash?: string) => {
     return createBotSettingUrl(this.rootProjectId, this.projectId, hash);
@@ -227,7 +227,7 @@ export class LgDiagnostic extends DiagnosticInfo {
     location: string,
     diagnostic: Diagnostic,
     lgFile: LgFile,
-    dialogs: DialogInfo[]
+    dialogs: DialogInfo[],
   ) {
     super(rootProjectId, projectId, id, location, diagnostic);
     this.message = createSingleMessage(diagnostic);
@@ -242,7 +242,7 @@ export class LgDiagnostic extends DiagnosticInfo {
     const mappedTemplate = lgFile.templates.find(
       (t) =>
         get(diagnostic, 'range.start.line') >= get(t, 'range.start.line') &&
-        get(diagnostic, 'range.end.line') <= get(t, 'range.end.line')
+        get(diagnostic, 'range.end.line') <= get(t, 'range.end.line'),
     );
     if (mappedTemplate?.name?.match(LgNamePattern)) {
       //should navigate to design page
@@ -262,7 +262,7 @@ export class LgDiagnostic extends DiagnosticInfo {
       projectId,
       'language-generation',
       resourceId,
-      diagnostic.range?.start.line
+      diagnostic.range?.start.line,
     );
     //the format of item.id is lgFile#inlineTemplateId
     if (dialogPath) {
@@ -281,7 +281,7 @@ export class LuDiagnostic extends DiagnosticInfo {
     location: string,
     diagnostic: Diagnostic,
     luFile: LuFile,
-    dialogs: DialogInfo[]
+    dialogs: DialogInfo[],
   ) {
     super(rootProjectId, projectId, id, location, diagnostic);
     this.dialogPath = this.findDialogPath(luFile, dialogs, diagnostic);
@@ -311,7 +311,7 @@ export class LuDiagnostic extends DiagnosticInfo {
       projectId,
       'language-understanding',
       resourceId,
-      diagnostic.range?.start.line
+      diagnostic.range?.start.line,
     );
     if (dialogPath) {
       uri = convertPathToUrl(rootProjectId, rootProjectId === projectId ? null : projectId, resourceId, dialogPath);
@@ -335,7 +335,7 @@ export class QnADiagnostic extends DiagnosticInfo {
       projectId,
       'knowledge-base',
       resourceId,
-      diagnostic.range?.start.line
+      diagnostic.range?.start.line,
     );
   };
 }

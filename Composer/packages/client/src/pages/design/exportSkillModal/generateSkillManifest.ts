@@ -33,7 +33,7 @@ export const generateSkillManifest = (
   selectedTriggers: ITrigger[],
   selectedDialogs: Partial<DialogInfo>[],
   currentTarget: PublishTarget,
-  projectId: string
+  projectId: string,
 ) => {
   const {
     activities: previousActivities,
@@ -71,7 +71,7 @@ export const generateSkillManifest = (
 export const generateActivities = (
   dialogSchemas: DialogSchemaFile[],
   triggers: ITrigger[],
-  dialogs: DialogInfo[]
+  dialogs: DialogInfo[],
 ): { activities?: { [name: string]: Activity } } => {
   const dialogActivities = dialogs.reduce((acc: any, dialog) => {
     const activity = generateActivity(dialogSchemas, dialog);
@@ -120,7 +120,7 @@ export const generateDispatchModels = (
   luFiles: LuFile[],
   qnaFiles: QnAFile[],
   target: PublishTarget,
-  projectId: string
+  projectId: string,
 ): { dispatchModels?: DispatchModels } => {
   const intents = selectedTriggers.filter(({ $kind }) => $kind === SDKKinds.OnIntent).map(({ intent }) => intent);
   const { id: rootId } = dialogs.find((dialog) => dialog?.isRoot) || {};
@@ -214,7 +214,7 @@ export const generateDispatchModels = (
 
 export const getDefinitions = (
   dialogSchema: DialogSchemaFile[],
-  selectedDialogs: DialogInfo[]
+  selectedDialogs: DialogInfo[],
 ): { definitions?: { [key: string]: any } } => {
   const definitions = dialogSchema.reduce((acc, { content = {}, id }) => {
     if (selectedDialogs.some(({ id: dialogId }) => dialogId === id)) {

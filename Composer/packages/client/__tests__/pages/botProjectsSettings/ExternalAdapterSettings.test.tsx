@@ -67,14 +67,16 @@ jest.mock('../../../src/utils/navigation', () => ({
   navigateTo: (...args) => mockNavigationTo(...args),
 }));
 
-const makeInitialState = (newSettings: {}) => ({ set }) => {
-  set(currentProjectIdState, PROJECT_ID);
-  set(settingsState(PROJECT_ID), newSettings);
-  set(dispatcherState, {
-    setSettings: setSettingsMock,
-  });
-  set(schemasState(PROJECT_ID), mockSchemas);
-};
+const makeInitialState =
+  (newSettings: any) =>
+  ({ set }) => {
+    set(currentProjectIdState, PROJECT_ID);
+    set(settingsState(PROJECT_ID), newSettings);
+    set(dispatcherState, {
+      setSettings: setSettingsMock,
+    });
+    set(schemasState(PROJECT_ID), mockSchemas);
+  };
 
 describe('ExternalAdapterSettings', () => {
   let initRecoilState;
@@ -87,7 +89,7 @@ describe('ExternalAdapterSettings', () => {
   it('brings up the modal', () => {
     const { getByTestId, getByText, queryByTestId } = renderWithRecoilAndCustomDispatchers(
       <ExternalAdapterSettings projectId={PROJECT_ID} />,
-      initRecoilState
+      initRecoilState,
     );
 
     const container = getByTestId('adapterSettings');
@@ -108,7 +110,7 @@ describe('ExternalAdapterSettings', () => {
   it('sets settings on an adapter', async () => {
     const { getByTestId, getByLabelText, queryByTestId } = renderWithRecoilAndCustomDispatchers(
       <ExternalAdapterSettings projectId={PROJECT_ID} />,
-      initRecoilState
+      initRecoilState,
     );
     const container = getByTestId('adapterSettings');
     const configureButton = within(container).queryAllByText('Configure')[0];
@@ -150,7 +152,7 @@ describe('ExternalAdapterSettings', () => {
   it('does not proceed if required settings are missing', () => {
     const { getByTestId } = renderWithRecoilAndCustomDispatchers(
       <ExternalAdapterSettings projectId={PROJECT_ID} />,
-      initRecoilState
+      initRecoilState,
     );
     const container = getByTestId('adapterSettings');
     const configureButton = within(container).queryAllByText('Configure')[0];
@@ -177,7 +179,7 @@ describe('ExternalAdapterSettings', () => {
 
     const { queryByTestId } = renderWithRecoilAndCustomDispatchers(
       <ExternalAdapterSettings projectId={PROJECT_ID} />,
-      makeInitialState(initStateWithAdapter)
+      makeInitialState(initStateWithAdapter),
     );
 
     const toggle = queryByTestId('toggle_Adapter.Mock');
@@ -193,7 +195,7 @@ describe('ExternalAdapterSettings', () => {
         runtimeSettings: {
           adapters: [{ name: 'Adapter.Mock', enabled: false, route: 'mock', type: 'Adapter.Full.Type.Mock' }],
         },
-      })
+      }),
     );
   });
 
@@ -211,7 +213,7 @@ describe('ExternalAdapterSettings', () => {
 
     const { queryByTestId } = renderWithRecoilAndCustomDispatchers(
       <ExternalAdapterSettings projectId={PROJECT_ID} />,
-      makeInitialState(initStateWithAdapter)
+      makeInitialState(initStateWithAdapter),
     );
 
     const toggle = queryByTestId('toggle_Adapter.Mock');
@@ -227,14 +229,14 @@ describe('ExternalAdapterSettings', () => {
         runtimeSettings: {
           adapters: [{ name: 'Adapter.Mock', enabled: true, route: 'mock', type: 'Adapter.Full.Type.Mock' }],
         },
-      })
+      }),
     );
   });
 
   it('deep link should nav to package manager', async () => {
     const { getByTestId } = renderWithRecoilAndCustomDispatchers(
       <ExternalAdapterSettings projectId={PROJECT_ID} />,
-      makeInitialState({})
+      makeInitialState({}),
     );
 
     fireEvent.click(getByTestId('packageManagerDeepLink'));

@@ -9,7 +9,6 @@ import {
   Snapshot,
   useGotoRecoilSnapshot,
   useRecoilSnapshot,
-  // eslint-disable-next-line @typescript-eslint/camelcase
   useRecoilTransactionObserver_UNSTABLE,
 } from 'recoil';
 import * as React from 'react';
@@ -54,7 +53,7 @@ const didAtomMapsChange = (prevMap: AtomMap, currMap: AtomMap) => {
 const mapTrackedAtomsOntoSnapshot = (
   current: Snapshot,
   target: Snapshot,
-  trackedAtoms: RecoilState<any>[] | null | undefined
+  trackedAtoms: RecoilState<any>[] | null | undefined,
 ): Snapshot => {
   if (!trackedAtoms) {
     return target;

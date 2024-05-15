@@ -97,7 +97,7 @@ const navContainer = (
   isActive: boolean,
   menuOpenHere: boolean,
   textWidth: number,
-  isBroken: boolean
+  isBroken: boolean,
 ) => css`
   ${isAnyMenuOpen
     ? ''
@@ -174,7 +174,7 @@ export const overflowSet = (isBroken: boolean) => css`
 const moreButtonContainer = {
   root: {
     lineHeight: '1',
-    display: 'flex' as 'flex',
+    display: 'flex' as const,
   },
 };
 
@@ -198,7 +198,7 @@ const diagnosticIcon = {
   height: '20px',
   fontSize: '12px',
   lineHeight: '20px',
-  textAlign: 'center' as 'center',
+  textAlign: 'center' as const,
 };
 
 const diagnosticErrorIcon = {
@@ -373,7 +373,7 @@ const DiagnosticIcons = (props: {
         {errors.map((item) => {
           let linkText = item.source;
           if (item.source === 'appsettings.json') {
-            linkText = 'Fix in bot settings';
+            linkText = 'Fix in Configure your bot';
           }
           return (
             <div key={item.message} css={diagnosticLink}>
@@ -449,10 +449,10 @@ export const TreeItem: React.FC<ITreeItemProps> = ({
       let errorContent = '';
       if (showErrors) {
         const warnings: Diagnostic[] = diagnostics.filter(
-          (diag: Diagnostic) => diag.severity === DiagnosticSeverity.Warning
+          (diag: Diagnostic) => diag.severity === DiagnosticSeverity.Warning,
         );
         const errors: Diagnostic[] = diagnostics.filter(
-          (diag: Diagnostic) => diag.severity === DiagnosticSeverity.Error
+          (diag: Diagnostic) => diag.severity === DiagnosticSeverity.Error,
         );
 
         warningContent = warnings.map((diag) => diag.message).join(',');
@@ -517,7 +517,7 @@ export const TreeItem: React.FC<ITreeItemProps> = ({
         </TreeItemContent>
       );
     },
-    [textWidth, overflowIconWidthActiveOrChildSelected, showErrors]
+    [textWidth, overflowIconWidthActiveOrChildSelected, showErrors],
   );
 
   const onRenderOverflowButton = useCallback(
@@ -525,7 +525,7 @@ export const TreeItem: React.FC<ITreeItemProps> = ({
       isActive: boolean,
       isChildSelected: boolean,
       menuOpenCallback: (cb: boolean) => void,
-      setThisItemSelected: (sel: boolean) => void
+      setThisItemSelected: (sel: boolean) => void,
     ) => {
       const moreLabel = formatMessage('More options');
       return (overflowItems: IContextualMenuItem[] | undefined) => {
@@ -568,7 +568,7 @@ export const TreeItem: React.FC<ITreeItemProps> = ({
         );
       };
     },
-    [isActive, isChildSelected, menuOpenCallback, setThisItemSelected]
+    [isActive, isChildSelected, menuOpenCallback, setThisItemSelected],
   );
 
   return (
@@ -601,7 +601,7 @@ export const TreeItem: React.FC<ITreeItemProps> = ({
           !!isActive,
           isChildSelected,
           menuOpenCallback,
-          setThisItemSelected
+          setThisItemSelected,
         )}
       />
     </div>

@@ -76,7 +76,7 @@ const getRemoteLuFiles = async (
   setWarningMsg,
   zipContent: Record<string, string>,
   manifestDirPath: string,
-  locale: string
+  locale: string,
 ) => {
   const luFiles: Record<string, { id: string; content: string }[]> = {};
   try {

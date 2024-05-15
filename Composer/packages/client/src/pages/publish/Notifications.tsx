@@ -73,7 +73,7 @@ export const getPublishedNotificationCardProps = (item: BotStatus): CardProps =>
 
 export const getSkillPublishedNotificationCardProps = (
   item: { status: number } & Record<string, any>,
-  url?: string
+  url?: string,
 ): CardProps => {
   const skillCardContent = css`
     display: flex;
@@ -121,7 +121,7 @@ export const getSkillPublishedNotificationCardProps = (
     description:
       item.status === 200
         ? formatMessage(
-            'Keep this URL handy to share it with other developers to use in their bot projects. You can find this URL in the project settings tab.'
+            'Keep this URL handy to share it with other developers to use in their bot projects. You can find this URL in the project settings tab.',
           )
         : formatMessage(`Your skill could not be published.`),
     type: item.status === 200 ? 'success' : 'error',
@@ -171,7 +171,7 @@ export const getPendingNotificationCardProps = (items: BotStatus[], isSkill = fa
         =1 {one bot}
         other {# bots}
     }`,
-        { count: items.length }
+        { count: items.length },
       );
   return {
     title: '',

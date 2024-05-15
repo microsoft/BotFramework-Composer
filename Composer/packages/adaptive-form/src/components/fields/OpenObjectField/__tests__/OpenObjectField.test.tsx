@@ -46,7 +46,7 @@ describe('<OpenObjectField />', () => {
     expect(onChange).toHaveBeenCalledWith(
       expect.objectContaining({
         foo: 'new foo value',
-      })
+      }),
     );
 
     const fooName = getByDisplayValue('foo');
@@ -56,7 +56,7 @@ describe('<OpenObjectField />', () => {
     expect(onChange).toHaveBeenCalledWith(
       expect.objectContaining({
         newFoo: 'new foo value',
-      })
+      }),
     );
 
     const fooActions = getByTestId('ObjectItemActions');
@@ -66,7 +66,7 @@ describe('<OpenObjectField />', () => {
     expect(onChange).toHaveBeenCalledWith(
       expect.not.objectContaining({
         foo: 'foo value',
-      })
+      }),
     );
   });
 

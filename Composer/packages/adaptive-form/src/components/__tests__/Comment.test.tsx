@@ -26,7 +26,7 @@ describe('<Comment />', () => {
   it('can edit an existing comment', async () => {
     const comment = faker.lorem.paragraph();
     const { findByLabelText, findByPlaceholderText, findByText, queryByTestId } = render(
-      <Comment comment={comment} onChange={onChange} />
+      <Comment comment={comment} onChange={onChange} />,
     );
 
     expect(queryByTestId('CommentCard')).toBeVisible();
@@ -56,7 +56,7 @@ describe('<Comment />', () => {
   it('can delete a comment', async () => {
     const comment = faker.lorem.paragraph();
     const { findByLabelText, findByPlaceholderText, queryByTestId, findByRole } = render(
-      <Comment comment={comment} onChange={onChange} />
+      <Comment comment={comment} onChange={onChange} />,
     );
 
     expect(queryByTestId('CommentCard')).toBeInTheDocument();

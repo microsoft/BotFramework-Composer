@@ -129,7 +129,7 @@ describe('setting dispatcher', () => {
             lastPublished: new Date(),
           },
         ],
-        projectId
+        projectId,
       );
     });
 
@@ -146,7 +146,7 @@ describe('setting dispatcher', () => {
     expect(renderedComponent.current.settings.runtime.path).toBe('path');
     expect(renderedComponent.current.settings.runtime.command).toBe('command');
     expect(renderedComponent.current.settings.runtime.key).toBe('key');
-    // @ts-ignore - runtime has 'name' in practice and is of a type that has 'name', but TS isn't seeing it somehow
+    // @ts-expect-error - runtime has 'name' in practice and is of a type that has 'name', but TS isn't seeing it somehow
     expect(renderedComponent.current.settings.runtime.name).toBe('name');
   });
 

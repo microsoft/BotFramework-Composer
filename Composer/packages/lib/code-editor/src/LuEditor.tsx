@@ -62,7 +62,7 @@ const LuSectionLink = withTooltip(
       </Text>
     ),
   },
-  Link
+  Link,
 );
 
 const sectionLinkTokens = { childrenGap: 4 };
@@ -169,14 +169,14 @@ const LuEditor: React.FC<LULSPEditorProps> = (props) => {
 
   const onLuNavigationMsg = (
     languageClient: MonacoLanguageClient,
-    onNavigateToLuPage: ((luFileId: string, luSectionId?: string | undefined) => void) | undefined
+    onNavigateToLuPage: ((luFileId: string, luSectionId?: string | undefined) => void) | undefined,
   ) => {
     return languageClient.onReady().then(() =>
       languageClient.onNotification('LuGotoDefinition', (result) => {
         if (luOption?.projectId) {
           onNavigateToLuPage?.(result.fileId, result.intent);
         }
-      })
+      }),
     );
   };
 
@@ -220,7 +220,7 @@ const LuEditor: React.FC<LULSPEditorProps> = (props) => {
                 return convertEdit(e);
               });
               editor.executeEdits(uri, edits);
-            })
+            }),
           );
 
           const disposable = languageClient.start();
@@ -286,7 +286,7 @@ const LuEditor: React.FC<LULSPEditorProps> = (props) => {
         }
       }
     },
-    [editor, entities]
+    [editor, entities],
   );
 
   const onExpandedEditorChange = React.useCallback(
@@ -294,7 +294,7 @@ const LuEditor: React.FC<LULSPEditorProps> = (props) => {
       editor?.getModel()?.setValue(newValue);
       onChange(newValue);
     },
-    [editor, onChange]
+    [editor, onChange],
   );
 
   const change = React.useCallback(
@@ -304,7 +304,7 @@ const LuEditor: React.FC<LULSPEditorProps> = (props) => {
         onChange(newValue);
       }
     },
-    [onChange]
+    [onChange],
   );
 
   const insertEntity = useCallback(
@@ -321,7 +321,7 @@ const LuEditor: React.FC<LULSPEditorProps> = (props) => {
         }
       }
     },
-    [editor]
+    [editor],
   );
 
   const navigateToLuPage = React.useCallback(() => {

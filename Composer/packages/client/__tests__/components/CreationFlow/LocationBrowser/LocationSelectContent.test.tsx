@@ -59,7 +59,7 @@ describe('<LocationSelectContent/>', () => {
         onCurrentPathUpdate={onCurrentPathUpdateMock}
         onOpen={onOpenMock}
       />,
-      recoilInitState
+      recoilInitState,
     );
   }
 

@@ -18,7 +18,7 @@ import { calculateBaseInputBoundary } from './calculateNodeBoundary';
 export function baseInputLayouter(
   botAsksNode: GraphNode,
   userAnswersNode: GraphNode,
-  invalidPromptNode: GraphNode
+  invalidPromptNode: GraphNode,
 ): GraphLayout {
   const boundary = calculateBaseInputBoundary(botAsksNode.boundary, userAnswersNode.boundary);
 

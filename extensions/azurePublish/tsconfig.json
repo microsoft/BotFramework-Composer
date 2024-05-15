@@ -1,7 +1,12 @@
 {
   "compilerOptions": {
     "esModuleInterop": true,
-    "jsx": "react"
+    "jsx": "react",
+    "skipLibCheck": true,
+    "typeRoots": [
+      "./node_modules/@types/",
+    ],
+    "types": ["jest"]
   },
   "include": [
     "src/**/*",

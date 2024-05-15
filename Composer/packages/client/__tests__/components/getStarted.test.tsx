@@ -161,7 +161,7 @@ describe('<GetStarted />', () => {
       <GetStarted {...getStartedProps} requiresLUIS={false} requiresQNA={false} />,
       ({ set }) => {
         applyBaseState(set);
-      }
+      },
     );
     const luisNode = await component.queryByText('Set up Language Understanding');
     expect(luisNode).toBeNull();

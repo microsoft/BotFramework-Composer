@@ -7,36 +7,57 @@ import React, { Fragment, useCallback, Suspense, useEffect } from 'react';
 import formatMessage from 'format-message';
 import { ActionButton } from '@fluentui/react/lib/Button';
 import { RouteComponentProps, Router } from '@reach/router';
-import { useRecoilValue } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import { LgFile } from '@botframework-composer/types';
 
 import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { navigateTo } from '../../utils/navigation';
 import { Page } from '../../components/Page';
-import { lgFilesSelectorFamily, localeState } from '../../recoilModel';
+import { lgFileState, lgFilesSelectorFamily, localeState } from '../../recoilModel';
 import TelemetryClient from '../../telemetry/TelemetryClient';
+import lgWorker from '../../recoilModel/parsers/lgWorker';
 
 import TableView from './table-view';
 const CodeEditor = React.lazy(() => import('./code-editor'));
 
-const LGPage: React.FC<RouteComponentProps<{
-  dialogId: string;
-  projectId: string;
-  skillId: string;
-  lgFileId: string;
-}>> = (props) => {
+const LGPage: React.FC<
+  RouteComponentProps<{
+    dialogId: string;
+    projectId: string;
+    skillId: string;
+    lgFileId: string;
+  }>
+> = (props) => {
   const { dialogId = '', projectId = '', skillId, lgFileId = '' } = props;
   const actualProjectId = skillId ?? projectId;
   const locale = useRecoilValue(localeState(actualProjectId));
   const lgFiles = useRecoilValue(lgFilesSelectorFamily(skillId ?? projectId));
+  const [currentLg, setCurrentLg] = useRecoilState(
+    lgFileState({ projectId: actualProjectId, lgFileId: `${dialogId}.${locale}` }),
+  );
   const path = props.location?.pathname ?? '';
 
   const edit = /\/edit(\/)?$/.test(path);
 
   const baseURL = skillId == null ? `/bot/${projectId}/` : `/bot/${projectId}/skill/${skillId}/`;
 
-  const activeFile = lgFileId
-    ? lgFiles.find(({ id }) => id === lgFileId || id === `${lgFileId}.${locale}`)
-    : lgFiles.find(({ id }) => id === dialogId || id === `${dialogId}.${locale}`);
+  const getActiveFile = () => {
+    let lgFile: LgFile | undefined;
+    if (lgFileId) {
+      lgFile = lgFiles.find(({ id }) => id === lgFileId || id === `${lgFileId}.${locale}`);
+    } else {
+      lgFile = lgFiles.find(({ id }) => id === dialogId || id === `${dialogId}.${locale}`);
+    }
+    if (lgFile?.isContentUnparsed) {
+      lgWorker.parse(actualProjectId, currentLg.id, currentLg.content, lgFiles).then((result) => {
+        setCurrentLg(result as LgFile);
+        return currentLg;
+      });
+    }
+    return lgFile;
+  };
+
+  const activeFile = getActiveFile();
 
   useEffect(() => {
     if (!activeFile && lgFiles.length) {
@@ -52,7 +73,7 @@ const LGPage: React.FC<RouteComponentProps<{
       navigateTo(url);
       TelemetryClient.track('EditModeToggled', { jsonView: !edit });
     },
-    [dialogId, projectId, edit, lgFileId, baseURL]
+    [dialogId, projectId, edit, lgFileId, baseURL],
   );
 
   const onRenderHeaderContent = () => {

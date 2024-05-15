@@ -12,7 +12,7 @@ const createDialogSchema = ({ set }: CallbackInterface, dialogSchema: DialogSche
 
 export const removeDialogSchema = (
   { set }: CallbackInterface,
-  { id, projectId }: { id: string; projectId: string }
+  { id, projectId }: { id: string; projectId: string },
 ) => {
   set(dialogSchemasState(projectId), (dialogSchemas) => dialogSchemas.filter((dialogSchema) => dialogSchema.id !== id));
 };
@@ -28,9 +28,9 @@ export const dialogSchemaDispatcher = () => {
       }
 
       set(dialogSchemasState(projectId), (dialogSchemas) =>
-        dialogSchemas.map((schema) => (schema.id === dialogSchema.id ? dialogSchema : schema))
+        dialogSchemas.map((schema) => (schema.id === dialogSchema.id ? dialogSchema : schema)),
       );
-    }
+    },
   );
 
   return {

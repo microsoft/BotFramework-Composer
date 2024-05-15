@@ -40,7 +40,7 @@ describe('<AdaptiveDialog />', () => {
         uischema={uischema}
         widgets={widgets}
         onEvent={() => null}
-      />
+      />,
     );
     expect(renderResult.getAllByText('hello')).toHaveLength(1);
   });

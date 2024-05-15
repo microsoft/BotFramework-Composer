@@ -10,20 +10,20 @@ import { FunctionRefPayload, PropertyRefPayload, TemplateRefPayload, ToolbarButt
 export const useEditorToolbarItems = (
   lgTemplates: readonly LgTemplate[],
   properties: readonly string[],
-  selectToolbarMenuItem: (itemText: string, itemType: ToolbarButtonPayload['kind']) => void
+  selectToolbarMenuItem: (itemText: string, itemType: ToolbarButtonPayload['kind']) => void,
 ) => {
   const templateRefPayload = React.useMemo(
     () =>
       ({
         kind: 'template',
         data: { templates: lgTemplates, onSelectTemplate: selectToolbarMenuItem },
-      } as TemplateRefPayload),
-    [lgTemplates, selectToolbarMenuItem]
+      }) as TemplateRefPayload,
+    [lgTemplates, selectToolbarMenuItem],
   );
 
   const propertyRefPayload = React.useMemo(
-    () => ({ kind: 'property', data: { properties, onSelectProperty: selectToolbarMenuItem } } as PropertyRefPayload),
-    [properties, selectToolbarMenuItem]
+    () => ({ kind: 'property', data: { properties, onSelectProperty: selectToolbarMenuItem } }) as PropertyRefPayload,
+    [properties, selectToolbarMenuItem],
   );
 
   const functionRefPayload = React.useMemo(
@@ -31,8 +31,8 @@ export const useEditorToolbarItems = (
       ({
         kind: 'function',
         data: { functions: builtInFunctionsGrouping, onSelectFunction: selectToolbarMenuItem },
-      } as FunctionRefPayload),
-    [builtInFunctionsGrouping, selectToolbarMenuItem]
+      }) as FunctionRefPayload,
+    [builtInFunctionsGrouping, selectToolbarMenuItem],
   );
 
   return { templateRefPayload, propertyRefPayload, functionRefPayload };

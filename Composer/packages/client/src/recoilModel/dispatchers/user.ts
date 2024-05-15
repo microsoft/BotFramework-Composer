@@ -16,39 +16,40 @@ import { logMessage } from './shared';
 
 export const userDispatcher = () => {
   const updateUserSettings = useRecoilCallback(
-    (callbackHelpers: CallbackInterface) => async (settings: Partial<UserSettingsPayload> = {}) => {
-      const { set } = callbackHelpers;
-      if (settings.appLocale != null) {
-        await loadLocale(settings.appLocale);
-      }
-      set(userSettingsState, (currentSettings) => {
-        const newSettings = {
-          ...currentSettings,
-        };
-        for (const key in settings) {
-          if (newSettings[key] != null) {
-            if (typeof newSettings[key] === 'object') {
-              newSettings[key] = { ...newSettings[key], ...settings[key] };
-            } else {
-              newSettings[key] = settings[key];
+    (callbackHelpers: CallbackInterface) =>
+      async (settings: Partial<UserSettingsPayload> = {}) => {
+        const { set } = callbackHelpers;
+        if (settings.appLocale != null) {
+          await loadLocale(settings.appLocale);
+        }
+        set(userSettingsState, (currentSettings) => {
+          const newSettings = {
+            ...currentSettings,
+          };
+          for (const key in settings) {
+            if (newSettings[key] != null) {
+              if (typeof newSettings[key] === 'object') {
+                newSettings[key] = { ...newSettings[key], ...settings[key] };
+              } else {
+                newSettings[key] = settings[key];
+              }
             }
           }
-        }
-        storage.set('userSettings', newSettings);
+          storage.set('userSettings', newSettings);
 
-        // push telemetry settings to the server
-        httpClient.post('/settings', { settings: pick(newSettings, ['telemetry']) }).catch((error) => {
-          logMessage(callbackHelpers, `Error updating server settings: ${error}`);
+          // push telemetry settings to the server
+          httpClient.post('/settings', { settings: pick(newSettings, ['telemetry']) }).catch((error) => {
+            logMessage(callbackHelpers, `Error updating server settings: ${error}`);
+          });
+
+          if (isElectron()) {
+            // push the settings to the electron main process
+            window.ipcRenderer.send('update-user-settings', newSettings);
+          }
+
+          return newSettings;
         });
-
-        if (isElectron()) {
-          // push the settings to the electron main process
-          window.ipcRenderer.send('update-user-settings', newSettings);
-        }
-
-        return newSettings;
-      });
-    }
+      },
   );
 
   return {

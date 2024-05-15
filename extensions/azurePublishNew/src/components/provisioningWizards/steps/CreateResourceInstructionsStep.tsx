@@ -51,7 +51,7 @@ export const CreateResourceInstructionsStep = () => {
       <Summary>
         <Text>
           {formatMessage(
-            'Select this option when you want to provision new Azure resources and publish a bot. A subscription to'
+            'Select this option when you want to provision new Azure resources and publish a bot. A subscription to',
           )}
         </Text>
         &nbsp;

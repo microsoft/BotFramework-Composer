@@ -151,7 +151,7 @@ export function generateNewDialog(
   dialogs: DialogInfo[],
   dialogId: string,
   data: TriggerFormData,
-  schema: any
+  schema: any,
 ): DialogInfo {
   //add new trigger
   const dialog = dialogs.find((dialog) => dialog.id === dialogId);
@@ -173,7 +173,7 @@ export function deleteTrigger(
   dialogs: DialogInfo[],
   dialogId: string,
   index: number,
-  callbackOnDeletedTrigger?: (trigger: ITriggerCondition) => any
+  callbackOnDeletedTrigger?: (trigger: ITriggerCondition) => any,
 ) {
   let dialogCopy = getDialog(dialogs, dialogId);
   if (!dialogCopy) return null;
@@ -191,7 +191,7 @@ export function deleteTrigger(
 }
 
 function getDialogsMap(dialogs: DialogInfo[]): DialogsMap {
-  return dialogs.reduce((result: { [key: string]: {} }, dialog: DialogInfo) => {
+  return dialogs.reduce((result: { [key: string]: Record<string, unknown> }, dialog: DialogInfo) => {
     result[dialog.id] = dialog.content;
     return result;
   }, {});

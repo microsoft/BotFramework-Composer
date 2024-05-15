@@ -45,7 +45,7 @@ export const PullFailedDialog: React.FC<PulledFailedDialogProps> = (props) => {
       <p>
         {formatMessage.rich(
           'There was an unexpected error pulling from publish profile <b>{ selectedTargetName }</b>',
-          { b: Bold, selectedTargetName }
+          { b: Bold, selectedTargetName },
         )}
       </p>
       <p css={boldText}>{typeof error === 'object' ? JSON.stringify(error, undefined, 2) : error}</p>

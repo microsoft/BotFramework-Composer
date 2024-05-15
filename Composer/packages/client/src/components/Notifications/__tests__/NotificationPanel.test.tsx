@@ -32,7 +32,7 @@ describe('<NotificationPanel />', () => {
         notifications={notifications as Notification[]}
         onDeleteNotification={jest.fn()}
         onDismiss={jest.fn()}
-      />
+      />,
     );
     const notificationCards = await findAllByTestId('NotificationCard');
     expect(notificationCards.length).toBe(4);
@@ -46,7 +46,7 @@ describe('<NotificationPanel />', () => {
         notifications={notifications as Notification[]}
         onDeleteNotification={deleteNotification}
         onDismiss={jest.fn}
-      />
+      />,
     );
     const clearAll = await findByTestId('ClearAll');
 

@@ -70,10 +70,8 @@ export const WebChatPanel: React.FC<WebChatPanelProps> = ({
         webChatTrafficChannel.current = new WebSocket(`ws://${location.hostname}:${conversationServerPort}/ws/traffic`);
         if (webChatTrafficChannel.current) {
           webChatTrafficChannel.current.onmessage = (event) => {
-            const data:
-              | ConversationActivityTraffic
-              | ConversationNetworkTrafficItem
-              | ConversationNetworkErrorItem = JSON.parse(event.data);
+            const data: ConversationActivityTraffic | ConversationNetworkTrafficItem | ConversationNetworkErrorItem =
+              JSON.parse(event.data);
 
             switch (data.trafficType) {
               case 'network': {
@@ -88,7 +86,7 @@ export const WebChatPanel: React.FC<WebChatPanelProps> = ({
                     id: uuid(),
                     timestamp: new Date(a.timestamp || Date.now()).getTime(),
                     trafficType: data.trafficType,
-                  }))
+                  })),
                 );
                 break;
               }
@@ -163,7 +161,7 @@ export const WebChatPanel: React.FC<WebChatPanelProps> = ({
           botUrl,
           secret,
           projectId,
-          activeLocale
+          activeLocale,
         );
         if (mounted) {
           setChatData({
@@ -191,7 +189,7 @@ export const WebChatPanel: React.FC<WebChatPanelProps> = ({
             oldChatData,
             requireNewUserId,
             activeLocale,
-            secret
+            secret,
           );
 
           TelemetryClient.track('WebChatConversationRestarted', {
@@ -208,9 +206,9 @@ export const WebChatPanel: React.FC<WebChatPanelProps> = ({
         }
       },
       1000,
-      { leading: true }
+      { leading: true },
     ),
-    [secret, activeLocale]
+    [secret, activeLocale],
   );
 
   const onSaveTranscriptClick = async (conversationId: string) => {

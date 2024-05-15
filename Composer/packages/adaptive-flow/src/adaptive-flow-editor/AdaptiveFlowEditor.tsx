@@ -37,7 +37,7 @@ formatMessage.setup({
 
 const emotionCache = createCache({
   key: 'adaptive-form-cache',
-  // @ts-expect-error
+  // @ts-expect-error: nounce defined during server rendering the page
   nonce: window.__nonce__,
 });
 
@@ -96,10 +96,10 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({ onFocus, onBlur, schema
   const focusedId = Array.isArray(focusedActions) && focusedActions[0] ? focusedActions[0] : '';
 
   // Compute schema diff
-  const customActionSchema = useMemo(() => getCustomSchema(schemas?.default, schemas?.sdk?.content).actions, [
-    schemas?.sdk?.content,
-    schemas?.default,
-  ]);
+  const customActionSchema = useMemo(
+    () => getCustomSchema(schemas?.default, schemas?.sdk?.content).actions,
+    [schemas?.sdk?.content, schemas?.default],
+  );
 
   const nodeContext: NodeRendererContextValue = {
     focusedId,

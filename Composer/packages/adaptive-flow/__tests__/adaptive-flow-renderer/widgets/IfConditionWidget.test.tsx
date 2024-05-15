@@ -15,7 +15,7 @@ describe('IfConditionWidget', () => {
         id="test"
         judgement={<span data-testid="test-judgement">Condition Judgement</span>}
         onEvent={() => null}
-      />
+      />,
     );
     expect(ifCondition).toBeTruthy();
     expect(ifCondition.getByTestId('test-judgement')).toBeTruthy();

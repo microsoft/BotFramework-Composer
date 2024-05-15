@@ -76,7 +76,7 @@ export function convertLuParseResultToLuFile(
   id: string,
   resource: LuParseResource,
   luFeatures: ILUFeaturesConfig,
-  importResolver?: LUImportResolverDelegate
+  importResolver?: LUImportResolverDelegate,
 ): LuFile {
   // filter structured-object from LUParser result.
   const { Sections, Errors, Content } = resource;
@@ -86,7 +86,7 @@ export function convertLuParseResultToLuFile(
     const { Name, Body, SectionType } = section;
     const range = new Range(
       new Position(get(section, 'Range.Start.Line', 0), get(section, 'Range.Start.Character', 0)),
-      new Position(get(section, 'Range.End.Line', 0), get(section, 'Range.End.Character', 0))
+      new Position(get(section, 'Range.End.Line', 0), get(section, 'Range.End.Character', 0)),
     );
     if (SectionType === LuSectionTypes.SIMPLEINTENTSECTION) {
       const Entities = section.Entities.map(({ Name, Type }) => ({ Name, Type }));
@@ -96,7 +96,7 @@ export function convertLuParseResultToLuFile(
         const { Name, Body } = subSection;
         const range = new Range(
           new Position(get(section, 'Range.Start.Line', 0), get(subSection, 'Range.Start.Character', 0)),
-          new Position(get(section, 'Range.End.Line', 0), get(subSection, 'Range.End.Character', 0))
+          new Position(get(section, 'Range.End.Line', 0), get(subSection, 'Range.End.Character', 0)),
         );
         const Entities = subSection.Entities.map(({ Name, Type }) => ({ Name, Type }));
         return { Name, Body, Entities, range, fileId };
@@ -108,7 +108,7 @@ export function convertLuParseResultToLuFile(
             ...subSection,
             Name: `${section.Name}/${subSection.Name}`,
           };
-        })
+        }),
       );
     }
   });
@@ -131,7 +131,7 @@ export function convertLuParseResultToLuFile(
   }
 
   const semanticDiagnostics = validateResource(resource, appliedluFeatures).map((e) =>
-    convertLuDiagnostic(e, id)
+    convertLuDiagnostic(e, id),
   ) as Diagnostic[];
 
   const imports = Sections.filter(({ SectionType }) => SectionType === SectionTypes.ImportSection).map(
@@ -141,7 +141,7 @@ export function convertLuParseResultToLuFile(
         description: Description,
         path: Path,
       };
-    }
+    },
   );
 
   // find all reference and parse them.
@@ -256,7 +256,7 @@ export function checkIsSingleSection(intent: LuIntentSection, enableSections = t
 function updateInSections(
   sections: LuIntentSection[],
   intentName: string,
-  updatedIntent: LuIntentSection | null
+  updatedIntent: LuIntentSection | null,
 ): LuIntentSection[] {
   // remove
   if (!updatedIntent || isEmpty(updatedIntent)) {
@@ -287,7 +287,7 @@ export function updateIntent(
   intentName: string,
   intent: { Name?: string; Body?: string } | null,
   luFeatures: ILUFeaturesConfig,
-  importResolver?: LUImportResolverDelegate
+  importResolver?: LUImportResolverDelegate,
 ): LuFile {
   let targetSection;
   let targetSectionContent;
@@ -300,7 +300,7 @@ export function updateIntent(
     if (intentName.includes('/')) {
       const [parrentName, childName] = intentName.split('/');
       const targetChildSection = Sections.find(({ Name }) => Name === parrentName)?.SimpleIntentSections.find(
-        ({ Name }) => Name === childName
+        ({ Name }) => Name === childName,
       );
       if (!targetChildSection) {
         return luFile;
@@ -358,7 +358,7 @@ export function addIntent(
   luFile: LuFile,
   { Name, Body }: LuIntentSection,
   luFeatures: ILUFeaturesConfig,
-  importResolver?: LUImportResolverDelegate
+  importResolver?: LUImportResolverDelegate,
 ): LuFile {
   const intentName = Name;
   if (Name.includes('/')) {
@@ -373,7 +373,7 @@ export function addIntents(
   luFile: LuFile,
   intents: LuIntentSection[],
   luFeatures: ILUFeaturesConfig,
-  importResolver?: LUImportResolverDelegate
+  importResolver?: LUImportResolverDelegate,
 ): LuFile {
   let result = luFile;
   for (const intent of intents) {
@@ -391,7 +391,7 @@ export function removeIntent(
   luFile: LuFile,
   intentName: string,
   luFeatures: ILUFeaturesConfig,
-  importResolver?: LUImportResolverDelegate
+  importResolver?: LUImportResolverDelegate,
 ): LuFile {
   return updateIntent(luFile, intentName, null, luFeatures, importResolver);
 }
@@ -399,7 +399,7 @@ export function removeIntents(
   luFile: LuFile,
   intentNames: string[],
   luFeatures: ILUFeaturesConfig,
-  importResolver?: LUImportResolverDelegate
+  importResolver?: LUImportResolverDelegate,
 ): LuFile {
   let result = luFile;
   for (const intentName of intentNames) {
@@ -416,7 +416,7 @@ export function parse(id: string, content: string, luFeatures: ILUFeaturesConfig
 export async function semanticValidate(
   id: string,
   content: string,
-  luFeatures: ILUFeaturesConfig
+  luFeatures: ILUFeaturesConfig,
 ): Promise<Diagnostic[]> {
   const appliedConfig = merge(defaultLUFeatures, luFeatures || {});
   const diagnostics: Diagnostic[] = [];

@@ -36,7 +36,7 @@ export const useEditorToolbarPopExpandItem = (
   },
   options?: {
     customClassName?: string;
-  }
+  },
 ) => {
   const [isExpanded, setIsExpanded] = React.useState(false);
 
@@ -49,9 +49,9 @@ export const useEditorToolbarPopExpandItem = (
             className: options?.customClassName,
             ariaLabel: formatMessage('Pop out editor: open editor'),
             onRenderIcon: () => {
-              let PopExpandIcon = createSvgIcon({ svg: () => popExpandSvgIcon, displayName: 'PopExpandIcon' });
-              PopExpandIcon = withTooltip({ content: formatMessage('Pop out editor') }, PopExpandIcon);
-              return <PopExpandIcon style={svgIconStyle} />;
+              const PopExpandIcon = createSvgIcon({ svg: () => popExpandSvgIcon, displayName: 'PopExpandIcon' });
+              const PopExpandIconComp = withTooltip({ content: formatMessage('Pop out editor') }, PopExpandIcon);
+              return <PopExpandIconComp style={svgIconStyle} />;
             },
             onClick: () => {
               setIsExpanded(true);
@@ -59,7 +59,7 @@ export const useEditorToolbarPopExpandItem = (
             },
           } as ICommandBarItemProps)
         : undefined,
-    [popExpandOptions]
+    [popExpandOptions],
   );
 
   const dismiss = React.useCallback(() => {

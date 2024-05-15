@@ -32,7 +32,7 @@ describe('<AdaptiveTrigger />', () => {
     const renderResult = render(
       <SchemaContext.Provider value={{ widgets, schemaProvider: new WidgetSchemaProvider(uischema) }}>
         <AdaptiveTrigger triggerData={triggerData} triggerId="triggers[0]" onEvent={() => null} />
-      </SchemaContext.Provider>
+      </SchemaContext.Provider>,
     );
     expect(renderResult.getAllByText('hello')).toHaveLength(1);
   });

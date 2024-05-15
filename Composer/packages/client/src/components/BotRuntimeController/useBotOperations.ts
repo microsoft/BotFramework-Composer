@@ -22,14 +22,14 @@ export function useBotOperations() {
     projectId: string,
     config: IPublishConfig,
     sensitiveSettings,
-    botBuildRequired: boolean
+    botBuildRequired: boolean,
   ) => {
     resetBotRuntimeLog(projectId);
     setBotStatus(projectId, BotStatus.pending);
     if (botBuildRequired) {
       // Default recognizer
       const matchedBuilder = builderEssentials.find(
-        ({ projectId: currentProjectId }) => projectId === currentProjectId
+        ({ projectId: currentProjectId }) => projectId === currentProjectId,
       );
       if (matchedBuilder?.dialogs) {
         await botRuntimeOperations?.buildWithDefaultRecognizer(projectId, {

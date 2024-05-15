@@ -233,7 +233,7 @@ export type OnIntent = RuleBase & {
 };
 
 /** Defines a sequence of steps to take if there is no other trigger or plan operating */
-export type OnUnknownIntent = RuleBase & {};
+export type OnUnknownIntent = RuleBase & Record<string, unknown>;
 
 export type ITriggerCondition = OnIntent | OnUnknownIntent;
 

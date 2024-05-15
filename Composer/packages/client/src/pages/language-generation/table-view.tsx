@@ -16,18 +16,19 @@ import formatMessage from 'format-message';
 import { NeutralColors, FontSizes } from '@fluentui/theme';
 import { RouteComponentProps } from '@reach/router';
 import { LgTemplate } from '@bfc/shared';
-import { useRecoilValue } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import { lgUtil } from '@bfc/indexers';
 import { LgFile } from '@botframework-composer/types/src';
 
 import { EditableField } from '../../components/EditableField';
 import { navigateTo } from '../../utils/navigation';
 import { actionButton, editableFieldContainer } from '../language-understanding/styles';
-import { dispatcherState, localeState, settingsState, dialogsSelectorFamily } from '../../recoilModel';
+import { dispatcherState, localeState, settingsState, dialogsSelectorFamily, lgFileState } from '../../recoilModel';
 import { languageListTemplates } from '../../components/MultiLanguage';
 import TelemetryClient from '../../telemetry/TelemetryClient';
 import { lgFilesSelectorFamily } from '../../recoilModel/selectors/lg';
 import { CellFocusZone } from '../../components/CellFocusZone';
+import lgWorker from '../../recoilModel/parsers/lgWorker';
 
 interface TableViewProps extends RouteComponentProps<{ dialogId: string; skillId: string; projectId: string }> {
   projectId: string;
@@ -46,15 +47,31 @@ const TableView: React.FC<TableViewProps> = (props) => {
   const locale = useRecoilValue(localeState(actualProjectId));
   const settings = useRecoilValue(settingsState(actualProjectId));
   const dialogs = useRecoilValue(dialogsSelectorFamily(actualProjectId));
-  const { createLgTemplate, copyLgTemplate, removeLgTemplate, setMessage, updateLgTemplate } = useRecoilValue(
-    dispatcherState
-  );
+  const { createLgTemplate, copyLgTemplate, removeLgTemplate, setMessage, updateLgTemplate } =
+    useRecoilValue(dispatcherState);
 
   const { languages, defaultLanguage } = settings;
+  const [defaultLg, setDefaultLg] = useRecoilState(
+    lgFileState({ projectId: actualProjectId, lgFileId: `${dialogId}.${defaultLanguage}` }),
+  );
 
-  const defaultLangFile = lgFileId
-    ? lgFiles.find(({ id }) => id === lgFileId)
-    : lgFiles.find(({ id }) => id === `${dialogId}.${defaultLanguage}`);
+  const getDefaultLangFile = () => {
+    let lgFile: LgFile | undefined;
+    if (lgFileId) {
+      lgFile = lgFiles.find(({ id }) => id === lgFileId);
+    } else {
+      lgFile = lgFiles.find(({ id }) => id === `${dialogId}.${defaultLanguage}`);
+    }
+    if (lgFile?.isContentUnparsed) {
+      lgWorker.parse(actualProjectId, defaultLg.id, defaultLg.content, lgFiles).then((result) => {
+        setDefaultLg(result as LgFile);
+        return defaultLg;
+      });
+    }
+    return lgFile;
+  };
+
+  const defaultLangFile = getDefaultLangFile();
 
   const [templates, setTemplates] = useState<LgTemplate[]>([]);
   const listRef = useRef(null);
@@ -74,7 +91,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
       const baseURL = skillId == null ? `/bot/${projectId}/` : `/bot/${projectId}/skill/${skillId}/`;
       navigateTo(`${baseURL}language-generation/${dialogId}/edit?t=${encodeURIComponent(name)}`);
     },
-    [dialogId, projectId, skillId]
+    [dialogId, projectId, skillId],
   );
 
   const onCreateNewTemplate = useCallback(() => {
@@ -103,7 +120,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
         removeLgTemplate(payload);
       }
     },
-    [file, actualProjectId]
+    [file, actualProjectId],
   );
 
   const onCopyTemplate = useCallback(
@@ -119,7 +136,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
         copyLgTemplate(payload);
       }
     },
-    [file, actualProjectId]
+    [file, actualProjectId],
   );
 
   const handleTemplateUpdate = useCallback(
@@ -134,7 +151,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
         updateLgTemplate(payload);
       }
     },
-    [file, actualProjectId]
+    [file, actualProjectId],
   );
 
   const handleTemplateUpdateDefaultLocale = useCallback(
@@ -149,7 +166,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
         updateLgTemplate(payload);
       }
     },
-    [defaultLangFile, actualProjectId]
+    [defaultLangFile, actualProjectId],
   );
 
   const getTemplatesMoreButtons = useCallback(
@@ -182,7 +199,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
 
       return buttons;
     },
-    [activeDialog, templates, onClickEdit, onRemoveTemplate, onCopyTemplate, setMessage]
+    [activeDialog, templates, onClickEdit, onRemoveTemplate, onCopyTemplate, setMessage],
   );
 
   const getTableColums = useCallback((): IColumn[] => {
@@ -387,7 +404,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
     // show compairable column when current lang is not default lang
     if (locale === defaultLanguage) {
       tableColums = tableColums.filter(
-        ({ key }) => ['responses-default-lang', 'responses-lang'].includes(key) === false
+        ({ key }) => ['responses-default-lang', 'responses-lang'].includes(key) === false,
       );
     } else {
       tableColums = tableColums.filter(({ key }) => ['responses'].includes(key) === false);

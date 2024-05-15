@@ -65,7 +65,7 @@ const blobStorageProvisionMethod = (provisionConfig: ProvisionServiceConfig): Pr
 
       const accountKeysResult = await storageManagementClient.storageAccounts.listKeys(
         config.resourceGroupName,
-        config.name
+        config.name,
       );
       const connectionString = accountKeysResult?.keys?.[0]?.value ?? '';
 

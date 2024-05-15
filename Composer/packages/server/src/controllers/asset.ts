@@ -128,7 +128,7 @@ export async function getTemplateReadMe(req: any, res: any) {
         'microsoft',
         'botframework-components',
         'main',
-        'generators/generator-bot-core-qna/README.md'
+        'generators/generator-bot-core-qna/README.md',
       );
       res.status(200).json(qnaReadMe);
     } else {
@@ -156,7 +156,7 @@ export async function getTemplateReadMe(req: any, res: any) {
 
           // iterate, starting on most recently published version, and query versionDict for a readMe for the version in question
           for (let i = items.length - 1; i > -1; i--) {
-            if (versionsDict[items[i][0]] && versionsDict[items[i][0]]?.readme) {
+            if (versionsDict?.[items[i][0]]?.readme) {
               // if a readMe exists, set it as our result and break out of the loop
               readMe = versionsDict[items[i][0]]?.readme;
               break;
