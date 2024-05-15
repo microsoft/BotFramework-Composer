@@ -75,7 +75,7 @@ export const TenantPicker = memo((props: Props) => {
           setErrorMessage(
             formatMessage('There was a problem loading Azure directories. {errMessage}', {
               errMessage: err.message || err.toString(),
-            })
+            }),
           );
         }
       })();
@@ -101,7 +101,7 @@ export const TenantPicker = memo((props: Props) => {
       setErrorMessage(
         formatMessage('There was a problem getting the access token for the current Azure directory. {errMessage}', {
           errMessage: ex.message || ex.toString(),
-        })
+        }),
       );
     }
   };
@@ -120,7 +120,7 @@ export const TenantPicker = memo((props: Props) => {
       placeholder: formatMessage('Select Azure directory'),
       errorMessage,
     }),
-    [errorMessage, tenants]
+    [errorMessage, tenants],
   );
 
   return (

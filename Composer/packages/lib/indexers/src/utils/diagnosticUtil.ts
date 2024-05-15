@@ -52,7 +52,7 @@ export function combineSimpleMessage(diagnostics: Diagnostic[]): string {
 export function offsetRange(range: Range, offset: number): Range {
   return new Range(
     new Position(range.start.line - offset, range.start.character),
-    new Position(range.end.line - offset, range.end.character)
+    new Position(range.end.line - offset, range.end.character),
   );
 }
 

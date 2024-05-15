@@ -59,13 +59,13 @@ describe('decodeDesignerPathToArrayPath()', () => {
 
   it('can handle invalid designer path.', () => {
     expect(decodeDesignerPathToArrayPath(dialog, `triggers["1234"].actions["9999"]`)).toEqual(
-      `triggers["1234"].actions["9999"]`
+      `triggers["1234"].actions["9999"]`,
     );
     expect(decodeDesignerPathToArrayPath(dialog, `triggers["5678"].actions["1234"]`)).toEqual(
-      `triggers["5678"].actions["1234"]`
+      `triggers["5678"].actions["1234"]`,
     );
     expect(decodeDesignerPathToArrayPath(dialog, `dialogs["1234"].actions["5678"]`)).toEqual(
-      `dialogs["1234"].actions["5678"]`
+      `dialogs["1234"].actions["5678"]`,
     );
   });
 

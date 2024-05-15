@@ -132,7 +132,6 @@ const absh: AuthProviderInit = {
     };
 
     const login: RequestHandler = (req, res) => {
-      /* eslint-disable @typescript-eslint/camelcase */
       const query = querystring.stringify({
         response_type: 'token',
         response_mode: 'form_post',
@@ -144,7 +143,6 @@ const absh: AuthProviderInit = {
           resource: req.query.resource || `${BASEURL}/home`,
         }),
       });
-      /* eslint-enable @typescript-eslint/camelcase */
 
       res.redirect(`${LOGIN_URL}?${query}`);
     };

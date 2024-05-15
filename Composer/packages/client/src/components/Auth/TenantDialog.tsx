@@ -56,7 +56,7 @@ export const TenantDialog: React.FC<TenantDialogProps> = (props) => {
       }}
       dialogType={DialogTypes.Customer}
       subText={formatMessage(
-        'The directory you choose will impact subscription, resource group, and region filters that are available when you select or create Azure resources. You can change this later.'
+        'The directory you choose will impact subscription, resource group, and region filters that are available when you select or create Azure resources. You can change this later.',
       )}
       title={formatMessage('Select directory')}
       onDismiss={props.onDismiss}

@@ -35,8 +35,8 @@ export const SelectTriggers: React.FC<ContentProps> = ({ selectedTriggers, setSe
             ? 1
             : -1
           : a.type > b.type
-          ? 1
-          : -1
+            ? 1
+            : -1,
       );
   }, [dialogs]);
 
@@ -81,13 +81,13 @@ export const SelectTriggers: React.FC<ContentProps> = ({ selectedTriggers, setSe
   ];
 
   const selectionRef = useRef(
-    new Selection({
+    new Selection<any>({
       getKey: (item) => item.id,
       onSelectionChanged: () => {
         const selectedItems = selectionRef.current.getSelection();
         setSelectedTriggers(selectedItems);
       },
-    })
+    }),
   );
 
   useEffect(() => {

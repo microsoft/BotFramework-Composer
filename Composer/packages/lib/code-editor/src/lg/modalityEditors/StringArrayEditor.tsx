@@ -77,7 +77,7 @@ export const StringArrayEditor = React.memo(
     const containerRef = useRef<HTMLDivElement | null>(null);
 
     const [currentIndex, setCurrentIndex] = useState<number | null>(
-      items.length === 1 && items[0].value === '' ? 0 : null
+      items.length === 1 && items[0].value === '' ? 0 : null,
     );
     const [calloutTargetElement, setCalloutTargetElement] = useState<HTMLTextAreaElement | null>(null);
 
@@ -87,14 +87,14 @@ export const StringArrayEditor = React.memo(
         updatedItems[index].value = newValue ?? '';
         onChange(updatedItems);
       },
-      [items, onChange]
+      [items, onChange],
     );
 
     const onItemFocus = useCallback(
       (index: number) => () => {
         setCurrentIndex(index);
       },
-      []
+      [],
     );
 
     const onItemRemove = useCallback(
@@ -106,7 +106,7 @@ export const StringArrayEditor = React.memo(
           setCurrentIndex(newItems.length - 1);
         }
       },
-      [currentIndex, items, onChange]
+      [currentIndex, items, onChange],
     );
 
     const onClickAddVariation = useCallback(() => {
@@ -204,7 +204,7 @@ export const StringArrayEditor = React.memo(
             setTimeout(() => {
               calloutTargetElement.setSelectionRange(
                 updatedItems[currentIndex].value.length,
-                updatedItems[currentIndex].value.length
+                updatedItems[currentIndex].value.length,
               );
             }, 0);
           }
@@ -217,7 +217,7 @@ export const StringArrayEditor = React.memo(
           location: 'LGResponseEditor',
         });
       },
-      [calloutTargetElement, currentIndex, items, telemetryClient, onChange]
+      [calloutTargetElement, currentIndex, items, telemetryClient, onChange],
     );
 
     const onInsertSSMLTag = React.useCallback(
@@ -259,7 +259,7 @@ export const StringArrayEditor = React.memo(
             setTimeout(() => {
               calloutTargetElement.setSelectionRange(
                 updatedItems[currentIndex].value.length,
-                updatedItems[currentIndex].value.length
+                updatedItems[currentIndex].value.length,
               );
             }, 0);
           }
@@ -272,7 +272,7 @@ export const StringArrayEditor = React.memo(
           location: 'LGResponseEditor',
         });
       },
-      [calloutTargetElement, currentIndex, items, onChange]
+      [calloutTargetElement, currentIndex, items, onChange],
     );
 
     const toolbar = React.useMemo(
@@ -293,7 +293,7 @@ export const StringArrayEditor = React.memo(
             onSelectToolbarMenuItem={onSelectToolbarMenuItem}
           />
         ),
-      [isSpeech, lgTemplates, memoryVariables, onInsertSSMLTag, onSelectToolbarMenuItem]
+      [isSpeech, lgTemplates, memoryVariables, onInsertSSMLTag, onSelectToolbarMenuItem],
     );
 
     return (
@@ -310,7 +310,7 @@ export const StringArrayEditor = React.memo(
               onRemove={onItemRemove(idx)}
               onShowCallout={onShowCallout}
             />
-          ) : null
+          ) : null,
         )}
         {currentIndex === null && (
           <Link as="button" styles={styles.link} onClick={onClickAddVariation}>
@@ -330,5 +330,5 @@ export const StringArrayEditor = React.memo(
         )}
       </div>
     );
-  }
+  },
 );

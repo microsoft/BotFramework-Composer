@@ -18,7 +18,7 @@ describe('<Home/>', () => {
     ];
     const onItemChosen = jest.fn((item) => item.path);
     const { container, queryByLabelText } = render(
-      <RecentBotList recentProjects={recentProjects} onItemChosen={onItemChosen} />
+      <RecentBotList recentProjects={recentProjects} onItemChosen={onItemChosen} />,
     );
     expect(container).toHaveTextContent('a');
     expect(container).toHaveTextContent('b');
@@ -110,7 +110,7 @@ describe('<Home/>', () => {
         href={videoItem.url}
         imageCover={videoItem.image}
         title={videoItem.title}
-      />
+      />,
     );
     expect(container).toHaveTextContent(videoItem.title);
   });

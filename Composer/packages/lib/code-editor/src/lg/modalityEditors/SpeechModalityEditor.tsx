@@ -43,7 +43,7 @@ const SpeechModalityEditor = React.memo(
         onTemplateChange,
         onUpdateResponseTemplate,
       },
-      { lgOption, lgTemplates }
+      { lgOption, lgTemplates },
     );
 
     const inputHintOptions = React.useMemo<IDropdownOption[]>(
@@ -79,8 +79,18 @@ const SpeechModalityEditor = React.memo(
           text: formatMessage('Expecting'),
           selected: inputHint === 'expectingInput',
         },
+        {
+          key: 'ignoringSpeechInput',
+          text: formatMessage('Ignoring Speech'),
+          selected: inputHint === 'ignoringSpeechInput',
+        },
+        {
+          key: 'ignoringNonSpeechInput',
+          text: formatMessage('Ignoring Non Speech'),
+          selected: inputHint === 'ignoringNonSpeechInput',
+        },
       ],
-      [inputHint]
+      [inputHint],
     );
 
     const inputHintChange = React.useCallback(
@@ -89,7 +99,7 @@ const SpeechModalityEditor = React.memo(
           onInputHintChange?.(option.key as string);
         }
       },
-      [onInputHintChange]
+      [onInputHintChange],
     );
 
     return (
@@ -117,7 +127,7 @@ const SpeechModalityEditor = React.memo(
         />
       </ModalityEditorContainer>
     );
-  }
+  },
 );
 
 export { SpeechModalityEditor };

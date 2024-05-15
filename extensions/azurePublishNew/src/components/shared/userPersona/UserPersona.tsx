@@ -32,17 +32,17 @@ export const UserPersona = (props: Props) => {
     const isSignedOut = await logOut();
     if (isSignedOut) {
       addNotification(
-        getLogoutNotificationSettings(formatMessage('You have successfully signed out of Azure'), 'info')
+        getLogoutNotificationSettings(formatMessage('You have successfully signed out of Azure'), 'info'),
       );
       closeDialog();
     } else {
       addNotification(
         getLogoutNotificationSettings(
           formatMessage(
-            'There was an error attempting to sign out of Azure. To complete sign out, you may need to restart Composer.'
+            'There was an error attempting to sign out of Azure. To complete sign out, you may need to restart Composer.',
           ),
-          'error'
-        )
+          'error',
+        ),
       );
     }
   }, [addNotification]);
@@ -57,13 +57,13 @@ export const UserPersona = (props: Props) => {
             const confirmed = await OpenConfirmModal(
               formatMessage('Sign out of Azure'),
               formatMessage(
-                'By signing out of Azure, your new publishing profile will be canceled and this dialog will close. Do you want to continue?'
+                'By signing out of Azure, your new publishing profile will be canceled and this dialog will close. Do you want to continue?',
               ),
               {
                 onRenderContent: (subtitle: string) => <div>{subtitle}</div>,
                 confirmText: formatMessage('Sign out'),
                 cancelText: formatMessage('Cancel'),
-              }
+              },
             );
             if (confirmed) {
               await signoutAndNotify();
@@ -75,7 +75,7 @@ export const UserPersona = (props: Props) => {
         </div>
       );
     },
-    [signoutAndNotify, props.onSignOut]
+    [signoutAndNotify, props.onSignOut],
   );
   return <Persona {...props} onRenderSecondaryText={props.onRenderSecondaryText || onRenderSecondaryText} />;
 };

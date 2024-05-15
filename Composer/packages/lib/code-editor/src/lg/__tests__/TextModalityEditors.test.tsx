@@ -22,7 +22,7 @@ describe('TextModalityEditor', () => {
         onRemoveTemplate={jest.fn()}
         onTemplateChange={jest.fn()}
         onUpdateResponseTemplate={jest.fn()}
-      />
+      />,
     );
 
     await findByText('hello world');
@@ -41,7 +41,7 @@ describe('TextModalityEditor', () => {
         onRemoveTemplate={jest.fn()}
         onTemplateChange={jest.fn()}
         onUpdateResponseTemplate={jest.fn()}
-      />
+      />,
     );
 
     await findByText('variation1');

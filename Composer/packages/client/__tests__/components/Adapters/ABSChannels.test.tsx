@@ -153,11 +153,9 @@ describe('<ABSChannels />', () => {
     expect(await component.findByText('MS Teams')).toBeTruthy();
     expect(await component.findByText('Web Chat')).toBeTruthy();
     expect(await component.findByText('Speech')).toBeTruthy();
-    expect(
-      httpClient.get
-    ).toBeCalledWith(
+    expect(httpClient.get).toBeCalledWith(
       `https://management.azure.com/subscriptions/${mockSubscriptionId}/resourceGroups/${mockResourceGroup}/providers/Microsoft.BotService/botServices/${mockBotName}/channels/MsTeamsChannel?api-version=2020-06-02`,
-      { headers: { Authorization: `Bearer ${mockTokenValue}` } }
+      { headers: { Authorization: `Bearer ${mockTokenValue}` } },
     );
   });
 
@@ -185,21 +183,17 @@ describe('<ABSChannels />', () => {
     await act(async () => {
       await fireEvent.click(teamsToggle);
     });
-    expect(
-      httpClient.delete
-    ).toBeCalledWith(
+    expect(httpClient.delete).toBeCalledWith(
       `https://management.azure.com/subscriptions/${mockSubscriptionId}/resourceGroups/${mockResourceGroup}/providers/Microsoft.BotService/botServices/${mockBotName}/channels/MsTeamsChannel?api-version=2020-06-02`,
-      { headers: { Authorization: `Bearer ${mockTokenValue}` } }
+      { headers: { Authorization: `Bearer ${mockTokenValue}` } },
     );
     await act(async () => {
       await fireEvent.click(teamsToggle);
     });
-    expect(
-      httpClient.put
-    ).toBeCalledWith(
+    expect(httpClient.put).toBeCalledWith(
       `https://management.azure.com/subscriptions/${mockSubscriptionId}/resourceGroups/${mockResourceGroup}/providers/Microsoft.BotService/botServices/${mockBotName}/channels/MsTeamsChannel?api-version=2020-06-02`,
       mockData,
-      { headers: { Authorization: `Bearer ${mockTokenValue}` } }
+      { headers: { Authorization: `Bearer ${mockTokenValue}` } },
     );
   });
 
@@ -228,21 +222,17 @@ describe('<ABSChannels />', () => {
     await act(async () => {
       await fireEvent.click(webChatToggle);
     });
-    expect(
-      httpClient.delete
-    ).toBeCalledWith(
+    expect(httpClient.delete).toBeCalledWith(
       `https://management.azure.com/subscriptions/${mockSubscriptionId}/resourceGroups/${mockResourceGroup}/providers/Microsoft.BotService/botServices/${mockBotName}/channels/${CHANNELS.WEBCHAT}?api-version=2020-06-02`,
-      { headers: { Authorization: `Bearer ${mockTokenValue}` } }
+      { headers: { Authorization: `Bearer ${mockTokenValue}` } },
     );
     await act(async () => {
       await fireEvent.click(webChatToggle);
     });
-    expect(
-      httpClient.put
-    ).toBeCalledWith(
+    expect(httpClient.put).toBeCalledWith(
       `https://management.azure.com/subscriptions/${mockSubscriptionId}/resourceGroups/${mockResourceGroup}/providers/Microsoft.BotService/botServices/${mockBotName}/channels/${CHANNELS.WEBCHAT}?api-version=2020-06-02`,
       mockData,
-      { headers: { Authorization: `Bearer ${mockTokenValue}` } }
+      { headers: { Authorization: `Bearer ${mockTokenValue}` } },
     );
   });
 
@@ -252,11 +242,9 @@ describe('<ABSChannels />', () => {
     await act(async () => {
       await fireEvent.click(speechToggle);
     });
-    expect(
-      httpClient.delete
-    ).toBeCalledWith(
+    expect(httpClient.delete).toBeCalledWith(
       `https://management.azure.com/subscriptions/${mockSubscriptionId}/resourceGroups/${mockResourceGroup}/providers/Microsoft.BotService/botServices/${mockBotName}/channels/${CHANNELS.SPEECH}?api-version=2020-06-02`,
-      { headers: { Authorization: `Bearer ${mockTokenValue}` } }
+      { headers: { Authorization: `Bearer ${mockTokenValue}` } },
     );
   });
 

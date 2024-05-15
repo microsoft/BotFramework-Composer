@@ -94,7 +94,7 @@ export const copyQnAFilesOnOtherLocales = (
   projectId: string,
   dialogIds: string[],
   qnaFiles: QnAFile[],
-  locales: string[]
+  locales: string[],
 ): QnAFile[] => {
   const originalSourceQnAFiles = qnaFiles.filter((f) => f.id.endsWith('.source'));
   const containerQnAFileIds = dialogIds.map((d) => `${d}.en-us`);
@@ -136,7 +136,7 @@ export const migrateQnAFiles = (
   projectId: string,
   dialogIds: string[],
   qnaFiles: QnAFile[],
-  locales: string[]
+  locales: string[],
 ): QnAFile[] => {
   // migrate script move qna pairs in *.qna to *-manual.source.qna.
   const updateQnAFiles1 = reformQnAToContainerKB(projectId, qnaFiles, locales);

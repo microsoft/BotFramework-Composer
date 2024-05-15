@@ -26,7 +26,7 @@ import { PreviewFeatureToggle } from './PreviewFeatureToggle';
 import { TemplateFeedForm } from './TemplateFeedForm';
 
 const ElectronSettings = lazy(() =>
-  import('./electronSettings').then((module) => ({ default: module.ElectronSettings }))
+  import('./electronSettings').then((module) => ({ default: module.ElectronSettings })),
 );
 
 const AppSettings: React.FC<RouteComponentProps> = () => {
@@ -41,7 +41,7 @@ const AppSettings: React.FC<RouteComponentProps> = () => {
       onboardingSetComplete(!checked);
       showCallout(checked);
     },
-    [onboardingSetComplete]
+    [onboardingSetComplete],
   );
 
   const onCodeEditorChange = (key: string) => (value: boolean | Record<string, string | number>) => {
@@ -179,7 +179,7 @@ const AppSettings: React.FC<RouteComponentProps> = () => {
         <SettingToggle
           checked={userSettings.codeEditor.minimap}
           description={formatMessage(
-            'A minimap gives an overview of your source code for quick navigation and code understanding.'
+            'A minimap gives an overview of your source code for quick navigation and code understanding.',
           )}
           image={images.minimap}
           title={formatMessage('Minimap')}
@@ -220,7 +220,7 @@ const AppSettings: React.FC<RouteComponentProps> = () => {
           <SettingToggle
             checked={!!userSettings.telemetry.allowDataCollection}
             description={formatMessage(
-              'Composer includes a telemetry feature that collects usage information. It is important that the Composer team understands how the tool is being used so that it can be improved.'
+              'Composer includes a telemetry feature that collects usage information. It is important that the Composer team understands how the tool is being used so that it can be improved.',
             )}
             id="dataCollectionToggle"
             title={formatMessage('Data collection')}

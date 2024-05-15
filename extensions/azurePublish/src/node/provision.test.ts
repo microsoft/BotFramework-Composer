@@ -18,7 +18,8 @@ const mockConfig = {
   name: 'profileName',
   type: 'azurepublish',
   subscription: 'test',
-} as ProvisionConfig;
+} as unknown as ProvisionConfig;
+
 const azProvision = new BotProjectProvision(mockConfig);
 
 const mockGet = jest.fn();

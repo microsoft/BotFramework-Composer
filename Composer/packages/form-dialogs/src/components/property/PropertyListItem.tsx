@@ -82,7 +82,7 @@ const PropertyListItemContent = React.memo((props: ContentProps) => {
   const tooltipId = useId('PropertyListItemContent');
   const { title: typeDisplayText, description: typeDisplayTitle } = React.useMemo(
     () => templates.find((template) => template.id === propertyCardData.propertyType).$generator,
-    [templates, propertyCardData.propertyType]
+    [templates, propertyCardData.propertyType],
   );
 
   const activateItem = React.useCallback(() => {
@@ -95,7 +95,7 @@ const PropertyListItemContent = React.memo((props: ContentProps) => {
         activateItem();
       }
     },
-    [activateItem]
+    [activateItem],
   );
 
   return (
@@ -155,35 +155,35 @@ export const PropertyListItem = React.memo((props: Props) => {
     (propertyType: string) => {
       changePropertyType({ id: propertyId, propertyType });
     },
-    [changePropertyType, propertyId]
+    [changePropertyType, propertyId],
   );
 
   const onChangePropertyName = React.useCallback(
     (name: string) => {
       changePropertyName({ id: propertyId, name });
     },
-    [changePropertyName, propertyId]
+    [changePropertyName, propertyId],
   );
 
   const onChangeData = React.useCallback(
     (data: Record<string, any>) => {
       changePropertyCardData({ id: propertyId, data });
     },
-    [changePropertyCardData, propertyId]
+    [changePropertyCardData, propertyId],
   );
 
   const onChangeArray = React.useCallback(
     (isArray: boolean) => {
       changePropertyArray({ id: propertyId, isArray });
     },
-    [changePropertyArray]
+    [changePropertyArray],
   );
 
   const onActivateItem = React.useCallback(
     (propertyId: string) => {
       activatePropertyId({ id: propertyId });
     },
-    [activatePropertyId]
+    [activatePropertyId],
   );
 
   const onRemove = React.useCallback(async () => {
@@ -191,7 +191,7 @@ export const PropertyListItem = React.memo((props: Props) => {
       formatMessage('Delete property?'),
       propertyCardData.name
         ? formatMessage('Are you sure you want to remove "{propertyName}"?', { propertyName: propertyCardData.name })
-        : formatMessage('Are you sure you want to remove this property?')
+        : formatMessage('Are you sure you want to remove this property?'),
     );
     if (res) {
       removeProperty({ id: propertyId });

@@ -36,7 +36,7 @@ const $refToRef = ($ref: string) => {
 
 export const jsonSchemaTypeToTemplateType = (
   propertyJson: any,
-  templates: FormDialogSchemaTemplate[]
+  templates: FormDialogSchemaTemplate[],
 ): { propertyType: string; isArray?: boolean } => {
   const jsonType = propertyJson.type ?? 'ref';
 
@@ -55,7 +55,7 @@ export const jsonSchemaTypeToTemplateType = (
 
       if (propertyJson.format) {
         const template = templates.find(
-          (template) => template.format === propertyJson.format && template.type === jsonType
+          (template) => template.format === propertyJson.format && template.type === jsonType,
         );
         return { propertyType: template.id };
       }
@@ -77,7 +77,7 @@ export const jsonSchemaTypeToTemplateType = (
 export const createSchemaStoreFromJson = (
   name: string,
   jsonString: string,
-  templates: FormDialogSchemaTemplate[]
+  templates: FormDialogSchemaTemplate[],
 ): { name: string; properties: PropertyCardData[] } => {
   const json = JSON.parse(jsonString);
 

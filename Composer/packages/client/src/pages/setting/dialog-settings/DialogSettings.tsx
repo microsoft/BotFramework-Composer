@@ -55,7 +55,7 @@ export const DialogSettings: React.FC<RouteComponentProps<{ projectId: string }>
   const onDefaultLanguageChange = (
     _event: React.FormEvent<HTMLDivElement>,
     option?: IDropdownOption,
-    _index?: number
+    _index?: number,
   ) => {
     const selectedLang = option?.key as string;
     if (selectedLang && selectedLang !== defaultLanguage) {

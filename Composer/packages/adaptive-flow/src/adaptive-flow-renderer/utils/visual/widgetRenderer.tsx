@@ -15,7 +15,7 @@ export interface UIWidgetContext extends WidgetContainerProps {
 export const renderUIWidget = (
   widgetSchema: FlowWidget,
   widgetMap: FlowEditorWidgetMap,
-  context: UIWidgetContext
+  context: UIWidgetContext,
 ): JSX.Element => {
   const parseWidgetSchema = (widgetSchema: FlowWidget) => {
     const { widget, ...props } = widgetSchema;

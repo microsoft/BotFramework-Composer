@@ -36,7 +36,9 @@ const cardContainer = (show: boolean, ref?: HTMLDivElement | null) => () => {
   return css`
     border-left: 4px solid #0078d4;
     background: white;
-    box-shadow: 0 6.4px 14.4px 0 rgba(0, 0, 0, 0.132), 0 1.2px 3.6px 0 rgba(0, 0, 0, 0.108);
+    box-shadow:
+      0 6.4px 14.4px 0 rgba(0, 0, 0, 0.132),
+      0 1.2px 3.6px 0 rgba(0, 0, 0, 0.108);
     width: 340px;
     border-radius: 2px;
     display: flex;
@@ -206,7 +208,7 @@ const defaultCardContentRenderer = (props: CardProps) => {
           </Stack>
           <Stack {...stackProps}>
             {rightLinkList.map(
-              (link) => link != null && <Stack.Item key={link.label}>{makeLinkLabel(link)}</Stack.Item>
+              (link) => link != null && <Stack.Item key={link.label}>{makeLinkLabel(link)}</Stack.Item>,
             )}
           </Stack>
         </Stack>

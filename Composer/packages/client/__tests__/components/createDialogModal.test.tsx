@@ -18,7 +18,7 @@ describe('<CreateDialogModal/>', () => {
       <CreateDialogModal isOpen projectId={projectId} onDismiss={onDismissMock} onSubmit={onSubmitMock} />,
       ({ set }) => {
         set(showCreateDialogModalState, true);
-      }
+      },
     );
   }
 

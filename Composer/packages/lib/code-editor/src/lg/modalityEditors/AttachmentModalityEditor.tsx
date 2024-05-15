@@ -38,7 +38,7 @@ const AttachmentModalityEditor = React.memo(
     editorSettings,
   }: Props) => {
     const [items, setItems] = React.useState<string[]>(
-      response?.value.map((item) => extractTemplateNameFromExpression(item) || '').filter(Boolean) || []
+      response?.value.map((item) => extractTemplateNameFromExpression(item) || '').filter(Boolean) || [],
     );
 
     const handleChange = React.useCallback(
@@ -56,7 +56,7 @@ const AttachmentModalityEditor = React.memo(
           },
         });
       },
-      [onUpdateResponseTemplate, lgTemplates]
+      [onUpdateResponseTemplate, lgTemplates],
     );
 
     const handleTemplateChange = React.useCallback(
@@ -80,7 +80,7 @@ const AttachmentModalityEditor = React.memo(
 
         onTemplateChange(templateId, body);
       },
-      [onUpdateResponseTemplate, onTemplateChange, items]
+      [onUpdateResponseTemplate, onTemplateChange, items],
     );
 
     const attachmentLayoutOptions = React.useMemo<IDropdownOption[]>(
@@ -105,7 +105,7 @@ const AttachmentModalityEditor = React.memo(
           selected: attachmentLayout === 'carousel',
         },
       ],
-      [attachmentLayout]
+      [attachmentLayout],
     );
 
     const attachmentLayoutChange = React.useCallback(
@@ -114,7 +114,7 @@ const AttachmentModalityEditor = React.memo(
           onAttachmentLayoutChange?.(option.key as string);
         }
       },
-      [onAttachmentLayoutChange]
+      [onAttachmentLayoutChange],
     );
 
     return (
@@ -145,7 +145,7 @@ const AttachmentModalityEditor = React.memo(
         />
       </ModalityEditorContainer>
     );
-  }
+  },
 );
 
 export { AttachmentModalityEditor };

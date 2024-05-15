@@ -14,7 +14,7 @@ export const useLuEntities = (luFile?: LuFile, filterPredicate?: (e: LuEntity) =
     if (luFile) {
       const luEntities = luFile.intents.reduce((acc, e) => {
         let items = (e.Entities ?? ([] as LuEntity[])).filter((e) =>
-          toolbarSupportedLuEntityTypes.includes(e.Type as ToolbarLuEntityType)
+          toolbarSupportedLuEntityTypes.includes(e.Type as ToolbarLuEntityType),
         );
 
         if (filterPredicate) {

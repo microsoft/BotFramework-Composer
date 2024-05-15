@@ -3,14 +3,14 @@
 
 import { IBotProject } from '@botframework-composer/types';
 
-export type ProvisionWorkingSet = Record<string, object>;
+export type ProvisionWorkingSet = Record<string, Record<string, string>>;
 
 export type OnProvisionProgress = (status: number, message: string) => void;
 
 export type ProvisionMethod = (
   config: ResourceConfig,
   workingSet: ProvisionWorkingSet,
-  onProgress?: OnProvisionProgress
+  onProgress?: OnProvisionProgress,
 ) => Promise<ProvisionWorkingSet>;
 
 export type ResourceProvisionService = {

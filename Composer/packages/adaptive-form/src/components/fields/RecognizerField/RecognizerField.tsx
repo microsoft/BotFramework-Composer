@@ -45,9 +45,10 @@ export const RecognizerField: React.FC<FieldProps<MicrosoftIRecognizer>> = (prop
 
   useMigrationEffect(value, onChange);
   const { recognizers: recognizerConfigs, currentRecognizer } = useRecognizerConfig();
-  const detailsListItems = useMemo(() => getDetailsListItems(recognizerConfigs, shellData, shellApi), [
-    recognizerConfigs,
-  ]);
+  const detailsListItems = useMemo(
+    () => getDetailsListItems(recognizerConfigs, shellData, shellApi),
+    [recognizerConfigs],
+  );
 
   const RecognizerEditor = currentRecognizer?.recognizerEditor;
   const widget = RecognizerEditor ? <RecognizerEditor {...props} /> : null;

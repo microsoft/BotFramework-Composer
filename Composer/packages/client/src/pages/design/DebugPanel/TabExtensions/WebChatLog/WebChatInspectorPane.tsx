@@ -55,7 +55,7 @@ export const WebChatInspectorPane: React.FC<WebChatInspectorPaneProps> = (props)
         }
       }
     },
-    [inspectionData, onSetInspectionData]
+    [inspectionData, onSetInspectionData],
   );
   const renderHeader = useCallback(
     (inspectionData: WebChatInspectionData) => {
@@ -81,7 +81,7 @@ export const WebChatInspectorPane: React.FC<WebChatInspectorPaneProps> = (props)
           return null;
       }
     },
-    [handleInspectorTabClick]
+    [handleInspectorTabClick],
   );
 
   const getInspectedData = (inspectionData: WebChatInspectionData) => {

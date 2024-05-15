@@ -18,9 +18,11 @@ export function logNetworkTraffic(req: Request, res: Response, next?: NextFuncti
   // when the request finishes, log the payload and status code to the client
   res.once('finish', () => {
     let data: ConversationNetworkErrorItem | ConversationNetworkTrafficItem | undefined;
+    let payload = (res as any).sentData;
+    payload = typeof payload === 'string' ? JSON.parse(payload || '{}') : payload;
     if (res.statusCode >= 400) {
       // an error was sent to the client
-      const { error = {} } = JSON.parse((res as any).sentData || '{}');
+      const { error = {} } = payload;
       data = {
         error: {
           details: error.details,
@@ -29,7 +31,7 @@ export function logNetworkTraffic(req: Request, res: Response, next?: NextFuncti
         id: uuid(),
         request: { method: req.method, payload: req.body, route: req.originalUrl },
         response: {
-          payload: JSON.parse((res as any).sentData || '{}'),
+          payload,
           statusCode: res.statusCode,
         },
         timestamp: Date.now(),
@@ -41,7 +43,7 @@ export function logNetworkTraffic(req: Request, res: Response, next?: NextFuncti
         id: uuid(),
         request: { method: req.method, payload: req.body, route: req.originalUrl },
         response: {
-          payload: JSON.parse((res as any).sentData || '{}'),
+          payload,
           statusCode: res.statusCode,
         },
         timestamp: Date.now(),

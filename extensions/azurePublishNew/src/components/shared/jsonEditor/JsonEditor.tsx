@@ -3,7 +3,7 @@
 /** @jsx jsx */
 import { jsx, css, SerializedStyles } from '@emotion/react';
 import React, { useRef } from 'react';
-import MonacoEditor, { EditorDidMount, EditorProps } from '@monaco-editor/react';
+import MonacoEditor, { OnMount, EditorProps } from '@monaco-editor/react';
 import { NeutralColors, SharedColors } from '@fluentui/theme';
 import { MessageBar, MessageBarType, Link } from '@fluentui/react';
 import formatMessage from 'format-message';
@@ -85,7 +85,7 @@ export const JsonEditor = (props: Props) => {
   const [focused, setFocused] = React.useState(false);
   const { userSettings: { codeEditor: { fontSettings } = {} } = {} } = useShellApi();
 
-  const handleOnMount: EditorDidMount = (_: () => string, editor) => {
+  const handleOnMount: OnMount = (editor) => {
     setEditorMounted(true);
     editorRef.current = editor;
     editor.onDidDispose(() => {
@@ -142,7 +142,6 @@ export const JsonEditor = (props: Props) => {
       onMouseLeave={() => setHovered(false)}
     >
       <MonacoEditor
-        editorDidMount={handleOnMount}
         language="json"
         options={{
           ...editorOptions,
@@ -153,6 +152,7 @@ export const JsonEditor = (props: Props) => {
           },
         }}
         theme="light"
+        onMount={handleOnMount}
         {...props}
       />
       {errorMessage && (

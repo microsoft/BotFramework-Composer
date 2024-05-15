@@ -22,7 +22,11 @@ export class NpmFeed implements IFeed {
    * @param packageSource package source from where to retrieve packages.
    * @param data data received in the `objects` field from the http call to the npm registry.
    */
-  constructor(private composer: IExtensionRegistration, private packageSource?: IPackageSource, private data?) {}
+  constructor(
+    private composer: IExtensionRegistration,
+    private packageSource?: IPackageSource,
+    private data?,
+  ) {}
 
   /**
    * Gets packages from the npm feed based on the provided query.

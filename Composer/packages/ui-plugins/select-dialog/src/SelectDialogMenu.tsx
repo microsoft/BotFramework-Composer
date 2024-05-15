@@ -170,7 +170,7 @@ export const SelectDialogMenu: React.FC<SelectDialogMenuProps> = (props) => {
         },
       },
     ],
-    [dialogItems, shouldShowFilter]
+    [dialogItems, shouldShowFilter],
   );
 
   const filterDialogs = useCallback(
@@ -181,7 +181,7 @@ export const SelectDialogMenu: React.FC<SelectDialogMenuProps> = (props) => {
 
       setDialogItems(allItems.filter((item) => item.text?.toLowerCase().includes(newVal?.toLowerCase() ?? '')));
     },
-    [allItems]
+    [allItems],
   );
 
   const selectedLabel = useMemo(() => {
@@ -234,7 +234,7 @@ export const SelectDialogMenu: React.FC<SelectDialogMenuProps> = (props) => {
         </Stack>
       );
     },
-    [allItems, filterDialogs, resetFilter]
+    [allItems, filterDialogs, resetFilter],
   );
 
   const handleItemClick = useCallback(
@@ -242,7 +242,7 @@ export const SelectDialogMenu: React.FC<SelectDialogMenuProps> = (props) => {
       setDialogItems(allItems);
       onChange(item);
     },
-    [allItems]
+    [allItems],
   );
 
   return (

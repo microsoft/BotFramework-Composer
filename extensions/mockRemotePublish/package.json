@@ -17,7 +17,7 @@
   },
   "devDependencies": {
     "@botframework-composer/types": "file:../../Composer/packages/types",
-    "@types/node": "18.0.3",
-    "@types/uuid": "8.3.4"
+    "@types/node": "20.11.25",
+    "@types/uuid": "9.0.8"
   }
 }

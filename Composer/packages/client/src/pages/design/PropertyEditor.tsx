@@ -58,7 +58,7 @@ const PropertyEditor: React.FC = () => {
       if (!isEqual(shellData, localData)) {
         setLocalData(shellData);
       }
-    }, 300)
+    }, 300),
   ).current;
 
   useEffect(() => {

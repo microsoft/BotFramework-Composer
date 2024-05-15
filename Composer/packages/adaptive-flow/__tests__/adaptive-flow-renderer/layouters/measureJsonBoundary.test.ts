@@ -24,16 +24,16 @@ describe('measureJsonBoundary', () => {
   });
   it('should return boundary whose size is determined by the json.$kind', () => {
     expect(measureJsonBoundary({ $kind: AdaptiveKinds.ChoiceDiamond })).toEqual(
-      new Boundary(DiamondSize.width, DiamondSize.height)
+      new Boundary(DiamondSize.width, DiamondSize.height),
     );
     expect(measureJsonBoundary({ $kind: AdaptiveKinds.ConditionNode })).toEqual(
-      new Boundary(InitNodeSize.width, InitNodeSize.height)
+      new Boundary(InitNodeSize.width, InitNodeSize.height),
     );
     expect(measureJsonBoundary({ $kind: AdaptiveKinds.LoopIndicator })).toEqual(
-      new Boundary(LoopIconSize.width, LoopIconSize.height)
+      new Boundary(LoopIconSize.width, LoopIconSize.height),
     );
     expect(measureJsonBoundary({ $kind: AdaptiveKinds.LogAction })).toEqual(
-      new Boundary(StandardNodeWidth, HeaderHeight)
+      new Boundary(StandardNodeWidth, HeaderHeight),
     );
   });
   it("should return boundary whose size is determined by the data's choices when json.$kind is choiceInput", () => {
@@ -49,11 +49,11 @@ describe('measureJsonBoundary', () => {
     expect(measureJsonBoundary(data1)).toEqual(
       new Boundary(
         InitNodeSize.width,
-        InitNodeSize.height + ChoiceInputSize.height + ChoiceInputMarginTop + ChoiceInputMarginBottom
-      )
+        InitNodeSize.height + ChoiceInputSize.height + ChoiceInputMarginTop + ChoiceInputMarginBottom,
+      ),
     );
     expect(measureJsonBoundary(data2)).toEqual(
-      new Boundary(InitNodeSize.width, InitNodeSize.height + 4 * (ChoiceInputSize.height + ChoiceInputMarginTop))
+      new Boundary(InitNodeSize.width, InitNodeSize.height + 4 * (ChoiceInputSize.height + ChoiceInputMarginTop)),
     );
   });
 });

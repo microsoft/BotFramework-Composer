@@ -7,7 +7,7 @@ const isUsingAdaptiveRuntimeKey = (runtimeKey?: string): boolean =>
   runtimeKey === 'csharp-azurewebapp-v2' || !!runtimeKey?.startsWith('adaptive-runtime-');
 
 const parseRuntimeKey = (
-  runtimeKey?: string
+  runtimeKey?: string,
 ): { isUsingAdaptiveRuntime: boolean; runtimeLanguage?: string; runtimeType?: string } => {
   const isAdaptive = isUsingAdaptiveRuntimeKey(runtimeKey);
 

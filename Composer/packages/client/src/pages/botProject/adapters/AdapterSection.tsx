@@ -43,7 +43,7 @@ const AdapterSection = ({ projectId, scrollToSectionId }: Props) => {
                 {children}
               </Link>
             ),
-          }
+          },
         )}
       </div>
       <Stack>
@@ -80,7 +80,7 @@ const AdapterSection = ({ projectId, scrollToSectionId }: Props) => {
                   {children}
                 </Link>
               ),
-            }
+            },
           )}
         </div>
         <ExternalAdapterSettings projectId={projectId} />

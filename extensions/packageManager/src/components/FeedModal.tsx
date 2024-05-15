@@ -78,7 +78,7 @@ export const FeedModal: React.FC<WorkingModalProps> = (props) => {
           setSelectedItem(undefined);
         }
       },
-    })
+    }),
   );
 
   useEffect(() => {
@@ -267,7 +267,7 @@ export const FeedModal: React.FC<WorkingModalProps> = (props) => {
     selection.setKeySelected(newItem.key, true, false);
     setSelection(selection);
 
-    telemetryClient.track('PackageFeedAdded', {});
+    telemetryClient.track('PackageFeedAdded');
 
     setEditRow(true);
   };
@@ -276,12 +276,12 @@ export const FeedModal: React.FC<WorkingModalProps> = (props) => {
     if (
       await confirm(
         formatMessage('Delete this feed?'),
-        formatMessage('Are you sure you want to remove this feed source?')
+        formatMessage('Are you sure you want to remove this feed source?'),
       )
     ) {
       setItems(items.filter((i) => i.key !== selectedItem.key));
       setSelectedItem(undefined);
-      telemetryClient.track('PackageFeedDeleted', {});
+      telemetryClient.track('PackageFeedDeleted');
     }
   };
 

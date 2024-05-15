@@ -139,7 +139,7 @@ export async function getBundleForView(req: ExtensionViewBundleRequest, res: Res
         return;
       }
     } catch (err) {
-      if (err.message && err.message.includes('not found')) {
+      if (err.message?.includes('not found')) {
         res.status(404).json({ error: 'bundle not found' });
         return;
       }
@@ -161,7 +161,7 @@ export async function performExtensionFetch(req: ExtensionFetchRequest, res: Res
     if (!response.ok) {
       throw response;
     }
-    if (!contentType || !contentType.includes('application/json')) {
+    if (!contentType?.includes('application/json')) {
       const text = await response.text();
       return res.send(text);
     }

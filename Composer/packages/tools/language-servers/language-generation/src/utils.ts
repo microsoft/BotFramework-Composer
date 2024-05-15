@@ -52,7 +52,7 @@ export type LGFileResolver = (id: string) => LgFile | undefined;
 export function getRangeAtPosition(
   document: TextDocument,
   position: Position,
-  includesDotAndAt?: boolean
+  includesDotAndAt?: boolean,
 ): Range | undefined {
   const text = document.getText();
   const line = position.line;
@@ -168,7 +168,7 @@ export const cardPropPossibleValueType = {
   Text: 'Text | ${Expression}',
   Speak: 'Text | ${Expression}',
   Attachments: 'List of attachments',
-  InputHint: 'accepting | ignoring | expecting',
+  InputHint: 'accepting | ignoring | expecting | ignoringSpeech | ignoringNonSpeech',
   AttachmentLayout: 'list | carousel',
   SuggestedActions: 'Text | ${Expression}',
 };

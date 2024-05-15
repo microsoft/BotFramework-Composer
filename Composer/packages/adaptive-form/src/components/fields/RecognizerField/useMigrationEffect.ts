@@ -7,7 +7,7 @@ import { MicrosoftIRecognizer } from '@bfc/shared';
 
 export const useMigrationEffect = (
   recognizer: MicrosoftIRecognizer | undefined,
-  onChangeRecognizer: ChangeHandler<MicrosoftIRecognizer>
+  onChangeRecognizer: ChangeHandler<MicrosoftIRecognizer>,
 ) => {
   const { qnaFiles, luFiles, currentDialog, locale } = useShellApi();
 

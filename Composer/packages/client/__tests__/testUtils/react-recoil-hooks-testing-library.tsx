@@ -40,8 +40,8 @@ function recoilStateWrapper(options?: RenderHookOptions) {
           };
           return result;
         },
-        {}
-      )
+        {},
+      ),
     );
 
     useEffect(() => {
@@ -78,7 +78,7 @@ function renderRecoilHook<P, R>(
   callback: (props: P) => R,
   options?: RenderHookOptions & {
     initialProps?: P;
-  }
+  },
 ): RenderHookResult<P, R> {
   return renderHook(callback, {
     ...options,

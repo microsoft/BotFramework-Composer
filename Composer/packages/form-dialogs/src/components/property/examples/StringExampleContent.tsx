@@ -66,7 +66,7 @@ export const StringExampleContent = (props: Props) => {
       exampleData[currentLocale] && Object.keys(exampleData[currentLocale])
         ? Object.keys(exampleData[currentLocale])[0]
         : propertyType,
-    [exampleData, propertyType, currentLocale]
+    [exampleData, propertyType, currentLocale],
   );
 
   const addLocale = () => {
@@ -76,7 +76,7 @@ export const StringExampleContent = (props: Props) => {
   const deleteLocale = (locale: string) => async () => {
     const confirm = await OpenConfirmModal(
       formatMessage('Delete "{locale}" examples?', { locale }),
-      formatMessage('Are you sure you want to remove examples for "{locale}" locale?', { locale })
+      formatMessage('Are you sure you want to remove examples for "{locale}" locale?', { locale }),
     );
     if (confirm) {
       const newExampleData = { ...exampleData };
@@ -89,7 +89,8 @@ export const StringExampleContent = (props: Props) => {
     onChange({ ...exampleData, [currentLocale]: { [entityName]: values } });
   };
 
-  const renderLabel = (helpText: string, tooltipId: string) =>
+  const renderLabel =
+    (helpText: string, tooltipId: string) =>
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (props: any, defaultRender?: (props: any) => JSX.Element | null) => (
       <FieldLabel defaultRender={defaultRender(props)} helpText={helpText} tooltipId={tooltipId} />

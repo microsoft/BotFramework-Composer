@@ -18,7 +18,7 @@ export const formCell = css`
 export const formCellFocus = mergeStyles(
   getFocusStyle(getTheme(), {
     inset: -3,
-  })
+  }),
 );
 
 /**

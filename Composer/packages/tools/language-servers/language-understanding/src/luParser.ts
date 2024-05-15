@@ -26,7 +26,7 @@ export class LuParserWithoutWorker {
     luFile: LuFile,
     intentName: string,
     intent: { Name?: string; Body?: string } | null,
-    luFeatures: ILUFeaturesConfig
+    luFeatures: ILUFeaturesConfig,
   ): Promise<LuFile> {
     return updateIntent(luFile, intentName, intent, luFeatures);
   }
@@ -60,7 +60,7 @@ class LuParserWithWorker {
     luFile: LuFile,
     intentName: string,
     intent: { Name?: string; Body?: string } | null,
-    luFeatures: ILUFeaturesConfig
+    luFeatures: ILUFeaturesConfig,
   ): Promise<LuFile> {
     const msgId = uniqueId();
     const msg = { id: msgId, type: 'updateIntent', payload: { luFile, intentName, intent, luFeatures } };

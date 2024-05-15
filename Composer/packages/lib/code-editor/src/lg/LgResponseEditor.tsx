@@ -32,5 +32,5 @@ export const LgResponseEditor = React.memo(
         onTemplateChange={onTemplateChange}
       />
     );
-  }
+  },
 );

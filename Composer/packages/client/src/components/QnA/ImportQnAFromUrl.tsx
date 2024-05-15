@@ -43,7 +43,7 @@ const title = <div style={titleStyle}>{formatMessage('Replace knowledge base fro
 const description = (
   <div style={descriptionStyle}>
     {formatMessage(
-      'Select this option if you want to replace current knowledge base from content hosted online such as an FAQ or document link (.csv, .xls or .doc format)'
+      'Select this option if you want to replace current knowledge base from content hosted online such as an FAQ or document link (.csv, .xls or .doc format)',
     )}
   </div>
 );

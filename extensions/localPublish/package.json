@@ -11,25 +11,25 @@
   },
   "dependencies": {
     "@botframework-composer/types": "file:../../Composer/packages/types",
-    "express": "4.18.1",
+    "express": "4.18.3",
     "kill-port": "2.0.1",
     "lodash": "4.17.21",
     "path": "0.12.7",
-    "portfinder": "^1.0.32",
+    "portfinder": "1.0.32",
     "tcp-port-used": "1.0.2",
     "uuid": "8.3.2",
-    "ws": "8.8.0"
+    "ws": "8.16.0"
   },
   "resolutions": {
     "@botframework-composer/types": "file:../../Composer/packages/types",
     "bl": "^4.0.3"
   },
   "devDependencies": {
-    "@types/debug": "4.1.7",
-    "@types/express": "4.17.13",
-    "@types/lodash": "4.14.182",
-    "@types/node": "18.0.3",
-    "@types/rimraf": "3.0.2",
-    "@types/tcp-port-used": "1.0.1"
+    "@types/debug": "4.1.12",
+    "@types/express": "4.17.21",
+    "@types/lodash": "4.14.202",
+    "@types/node": "20.11.25",
+    "@types/rimraf": "4.0.5",
+    "@types/tcp-port-used": "1.0.4"
   }
 }

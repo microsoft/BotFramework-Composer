@@ -8,9 +8,8 @@ import { SelectionContext } from '../../../src/adaptive-flow-editor/contexts/Sel
 
 describe('SelectionContext', () => {
   const ContextConsumer = () => {
-    const { getNodeIndex, getSelectableIds, selectedIds, setSelectedIds, selectableElements } = useContext(
-      SelectionContext
-    );
+    const { getNodeIndex, getSelectableIds, selectedIds, setSelectedIds, selectableElements } =
+      useContext(SelectionContext);
     return (
       <div>
         <span data-testid="getNodeIndex-result">{getNodeIndex('')}</span>
@@ -33,7 +32,7 @@ describe('SelectionContext', () => {
         }}
       >
         <ContextConsumer />
-      </SelectionContext.Provider>
+      </SelectionContext.Provider>,
     );
 
     expect(ele.getByTestId('getNodeIndex-result').textContent).toEqual('1');

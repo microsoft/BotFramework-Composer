@@ -14,7 +14,7 @@ export const foreachLayouter = (
   foreachNode: GraphNode | null,
   stepsNode: GraphNode | null,
   loopBeginNode: GraphNode,
-  loopEndNode: GraphNode
+  loopEndNode: GraphNode,
 ): GraphLayout => {
   if (!foreachNode || !stepsNode) return new GraphLayout();
 
@@ -22,7 +22,7 @@ export const foreachLayouter = (
     foreachNode.boundary,
     stepsNode.boundary,
     loopBeginNode.boundary,
-    loopEndNode.boundary
+    loopEndNode.boundary,
   );
 
   foreachNode.offset = {

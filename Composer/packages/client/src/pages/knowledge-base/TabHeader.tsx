@@ -27,7 +27,7 @@ export const TabHeader: React.FC<TabHeaderProps> = (props) => {
     const currentLocale = languageList.find(
       (l) =>
         (!l.isDefault && l.language === item.props.headerText) ||
-        (l.isDefault && `${l.language}(Default)` === item.props.headerText)
+        (l.isDefault && `${l.language}(Default)` === item.props.headerText),
     )?.locale as string;
     setSelectedKey(languageList.findIndex((l) => l.locale === currentLocale));
     onChangeLocale(currentLocale);

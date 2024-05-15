@@ -8,7 +8,7 @@ export const getDefaultFeatureFlags = (): FeatureFlagMap => ({
   FORM_DIALOG: {
     displayName: formatMessage('Form dialogs'),
     description: formatMessage(
-      'Automatically generate dialogs that collect information from a user to manage conversations.'
+      'Automatically generate dialogs that collect information from a user to manage conversations.',
     ),
     documentationLink: 'https://aka.ms/AAailpe',
     isHidden: false,
@@ -17,7 +17,7 @@ export const getDefaultFeatureFlags = (): FeatureFlagMap => ({
   ADVANCED_TEMPLATE_OPTIONS: {
     displayName: formatMessage('Advanced template options'),
     description: formatMessage(
-      'Enables creating bots from local templates as well as creating bots from older versions of published templates'
+      'Enables creating bots from local templates as well as creating bots from older versions of published templates',
     ),
     documentationLink: '',
     isHidden: true,

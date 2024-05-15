@@ -8,7 +8,7 @@ import { shallowCopyAdaptiveAction } from './shallowCopyAdaptiveAction';
 import { copyAdaptiveActionList } from './copyAdaptiveActionList';
 
 type ForeachAction = Foreach | ForeachPage;
-export const copyForeach = async (input: ForeachAction, externalApi: ExternalApi): Promise<ForeachAction> => {
+export async function copyForeach(input: ForeachAction, externalApi: ExternalApi): Promise<ForeachAction> {
   const copy = shallowCopyAdaptiveAction(input, externalApi);
 
   if (Array.isArray(input.actions)) {
@@ -16,4 +16,4 @@ export const copyForeach = async (input: ForeachAction, externalApi: ExternalApi
   }
 
   return copy;
-};
+}
