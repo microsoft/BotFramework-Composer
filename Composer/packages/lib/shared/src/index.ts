@@ -17,6 +17,7 @@ export * from './EditorAPI';
 export * from './featureFlagUtils';
 export * from './functionUtils';
 export * from './generateUniqueId';
+export * from './getBotBuilderVersion';
 export * from './icons';
 export * from './labelMap';
 export * from './lgUtils';

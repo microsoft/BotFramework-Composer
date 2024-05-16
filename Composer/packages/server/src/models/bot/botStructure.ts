@@ -32,6 +32,7 @@ const BotStructureTemplate = {
   formDialogs: 'form-dialogs/${FORMDIALOGNAME}',
   skillManifests: 'manifests/${MANIFESTFILENAME}',
   botProject: '${BOTNAME}.botproj',
+  botCsProject: '${BOTNAME}.csproj',
   recognizer: 'recognizers/${RECOGNIZERNAME}',
   crossTrainConfig: 'settings/${CROSSTRAINCONFIGNAME}',
   // PVA
@@ -81,6 +82,7 @@ export const BotStructureFilesPatterns = [
   templateInterpolate(BotStructureTemplate.formDialogs, { FORMDIALOGNAME: '*.form' }),
   templateInterpolate(BotStructureTemplate.skillManifests, { MANIFESTFILENAME: '*.json' }),
   templateInterpolate(BotStructureTemplate.botProject, { BOTNAME: '*' }),
+  templateInterpolate(BotStructureTemplate.botCsProject, { BOTNAME: '*' }),
   templateInterpolate(BotStructureTemplate.recognizer, { RECOGNIZERNAME: '*.dialog' }),
   templateInterpolate(BotStructureTemplate.crossTrainConfig, { CROSSTRAINCONFIGNAME: 'cross-train.config.json' }),
   '*.schema',
