@@ -31,8 +31,14 @@ export const App: React.FC = () => {
   const [isClosing, setIsClosing] = useState(false);
   const [listener, setListener] = useState<{ destroy(): boolean }>({} as any);
 
-  const { fetchExtensions, fetchFeatureFlags, checkNodeVersion, performAppCleanupOnQuit, setMachineInfo } =
-    useRecoilValue(dispatcherState);
+  const {
+    fetchExtensions,
+    fetchFeatureFlags,
+    checkNodeVersion,
+    setBotBuilderVersion,
+    performAppCleanupOnQuit,
+    setMachineInfo,
+  } = useRecoilValue(dispatcherState);
   const updateFile = useRecoilCallback((callbackHelpers: CallbackInterface) => async ({ projectId, value }) => {
     callbackHelpers.set(lgFileState({ projectId, lgFileId: value.id }), value);
   });
@@ -53,6 +59,7 @@ export const App: React.FC = () => {
 
   useEffect(() => {
     checkNodeVersion();
+    setBotBuilderVersion();
     fetchExtensions();
     fetchFeatureFlags();
 

@@ -5,6 +5,7 @@
 import { CallbackInterface, useRecoilCallback } from 'recoil';
 import debounce from 'lodash/debounce';
 import formatMessage from 'format-message';
+import { getBotBuilderVersion } from '@bfc/shared';
 
 import {
   appUpdateState,
@@ -24,6 +25,7 @@ import {
   showWarningDiagnosticsState,
   projectsForDiagnosticsFilterState,
   templateFeedUrlState,
+  botBuilderVersionState,
 } from '../atoms/appState';
 import { AppUpdaterStatus, CreationFlowStatus, CreationFlowType } from '../../constants';
 import OnboardingState from '../../utils/onboardingStorage';
@@ -161,6 +163,18 @@ export const applicationDispatcher = () => {
     }
   });
 
+  const setBotBuilderVersion = useRecoilCallback(({ set }: CallbackInterface) => async () => {
+    try {
+      const versions = await getBotBuilderVersion();
+      set(botBuilderVersionState, versions);
+    } catch (err) {
+      set(applicationErrorState, {
+        message: formatMessage('Error getting BotBuilder version from BotFramework-Components repository'),
+        summary: err.message,
+      });
+    }
+  });
+
   const fetchTemplateFeedUrl = useRecoilCallback(({ set }: CallbackInterface) => async () => {
     try {
       const response = await httpClient.get(`/assets/templateFeedUrl`);
@@ -234,5 +248,6 @@ export const applicationDispatcher = () => {
     setProjectsForDiagnosticsFilter,
     fetchTemplateFeedUrl,
     setTemplateFeedUrl,
+    setBotBuilderVersion,
   };
 };
