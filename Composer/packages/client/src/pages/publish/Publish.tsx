@@ -95,7 +95,7 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
   const [publishDialogVisible, setPublishDialogVisiblity] = useState(false);
   const [pullDialogVisible, setPullDialogVisiblity] = useState(false);
   const [updaterStatus, setUpdaterStatus] = useState<{ [skillId: string]: boolean }>(
-    initUpdaterStatus(publishHistoryList)
+    initUpdaterStatus(publishHistoryList),
   );
   const [checkedSkillIds, setCheckedSkillIds] = useState<string[]>([]);
 
@@ -162,7 +162,7 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
       // Start updaters
       botList
         .filter(
-          (bot) => !!bot.publishTarget && !pollingUpdaterList.some((u) => u.isSameUpdater(bot.id, bot.publishTarget))
+          (bot) => !!bot.publishTarget && !pollingUpdaterList.some((u) => u.isSameUpdater(bot.id, bot.publishTarget)),
         )
         .forEach((bot) => {
           if (pollingUpdaterList.some((updater) => updater.isSameUpdater(bot.id, bot.publishTarget))) return;
@@ -232,7 +232,7 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
           skillPublishStatus !== SKILL_PUBLISH_STATUS.INITIAL
             ? getSkillPublishedNotificationCardProps(
                 { ...updatedBot, status: responseData.status, skillManifestUrl: '' },
-                skillManifestUrl
+                skillManifestUrl,
               )
             : getPublishedNotificationCardProps({ ...updatedBot, status: responseData.status, skillManifestUrl: '' });
         const resultNotification = createNotification(notificationCard);
@@ -318,7 +318,7 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
                   title: formatMessage('Unsupported publishing profile'),
                   description: formatMessage(
                     'This publishing profile ({ profileName }) is no longer supported. You are a member of multiple Azure tenants and the profile needs to have a tenant id associated with it. You can either edit the profile by adding the `tenantId` property to its configuration or create a new one.',
-                    { profileName: target.name }
+                    { profileName: target.name },
                   ),
                 });
               } else {
@@ -346,7 +346,7 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
       return accumulator;
     }, {});
     const notification = createNotification(
-      getPendingNotificationCardProps(items, skillPublishStatus === SKILL_PUBLISH_STATUS.WAITING)
+      getPendingNotificationCardProps(items, skillPublishStatus === SKILL_PUBLISH_STATUS.WAITING),
     );
     pendingNotificationRef.current = notification;
     addNotification(notification);
@@ -421,7 +421,7 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
             targetMap.publishTarget = publishTarget;
           }
           return targetMap;
-        })
+        }),
       );
     } else {
       setCurrentBotList([...currentBotList, { id: currentBotStatus.id, name: currentBotStatus.name, publishTarget }]);

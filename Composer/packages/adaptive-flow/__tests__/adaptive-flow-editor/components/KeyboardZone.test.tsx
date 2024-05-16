@@ -19,7 +19,7 @@ describe('KeyboardZone', () => {
     const zone = render(
       <KeyboardZone onCommand={() => undefined}>
         <span data-testid="zone-child">children</span>
-      </KeyboardZone>
+      </KeyboardZone>,
     );
     expect(zone).toBeTruthy();
     expect(zone.getByTestId('zone-child')).toBeTruthy();
@@ -30,7 +30,7 @@ describe('KeyboardZone', () => {
     const zone = render(
       <KeyboardZone onCommand={mockOnCommand}>
         <span data-testid="zone-child">children</span>
-      </KeyboardZone>
+      </KeyboardZone>,
     ).getByTestId('keyboard-zone');
 
     fireEvent.focus(zone);
@@ -40,7 +40,7 @@ describe('KeyboardZone', () => {
         key: 'C',
         code: 'C',
         ctrlKey: true,
-      })
+      }),
     );
     expect(mockOnCommand).toHaveBeenCalled();
   });

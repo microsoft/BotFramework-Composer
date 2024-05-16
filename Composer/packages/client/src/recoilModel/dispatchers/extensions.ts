@@ -48,7 +48,7 @@ export const extensionsDispatcher = () => {
         // eslint-disable-next-line no-console
         console.error(err);
       }
-    }
+    },
   );
 
   const removeExtension = useRecoilCallback((callbackHelpers: CallbackInterface) => async (extensionName: string) => {
@@ -86,7 +86,7 @@ export const extensionsDispatcher = () => {
         // eslint-disable-next-line no-console
         console.error(err);
       }
-    }
+    },
   );
 
   const updateExtensionSettings = useRecoilCallback(
@@ -100,7 +100,7 @@ export const extensionsDispatcher = () => {
         // eslint-disable-next-line no-console
         console.error(err);
       }
-    }
+    },
   );
 
   return {

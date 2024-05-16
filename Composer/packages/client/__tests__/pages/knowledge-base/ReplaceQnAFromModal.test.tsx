@@ -33,7 +33,7 @@ describe('Replace QnA from portal Modal', () => {
         qnaFile={qnaFile}
         onDismiss={onDismiss}
         onSubmit={handleSubmit}
-      />
+      />,
     );
     const urlField = getByTestId('ImportNewUrlToOverwriteQnAFile');
     fireEvent.change(urlField, { target: { value: 'http://newUrl.pdf' } });
@@ -52,7 +52,7 @@ describe('Replace QnA from portal Modal', () => {
         qnaFile={qnaFile}
         onDismiss={onDismiss}
         onSubmit={handleSubmit}
-      />
+      />,
     );
     const secondOption = getByText('Replace with an existing knowledge base from QnA maker portal');
     fireEvent.click(secondOption);
@@ -60,7 +60,7 @@ describe('Replace QnA from portal Modal', () => {
     fireEvent.click(next);
 
     expect(
-      getByText('Select the subscription and resource you want to choose a knowledge base from')
+      getByText('Select the subscription and resource you want to choose a knowledge base from'),
     ).toBeInTheDocument();
   });
 });

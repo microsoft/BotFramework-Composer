@@ -101,7 +101,7 @@ const ConfirmDialog: React.FC<ConfirmDialogProps> = (props) => {
   } = setting;
 
   const [additionalCheckboxValue, setAdditionalCheckboxValue] = React.useState<boolean | undefined>(
-    getDefaultAdditionalCheckboxValue(checkboxProps)
+    getDefaultAdditionalCheckboxValue(checkboxProps),
   );
   const [disabled, setDisabled] = React.useState(setting.disabled);
 
@@ -176,7 +176,7 @@ const ConfirmDialog: React.FC<ConfirmDialogProps> = (props) => {
 export const OpenConfirmModal = (
   title,
   subTitle,
-  setting: Record<string, any> & { checkboxProps?: DoubleConfirmCheckboxProps } = {}
+  setting: Record<string, any> & { checkboxProps?: DoubleConfirmCheckboxProps } = {},
 ): Promise<boolean> => {
   return new Promise((resolve) => {
     const node = document.createElement('div');
@@ -203,7 +203,7 @@ export const OpenConfirmModal = (
 export const OpenConfirmModalWithCheckbox = (
   title,
   subTitle,
-  setting: Record<string, any> & { checkboxProps?: CheckboxProps } = {}
+  setting: Record<string, any> & { checkboxProps?: CheckboxProps } = {},
 ): Promise<{ additionalConfirm?: boolean } | null> => {
   return new Promise((resolve) => {
     const node = document.createElement('div');

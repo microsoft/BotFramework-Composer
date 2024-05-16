@@ -35,5 +35,5 @@ export const HelpIconTooltip = React.memo(
         styles={tooltipStyles}
       />
     );
-  }
+  },
 );

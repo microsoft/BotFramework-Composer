@@ -141,14 +141,14 @@ describe('<DiagnosticList/>', () => {
     set(schemasState(state.projectId), mockProjectResponse.schemas);
     set(
       formDialogSchemaIdsState(state.projectId),
-      state.formDialogSchemas.map((fds) => fds.id)
+      state.formDialogSchemas.map((fds) => fds.id),
     );
   };
 
   it('should render the DiagnosticList', () => {
     const { container } = renderWithRecoil(
       <DiagnosticList diagnosticItems={state.diagnostics as any} />,
-      initRecoilState
+      initRecoilState,
     );
     expect(container).toHaveTextContent('server');
   });

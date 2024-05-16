@@ -36,7 +36,7 @@ const LuisIntentEditor: React.FC<FieldProps<string>> = (props) => {
 
   const popExpandOptions = useMemo(
     () => ({ popExpandTitle: typeof label === 'string' ? label : formatMessage('Trigger phrases') }),
-    [label]
+    [label],
   );
 
   const luIntent = useMemo(() => {
@@ -71,7 +71,7 @@ const LuisIntentEditor: React.FC<FieldProps<string>> = (props) => {
         : `/bot/${projectId}/language-understanding/${fileId}${sectionId ? `/edit?t=${sectionId}` : ''}`;
       shellApi.navigateTo(url);
     },
-    [shellApi, projectId, locale, currentDialog]
+    [shellApi, projectId, locale, currentDialog],
   );
 
   if (!luFile || !intentName) {

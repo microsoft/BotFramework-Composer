@@ -47,13 +47,8 @@ const getProjectLink = (path: string, id?: string) => {
 };
 
 const SettingPage: React.FC<RouteComponentProps> = () => {
-  const {
-    addLanguageDialogCancel,
-    delLanguageDialogCancel,
-    addLanguages,
-    deleteLanguages,
-    fetchProjectById,
-  } = useRecoilValue(dispatcherState);
+  const { addLanguageDialogCancel, delLanguageDialogCancel, addLanguages, deleteLanguages, fetchProjectById } =
+    useRecoilValue(dispatcherState);
   const projectId = useRecoilValue(currentProjectIdState);
   const locale = useRecoilValue(localeState(projectId));
   const showDelLanguageModal = useRecoilValue(showDelLanguageModalState(projectId));

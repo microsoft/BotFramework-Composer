@@ -30,7 +30,7 @@ describe('<AddLanguageModal />', () => {
         locale={locale}
         onDismiss={onDismiss}
         onSubmit={onSubmit}
-      />
+      />,
     );
 
     const engCheckBox = getByText('English (United States) - Original');
@@ -58,7 +58,7 @@ describe('<DeleteLanguageModal />', () => {
         locale={locale}
         onDismiss={onDismiss}
         onSubmit={onSubmit}
-      />
+      />,
     );
 
     const checkBox = getByText('Chinese (Simplified, China) - Current');

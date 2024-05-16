@@ -73,7 +73,7 @@ export const CreateResourcesWizard = React.memo((props: Props) => {
                 {children}
               </a>
             ),
-          }
+          },
         ),
         onRenderContent: () => (
           <ChooseResourcesStep enabledResources={enabledResources} onChangeSelection={setEnabledResources} />
@@ -84,7 +84,7 @@ export const CreateResourcesWizard = React.memo((props: Props) => {
         id: 'review-resources',
         title: formatMessage('Review resources to be created'),
         subTitle: formatMessage(
-          'The following resources will be created and provisioned for your bot. Once provisioned, they will be available in the Azure portal.'
+          'The following resources will be created and provisioned for your bot. Once provisioned, they will be available in the Azure portal.',
         ),
         onRenderContent: () => <ReviewResourcesStep />,
         navigationState: { nextText: formatMessage('Done') },

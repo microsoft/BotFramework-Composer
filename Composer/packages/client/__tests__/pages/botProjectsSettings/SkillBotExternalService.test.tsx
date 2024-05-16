@@ -110,7 +110,7 @@ describe('<SkillBotExternalService />', () => {
     //test
     const component = renderWithRecoilAndCustomDispatchers(
       <SkillBotExternalService projectId={skillProjId} />,
-      initRecoilState
+      initRecoilState,
     );
 
     const textFieldAuthoring = await component.getByTestId('skillLUISAuthoringKeyField');
@@ -123,7 +123,7 @@ describe('<SkillBotExternalService />', () => {
   it('should allow skill specific luis key that is updated in settings', async () => {
     const component = renderWithRecoilAndCustomDispatchers(
       <SkillBotExternalService projectId={skillProjId} />,
-      initRecoilState
+      initRecoilState,
     );
     const useSkillLuisKeyBtn = await component.getByTestId('skillLUISAuthoringKeyBtn');
     await act(async () => {
@@ -149,7 +149,7 @@ describe('<SkillBotExternalService />', () => {
   it('should allow skill specific qna key that is updated in settings', async () => {
     const component = renderWithRecoilAndCustomDispatchers(
       <SkillBotExternalService projectId={skillProjId} />,
-      initRecoilState
+      initRecoilState,
     );
     const useSkillQnaKeyBtn = await component.getByTestId('skillQnaAuthoringBtn');
     await act(async () => {

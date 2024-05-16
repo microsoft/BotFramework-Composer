@@ -15,7 +15,7 @@ test('should transform string as BeginDialog', () => {
       $kind: AdaptiveKinds.StepGroup,
       children: ['CalleeDialog'],
     },
-    ''
+    '',
   );
   expect(result[0].json).toEqual({
     $kind: AdaptiveKinds.BeginDialog,

@@ -59,7 +59,7 @@ const Root = styled(Stack)<{
             zIndex: 1,
           },
         }
-      : null
+      : null,
 );
 
 const oneLinerStyles = classNamesFunction<IStackItemProps, IStackItemStyles>()({
@@ -110,7 +110,7 @@ const FormDialogSchemaItem = React.memo((props: FormDialogSchemaItemProps) => {
 
       onDelete(schemaId);
     },
-    [schemaId, onDelete]
+    [schemaId, onDelete],
   );
 
   const generateDialog = React.useCallback(
@@ -119,7 +119,7 @@ const FormDialogSchemaItem = React.memo((props: FormDialogSchemaItemProps) => {
 
       onGenerate(schemaId);
     },
-    [schemaId, onGenerate]
+    [schemaId, onGenerate],
   );
 
   const viewDialog = React.useCallback(
@@ -128,12 +128,12 @@ const FormDialogSchemaItem = React.memo((props: FormDialogSchemaItemProps) => {
 
       onViewDialog(schemaId);
     },
-    [schemaId, onViewDialog]
+    [schemaId, onViewDialog],
   );
 
   const renderOverflowItem = React.useCallback(
     (item: IOverflowSetItemProps) => <CommandBarButton aria-label={item.name} role="menuitem" onClick={item.onClick} />,
-    []
+    [],
   );
 
   const renderOverflowButton = React.useCallback(
@@ -150,7 +150,7 @@ const FormDialogSchemaItem = React.memo((props: FormDialogSchemaItemProps) => {
         />
       </TooltipHost>
     ),
-    []
+    [],
   );
 
   return (
@@ -245,7 +245,7 @@ export const FormDialogSchemaList: React.FC<FormDialogSchemaListProps> = React.m
         onViewDialog={onViewDialog}
       />
     ),
-    [selectedId, onSelectItem, onDeleteItem, onGenerate]
+    [selectedId, onSelectItem, onDeleteItem, onGenerate],
   );
 
   return (
@@ -270,7 +270,7 @@ export const FormDialogSchemaList: React.FC<FormDialogSchemaListProps> = React.m
                   0 {}
                 other {Press down arrow key to navigate the search results}
             }`,
-          { itemCount: items.length }
+          { itemCount: items.length },
         )}
         aria-live="polite"
       />

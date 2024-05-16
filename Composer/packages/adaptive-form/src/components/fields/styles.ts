@@ -18,7 +18,7 @@ export const arrayItem = {
   contaInerFocus: mergeStyles(
     getFocusStyle(getTheme(), {
       inset: -3,
-    })
+    }),
   ),
 
   field: css`

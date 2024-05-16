@@ -45,7 +45,7 @@ export const FormDialogSchemaDetails = () => {
       if (selection?.toString()) return;
 
       const elms = Array.prototype.slice.call(
-        containerRef.current.querySelectorAll(`.${jsPropertyListClassName}`) || []
+        containerRef.current?.querySelectorAll(`.${jsPropertyListClassName}`) || [],
       ) as HTMLDivElement[];
 
       if (!dragEventRef.current && !elms.some((elm) => elm.contains(e.target as HTMLElement))) {
@@ -56,7 +56,7 @@ export const FormDialogSchemaDetails = () => {
     if (containerRef.current) {
       containerRef.current.addEventListener('click', clickOutsideLists);
       lifetime.add(() => {
-        containerRef.current.removeEventListener('click', clickOutsideLists);
+        containerRef.current?.removeEventListener('click', clickOutsideLists);
       });
     }
 
@@ -85,7 +85,7 @@ export const FormDialogSchemaDetails = () => {
         toIndex: destination.index,
       });
     },
-    [moveProperty]
+    [moveProperty],
   );
 
   return (

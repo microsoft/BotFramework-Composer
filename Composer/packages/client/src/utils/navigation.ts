@@ -42,7 +42,7 @@ export function checkUrl(
   currentUri: string,
   projectId: string,
   skillId: string | null,
-  { dialogId, selected, focused, promptTab }: DesignPageLocation
+  { dialogId, selected, focused, promptTab }: DesignPageLocation,
 ) {
   let lastUri =
     skillId == null
@@ -62,7 +62,7 @@ export function convertPathToUrl(
   projectId: string,
   skillId: string | null,
   dialogId: string | null,
-  path?: string
+  path?: string,
 ): string {
   //path is like main.triggers[0].actions[0]
   //uri = id?selected=triggers[0]&focused=triggers[0].actions[0]

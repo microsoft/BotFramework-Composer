@@ -86,7 +86,7 @@ export const AdaptiveTrigger: React.FC<AdaptiveTriggerProps> = ({ triggerId, tri
       0,
       HeadSize.width - HeadSize.axisX,
       TailSize.width - TailSize.axisX,
-      contentBoundary.width - contentBoundary.axisX
+      contentBoundary.width - contentBoundary.axisX,
     );
   const editorHeight = HeadSize.height + TailSize.height + contentBoundary.height;
 
@@ -125,7 +125,7 @@ export const AdaptiveTrigger: React.FC<AdaptiveTriggerProps> = ({ triggerId, tri
             contentBoundary.height + HeadSize.height,
             EdgeDirection.Down,
             ElementInterval.y / 2,
-            { directed: true }
+            { directed: true },
           )}
           <circle
             cx={editorAxisX}

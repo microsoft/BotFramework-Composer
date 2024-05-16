@@ -33,7 +33,7 @@ describe('Bot Language', () => {
     };
     const { getByTestId } = renderWithRecoilAndCustomDispatchers(
       <BotLanguage projectId={state.projectId} />,
-      initRecoilState
+      initRecoilState,
     );
     const defaultLanguageContainer = getByTestId('defaultLanguage');
     expect(within(defaultLanguageContainer).getByText('English (United States)')).toBeInTheDocument();

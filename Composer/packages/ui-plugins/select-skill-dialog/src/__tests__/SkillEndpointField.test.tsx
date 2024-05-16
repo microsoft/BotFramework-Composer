@@ -30,7 +30,7 @@ const renderSkillEndpointField = ({ value = {}, updateSkill = jest.fn() } = {}) 
   return render(
     <EditorExtension plugins={{}} projectId={projectId} shell={{ api: shell, data: shellData }}>
       <SkillEndpointField {...props} />
-    </EditorExtension>
+    </EditorExtension>,
   );
 };
 
@@ -61,7 +61,7 @@ describe('Begin Skill Dialog', () => {
       expect.objectContaining({
         selectedEndpointIndex: 1,
         skill: selectedSkill,
-      })
+      }),
     );
   });
 
@@ -91,7 +91,7 @@ describe('Begin Skill Dialog', () => {
       expect.objectContaining({
         selectedEndpointIndex: selectedKeyIndex,
         skill: selectedSkill,
-      })
+      }),
     );
   });
 

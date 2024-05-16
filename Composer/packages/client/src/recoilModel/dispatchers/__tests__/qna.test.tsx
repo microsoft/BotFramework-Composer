@@ -21,24 +21,30 @@ jest.mock('../../parsers/qnaWorker', () => {
   return {
     parse: (id: string, content) => ({ id, content }),
     removeSection: (projectId: string, qnaFile, sectionId: string) =>
+      // eslint-disable-next-line @typescript-eslint/no-var-requires
       filterParseResult(require('@bfc/indexers/lib/utils/qnaUtil').removeSection(qnaFile, sectionId)),
     insertSection: (projectId: string, qnaFile, position, sectionContent) =>
+      // eslint-disable-next-line @typescript-eslint/no-var-requires
       filterParseResult(require('@bfc/indexers/lib/utils/qnaUtil').insertSection(qnaFile, position, sectionContent)),
     createQnAQuestion: (projectId: string, qnaFile, sectionId: string, questionContent) =>
       filterParseResult(
-        require('@bfc/indexers/lib/utils/qnaUtil').createQnAQuestion(qnaFile, sectionId, questionContent)
+        require('@bfc/indexers/lib/utils/qnaUtil').createQnAQuestion(qnaFile, sectionId, questionContent),
       ),
     updateQnAQuestion: (projectId: string, qnaFile, sectionId: string, questionId: string, questionContent) =>
       filterParseResult(
-        require('@bfc/indexers/lib/utils/qnaUtil').updateQnAQuestion(qnaFile, sectionId, questionId, questionContent)
+        require('@bfc/indexers/lib/utils/qnaUtil').updateQnAQuestion(qnaFile, sectionId, questionId, questionContent),
       ),
     removeQnAQuestion: (projectId: string, qnaFile, sectionId: string, questionId: string) =>
+      // eslint-disable-next-line @typescript-eslint/no-var-requires
       filterParseResult(require('@bfc/indexers/lib/utils/qnaUtil').removeQnAQuestion(qnaFile, sectionId, questionId)),
     updateQnAAnswer: (projectId: string, qnaFile, sectionId: string, answerContent) =>
+      // eslint-disable-next-line @typescript-eslint/no-var-requires
       filterParseResult(require('@bfc/indexers/lib/utils/qnaUtil').updateQnAAnswer(qnaFile, sectionId, answerContent)),
     addImport: (projectId: string, qnaFile: string, path: string) =>
+      // eslint-disable-next-line @typescript-eslint/no-var-requires
       filterParseResult(require('@bfc/indexers/lib/utils/qnaUtil').addImport(qnaFile, path)),
     removeImport: (projectId: string, qnaFile, path: string) =>
+      // eslint-disable-next-line @typescript-eslint/no-var-requires
       filterParseResult(require('@bfc/indexers/lib/utils/qnaUtil').removeImport(qnaFile, path)),
   };
 });
@@ -121,7 +127,7 @@ describe('QnA dispatcher', () => {
     });
 
     expect(renderedComponent.current.qnaFiles[0].qnaSections[0].Questions[0].content).toContain(
-      'What is your name, my friend?'
+      'What is your name, my friend?',
     );
   });
 

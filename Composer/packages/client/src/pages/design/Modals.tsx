@@ -146,7 +146,7 @@ const Modals: React.FC<ModalsProps> = ({ projectId = '', rootBotId = '' }) => {
             await addRemoteSkillToBotProject(manifestUrl, endpointName, zipContent);
           }}
           addTriggerToRoot={async (dialogId, formData, skillId) => {
-            await createTriggerForRemoteSkill(projectId, dialogId, formData, skillId);
+            await createTriggerForRemoteSkill(rootBotId, dialogId, formData, skillId);
             commitChanges();
           }}
           projectId={rootBotId}

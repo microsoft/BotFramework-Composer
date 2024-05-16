@@ -18,20 +18,20 @@ export class ServerWorker {
   public static async execute(
     workerName: 'dialogMerge',
     args: DialogMergeArgs,
-    updateProcess?: (status: number, message: string) => void
+    updateProcess?: (status: number, message: string) => void,
   );
   public static async execute(
     workerName: 'templateInstallation',
     args: TemplateInstallationArgs,
-    updateProcess?: (status: number, message: string) => void
+    updateProcess?: (status: number, message: string) => void,
   );
-  public static async execute<T extends Record<string, unknown> = {}>(
+  public static async execute<T extends Record<string, unknown>>(
     workerName: WorkerName,
     args: T,
     /**
      * Callback to update BackgroundProcessManager
      */
-    updateProcess?: (status: number, message: string) => void
+    updateProcess?: (status: number, message: string) => void,
   ): Promise<void> {
     return new Promise((resolve, reject) => {
       // used to reject in case of an unhandled error
@@ -73,7 +73,7 @@ export class ServerWorker {
       return path.join(
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         (process as any).resourcesPath,
-        `app.asar.unpacked/node_modules/@bfc/server-workers/lib/workers/${workerName}.worker.js`
+        `app.asar.unpacked/node_modules/@bfc/server-workers/lib/workers/${workerName}.worker.js`,
       );
     } else {
       return path.resolve(__dirname, `./workers/${workerName}.worker.js`);

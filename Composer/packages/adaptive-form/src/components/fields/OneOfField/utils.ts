@@ -39,7 +39,7 @@ const sortOptionsByTypeWeights = ({ key: type1 }, { key: type2 }): number => {
 
 export function getOptions(
   schema: JSONSchema7,
-  definitions?: SchemaDefinitions
+  definitions?: SchemaDefinitions,
 ): { options: IDropdownOption[]; isNested: boolean } {
   const { type, oneOf, additionalProperties } = schema;
 

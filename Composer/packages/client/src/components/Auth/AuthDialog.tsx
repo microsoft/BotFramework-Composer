@@ -76,7 +76,7 @@ export const AuthDialog: React.FC<AuthDialogProps> = (props) => {
         type: DialogType.close,
         title: formatMessage('Provide access tokens'),
         subText: formatMessage(
-          'To perform provisioning and publishing actions, Composer requires access to your Azure and MS Graph accounts.  Paste access tokens from the az command line tool using the commands highlighted below.'
+          'To perform provisioning and publishing actions, Composer requires access to your Azure and MS Graph accounts.  Paste access tokens from the az command line tool using the commands highlighted below.',
         ),
         styles: authDialogStyles.dialog,
       }}

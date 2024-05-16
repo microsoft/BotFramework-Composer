@@ -11,7 +11,7 @@ describe('<OffsetContainer />', () => {
     const offsetContainer = render(
       <OffsetContainer offset={{ x: 0, y: 0 }}>
         <></>
-      </OffsetContainer>
+      </OffsetContainer>,
     );
 
     expect(offsetContainer).toBeTruthy();
@@ -22,7 +22,7 @@ describe('<OffsetContainer />', () => {
     const offsetContainer = render(
       <OffsetContainer offset={{ x: 0, y: 0 }}>
         <div data-testid="offset-content" />
-      </OffsetContainer>
+      </OffsetContainer>,
     );
 
     expect(offsetContainer.getByTestId('offset-content')).toBeTruthy();

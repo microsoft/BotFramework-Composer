@@ -43,7 +43,7 @@ const PropertyPanel: React.FC<PropertyViewProps> = React.memo(({ projectId = '',
 
     const skillNameIdentifier = skillsByProjectId[projectId];
     return skills[skillNameIdentifier];
-  }, [skills, isSkill, skillsByProjectId]);
+  }, [projectId, skills, isSkill, skillsByProjectId]);
 
   const shellForPropertyEditor = useShell('PropertyEditor', projectId);
 

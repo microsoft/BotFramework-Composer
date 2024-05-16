@@ -7,7 +7,7 @@ import { existsSync, mkdirp, mkdirpSync, readFileSync, writeFile, writeFileSync 
 
 export const ensureDirectory = async (dirPath: string) => await mkdirp(dirPath);
 
-export const ensureJsonFileSync = (filePath: string, defaultContent: { [key: string]: {} }) => {
+export const ensureJsonFileSync = (filePath: string, defaultContent: { [key: string]: unknown }) => {
   if (!existsSync(filePath)) {
     mkdirpSync(path.dirname(filePath));
     writeFileSync(filePath, JSON.stringify(defaultContent, null, 4), { encoding: 'utf8' });

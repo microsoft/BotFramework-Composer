@@ -78,13 +78,8 @@ const Home: React.FC<RouteComponentProps> = () => {
 
   const recentProjects = useRecoilValue(recentProjectsState);
   const feed = useRecoilValue(feedState);
-  const {
-    openProject,
-    setCreationFlowStatus,
-    setCreationFlowType,
-    setWarnAboutDotNet,
-    setWarnAboutFunctions,
-  } = useRecoilValue(dispatcherState);
+  const { openProject, setCreationFlowStatus, setCreationFlowType, setWarnAboutDotNet, setWarnAboutFunctions } =
+    useRecoilValue(dispatcherState);
   const warnAboutDotNet = useRecoilValue(warnAboutDotNetState);
   const warnAboutFunctions = useRecoilValue(warnAboutFunctionsState);
 

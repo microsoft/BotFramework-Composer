@@ -18,8 +18,8 @@ describe('useEditorEventApi', () => {
         nodeContext: { ...defaultRendererContextValue, focusedId: 'a' },
         selectionContext: { ...defaultSelectionContextValue, selectedIds: ['a'] },
       },
-      ShellApiStub
-    )
+      ShellApiStub,
+    ),
   ).result.current;
 
   it('returns necessary apis.', () => {

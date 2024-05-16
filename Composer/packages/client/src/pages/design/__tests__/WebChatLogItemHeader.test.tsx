@@ -46,7 +46,7 @@ describe('<DebugPanel />', () => {
               response: { payload: {}, statusCode: 400 },
             },
           ]);
-        }
+        },
       );
       await findByTestId('DebugErrorIndicator');
 
@@ -73,7 +73,7 @@ describe('<DebugPanel />', () => {
               response: { payload: {}, statusCode: 400 },
             },
           ]);
-        })
+        }),
       );
       expect(queryByTestId('DebugErrorIndicator')).toBeNull();
     });

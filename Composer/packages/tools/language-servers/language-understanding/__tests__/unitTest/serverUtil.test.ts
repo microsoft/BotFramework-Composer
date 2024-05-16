@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-/* eslint-disable @typescript-eslint/camelcase */
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 

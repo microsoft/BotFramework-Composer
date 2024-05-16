@@ -6,7 +6,7 @@ import { OneAuth } from '@bfc/electron-server/src/auth/oneauth';
 
 export type ElectronContext = {
   getAccessToken: (
-    params: ElectronAuthParameters
+    params: ElectronAuthParameters,
   ) => Promise<{ accessToken: string; acquiredAt: number; expiryTime: number }>;
   getARMTokenForTenant: (tenantId: string) => Promise<string>;
   getTenants: () => Promise<AzureTenant[]>;

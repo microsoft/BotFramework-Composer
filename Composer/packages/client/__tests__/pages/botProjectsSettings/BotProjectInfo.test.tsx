@@ -44,7 +44,7 @@ describe('<BotProjectInfo />', () => {
   it('should render correct bot location', async () => {
     const component = renderWithRecoilAndCustomDispatchers(
       <BotProjectInfo isRootBot projectId={projectId} />,
-      initRecoilState
+      initRecoilState,
     );
     const locationNode = await component.findByTestId('botLocationString');
     expect(locationNode.textContent).toBe(mockLocation);
@@ -53,7 +53,7 @@ describe('<BotProjectInfo />', () => {
   it('should open read me', async () => {
     const component = renderWithRecoilAndCustomDispatchers(
       <BotProjectInfo isRootBot projectId={projectId} />,
-      initRecoilState
+      initRecoilState,
     );
 
     const readMeBtn = component.getByTestId('settingsReadMeBtn');

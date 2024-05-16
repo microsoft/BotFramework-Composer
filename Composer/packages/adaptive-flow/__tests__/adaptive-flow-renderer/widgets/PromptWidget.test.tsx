@@ -16,7 +16,7 @@ describe('PromptWidget', () => {
         id="test"
         userInput={<span data-testid="test-userInput">UserInput</span>}
         onEvent={() => null}
-      />
+      />,
     );
     expect(promptNode).toBeTruthy();
     expect(promptNode.getByTestId('test-botAsks')).toBeTruthy();

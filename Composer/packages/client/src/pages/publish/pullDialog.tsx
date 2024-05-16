@@ -43,7 +43,7 @@ export const PullDialog: React.FC<PullDialogProps> = (props) => {
         try {
           // wait for pull result from server
           const res = await axios.post<{ backupLocation: string }>(
-            `/api/publish/${projectId}/pull/${selectedTarget.name}`
+            `/api/publish/${projectId}/pull/${selectedTarget.name}`,
           );
           const { backupLocation } = res.data;
           // show notification indicating success and close dialog

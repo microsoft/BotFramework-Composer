@@ -9,7 +9,7 @@ export const addSkillFiles = async (
   projectId: string,
   skillName: string,
   url: string,
-  zipContent: Record<string, any>
+  zipContent: Record<string, any>,
 ): Promise<{ manifest: FileInfo | undefined; error?: any }> => {
   try {
     const response = await httpClient.post(`/projects/${projectId}/skillFiles`, { url, skillName, zipContent });

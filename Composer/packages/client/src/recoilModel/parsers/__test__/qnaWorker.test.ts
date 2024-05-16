@@ -8,6 +8,7 @@ jest.mock('./../workers/qnaParser.worker.ts', () => {
     onmessage = (data) => data;
 
     postMessage = (data) => {
+      // eslint-disable-next-line @typescript-eslint/no-var-requires
       const payload = require('../workers/qnaParser.worker').handleMessage(data);
       this.onmessage({ data: { id: data.id, payload } });
     };

@@ -3,6 +3,7 @@
 
 import { FileAsset } from '../persistence/types';
 
+// @ts-expect-error used for creating worker (adjusted by Webpack)
 import Worker from './workers/calculator.worker.ts';
 import { BaseWorker } from './baseWorker';
 import { FilesDifferencePayload, CalculatorType } from './types';

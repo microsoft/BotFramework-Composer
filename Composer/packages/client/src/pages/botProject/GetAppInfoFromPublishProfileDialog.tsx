@@ -66,7 +66,7 @@ export const GetAppInfoFromPublishProfileDialog: React.FC<Props> = (props) => {
   const dialogTitle = {
     title: formatMessage('Retrieve App ID from publishing profile'),
     subText: formatMessage(
-      'A publishing profile contains the information necessary to provision and publish your bot, including its App ID.'
+      'A publishing profile contains the information necessary to provision and publish your bot, including its App ID.',
     ),
   };
 

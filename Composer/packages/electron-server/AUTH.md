@@ -6,6 +6,8 @@ Authentication in Composer is done using the OneAuth native node library.
 
 This library leverages APIs within the user's OS to store and retrieve credentials in a compliant fashion, and allows Composer to get access tokens on behalf of the user once the user signs in.
 
+Note: in some cases you might want to disable OneAuth and provide required tokens directly. To do so set the `COMPOSER_ENABLE_ONEAUTH` to `false`.
+
 We disable this authentication flow by default in the development environment. To use the flow in a dev environment, please follow the steps below to leverage the OneAuth library.
 
 ## Requirements

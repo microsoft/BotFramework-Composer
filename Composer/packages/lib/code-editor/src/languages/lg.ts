@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/camelcase, no-useless-escape */
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
@@ -82,7 +81,7 @@ export function registerLGLanguage(monaco: Monaco) {
         //parameter in template name
         [/([a-zA-Z0-9_][a-zA-Z0-9_-]*)(,|\))/, ['parameter', 'delimiter']],
         // other
-        [/[^\()]/, 'template-name'],
+        [/[^(]/, 'template-name'],
       ],
       template_body: [
         //comments

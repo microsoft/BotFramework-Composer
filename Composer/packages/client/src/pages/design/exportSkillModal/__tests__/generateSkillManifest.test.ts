@@ -63,7 +63,7 @@ describe('generateOtherActivities', () => {
         conversationUpdate: {
           type: 'conversationUpdate',
         },
-      })
+      }),
     );
 
     expect(generateOtherActivities(SDKKinds.OnEndOfConversationActivity)).toEqual(
@@ -71,7 +71,7 @@ describe('generateOtherActivities', () => {
         endOfConversation: {
           type: 'endOfConversation',
         },
-      })
+      }),
     );
 
     expect(generateOtherActivities(SDKKinds.OnIntent)).toEqual(
@@ -79,7 +79,7 @@ describe('generateOtherActivities', () => {
         message: {
           type: 'message',
         },
-      })
+      }),
     );
   });
 });
@@ -95,7 +95,7 @@ describe('generateActivity', () => {
           type: 'event',
           name: 'test',
         },
-      })
+      }),
     );
   });
 
@@ -126,7 +126,7 @@ describe('generateActivity', () => {
             },
           },
         },
-      })
+      }),
     );
   });
 });
@@ -161,7 +161,7 @@ describe('generateActivities', () => {
             resultValue: expect.any(Object),
           }),
         },
-      })
+      }),
     );
   });
 });
@@ -184,7 +184,7 @@ describe('getDefinitions', () => {
           equalsExpression: expect.any(Object),
           integerExpression: expect.any(Object),
         },
-      })
+      }),
     );
   });
 });
@@ -203,7 +203,7 @@ describe('generateDispatchModels', () => {
       luFiles,
       qnaFiles,
       currentTarget,
-      projectId
+      projectId,
     );
     expect(result).toEqual({});
   });
@@ -224,7 +224,7 @@ describe('generateDispatchModels', () => {
       luFiles,
       qnaFiles,
       currentTarget,
-      projectId
+      projectId,
     );
     expect(result).toEqual({});
   });
@@ -245,7 +245,7 @@ describe('generateDispatchModels', () => {
       luFiles,
       qnaFiles,
       currentTarget,
-      projectId
+      projectId,
     );
     expect(result).toEqual({});
   });
@@ -266,7 +266,7 @@ describe('generateDispatchModels', () => {
       luFiles,
       qnaFiles,
       currentTarget,
-      projectId
+      projectId,
     );
     expect(result).toEqual(
       expect.objectContaining({
@@ -299,7 +299,7 @@ describe('generateDispatchModels', () => {
             ],
           },
         },
-      })
+      }),
     );
   });
 });

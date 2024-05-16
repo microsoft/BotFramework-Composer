@@ -95,7 +95,7 @@ export const AppIdAndPassword: React.FC<AppIdAndPasswordProps> = (props) => {
                 {children}
               </Link>
             ),
-          }
+          },
         )}
       </div>
       <div css={appIdAndPasswordStyle}>

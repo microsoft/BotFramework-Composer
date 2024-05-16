@@ -31,7 +31,7 @@ export const PullConfirmationDialog: React.FC<PullConfirmationDialogProps> = (pr
     >
       <p>
         {formatMessage(
-          'You are about to pull project files from the selected publish profiles. The current project will be overwritten by the pulled files, and will be saved as a backup automatically. You will be able to retrieve the backup anytime in the future.'
+          'You are about to pull project files from the selected publish profiles. The current project will be overwritten by the pulled files, and will be saved as a backup automatically. You will be able to retrieve the backup anytime in the future.',
         )}
       </p>
       <p>{formatMessage('Do you want to proceed?')}</p>

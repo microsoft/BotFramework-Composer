@@ -50,7 +50,7 @@ export const ElectronSettings: React.FC<RouteComponentProps> = () => {
                   {props.children}
                 </Link>;
               },
-            }
+            },
           ) as any
         }
         image={images.earlyAdopters}

@@ -279,7 +279,7 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
                             {children}
                           </a>
                         ),
-                      }
+                      },
                     )}
                   </div>
                 ),
@@ -437,8 +437,8 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
         const result = await OpenConfirmModal(
           formatMessage('Enable speech'),
           formatMessage(
-            'This cognitive service account is already set as the default for another bot. Do you want to enable this service without setting it as default?'
-          )
+            'This cognitive service account is already set as the default for another bot. Do you want to enable this service without setting it as default?',
+          ),
         );
         if (result) {
           toggleSpeechOn(settings, false);
@@ -588,7 +588,7 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
         >
           <Text block variant="small">
             {formatMessage(
-              'Teams requires a few more steps to get your connection up and running. Follow the instructions on our documentation page to learn how.'
+              'Teams requires a few more steps to get your connection up and running. Follow the instructions on our documentation page to learn how.',
             )}
           </Text>
           <Link className={teamsCallOutStyles.link} href={teamsHelpLink} target="_blank">

@@ -27,7 +27,7 @@ class LgParserWithoutWorker {
     lgFile: LgFile,
     templateName: string,
     template: { name?: string; parameters?: string[]; body?: string },
-    lgFiles: ResolverResource[]
+    lgFiles: ResolverResource[],
   ): Promise<LgFile> {
     const lgImportResolver = lgImportResolverGenerator(lgFiles, '.lg');
     return lgUtil.updateTemplate(lgFile, templateName, template, lgImportResolver);
@@ -80,7 +80,7 @@ class LgParserWithWorker {
     lgFile: LgFile,
     templateName: string,
     template: { name?: string; parameters?: string[]; body?: string },
-    lgFiles: ResolverResource[]
+    lgFiles: ResolverResource[],
   ): Promise<LgFile> {
     const msgId = uniqueId();
     const msg = { id: msgId, type: 'updateTemplate', payload: { lgFile, templateName, template, lgFiles } };
@@ -103,7 +103,7 @@ class LgParserWithWorker {
 
   public async extractLGVariables(
     curCbangedFile: string | undefined,
-    lgFiles: string[]
+    lgFiles: string[],
   ): Promise<{ lgVariables: string[] }> {
     const msgId = uniqueId();
     const msg = { id: msgId, type: 'extractLGVariables', payload: { curCbangedFile, lgFiles } };

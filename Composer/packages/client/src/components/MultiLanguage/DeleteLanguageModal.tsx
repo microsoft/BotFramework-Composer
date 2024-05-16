@@ -55,7 +55,7 @@ const DeleteLanguageModal: React.FC<IDeleteLanguageModalProps> = (props) => {
       props.onSubmit(formData);
       setFormData(initialFormData);
     },
-    [formData]
+    [formData],
   );
 
   const onDismiss = useCallback((e) => {

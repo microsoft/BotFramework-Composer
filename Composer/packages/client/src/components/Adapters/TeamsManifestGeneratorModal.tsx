@@ -86,7 +86,7 @@ export const TeamsManifestGeneratorModal = (props: TeamsManifestGeneratorModalPr
       dialogType={DialogTypes.CreateFlow}
       isOpen={!props.hidden}
       subText={formatMessage(
-        'Your Teams adapter is configured for your published bot. Copy the manifest, open App Studio in Teams and add the manifest so you can test your bot in Teams'
+        'Your Teams adapter is configured for your published bot. Copy the manifest, open App Studio in Teams and add the manifest so you can test your bot in Teams',
       )}
       title={formatMessage('Teams Manifest')}
       onDismiss={props.onDismiss}

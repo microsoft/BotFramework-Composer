@@ -60,14 +60,14 @@ export class AzureResourceMananger {
     if (!config.name) {
       throw createCustomizeError(
         ProvisionErrors.CREATE_RESOURCEGROUP_ERROR,
-        'You should provide a valid resource group name.'
+        'You should provide a valid resource group name.',
       );
     }
     // Create a new resource group
     if (!config.location) {
       throw createCustomizeError(
         ProvisionErrors.CREATE_RESOURCEGROUP_ERROR,
-        'You should provide a valid resource group name.'
+        'You should provide a valid resource group name.',
       );
     }
 
@@ -93,7 +93,7 @@ export class AzureResourceMananger {
           });
           throw createCustomizeError(
             ProvisionErrors.CREATE_RESOURCEGROUP_ERROR,
-            resourceGroupGetResult._response.bodyAsText
+            resourceGroupGetResult._response.bodyAsText,
           );
         }
 
@@ -120,7 +120,7 @@ export class AzureResourceMananger {
         if (resourceGroupResult._response.status >= 300) {
           throw createCustomizeError(
             ProvisionErrors.CREATE_RESOURCEGROUP_ERROR,
-            resourceGroupResult._response.bodyAsText
+            resourceGroupResult._response.bodyAsText,
           );
         }
 
@@ -140,7 +140,7 @@ export class AzureResourceMananger {
    * @param config
    */
   public async deployLuisAuthoringResource(
-    config: LuisAuthoringResourceConfig
+    config: LuisAuthoringResourceConfig,
   ): Promise<{ authoringKey: string; authoringEndpoint: string; location: string }> {
     try {
       this.logger({
@@ -150,7 +150,7 @@ export class AzureResourceMananger {
       const cognitiveServicesManagementClient = new CognitiveServicesManagementClient(
         this.creds,
         this.subscriptionId,
-        this.options
+        this.options,
       );
       // check location is validated
       let authoringLocation = config.location;
@@ -166,7 +166,7 @@ export class AzureResourceMananger {
             name: config.sku ?? 'F0',
           },
           location: authoringLocation,
-        }
+        },
       );
       if (deployResult._response.status >= 300) {
         this.logger({
@@ -175,7 +175,7 @@ export class AzureResourceMananger {
         });
         throw createCustomizeError(
           ProvisionErrors.CREATE_LUIS_AUTHORING_RESOURCE_ERROR,
-          deployResult._response.bodyAsText
+          deployResult._response.bodyAsText,
         );
       }
 
@@ -198,7 +198,7 @@ export class AzureResourceMananger {
    * @param config
    */
   public async deployLuisResource(
-    config: LuisResourceConfig
+    config: LuisResourceConfig,
   ): Promise<{ endpoint: string; endpointKey: string; location: string }> {
     try {
       this.logger({
@@ -208,7 +208,7 @@ export class AzureResourceMananger {
       const cognitiveServicesManagementClient = new CognitiveServicesManagementClient(
         this.creds,
         this.subscriptionId,
-        this.options
+        this.options,
       );
       // check luis publish location is validated
       let authoringLocation = config.location;
@@ -224,7 +224,7 @@ export class AzureResourceMananger {
             name: config.sku ?? 'S0',
           },
           location: authoringLocation,
-        }
+        },
       );
       if (deployResult._response.status >= 300) {
         this.logger({
@@ -281,7 +281,7 @@ export class AzureResourceMananger {
           replicaCount: 1,
           partitionCount: 1,
           hostingMode: 'default',
-        }
+        },
       );
 
       if (searchServiceDeployResult._response.status >= 300) {
@@ -307,7 +307,7 @@ export class AzureResourceMananger {
             family: 'S',
             capacity: 1,
           },
-        }
+        },
       );
 
       if (servicePlanResult._response.status >= 300) {
@@ -322,7 +322,7 @@ export class AzureResourceMananger {
       const applicationInsightsManagementClient = new ApplicationInsightsManagementClient(
         this.creds,
         this.subscriptionId,
-        this.options
+        this.options,
       );
       const appinsightsName = config.resourceGroupName;
       const appinsightsDeployResult = await applicationInsightsManagementClient.components.createOrUpdate(
@@ -332,7 +332,7 @@ export class AzureResourceMananger {
           location: config.location,
           applicationType: 'web',
           kind: 'web',
-        }
+        },
       );
       if (appinsightsDeployResult._response.status >= 300 || appinsightsDeployResult.provisioningState != 'Succeeded') {
         this.logger({
@@ -348,7 +348,7 @@ export class AzureResourceMananger {
       ).primaryKey;
       const appInsightsComponent = await applicationInsightsManagementClient.components.get(
         config.resourceGroupName,
-        appinsightsName
+        appinsightsName,
       );
       const userAppInsightsKey = appInsightsComponent.instrumentationKey;
       const userAppInsightsName = appinsightsName;
@@ -415,7 +415,7 @@ export class AzureResourceMananger {
             ],
           },
           enabled: true,
-        }
+        },
       );
 
       if (webAppResult._response.status >= 300) {
@@ -430,7 +430,7 @@ export class AzureResourceMananger {
       const cognitiveServicesManagementClient = new CognitiveServicesManagementClient(
         this.creds,
         this.subscriptionId,
-        this.options
+        this.options,
       );
       const deployResult = await cognitiveServicesManagementClient.accounts.create(
         config.resourceGroupName,
@@ -446,7 +446,7 @@ export class AzureResourceMananger {
               qnaRuntimeEndpoint: `https://${webAppResult.hostNames?.[0]}`,
             },
           },
-        }
+        },
       );
       if (deployResult._response.status >= 300) {
         this.logger({
@@ -459,7 +459,7 @@ export class AzureResourceMananger {
       const endpoint = webAppResult.hostNames?.[0];
       const keys = await cognitiveServicesManagementClient.accounts.listKeys(
         config.resourceGroupName,
-        qnaMakerServiceName
+        qnaMakerServiceName,
       );
       const subscriptionKey = keys?.key1 ?? '';
       return {
@@ -480,7 +480,7 @@ export class AzureResourceMananger {
    * @param config
    */
   public async deployAppInsightsResource(
-    config: ApplicationInsightsConfig
+    config: ApplicationInsightsConfig,
   ): Promise<{ instrumentationKey: string; connectionString: string }> {
     try {
       this.logger({
@@ -490,7 +490,7 @@ export class AzureResourceMananger {
       const applicationInsightsManagementClient = new ApplicationInsightsManagementClient(
         this.creds,
         this.subscriptionId,
-        this.options
+        this.options,
       );
       const deployResult = await applicationInsightsManagementClient.components.createOrUpdate(
         config.resourceGroupName,
@@ -499,7 +499,7 @@ export class AzureResourceMananger {
           location: config.location,
           applicationType: config.applicationType ?? 'web',
           kind: 'web',
-        }
+        },
       );
       if (deployResult._response.status >= 300 || deployResult.provisioningState != 'Succeeded') {
         this.logger({
@@ -551,7 +551,7 @@ export class AzureResourceMananger {
       appinsightsApiKeyResponse = await appinsightsClient.aPIKeys.create(
         config.resourceGroupName,
         config.name,
-        apiKeyOptions
+        apiKeyOptions,
       );
 
       const appinsightsApiKey = appinsightsApiKeyResponse.apiKey;
@@ -583,7 +583,7 @@ export class AzureResourceMananger {
             this.logger({
               status: BotProjectDeployLoggerType.PROVISION_ERROR,
               message: `! Something went wrong while trying to link Application Insights settings to Bot Service Result: ${JSON.stringify(
-                botUpdateResult
+                botUpdateResult,
               )}`,
             });
             throw err;
@@ -632,7 +632,7 @@ export class AzureResourceMananger {
               failoverPriority: 0,
             },
           ],
-        }
+        },
       );
 
       if (dbAccountDeployResult._response.status >= 300 || dbAccountDeployResult.provisioningState != 'Succeeded') {
@@ -653,7 +653,7 @@ export class AzureResourceMananger {
             id: config.databaseName,
           },
           options: {},
-        }
+        },
       );
 
       if (dbDeployResult._response.status >= 300) {
@@ -697,7 +697,7 @@ export class AzureResourceMananger {
             },
           },
           options: {},
-        }
+        },
       );
 
       if (containerCreateResult._response.status >= 300) {
@@ -710,7 +710,7 @@ export class AzureResourceMananger {
 
       const authKeyResult = await cosmosDBManagementClient.databaseAccounts.listKeys(
         config.resourceGroupName,
-        config.name
+        config.name,
       );
       if (authKeyResult._response.status >= 300) {
         this.logger({
@@ -744,7 +744,7 @@ export class AzureResourceMananger {
    * @param config
    */
   public async deployBlobStorageResource(
-    config: BlobStorageConfig
+    config: BlobStorageConfig,
   ): Promise<{ name: string; connectionString: string; container: string }> {
     try {
       this.logger({
@@ -770,7 +770,7 @@ export class AzureResourceMananger {
 
       const accountKeysResult = await storageManagementClient.storageAccounts.listKeys(
         config.resourceGroupName,
-        config.name
+        config.name,
       );
       const connectionString = accountKeysResult?.keys?.[0].value ?? '';
 
@@ -813,7 +813,7 @@ export class AzureResourceMananger {
             family: 'S',
             capacity: 1,
           },
-        }
+        },
       );
 
       if (servicePlanResult._response.status >= 300) {
@@ -916,7 +916,7 @@ export class AzureResourceMananger {
               },
             ],
           },
-        }
+        },
       );
 
       if (azureFunctionsResult._response.status >= 300) {
@@ -926,7 +926,7 @@ export class AzureResourceMananger {
         });
         throw createCustomizeError(
           ProvisionErrors.CREATE_FUNCTIONS_RESOURCE_ERROR,
-          azureFunctionsResult._response.bodyAsText
+          azureFunctionsResult._response.bodyAsText,
         );
       }
 

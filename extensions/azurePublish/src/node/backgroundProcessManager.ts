@@ -12,7 +12,7 @@ export class BackgroundProcessManager {
     projectId: string,
     processName: string,
     initialMessage?: string,
-    comment?: string
+    comment?: string,
   ): string {
     const id = uuid();
     this.processes[id] = {

@@ -38,7 +38,7 @@ export function createWebSocket(url: string): WebSocket {
 export function createLanguageClient(
   name: string,
   documentSelector: LanguageClientOptions['documentSelector'],
-  connection: MessageConnection
+  connection: MessageConnection,
 ): MonacoLanguageClient {
   return new MonacoLanguageClient({
     name,
@@ -64,7 +64,7 @@ export async function sendRequestWithRetry(
   languageClient: MonacoLanguageClient,
   method: string,
   data: any,
-  interval = 1000
+  interval = 1000,
 ) {
   let sendTimer;
 

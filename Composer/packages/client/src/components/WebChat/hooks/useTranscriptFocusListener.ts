@@ -45,7 +45,7 @@ export const useTranscriptFocusListener = () => {
         setWebChatInspectionData(currentProjectId, { item: trafficItem });
       }
     },
-    [activeDebugPanelTab, currentProjectId, rawWebChatTraffic, setDebugPanelActiveTab, setDebugPanelExpansion]
+    [activeDebugPanelTab, currentProjectId, rawWebChatTraffic, setDebugPanelActiveTab, setDebugPanelExpansion],
   );
 
   useObserveTranscriptFocus(onActivityFocused, [onActivityFocused]);
