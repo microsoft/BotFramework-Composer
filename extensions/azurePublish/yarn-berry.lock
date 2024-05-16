@@ -1941,16 +1941,16 @@ __metadata:
 
 "@bfc/built-in-functions@file:../../Composer/packages/tools/built-in-functions::locator=azurePublish%40workspace%3A.":
   version: 1.0.0
-  resolution: "@bfc/built-in-functions@file:../../Composer/packages/tools/built-in-functions#../../Composer/packages/tools/built-in-functions::hash=0c6f19&locator=azurePublish%40workspace%3A."
+  resolution: "@bfc/built-in-functions@file:../../Composer/packages/tools/built-in-functions#../../Composer/packages/tools/built-in-functions::hash=c3f7bb&locator=azurePublish%40workspace%3A."
   dependencies:
     tslib: 2.6.2
-  checksum: 6e7ca8ed2cba36d4b6e1bcf50795017737c95178134c03bbb58bd45ffb510e6ef2043bc4b51708a52bb26c63033f89895de9572bb06c2d7048b2ae44945120a5
+  checksum: b47290f91ceb19638dcd5e88f0c74bf35d8c347d6135836b8b3909fe417a5e84db5143b5650fe416f0cb07a08ccad7283d606a6040a6b958f60070ea5445d52c
   languageName: node
   linkType: hard
 
 "@bfc/code-editor@file:../../Composer/packages/lib/code-editor::locator=azurePublish%40workspace%3A.":
   version: 0.0.0
-  resolution: "@bfc/code-editor@file:../../Composer/packages/lib/code-editor#../../Composer/packages/lib/code-editor::hash=c0b75e&locator=azurePublish%40workspace%3A."
+  resolution: "@bfc/code-editor@file:../../Composer/packages/lib/code-editor#../../Composer/packages/lib/code-editor::hash=b4c0c5&locator=azurePublish%40workspace%3A."
   dependencies:
     "@emotion/react": ^11.1.3
     "@emotion/styled": ^11.1.3
@@ -1973,7 +1973,7 @@ __metadata:
     "@bfc/ui-shared": "*"
     react: 16.13.1
     react-dom: 16.13.1
-  checksum: cac54f344ec07fd53cf666252414dc50ebc096ff6d61b4e08c1689c52a6b88d20bce28e8547ce4002f084362bdd414465e9fdd71669bfe4d41ca21a511569e34
+  checksum: a87f49bddf7cd6eef842cc1a609c7cb276b51d33ffc7a467d46d236ff4e6211fb2c6c8e44b98895901966764d741c056e8114d6f28c70dd05436828cb7958d62
   languageName: node
   linkType: hard
 
@@ -2009,7 +2009,7 @@ __metadata:
 
 "@bfc/shared@file:../../Composer/packages/lib/shared::locator=azurePublish%40workspace%3A.":
   version: 0.0.0
-  resolution: "@bfc/shared@file:../../Composer/packages/lib/shared#../../Composer/packages/lib/shared::hash=a5867b&locator=azurePublish%40workspace%3A."
+  resolution: "@bfc/shared@file:../../Composer/packages/lib/shared#../../Composer/packages/lib/shared::hash=6d4444&locator=azurePublish%40workspace%3A."
   dependencies:
     "@botframework-composer/types": "*"
     format-message: 6.2.4
@@ -2023,7 +2023,7 @@ __metadata:
     react: 16.13.1
     react-dom: 16.13.1
     tslib: 2.4.0
-  checksum: ebeeecad54bdc747bf37541b84ab31423f3450057a46dcf078683c02b6204b4d26c33ad62e0f9e9b7726c53ae4d36a3406af1b42b7f6a758692229c8ba07c459
+  checksum: f87ccf0570136fd48e8baacdfe7c27d33801bbb9745b83614cf0ba3ad6b3a928f39aefb02457bf6c30a4972fd6332a9dbf1ef3a298d0fc062dc103c04cc104a9
   languageName: node
   linkType: hard
 
@@ -2068,7 +2068,7 @@ __metadata:
 
 "@botframework-composer/types@file:../../Composer/packages/types::locator=azurePublish%40workspace%3A.":
   version: 0.0.2
-  resolution: "@botframework-composer/types@file:../../Composer/packages/types#../../Composer/packages/types::hash=0466bc&locator=azurePublish%40workspace%3A."
+  resolution: "@botframework-composer/types@file:../../Composer/packages/types#../../Composer/packages/types::hash=301de2&locator=azurePublish%40workspace%3A."
   dependencies:
     "@types/express": 4.16.1
     "@types/passport": ^1.0.4
@@ -2077,7 +2077,7 @@ __metadata:
     express-serve-static-core: 0.1.1
     json-schema: 0.4.0
     tslib: 2.6.2
-  checksum: 18f95343974396b1dd0dfc18b1e2758d783aee210f58a298d3ec20a5ce2de30713a9bede5fcefacca4fa0191857d2cabf97b9bf69bbb0d069d1b2945ec738c04
+  checksum: 0b6cf454dce68c84e212e5017347beab812f2619a2cf6508307acc41573cf1f27121372e1333a4965f2c3029991ac8a0a853f811ed94a972b9184386bbe2d5a4
   languageName: node
   linkType: hard
 
