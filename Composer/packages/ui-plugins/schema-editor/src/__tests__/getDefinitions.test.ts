@@ -13,13 +13,13 @@ describe('getDefinitions', () => {
   it('returns definitions', () => {
     const definitions = getDefinitions(
       [{ type: 'integer' }, { $ref: '#/definitions/booleanExpression' }],
-      valueTypeDefinitions
+      valueTypeDefinitions,
     );
 
     expect(definitions).toEqual(
       expect.objectContaining({
         booleanExpression: expect.any(Object),
-      })
+      }),
     );
   });
 
@@ -30,7 +30,7 @@ describe('getDefinitions', () => {
       expect.objectContaining({
         equalsExpression: expect.any(Object),
         valueExpression: expect.any(Object),
-      })
+      }),
     );
   });
 });

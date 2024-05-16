@@ -23,8 +23,8 @@ describe('moveCursor', () => {
           } as any,
         ],
         'test',
-        KeyboardCommandTypes.Cursor.MoveNext
-      )
+        KeyboardCommandTypes.Cursor.MoveNext,
+      ),
     ).toEqual({ focused: 'test-focused', selected: 'test', tab: '' });
   });
 
@@ -39,8 +39,8 @@ describe('moveCursor', () => {
           } as any,
         ],
         'test',
-        KeyboardCommandTypes.Cursor.MoveLeft
-      )
+        KeyboardCommandTypes.Cursor.MoveLeft,
+      ),
     ).toEqual({ focused: 'test-focused', selected: 'test', tab: '' });
   });
 });

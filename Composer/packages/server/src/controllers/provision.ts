@@ -49,7 +49,7 @@ export const ProvisionController = {
             { ...req.body },
             currentProject,
             user,
-            authService.getAccessToken.bind(authService)
+            authService.getAccessToken.bind(authService),
           );
           // set status and return value as json
           res.status(result.status).json(result);

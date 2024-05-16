@@ -20,56 +20,57 @@ const checkEmptyQuestionOrAnswerInQnAFile = (sections) => {
 
 export const builderDispatcher = () => {
   const build = useRecoilCallback(
-    (callbackHelpers: CallbackInterface) => async (
-      projectId: string,
-      luisConfig: ILuisConfig,
-      qnaConfig: IQnAConfig,
-      orchestratorConfig: IOrchestratorConfig
-    ) => {
-      const { set, snapshot } = callbackHelpers;
-      const dialogs = await snapshot.getPromise(dialogsWithLuProviderSelectorFamily(projectId));
-      const luFiles = await snapshot.getPromise(luFilesSelectorFamily(projectId));
-      const qnaFiles = await snapshot.getPromise(qnaFilesSelectorFamily(projectId));
-      const referredLuFiles = luUtil.checkLuisBuild(luFiles, dialogs);
-      const referredQnaFiles = qnaUtil.checkQnaBuild(qnaFiles, dialogs);
-      const errorMsg = referredQnaFiles.reduce(
-        (result, file) => {
-          if (
-            file.qnaSections &&
-            file.qnaSections.length > 0 &&
-            checkEmptyQuestionOrAnswerInQnAFile(file.qnaSections)
-          ) {
-            result.message = result.message + `${file.id}.qna file contains empty answer or questions`;
-          }
-          return result;
-        },
-        { title: Text.LUISDEPLOYFAILURE, message: '' }
-      );
-      if (errorMsg.message) {
-        set(botBuildTimeErrorState(projectId), errorMsg);
-        set(botStatusState(projectId), BotStatus.failed);
-        return;
-      }
-      try {
-        await httpClient.post(`/projects/${projectId}/build`, {
-          luisConfig,
-          qnaConfig,
-          orchestratorConfig,
-          projectId,
-          luFiles: referredLuFiles.map((file) => ({ id: file.id, isEmpty: file.empty })),
-          qnaFiles: referredQnaFiles.map((file) => ({ id: file.id, isEmpty: file.empty })),
-        });
-        luFileStatusStorage.publishAll(projectId);
-        qnaFileStatusStorage.publishAll(projectId);
-        set(botStatusState(projectId), BotStatus.published);
-      } catch (err) {
-        set(botStatusState(projectId), BotStatus.failed);
-        set(botBuildTimeErrorState(projectId), {
-          title: Text.LUISDEPLOYFAILURE,
-          message: err.response?.data?.message || err.message,
-        });
-      }
-    }
+    (callbackHelpers: CallbackInterface) =>
+      async (
+        projectId: string,
+        luisConfig: ILuisConfig,
+        qnaConfig: IQnAConfig,
+        orchestratorConfig: IOrchestratorConfig,
+      ) => {
+        const { set, snapshot } = callbackHelpers;
+        const dialogs = await snapshot.getPromise(dialogsWithLuProviderSelectorFamily(projectId));
+        const luFiles = await snapshot.getPromise(luFilesSelectorFamily(projectId));
+        const qnaFiles = await snapshot.getPromise(qnaFilesSelectorFamily(projectId));
+        const referredLuFiles = luUtil.checkLuisBuild(luFiles, dialogs);
+        const referredQnaFiles = qnaUtil.checkQnaBuild(qnaFiles, dialogs);
+        const errorMsg = referredQnaFiles.reduce(
+          (result, file) => {
+            if (
+              file.qnaSections &&
+              file.qnaSections.length > 0 &&
+              checkEmptyQuestionOrAnswerInQnAFile(file.qnaSections)
+            ) {
+              result.message = result.message + `${file.id}.qna file contains empty answer or questions`;
+            }
+            return result;
+          },
+          { title: Text.LUISDEPLOYFAILURE, message: '' },
+        );
+        if (errorMsg.message) {
+          set(botBuildTimeErrorState(projectId), errorMsg);
+          set(botStatusState(projectId), BotStatus.failed);
+          return;
+        }
+        try {
+          await httpClient.post(`/projects/${projectId}/build`, {
+            luisConfig,
+            qnaConfig,
+            orchestratorConfig,
+            projectId,
+            luFiles: referredLuFiles.map((file) => ({ id: file.id, isEmpty: file.empty })),
+            qnaFiles: referredQnaFiles.map((file) => ({ id: file.id, isEmpty: file.empty })),
+          });
+          luFileStatusStorage.publishAll(projectId);
+          qnaFileStatusStorage.publishAll(projectId);
+          set(botStatusState(projectId), BotStatus.published);
+        } catch (err) {
+          set(botStatusState(projectId), BotStatus.failed);
+          set(botBuildTimeErrorState(projectId), {
+            title: Text.LUISDEPLOYFAILURE,
+            message: err.response?.data?.message || err.message,
+          });
+        }
+      },
   );
   return {
     build,

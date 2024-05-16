@@ -23,18 +23,23 @@ jest.mock('../../parsers/lgWorker', () => {
   return {
     parse: (projectId, id, content) => ({ id, content }),
     addTemplate: (projectId, lgFile, template) =>
+      // eslint-disable-next-line @typescript-eslint/no-var-requires
       filterParseResult(require('@bfc/indexers/lib/utils/lgUtil').addTemplate(lgFile, template)),
     addTemplates: (projectId, lgFile, templates) =>
+      // eslint-disable-next-line @typescript-eslint/no-var-requires
       filterParseResult(require('@bfc/indexers/lib/utils/lgUtil').addTemplates(lgFile, templates)),
     updateTemplate: (projectId, lgFile, templateName, template) =>
+      // eslint-disable-next-line @typescript-eslint/no-var-requires
       filterParseResult(require('@bfc/indexers/lib/utils/lgUtil').updateTemplate(lgFile, templateName, template)),
     removeTemplate: (projectId, lgFile, templateName) =>
+      // eslint-disable-next-line @typescript-eslint/no-var-requires
       filterParseResult(require('@bfc/indexers/lib/utils/lgUtil').removeTemplate(lgFile, templateName)),
     removeTemplates: (projectId, lgFile, templateNames) =>
+      // eslint-disable-next-line @typescript-eslint/no-var-requires
       filterParseResult(require('@bfc/indexers/lib/utils/lgUtil').removeTemplates(lgFile, templateNames)),
     copyTemplate: (projectId, lgFile, fromTemplateName, toTemplateName) =>
       filterParseResult(
-        require('@bfc/indexers/lib/utils/lgUtil').copyTemplate(lgFile, fromTemplateName, toTemplateName)
+        require('@bfc/indexers/lib/utils/lgUtil').copyTemplate(lgFile, fromTemplateName, toTemplateName),
       ),
   };
 });
@@ -56,7 +61,7 @@ const getLgTemplate = (name, body): LgTemplate =>
   ({
     name,
     body,
-  } as LgTemplate);
+  }) as LgTemplate;
 
 describe('Lg dispatcher', () => {
   const useRecoilTestHook = () => {

@@ -109,8 +109,8 @@ export const useProjectIdCache = () => {
   return projectId;
 };
 
-export function useInterval(callback: Function, delay: number | null) {
-  const savedCallback: MutableRefObject<Function | undefined> = useRef();
+export function useInterval(callback: () => void, delay: number | null) {
+  const savedCallback: MutableRefObject<(() => void) | undefined> = useRef();
 
   // Remember the latest callback.
   useEffect(() => {
@@ -133,9 +133,9 @@ export function useInterval(callback: Function, delay: number | null) {
 
 export function useClickOutsideOutsideTarget(
   targetRefs: MutableRefObject<HTMLElement | null>[] | null,
-  callback: Function
+  callback: (...args: any[]) => void,
 ) {
-  const savedCallback: MutableRefObject<Function | undefined> = useRef();
+  const savedCallback: MutableRefObject<((...args: any[]) => void) | undefined> = useRef();
 
   const isClickInsideTargets = (currentClickTarget: Node) => {
     const isClickedInside = targetRefs?.find((ref) => {

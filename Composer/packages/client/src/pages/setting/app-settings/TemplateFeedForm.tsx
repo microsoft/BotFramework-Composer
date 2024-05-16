@@ -60,7 +60,7 @@ export const TemplateFeedForm = () => {
     setFieldDisabled(false);
     if (templateProjects.length < 1) {
       setErrorMessage(
-        formatMessage('This feed did not return any templates, please confirm that this is a valid template feed URL.')
+        formatMessage('This feed did not return any templates, please confirm that this is a valid template feed URL.'),
       );
     } else {
       setErrorMessage('');

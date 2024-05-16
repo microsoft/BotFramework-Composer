@@ -97,21 +97,21 @@ export const AttachmentArrayEditor = React.memo(
       debounce((id: string, content: string | undefined, callback: (templateId: string, body?: string) => void) => {
         callback(id, content);
       }, 300),
-      []
+      [],
     );
 
     const onLgCodeChange = React.useCallback(
       (templateId: string) => (body?: string) => {
         debouncedChange(templateId, body, onTemplateChange);
       },
-      [debouncedChange, onTemplateChange]
+      [debouncedChange, onTemplateChange],
     );
 
     const onFocus = React.useCallback(
       (index: number) => () => {
         setCurrentIndex(index);
       },
-      []
+      [],
     );
 
     const onRemove = React.useCallback(
@@ -120,7 +120,7 @@ export const AttachmentArrayEditor = React.memo(
         onChange(newItems);
         onRemoveTemplate(templateId);
       },
-      [items, onChange, onRemoveTemplate]
+      [items, onChange, onRemoveTemplate],
     );
 
     const onAddTemplateClick = React.useCallback(
@@ -132,7 +132,7 @@ export const AttachmentArrayEditor = React.memo(
           setCurrentIndex(items.length);
         }
       },
-      [items, lgOption, lgTemplates, onChange, onTemplateChange]
+      [items, lgOption, lgTemplates, onChange, onTemplateChange],
     );
 
     const newButtonMenuItems = React.useMemo<IContextualMenuItem[]>(
@@ -163,12 +163,13 @@ export const AttachmentArrayEditor = React.memo(
           },
         },
       ],
-      [onAddTemplateClick]
+      [onAddTemplateClick],
     );
 
-    const addButtonMenuProps = React.useMemo<IContextualMenuProps>(() => ({ items: newButtonMenuItems }), [
-      newButtonMenuItems,
-    ]);
+    const addButtonMenuProps = React.useMemo<IContextualMenuProps>(
+      () => ({ items: newButtonMenuItems }),
+      [newButtonMenuItems],
+    );
 
     React.useEffect(() => {
       const keydownHandler = (e: KeyboardEvent) => {
@@ -240,7 +241,7 @@ export const AttachmentArrayEditor = React.memo(
           templates[index].body
         );
       },
-      [templates]
+      [templates],
     );
 
     return (
@@ -271,5 +272,5 @@ export const AttachmentArrayEditor = React.memo(
         )}
       </div>
     );
-  }
+  },
 );

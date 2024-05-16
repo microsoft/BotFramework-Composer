@@ -31,7 +31,7 @@ export const BotRuntimeStatus = React.memo((props: BotRuntimeStatusProps) => {
     () => {
       getPublishStatus(projectId, defaultPublishConfig);
     },
-    isRunning ? pollingInterval : null
+    isRunning ? pollingInterval : null,
   );
 
   useEffect(() => {

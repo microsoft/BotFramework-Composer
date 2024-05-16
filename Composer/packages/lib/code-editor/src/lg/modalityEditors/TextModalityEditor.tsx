@@ -34,13 +34,13 @@ const TextModalityEditor = React.memo(
         onTemplateChange,
         onUpdateResponseTemplate,
       },
-      { lgOption, lgTemplates, focusOnMount }
+      { lgOption, lgTemplates, focusOnMount },
     );
 
     return (
       <ModalityEditorContainer
         contentDescription={formatMessage(
-          'Response alternatives will be selected at random for a more dynamic conversation.'
+          'Response alternatives will be selected at random for a more dynamic conversation.',
         )}
         contentTitle={formatMessage('Responses')}
         disableRemoveModality={disableRemoveModality}
@@ -60,7 +60,7 @@ const TextModalityEditor = React.memo(
         />
       </ModalityEditorContainer>
     );
-  }
+  },
 );
 
 export { TextModalityEditor };

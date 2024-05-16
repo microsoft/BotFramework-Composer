@@ -22,7 +22,7 @@ describe('drawSVGEdge', () => {
 
   it('should render an arrowhead when "directed" option set to true', async () => {
     const { container } = render(
-      <svg>{drawSVGEdge('test', 10, 10, EdgeDirection.Right, 100, { directed: true })}</svg>
+      <svg>{drawSVGEdge('test', 10, 10, EdgeDirection.Right, 100, { directed: true })}</svg>,
     );
     const lines = await container.querySelectorAll('line');
     expect(lines.length).toEqual(1);
@@ -33,7 +33,7 @@ describe('drawSVGEdge', () => {
 
   it('should render label text when "label" is set', async () => {
     const { container } = render(
-      <svg>{drawSVGEdge('test', 10, 10, EdgeDirection.Right, 100, { label: 'hello' })}</svg>
+      <svg>{drawSVGEdge('test', 10, 10, EdgeDirection.Right, 100, { label: 'hello' })}</svg>,
     );
     const labels = await container.querySelectorAll('text');
     expect(labels.length).toEqual(1);

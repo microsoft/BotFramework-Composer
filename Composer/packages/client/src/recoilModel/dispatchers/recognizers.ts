@@ -19,34 +19,35 @@ const templates = {
 
 export const recognizerDispatcher = () => {
   const updateRecognizer = useRecoilCallback(
-    ({ set, snapshot }: CallbackInterface) => async (projectId: string, dialogId: string, kind: LuProviderType) => {
-      const recognizers = await snapshot.getPromise(recognizersSelectorFamily(projectId));
+    ({ set, snapshot }: CallbackInterface) =>
+      async (projectId: string, dialogId: string, kind: LuProviderType) => {
+        const recognizers = await snapshot.getPromise(recognizersSelectorFamily(projectId));
 
-      const updates = recognizers.filter(
-        ({ id, content }) =>
-          id.split('.')[0] === dialogId && LuProviderRecognizer.includes(content.$kind) && content.$kind !== kind
-      );
+        const updates = recognizers.filter(
+          ({ id, content }) =>
+            id.split('.')[0] === dialogId && LuProviderRecognizer.includes(content.$kind) && content.$kind !== kind,
+        );
 
-      const mutlilangRecognizer = recognizers.find(
-        ({ id, content }) => id.split('.')[0] === dialogId && content.$kind === SDKKinds.MultiLanguageRecognizer
-      );
+        const mutlilangRecognizer = recognizers.find(
+          ({ id, content }) => id.split('.')[0] === dialogId && content.$kind === SDKKinds.MultiLanguageRecognizer,
+        );
 
-      if (mutlilangRecognizer) {
-        const { id, content } = mutlilangRecognizer;
-        const key = kind === SDKKinds.OrchestratorRecognizer ? 'ORCHESTRATOR' : 'LUIS';
-        set(recognizerState({ projectId, id }), {
-          content: { ...content, id: `${key}_${id.replace('.lu.dialog', '')}` },
-          id,
+        if (mutlilangRecognizer) {
+          const { id, content } = mutlilangRecognizer;
+          const key = kind === SDKKinds.OrchestratorRecognizer ? 'ORCHESTRATOR' : 'LUIS';
+          set(recognizerState({ projectId, id }), {
+            content: { ...content, id: `${key}_${id.replace('.lu.dialog', '')}` },
+            id,
+          });
+        }
+
+        updates.forEach(({ id }) => {
+          set(recognizerState({ projectId, id }), {
+            id,
+            content: templates[kind](dialogId, id.replace('.lu.dialog', '')),
+          });
         });
-      }
-
-      updates.forEach(({ id }) => {
-        set(recognizerState({ projectId, id }), {
-          id,
-          content: templates[kind](dialogId, id.replace('.lu.dialog', '')),
-        });
-      });
-    }
+      },
   );
 
   return {

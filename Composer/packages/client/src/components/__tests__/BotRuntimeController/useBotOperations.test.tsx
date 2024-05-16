@@ -76,7 +76,7 @@ describe('useBotOperations', () => {
           endpointKey: '',
           subscriptionKey: '',
         },
-      }
+      },
     );
   });
 

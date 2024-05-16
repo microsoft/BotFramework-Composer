@@ -13,7 +13,7 @@
     "build": "yarn clean && yarn build:css && yarn build:ts",
     "build:ts": "tsc --build tsconfig.build.json",
     "build:css": "copyfiles --up 1 \"src/**/*.css\" \"src/**/*.scss\" lib",
-    "clean": "rimraf lib demo/dist",
+    "clean": "rimraf lib demo/dist .swc",
     "prepublishOnly": "npm run build",
     "start": "webpack-dev-server --config demo/webpack.config.demo.js",
     "build:demo": "webpack --config demo/webpack.config.demo.js",
@@ -54,7 +54,7 @@
     "react-dom": "16.13.1",
     "rimraf": "3.0.2",
     "style-loader": "^0.23.1",
-    "ts-loader": "9.3.1",
+    "ts-loader": "9.5.1",
     "url-loader": "^1.1.2",
     "webpack": "^4.43.0",
     "webpack-cli": "^3.3.11",
@@ -72,7 +72,7 @@
     "monaco-languageclient": "0.10.2",
     "normalize-url": "^4.5.1",
     "reconnecting-websocket": "^3.2.2",
-    "tslib": "2.4.0",
+    "tslib": "2.6.2",
     "vscode-ws-jsonrpc": "^0.1.1"
   }
 }

@@ -110,7 +110,7 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
     RuntimeLogServer.sendRuntimeLogToSubscribers(
       botId,
       LocalPublisher.runningBots[botId].result.runtimeLog ?? '',
-      LocalPublisher.runningBots[botId].result.runtimeError ?? ''
+      LocalPublisher.runningBots[botId].result.runtimeError ?? '',
     );
   };
 
@@ -257,9 +257,9 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
     // get port, and stop previous bot if exist
     try {
       // if a port (e.g. --port 5000) is configured in the custom runtime command try to parse and set this port
-      if (settings.runtime.command && settings.runtime.command.includes('--port')) {
+      if (settings.runtime?.command?.includes?.('--port')) {
         try {
-          port = /--port (\d+)/.exec(settings.runtime.command)[1];
+          port = Number(/--port (\d+)/.exec(settings.runtime.command)[1]);
         } catch (err) {
           console.warn(`Custom runtime command has an invalid port argument.`);
         }
@@ -340,7 +340,7 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
           },
           (err) => {
             reject(`Bot on localhost:${port} not working, error message: ${err.message}`);
-          }
+          },
         );
       } catch (err) {
         reject(err);
@@ -387,20 +387,18 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
     child: ChildProcess,
     botId: string,
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    logger: (...args: any[]) => void
+    logger: (...args: any[]) => void,
   ) => {
     let errOutput = '';
-    child.stdout &&
-      child.stdout.on('data', (data: any) => {
-        const runtimeData = data.toString();
-        this.appendRuntimeLogs(botId, runtimeData);
-        logger('%s', data.toString());
-      });
+    child.stdout?.on?.('data', (data: any) => {
+      const runtimeData = data.toString();
+      this.appendRuntimeLogs(botId, runtimeData);
+      logger('%s', data.toString());
+    });
 
-    child.stderr &&
-      child.stderr.on('data', (err: any) => {
-        errOutput += err.toString();
-      });
+    child.stderr?.on?.('data', (err: any) => {
+      errOutput += err.toString();
+    });
 
     child.on('exit', (code) => {
       if (code !== 0) {
@@ -458,7 +456,11 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
       const bot = LocalPublisher.runningBots[botId];
       // Kill the bot process AND all child processes
       try {
-        process.kill(isWin ? bot.process.pid : -bot.process.pid);
+        if (isWin) {
+          spawn(`taskkill /pid ${bot.process.pid} /T /F`, { shell: true });
+        } else {
+          process.kill(-bot.process.pid);
+        }
       } catch (err) {
         // swallow this error which happens if the child process is already gone
       }
@@ -482,3 +484,5 @@ const cleanup = () => {
 (['SIGINT', 'SIGTERM', 'SIGQUIT'] as NodeJS.Signals[]).forEach((signal: NodeJS.Signals) => {
   process.on(signal, cleanup.bind(null, signal));
 });
+
+process.on('beforeExit', cleanup);

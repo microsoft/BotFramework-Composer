@@ -15,7 +15,7 @@ import { getBaseName } from './fileUtil';
 export const createMissingLgTemplatesForDialogs = async (
   projectId: string,
   dialogs: DialogInfo[],
-  lgFiles: LgFile[]
+  lgFiles: LgFile[],
 ): Promise<LgFile[]> => {
   const updatedLgFiles: LgFile[] = [];
 

@@ -10,13 +10,9 @@ import { Path } from '../../utility/path';
 import log from './../../logger';
 import { DOC_EXTENSIONS, QNA_SUBSCRIPTION_KEY, COGNITIVE_SERVICES_ENDPOINTS } from './../../constants';
 
-// eslint-disable-next-line @typescript-eslint/no-var-requires
 const qnaBuild = require('@microsoft/bf-lu/lib/parser/qnabuild/builder.js');
-// eslint-disable-next-line @typescript-eslint/no-var-requires
 const KB = require('@microsoft/bf-lu/lib/parser/qna/qnamaker/kb.js');
-// eslint-disable-next-line @typescript-eslint/no-var-requires
 const { CognitiveServicesCredentials } = require('@azure/ms-rest-azure-js');
-// eslint-disable-next-line @typescript-eslint/no-var-requires
 const { QnAMakerClient } = require('@azure/cognitiveservices-qnamaker');
 
 const debug = log.extend('helper-parser');
@@ -43,7 +39,7 @@ async function importQnAFromUrl(builder: any, url: string, subscriptionKey: stri
       subscriptionKey,
       COGNITIVE_SERVICES_ENDPOINTS,
       uuid(),
-      multiTurn
+      multiTurn,
     );
   } else {
     onlineQnAContent = await builder.importUrlReference(
@@ -51,7 +47,7 @@ async function importQnAFromUrl(builder: any, url: string, subscriptionKey: stri
       subscriptionKey,
       COGNITIVE_SERVICES_ENDPOINTS,
       uuid(),
-      multiTurn
+      multiTurn,
     );
   }
   return onlineQnAContent;

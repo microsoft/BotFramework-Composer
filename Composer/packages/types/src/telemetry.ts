@@ -229,8 +229,7 @@ type OrchestratorEvents = {
 type PropertyEditorEvents = {
   RecognizerChanged: { recognizer: string };
 };
-
-type OtherEvents = {};
+type OtherEvents = Record<string, any>;
 
 type PageView = {
   [PageNames.Design]: undefined;
@@ -282,13 +281,13 @@ export type TelemetryEventName = keyof TelemetryEvents;
 export type TelemetryClient = {
   track: <TN extends TelemetryEventName>(
     eventName: TN,
-    properties?: TelemetryEvents[TN] extends undefined ? never : TelemetryEvents[TN]
+    properties?: TelemetryEvents[TN] extends undefined ? never : TelemetryEvents[TN],
   ) => void;
 
   pageView: <TN extends TelemetryEventName>(
     eventName: TN,
     url: string,
-    properties?: TelemetryEvents[TN] extends undefined ? never : TelemetryEvents[TN]
+    properties?: TelemetryEvents[TN] extends undefined ? never : TelemetryEvents[TN],
   ) => void;
 };
 

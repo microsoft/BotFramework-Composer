@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 import { LgFile } from '@bfc/shared';
 
+// @ts-expect-error used for creating worker (adjusted by Webpack)
 import Worker from './workers/lgParserDiagnostic.worker.ts';
 import { BaseWorker } from './baseWorker';
 import { LgActionType, LgParsePayload } from './types';

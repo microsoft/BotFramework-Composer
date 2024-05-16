@@ -151,7 +151,7 @@ export const ToolbarButtonMenu = React.memo((props: ToolbarButtonMenuProps) => {
       },
       layerProps: { className: dismissHandlerClassName },
     }),
-    [dismissHandlerClassName]
+    [dismissHandlerClassName],
   );
 
   const propertyTreeConfig = React.useMemo(() => {
@@ -246,7 +246,7 @@ export const ToolbarButtonMenu = React.memo((props: ToolbarButtonMenuProps) => {
       const { functions, onSelectFunction } = (payload as FunctionRefPayload).data;
       return functions
         .reduce((acc, f) => {
-          if (f.children && f.children.length) {
+          if (f.children?.length) {
             acc.push(...f.children);
           }
 
@@ -312,12 +312,12 @@ export const ToolbarButtonMenu = React.memo((props: ToolbarButtonMenuProps) => {
         <Header>{uiStrings.header}</Header>
       </Stack>
     ),
-    []
+    [],
   );
 
   const { onRenderMenuList, query, onReset } = useSearchableMenuListCallback(
     uiStrings.searchPlaceholder,
-    menuHeaderRenderer
+    menuHeaderRenderer,
   );
 
   React.useEffect(() => {
@@ -326,14 +326,14 @@ export const ToolbarButtonMenu = React.memo((props: ToolbarButtonMenuProps) => {
         payload.kind === 'function'
           ? flatFunctionListItems
           : payload.kind === 'property'
-          ? flatPropertyListItems
-          : menuItems;
+            ? flatPropertyListItems
+            : menuItems;
 
       const predicate = getFilterPredicate(payload.kind, query);
 
       const filteredItems = searchableItems.filter(predicate);
 
-      if (!filteredItems || !filteredItems.length) {
+      if (!filteredItems?.length) {
         filteredItems.push(noSearchResultMenuItem);
       }
 

@@ -117,7 +117,7 @@ describe('<ToolbarButtonMenu />', () => {
       jest.runAllTimers();
     });
 
-    expect((await screen.findAllByText(/this/)).length).toBe(3);
+    expect((await screen.findAllByText(/this\.\w/)).length).toBe(2);
   });
 
   it('property: Should expand property in the menu on click if not leaf', async () => {
@@ -201,7 +201,7 @@ describe('<ToolbarButtonMenu />', () => {
 
     expect(functionPayload.data.onSelectFunction).toBeCalledWith(
       getBuiltInFunctionInsertText(functionName),
-      'function'
+      'function',
     );
   });
 });

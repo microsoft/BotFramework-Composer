@@ -20,20 +20,22 @@ const projectIds = ['123-a', '234-bc', '567-de'];
 const projectDataSelector = selectorFamily({
   key: 'project-data-selector',
   get: () => noop,
-  set: (projectId: string) => ({ set }, stateUpdater: any) => {
-    const { metadata, botError, displayName } = stateUpdater;
-    if (metadata) {
-      set(projectMetaDataState(projectId), metadata);
-    }
+  set:
+    (projectId: string) =>
+    ({ set }, stateUpdater: any) => {
+      const { metadata, botError, displayName } = stateUpdater;
+      if (metadata) {
+        set(projectMetaDataState(projectId), metadata);
+      }
 
-    if (botError) {
-      set(botErrorState(projectId), location);
-    }
+      if (botError) {
+        set(botErrorState(projectId), location);
+      }
 
-    if (displayName) {
-      set(botDisplayNameState(projectId), displayName);
-    }
-  },
+      if (displayName) {
+        set(botDisplayNameState(projectId), displayName);
+      }
+    },
 });
 
 const useRecoilTestHook = () => {
@@ -69,7 +71,7 @@ beforeEach(() => {
     useRecoilTestHook,
     {
       states: [],
-    }
+    },
   );
   renderedComponent = rendered.result;
 });

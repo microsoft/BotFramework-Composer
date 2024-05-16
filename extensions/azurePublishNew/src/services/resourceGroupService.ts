@@ -7,7 +7,7 @@ import { throwNotImplementedError } from './throwNotImplementedError';
 
 const createResourceGroupService = (token: string, subscriptionId: string) => {
   const tokenCredentials = new TokenCredentials(token);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  // @ts-expect-error types missmatch
   const client = new ResourceManagementClient(tokenCredentials, subscriptionId);
 
   const list = async () => {

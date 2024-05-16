@@ -6,7 +6,7 @@ import { resolveRef } from '../resolveRef';
 describe('resolveRef', () => {
   it('returns the schema if no $ref is defined', () => {
     const schema = { type: 'string' };
-    // @ts-expect-error
+    // @ts-expect-error: test
     expect(resolveRef(schema)).toEqual({ type: 'string' });
   });
 

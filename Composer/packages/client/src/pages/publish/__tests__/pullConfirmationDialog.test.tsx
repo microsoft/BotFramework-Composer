@@ -10,7 +10,7 @@ describe('<PullConfirmationDialog />', () => {
   it('should render', async () => {
     const { findByText } = render(<PullConfirmationDialog onConfirm={jest.fn()} onDismiss={jest.fn()} />);
     await findByText(
-      'You are about to pull project files from the selected publish profiles. The current project will be overwritten by the pulled files, and will be saved as a backup automatically. You will be able to retrieve the backup anytime in the future.'
+      'You are about to pull project files from the selected publish profiles. The current project will be overwritten by the pulled files, and will be saved as a backup automatically. You will be able to retrieve the backup anytime in the future.',
     );
   });
 

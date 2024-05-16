@@ -160,7 +160,7 @@ export const GetStartedNextSteps: React.FC<GetStartedProps> = (props) => {
         key: 'luis',
         label: formatMessage('Set up Language Understanding'),
         description: formatMessage(
-          'Use machine learning to understand natural language input and direct the conversation flow.'
+          'Use machine learning to understand natural language input and direct the conversation flow.',
         ),
         learnMore: 'https://aka.ms/composer-luis-learnmore',
         required: true,
@@ -183,7 +183,7 @@ export const GetStartedNextSteps: React.FC<GetStartedProps> = (props) => {
         key: 'qna',
         label: formatMessage('Set up QnA Maker'),
         description: formatMessage(
-          'Use Azure QnA Maker to create a simple question-and-answer bot from a website FAQ.'
+          'Use Azure QnA Maker to create a simple question-and-answer bot from a website FAQ.',
         ),
         learnMore: 'https://aka.ms/composer-addqnamaker-learnmore',
         required: true,
@@ -227,7 +227,7 @@ export const GetStartedNextSteps: React.FC<GetStartedProps> = (props) => {
         key: 'publishing',
         label: formatMessage('Create a publishing profile'),
         description: formatMessage(
-          'A publishing profile provides the secure connectivity required to publish your bot.'
+          'A publishing profile provides the secure connectivity required to publish your bot.',
         ),
         checked: hasPublishingProfile,
         learnMore: 'https://aka.ms/composer-getstarted-publishingprofile',
@@ -243,7 +243,7 @@ export const GetStartedNextSteps: React.FC<GetStartedProps> = (props) => {
         key: 'partialProfile',
         label: formatMessage('Complete your publishing profile'),
         description: formatMessage(
-          'Finish setting up your environment and provisioning resources so that you can publish your bot.'
+          'Finish setting up your environment and provisioning resources so that you can publish your bot.',
         ),
         checked: hasPublishingProfile && !hasPartialPublishingProfile,
         learnMore: 'https://aka.ms/composer-getstarted-publishingprofile',
@@ -259,7 +259,7 @@ export const GetStartedNextSteps: React.FC<GetStartedProps> = (props) => {
       key: 'editlg',
       label: formatMessage('Edit bot responses'),
       description: formatMessage(
-        "Define your bot's responses, add phrase variations, execute simple expressions based on context, or refer to conversational memory."
+        "Define your bot's responses, add phrase variations, execute simple expressions based on context, or refer to conversational memory.",
       ),
       learnMore: 'https://aka.ms/composer-getstarted-editbotsays',
       checked: false,
@@ -313,7 +313,7 @@ export const GetStartedNextSteps: React.FC<GetStartedProps> = (props) => {
         key: 'devops',
         label: formatMessage('Set up continuous deployment (DevOps)'),
         description: formatMessage(
-          'Build a continuous integration and deployment (CI/CD) pipeline with Azure Resource Manager templates.'
+          'Build a continuous integration and deployment (CI/CD) pipeline with Azure Resource Manager templates.',
         ),
         learnMore: 'https://aka.ms/bfcomposercicd',
         checked: false,

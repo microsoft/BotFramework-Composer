@@ -20,13 +20,13 @@ export const PersonaCard: React.FC = (props) => {
     const confirmed = await OpenConfirmModal(
       formatMessage('Sign out of Azure'),
       formatMessage(
-        'By signing out of Azure, your operation will be canceled and this dialog will close. Do you want to continue?'
+        'By signing out of Azure, your operation will be canceled and this dialog will close. Do you want to continue?',
       ),
       {
         onRenderContent: (subtitle: string) => <div>{subtitle}</div>,
         confirmText: formatMessage('Sign out'),
         cancelText: formatMessage('Cancel'),
-      }
+      },
     );
     if (confirmed) {
       await logoutUser();

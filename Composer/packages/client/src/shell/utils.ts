@@ -22,7 +22,7 @@ export const serializeLgTemplate = (
   templateName: string,
   fromId: string,
   lgText: string,
-  lgTemplates: LgTemplate[]
+  lgTemplates: LgTemplate[],
 ) => {
   const lgTemplate = lgTemplates.find((x) => x.name === templateName);
 
@@ -77,7 +77,7 @@ export const deserializeLgTemplate = async (
   lgText: string,
   hostActionData: MicrosoftIDialog,
   hostFieldName: string,
-  addLgTemplate: ShellApi['addLgTemplate']
+  addLgTemplate: ShellApi['addLgTemplate'],
 ) => {
   const newLgType = new LgType(hostActionData.$kind, hostFieldName).toString();
   const newLgTemplateName = new LgMetaData(newLgType, toId).toString();

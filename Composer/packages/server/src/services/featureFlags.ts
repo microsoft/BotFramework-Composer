@@ -105,7 +105,7 @@ export class FeatureFlagService {
   }
 
   public static getFeatureFlagValue(featureFlagKey: FeatureFlagKey): boolean {
-    if (FeatureFlagService.currentFeatureFlagMap && FeatureFlagService.currentFeatureFlagMap[featureFlagKey]) {
+    if (FeatureFlagService.currentFeatureFlagMap?.[featureFlagKey]) {
       return FeatureFlagService.currentFeatureFlagMap[featureFlagKey].enabled;
     }
     return false;

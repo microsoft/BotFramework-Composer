@@ -30,7 +30,6 @@ export class DesignerCache {
     }
 
     if (this.cacheSize >= this.MAX_CACHE_SIZE) {
-      delete this.boundaryCache;
       this.boundaryCache = {};
       this.cacheSize = 0;
     }

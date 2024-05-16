@@ -72,7 +72,7 @@ function mapTrackedAtomsOntoSnapshot(
   target: Snapshot,
   currentAssets: AtomAssetsMap,
   nextAssets: AtomAssetsMap,
-  projectId: string
+  projectId: string,
 ): Snapshot {
   trackedAtoms(projectId).forEach((atom) => {
     const current = currentAssets.get(atom);
@@ -157,7 +157,7 @@ export const UndoRoot = React.memo((props: UndoRootProps) => {
     current: AtomAssetsMap,
     next: AtomAssetsMap,
     gotoSnapshot: (snapshot: Snapshot) => void,
-    projectId: string
+    projectId: string,
   ) => {
     target = mapTrackedAtomsOntoSnapshot(target, current, next, projectId);
     gotoSnapshot(target);

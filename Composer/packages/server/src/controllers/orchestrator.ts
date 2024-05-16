@@ -15,7 +15,7 @@ class OrchestratorController {
 
   private getModelBasePath = async () => {
     let appDataPath = '';
-    if (process?.versions?.hasOwnProperty('electron')) {
+    if (process?.versions && 'electron' in process.versions) {
       const { app } = await import('electron');
       appDataPath = app.getPath('appData');
     } else {

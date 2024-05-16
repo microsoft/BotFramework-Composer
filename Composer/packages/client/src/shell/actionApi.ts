@@ -39,7 +39,7 @@ export const useActionApi = (projectId: string) => {
     toId: string,
     lgText: string,
     hostActionData: MicrosoftIDialog,
-    hostFieldName: string
+    hostFieldName: string,
   ): Promise<string> => {
     if (!lgText) return '';
     return await deserializeLgTemplate(lgFileId, toId, lgText, hostActionData, hostFieldName, addLgTemplate);
@@ -63,7 +63,7 @@ export const useActionApi = (projectId: string) => {
     luFileId: string,
     intent: LuIntentSection | undefined,
     hostResourceId: string,
-    hostResourceData: MicrosoftIDialog
+    hostResourceData: MicrosoftIDialog,
   ) => {
     if (!intent) return;
 
@@ -132,7 +132,7 @@ export const useActionApi = (projectId: string) => {
     return destructActions(
       actions,
       (templates: string[]) => removeLgTemplates(dialogId, templates),
-      (luIntents: string[]) => Promise.all(luIntents.map((intent) => removeLuIntent(dialogId, intent)))
+      (luIntents: string[]) => Promise.all(luIntents.map((intent) => removeLuIntent(dialogId, intent))),
     );
   }
 

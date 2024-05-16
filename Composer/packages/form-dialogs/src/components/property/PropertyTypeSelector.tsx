@@ -32,7 +32,7 @@ export const PropertyTypeSelector = React.memo((props: Props) => {
           template,
         },
       })),
-    [templates, selectedPropertyType]
+    [templates, selectedPropertyType],
   );
 
   const selectedKey = React.useMemo(() => options.find((o) => o.selected).key, [options]);
@@ -42,7 +42,7 @@ export const PropertyTypeSelector = React.memo((props: Props) => {
       const newPropertyType = option.key as string;
       onChange(newPropertyType);
     },
-    [onChange]
+    [onChange],
   );
 
   const onRenderLabel = React.useCallback(
@@ -51,7 +51,7 @@ export const PropertyTypeSelector = React.memo((props: Props) => {
       (props: any, defaultRender?: (props: any) => JSX.Element | null) => (
         <FieldLabel defaultRender={defaultRender(props)} helpText={helpText} tooltipId={tooltipId} />
       ),
-    []
+    [],
   );
 
   return (
@@ -65,9 +65,9 @@ export const PropertyTypeSelector = React.memo((props: Props) => {
       onChange={change}
       onRenderLabel={onRenderLabel(
         formatMessage(
-          `The property type defines the expected input. The type can be a list (or enum) of defined values or a data format, such as a date, email, number, or string.`
+          `The property type defines the expected input. The type can be a list (or enum) of defined values or a data format, such as a date, email, number, or string.`,
         ),
-        propertyTypeTooltipId
+        propertyTypeTooltipId,
       )}
     />
   );

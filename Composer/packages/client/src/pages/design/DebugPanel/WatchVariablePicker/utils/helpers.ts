@@ -40,7 +40,7 @@ export const computePropertyItemTree = (properties: readonly string[]): Property
         n,
         `${prefix}${prefix ? '.' : ''}${n.name}`,
         items.filter((i) => i.startsWith(`${prefix}${prefix ? '.' : ''}${n.name}`)),
-        level + 1
+        level + 1,
       );
     }
     currentNode.children = children;
@@ -73,7 +73,7 @@ const getPath = <T extends { id: string; name: string; children?: T[] }>(item: T
  */
 export const getAllNodes = <T extends { id: string; name: string; children?: T[] }>(
   root: T,
-  options?: Partial<{ expanded: Record<string, boolean>; skipRoot: boolean }>
+  options?: Partial<{ expanded: Record<string, boolean>; skipRoot: boolean }>,
 ): {
   nodes: T[];
   levels: Record<string, number>;

@@ -38,24 +38,25 @@ import { flushExistingTasks } from './utils/project';
 
 export const applicationDispatcher = () => {
   const setAppUpdateStatus = useRecoilCallback(
-    ({ set }: CallbackInterface) => (status: AppUpdaterStatus, version: string | undefined) => {
-      set(appUpdateState, (currentAppUpdate) => {
-        const newAppUpdateState = {
-          ...currentAppUpdate,
-        };
-        if (status === AppUpdaterStatus.UPDATE_AVAILABLE || status === AppUpdaterStatus.BREAKING_UPDATE_AVAILABLE) {
-          newAppUpdateState.version = version;
-        }
-        if (status === AppUpdaterStatus.IDLE) {
-          newAppUpdateState.progressPercent = 0;
-          newAppUpdateState.version = undefined;
-        }
+    ({ set }: CallbackInterface) =>
+      (status: AppUpdaterStatus, version: string | undefined) => {
+        set(appUpdateState, (currentAppUpdate) => {
+          const newAppUpdateState = {
+            ...currentAppUpdate,
+          };
+          if (status === AppUpdaterStatus.UPDATE_AVAILABLE || status === AppUpdaterStatus.BREAKING_UPDATE_AVAILABLE) {
+            newAppUpdateState.version = version;
+          }
+          if (status === AppUpdaterStatus.IDLE) {
+            newAppUpdateState.progressPercent = 0;
+            newAppUpdateState.version = undefined;
+          }
 
-        newAppUpdateState.status = status;
+          newAppUpdateState.status = status;
 
-        return newAppUpdateState;
-      });
-    }
+          return newAppUpdateState;
+        });
+      },
   );
 
   const setAppUpdateShowing = useRecoilCallback(({ set }: CallbackInterface) => (isShowing: boolean) => {
@@ -77,38 +78,43 @@ export const applicationDispatcher = () => {
   });
 
   const setAppUpdateProgress = useRecoilCallback(
-    ({ set }: CallbackInterface) => (progressPercent: number, downloadSizeInBytes: number) => {
-      set(appUpdateState, (updaterState: AppUpdateState) => {
-        return {
-          ...updaterState,
-          progressPercent,
-          downloadSizeInBytes,
-        };
-      });
-    }
+    ({ set }: CallbackInterface) =>
+      (progressPercent: number, downloadSizeInBytes: number) => {
+        set(appUpdateState, (updaterState: AppUpdateState) => {
+          return {
+            ...updaterState,
+            progressPercent,
+            downloadSizeInBytes,
+          };
+        });
+      },
   );
 
   const setMessage = useRecoilCallback(({ set }: CallbackInterface) => (message: string) => {
     set(announcementState, message);
   });
 
-  const setPageElementState = useRecoilCallback(({ set }: CallbackInterface) => (mode: PageMode, settings: {}) => {
-    set(pageElementState, (currentElementState) => ({
-      ...currentElementState,
-      [mode]: settings,
-    }));
-  });
+  const setPageElementState = useRecoilCallback(
+    ({ set }: CallbackInterface) =>
+      (mode: PageMode, settings: Record<string, unknown>) => {
+        set(pageElementState, (currentElementState) => ({
+          ...currentElementState,
+          [mode]: settings,
+        }));
+      },
+  );
 
   const onboardingAddCoachMarkRef = useRecoilCallback(
-    ({ set }: CallbackInterface) => (coachMarkRef: { [key: string]: any }) => {
-      set(onboardingState, (onboardingObj) => ({
-        ...onboardingObj,
-        coachMarkRefs: {
-          ...onboardingObj.coachMarkRefs,
-          ...coachMarkRef,
-        },
-      }));
-    }
+    ({ set }: CallbackInterface) =>
+      (coachMarkRef: { [key: string]: any }) => {
+        set(onboardingState, (onboardingObj) => ({
+          ...onboardingObj,
+          coachMarkRefs: {
+            ...onboardingObj.coachMarkRefs,
+            ...coachMarkRef,
+          },
+        }));
+      },
   );
 
   const onboardingSetComplete = useRecoilCallback(({ set }: CallbackInterface) => (isComplete: boolean) => {
@@ -130,7 +136,7 @@ export const applicationDispatcher = () => {
   const setApplicationLevelError = useRecoilCallback(
     (callbackHelpers: CallbackInterface) => (errorObj: StateError | undefined) => {
       setError(callbackHelpers, errorObj);
-    }
+    },
   );
 
   const setDebugPanelExpansion = useRecoilCallback(({ set }: CallbackInterface) => (isExpanded: boolean) => {
@@ -138,9 +144,10 @@ export const applicationDispatcher = () => {
   });
 
   const setActiveTabInDebugPanel = useRecoilCallback(
-    ({ set }: CallbackInterface) => (activeTab: DebugDrawerKeys | undefined) => {
-      set(debugPanelActiveTabState, activeTab);
-    }
+    ({ set }: CallbackInterface) =>
+      (activeTab: DebugDrawerKeys | undefined) => {
+        set(debugPanelActiveTabState, activeTab);
+      },
   );
 
   const checkNodeVersion = useRecoilCallback(({ set }: CallbackInterface) => async () => {

@@ -1,0 +1,17 @@
+{
+  "inputs": ["./package.json"],
+  "output": "../ThirdPartyNotices.txt",
+  "overwrite": true,
+  "eol": "lf",
+  "no-spinner": true,
+  "replace": {
+    "@bcoe/v8-coverage@0.2.3": "./node_modules/@bcoe/v8-coverage/LICENSE.txt",
+    "through@2.3.8": "./node_modules/through/./LICENSE.MIT",
+    "rc@1.2.8": "./node_modules/rc/LICENSE.MIT",
+    "microsoft-cognitiveservices-speech-sdk@1.17.0": "./node_modules/microsoft-cognitiveservices-speech-sdk/LICENSE",
+    "doctrine@3.0.0": "./node_modules/doctrine/LICENSE",
+    "sax@0.5.8": "./node_modules/sax/LICENSE",
+    "atob@2.1.2": "./node_modules/atob/LICENSE",
+    "JSONStream@1.3.5": "./node_modules/JSONStream/LICENSE.MIT"
+  }
+}

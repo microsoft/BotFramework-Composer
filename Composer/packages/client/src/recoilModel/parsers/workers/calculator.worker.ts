@@ -40,7 +40,7 @@ export function getDifferenceItems(target: FileAsset[], origin: FileAsset[]) {
 
       return result;
     },
-    { updated: [], added: [] }
+    { updated: [], added: [] },
   );
 
   return { updated, added, deleted };

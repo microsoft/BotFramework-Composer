@@ -205,13 +205,13 @@ const DialogTitle = {
             {children}
           </a>
         ),
-      }
+      },
     ),
   },
   REVIEW: {
     title: formatMessage('Review resources to be created'),
     subText: formatMessage(
-      'The following resources will be created and provisioned for your bot. Once provisioned, they will be available in the Azure portal.'
+      'The following resources will be created and provisioned for your bot. Once provisioned, they will be available in the Azure portal.',
     ),
   },
   CONFIG_RESOURCES: {
@@ -403,7 +403,7 @@ export const AzureProvisionDialog: React.FC = () => {
 
   const preferredAppServiceOS = useMemo(getPreferredAppServiceOS, [currentProjectId, projectCollection]);
   const [formData, setFormData] = useState<ProvisionFormData>(
-    getDefaultFormData(currentConfig, { ...extensionState, appServiceOperatingSystem: preferredAppServiceOS })
+    getDefaultFormData(currentConfig, { ...extensionState, appServiceOperatingSystem: preferredAppServiceOS }),
   );
 
   const [isLoading, setIsLoading] = useState(true);
@@ -454,7 +454,7 @@ export const AzureProvisionDialog: React.FC = () => {
         'Provisoning Command:\n' +
         '{command}\n\n' +
         'Detailed instructions:\nhttps://aka.ms/how-to-complete-provision-handoff',
-      { command: provisionComposer }
+      { command: provisionComposer },
     );
 
     setHandoffInstructions(instructions);
@@ -539,8 +539,8 @@ export const AzureProvisionDialog: React.FC = () => {
             if (data.length === 0) {
               setSubscriptionsErrorMessage(
                 formatMessage(
-                  'Your subscription list is empty, please add your subscription, or login with another account.'
-                )
+                  'Your subscription list is empty, please add your subscription, or login with another account.',
+                ),
               );
             }
           }
@@ -614,7 +614,7 @@ export const AzureProvisionDialog: React.FC = () => {
         }
       }, 500);
     },
-    [publishType, formData.subscriptionId, currentUser]
+    [publishType, formData.subscriptionId, currentUser],
   );
 
   const newHostName = useCallback(
@@ -623,7 +623,7 @@ export const AzureProvisionDialog: React.FC = () => {
       // debounce name check
       checkNameAvailability(newName);
     },
-    [checkNameAvailability]
+    [checkNameAvailability],
   );
 
   const updateCurrentLocation = useCallback(
@@ -639,7 +639,7 @@ export const AzureProvisionDialog: React.FC = () => {
         }
       }
     },
-    [deployLocations, luisLocations]
+    [deployLocations, luisLocations],
   );
 
   useEffect(() => {
@@ -693,7 +693,7 @@ export const AzureProvisionDialog: React.FC = () => {
 
       setPageAndTitle(PageTypes.AddResources);
     },
-    [extensionResourceOptions]
+    [extensionResourceOptions],
   );
 
   const onSubmit = useCallback(
@@ -710,7 +710,7 @@ export const AzureProvisionDialog: React.FC = () => {
       clearAll();
       closeDialog();
     },
-    [currentUser]
+    [currentUser],
   );
 
   const onSave = useCallback(() => {
@@ -723,17 +723,17 @@ export const AzureProvisionDialog: React.FC = () => {
     const isSignedOut = await logOut();
     if (isSignedOut) {
       addNotification(
-        getLogoutNotificationSettings(formatMessage('You have successfully signed out of Azure'), 'info')
+        getLogoutNotificationSettings(formatMessage('You have successfully signed out of Azure'), 'info'),
       );
       closeDialog();
     } else {
       addNotification(
         getLogoutNotificationSettings(
           formatMessage(
-            'There was an error attempting to sign out of Azure. To complete sign out, you may need to restart Composer.'
+            'There was an error attempting to sign out of Azure. To complete sign out, you may need to restart Composer.',
           ),
-          'error'
-        )
+          'error',
+        ),
       );
     }
   }, [addNotification]);
@@ -748,13 +748,13 @@ export const AzureProvisionDialog: React.FC = () => {
             const confirmed = await OpenConfirmModal(
               formatMessage('Sign out of Azure'),
               formatMessage(
-                'By signing out of Azure, your new publishing profile will be canceled and this dialog will close. Do you want to continue?'
+                'By signing out of Azure, your new publishing profile will be canceled and this dialog will close. Do you want to continue?',
               ),
               {
                 onRenderContent: (subtitle: string) => <div>{subtitle}</div>,
                 confirmText: formatMessage('Sign out'),
                 cancelText: formatMessage('Cancel'),
-              }
+              },
             );
             if (confirmed) {
               await signoutAndNotify();
@@ -765,7 +765,7 @@ export const AzureProvisionDialog: React.FC = () => {
         </div>
       );
     },
-    [signoutAndNotify]
+    [signoutAndNotify],
   );
 
   const isNextDisabled = useMemo(() => {
@@ -777,7 +777,7 @@ export const AzureProvisionDialog: React.FC = () => {
         !formData.region ||
         subscriptionsErrorMessage ||
         errorResourceGroupName ||
-        errorHostName !== ''
+        errorHostName !== '',
     );
   }, [
     formData.subscriptionId,
@@ -867,8 +867,8 @@ export const AzureProvisionDialog: React.FC = () => {
               </ConfigureResourcesPropertyLabel>
               {renderPropertyInfoIcon(
                 formatMessage(
-                  'A custom resource group name that you choose or create. Resource groups allow you to group Azure resources for access and management.'
-                )
+                  'A custom resource group name that you choose or create. Resource groups allow you to group Azure resources for access and management.',
+                ),
               )}
             </Stack>
             <ResourceGroupPicker
@@ -892,7 +892,7 @@ export const AzureProvisionDialog: React.FC = () => {
                 {formatMessage('Operating System')}
               </ConfigureResourcesPropertyLabel>
               {renderPropertyInfoIcon(
-                formatMessage('Select the operating system that will host your application service.')
+                formatMessage('Select the operating system that will host your application service.'),
               )}
             </Stack>
             <ChoiceGroup
@@ -1282,7 +1282,7 @@ export const AzureProvisionDialog: React.FC = () => {
     <Fragment>
       <ProvisionHandoff
         developerInstructions={formatMessage(
-          'If Azure resources and subscription are managed by others, use the following information to request creation of the resources that you need to build and run your bot.'
+          'If Azure resources and subscription are managed by others, use the following information to request creation of the resources that you need to build and run your bot.',
         )}
         handoffInstructions={handoffInstructions}
         hidden={!showHandoff}

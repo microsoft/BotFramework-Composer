@@ -13,7 +13,7 @@ const installRemoteTemplate = async (
   yeomanEnv: yeoman,
   templateGeneratorPath: string,
   npmPackageName: string,
-  templateVersion: string
+  templateVersion: string,
 ) => {
   yeomanEnv.cwd = templateGeneratorPath;
   try {
@@ -33,13 +33,11 @@ const instantiateRemoteTemplate = async (
   projectName: string,
   runtimeType: string,
   runtimeLanguage: string,
-  yeomanOptions: any
+  yeomanOptions: any,
 ): Promise<void> => {
   log('About to instantiate a template!', dstDir, generatorName, projectName);
   yeomanEnv.cwd = dstDir;
   try {
-    // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
-    // @ts-ignore @types/yeoman-environment is outdated
     await yeomanEnv.run([generatorName, projectName, '-p', runtimeLanguage, '-i', runtimeType], yeomanOptions);
     log('Template successfully instantiated', dstDir, generatorName, projectName);
   } catch (err) {
@@ -57,7 +55,7 @@ const yeomanWork = async (
   runtimeType: string,
   runtimeLanguage: string,
   yeomanOptions: any,
-  isLocalGenerator: boolean
+  isLocalGenerator: boolean,
 ) => {
   // create yeoman environment
   log('Getting Yeoman environment');
@@ -67,7 +65,7 @@ const yeomanWork = async (
   const yeomanEnv = yeoman.createEnv(
     '',
     { yeomanRepository: templateGeneratorPath },
-    new TerminalAdapter({ console: console })
+    new TerminalAdapter({ console: console }),
   );
   if (!isLocalGenerator) {
     log('Looking up local packages');
@@ -89,7 +87,7 @@ const yeomanWork = async (
     projectName,
     runtimeType,
     runtimeLanguage,
-    yeomanOptions
+    yeomanOptions,
   );
 };
 
@@ -115,7 +113,7 @@ if (!isMainThread) {
     workerData.runtimeType,
     workerData.runtimeLanguage,
     workerData.yeomanOptions,
-    workerData.isLocalGenerator
+    workerData.isLocalGenerator,
   )
     .then(() => {
       process.exit(0);

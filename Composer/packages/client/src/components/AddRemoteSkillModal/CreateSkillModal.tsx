@@ -117,7 +117,7 @@ export const validateLocalZip = async (files: Record<string, JSZipObject>) => {
       } else {
         result.error = {
           manifestUrl: formatMessage(
-            'Endpoints should not be empty or endpoint should have endpoint url field in manifest json'
+            'Endpoints should not be empty or endpoint should have endpoint url field in manifest json',
           ),
         };
       }
@@ -140,7 +140,7 @@ export const getSkillManifest = async (
   manifestUrl: string,
   setSkillManifest,
   setFormDataErrors,
-  setShowDetail
+  setShowDetail,
 ) => {
   try {
     const { data } = await httpClient.get(`/projects/${projectId}/skill/retrieveSkillManifest`, {
@@ -208,9 +208,13 @@ export const CreateSkillModal: React.FC<CreateSkillModalProps> = (props) => {
   const [zipContent, setZipContent] = useState({});
 
   const publishTypes = useRecoilValue(publishTypesState(projectId));
-  const { languages, luFeatures, runtime, publishTargets = [], MicrosoftAppId } = useRecoilValue(
-    settingsState(projectId)
-  );
+  const {
+    languages,
+    luFeatures,
+    runtime,
+    publishTargets = [],
+    MicrosoftAppId,
+  } = useRecoilValue(settingsState(projectId));
   const { dialogId } = useRecoilValue(designPageLocationState(projectId));
   const rootDialog = useRecoilValue(rootDialogSelector(projectId));
   const luFiles = useRecoilValue(luFilesSelectorFamily(projectId));
@@ -243,7 +247,7 @@ export const CreateSkillModal: React.FC<CreateSkillModalProps> = (props) => {
         formData: { manifestUrl: currentManifestUrl },
         ...validationHelpers,
       },
-      skillUrls
+      skillUrls,
     );
     setFormData({
       ...rest,
@@ -261,7 +265,7 @@ export const CreateSkillModal: React.FC<CreateSkillModalProps> = (props) => {
       getSkillManifest(projectId, formData.manifestUrl, setSkillManifest, setFormDataErrors, setShowDetail);
       setManifestDirPath(localManifestPath.substring(0, localManifestPath.lastIndexOf('/')));
     },
-    [projectId, formData]
+    [projectId, formData],
   );
 
   const handleSubmit = async (event, content: string, enable: boolean) => {
@@ -303,7 +307,7 @@ export const CreateSkillModal: React.FC<CreateSkillModalProps> = (props) => {
     setMicrosoftAppProperties(
       projectId,
       configuration.settings.MicrosoftAppId,
-      configuration.settings.MicrosoftAppPassword
+      configuration.settings.MicrosoftAppPassword,
     );
 
     setShowSetAppIdDialog(false);

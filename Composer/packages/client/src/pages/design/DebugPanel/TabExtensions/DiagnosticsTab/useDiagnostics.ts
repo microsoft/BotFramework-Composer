@@ -10,7 +10,7 @@ import { IDiagnosticInfo } from './DiagnosticType';
 
 export const useDiagnosticsData = (): IDiagnosticInfo[] => {
   const diagnosticData = useRecoilValue(
-    allDiagnosticsSelectorFamily([DiagnosticSeverity.Error, DiagnosticSeverity.Warning])
+    allDiagnosticsSelectorFamily([DiagnosticSeverity.Error, DiagnosticSeverity.Warning]),
   );
 
   return diagnosticData ?? [];

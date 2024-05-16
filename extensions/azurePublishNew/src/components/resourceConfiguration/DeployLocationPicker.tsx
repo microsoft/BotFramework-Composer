@@ -51,7 +51,7 @@ export const DeployLocationPicker = React.memo((props: Props) => {
       placeholder: formatMessage('Select Region'),
       errorMessage,
     }),
-    [errorMessage]
+    [errorMessage],
   );
 
   return (
@@ -59,7 +59,7 @@ export const DeployLocationPicker = React.memo((props: Props) => {
       isLoading={isLoading}
       items={sortBy(
         deployLocations.map((t) => ({ key: t.name, text: t.displayName })),
-        [(location) => location.text]
+        [(location) => location.text],
       )}
       onSubmit={(option) => props.onChangeDeployLocation(option.key)}
       {...{

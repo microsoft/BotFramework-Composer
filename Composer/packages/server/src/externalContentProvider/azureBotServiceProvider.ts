@@ -90,7 +90,7 @@ export class AzureBotServiceProvider extends ExternalContentProvider<AzureBotSer
     resourceGroupName: string,
     vaultName: string,
     tenantId: string,
-    objectId: string
+    objectId: string,
   ) {
     try {
       const operationKind = 'add';
@@ -115,7 +115,7 @@ export class AzureBotServiceProvider extends ExternalContentProvider<AzureBotSer
             Authorization: `Bearer ${token}`,
             'Content-Type': 'application/json',
           },
-        }
+        },
       );
       return result;
     } catch (e) {

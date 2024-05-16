@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 import * as jwt from 'jsonwebtoken';
+import { decode } from 'jsonwebtoken';
 
 import {
   usGovernmentAuthentication,
@@ -36,9 +37,9 @@ describe('botFrameworkAuthenticationMiddleware', () => {
     mockNext.mockClear();
     mockEnd.mockClear();
     mockStatus.mockClear();
-    (jwt.decode as jest.Mock).mockClear();
+    (decode as jest.Mock).mockClear();
     (jwt.verify as jest.Mock).mockClear();
-    (jwt.decode as jest.Mock).mockImplementation(() => ({
+    (decode as jest.Mock).mockImplementation(() => ({
       header: {
         kid: 'someKeyId',
       },

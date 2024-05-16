@@ -39,7 +39,7 @@ process.on('message', async (msg: WorkerMsg) => {
           lgFile,
           templateName,
           template,
-          lgImportResolver
+          lgImportResolver,
         );
         process.send?.({ id: msg.id, payload: { id, content, templates, allTemplates, diagnostics } });
         break;

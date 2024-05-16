@@ -28,7 +28,7 @@ export type Profile = ABSProfile; // can include PVAProfile or other type of pro
  */
 export async function getPublishProfileFromPayload(
   profile: Profile,
-  source: string
+  source: string,
 ): Promise<PublishTarget | undefined> {
   try {
     const result = await httpClient.post(`/import/${source}/generateProfile`, profile);

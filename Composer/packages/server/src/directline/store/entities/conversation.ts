@@ -41,7 +41,7 @@ export class Conversation {
     conversationId: string,
     user: User,
     webChatMode: WebChatMode,
-    activeLocale = 'en-us'
+    activeLocale = 'en-us',
   ) {
     this.botEndpoint = botEndpoint;
     this.conversationId = conversationId;
@@ -72,7 +72,7 @@ export class Conversation {
   }
 
   private addActivityToQueue(activity: Activity) {
-    if (!(activity.channelData || {}).postback) {
+    if (!activity?.channelData?.postback) {
       this.activities = [...this.activities, { activity, watermark: this.nextWatermark++ }];
     }
   }
@@ -134,7 +134,7 @@ export class Conversation {
    */
   public async postActivityToBot(
     state: DLServerState,
-    activity: Activity
+    activity: Activity,
   ): Promise<{
     sendActivity: Activity;
     response: any | undefined;

@@ -11,7 +11,7 @@ describe('<ElementWrapper>', () => {
     const ele = render(
       <ElementWrapper nodeId="test" tagId="1">
         <span data-testid="wrapped-content">Content</span>
-      </ElementWrapper>
+      </ElementWrapper>,
     );
 
     expect(ele).toBeTruthy();

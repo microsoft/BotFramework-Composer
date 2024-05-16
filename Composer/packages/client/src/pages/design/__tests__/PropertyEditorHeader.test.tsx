@@ -43,7 +43,7 @@ describe('<PropertyEditorHeader />', () => {
     };
     const helpLink = 'https://botframework-skill/manifest';
     const { findByText } = render(
-      <PropertyEditorHeader botName={'echo-bot'} helpLink={helpLink} projectData={metadata} />
+      <PropertyEditorHeader botName={'echo-bot'} helpLink={helpLink} projectData={metadata} />,
     );
     expect(findByText('Remote Skill'));
     expect(findByText('Learn more'));

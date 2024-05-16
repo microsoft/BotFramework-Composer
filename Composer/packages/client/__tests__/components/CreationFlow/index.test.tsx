@@ -86,7 +86,7 @@ describe('<CreationFlow/>', () => {
     } = renderWithRouter(
       <RecoilRoot initializeState={initRecoilState}>
         <CreationFlow location={locationMock} />
-      </RecoilRoot>
+      </RecoilRoot>,
     );
 
     act(() => {

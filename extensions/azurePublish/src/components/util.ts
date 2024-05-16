@@ -91,7 +91,7 @@ const isUsingAdaptiveRuntimeKey = (runtimeKey?: string): boolean =>
  * @default { isUsingAdaptiveRuntime: false, runtimeLanguage: 'dotnet', runtimeType: 'webapp'}
  */
 export const parseRuntimeKey = (
-  runtimeKey?: string
+  runtimeKey?: string,
 ): { isUsingAdaptiveRuntime: boolean; runtimeLanguage?: string; runtimeType?: string } => {
   const isAdaptive = isUsingAdaptiveRuntimeKey(runtimeKey);
 

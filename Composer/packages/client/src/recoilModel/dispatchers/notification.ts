@@ -56,7 +56,7 @@ export const notificationDispatcher = () => {
   const updateNotification = useRecoilCallback(
     (callbackHelper: CallbackInterface) => (id: string, newValue: Partial<CardProps>) => {
       updateNotificationInternal(callbackHelper, id, newValue);
-    }
+    },
   );
 
   return {
