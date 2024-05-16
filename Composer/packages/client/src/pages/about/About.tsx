@@ -100,7 +100,7 @@ export const About: React.FC<RouteComponentProps> = () => {
                 <Link
                   href={`https://github.com/microsoft/botbuilder-js/releases/tag/${botBuilderVersion.js.replace(
                     '-preview',
-                    ''
+                    '',
                   )}`}
                   style={{ marginLeft: '3px', textDecoration: 'underline' }}
                   target={'_blank'}
