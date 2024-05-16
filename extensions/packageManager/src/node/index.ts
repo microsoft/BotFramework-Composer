@@ -251,7 +251,7 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
       const runtimePath = currentProject.getRuntimePath();
 
       if (currentProject.settings?.runtime?.customRuntime && runtimePath) {
-        const manifestFile = runtime.identifyManifest(runtimePath, currentProject.name);
+        const manifestFile = runtime.identifyManifest(runtimePath, currentProject);
 
         const dryrun = new SchemaMerger(
           [manifestFile, `!${path.join(currentProject.dir, 'generated')}/**`],
@@ -314,7 +314,7 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
             currentProject,
           );
 
-          const manifestFile = runtime.identifyManifest(runtimePath, currentProject.name);
+          const manifestFile = runtime.identifyManifest(runtimePath, currentProject);
 
           // call do a dry run on the dialog merge
           const dryrun = new SchemaMerger(
@@ -453,7 +453,7 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
         try {
           const output = await runtime.uninstallComponent(runtimePath, packageName, currentProject);
 
-          const manifestFile = runtime.identifyManifest(runtimePath, currentProject.name);
+          const manifestFile = runtime.identifyManifest(runtimePath, currentProject);
 
           // call do a dry run on the dialog merge
           const merger = new SchemaMerger(
