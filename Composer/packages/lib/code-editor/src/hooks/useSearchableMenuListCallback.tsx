@@ -23,7 +23,7 @@ const searchFieldStyles = { root: { borderRadius: 0, ...fontSizeStyle }, iconCon
  */
 export const useSearchableMenuListCallback = (
   searchFiledPlaceHolder?: string,
-  headerRenderer?: () => React.ReactNode
+  headerRenderer?: () => React.ReactNode,
 ) => {
   const { onSearchAbort, onSearchQueryChange, query, setQuery } = useDebouncedSearchCallbacks();
 
@@ -41,7 +41,7 @@ export const useSearchableMenuListCallback = (
               =1 {one result}
               other {# results}
             }`,
-            { query, count: menuListProps?.items?.filter((item) => item?.key && item.key !== 'no_results').length }
+            { query, count: menuListProps?.items?.filter((item) => item?.key && item.key !== 'no_results').length },
           )
         : undefined;
 
@@ -60,7 +60,7 @@ export const useSearchableMenuListCallback = (
         </Stack>
       );
     },
-    [searchFiledPlaceHolder, headerRenderer, onReset, onSearchQueryChange, searchComplete]
+    [searchFiledPlaceHolder, headerRenderer, onReset, onSearchQueryChange, searchComplete],
   );
 
   return { onRenderMenuList: callback, query, onReset };

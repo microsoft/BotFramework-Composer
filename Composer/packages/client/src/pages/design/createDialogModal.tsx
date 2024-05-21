@@ -103,7 +103,7 @@ export const CreateDialogModal: React.FC<CreateDialogModalProps> = (props) => {
       onSubmit(formData.name, dialogData);
       TelemetryClient.track('AddNewDialogCompleted');
     },
-    [hasErrors, formData]
+    [hasErrors, formData],
   );
 
   return (

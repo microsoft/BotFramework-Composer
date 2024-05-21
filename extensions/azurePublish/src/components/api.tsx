@@ -53,7 +53,7 @@ export const getSubscriptions = async (token: string): Promise<Array<Subscriptio
     let message = JSON.stringify(err, Object.getOwnPropertyNames(err));
     if (err?.code === 12 && err?.message?.match(/Bearer/gi)) {
       message = formatMessage(
-        'There was an authentication problem retrieving subscriptions. Verify your login session has not expired and you have permission to list subscriptions in this account.'
+        'There was an authentication problem retrieving subscriptions. Verify your login session has not expired and you have permission to list subscriptions in this account.',
       );
     }
 
@@ -100,7 +100,7 @@ export const getResourceGroups = async (token: string, subscriptionId: string): 
 export const getResources = async (
   token: string,
   subscriptionId: string,
-  resourceGroupName: string
+  resourceGroupName: string,
 ): Promise<Array<GenericResource>> => {
   try {
     if (!subscriptionId) {
@@ -143,7 +143,7 @@ export const getDeployLocations = async (token: string, subscriptionId: string) 
       `https://management.azure.com/subscriptions/${subscriptionId}/locations?api-version=2019-10-01`,
       {
         headers: { Authorization: `Bearer ${token}` },
-      }
+      },
     );
     return result.data.value;
   } catch (error) {
@@ -159,7 +159,7 @@ export const getDeployLocations = async (token: string, subscriptionId: string) 
 export const getSupportedRegionsByType = async (
   token: string,
   subscriptionId: string,
-  resourceType: AzureResourceProviderType
+  resourceType: AzureResourceProviderType,
 ): Promise<Array<string>> => {
   try {
     if (!subscriptionId) {
@@ -207,7 +207,7 @@ export const getSupportedRegionsByType = async (
 export const CheckBotNameAvailability = async (
   token: string,
   botName: string,
-  subscriptionId: string
+  subscriptionId: string,
 ): Promise<CheckNameAvailabilityResponseBody> => {
   try {
     if (!botName) {
@@ -265,7 +265,7 @@ export const CheckBotNameAvailability = async (
 export const CheckWebAppNameAvailability = async (
   token: string,
   webAppName: string,
-  subscriptionId: string
+  subscriptionId: string,
 ): Promise<ResourceNameAvailability> => {
   try {
     if (!webAppName) {
@@ -292,7 +292,7 @@ export const CheckWebAppNameAvailability = async (
     const webSiteManagementClient = new WebSiteManagementClient(credentials, subscriptionId);
     const getCheckNameAvailabilityResult = await webSiteManagementClient.checkNameAvailability(
       webAppName,
-      'Microsoft.Web/sites'
+      'Microsoft.Web/sites',
     );
     if (getCheckNameAvailabilityResult._response.status >= 300) {
       logger({
@@ -326,7 +326,7 @@ export const CheckCognitiveResourceSku = async (
   location: string,
   sku: string,
   kind: string,
-  type: string
+  type: string,
 ): Promise<boolean> => {
   try {
     if (!subscriptionId) {

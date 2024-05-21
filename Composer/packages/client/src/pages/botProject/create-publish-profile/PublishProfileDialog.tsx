@@ -41,21 +41,14 @@ const formatDialogTitle = (current) => {
     subText: formatMessage(
       'To test, run and publish your bot, it needs Azure resources such as app registration, hosting and channels.' +
         ' Other resources, such as language understanding and storage are optional.' +
-        ' A publishing profile contains all of the information necessary to provision and publish your bot, including its Azure resources.'
+        ' A publishing profile contains all of the information necessary to provision and publish your bot, including its Azure resources.',
     ),
   };
 };
 
 export const PublishProfileDialog: React.FC<PublishProfileDialogProps> = (props) => {
-  const {
-    current,
-    types,
-    projectId,
-    closeDialog,
-    targets,
-    setPublishTargets,
-    onUpdateIsCreateProfileFromSkill,
-  } = props;
+  const { current, types, projectId, closeDialog, targets, setPublishTargets, onUpdateIsCreateProfileFromSkill } =
+    props;
   const [name, setName] = useState(current?.item.name || '');
   const [targetType, setTargetType] = useState<string>(current?.item.type || '');
 
@@ -146,7 +139,7 @@ export const PublishProfileDialog: React.FC<PublishProfileDialogProps> = (props)
         TelemetryClient.track('NewPublishingProfileSaved', { type });
       }
     },
-    [targets, projectId]
+    [targets, projectId],
   );
 
   useEffect(() => {

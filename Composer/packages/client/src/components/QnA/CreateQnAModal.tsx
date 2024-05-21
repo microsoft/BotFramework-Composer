@@ -180,8 +180,8 @@ export const CreateQnAModal: React.FC<CreateQnAModalProps> = (props) => {
           if (data.length === 0) {
             setSubscriptionsErrorMessage(
               formatMessage(
-                'Your subscription list is empty, please add your subscription, or login with another account.'
-              )
+                'Your subscription list is empty, please add your subscription, or login with another account.',
+              ),
             );
           }
         })
@@ -235,7 +235,7 @@ export const CreateQnAModal: React.FC<CreateQnAModalProps> = (props) => {
 
       const keylist: KeyRec[] = await fetchKeys(
         cognitiveServicesManagementClient,
-        accounts.filter((a) => a.kind === serviceKeyType)
+        accounts.filter((a) => a.kind === serviceKeyType),
       );
 
       const kbsMap = {};
@@ -437,7 +437,7 @@ export const CreateQnAModal: React.FC<CreateQnAModalProps> = (props) => {
             {noKeys && subscriptionId && (
               <span style={{ color: NeutralColors.gray100 }}>
                 {formatMessage(
-                  'No existing QnA Maker resources were found in this subscription. Select a different subscription, or click “Back” to create a new resource or generate a resource request to handoff to your Azure admin.'
+                  'No existing QnA Maker resources were found in this subscription. Select a different subscription, or click “Back” to create a new resource or generate a resource request to handoff to your Azure admin.',
                 )}
               </span>
             )}

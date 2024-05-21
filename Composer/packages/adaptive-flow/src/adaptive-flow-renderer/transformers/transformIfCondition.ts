@@ -12,7 +12,7 @@ const ElseBranchKey = AdaptiveFieldNames.ElseActions;
 
 export function transformIfCondtion(
   input,
-  jsonpath: string
+  jsonpath: string,
 ): { condition: IndexedNode; choice: IndexedNode; ifGroup: IndexedNode; elseGroup: IndexedNode } | null {
   if (!input || typeof input !== 'object') return null;
 

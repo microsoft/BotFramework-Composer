@@ -41,7 +41,7 @@ const getStructuredResponseHelper = (value: unknown, kind: 'Text' | 'Speak' | 'A
 
 const getStructuredResponseByKind = (
   template: LgTemplate,
-  kind: StructuredResponseItem['kind']
+  kind: StructuredResponseItem['kind'],
 ): StructuredResponseItem | undefined => {
   const value = template.properties?.[kind];
   if (value === undefined) {
@@ -60,18 +60,18 @@ const getStructuredResponseByKind = (
       return { kind: 'SuggestedActions', value: responseValue } as SuggestedActionsStructuredResponseItem;
     }
     case 'AttachmentLayout':
-      if (acceptedAttachmentLayout.includes(value as typeof acceptedAttachmentLayout[number])) {
+      if (acceptedAttachmentLayout.includes(value as (typeof acceptedAttachmentLayout)[number])) {
         return {
           kind: 'AttachmentLayout',
-          value: value as typeof acceptedAttachmentLayout[number],
+          value: value as (typeof acceptedAttachmentLayout)[number],
         } as AttachmentLayoutStructuredResponseItem;
       }
       break;
     case 'InputHint':
-      if (acceptedInputHintValues.includes(value as typeof acceptedInputHintValues[number])) {
+      if (acceptedInputHintValues.includes(value as (typeof acceptedInputHintValues)[number])) {
         return {
           kind: 'InputHint',
-          value: value as typeof acceptedInputHintValues[number],
+          value: value as (typeof acceptedInputHintValues)[number],
         } as InputHintStructuredResponseItem;
       }
       break;

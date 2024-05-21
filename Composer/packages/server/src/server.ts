@@ -38,7 +38,6 @@ import { cleanHostedBots } from './utility/cleanHostedBots';
 import { getVersion } from './utility/getVersion';
 import { serverListenHost, serverHostname } from './settings/env';
 
-// eslint-disable-next-line @typescript-eslint/no-var-requires
 const session = require('express-session');
 
 export async function start(electronContext?: ElectronContext): Promise<number | string> {
@@ -102,7 +101,7 @@ export async function start(electronContext?: ElectronContext): Promise<number |
           // TODO: use nonce strategy after addressing issues with monaco-editor pacakge
           "style-src 'self' 'unsafe-inline'",
           // `style-src 'self' 'nonce-${req.__nonce__}';`,
-        ]).join(' ')
+        ]).join(' '),
       );
     }
 
@@ -130,7 +129,7 @@ export async function start(electronContext?: ElectronContext): Promise<number |
     res.header('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE, PATCH, OPTIONS');
     res.header(
       'Access-Control-Allow-Headers',
-      'Origin, X-Requested-With, Content-Type, Accept, Authorization, x-ms-bot-agent'
+      'Origin, X-Requested-With, Content-Type, Accept, Authorization, x-ms-bot-agent',
     );
     next?.();
   };
@@ -190,7 +189,7 @@ export async function start(electronContext?: ElectronContext): Promise<number |
         // We don't use the debug logger here because we always want it to be shown.
         // eslint-disable-next-line no-console
         console.log(
-          `\n\n${chalk.green('Composer now running at:')}\n\n${chalk.blue(`http://${serverHostname}:${port}`)}\n`
+          `\n\n${chalk.green('Composer now running at:')}\n\n${chalk.blue(`http://${serverHostname}:${port}`)}\n`,
         );
       }
       resolve();

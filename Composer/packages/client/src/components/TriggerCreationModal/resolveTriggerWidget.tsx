@@ -26,7 +26,7 @@ export function resolveTriggerWidget(
   projectId: string,
   dialogId: string,
   luFile?: LuFile,
-  setLuFile?: (data: LuFile) => void
+  setLuFile?: (data: LuFile) => void,
 ) {
   const isRegEx = isRegExRecognizerType(dialogFile);
   const isLUISnQnA = isLUISnQnARecognizerType(dialogFile) || isPVARecognizerType(dialogFile);
@@ -67,7 +67,7 @@ export function resolveTriggerWidget(
           Name: PlaceHolderSectionName,
           Body: body,
         },
-        {}
+        {},
       );
       setLuFile(shadowLuFile);
     }

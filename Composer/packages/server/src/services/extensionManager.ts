@@ -51,7 +51,7 @@ export type ExtensionManifest = Record<string, ExtensionMetadata>;
 export class ExtensionManagerImp {
   public constructor(
     private _manifest?: JsonStore<ExtensionManifest>,
-    private _settings?: JsonStore<ExtensionSettings>
+    private _settings?: JsonStore<ExtensionSettings>,
   ) {}
 
   /**
@@ -160,7 +160,7 @@ export class ExtensionManagerImp {
       if (typeof extension.default === 'function') {
         // the module exported just an init function
         await extension.default.call(null, registration);
-      } else if (extension.default && extension.default.initialize) {
+      } else if (extension.default?.initialize) {
         // the module exported an object with an initialize method
         await extension.default.initialize.call(null, registration);
       } else if (extension.initialize && typeof extension.initialize === 'function') {

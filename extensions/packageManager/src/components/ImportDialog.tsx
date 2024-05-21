@@ -42,7 +42,7 @@ const ImportDialog: React.FC<ImportDialogProps> = (props) => {
       <form onSubmit={submit}>
         <p>
           {formatMessage(
-            'Install a specific package by pasting the name and version number below. The text must be an exact match in order to find the correct package. You can also add and browse feeds to find packages to add.'
+            'Install a specific package by pasting the name and version number below. The text must be an exact match in order to find the correct package. You can also add and browse feeds to find packages to add.',
           )}
         </p>
         <TextField

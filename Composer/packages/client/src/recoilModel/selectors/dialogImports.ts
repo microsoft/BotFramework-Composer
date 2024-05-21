@@ -14,7 +14,7 @@ import { luFilesSelectorFamily } from './lu';
 // Finds all the file imports starting from a given dialog file.
 export const getLanguageFileImports = <T extends LgFile | LuFile | QnAFile>(
   rootDialogId: string,
-  getFile: (fileId: string) => T
+  getFile: (fileId: string) => T,
 ): LanguageFileImport[] => {
   const imports: LanguageFileImport[] = [];
 
@@ -31,7 +31,7 @@ export const getLanguageFileImports = <T extends LgFile | LuFile | QnAFile>(
 
     const file = getFile(currentId);
     // If file is not found or file content is empty, then continue.
-    if (!file || !file.content) {
+    if (!file?.content) {
       // eslint-disable-next-line no-console
       console.warn(`Could not find language import file ${currentId}`);
       continue;
@@ -58,26 +58,30 @@ export const getLanguageFileImports = <T extends LgFile | LuFile | QnAFile>(
 // Returns all the lg imports referenced by a dialog file and its referenced lg files.
 export const lgImportsSelectorFamily = selectorFamily<LanguageFileImport[], { projectId: string; dialogId: string }>({
   key: 'lgImports',
-  get: ({ projectId, dialogId }) => ({ get }) => {
-    const locale = get(localeState(projectId));
+  get:
+    ({ projectId, dialogId }) =>
+    ({ get }) => {
+      const locale = get(localeState(projectId));
 
-    const getFile = (fileId: string) =>
-      get(lgFilesSelectorFamily(projectId)).find((f) => f.id === fileId || f.id === `${fileId}.${locale}`) as LgFile;
+      const getFile = (fileId: string) =>
+        get(lgFilesSelectorFamily(projectId)).find((f) => f.id === fileId || f.id === `${fileId}.${locale}`) as LgFile;
 
-    // Have to exclude common as a special case
-    return getLanguageFileImports(dialogId, getFile).filter((i) => getBaseName(i.id) !== 'common');
-  },
+      // Have to exclude common as a special case
+      return getLanguageFileImports(dialogId, getFile).filter((i) => getBaseName(i.id) !== 'common');
+    },
 });
 
 // Returns all the lu imports referenced by a dialog file and its referenced lu files.
 export const luImportsSelectorFamily = selectorFamily<LanguageFileImport[], { projectId: string; dialogId: string }>({
   key: 'luImports',
-  get: ({ projectId, dialogId }) => ({ get }) => {
-    const locale = get(localeState(projectId));
+  get:
+    ({ projectId, dialogId }) =>
+    ({ get }) => {
+      const locale = get(localeState(projectId));
 
-    const getFile = (fileId: string) =>
-      get(luFilesSelectorFamily(projectId)).find((f) => f.id === fileId || f.id === `${fileId}.${locale}`) as LuFile;
+      const getFile = (fileId: string) =>
+        get(luFilesSelectorFamily(projectId)).find((f) => f.id === fileId || f.id === `${fileId}.${locale}`) as LuFile;
 
-    return getLanguageFileImports(dialogId, getFile);
-  },
+      return getLanguageFileImports(dialogId, getFile);
+    },
 });

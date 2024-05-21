@@ -30,7 +30,7 @@ export function getLuisBuildLuFiles(luFiles: LuFile[], dialogs: DialogInfo[]) {
     const idWithoutLocale = getBaseName(file.id);
     return dialogs.some(
       (dialog) =>
-        dialog.luFile === idWithoutLocale && dialog.luProvider !== SDKKinds.OrchestratorRecognizer && !file.empty
+        dialog.luFile === idWithoutLocale && dialog.luProvider !== SDKKinds.OrchestratorRecognizer && !file.empty,
     );
   });
 }
@@ -47,7 +47,7 @@ function generateErrorMessage(invalidLuFile: LuFile[]) {
 export function checkLuisBuild(luFiles: LuFile[], dialogs: DialogInfo[]) {
   const referred = getReferredLuFiles(luFiles, dialogs, false);
   const invalidLuFile = referred.filter(
-    (file) => file.diagnostics.filter((n) => n.severity === DiagnosticSeverity.Error).length !== 0
+    (file) => file.diagnostics.filter((n) => n.severity === DiagnosticSeverity.Error).length !== 0,
   );
   if (invalidLuFile.length !== 0) {
     const msg = generateErrorMessage(invalidLuFile);

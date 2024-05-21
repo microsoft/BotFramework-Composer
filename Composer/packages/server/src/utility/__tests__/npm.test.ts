@@ -51,7 +51,7 @@ describe('search', () => {
     const mockRes = {
       json: jest.fn(),
     };
-    ((fetch as unknown) as jest.Mock).mockImplementation(() => mockRes);
+    (fetch as unknown as jest.Mock).mockImplementation(() => mockRes);
     mockRes.json.mockResolvedValue({ objects: data.map((d) => ({ package: d })) });
   });
 
@@ -59,7 +59,7 @@ describe('search', () => {
     const results = await search('my query');
 
     expect(fetch).toHaveBeenCalledWith(
-      expect.stringContaining('registry.npmjs.org/-/v1/search?text=my+query+keywords:botframework-composer')
+      expect.stringContaining('registry.npmjs.org/-/v1/search?text=my+query+keywords:botframework-composer'),
     );
 
     expect(results).toEqual([
@@ -107,7 +107,7 @@ describe('downloadPackage', () => {
       json: jest.fn(),
       body: new MockBody(),
     };
-    ((fetch as unknown) as jest.Mock).mockImplementation(() => mockRes);
+    (fetch as unknown as jest.Mock).mockImplementation(() => mockRes);
     mockRes.json.mockResolvedValue(packageMetadata);
 
     const extractor = new MockExtractor();

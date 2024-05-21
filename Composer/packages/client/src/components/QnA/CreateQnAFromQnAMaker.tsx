@@ -41,7 +41,7 @@ export const CreateQnAFromQnAMaker: React.FC<CreateQnAFromFormProps> = (props) =
         <p>
           <span css={subText}>
             {formatMessage(
-              'Import content from an existing knowledge base on the QnA maker portal. Your knowledge base will downloaded locally and source knowledge base will remain as-is.'
+              'Import content from an existing knowledge base on the QnA maker portal. Your knowledge base will downloaded locally and source knowledge base will remain as-is.',
             )}
           </span>
         </p>

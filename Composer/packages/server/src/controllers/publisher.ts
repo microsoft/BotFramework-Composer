@@ -49,7 +49,7 @@ export const PublishController = {
               getProvisionStatus: typeof methods.getProvisionStatus === 'function',
             },
           };
-        })
+        }),
     );
   },
   publish: async (req, res) => {
@@ -115,7 +115,7 @@ export const PublishController = {
           currentProject,
           metadata,
           user,
-          authService.getAccessToken.bind(authService)
+          authService.getAccessToken.bind(authService),
         );
 
         // copy status into payload for ease of access in client
@@ -174,7 +174,7 @@ export const PublishController = {
           configuration,
           currentProject,
           user,
-          authService.getAccessToken.bind(authService)
+          authService.getAccessToken.bind(authService),
         );
         // update the eTag if the publish was completed and an eTag is provided
         if (results.status === 200) {
@@ -228,7 +228,7 @@ export const PublishController = {
           configuration,
           currentProject,
           user,
-          authService.getAccessToken.bind(authService)
+          authService.getAccessToken.bind(authService),
         );
 
         // set status and return value as json
@@ -363,7 +363,7 @@ export const PublishController = {
             configuration,
             currentProject,
             user,
-            authService.getAccessToken.bind(authService)
+            authService.getAccessToken.bind(authService),
           );
           if (results.status === 500) {
             // something went wrong
@@ -400,7 +400,7 @@ export const PublishController = {
             templateDir,
             locationRef,
             user,
-            undefined // TODO: re-enable once we figure out path issue currentProject.settings?.defaultLanguage || 'en-us'
+            undefined, // TODO: re-enable once we figure out path issue currentProject.settings?.defaultLanguage || 'en-us'
           );
           log('Copied template content successfully.');
           // clean up the temporary template & zip directories -- fire and forget

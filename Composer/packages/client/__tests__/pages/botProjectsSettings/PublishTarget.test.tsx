@@ -36,7 +36,7 @@ describe('Publish Target', () => {
   it('should add new publish profile', () => {
     const { getByTestId, getByText } = renderWithRecoilAndCustomDispatchers(
       <PublishTargets projectId={state.projectId} />,
-      initRecoilState
+      initRecoilState,
     );
 
     const addNewPublishProfile = getByTestId('addNewPublishProfile');

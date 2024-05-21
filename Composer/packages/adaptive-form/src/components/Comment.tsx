@@ -59,7 +59,7 @@ const Comment: React.FC<CommentProps> = ({ comment, onChange }) => {
     (_e, val?: string) => {
       onChange(val);
     },
-    [onChange]
+    [onChange],
   );
 
   const handleBlur = useCallback(() => {

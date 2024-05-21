@@ -50,7 +50,7 @@ describe('useListEntityValidation hook', () => {
   it('Should validate list entity name', () => {
     const { result } = renderHook(() => useListEntityValidation(invalidNameListEntity));
     expect(result.current.nameError).toBe(
-      'Spaces and special characters are not allowed. Use letters, numbers, -, or _.'
+      'Spaces and special characters are not allowed. Use letters, numbers, -, or _.',
     );
     expect(result.current.hasErrors).toBeTruthy();
   });

@@ -37,7 +37,7 @@ export class ConversationService {
     newConversationId: string,
     userId: string,
     activeLocale: string,
-    secret: BotSecret
+    secret: BotSecret,
   ) {
     const url = `${this.directlineHostUrl}/conversations/${oldConversationId}/updateConversation`;
     return axios.put(
@@ -53,7 +53,7 @@ export class ConversationService {
         headers: {
           'Content-Type': 'application/json',
         },
-      }
+      },
     );
   }
 
@@ -67,7 +67,7 @@ export class ConversationService {
 
   private async fetchDirectLineObject(
     conversationId: string,
-    directLineOptions: { mode: WebChatMode; endpointId: string; userId: string }
+    directLineOptions: { mode: WebChatMode; endpointId: string; userId: string },
   ) {
     const options = {
       conversationId,
@@ -100,7 +100,7 @@ export class ConversationService {
         headers: {
           'Content-Type': 'application/json',
         },
-      }
+      },
     );
   }
 
@@ -108,7 +108,7 @@ export class ConversationService {
     botUrl: string,
     secret: BotSecret,
     projectId: string,
-    activeLocale: string
+    activeLocale: string,
   ): Promise<ChatData> {
     const webChatMode = 'livechat';
     const user = this.getUser();
@@ -147,7 +147,7 @@ export class ConversationService {
     oldChatData: ChatData,
     requireNewUserID: boolean,
     activeLocale: string,
-    secret: BotSecret
+    secret: BotSecret,
   ) {
     if (oldChatData.directline) {
       oldChatData.directline.end();
@@ -165,7 +165,7 @@ export class ConversationService {
       conversationId,
       user.id,
       activeLocale,
-      secret
+      secret,
     );
     const { endpointId } = resp.data;
     const directline = await this.fetchDirectLineObject(conversationId, {

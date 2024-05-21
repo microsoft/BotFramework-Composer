@@ -33,7 +33,7 @@ const Splitter = styled.div(
     marginLeft: horizontal ? '0' : getCenteredMargin(splitterSize),
     marginTop: horizontal ? getCenteredMargin(splitterSize) : '0',
     background: dragging ? 'black' : 'silver',
-  })
+  }),
 );
 
 /**

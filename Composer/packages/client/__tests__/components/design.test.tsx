@@ -47,7 +47,7 @@ describe('<ProjectTree/>', () => {
         onDialogDeleteTrigger={handleDeleteTrigger}
         onSelect={handleSelect}
       />,
-      initRecoilState
+      initRecoilState,
     );
     const node = await findByTestId('EchoBot-1_Greeting');
     fireEvent.click(node);
@@ -61,7 +61,7 @@ describe('<ProjectTree/>', () => {
     });
     const handleSubmit = jest.fn(() => {});
     const { getByText } = renderWithRecoil(
-      <CreateDialogModal isOpen={isOpen} projectId={projectId} onDismiss={handleDismiss} onSubmit={handleSubmit} />
+      <CreateDialogModal isOpen={isOpen} projectId={projectId} onDismiss={handleDismiss} onSubmit={handleSubmit} />,
     );
     const cancelButton = getByText('Cancel');
     fireEvent.click(cancelButton);
@@ -81,7 +81,7 @@ describe('<ProjectTree/>', () => {
         projectId={projectId}
         onDismiss={handleDismiss}
         onSubmit={handleSubmit}
-      />
+      />,
     );
     const cancelButton = getByText('Cancel');
     fireEvent.click(cancelButton);

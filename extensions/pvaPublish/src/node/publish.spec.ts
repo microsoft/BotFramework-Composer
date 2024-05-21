@@ -62,7 +62,7 @@ describe('publish()', () => {
       mockBotProject,
       { comment: 'testing' },
       undefined,
-      mockGetAccessToken
+      mockGetAccessToken,
     );
 
     expect(result.status).toBe(202);
@@ -71,7 +71,7 @@ describe('publish()', () => {
     expect(innerResult.comment).toBe('testing');
     expect(innerResult.eTag).toBe('W/"version"');
     expect(innerResult.log).toEqual(
-      mockDiagnostics.map((diag) => `---\n${JSON.stringify(diag, null, 2)}\n---\n`).join('\n')
+      mockDiagnostics.map((diag) => `---\n${JSON.stringify(diag, null, 2)}\n---\n`).join('\n'),
     );
     expect(innerResult.id).toBe('operationId');
     expect(innerResult.action).toEqual(null);
@@ -87,7 +87,7 @@ describe('publish()', () => {
       mockBotProject,
       { comment: 'testing' },
       undefined,
-      mockGetAccessToken
+      mockGetAccessToken,
     );
 
     expect(result.status).toBe(502);
@@ -104,7 +104,7 @@ describe('publish()', () => {
       mockBotProject,
       { comment: 'testing' },
       undefined,
-      mockGetAccessToken
+      mockGetAccessToken,
     );
 
     expect(result.status).toBe(500);

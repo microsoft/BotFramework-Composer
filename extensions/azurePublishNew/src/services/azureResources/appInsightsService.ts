@@ -7,7 +7,7 @@ import { throwNotImplementedError } from '../throwNotImplementedError';
 
 const createAppInsightsService = (token: string, subscriptionId: string) => {
   const tokenCredentials = new TokenCredentials(token);
-  // @ts-expect-error
+  // @ts-expect-error types missmatch
   const applicationInsightsManagementClient = new ApplicationInsightsManagementClient(tokenCredentials, subscriptionId);
 
   const checkNameAvailability = async () => {

@@ -102,7 +102,7 @@ export const getTeachingBubble = (id: string | undefined): TeachingBubble => {
     case 'mainDialog':
       return {
         content: formatMessage(
-          'The main dialog is the foundation of every bot created in Composer. There is only one main dialog and all other dialogs are children of it. It gets initialized every time your bot runs and is the entry point into the bot.'
+          'The main dialog is the foundation of every bot created in Composer. There is only one main dialog and all other dialogs are children of it. It gets initialized every time your bot runs and is the entry point into the bot.',
         ),
         headline: formatMessage('Main dialog'),
         helpLink: 'https://docs.microsoft.com/en-us/composer/concept-dialog',
@@ -111,7 +111,7 @@ export const getTeachingBubble = (id: string | undefined): TeachingBubble => {
     case 'trigger':
       return {
         content: formatMessage(
-          'Triggers are the main component of a dialog, they are how you catch and respond to events. Each trigger has a condition and a collection of actions to execute when the condition is met.'
+          'Triggers are the main component of a dialog, they are how you catch and respond to events. Each trigger has a condition and a collection of actions to execute when the condition is met.',
         ),
         headline: formatMessage('Add a new trigger'),
         helpLink: 'https://docs.microsoft.com/en-us/composer/concept-events-and-triggers',
@@ -120,7 +120,7 @@ export const getTeachingBubble = (id: string | undefined): TeachingBubble => {
     case 'actions':
       return {
         content: formatMessage(
-          'Actions are the main component of a trigger; they are what enable your bot to take action whether in response to user input or any other event that may occur.'
+          'Actions are the main component of a trigger; they are what enable your bot to take action whether in response to user input or any other event that may occur.',
         ),
         headline: formatMessage('Actions'),
         helpLink: 'https://docs.microsoft.com/en-us/composer/concept-dialog#action',
@@ -129,7 +129,7 @@ export const getTeachingBubble = (id: string | undefined): TeachingBubble => {
     case 'userInput':
       return {
         content: formatMessage(
-          'The User Input page is where the Language Understanding editor locates. From here users can view all the Language Understanding templates and edit them.'
+          'The User Input page is where the Language Understanding editor locates. From here users can view all the Language Understanding templates and edit them.',
         ),
         headline: formatMessage('User input'),
         helpLink: 'https://docs.microsoft.com/en-us/composer/concept-language-understanding',
@@ -138,7 +138,7 @@ export const getTeachingBubble = (id: string | undefined): TeachingBubble => {
     case 'botResponses':
       return {
         content: formatMessage(
-          'The Bot Responses page is where the Language Generation (LG) editor locates. From here users can view all the LG templates and edit them.'
+          'The Bot Responses page is where the Language Generation (LG) editor locates. From here users can view all the LG templates and edit them.',
         ),
         headline: formatMessage('Bot responses'),
         helpLink: 'https://docs.microsoft.com/en-us/composer/concept-language-generation',
@@ -159,7 +159,7 @@ export const getTeachingBubble = (id: string | undefined): TeachingBubble => {
                 {children}
               </a>
             ),
-          }
+          },
         ),
         headline: formatMessage('Test with Web Chat or Emulator'),
         calloutProps: {

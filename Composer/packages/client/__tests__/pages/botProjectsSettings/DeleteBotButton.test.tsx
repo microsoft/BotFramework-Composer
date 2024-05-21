@@ -15,7 +15,7 @@ const state = {
 describe('Delete Bot Button', () => {
   it('should render Delete Bot Button', () => {
     const { getByText } = renderWithRecoil(
-      <DeleteBotButton projectId={state.projectId} scrollToSectionId="deleteBot" />
+      <DeleteBotButton projectId={state.projectId} scrollToSectionId="deleteBot" />,
     );
     const deleteButton = getByText('Delete');
     act(() => {

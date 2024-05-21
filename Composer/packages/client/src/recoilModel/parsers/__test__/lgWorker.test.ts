@@ -10,6 +10,7 @@ jest.mock('./../workers/lgParser.worker.ts', () => {
     onmessage = (data) => data;
 
     postMessage = (data) => {
+      // eslint-disable-next-line @typescript-eslint/no-var-requires
       const payload = require('../workers/lgParser.worker').handleMessage(data);
       this.onmessage({ data: { id: data.id, payload } });
     };
@@ -18,6 +19,7 @@ jest.mock('./../workers/lgParser.worker.ts', () => {
   return Test;
 });
 
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const lgCache = require('../workers/lgParser.worker').cache;
 
 const lgFiles = [
@@ -32,7 +34,7 @@ const getLgTemplate = (name, body): LgTemplate =>
   ({
     name,
     body,
-  } as LgTemplate);
+  }) as LgTemplate;
 
 describe('test lg worker', () => {
   it('cache the new project', async () => {
@@ -65,7 +67,7 @@ describe('test lg worker', () => {
       'test',
       lgFiles[0],
       [getLgTemplate('Test1', '-add1'), getLgTemplate('Test2', '-add2')],
-      lgFiles
+      lgFiles,
     );
     const expected = {
       body: '-add2',
@@ -84,7 +86,7 @@ describe('test lg worker', () => {
       lgFiles[0],
       'Test2',
       getLgTemplate('Test2', '-update'),
-      lgFiles
+      lgFiles,
     );
     const expected = {
       body: '-update',

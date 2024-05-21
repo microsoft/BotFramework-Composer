@@ -14,7 +14,7 @@ const DefaultBranchKey = AdaptiveFieldNames.DefaultCase;
 
 export function transformSwitchCondition(
   input,
-  jsonpath: string
+  jsonpath: string,
 ): { condition: IndexedNode; choice: IndexedNode; branches: IndexedNode[] } | null {
   if (!input || typeof input !== 'object') return null;
 
@@ -39,7 +39,7 @@ export function transformSwitchCondition(
       $kind: AdaptiveKinds.StepGroup,
       label: DefaultBranchKey,
       children: defaultSteps,
-    })
+    }),
   );
 
   if (!cases || !Array.isArray(cases)) return result;
@@ -52,7 +52,7 @@ export function transformSwitchCondition(
         label: value,
         children: actions || [],
       });
-    })
+    }),
   );
 
   inheritParentProperties(input, [result.condition, result.choice, ...result.branches]);

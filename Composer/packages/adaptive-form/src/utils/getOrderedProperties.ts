@@ -12,7 +12,7 @@ export function getOrderedProperties(
   schema: JSONSchema7,
   baseUiOptions: UIOptions,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  data: any
+  data: any,
 ): OrderConfig {
   const uiOptions = cloneDeep(baseUiOptions);
   const { order = ['*'] } = uiOptions;
@@ -52,7 +52,7 @@ export function getOrderedProperties(
   }, [] as OrderConfig);
 
   const allProperties = Object.keys(schema.properties ?? {}).filter(
-    (p) => !p.startsWith('$') && !hiddenFieldSet.has(p)
+    (p) => !p.startsWith('$') && !hiddenFieldSet.has(p),
   );
 
   const restIdx = orderedFields.indexOf('*');
@@ -71,7 +71,7 @@ export function getOrderedProperties(
           title: schema.title,
           errorMsg,
           options: JSON.stringify(uiOptions, null, 2),
-        })
+        }),
       );
     }
   }

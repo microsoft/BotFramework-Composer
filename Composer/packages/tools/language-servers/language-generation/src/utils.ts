@@ -52,7 +52,7 @@ export type LGFileResolver = (id: string) => LgFile | undefined;
 export function getRangeAtPosition(
   document: TextDocument,
   position: Position,
-  includesDotAndAt?: boolean
+  includesDotAndAt?: boolean,
 ): Range | undefined {
   const text = document.getText();
   const line = position.line;

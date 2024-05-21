@@ -45,7 +45,7 @@ const postRequestWithRetry = async (requestUri: string, requestOptions: AxiosReq
       } else if (retryCount == 0) {
         throw createCustomizeError(
           ProvisionErrors.CREATE_APP_REGISTRATION,
-          'App create failed! Please file an issue on Github.'
+          'App create failed! Please file an issue on Github.',
         );
       } else {
         await sleep(3000);
@@ -93,7 +93,7 @@ const appRegistrationProvisionMethod = (provisionConfig: ProvisionServiceConfig)
 
   return async (
     resourceConfig: AppRegistrationResourceConfig,
-    workingSet: ProvisionWorkingSet
+    workingSet: ProvisionWorkingSet,
   ): Promise<ProvisionWorkingSet> => {
     const { appName } = resourceConfig;
     const { appId, id } = await createApp(appName);

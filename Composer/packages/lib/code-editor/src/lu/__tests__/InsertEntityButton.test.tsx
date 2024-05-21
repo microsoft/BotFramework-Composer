@@ -61,7 +61,7 @@ describe('<InsertEntityButton />', () => {
         luFile={luFile}
         tagEntityDisabled={false}
         onInsertEntity={callback}
-      />
+      />,
     );
     fireEvent.click(screen.getByTestId('menuButton'));
     fireEvent.click(screen.getByText('entity10'));
@@ -76,7 +76,7 @@ describe('<InsertEntityButton />', () => {
         luFile={luFile}
         tagEntityDisabled={false}
         onInsertEntity={jest.fn()}
-      />
+      />,
     );
 
     fireEvent.click(screen.getByTestId('menuButton'));

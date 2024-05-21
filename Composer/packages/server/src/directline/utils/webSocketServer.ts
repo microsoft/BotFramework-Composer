@@ -157,7 +157,7 @@ export class WebSocketServer {
   }
 
   public static sendTrafficToSubscribers(
-    data: Partial<ConversationActivityTraffic> | ConversationNetworkTrafficItem | ConversationNetworkErrorItem
+    data: Partial<ConversationActivityTraffic> | ConversationNetworkTrafficItem | ConversationNetworkErrorItem,
   ): void {
     this.sockets[socketTrafficChannelKey]?.send(JSON.stringify(data));
   }

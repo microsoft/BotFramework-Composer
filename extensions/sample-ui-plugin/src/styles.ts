@@ -46,8 +46,15 @@ export const textField = css`
 
 // copied from Fluent
 export const label = css`
-  font-family: 'Segoe UI', 'Segoe UI Web (West European)', 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto,
-    'Helvetica Neue', sans-serif;
+  font-family:
+    'Segoe UI',
+    'Segoe UI Web (West European)',
+    'Segoe UI',
+    -apple-system,
+    BlinkMacSystemFont,
+    Roboto,
+    'Helvetica Neue',
+    sans-serif;
   font-size: 14px;
   font-weight: 600;
   color: rgb(50, 49, 48);
@@ -64,8 +71,15 @@ export const shortTextField = css`
 `;
 
 export const output = css`
-  font-family: 'Segoe UI', 'Segoe UI Web (West European)', 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto,
-    'Helvetica Neue', sans-serif;
+  font-family:
+    'Segoe UI',
+    'Segoe UI Web (West European)',
+    'Segoe UI',
+    -apple-system,
+    BlinkMacSystemFont,
+    Roboto,
+    'Helvetica Neue',
+    sans-serif;
   font-size: 14px;
   font-weight: 400;
 `;

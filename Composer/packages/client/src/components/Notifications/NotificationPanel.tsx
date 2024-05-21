@@ -60,7 +60,7 @@ const NotificationPanel: React.FC<NotificationPanelProps> = ({
         {defaultRender?.(props)}
       </div>
     ),
-    [handleClearAll]
+    [handleClearAll],
   );
 
   return (

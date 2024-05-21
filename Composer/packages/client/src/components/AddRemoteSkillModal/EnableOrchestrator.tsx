@@ -44,7 +44,7 @@ const EnableOrchestrator: React.FC<OrchestratorProps> = (props) => {
         <Checkbox
           defaultChecked
           label={formatMessage(
-            'Use Orchestrator for multi-bot projects (bots that consist of multiple bots or connect to skills).'
+            'Use Orchestrator for multi-bot projects (bots that consist of multiple bots or connect to skills).',
           )}
           styles={{ root: { margin: '20px 0' } }}
           onChange={onChange}

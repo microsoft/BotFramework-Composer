@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/ban-ts-ignore */
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
@@ -20,7 +20,7 @@ export const useResizeObserver = <T extends HTMLElement>(
   // @ts-ignore
   resizeCallback: (entries: ResizeObserverEntry[]) => void,
   // @ts-ignore
-  options?: ResizeObserverOptions
+  options?: ResizeObserverOptions,
 ) => {
   // @ts-ignore
   const resizeObserver = React.useRef(new ResizeObserver(resizeCallback));

@@ -38,14 +38,14 @@ const updateLgFiles = (
     deletes?: LgFile[];
     updates?: LgFile[];
   },
-  needUpdate?: (current: LgFile, changed: LgFile) => boolean
+  needUpdate?: (current: LgFile, changed: LgFile) => boolean,
 ) => {
   const { updates, adds, deletes } = changes;
 
   // updates
   updates?.forEach((lgFile) => {
     set(lgFileState({ projectId, lgFileId: lgFile.id }), (preFile) =>
-      needUpdate ? (needUpdate(preFile, lgFile) ? lgFile : preFile) : lgFile
+      needUpdate ? (needUpdate(preFile, lgFile) ? lgFile : preFile) : lgFile,
     );
   });
 
@@ -58,7 +58,7 @@ const updateLgFiles = (
   if (adds?.length) {
     adds.forEach((lgFile) => {
       set(lgFileState({ projectId, lgFileId: lgFile.id }), (preFile) =>
-        needUpdate ? (needUpdate(preFile, lgFile) ? lgFile : preFile) : lgFile
+        needUpdate ? (needUpdate(preFile, lgFile) ? lgFile : preFile) : lgFile,
       );
     });
     set(lgFileIdsState(projectId), (ids) => ids.concat(adds.map((file) => file.id)));
@@ -69,7 +69,7 @@ const updateLgFiles = (
 export const getRelatedLgFileChanges = async (
   projectId: string,
   originLgFiles: LgFile[],
-  updatedLgFile: LgFile
+  updatedLgFile: LgFile,
 ): Promise<LgFile[]> => {
   const { id } = updatedLgFile;
   const dialogId = getBaseName(id);
@@ -97,7 +97,7 @@ export const getRelatedLgFileChanges = async (
       };
     });
   const deletedTemplates = differenceBy(originLgFile.templates, updatedLgFile.templates, 'name').filter(
-    templateIsNotEmpty
+    templateIsNotEmpty,
   );
   const onlyAdds = addedTemplates.length && !deletedTemplates.length;
   const onlyDeletes = !addedTemplates.length && deletedTemplates.length;
@@ -117,7 +117,7 @@ export const getRelatedLgFileChanges = async (
         projectId,
         newLgFile,
         deletedTemplates.map(({ name }) => name),
-        lgFiles
+        lgFiles,
       )) as LgFile;
       changes.push(newLgFile);
     }
@@ -129,7 +129,7 @@ export const getRelatedLgFileChanges = async (
         file,
         deletedTemplates[0].name,
         addedTemplates[0],
-        lgFiles
+        lgFiles,
       )) as LgFile;
       changes.push(newLgFile);
     }
@@ -141,7 +141,7 @@ export const getRelatedLgFileChanges = async (
 // when do create, passed id do not carried with locale
 export const createLgFileState = async (
   callbackHelpers: CallbackInterface,
-  { id, content, projectId }: { id: string; content: string; projectId: string }
+  { id, content, projectId }: { id: string; content: string; projectId: string },
 ) => {
   try {
     const { snapshot } = callbackHelpers;
@@ -178,7 +178,7 @@ export const createLgFileState = async (
 
 export const removeLgFileState = async (
   callbackHelpers: CallbackInterface,
-  { id, projectId }: { id: string; projectId: string }
+  { id, projectId }: { id: string; projectId: string },
 ) => {
   const { snapshot } = callbackHelpers;
   const lgFiles = await snapshot.getPromise(lgFilesSelectorFamily(projectId));
@@ -195,291 +195,254 @@ export const removeLgFileState = async (
 
 export const lgDispatcher = () => {
   const createLgFile = useRecoilCallback(
-    (callbackHelpers: CallbackInterface) => async ({
-      id,
-      content,
-      projectId,
-    }: {
-      id: string;
-      content: string;
-      projectId: string;
-    }) => {
-      try {
-        await createLgFileState(callbackHelpers, { id, content, projectId });
-      } catch (error) {
-        setError(callbackHelpers, error);
-      }
-    }
+    (callbackHelpers: CallbackInterface) =>
+      async ({ id, content, projectId }: { id: string; content: string; projectId: string }) => {
+        try {
+          await createLgFileState(callbackHelpers, { id, content, projectId });
+        } catch (error) {
+          setError(callbackHelpers, error);
+        }
+      },
   );
 
   const removeLgFile = useRecoilCallback(
-    (callbackHelpers: CallbackInterface) => async ({ id, projectId }: { id: string; projectId: string }) => {
-      await removeLgFileState(callbackHelpers, { id, projectId });
-    }
+    (callbackHelpers: CallbackInterface) =>
+      async ({ id, projectId }: { id: string; projectId: string }) => {
+        await removeLgFileState(callbackHelpers, { id, projectId });
+      },
   );
 
   const updateLgFile = useRecoilCallback(
-    (callbackHelpers: CallbackInterface) => async ({
-      id,
-      content,
-      projectId,
-    }: {
-      id: string;
-      content: string;
-      projectId: string;
-    }) => {
-      try {
-        const { set, snapshot } = callbackHelpers;
-        //set content first
-        set(lgFileState({ projectId, lgFileId: id }), (prevLgFile) => {
-          return {
-            ...prevLgFile,
-            content,
-          };
-        });
+    (callbackHelpers: CallbackInterface) =>
+      async ({ id, content, projectId }: { id: string; content: string; projectId: string }) => {
+        try {
+          const { set, snapshot } = callbackHelpers;
+          //set content first
+          set(lgFileState({ projectId, lgFileId: id }), (prevLgFile) => {
+            return {
+              ...prevLgFile,
+              content,
+            };
+          });
 
+          const lgFiles = await snapshot.getPromise(lgFilesSelectorFamily(projectId));
+          const updatedFile = (await LgWorker.parse(projectId, id, content, lgFiles)) as LgFile;
+          const updatedFiles = await getRelatedLgFileChanges(projectId, lgFiles, updatedFile);
+
+          // compare to drop expired change on current id lg file.
+          /**
+           * Why other methods do not need double check content?
+           * Because this method already did set content before call updateLgFiles.
+           */
+
+          updateLgFiles(callbackHelpers, projectId, { updates: updatedFiles }, (current, changed) => {
+            // compare to drop expired content already setted above.
+            return current.id === id ? current?.content === changed?.content : true;
+          });
+
+          // if changes happen on common.lg, async re-parse all.
+          if (getBaseName(id) === 'common') {
+            const { reparseAllLgFiles } = await snapshot.getPromise(dispatcherState);
+            reparseAllLgFiles({ projectId });
+          }
+        } catch (error) {
+          setError(callbackHelpers, error);
+        }
+      },
+  );
+
+  const updateLgTemplate = useRecoilCallback(
+    (callbackHelpers: CallbackInterface) =>
+      async ({
+        id,
+        templateName,
+        template,
+        projectId,
+      }: {
+        id: string;
+        templateName: string;
+        template: LgTemplate;
+        projectId: string;
+      }) => {
+        const { snapshot } = callbackHelpers;
         const lgFiles = await snapshot.getPromise(lgFilesSelectorFamily(projectId));
-        const updatedFile = (await LgWorker.parse(projectId, id, content, lgFiles)) as LgFile;
-        const updatedFiles = await getRelatedLgFileChanges(projectId, lgFiles, updatedFile);
+        const lgFile = lgFiles.find((file) => file.id === id);
+        if (!lgFile) return lgFiles;
+        const sameIdOtherLocaleFiles = lgFiles.filter((file) => getBaseName(file.id) === getBaseName(id));
 
-        // compare to drop expired change on current id lg file.
-        /**
-         * Why other methods do not need double check content?
-         * Because this method already did set content before call updateLgFiles.
-         */
+        // create need sync to multi locale file.
+        const originTemplate = lgFile.templates.find(({ name }) => name === templateName);
+        if (!originTemplate) {
+          await createLgTemplate({ id, template, projectId });
+          return;
+        }
 
-        updateLgFiles(callbackHelpers, projectId, { updates: updatedFiles }, (current, changed) => {
-          // compare to drop expired content already setted above.
-          return current.id === id ? current?.content === changed?.content : true;
-        });
+        try {
+          if (template.name !== templateName) {
+            // name change, need update cross multi locale file.
+            const changes: LgFile[] = [];
+
+            for (const item of sameIdOtherLocaleFiles) {
+              const updatedFile = (await LgWorker.updateTemplate(
+                projectId,
+                item,
+                templateName,
+                { name: template.name },
+                lgFiles,
+              )) as LgFile;
+              changes.push(updatedFile);
+            }
+            updateLgFiles(callbackHelpers, projectId, { updates: changes });
+          } else {
+            // body change, only update current locale file
+            const updatedFile = (await LgWorker.updateTemplate(
+              projectId,
+              lgFile,
+              templateName,
+              { body: template.body },
+              lgFiles,
+            )) as LgFile;
+            updateLgFiles(callbackHelpers, projectId, { updates: [updatedFile] });
+          }
+        } catch (error) {
+          setError(callbackHelpers, error);
+          return;
+        }
 
         // if changes happen on common.lg, async re-parse all.
         if (getBaseName(id) === 'common') {
           const { reparseAllLgFiles } = await snapshot.getPromise(dispatcherState);
           reparseAllLgFiles({ projectId });
         }
-      } catch (error) {
-        setError(callbackHelpers, error);
-      }
-    }
-  );
-
-  const updateLgTemplate = useRecoilCallback(
-    (callbackHelpers: CallbackInterface) => async ({
-      id,
-      templateName,
-      template,
-      projectId,
-    }: {
-      id: string;
-      templateName: string;
-      template: LgTemplate;
-      projectId: string;
-    }) => {
-      const { snapshot } = callbackHelpers;
-      const lgFiles = await snapshot.getPromise(lgFilesSelectorFamily(projectId));
-      const lgFile = lgFiles.find((file) => file.id === id);
-      if (!lgFile) return lgFiles;
-      const sameIdOtherLocaleFiles = lgFiles.filter((file) => getBaseName(file.id) === getBaseName(id));
-
-      // create need sync to multi locale file.
-      const originTemplate = lgFile.templates.find(({ name }) => name === templateName);
-      if (!originTemplate) {
-        await createLgTemplate({ id, template, projectId });
-        return;
-      }
-
-      try {
-        if (template.name !== templateName) {
-          // name change, need update cross multi locale file.
-          const changes: LgFile[] = [];
-
-          for (const item of sameIdOtherLocaleFiles) {
-            const updatedFile = (await LgWorker.updateTemplate(
-              projectId,
-              item,
-              templateName,
-              { name: template.name },
-              lgFiles
-            )) as LgFile;
-            changes.push(updatedFile);
-          }
-          updateLgFiles(callbackHelpers, projectId, { updates: changes });
-        } else {
-          // body change, only update current locale file
-          const updatedFile = (await LgWorker.updateTemplate(
-            projectId,
-            lgFile,
-            templateName,
-            { body: template.body },
-            lgFiles
-          )) as LgFile;
-          updateLgFiles(callbackHelpers, projectId, { updates: [updatedFile] });
-        }
-      } catch (error) {
-        setError(callbackHelpers, error);
-        return;
-      }
-
-      // if changes happen on common.lg, async re-parse all.
-      if (getBaseName(id) === 'common') {
-        const { reparseAllLgFiles } = await snapshot.getPromise(dispatcherState);
-        reparseAllLgFiles({ projectId });
-      }
-    }
+      },
   );
 
   const createLgTemplate = useRecoilCallback(
-    (callbackHelpers: CallbackInterface) => async ({
-      id,
-      template,
-      projectId,
-    }: {
-      id: string;
-      template: LgTemplate;
-      projectId: string;
-    }) => {
-      const { snapshot } = callbackHelpers;
-      const lgFiles = await snapshot.getPromise(lgFilesSelectorFamily(projectId));
-      const lgFile = lgFiles.find((file) => file.id === id);
-      if (!lgFile) return lgFiles;
-      const updatedFile = (await LgWorker.addTemplate(projectId, lgFile, template, lgFiles)) as LgFile;
-      const updatedFiles = await getRelatedLgFileChanges(projectId, lgFiles, updatedFile);
-      updateLgFiles(callbackHelpers, projectId, { updates: updatedFiles });
-    }
+    (callbackHelpers: CallbackInterface) =>
+      async ({ id, template, projectId }: { id: string; template: LgTemplate; projectId: string }) => {
+        const { snapshot } = callbackHelpers;
+        const lgFiles = await snapshot.getPromise(lgFilesSelectorFamily(projectId));
+        const lgFile = lgFiles.find((file) => file.id === id);
+        if (!lgFile) return lgFiles;
+        const updatedFile = (await LgWorker.addTemplate(projectId, lgFile, template, lgFiles)) as LgFile;
+        const updatedFiles = await getRelatedLgFileChanges(projectId, lgFiles, updatedFile);
+        updateLgFiles(callbackHelpers, projectId, { updates: updatedFiles });
+      },
   );
 
   const createLgTemplates = useRecoilCallback(
-    (callbackHelpers: CallbackInterface) => async ({
-      id,
-      templates,
-      projectId,
-    }: {
-      id: string;
-      templates: LgTemplate[];
-      projectId: string;
-    }) => {
-      try {
-        const { snapshot } = callbackHelpers;
-        const lgFiles = await snapshot.getPromise(lgFilesSelectorFamily(projectId));
-        const lgFile = lgFiles.find((file) => file.id === id);
-        if (!lgFile) return lgFiles;
-        const updatedFile = (await LgWorker.addTemplates(projectId, lgFile, templates, lgFiles)) as LgFile;
-        const updatedFiles = await getRelatedLgFileChanges(projectId, lgFiles, updatedFile);
-        updateLgFiles(callbackHelpers, projectId, { updates: updatedFiles });
-      } catch (error) {
-        setError(callbackHelpers, error);
-      }
-    }
+    (callbackHelpers: CallbackInterface) =>
+      async ({ id, templates, projectId }: { id: string; templates: LgTemplate[]; projectId: string }) => {
+        try {
+          const { snapshot } = callbackHelpers;
+          const lgFiles = await snapshot.getPromise(lgFilesSelectorFamily(projectId));
+          const lgFile = lgFiles.find((file) => file.id === id);
+          if (!lgFile) return lgFiles;
+          const updatedFile = (await LgWorker.addTemplates(projectId, lgFile, templates, lgFiles)) as LgFile;
+          const updatedFiles = await getRelatedLgFileChanges(projectId, lgFiles, updatedFile);
+          updateLgFiles(callbackHelpers, projectId, { updates: updatedFiles });
+        } catch (error) {
+          setError(callbackHelpers, error);
+        }
+      },
   );
 
   const removeLgTemplate = useRecoilCallback(
-    (callbackHelpers: CallbackInterface) => async ({
-      id,
-      templateName,
-      projectId,
-    }: {
-      id: string;
-      templateName: string;
-      projectId: string;
-    }) => {
-      const { snapshot } = callbackHelpers;
-      const lgFiles = await snapshot.getPromise(lgFilesSelectorFamily(projectId));
-      const lgFile = lgFiles.find((file) => file.id === id);
-      if (!lgFile) return lgFiles;
-      try {
-        const updatedFile = (await LgWorker.removeTemplate(projectId, lgFile, templateName, lgFiles)) as LgFile;
+    (callbackHelpers: CallbackInterface) =>
+      async ({ id, templateName, projectId }: { id: string; templateName: string; projectId: string }) => {
+        const { snapshot } = callbackHelpers;
+        const lgFiles = await snapshot.getPromise(lgFilesSelectorFamily(projectId));
+        const lgFile = lgFiles.find((file) => file.id === id);
+        if (!lgFile) return lgFiles;
+        try {
+          const updatedFile = (await LgWorker.removeTemplate(projectId, lgFile, templateName, lgFiles)) as LgFile;
 
-        const updatedFiles = await getRelatedLgFileChanges(projectId, lgFiles, updatedFile);
-        updateLgFiles(callbackHelpers, projectId, { updates: updatedFiles });
-      } catch (error) {
-        setError(callbackHelpers, error);
-      }
-    }
+          const updatedFiles = await getRelatedLgFileChanges(projectId, lgFiles, updatedFile);
+          updateLgFiles(callbackHelpers, projectId, { updates: updatedFiles });
+        } catch (error) {
+          setError(callbackHelpers, error);
+        }
+      },
   );
 
   const removeLgTemplates = useRecoilCallback(
-    (callbackHelpers: CallbackInterface) => async ({
-      id,
-      templateNames,
-      projectId,
-    }: {
-      id: string;
-      templateNames: string[];
-      projectId: string;
-    }) => {
-      try {
-        const { snapshot } = callbackHelpers;
-        const lgFiles = await snapshot.getPromise(lgFilesSelectorFamily(projectId));
-        const lgFile = lgFiles.find((file) => file.id === id);
-        if (!lgFile) return lgFiles;
+    (callbackHelpers: CallbackInterface) =>
+      async ({ id, templateNames, projectId }: { id: string; templateNames: string[]; projectId: string }) => {
+        try {
+          const { snapshot } = callbackHelpers;
+          const lgFiles = await snapshot.getPromise(lgFilesSelectorFamily(projectId));
+          const lgFile = lgFiles.find((file) => file.id === id);
+          if (!lgFile) return lgFiles;
 
-        const updatedFile = (await LgWorker.removeTemplates(projectId, lgFile, templateNames, lgFiles)) as LgFile;
+          const updatedFile = (await LgWorker.removeTemplates(projectId, lgFile, templateNames, lgFiles)) as LgFile;
 
-        const updatedFiles = await getRelatedLgFileChanges(projectId, lgFiles, updatedFile);
-        updateLgFiles(callbackHelpers, projectId, { updates: updatedFiles });
-      } catch (error) {
-        setError(callbackHelpers, error);
-      }
-    }
+          const updatedFiles = await getRelatedLgFileChanges(projectId, lgFiles, updatedFile);
+          updateLgFiles(callbackHelpers, projectId, { updates: updatedFiles });
+        } catch (error) {
+          setError(callbackHelpers, error);
+        }
+      },
   );
 
   const copyLgTemplate = useRecoilCallback(
-    (callbackHelpers: CallbackInterface) => async ({
-      id,
-      fromTemplateName,
-      toTemplateName,
-      projectId,
-    }: {
-      id: string;
-      fromTemplateName: string;
-      toTemplateName: string;
-      projectId: string;
-    }) => {
-      try {
-        const { snapshot } = callbackHelpers;
-        const lgFiles = await snapshot.getPromise(lgFilesSelectorFamily(projectId));
-        const lgFile = lgFiles.find((file) => file.id === id);
-        if (!lgFile) return lgFiles;
-        const updatedFile = (await LgWorker.copyTemplate(
-          projectId,
-          lgFile,
-          fromTemplateName,
-          toTemplateName,
-          lgFiles
-        )) as LgFile;
-        const updatedFiles = await getRelatedLgFileChanges(projectId, lgFiles, updatedFile);
-        updateLgFiles(callbackHelpers, projectId, { updates: updatedFiles });
-      } catch (error) {
-        setError(callbackHelpers, error);
-      }
-    }
+    (callbackHelpers: CallbackInterface) =>
+      async ({
+        id,
+        fromTemplateName,
+        toTemplateName,
+        projectId,
+      }: {
+        id: string;
+        fromTemplateName: string;
+        toTemplateName: string;
+        projectId: string;
+      }) => {
+        try {
+          const { snapshot } = callbackHelpers;
+          const lgFiles = await snapshot.getPromise(lgFilesSelectorFamily(projectId));
+          const lgFile = lgFiles.find((file) => file.id === id);
+          if (!lgFile) return lgFiles;
+          const updatedFile = (await LgWorker.copyTemplate(
+            projectId,
+            lgFile,
+            fromTemplateName,
+            toTemplateName,
+            lgFiles,
+          )) as LgFile;
+          const updatedFiles = await getRelatedLgFileChanges(projectId, lgFiles, updatedFile);
+          updateLgFiles(callbackHelpers, projectId, { updates: updatedFiles });
+        } catch (error) {
+          setError(callbackHelpers, error);
+        }
+      },
   );
 
   const reparseAllLgFiles = useRecoilCallback(
-    (callbackHelpers: CallbackInterface) => async ({ projectId }: { projectId: string }) => {
-      try {
-        const { snapshot } = callbackHelpers;
-        const lgFiles = await snapshot.getPromise(lgFilesSelectorFamily(projectId));
-        const reparsedLgFiles: LgFile[] = [];
-        for (const file of lgFiles) {
-          const reparsedFile = (await LgDiagnosticWorker.parse(projectId, file.id, file.content, lgFiles)) as LgFile;
-          reparsedLgFiles.push({ ...file, diagnostics: reparsedFile.diagnostics });
+    (callbackHelpers: CallbackInterface) =>
+      async ({ projectId }: { projectId: string }) => {
+        try {
+          const { snapshot } = callbackHelpers;
+          const lgFiles = await snapshot.getPromise(lgFilesSelectorFamily(projectId));
+          const reparsedLgFiles: LgFile[] = [];
+          for (const file of lgFiles) {
+            const reparsedFile = (await LgDiagnosticWorker.parse(projectId, file.id, file.content, lgFiles)) as LgFile;
+            reparsedLgFiles.push({ ...file, diagnostics: reparsedFile.diagnostics });
+          }
+          updateLgFiles(callbackHelpers, projectId, { updates: reparsedLgFiles }, (current, changed) => {
+            // compare to drop expired content already setted above.
+            return current?.content === changed?.content;
+          });
+        } catch (error) {
+          setError(callbackHelpers, error);
         }
-        updateLgFiles(callbackHelpers, projectId, { updates: reparsedLgFiles }, (current, changed) => {
-          // compare to drop expired content already setted above.
-          return current?.content === changed?.content;
-        });
-      } catch (error) {
-        setError(callbackHelpers, error);
-      }
-    }
+      },
   );
 
   const updateAllLgFiles = useRecoilCallback(
-    ({ set }: CallbackInterface) => ({ projectId, lgFiles }: { projectId: string; lgFiles: LgFile[] }) => {
-      set(lgFilesSelectorFamily(projectId), lgFiles);
-    }
+    ({ set }: CallbackInterface) =>
+      ({ projectId, lgFiles }: { projectId: string; lgFiles: LgFile[] }) => {
+        set(lgFilesSelectorFamily(projectId), lgFiles);
+      },
   );
 
   return {

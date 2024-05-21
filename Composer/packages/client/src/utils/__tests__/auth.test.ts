@@ -9,7 +9,7 @@ const jwtToken =
 
 describe('isTokenExpired', () => {
   it('is false when token is valid', () => {
-    // @ts-ignore
+    // @ts-expect-error: test
     Date.now = jest.spyOn(Date, 'now').mockImplementation(() => 1567630800000); // 2019-09-04 14:00 PDT
     expect(isTokenExpired(jwtToken)).toBe(false);
   });
@@ -19,11 +19,11 @@ describe('isTokenExpired', () => {
   });
 
   it('is true when token is expired', () => {
-    // @ts-ignore
+    // @ts-expect-error: test
     Date.now = jest.spyOn(Date, 'now').mockImplementation(() => 1567717200000); // 2019-09-05 14:00 PDT
     expect(isTokenExpired(jwtToken)).toBe(true);
 
-    // @ts-ignore
+    // @ts-expect-error: test
     Date.now = jest.spyOn(Date, 'now').mockImplementation(() => 1567803600000); // 2019-09-06 14:00 PDT
     expect(isTokenExpired(jwtToken)).toBe(true);
   });

@@ -11,7 +11,7 @@ export async function copyDir(
   srcStorage: IFileStorage,
   dstDir: string,
   dstStorage: IFileStorage,
-  pathsToExclude?: Set<string>
+  pathsToExclude?: Set<string>,
 ) {
   if (!(await srcStorage.exists(srcDir)) || !(await srcStorage.stat(srcDir)).isDir) {
     throw new Error(`No such dir ${srcDir}}`);

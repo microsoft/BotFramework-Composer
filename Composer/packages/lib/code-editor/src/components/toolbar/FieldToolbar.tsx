@@ -86,21 +86,21 @@ export const FieldToolbar = React.memo((props: FieldToolbarProps) => {
   const { functionRefPayload, propertyRefPayload, templateRefPayload } = useEditorToolbarItems(
     lgTemplates ?? [],
     properties ?? [],
-    onSelectToolbarMenuItem
+    onSelectToolbarMenuItem,
   );
 
   const TooltipTemplateButton = React.useMemo(
     () => withTooltip({ content: formatMessage('Insert a template reference') }, ToolbarButtonMenu),
-    []
+    [],
   );
   const TooltipPropertyButton = React.useMemo(
     () => withTooltip({ content: formatMessage('Insert a property reference in memory') }, ToolbarButtonMenu),
-    []
+    [],
   );
   const TooltipFunctionButton = React.useMemo(
     () =>
       withTooltip({ content: formatMessage('Insert an adaptive expression pre-built function') }, ToolbarButtonMenu),
-    []
+    [],
   );
 
   const fixedItems: ICommandBarItemProps[] = React.useMemo(() => {
@@ -164,7 +164,7 @@ export const FieldToolbar = React.memo((props: FieldToolbarProps) => {
         buttonStyles: moreButtonStyles,
         className: dismissHandlerClassName,
       })) ?? [],
-    [moreToolbarItems, dismissHandlerClassName]
+    [moreToolbarItems, dismissHandlerClassName],
   );
 
   const items = React.useMemo(
@@ -175,7 +175,7 @@ export const FieldToolbar = React.memo((props: FieldToolbarProps) => {
         : []),
       ...moreItems,
     ],
-    [fixedItems, moreItems]
+    [fixedItems, moreItems],
   );
 
   return (

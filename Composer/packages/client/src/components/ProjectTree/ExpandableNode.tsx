@@ -25,8 +25,8 @@ const listItemStyle = (isActive: boolean, isOpen: boolean, hasChildren: boolean)
   ${!hasChildren
     ? 'list-style: none'
     : isOpen
-    ? `list-style-image: url("data:image/svg+xml,%3C%3Fxml version='1.0' encoding='UTF-8' standalone='no'%3F%3E%3Csvg xmlns='http://www.w3.org/2000/svg' version='1.1' height='16' width='16' viewBox='0 0 24 16'%3E%3Cpath style='fill:black%3B' d='M 8 8 h 16 l -8 8 l -8 -8'/%3E%3C/svg%3E");`
-    : `list-style-image: url("data:image/svg+xml,%3C%3Fxml version='1.0' encoding='UTF-8' standalone='no'%3F%3E%3Csvg xmlns='http://www.w3.org/2000/svg' version='1.1' height='16' width='16' viewBox='0 0 24 16'%3E%3Cpath style='fill:black%3B' d='M 16 0 v 16 l 8 -8 l -8 -8'/%3E%3C/svg%3E");`}
+      ? `list-style-image: url("data:image/svg+xml,%3C%3Fxml version='1.0' encoding='UTF-8' standalone='no'%3F%3E%3Csvg xmlns='http://www.w3.org/2000/svg' version='1.1' height='16' width='16' viewBox='0 0 24 16'%3E%3Cpath style='fill:black%3B' d='M 8 8 h 16 l -8 8 l -8 -8'/%3E%3C/svg%3E");`
+      : `list-style-image: url("data:image/svg+xml,%3C%3Fxml version='1.0' encoding='UTF-8' standalone='no'%3F%3E%3Csvg xmlns='http://www.w3.org/2000/svg' version='1.1' height='16' width='16' viewBox='0 0 24 16'%3E%3Cpath style='fill:black%3B' d='M 16 0 v 16 l 8 -8 l -8 -8'/%3E%3C/svg%3E");`}
 `;
 
 const listStyle = css`

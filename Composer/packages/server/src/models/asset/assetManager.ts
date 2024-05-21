@@ -56,7 +56,7 @@ export class AssetManager {
     templateDir: string,
     ref: LocationRef,
     user?: UserIdentity,
-    locale?: string
+    locale?: string,
   ): Promise<LocationRef> {
     // user storage maybe diff from template storage
     const dstStorage = StorageService.getStorageClient(ref.storageId, user);
@@ -88,7 +88,7 @@ export class AssetManager {
     templateId: string,
     ref: LocationRef,
     user?: UserIdentity,
-    locale?: string
+    locale?: string,
   ): Promise<LocationRef> {
     // user storage maybe diff from template storage
     const dstStorage = StorageService.getStorageClient(ref.storageId, user);
@@ -111,7 +111,7 @@ export class AssetManager {
     runtimeLanguage: FeedName,
     yeomanOptions?: any,
     user?: UserIdentity,
-    isLocalGenerator?: boolean
+    isLocalGenerator?: boolean,
   ): Promise<LocationRef> {
     try {
       // user storage maybe diff from template storage
@@ -142,13 +142,13 @@ export class AssetManager {
         },
         (status, msg) => {
           BackgroundProcessManager.updateProcess(jobId, status, msg);
-        }
+        },
       );
       return ref;
     } catch (err) {
       if (err?.message.match(/npm/)) {
         throw new Error(
-          `Error calling npm to fetch template. Please ensure that node and npm are installed and available on your system. Full error message: ${err?.message}`
+          `Error calling npm to fetch template. Please ensure that node and npm are installed and available on your system. Full error message: ${err?.message}`,
         );
       } else {
         throw new Error(`Error hit when instantiating remote template: ${err?.message}`);
@@ -276,41 +276,39 @@ export class AssetManager {
       const data = await res.json();
 
       const result: BotTemplate[] = await Promise.all(
-        data.objects.map(
-          async (result): Promise<BotTemplate> => {
-            const { name, version, keywords, description = '' } = result.package;
-            const shouldFetchVersions = FeatureFlagService.getFeatureFlagValue('ADVANCED_TEMPLATE_OPTIONS');
-            const versions = shouldFetchVersions ? await this.getNpmPackageVersions(name) : [];
-            const displayName = this.getPackageDisplayName(name);
-            const templateToReturn = {
-              id: name,
-              name: displayName,
-              description: description,
-              package: {
-                packageName: name,
-                packageSource: 'npm',
-                packageVersion: version,
-                availableVersions: versions,
-              },
-            } as BotTemplate;
-            if (isArray(keywords)) {
-              if (keywords.includes('bf-dotnet-functions') || keywords.includes('bf-dotnet-webapp')) {
-                templateToReturn.dotnetSupport = {
-                  functionsSupported: keywords.includes('bf-dotnet-functions'),
-                  webAppSupported: keywords.includes('bf-dotnet-webapp'),
-                };
-              }
-              if (keywords.includes('bf-js-functions') || keywords.includes('bf-js-webapp')) {
-                templateToReturn.nodeSupport = {
-                  functionsSupported: keywords.includes('bf-js-functions'),
-                  webAppSupported: keywords.includes('bf-js-webapp'),
-                };
-              }
-              templateToReturn.isMultiBotTemplate = keywords.includes('msbot-multibot-project');
+        data.objects.map(async (result): Promise<BotTemplate> => {
+          const { name, version, keywords, description = '' } = result.package;
+          const shouldFetchVersions = FeatureFlagService.getFeatureFlagValue('ADVANCED_TEMPLATE_OPTIONS');
+          const versions = shouldFetchVersions ? await this.getNpmPackageVersions(name) : [];
+          const displayName = this.getPackageDisplayName(name);
+          const templateToReturn = {
+            id: name,
+            name: displayName,
+            description: description,
+            package: {
+              packageName: name,
+              packageSource: 'npm',
+              packageVersion: version,
+              availableVersions: versions,
+            },
+          } as BotTemplate;
+          if (isArray(keywords)) {
+            if (keywords.includes('bf-dotnet-functions') || keywords.includes('bf-dotnet-webapp')) {
+              templateToReturn.dotnetSupport = {
+                functionsSupported: keywords.includes('bf-dotnet-functions'),
+                webAppSupported: keywords.includes('bf-dotnet-webapp'),
+              };
             }
-            return templateToReturn;
+            if (keywords.includes('bf-js-functions') || keywords.includes('bf-js-webapp')) {
+              templateToReturn.nodeSupport = {
+                functionsSupported: keywords.includes('bf-js-functions'),
+                webAppSupported: keywords.includes('bf-js-webapp'),
+              };
+            }
+            templateToReturn.isMultiBotTemplate = keywords.includes('msbot-multibot-project');
           }
-        )
+          return templateToReturn;
+        }),
       );
       if (feedUrl === firstPartyTemplateFeed && result.length < 1) {
         return FallbackTemplateFeedObj;

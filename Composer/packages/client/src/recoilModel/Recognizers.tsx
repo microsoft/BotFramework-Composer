@@ -80,7 +80,7 @@ export const getMultiLanguagueRecognizerDialog = (
   fileType: 'lu' | 'qna',
   isOrchestrator = false,
   supportedLanguages: string[] = [],
-  defaultLanguage = 'en-us'
+  defaultLanguage = 'en-us',
 ) => {
   const key = fileType === 'qna' ? 'QnA' : isOrchestrator ? 'ORCHESTRATOR' : 'LUIS';
 
@@ -150,7 +150,7 @@ export const generateRecognizers = (
   luFiles: LuFile[],
   qnaFiles: QnAFile[],
   luProvide?: LuProviderType,
-  defaultLanguage = 'en-us'
+  defaultLanguage = 'en-us',
 ) => {
   const isCrossTrain = isCrossTrainedRecognizerSet(dialog);
   const isOrchestrator = luProvide === SDKKinds.OrchestratorRecognizer;
@@ -163,7 +163,7 @@ export const generateRecognizers = (
     'lu',
     isOrchestrator,
     LUISLocales,
-    defaultLanguage
+    defaultLanguage,
   );
 
   const crossTrainedRecognizer = getCrossTrainedRecognizerDialog(dialog.id, luFiles, qnaFiles);
@@ -173,7 +173,7 @@ export const generateRecognizers = (
     'qna',
     false,
     QnALocales,
-    defaultLanguage
+    defaultLanguage,
   );
   const qnaMakeRecognizers = getQnAMakerRecognizerDialogs(dialog.id, qnaFiles);
 

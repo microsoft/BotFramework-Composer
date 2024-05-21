@@ -33,7 +33,7 @@ type ManageServiceProps = {
     resourceGroupName: string,
     resourceName: string,
     region: string,
-    tier?: string
+    tier?: string,
   ) => Promise<string>;
   createServiceInBackground?: boolean;
   handoffInstructions: string;
@@ -115,7 +115,7 @@ export const ManageService: React.FC<ManageServiceProps> = (props: ManageService
       setLocationList(
         locations.map((location) => {
           return { key: location.name || '', text: location.displayName || '' };
-        })
+        }),
       );
     }
   };
@@ -144,8 +144,8 @@ export const ManageService: React.FC<ManageServiceProps> = (props: ManageService
           if (data.length === 0) {
             setSubscriptionsErrorMessage(
               formatMessage(
-                'Your subscription list is empty, please add your subscription, or login with another account.'
-              )
+                'Your subscription list is empty, please add your subscription, or login with another account.',
+              ),
             );
           }
         })
@@ -212,7 +212,7 @@ export const ManageService: React.FC<ManageServiceProps> = (props: ManageService
 
       const keylist: KeyRec[] = await fetchKeys(
         cognitiveServicesManagementClient,
-        accounts.filter((a) => a.kind === props.serviceKeyType)
+        accounts.filter((a) => a.kind === props.serviceKeyType),
       );
       setLoading(undefined);
       if (keylist.length == 0) {
@@ -258,8 +258,8 @@ export const ManageService: React.FC<ManageServiceProps> = (props: ManageService
           setOutcomeDescription(
             formatMessage(
               'Due to the following error, we were unable to successfully add your selected {service} keys to your bot project:',
-              { service: props.serviceName }
-            )
+              { service: props.serviceName },
+            ),
           );
           setOutcomeSummary(<p>{err.message}</p>);
           setOutcomeError(true);
@@ -286,7 +286,7 @@ export const ManageService: React.FC<ManageServiceProps> = (props: ManageService
             resourceGroupName,
             resourceName,
             region,
-            tier
+            tier,
           );
 
           TelemetryClient.track('SettingsGetKeysCreateNewResourceCompleted', {
@@ -308,8 +308,8 @@ export const ManageService: React.FC<ManageServiceProps> = (props: ManageService
         setOutcomeDescription(
           formatMessage(
             'Due to the following error, we were unable to successfully add your selected {service} keys to your bot project:',
-            { service: props.serviceName }
-          )
+            { service: props.serviceName },
+          ),
         );
         setOutcomeSummary(<p>{err.message}</p>);
         setOutcomeError(true);
@@ -323,7 +323,7 @@ export const ManageService: React.FC<ManageServiceProps> = (props: ManageService
       setOutcomeDescription(
         formatMessage('The following {service} resource was successfully created and added to your bot project:', {
           service: props.serviceName,
-        })
+        }),
       );
       setOutcomeSummary(
         <div>
@@ -343,7 +343,7 @@ export const ManageService: React.FC<ManageServiceProps> = (props: ManageService
             <label css={summaryLabelStyles}>{formatMessage('Resource name')}</label>
             {resourceName}
           </p>
-        </div>
+        </div>,
       );
       setOutcomeError(false);
 
@@ -399,7 +399,7 @@ export const ManageService: React.FC<ManageServiceProps> = (props: ManageService
     setOutcomeDescription(
       formatMessage('The following {service} keys have been successfully added to your bot project:', {
         service: props.serviceName,
-      })
+      }),
     );
     setOutcomeSummary(
       <div>
@@ -411,7 +411,7 @@ export const ManageService: React.FC<ManageServiceProps> = (props: ManageService
           <label css={summaryLabelStyles}>{formatMessage('Region')}</label>
           {region}
         </p>
-      </div>
+      </div>,
     );
     setOutcomeError(false);
 
@@ -436,7 +436,7 @@ export const ManageService: React.FC<ManageServiceProps> = (props: ManageService
   const onRenderOption = (option) => {
     return (
       <div>
-        {option.data && option.data.icon && (
+        {option.data?.icon && (
           <Icon aria-hidden="true" iconName={option.data.icon} style={iconStyles} title={option.data.icon} />
         )}
         <span>{option.text}</span>
@@ -519,7 +519,7 @@ export const ManageService: React.FC<ManageServiceProps> = (props: ManageService
                   'No existing {service} resources were found in this subscription. Select a different subscription, or click “Back” to create a new resource or generate a resource request to handoff to your Azure admin.',
                   {
                     service: props.serviceName,
-                  }
+                  },
                 )}
               </span>
             )}
@@ -777,11 +777,11 @@ export const ManageService: React.FC<ManageServiceProps> = (props: ManageService
     <Fragment>
       <ProvisionHandoff
         developerInstructions={formatMessage(
-          'If Azure resources and subscription are managed by others, use the following information to request creation of the resources that you need to build and run your bot.'
+          'If Azure resources and subscription are managed by others, use the following information to request creation of the resources that you need to build and run your bot.',
         )}
         handoffInstructions={formatMessage(
           'I am creating a conversational experience using Microsoft Bot Framework project. For my project to work, it needs Azure resources including {service}. Below are the steps to create these resources.\n\n{instructions}',
-          { instructions: props.handoffInstructions, service: props.serviceName }
+          { instructions: props.handoffInstructions, service: props.serviceName },
         )}
         hidden={!showHandoff}
         title={formatMessage('Generate instructions for Azure administrator')}

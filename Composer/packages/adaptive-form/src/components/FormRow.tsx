@@ -16,19 +16,8 @@ export interface FormRowProps extends Omit<FieldProps, 'onChange'> {
 }
 
 export function getRowProps(rowProps: FormRowProps, field: string): FieldProps {
-  const {
-    id,
-    schema,
-    definitions,
-    value,
-    uiOptions,
-    className,
-    label,
-    rawErrors,
-    onBlur,
-    onFocus,
-    onChange,
-  } = rowProps;
+  const { id, schema, definitions, value, uiOptions, className, label, rawErrors, onBlur, onFocus, onChange } =
+    rowProps;
 
   const { required = [] } = schema;
   const fieldSchema = resolvePropSchema(schema, field, definitions);

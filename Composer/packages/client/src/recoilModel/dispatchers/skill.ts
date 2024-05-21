@@ -72,35 +72,37 @@ export const skillDispatcher = () => {
   };
 
   const removeSkillManifest = useRecoilCallback(
-    ({ set, snapshot }: CallbackInterface) => async (id: string, projectId: string) => {
-      let newCurrentManifestId: string | undefined;
-      const dispatcher = await snapshot.getPromise(dispatcherState);
-      set(skillManifestsState(projectId), (skillManifests) => {
-        const filtered = skillManifests.filter((manifest) => manifest.id !== id);
-        if (filtered.length > 0) {
-          newCurrentManifestId = filtered[0].id;
-        }
-        return filtered;
-      });
-      dispatcher.updateManifestInBotProjectFile(projectId, newCurrentManifestId);
-    }
+    ({ set, snapshot }: CallbackInterface) =>
+      async (id: string, projectId: string) => {
+        let newCurrentManifestId: string | undefined;
+        const dispatcher = await snapshot.getPromise(dispatcherState);
+        set(skillManifestsState(projectId), (skillManifests) => {
+          const filtered = skillManifests.filter((manifest) => manifest.id !== id);
+          if (filtered.length > 0) {
+            newCurrentManifestId = filtered[0].id;
+          }
+          return filtered;
+        });
+        dispatcher.updateManifestInBotProjectFile(projectId, newCurrentManifestId);
+      },
   );
 
   const updateSkillManifest = useRecoilCallback(
-    (callbackHelpers: CallbackInterface) => async ({ id, content }: SkillManifestFile, projectId: string) => {
-      const { set, snapshot } = callbackHelpers;
-      const manifests = await snapshot.getPromise(skillManifestsState(projectId));
-      const dispatcher = await snapshot.getPromise(dispatcherState);
+    (callbackHelpers: CallbackInterface) =>
+      async ({ id, content }: SkillManifestFile, projectId: string) => {
+        const { set, snapshot } = callbackHelpers;
+        const manifests = await snapshot.getPromise(skillManifestsState(projectId));
+        const dispatcher = await snapshot.getPromise(dispatcherState);
 
-      if (!manifests.some((manifest) => manifest.id === id)) {
-        createSkillManifest(callbackHelpers, { id, content, projectId });
-        dispatcher.updateManifestInBotProjectFile(projectId, id);
-      }
+        if (!manifests.some((manifest) => manifest.id === id)) {
+          createSkillManifest(callbackHelpers, { id, content, projectId });
+          dispatcher.updateManifestInBotProjectFile(projectId, id);
+        }
 
-      set(skillManifestsState(projectId), (skillManifests) =>
-        skillManifests.map((manifest) => (manifest.id === id ? { id, content } : manifest))
-      );
-    }
+        set(skillManifestsState(projectId), (skillManifests) =>
+          skillManifests.map((manifest) => (manifest.id === id ? { id, content } : manifest)),
+        );
+      },
   );
 
   const displayManifestModal = useRecoilCallback(({ set }: CallbackInterface) => (id: string) => {

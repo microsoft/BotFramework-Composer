@@ -28,7 +28,7 @@ export const SchemaEditorField: React.FC = () => {
 
   const value = useMemo(
     () => (typeof content === 'object' ? content : getDefaultDialogSchema(SCHEMA_URI, displayName || dialogId)),
-    [content]
+    [content],
   );
 
   const formValue = useMemo(
@@ -36,7 +36,7 @@ export const SchemaEditorField: React.FC = () => {
       dialogValue: value?.properties || {},
       resultValue: value?.$result?.properties || {},
     }),
-    [value?.properties, value?.$result?.properties]
+    [value?.properties, value?.$result?.properties],
   );
 
   const handleChange = ({ dialogValue = {}, resultValue = {} }) => {

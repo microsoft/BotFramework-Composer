@@ -102,7 +102,7 @@ export class ElectronAuthProvider extends AuthProvider {
 
   private cacheTokens(
     tokenInfo: { accessToken: string; acquiredAt: number; expiryTime: number },
-    params: AuthParameters
+    params: AuthParameters,
   ): void {
     const { accessToken, acquiredAt, expiryTime } = tokenInfo;
     if (!accessToken) {

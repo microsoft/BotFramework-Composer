@@ -88,7 +88,7 @@ export const ExpressionFieldToolbar = (props: Props) => {
 
       target?.focus();
     },
-    [target, value, onChange]
+    [target, value, onChange],
   );
   return target ? (
     <Callout

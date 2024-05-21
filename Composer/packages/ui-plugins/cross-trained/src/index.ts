@@ -12,7 +12,7 @@ const config: PluginConfig = {
         displayName: () => formatMessage('Default'),
         description: () =>
           formatMessage(
-            'Gives your bot the ability to extract intent and entity data from an utterance based on a cross trained recognizer set.'
+            'Gives your bot the ability to extract intent and entity data from an utterance based on a cross trained recognizer set.',
           ),
         isSelected: (data, dialog: DialogInfo) => {
           if (dialog.luProvider === SDKKinds.OrchestratorRecognizer) return false;

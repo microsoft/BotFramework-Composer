@@ -20,11 +20,11 @@ type Props = {
   onDismiss: () => void;
   onJumpToOpenModal: (search?: string) => void;
   onToggleCreateModal: (boolean) => void;
-} & RouteComponentProps<{}>;
+} & RouteComponentProps<unknown>;
 
 const dialogWrapperProps = DialogCreationCopy.CREATE_OPTIONS;
 
-const dialogStyle: { dialog: Partial<IDialogContentStyles>; modal: {} } = {
+const dialogStyle: { dialog: Partial<IDialogContentStyles>; modal: unknown } = {
   dialog: {
     title: {
       fontWeight: FontWeights.bold,

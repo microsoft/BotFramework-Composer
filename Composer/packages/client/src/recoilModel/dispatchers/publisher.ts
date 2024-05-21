@@ -96,7 +96,7 @@ export const publisherDispatcher = () => {
     callbackHelpers: CallbackInterface,
     projectId: string,
     target: any,
-    data: PublishResult
+    data: PublishResult,
   ) => {
     if (data == null) return;
     const { set, snapshot } = callbackHelpers;
@@ -196,42 +196,37 @@ export const publisherDispatcher = () => {
   });
 
   const publishToTarget = useRecoilCallback(
-    (callbackHelpers: CallbackInterface) => async (
-      projectId: string,
-      target: PublishTarget,
-      metadata: any,
-      sensitiveSettings,
-      token = ''
-    ) => {
-      try {
-        const { snapshot } = callbackHelpers;
-        const dialogs = await snapshot.getPromise(dialogsWithLuProviderSelectorFamily(projectId));
-        const luFiles = await snapshot.getPromise(luFilesSelectorFamily(projectId));
-        const qnaFiles = await snapshot.getPromise(qnaFilesSelectorFamily(projectId));
-        const referredLuFiles = luUtil.checkLuisBuild(luFiles, dialogs);
-        const referredQnaFiles = qnaUtil.checkQnaBuild(qnaFiles, dialogs);
-        const response = await httpClient.post(`/publish/${projectId}/publish/${target.name}`, {
-          publishTarget: target,
-          accessToken: token,
-          metadata: {
-            ...metadata,
-            luResources: referredLuFiles.map((file) => ({ id: file.id, isEmpty: file.empty })),
-            qnaResources: referredQnaFiles.map((file) => ({ id: file.id, isEmpty: file.empty })),
-          },
-          sensitiveSettings,
-        });
+    (callbackHelpers: CallbackInterface) =>
+      async (projectId: string, target: PublishTarget, metadata: any, sensitiveSettings, token = '') => {
+        try {
+          const { snapshot } = callbackHelpers;
+          const dialogs = await snapshot.getPromise(dialogsWithLuProviderSelectorFamily(projectId));
+          const luFiles = await snapshot.getPromise(luFilesSelectorFamily(projectId));
+          const qnaFiles = await snapshot.getPromise(qnaFilesSelectorFamily(projectId));
+          const referredLuFiles = luUtil.checkLuisBuild(luFiles, dialogs);
+          const referredQnaFiles = qnaUtil.checkQnaBuild(qnaFiles, dialogs);
+          const response = await httpClient.post(`/publish/${projectId}/publish/${target.name}`, {
+            publishTarget: target,
+            accessToken: token,
+            metadata: {
+              ...metadata,
+              luResources: referredLuFiles.map((file) => ({ id: file.id, isEmpty: file.empty })),
+              qnaResources: referredQnaFiles.map((file) => ({ id: file.id, isEmpty: file.empty })),
+            },
+            sensitiveSettings,
+          });
 
-        // add job id to storage
-        const publishJobIds = publishStorage.get('jobIds') || {};
-        publishJobIds[`${projectId}-${target.name}`] = response.data.id;
-        publishStorage.set('jobIds', publishJobIds);
+          // add job id to storage
+          const publishJobIds = publishStorage.get('jobIds') || {};
+          publishJobIds[`${projectId}-${target.name}`] = response.data.id;
+          publishStorage.set('jobIds', publishJobIds);
 
-        await publishSuccess(callbackHelpers, projectId, response.data, target);
-      } catch (err) {
-        // special case to handle dotnet issues
-        await publishFailure(callbackHelpers, Text.CONNECTBOTFAILURE, err.response?.data, target, projectId);
-      }
-    }
+          await publishSuccess(callbackHelpers, projectId, response.data, target);
+        } catch (err) {
+          // special case to handle dotnet issues
+          await publishFailure(callbackHelpers, Text.CONNECTBOTFAILURE, err.response?.data, target, projectId);
+        }
+      },
   );
 
   const rollbackToVersion = useRecoilCallback(
@@ -245,14 +240,14 @@ export const publisherDispatcher = () => {
       } catch (err) {
         await publishFailure(callbackHelpers, Text.CONNECTBOTFAILURE, err.response.data, target, projectId);
       }
-    }
+    },
   );
 
   // get bot status from target publisher
   const getPublishStatusV2 = useRecoilCallback(
     (callbackHelpers: CallbackInterface) => async (projectId: string, target: any, response: any) => {
       updatePublishStatus(callbackHelpers, projectId, target, response?.data);
-    }
+    },
   );
 
   // get bot status from target publisher
@@ -263,14 +258,14 @@ export const publisherDispatcher = () => {
           jobId ??
           (publishStorage.get('jobIds') ? publishStorage.get('jobIds')[`${projectId}-${target.name}`] : undefined);
         const response = await httpClient.get(
-          `/publish/${projectId}/status/${target.name}${currentJobId ? '/' + currentJobId : ''}`
+          `/publish/${projectId}/status/${target.name}${currentJobId ? '/' + currentJobId : ''}`,
         );
 
         updatePublishStatus(callbackHelpers, projectId, target, response.data);
       } catch (err) {
         updatePublishStatus(callbackHelpers, projectId, target, err.response?.data);
       }
-    }
+    },
   );
   const getPublishHistory = useRecoilCallback(
     (callbackHelpers: CallbackInterface) => async (projectId: string, target: any) => {
@@ -287,30 +282,31 @@ export const publisherDispatcher = () => {
         //TODO: error
         logMessage(callbackHelpers, err.response?.data?.message || err.message);
       }
-    }
+    },
   );
 
   // only support local publish
   const stopPublishBot = useRecoilCallback(
-    (callbackHelpers: CallbackInterface) => async (projectId: string, target: any = defaultPublishConfig) => {
-      const { set, snapshot } = callbackHelpers;
-      try {
-        const currentBotStatus = await snapshot.getPromise(botStatusState(projectId));
-        // Change to "Stopping" status only if the Bot is not in a failed state or inactive state
-        if (currentBotStatus !== BotStatus.failed && currentBotStatus !== BotStatus.inactive) {
-          set(botStatusState(projectId), BotStatus.stopping);
-        }
+    (callbackHelpers: CallbackInterface) =>
+      async (projectId: string, target: any = defaultPublishConfig) => {
+        const { set, snapshot } = callbackHelpers;
+        try {
+          const currentBotStatus = await snapshot.getPromise(botStatusState(projectId));
+          // Change to "Stopping" status only if the Bot is not in a failed state or inactive state
+          if (currentBotStatus !== BotStatus.failed && currentBotStatus !== BotStatus.inactive) {
+            set(botStatusState(projectId), BotStatus.stopping);
+          }
 
-        await httpClient.post(`/publish/${projectId}/stopPublish/${target.name}`);
+          await httpClient.post(`/publish/${projectId}/stopPublish/${target.name}`);
 
-        if (currentBotStatus !== BotStatus.failed) {
-          set(botStatusState(projectId), BotStatus.inactive);
+          if (currentBotStatus !== BotStatus.failed) {
+            set(botStatusState(projectId), BotStatus.inactive);
+          }
+        } catch (err) {
+          setError(callbackHelpers, err);
+          logMessage(callbackHelpers, err.message);
         }
-      } catch (err) {
-        setError(callbackHelpers, err);
-        logMessage(callbackHelpers, err.message);
-      }
-    }
+      },
   );
 
   const resetBotRuntimeLog = useRecoilCallback((callbackHelpers: CallbackInterface) => async (projectId: string) => {
@@ -328,7 +324,7 @@ export const publisherDispatcher = () => {
         botEndpoints[projectId]?.url || defaultBotEndpoint,
         settings.MicrosoftAppId && settings.MicrosoftAppPassword
           ? { MicrosoftAppId: settings.MicrosoftAppId, MicrosoftAppPassword: settings.MicrosoftAppPassword }
-          : { MicrosoftAppPassword: '', MicrosoftAppId: '' }
+          : { MicrosoftAppPassword: '', MicrosoftAppId: '' },
       );
     } catch (err) {
       setError(callbackHelpers, err);
@@ -345,7 +341,7 @@ export const publisherDispatcher = () => {
         setError(callbackHelpers, err);
         logMessage(callbackHelpers, err.message);
       }
-    }
+    },
   );
 
   return {

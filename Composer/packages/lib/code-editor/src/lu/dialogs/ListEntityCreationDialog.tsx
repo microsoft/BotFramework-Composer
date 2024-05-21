@@ -81,7 +81,7 @@ export const ListEntityCreationDialog = (props: Props) => {
     new Selection({
       onSelectionChanged: () => setSelectedItems(selection.getSelection() as ListEntityItem[]),
       selectionMode: SelectionMode.multiple,
-    })
+    }),
   ).current;
 
   const scrollTimeoutRef = React.useRef<ReturnType<typeof setTimeout>>();
@@ -97,7 +97,7 @@ export const ListEntityCreationDialog = (props: Props) => {
     (_: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, newValue?: string) => {
       setListEntity((currentEntity) => ({ ...currentEntity, name: newValue ?? currentEntity.name }));
     },
-    []
+    [],
   );
 
   const changeNormalizedValue = React.useCallback(
@@ -108,14 +108,14 @@ export const ListEntityCreationDialog = (props: Props) => {
         if (foundIdx !== -1) {
           const foundItem = clonedEntity.items[foundIdx];
           clonedEntity.items = clonedEntity.items.map((item, idx) =>
-            idx === foundIdx ? { ...foundItem, normalizedValue: newValue ?? foundItem.normalizedValue } : item
+            idx === foundIdx ? { ...foundItem, normalizedValue: newValue ?? foundItem.normalizedValue } : item,
           );
         }
 
         return clonedEntity;
       });
     },
-    []
+    [],
   );
 
   const changeSynonyms = React.useCallback(
@@ -126,14 +126,14 @@ export const ListEntityCreationDialog = (props: Props) => {
         if (foundIdx !== -1) {
           const foundItem = clonedEntity.items[foundIdx];
           clonedEntity.items = clonedEntity.items.map((item, idx) =>
-            idx === foundIdx ? { ...foundItem, synonyms } : item
+            idx === foundIdx ? { ...foundItem, synonyms } : item,
           );
         }
 
         return clonedEntity;
       });
     },
-    []
+    [],
   );
 
   const blur = React.useCallback(
@@ -142,7 +142,7 @@ export const ListEntityCreationDialog = (props: Props) => {
         changeSynonyms(item)(tags);
       }
     },
-    [changeSynonyms]
+    [changeSynonyms],
   );
 
   const deleteSelectedListEntityItems = React.useCallback(() => {
@@ -190,7 +190,7 @@ export const ListEntityCreationDialog = (props: Props) => {
         onClick: deleteSelectedListEntityItems,
       },
     ],
-    [deleteSelectedListEntityItems, addListEntityItem, selectedItems]
+    [deleteSelectedListEntityItems, addListEntityItem, selectedItems],
   );
 
   const columns = React.useMemo<IColumn[]>(() => {
@@ -243,7 +243,7 @@ export const ListEntityCreationDialog = (props: Props) => {
 
   const renderRow: IRenderFunction<IDetailsRowProps> = React.useCallback(
     (rowProps) => (rowProps ? <DetailsRow {...rowProps} styles={detailsRowStyles} /> : null),
-    []
+    [],
   );
 
   const createDisabled = !listEntity.name || !listEntity.items.length || hasErrors;
@@ -268,7 +268,7 @@ export const ListEntityCreationDialog = (props: Props) => {
                 {children}
               </Link>
             ),
-          }
+          },
         )}
       </SubText>
       <Stack tokens={containerStackTokens}>
@@ -304,7 +304,7 @@ export const ListEntityCreationDialog = (props: Props) => {
                 =1 {One item is selected}
                 other {# items are selected}
             }`,
-            { count: selection.count }
+            { count: selection.count },
           )}
         />
       ) : null}

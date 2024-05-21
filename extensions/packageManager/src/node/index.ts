@@ -201,7 +201,7 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
           // append user specified query to defaultQuery
           if (req.query.term) {
             packageSource.defaultQuery.query = `${packageSource.defaultQuery.query}+${encodeURIComponent(
-              req.query.term
+              req.query.term,
             )}`;
           }
 
@@ -251,7 +251,7 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
       const runtimePath = currentProject.getRuntimePath();
 
       if (currentProject.settings?.runtime?.customRuntime && runtimePath) {
-        const manifestFile = runtime.identifyManifest(runtimePath, currentProject.name);
+        const manifestFile = runtime.identifyManifest(runtimePath, currentProject);
 
         const dryrun = new SchemaMerger(
           [manifestFile, `!${path.join(currentProject.dir, 'generated')}/**`],
@@ -261,7 +261,7 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
           false, // verbosity: true = verbose
           composer.log,
           composer.log,
-          captureErrors
+          captureErrors,
         );
         const dryRunMergeResults = await dryrun.merge();
 
@@ -311,10 +311,10 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
             packageName,
             version,
             source,
-            currentProject
+            currentProject,
           );
 
-          const manifestFile = runtime.identifyManifest(runtimePath, currentProject.name);
+          const manifestFile = runtime.identifyManifest(runtimePath, currentProject);
 
           // call do a dry run on the dialog merge
           const dryrun = new SchemaMerger(
@@ -325,7 +325,7 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
             false, // verbosity: true = verbose
             composer.log,
             composer.log,
-            captureErrors
+            captureErrors,
           );
 
           const dryRunMergeResults = await dryrun.merge();
@@ -353,7 +353,7 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
               false, // verbosity: true = verbose
               composer.log,
               composer.log,
-              composer.log
+              composer.log,
             );
 
             const mergeResults = await realMerge.merge();
@@ -361,7 +361,7 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
             composer.log(
               'MERGE RESULTS',
               path.join(currentProject.dataDir, 'dialogs/imported'),
-              JSON.stringify(mergeResults, null, 2)
+              JSON.stringify(mergeResults, null, 2),
             );
 
             const installedComponents = await loadPackageAssets(mergeResults.components.filter(isAdaptiveComponent));
@@ -379,7 +379,7 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
               if (
                 newlyInstalledPlugin &&
                 !currentProject.settings.runtimeSettings?.components?.find(
-                  (p: { name: string }) => p.name === newlyInstalledPlugin.name
+                  (p: { name: string }) => p.name === newlyInstalledPlugin.name,
                 )
               ) {
                 const newSettings = await currentProject.getEnvSettings();
@@ -453,7 +453,7 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
         try {
           const output = await runtime.uninstallComponent(runtimePath, packageName, currentProject);
 
-          const manifestFile = runtime.identifyManifest(runtimePath, currentProject.name);
+          const manifestFile = runtime.identifyManifest(runtimePath, currentProject);
 
           // call do a dry run on the dialog merge
           const merger = new SchemaMerger(
@@ -464,7 +464,7 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
             false, // verbosity: true = verbose
             composer.log,
             composer.log,
-            captureErrors
+            captureErrors,
           );
 
           const mergeResults = await merger.merge();
@@ -484,7 +484,7 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
           ) {
             const newSettings = await currentProject.getEnvSettings();
             newSettings.runtimeSettings.components = newSettings.runtimeSettings.components.filter(
-              (p) => p.name !== packageName
+              (p) => p.name !== packageName,
             );
             currentProject.updateEnvSettings(newSettings);
           }

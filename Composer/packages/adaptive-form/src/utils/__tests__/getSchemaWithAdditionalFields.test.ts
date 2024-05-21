@@ -35,7 +35,7 @@ describe('getSchemaWithAdditionalFields', () => {
         properties: expect.objectContaining({
           additionalField: {},
         }),
-      })
+      }),
     );
   });
 });

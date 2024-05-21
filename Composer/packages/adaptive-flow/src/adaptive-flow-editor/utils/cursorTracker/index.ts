@@ -11,7 +11,7 @@ import { handleTabMove } from './tabMove';
 export function moveCursor(
   selectableElements: SelectorElement[],
   id: string,
-  command: string
+  command: string,
 ): { [key: string]: string | undefined } {
   const currentElement = selectableElements.find((element) => element.selectedId === id || element.focusedId === id);
   if (!currentElement) return { selected: id, focused: undefined };

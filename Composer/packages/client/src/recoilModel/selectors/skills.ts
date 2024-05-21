@@ -110,7 +110,7 @@ export const skillUsedInBotsSelector = selector({
         result[skillId] = usedInBots;
         return result;
       },
-      {}
+      {},
     );
     return skillInBots;
   },

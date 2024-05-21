@@ -43,7 +43,7 @@ export async function getNewProjRef(
   templateId: string,
   locationRef: LocationRef,
   user?: UserIdentity,
-  locale?: string
+  locale?: string,
 ) {
   const createFromRemoteTemplate = !!templateDir;
   let newProjRef;
@@ -68,7 +68,7 @@ export async function ejectAndMerge(currentProject: BotProject, jobId: string) {
       BackgroundProcessManager.updateProcess(jobId, 202, formatMessage('Building runtime'));
       await runtime.build(runtimePath, currentProject);
 
-      const manifestFile = runtime.identifyManifest(currentProject.dataDir, currentProject.name);
+      const manifestFile = runtime.identifyManifest(currentProject.dataDir, currentProject);
 
       // run the merge command to merge all package dependencies from the template to the bot project
       BackgroundProcessManager.updateProcess(jobId, 202, formatMessage('Merging Packages'));
