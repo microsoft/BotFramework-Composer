@@ -23,6 +23,11 @@
     "tslib": "2.6.2",
     "vscode-languageserver": "5.3.0-next.10"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/microsoft/BotFramework-Composer.git",
+    "directory": "Composer/packages/tools/language-servers/language-generation"
+  },
   "devDependencies": {
     "@botframework-composer/test-utils": "*",
     "@types/node": "13.9.3",
