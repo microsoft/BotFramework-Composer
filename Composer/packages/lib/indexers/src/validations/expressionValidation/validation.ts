@@ -20,6 +20,23 @@ export const addReturnType = (currentType: number, newType: number) => {
   return currentType | newType;
 };
 
+export const trimExpression = (expression: string): string => {
+  let result = expression.trim();
+  if (result.startsWith('=')) {
+    result = result.substring(1).trim();
+  }
+
+  if (result.startsWith('$')) {
+    result = result.substring(1).trim();
+  }
+
+  if (result.startsWith('{') && result.endsWith('}')) {
+    result = result.substring(1, result.length - 1).trim();
+  }
+
+  return result;
+};
+
 export const checkStringExpression = (exp: string, isStringType: boolean): number => {
   const origin = exp.trim();
   const containsEqual = origin.startsWith('=');
@@ -28,7 +45,9 @@ export const checkStringExpression = (exp: string, isStringType: boolean): numbe
     return ReturnType.String;
   }
 
-  return Expression.parse(containsEqual ? origin.substring(1) : origin).returnType;
+  const trimmedOrigin = trimExpression(origin);
+
+  return Expression.parse(trimmedOrigin).returnType;
 };
 
 export const checkExpression = (exp: any, required: boolean, types: number[]): number => {

@@ -332,6 +332,11 @@ export const userHasNodeInstalledState = atom<boolean>({
   default: true,
 });
 
+export const botBuilderVersionState = atom<{ dotnet: string; js: string }>({
+  key: getFullyQualifiedKey('botBuilderVersion'),
+  default: { dotnet: '', js: '' },
+});
+
 export const warnAboutDotNetState = atom<boolean>({
   key: getFullyQualifiedKey('warnAboutDotNetState'),
   default: false,
