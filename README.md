@@ -1,3 +1,7 @@
+# PRE-ARCHIVE NOTICE: 
+This project is no longer actively maintained and will be archived in January of 2025.  Functions of this project were superseded by [Microsoft Copilot Studio](https://aka.ms/copilotstudio) 
+Archived projects are still available for use by developers, however they will not be actively maintained or serviced by Microsoft. 
+
 # ![Microsoft Bot Framework Composer](./docs/Assets/gh-banner.png)
 
 # Microsoft Bot Framework Composer
