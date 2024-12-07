@@ -69,8 +69,8 @@ export const ActionNodeWrapper = ({ id, tab, data, onEvent, hideComment, childre
   const { focusedId, focusedEvent, focusedTab } = useContext(NodeRendererContext);
   const { selectedIds, getNodeIndex } = useContext(SelectionContext);
   const nodeFocused = focusedId === id || focusedEvent === id;
-  const nodeDoubleSelected = tab && nodeFocused && tab === focusedTab;
   const nodeSelected = selectedIds.includes(id);
+  const nodeDoubleSelected = tab && nodeFocused && tab === focusedTab && nodeSelected;
   const nodeId = `action-${selectableId}`;
 
   const declareElementAttributes = (selectedId: string, id: string) => {
