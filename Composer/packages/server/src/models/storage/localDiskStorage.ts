@@ -6,6 +6,7 @@ import { promisify } from 'util';
 import path from 'path';
 
 import glob from 'globby';
+import globBasic from 'glob';
 import archiver from 'archiver';
 import rimraf from 'rimraf';
 import { FileExtensions } from '@botframework-composer/types';
@@ -34,6 +35,25 @@ const rename = promisify(fs.rename);
 export class LocalDiskStorage implements IFileStorage {
   async stat(path: string): Promise<Stat> {
     const fstat = await stat(path);
+
+    let lastModified = fstat.mtime.toString();
+
+    // if a folder, get the last modified date/time from the last modified file
+    if(fstat.isDirectory()) {
+      try {
+        const lastModifiedFiles = globBasic.sync( path + '/**/*.*' )
+          .map(name => ({name, mtime: fs.statSync(name).mtime}))
+          .sort((a, b) => b.mtime.getTime() - a.mtime.getTime());
+
+        if (lastModifiedFiles != null && lastModifiedFiles.length > 0) {
+          const fstatFile = await stat(lastModifiedFiles[0].name);
+          lastModified = fstatFile.mtime.toString();
+        }
+      } catch(e) {
+        // proceed with original date, from stat(path)
+      }
+    }
+
     // test to see if this file is writable
     let writable = true;
     try {
@@ -41,11 +61,12 @@ export class LocalDiskStorage implements IFileStorage {
     } catch (err) {
       writable = false;
     }
+
     return {
       isDir: fstat.isDirectory(),
       isFile: fstat.isFile(),
       isWritable: writable,
-      lastModified: fstat.mtime.toString(),
+      lastModified: lastModified,
       size: fstat.isFile() ? fstat.size.toString() : '',
     };
   }
