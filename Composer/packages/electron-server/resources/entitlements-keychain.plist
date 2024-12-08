@@ -13,6 +13,8 @@
     <key>keychain-access-groups</key>
     <array>
       <string>UBF8T346G9.com.microsoft.identity.universalstorage</string>
+      <string>UBF8T346G9.com.microsoft.oneauth</string>
+      <string>UBF8T346G9.com.microsoft.adalcache</string>
     </array>
     <key>com.apple.application-identifier</key>
     <string>UBF8T346G9.com.microsoft.botframework.composer</string>
