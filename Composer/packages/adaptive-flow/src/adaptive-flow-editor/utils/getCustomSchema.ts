@@ -30,7 +30,7 @@ const pickSchema = (picked$kinds: SDKKinds[], sourceSchema: SourceSchema): JSONS
     {
       oneOf: [],
       definitions: {},
-    } as JSONSchema7
+    } as JSONSchema7,
   );
 
   // Sort `oneOf` list alphabetically
@@ -81,6 +81,6 @@ export const getCustomSchema = (baseSchema?: JSONSchema7, ejectedSchema?: JSONSc
       triggers: pickSchema(triggerKinds, ejectedDefinitions as SourceSchema),
       recognizers: pickSchema(recognizerKinds, ejectedDefinitions as SourceSchema),
     },
-    (v) => v !== undefined
+    (v) => v !== undefined,
   );
 };

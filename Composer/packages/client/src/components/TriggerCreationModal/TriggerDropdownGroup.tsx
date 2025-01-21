@@ -44,14 +44,14 @@ export const TriggerDropdownGroup: FC<TriggerDropdownGroupProps> = ({
         </div>
       );
     },
-    [recognizerType]
+    [recognizerType],
   );
 
   const triggerOptionTree = useMemo(() => {
     return generateTriggerOptionTree(
       triggerUISchema,
       formatMessage('What is the type of this trigger?'),
-      formatMessage('Select a trigger type')
+      formatMessage('Select a trigger type'),
     );
   }, []);
 

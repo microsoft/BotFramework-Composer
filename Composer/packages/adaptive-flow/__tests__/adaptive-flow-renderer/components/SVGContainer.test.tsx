@@ -11,7 +11,7 @@ describe('<SVGContainer />', () => {
     const svgContainer = render(
       <SVGContainer>
         <></>
-      </SVGContainer>
+      </SVGContainer>,
     );
 
     expect(svgContainer).toBeTruthy();
@@ -22,7 +22,7 @@ describe('<SVGContainer />', () => {
     const svgContainer = render(
       <SVGContainer>
         <circle data-testid="svg-content" />
-      </SVGContainer>
+      </SVGContainer>,
     );
 
     expect(svgContainer.getByTestId('svg-content')).toBeTruthy();

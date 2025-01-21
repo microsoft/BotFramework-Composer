@@ -67,7 +67,7 @@ export const PropertyTreeItem = React.memo((props: PropertyTreeItemProps) => {
       e.stopPropagation();
       onToggleExpand?.(item.id, !expanded);
     },
-    [expanded, onToggleExpand, item]
+    [expanded, onToggleExpand, item],
   );
 
   const isExpandable = !!item.children?.length && onToggleExpand;

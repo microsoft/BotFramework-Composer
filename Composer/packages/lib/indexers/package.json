@@ -30,7 +30,7 @@
     "adaptive-expressions": "^4.18.0",
     "botbuilder-lg": "^4.18.0",
     "lodash": "^4.17.19",
-    "tslib": "2.4.0"
+    "tslib": "2.6.2"
   },
   "peerDependencies": {
     "@bfc/shared": "*"

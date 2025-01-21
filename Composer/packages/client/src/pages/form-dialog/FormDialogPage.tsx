@@ -63,9 +63,10 @@ const FormDialogPage: React.FC<Props> = React.memo((props: Props) => {
     loadFormDialogSchemaTemplates();
   }, []);
 
-  const availableTemplates = React.useMemo(() => formDialogLibraryTemplates.filter((t) => !t.$global), [
-    formDialogLibraryTemplates,
-  ]);
+  const availableTemplates = React.useMemo(
+    () => formDialogLibraryTemplates.filter((t) => !t.$global),
+    [formDialogLibraryTemplates],
+  );
 
   const validSchemaId = React.useMemo(() => formDialogSchemaIds.includes(schemaId), [formDialogSchemaIds, schemaId]);
 
@@ -79,7 +80,7 @@ const FormDialogPage: React.FC<Props> = React.memo((props: Props) => {
     async (id: string) => {
       const res = await OpenConfirmModal(
         formatMessage('Delete form dialog schema?'),
-        formatMessage('Are you sure you want to remove form dialog schema "{id}"?', { id })
+        formatMessage('Are you sure you want to remove form dialog schema "{id}"?', { id }),
       );
       if (res) {
         removeFormDialogSchema({ id, projectId });
@@ -88,7 +89,7 @@ const FormDialogPage: React.FC<Props> = React.memo((props: Props) => {
         }
       }
     },
-    [selectItem, removeFormDialogSchema, schemaId]
+    [selectItem, removeFormDialogSchema, schemaId],
   );
 
   const generateDialog = React.useCallback(
@@ -108,7 +109,7 @@ const FormDialogPage: React.FC<Props> = React.memo((props: Props) => {
         generateFormDialog({ projectId, schemaId });
       }
     },
-    [generateFormDialog, projectId]
+    [generateFormDialog, projectId],
   );
 
   const viewDialog = React.useCallback(
@@ -117,7 +118,7 @@ const FormDialogPage: React.FC<Props> = React.memo((props: Props) => {
         navigateToGeneratedDialog({ projectId, schemaId });
       }
     },
-    [navigateToGeneratedDialog, projectId]
+    [navigateToGeneratedDialog, projectId],
   );
 
   React.useEffect(() => {
@@ -143,7 +144,7 @@ const FormDialogPage: React.FC<Props> = React.memo((props: Props) => {
               label: formatMessage('View dialog'),
               onClick: () => generatingSchemaId && viewDialog(generatingSchemaId),
             },
-          })
+          }),
         );
       } else {
         // error, show failed message with error.
@@ -152,7 +153,7 @@ const FormDialogPage: React.FC<Props> = React.memo((props: Props) => {
             type: 'error',
             title: formatMessage('Dialog generation has failed.'),
             description: formDialogError.message,
-          })
+          }),
         );
       }
     } else {
@@ -164,7 +165,7 @@ const FormDialogPage: React.FC<Props> = React.memo((props: Props) => {
             type: 'error',
             title: formatMessage('Form dialog error'),
             description: formDialogError.message,
-          })
+          }),
         );
       }
     }
@@ -176,7 +177,7 @@ const FormDialogPage: React.FC<Props> = React.memo((props: Props) => {
         updateFormDialogSchema({ id, content, projectId });
       }
     },
-    [updateFormDialogSchema, schemaId]
+    [updateFormDialogSchema, schemaId],
   );
 
   const createItem = React.useCallback(
@@ -184,7 +185,7 @@ const FormDialogPage: React.FC<Props> = React.memo((props: Props) => {
       createFormDialogSchema({ id: formDialogName, projectId });
       setCreateSchemaDialogOpen(false);
     },
-    [createFormDialogSchema, setCreateSchemaDialogOpen]
+    [createFormDialogSchema, setCreateSchemaDialogOpen],
   );
 
   const onMeasuredSizesChanged = (sizes: SplitMeasuredSizes) => {

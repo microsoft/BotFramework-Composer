@@ -27,7 +27,9 @@ const nodeBorderSelectedStyle = css`
 
 // BotAsks, UserAnswers and InvalidPromptBrick nodes selected style
 const nodeBorderDoubleSelectedStyle = css`
-  box-shadow: 0px 0px 0px 2px #0078d4, 0px 0px 0px 6px rgba(0, 120, 212, 0.3);
+  box-shadow:
+    0px 0px 0px 2px #0078d4,
+    0px 0px 0px 6px rgba(0, 120, 212, 0.3);
 `;
 
 /**
@@ -91,7 +93,7 @@ export const ActionNodeWrapper = ({ id, tab, data, onEvent, hideComment, childre
     (action) => {
       nodeFocused && addCoachMarkRef({ action });
     },
-    [nodeFocused]
+    [nodeFocused],
   );
 
   useEffect(() => {

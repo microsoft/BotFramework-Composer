@@ -34,7 +34,7 @@ describe('Allowed Callers', () => {
     };
     const component = renderWithRecoilAndCustomDispatchers(
       <AllowedCallers projectId={state.projectId} />,
-      initRecoilState
+      initRecoilState,
     );
 
     // Create new caller

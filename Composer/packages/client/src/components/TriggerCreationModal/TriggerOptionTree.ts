@@ -43,20 +43,20 @@ const getGroupKey = (submenu) => (typeof submenu === 'object' ? submenu.label : 
 export const generateTriggerOptionTree = (
   triggerUIOptions: TriggerUISchema,
   rootPrompt: string,
-  rootPlaceHolder: string
+  rootPlaceHolder: string,
 ): TriggerOptionTree => {
   const root = new TriggerOptionGroupNode('triggerTypeDropDown', rootPrompt, rootPlaceHolder);
 
   const allOptionEntries = Object.entries(triggerUIOptions).filter(([, option]) => Boolean(option)) as [
     string,
-    TriggerUIOption
+    TriggerUIOption,
   ][];
   const leafEntries = allOptionEntries.filter(([, options]) => !options.submenu);
   const nonLeafEntries = allOptionEntries.filter(([, options]) => options.submenu);
 
   // Build leaf nodes whose depth = 1.
   const leafNodeList = leafEntries.map(
-    ([$kind, options]) => new TriggerOptionLeafNode(options?.label ?? '', $kind, options?.order)
+    ([$kind, options]) => new TriggerOptionLeafNode(options?.label ?? '', $kind, options?.order),
   );
 
   // Insert depth 1 leaf nodes to tree.
@@ -66,17 +66,20 @@ export const generateTriggerOptionTree = (
   // Build group nodes.
   const groups = nonLeafEntries
     .map(([, options]) => options.submenu)
-    .reduce((result, submenu) => {
-      const name = getGroupKey(submenu);
-      if (!result[name]) result[name] = new TriggerOptionGroupNode(name, '', '');
-      if (typeof submenu === 'object') {
-        const tree: TriggerOptionGroupNode = result[name];
-        tree.prompt = submenu.prompt;
-        tree.placeholder = submenu.placeholder;
-        tree.parent = root;
-      }
-      return result;
-    }, {} as { [key: string]: TriggerOptionGroupNode });
+    .reduce(
+      (result, submenu) => {
+        const name = getGroupKey(submenu);
+        if (!result[name]) result[name] = new TriggerOptionGroupNode(name, '', '');
+        if (typeof submenu === 'object') {
+          const tree: TriggerOptionGroupNode = result[name];
+          tree.prompt = submenu.prompt;
+          tree.placeholder = submenu.placeholder;
+          tree.parent = root;
+        }
+        return result;
+      },
+      {} as { [key: string]: TriggerOptionGroupNode },
+    );
 
   // Insert depth 1 group nodes to tree.
   root.children.push(...Object.values(groups));

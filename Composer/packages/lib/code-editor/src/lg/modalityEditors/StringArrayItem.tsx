@@ -127,7 +127,7 @@ const TextViewItem = React.memo(
         e.preventDefault();
         onRemove();
       },
-      [onRemove]
+      [onRemove],
     );
 
     const focus = React.useCallback(
@@ -135,7 +135,7 @@ const TextViewItem = React.memo(
         e.stopPropagation();
         onFocus();
       },
-      [onFocus]
+      [onFocus],
     );
 
     const click = React.useCallback(
@@ -143,12 +143,12 @@ const TextViewItem = React.memo(
         e.stopPropagation();
         onFocus();
       },
-      [onFocus]
+      [onFocus],
     );
 
     const RemoveIcon = React.useMemo(
       () => withTooltip({ content: removeTooltipTextContent ?? formatMessage('Remove variation') }, IconButton),
-      [removeTooltipTextContent]
+      [removeTooltipTextContent],
     );
 
     return (
@@ -174,7 +174,7 @@ const TextViewItem = React.memo(
         />
       </TextViewItemRoot>
     );
-  }
+  },
 );
 
 type TextFieldItemProps = Omit<Props, 'onRemove' | 'mode' | 'onFocus' | 'telemetryClient'>;
@@ -196,7 +196,7 @@ const TextFieldItem = React.memo(({ value, onShowCallout, onChange }: TextFieldI
       e.stopPropagation();
       onShowCallout?.(e.target as HTMLTextAreaElement);
     },
-    [onShowCallout]
+    [onShowCallout],
   );
 
   const click = React.useCallback(
@@ -204,7 +204,7 @@ const TextFieldItem = React.memo(({ value, onShowCallout, onChange }: TextFieldI
       e.stopPropagation();
       onShowCallout?.(e.target as HTMLTextAreaElement);
     },
-    [onShowCallout]
+    [onShowCallout],
   );
 
   return (
@@ -252,12 +252,13 @@ export const StringArrayItem = (props: Props) => {
         editor?.focus();
       }
     },
-    [editorMode]
+    [editorMode],
   );
 
-  const popExpandOptions = React.useMemo(() => ({ onEditorPopToggle, popExpandTitle: formatMessage('Attachment') }), [
-    onEditorPopToggle,
-  ]);
+  const popExpandOptions = React.useMemo(
+    () => ({ onEditorPopToggle, popExpandTitle: formatMessage('Attachment') }),
+    [onEditorPopToggle],
+  );
 
   return (
     <Root verticalAlign="center">

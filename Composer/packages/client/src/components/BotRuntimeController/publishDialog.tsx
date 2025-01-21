@@ -152,7 +152,7 @@ const PublishDialog: React.FC<IPublishDialogProps> = (props) => {
       };
       onPublish(publishConfig);
     },
-    [hasErrors, formData]
+    [hasErrors, formData],
   );
 
   const luisTitleRender = () => {

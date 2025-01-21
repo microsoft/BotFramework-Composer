@@ -206,7 +206,7 @@ async function main(show = false) {
           }
         })
         .catch((e) =>
-          console.error('[Windows] Error while waiting for main window to show before processing deep link: ', e)
+          console.error('[Windows] Error while waiting for main window to show before processing deep link: ', e),
         );
     }
     log('Rendered application.');
@@ -374,7 +374,7 @@ async function run() {
         mainWindow?.loadURL(getBaseUrl() + deeplinkUrl);
       })
       .catch((e) =>
-        console.error('[Mac] Error while waiting for main window to show before processing deep link: ', e)
+        console.error('[Mac] Error while waiting for main window to show before processing deep link: ', e),
       );
   });
 }

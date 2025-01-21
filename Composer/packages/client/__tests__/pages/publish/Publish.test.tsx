@@ -115,7 +115,7 @@ describe('publish page', () => {
         onManagePublishProfile={jest.fn()}
         onRollbackClick={jest.fn()}
       />,
-      initRecoilState
+      initRecoilState,
     );
     getByText('Bot');
     getByText('Date');
@@ -151,7 +151,7 @@ describe('publish page', () => {
     ];
     const { getByText } = renderWithRecoil(
       <PublishDialog items={selectedBots} onDismiss={jest.fn()} onSubmit={jest.fn()} />,
-      initRecoilState
+      initRecoilState,
     );
     getByText('Publish');
     getByText('You are about to publish your bot to the profile below. Do you want to proceed?');

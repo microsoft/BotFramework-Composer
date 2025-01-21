@@ -48,7 +48,7 @@ const Content = styled(Stack)<{
 type PropertyTreeItemProps = {
   onClick?: (
     ev?: React.MouseEvent<HTMLElement> | React.KeyboardEvent<HTMLElement>,
-    item?: IContextualMenuItem
+    item?: IContextualMenuItem,
   ) => boolean | void;
   item: PropertyItem;
   level: number;
@@ -67,7 +67,7 @@ export const PropertyTreeItem = React.memo((props: PropertyTreeItemProps) => {
       e.stopPropagation();
       onToggleExpand?.(item.id, !expanded);
     },
-    [expanded, onToggleExpand, item]
+    [expanded, onToggleExpand, item],
   );
 
   const isExpandable = !!item.children?.length && onToggleExpand;

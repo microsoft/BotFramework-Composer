@@ -599,14 +599,14 @@ export class BotProject implements IBotProject {
           ...orchestratorConfig,
         },
         this.settings.downsampling,
-        this.settings.crossTrain
+        this.settings.crossTrain,
       );
       await this.builder.build(
         luFiles,
         qnaFiles,
         Array.from(this.files.values()) as FileInfo[],
         emptyFiles,
-        !!this.settings.luis.directVersionPublish
+        !!this.settings.luis.directVersionPublish,
       );
     }
   };
@@ -741,7 +741,7 @@ export class BotProject implements IBotProject {
         luUrls.push(lu.url);
         lu.url = defaultSkillFilePath(skillName, Path.basename(lu.url, '.lu'), 'lu');
         return lu;
-      })
+      }),
     );
     await this.createSkillLuFiles(luUrls, skillName);
     return await this.createManifestJsonFile(manifestName, manifestContent, skillName);
@@ -759,7 +759,7 @@ export class BotProject implements IBotProject {
     }
     return await this._createFile(
       `skills/${convertFolderNameToSkillName(manifestKey, skillName)}`,
-      zipContent[manifestKey]
+      zipContent[manifestKey],
     );
   }
 
@@ -936,7 +936,7 @@ export class BotProject implements IBotProject {
         '!(settings/appsettings.json)',
         '!(**/luconfig.json)',
       ],
-      root
+      root,
     );
 
     for (const filePath of paths.sort()) {

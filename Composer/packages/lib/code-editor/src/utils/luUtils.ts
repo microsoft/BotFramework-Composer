@@ -126,7 +126,7 @@ const removeTrailingEmptyLines = (editor: any): number => {
 export const computeDefineLuEntityEdits = (
   entity: { entityType: ToolbarLuEntityType; entityName: string; entityDefinition?: string },
   editor: any,
-  entities: readonly LuEntity[]
+  entities: readonly LuEntity[],
 ): { edits: MonacoEdit[]; selection?: MonacoRange; scrollLine?: number } | undefined => {
   if (editor) {
     const { entityDefinition, entityName, entityType } = entity;
@@ -139,7 +139,7 @@ export const computeDefineLuEntityEdits = (
       getLuText(
         entityType,
         entityName,
-        entities.map((e) => e.Name)
+        entities.map((e) => e.Name),
       );
 
     const edits: MonacoEdit[] = [];

@@ -222,23 +222,6 @@ module.exports = function (webpackEnv) {
         // Disable require.ensure as it's not a standard language feature.
         { parser: { requireEnsure: false } },
 
-        // First, run the linter.
-        // It's important to do this before Babel processes the JS.
-        {
-          test: /\.(js|mjs|jsx)$/,
-          enforce: 'pre',
-          use: [
-            {
-              options: {
-                formatter: require.resolve('react-dev-utils/eslintFormatter'),
-                eslintPath: require.resolve('eslint'),
-                quiet: true,
-              },
-              loader: require.resolve('eslint-loader'),
-            },
-          ],
-          include: paths.appSrc,
-        },
         {
           test: /\.worker\.ts$/,
           use: {

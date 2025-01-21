@@ -102,16 +102,16 @@ export const validateName = (sources: QnAFile[]): FieldValidator => {
     if (name) {
       if (!FileNameRegex.test(name)) {
         currentError = formatMessage(
-          'A knowledge base name cannot contain spaces or special characters. Use letters, numbers, -, or _.'
+          'A knowledge base name cannot contain spaces or special characters. Use letters, numbers, -, or _.',
         );
       }
 
       const duplicatedItemIndex = sources.findIndex(
-        (item) => getBaseName(item.id.toLowerCase()) === `${name.toLowerCase()}.source`
+        (item) => getBaseName(item.id.toLowerCase()) === `${name.toLowerCase()}.source`,
       );
       if (duplicatedItemIndex > -1) {
         currentError = formatMessage(
-          'You already have a knowledge base with that name. Choose another name and try again.'
+          'You already have a knowledge base with that name. Choose another name and try again.',
         );
       }
     }

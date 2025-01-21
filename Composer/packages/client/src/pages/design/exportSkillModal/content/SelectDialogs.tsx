@@ -14,9 +14,10 @@ import { SelectItems } from './SelectItems';
 
 export const SelectDialogs: React.FC<ContentProps> = ({ selectedDialogs, setSelectedDialogs, projectId }) => {
   const dialogs = useRecoilValue(dialogsSelectorFamily(projectId));
-  const items = useMemo(() => dialogs.map(({ id, content, displayName }) => ({ id, content, displayName })), [
-    projectId,
-  ]);
+  const items = useMemo(
+    () => dialogs.map(({ id, content, displayName }) => ({ id, content, displayName })),
+    [projectId],
+  );
 
   // for detail file list in open panel
   const tableColumns = useMemo(
@@ -39,17 +40,17 @@ export const SelectDialogs: React.FC<ContentProps> = ({ selectedDialogs, setSele
         isPadded: true,
       },
     ],
-    [projectId]
+    [projectId],
   );
 
   const selectionRef = useRef(
-    new Selection({
+    new Selection<any>({
       getKey: (item) => item.id,
       onSelectionChanged: () => {
         const selectedItems = selectionRef.current.getSelection();
         setSelectedDialogs(selectedItems);
       },
-    })
+    }),
   );
 
   useEffect(() => {

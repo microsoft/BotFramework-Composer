@@ -9,7 +9,7 @@ import { SelectorElement, Direction } from './type';
 export function handleArrowkeyMove(
   currentElement: SelectorElement,
   selectableElements: SelectorElement[],
-  command: string
+  command: string,
 ) {
   let element: SelectorElement = currentElement;
   let direction: Direction;

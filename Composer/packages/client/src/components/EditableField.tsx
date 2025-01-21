@@ -26,8 +26,8 @@ const defaultContainerStyle = (hasFocus, hasErrors) => css`
     outline: ${hasErrors
       ? `2px solid ${SharedColors.red10}`
       : hasFocus
-      ? `2px solid ${SharedColors.cyanBlue10}`
-      : undefined};
+        ? `2px solid ${SharedColors.cyanBlue10}`
+        : undefined};
   }
   :hover .ms-Button-icon,
   :focus-within .ms-Button-icon {
@@ -286,7 +286,7 @@ const EditableField: React.FC<EditableFieldProps> = (props) => {
                   },
                 },
               },
-              styles
+              styles,
             ) as Partial<ITextFieldStyles>
           }
           value={
@@ -317,7 +317,7 @@ const EditableField: React.FC<EditableFieldProps> = (props) => {
                     visibility: 'hidden',
                   },
                 },
-                iconProps?.iconStyles
+                iconProps?.iconStyles,
               ),
             }}
             styles={{

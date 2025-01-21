@@ -44,7 +44,7 @@ const appInsightsProvisionMethod = (provisionConfig: ProvisionServiceConfig) => 
 
   const applicationInsightsManagementClient = new ApplicationInsightsManagementClient(
     tokenCredentials,
-    provisionConfig.subscriptionId
+    provisionConfig.subscriptionId,
   );
 
   const botServiceClient = new AzureBotService(tokenCredentials, provisionConfig.subscriptionId);
@@ -57,7 +57,7 @@ const appInsightsProvisionMethod = (provisionConfig: ProvisionServiceConfig) => 
         location: resourceConfig.location,
         applicationType: resourceConfig.applicationType ?? 'web',
         kind: 'web',
-      }
+      },
     );
 
   type ApiKeyOptions = {
@@ -86,7 +86,7 @@ const appInsightsProvisionMethod = (provisionConfig: ProvisionServiceConfig) => 
     appInsightsClient: ApplicationInsightsManagementClient,
     botServiceClient: AzureBotService,
     apiKeyOptions: ApiKeyOptions,
-    config: AppInsightsResourceConfig
+    config: AppInsightsResourceConfig,
   ) => {
     const appComponents = await appInsightsClient.components.get(config.resourceGroupName, config.name);
     const appInsightsId = appComponents.appId;
@@ -95,7 +95,7 @@ const appInsightsProvisionMethod = (provisionConfig: ProvisionServiceConfig) => 
     const appInsightsApiKeyResponse = await appInsightsClient.aPIKeys.create(
       config.resourceGroupName,
       config.name,
-      apiKeyOptions
+      apiKeyOptions,
     );
 
     const appInsightsApiKey = appInsightsApiKeyResponse.apiKey;
@@ -113,7 +113,7 @@ const appInsightsProvisionMethod = (provisionConfig: ProvisionServiceConfig) => 
 
   return async (
     resourceConfig: AppInsightsResourceConfig,
-    workingSet: ProvisionWorkingSet
+    workingSet: ProvisionWorkingSet,
   ): Promise<ProvisionWorkingSet> => {
     try {
       const deployResult = await createOrUpdateAppInsightsComponent(resourceConfig);
@@ -124,7 +124,7 @@ const appInsightsProvisionMethod = (provisionConfig: ProvisionServiceConfig) => 
         applicationInsightsManagementClient,
         botServiceClient,
         apiKeyOptions,
-        resourceConfig
+        resourceConfig,
       );
 
       const provisionResult = {

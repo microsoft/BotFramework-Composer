@@ -37,7 +37,7 @@ const Root = styled(Stack)<{
             background: 'rgba(255,255,255, 0.6)',
           },
         }
-      : null
+      : null,
 );
 
 const noop = () => {};

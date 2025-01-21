@@ -31,7 +31,7 @@ export interface LUDocument {
 
 export declare type LUImportResolverDelegate = (
   source: string,
-  resourceId: string
+  resourceId: string,
 ) => {
   content: string;
   id: string;

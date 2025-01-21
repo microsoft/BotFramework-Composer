@@ -19,53 +19,52 @@ const labelContainerStyle: IStackStyles = {
   },
 };
 
-export const getPickerContextualMenuItem = (query: string, propertyTreeExpanded: Record<string, boolean>) => (
-  itemProps: IContextualMenuItemProps
-) => {
-  const {
-    item: { secondaryText: path },
-  } = itemProps;
+export const getPickerContextualMenuItem =
+  (query: string, propertyTreeExpanded: Record<string, boolean>) => (itemProps: IContextualMenuItemProps) => {
+    const {
+      item: { secondaryText: path },
+    } = itemProps;
 
-  const { onToggleExpand, level, node } = itemProps.item.data as {
-    node: PropertyItem;
-    onToggleExpand: (itemId: string, expanded: boolean) => void;
-    level: number;
-  };
+    const { onToggleExpand, level, node } = itemProps.item.data as {
+      node: PropertyItem;
+      onToggleExpand: (itemId: string, expanded: boolean) => void;
+      level: number;
+    };
 
-  const renderLabel = () => {
-    const pathNodes = (path ?? '').split('.');
-    return (
-      <Stack horizontal styles={labelContainerStyle} verticalAlign="center">
-        {pathNodes.map((pathNode, idx) => (
-          <Text
-            key={`segment-${idx}`}
-            styles={{
-              root: {
-                color: idx === pathNodes.length - 1 ? NeutralColors.black : NeutralColors.gray130,
-              },
-            }}
-            variant="small"
-          >
-            {`${pathNode}${idx === pathNodes.length - 1 && node.children.length === 0 ? '' : '.'}`}
-          </Text>
-        ))}
+    const renderLabel = () => {
+      const pathNodes = (path ?? '').split('.');
+      return (
+        <Stack horizontal styles={labelContainerStyle} verticalAlign="center">
+          {pathNodes.map((pathNode, idx) => (
+            <Text
+              key={`segment-${idx}`}
+              styles={{
+                root: {
+                  color: idx === pathNodes.length - 1 ? NeutralColors.black : NeutralColors.gray130,
+                },
+              }}
+              variant="small"
+            >
+              {`${pathNode}${idx === pathNodes.length - 1 && node.children.length === 0 ? '' : '.'}`}
+            </Text>
+          ))}
+        </Stack>
+      );
+    };
+
+    const renderSearchResultLabel = () => (
+      <Stack styles={labelContainerStyle} verticalAlign="center">
+        <Text variant="small">{path}</Text>
       </Stack>
     );
+
+    return (
+      <PropertyTreeItem
+        expanded={propertyTreeExpanded[node.id]}
+        item={node}
+        level={level}
+        onRenderLabel={query ? renderSearchResultLabel : renderLabel}
+        onToggleExpand={onToggleExpand}
+      />
+    );
   };
-
-  const renderSearchResultLabel = () => (
-    <Stack styles={labelContainerStyle} verticalAlign="center">
-      <Text variant="small">{path}</Text>
-    </Stack>
-  );
-
-  return (
-    <PropertyTreeItem
-      expanded={propertyTreeExpanded[node.id]}
-      item={node}
-      level={level}
-      onRenderLabel={query ? renderSearchResultLabel : renderLabel}
-      onToggleExpand={onToggleExpand}
-    />
-  );
-};

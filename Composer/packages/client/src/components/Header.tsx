@@ -369,7 +369,7 @@ export const Header = () => {
             onDismiss={hideTeachingBubble}
           >
             {formatMessage(
-              'Click start and your bot will be up and running. Once it’s running, you can select “Open in WebChat” to test.'
+              'Click start and your bot will be up and running. Once it’s running, you can select “Open in WebChat” to test.',
             )}
           </TeachingBubble>
         )}
@@ -395,7 +395,7 @@ export const Header = () => {
           <div css={calloutHeader}> {formatMessage('Active language')}</div>
           <div css={calloutDescription}>
             {formatMessage(
-              'This is the bot language you are currently authoring. Change the active language in the dropdown below.'
+              'This is the bot language you are currently authoring. Change the active language in the dropdown below.',
             )}
           </div>
           <FocusTrapZone isClickableOutsideFocusTrap>

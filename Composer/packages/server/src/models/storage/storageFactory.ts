@@ -10,7 +10,7 @@ import { StorageConnection, IFileStorage } from './interface';
 
 export class StorageFactory {
   public static createStorageClient(conn: StorageConnection, user?: UserIdentity): IFileStorage {
-    if (ExtensionContext.extensions.storage && ExtensionContext.extensions.storage.customStorageClass) {
+    if (ExtensionContext.extensions.storage?.customStorageClass) {
       const customStorageClass = ExtensionContext.extensions.storage.customStorageClass;
       if (customStorageClass) {
         return new customStorageClass(conn, user) as IFileStorage;

@@ -45,7 +45,7 @@ const luisAuthoringProvisionMethod = (provisionConfig: ProvisionServiceConfig): 
 
   const cognitiveServicesManagementClient = new CognitiveServicesManagementClient(
     tokenCredentials,
-    provisionConfig.subscriptionId
+    provisionConfig.subscriptionId,
   );
 
   return async (config: LuisAuthoringConfig, workingSet: ProvisionWorkingSet): Promise<ProvisionWorkingSet> => {
@@ -65,7 +65,7 @@ const luisAuthoringProvisionMethod = (provisionConfig: ProvisionServiceConfig): 
             name: config.sku ?? 'F0',
           },
           location: authoringLocation,
-        }
+        },
       );
 
       const authoringEndpoint = deployResult.properties?.endpoint ?? '';

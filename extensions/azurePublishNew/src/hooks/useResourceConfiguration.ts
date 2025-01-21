@@ -47,10 +47,10 @@ export const useResourceConfiguration = () => {
     requireUserLogin(publishConfig?.tenantId, { requireGraph: true }); //use tenantId from import config if present
   }, [isAuthenticated]);
 
-  const hasErrors = React.useMemo(() => isInvalidResourceGroupName || isInvalidHostName, [
-    isInvalidHostName,
-    isInvalidResourceGroupName,
-  ]);
+  const hasErrors = React.useMemo(
+    () => isInvalidResourceGroupName || isInvalidHostName,
+    [isInvalidHostName, isInvalidResourceGroupName],
+  );
 
   const isValidConfiguration = React.useMemo(
     (): boolean =>
@@ -63,7 +63,7 @@ export const useResourceConfiguration = () => {
         !luisRegion ||
         !hostName
       ),
-    [currentTenant, subscriptionId, resourceGroupName, hasErrors, deployLocation, luisRegion, hostName]
+    [currentTenant, subscriptionId, resourceGroupName, hasErrors, deployLocation, luisRegion, hostName],
   );
 
   const handleChangeSubscription = React.useCallback((subscriptionId: string) => {
@@ -83,7 +83,7 @@ export const useResourceConfiguration = () => {
     (isValid: boolean) => {
       setIsInvalidResourceGroupName(isValid);
     },
-    [setIsInvalidResourceGroupName]
+    [setIsInvalidResourceGroupName],
   );
 
   const handleChangeDeployLocation = React.useCallback((deployLocationId: string) => {
@@ -95,7 +95,7 @@ export const useResourceConfiguration = () => {
       setLuisRegion(
         (LuisAuthoringSupportLocation.includes(deployLocation)
           ? deployLocation
-          : LuisAuthoringSupportLocation[0]) as LuisRegion
+          : LuisAuthoringSupportLocation[0]) as LuisRegion,
       );
     }
   }, []);

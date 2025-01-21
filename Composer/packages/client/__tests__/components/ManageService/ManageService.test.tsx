@@ -98,7 +98,7 @@ describe('<ManageService />', () => {
         onGetKey={onGetKey}
         onNext={onNext}
         onToggleVisibility={onToggleVisibility}
-      />
+      />,
     );
 
     // confirm the text of the UI contains the dynamic values
@@ -130,7 +130,7 @@ describe('<ManageService />', () => {
         onGetKey={onGetKey}
         onNext={onNext}
         onToggleVisibility={onToggleVisibility}
-      />
+      />,
     );
 
     const cancelButton = await findByText('Cancel');
@@ -159,7 +159,7 @@ describe('<ManageService />', () => {
         onGetKey={onGetKey}
         onNext={onNext}
         onToggleVisibility={onToggleVisibility}
-      />
+      />,
     );
 
     // test the default option (choose existing)
@@ -176,7 +176,7 @@ describe('<ManageService />', () => {
 
     expect(baseElement).toHaveTextContent(`Select ${serviceName} resources`);
     expect(baseElement).toHaveTextContent(
-      `Choose the subscription where your existing ${serviceName} resource is located.`
+      `Choose the subscription where your existing ${serviceName} resource is located.`,
     );
 
     // ensure that since a subscription hasn't been selected
@@ -251,7 +251,7 @@ describe('<ManageService />', () => {
         onGetKey={onGetKey}
         onNext={onNext}
         onToggleVisibility={onToggleVisibility}
-      />
+      />,
     );
 
     // test the default option (choose existing)
@@ -345,7 +345,7 @@ describe('<ManageService />', () => {
       'mockedGroup',
       'mockedResource',
       'westus',
-      expect.anything()
+      expect.anything(),
     );
 
     // ensure that the final callback was called
@@ -377,7 +377,7 @@ describe('<ManageService />', () => {
         onGetKey={onGetKey}
         onNext={onNext}
         onToggleVisibility={onToggleVisibility}
-      />
+      />,
     );
 
     // test the default option (choose existing)
@@ -499,7 +499,7 @@ describe('<ManageService />', () => {
       'mockedGroup',
       'mockedResource',
       'westus',
-      'mockedTier'
+      'mockedTier',
     );
 
     // ensure that the final callback was called
@@ -530,7 +530,7 @@ describe('<ManageService />', () => {
         onGetKey={onGetKey}
         onNext={onNext}
         onToggleVisibility={onToggleVisibility}
-      />
+      />,
     );
 
     // test the default option (choose existing)
@@ -648,7 +648,7 @@ describe('<ManageService />', () => {
       'mockedGroup',
       'mockedResource',
       'westus',
-      'mockedTier'
+      'mockedTier',
     );
 
     // ensure that the final callback was called
@@ -679,7 +679,7 @@ describe('<ManageService />', () => {
         onGetKey={onGetKey}
         onNext={onNext}
         onToggleVisibility={onToggleVisibility}
-      />
+      />,
     );
 
     // test the default option (choose existing)
@@ -697,7 +697,7 @@ describe('<ManageService />', () => {
     });
 
     expect(baseElement).toHaveTextContent(
-      `I am creating a conversational experience using Microsoft Bot Framework project.`
+      `I am creating a conversational experience using Microsoft Bot Framework project.`,
     );
     expect(baseElement).toHaveTextContent(handoffInstructions);
   });

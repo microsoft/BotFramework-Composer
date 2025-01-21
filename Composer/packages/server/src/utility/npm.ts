@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 import { promisify } from 'util';
+import stream from 'stream';
 
 import { mkdir, remove } from 'fs-extra';
 import tar from 'tar';
@@ -10,7 +11,7 @@ import { ExtensionSearchResult } from '@botframework-composer/types';
 import fetch from '../utility/fetch';
 import logger from '../logger';
 
-const streamPipeline = promisify(require('stream').pipeline);
+const streamPipeline = promisify(stream.pipeline);
 
 const log = logger.extend('extension-manager:npm');
 
@@ -21,7 +22,7 @@ export async function search(query = '', keywords = ['botframework-composer']): 
     const queryString = query.replace(' ', '+');
     const keyWordString = keywords.join('+');
     const res = await fetch(
-      `https://registry.npmjs.org/-/v1/search?text=${queryString}+keywords:${keyWordString}&size=100&from=0&quality=0.65&popularity=0.98&maintenance=0.5`
+      `https://registry.npmjs.org/-/v1/search?text=${queryString}+keywords:${keyWordString}&size=100&from=0&quality=0.65&popularity=0.98&maintenance=0.5`,
     );
     const data = await res.json();
 

@@ -77,11 +77,11 @@ const FormTitle: React.FC<FormTitleProps> = (props) => {
               data?.intent,
               normalizedIntentName,
               shell.current.data,
-              shell.current.api
+              shell.current.api,
             ));
         }
       }, 400),
-    []
+    [],
   );
 
   const handleTitleChange = (newTitle?: string): void => {

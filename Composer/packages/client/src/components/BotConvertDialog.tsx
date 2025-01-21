@@ -17,7 +17,7 @@ export const BotConvertConfirmDialog = (showSubContent: boolean) => {
       <div css={contentContainer}>
         <p>
           {formatMessage(
-            'This project was created in an older version of Composer. To open this project in Composer 2.0, we must copy your project and convert it to the latest format. Your original project will not be changed.'
+            'This project was created in an older version of Composer. To open this project in Composer 2.0, we must copy your project and convert it to the latest format. Your original project will not be changed.',
           )}
         </p>
         {showSubContent && (
@@ -33,7 +33,7 @@ export const BotConvertConfirmDialog = (showSubContent: boolean) => {
                     {children}
                   </Link>
                 ),
-              }
+              },
             )}
           </p>
         )}

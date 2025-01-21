@@ -46,14 +46,14 @@ const updateQnaFiles = (
     deletes?: QnAFile[];
     updates?: QnAFile[];
   },
-  getLatestFile?: (current: QnAFile, changed: QnAFile) => QnAFile
+  getLatestFile?: (current: QnAFile, changed: QnAFile) => QnAFile,
 ) => {
   const { updates, adds, deletes } = changes;
 
   // updates
   updates?.forEach((qnaFile) => {
     set(qnaFileState({ projectId, qnaFileId: qnaFile.id }), (oldQnaFile) =>
-      getLatestFile ? getLatestFile(oldQnaFile, qnaFile) : qnaFile
+      getLatestFile ? getLatestFile(oldQnaFile, qnaFile) : qnaFile,
     );
   });
 
@@ -68,7 +68,7 @@ const updateQnaFiles = (
     const addedIds = adds.map((file) => file.id);
     adds.forEach((qnaFile) => {
       set(qnaFileState({ projectId, qnaFileId: qnaFile.id }), (oldQnaFile) =>
-        getLatestFile ? getLatestFile(oldQnaFile, qnaFile) : qnaFile
+        getLatestFile ? getLatestFile(oldQnaFile, qnaFile) : qnaFile,
       );
     });
     set(qnaFileIdsState(projectId), (ids) => [...ids, ...addedIds]);
@@ -77,7 +77,7 @@ const updateQnaFiles = (
 
 export const updateQnAFileState = async (
   callbackHelpers: CallbackInterface,
-  { id, content, projectId }: { id: string; content: string; projectId: string }
+  { id, content, projectId }: { id: string; content: string; projectId: string },
 ) => {
   const updatedQnAFile = (await qnaWorker.parse(id, content)) as QnAFile;
 
@@ -86,7 +86,7 @@ export const updateQnAFileState = async (
 
 export const createQnAFileState = async (
   callbackHelpers: CallbackInterface,
-  { id, content, projectId }: { id: string; content: string; projectId: string }
+  { id, content, projectId }: { id: string; content: string; projectId: string },
 ) => {
   const { snapshot } = callbackHelpers;
   const qnaFiles = await snapshot.getPromise(qnaFilesSelectorFamily(projectId));
@@ -111,7 +111,7 @@ export const createQnAFileState = async (
 
 export const createSourceQnAFileByLocaleState = async (
   callbackHelpers: CallbackInterface,
-  { id, content, locale, projectId }: { id: string; content: string; locale: string; projectId: string }
+  { id, content, locale, projectId }: { id: string; content: string; locale: string; projectId: string },
 ) => {
   const { snapshot } = callbackHelpers;
   const qnaFiles = await snapshot.getPromise(qnaFilesSelectorFamily(projectId));
@@ -131,7 +131,7 @@ export const createSourceQnAFileByLocaleState = async (
  */
 export const removeQnAFileState = async (
   callbackHelpers: CallbackInterface,
-  { id, projectId }: { id: string; projectId: string }
+  { id, projectId }: { id: string; projectId: string },
 ) => {
   const { snapshot } = callbackHelpers;
   const qnaFiles = await snapshot.getPromise(qnaFilesSelectorFamily(projectId));
@@ -153,7 +153,7 @@ export const removeQnAFileState = async (
 
 export const createKBFileState = async (
   callbackHelpers: CallbackInterface,
-  { id, name, content, projectId }: { id: string; name: string; content: string; projectId: string }
+  { id, name, content, projectId }: { id: string; name: string; content: string; projectId: string },
 ) => {
   const { snapshot } = callbackHelpers;
   const qnaFiles = await snapshot.getPromise(qnaFilesSelectorFamily(projectId));
@@ -183,7 +183,7 @@ export const createKBFileByLocaleState = async (
     content,
     locale,
     projectId,
-  }: { id: string; name: string; content: string; locale: string; projectId: string }
+  }: { id: string; name: string; content: string; locale: string; projectId: string },
 ) => {
   const { snapshot } = callbackHelpers;
   const allQnAFiles: QnAFile[] = await snapshot.getPromise(qnaFilesSelectorFamily(projectId));
@@ -206,7 +206,7 @@ export const createKBFileByLocaleState = async (
 
 const updateDialogQnARef = (
   callbackHelpers: CallbackInterface,
-  params: { id: string; name: string; projectId: string; qnaFiles: QnAFile[] }
+  params: { id: string; name: string; projectId: string; qnaFiles: QnAFile[] },
 ) => {
   const { id, name, projectId, qnaFiles } = params;
 
@@ -226,7 +226,7 @@ const updateDialogQnARef = (
 
 export const removeKBFileState = async (
   callbackHelpers: CallbackInterface,
-  { id, projectId }: { id: string; projectId: string }
+  { id, projectId }: { id: string; projectId: string },
 ) => {
   const { snapshot } = callbackHelpers;
   const qnaFiles = await snapshot.getPromise(qnaFilesSelectorFamily(projectId));
@@ -248,7 +248,7 @@ export const removeKBFileState = async (
 
 export const renameKBFileState = async (
   callbackHelpers: CallbackInterface,
-  { id, name, projectId }: { id: string; name: string; projectId: string }
+  { id, name, projectId }: { id: string; name: string; projectId: string },
 ) => {
   const { set, snapshot } = callbackHelpers;
   const qnaFiles = await snapshot.getPromise(qnaFilesSelectorFamily(projectId));
@@ -283,388 +283,220 @@ export const renameKBFileState = async (
 
 export const qnaDispatcher = () => {
   const createQnADialogBegin = useRecoilCallback(
-    ({ set }: CallbackInterface) => async ({
-      onComplete,
-      projectId,
-      dialogId,
-    }: {
-      onComplete?: () => void;
-      projectId: string;
-      dialogId: string;
-    }) => {
-      set(createQnAOnState, { projectId, dialogId });
-      set(showCreateQnADialogState(projectId), true);
-      set(onCreateQnADialogCompleteState(projectId), { func: onComplete });
-    }
+    ({ set }: CallbackInterface) =>
+      async ({ onComplete, projectId, dialogId }: { onComplete?: () => void; projectId: string; dialogId: string }) => {
+        set(createQnAOnState, { projectId, dialogId });
+        set(showCreateQnADialogState(projectId), true);
+        set(onCreateQnADialogCompleteState(projectId), { func: onComplete });
+      },
   );
 
   const createQnADialogCancel = useRecoilCallback(
-    ({ set }: CallbackInterface) => ({ projectId }: { projectId: string }) => {
-      set(createQnAOnState, { projectId: '', dialogId: '' });
-      set(showCreateQnADialogState(projectId), false);
-      set(onCreateQnADialogCompleteState(projectId), { func: undefined });
-    }
+    ({ set }: CallbackInterface) =>
+      ({ projectId }: { projectId: string }) => {
+        set(createQnAOnState, { projectId: '', dialogId: '' });
+        set(showCreateQnADialogState(projectId), false);
+        set(onCreateQnADialogCompleteState(projectId), { func: undefined });
+      },
   );
 
   const createQnADialogSuccess = useRecoilCallback(
-    ({ set, snapshot }: CallbackInterface) => async ({ projectId }: { projectId: string }) => {
-      const onCreateQnAFromUrlDialogComplete = (await snapshot.getPromise(onCreateQnADialogCompleteState(projectId)))
-        .func;
-      if (typeof onCreateQnAFromUrlDialogComplete === 'function') {
-        onCreateQnAFromUrlDialogComplete();
-      }
-      set(showCreateQnADialogState(projectId), false);
-      set(onCreateQnADialogCompleteState(projectId), { func: undefined });
-    }
+    ({ set, snapshot }: CallbackInterface) =>
+      async ({ projectId }: { projectId: string }) => {
+        const onCreateQnAFromUrlDialogComplete = (await snapshot.getPromise(onCreateQnADialogCompleteState(projectId)))
+          .func;
+        if (typeof onCreateQnAFromUrlDialogComplete === 'function') {
+          onCreateQnAFromUrlDialogComplete();
+        }
+        set(showCreateQnADialogState(projectId), false);
+        set(onCreateQnADialogCompleteState(projectId), { func: undefined });
+      },
   );
 
   const updateQnAFile = useRecoilCallback(
-    (callbackHelpers: CallbackInterface) => async ({
-      id, //qna file id: dialogName.locale or kbName.source.locale
-      content,
-      projectId,
-    }: {
-      id: string;
-      content: string;
-      projectId: string;
-    }) => {
-      await updateQnAFileState(callbackHelpers, { id, content, projectId });
-    }
+    (callbackHelpers: CallbackInterface) =>
+      async ({
+        id, //qna file id: dialogName.locale or kbName.source.locale
+        content,
+        projectId,
+      }: {
+        id: string;
+        content: string;
+        projectId: string;
+      }) => {
+        await updateQnAFileState(callbackHelpers, { id, content, projectId });
+      },
   );
 
   const updateContainerQnAFile = useRecoilCallback(
-    (callbackHelpers: CallbackInterface) => async ({
-      id,
-      content,
-      projectId,
-    }: {
-      id: string;
-      content: string;
-      projectId: string;
-    }) => {
-      const updatedQnAFile = (await qnaWorker.parse(id, content)) as QnAFile;
+    (callbackHelpers: CallbackInterface) =>
+      async ({ id, content, projectId }: { id: string; content: string; projectId: string }) => {
+        const updatedQnAFile = (await qnaWorker.parse(id, content)) as QnAFile;
 
-      updateQnaFiles(callbackHelpers, projectId, { updates: [updatedQnAFile] });
-    }
+        updateQnaFiles(callbackHelpers, projectId, { updates: [updatedQnAFile] });
+      },
   );
 
   const createQnAFile = useRecoilCallback(
-    (callbackHelpers: CallbackInterface) => async ({
-      id,
-      content,
-      projectId,
-    }: {
-      id: string;
-      locale: string;
-      content: string;
-      projectId: string;
-      filteredLocales: string[];
-    }) => {
-      await createQnAFileState(callbackHelpers, { id, content, projectId });
-    }
+    (callbackHelpers: CallbackInterface) =>
+      async ({
+        id,
+        content,
+        projectId,
+      }: {
+        id: string;
+        locale: string;
+        content: string;
+        projectId: string;
+        filteredLocales: string[];
+      }) => {
+        await createQnAFileState(callbackHelpers, { id, content, projectId });
+      },
   );
 
   const removeQnAFile = useRecoilCallback(
-    (callbackHelpers: CallbackInterface) => async ({ id, projectId }: { id: string; projectId: string }) => {
-      await removeQnAFileState(callbackHelpers, { id, projectId });
-    }
+    (callbackHelpers: CallbackInterface) =>
+      async ({ id, projectId }: { id: string; projectId: string }) => {
+        await removeQnAFileState(callbackHelpers, { id, projectId });
+      },
   );
 
   const removeQnAFileOnAllLocales = useRecoilCallback(
-    (callbackHelpers: CallbackInterface) => async ({ id, projectId }: { id: string; projectId: string }) => {
-      const { snapshot } = callbackHelpers;
-      const qnaFiles = await snapshot.getPromise(qnaFilesSelectorFamily(projectId));
+    (callbackHelpers: CallbackInterface) =>
+      async ({ id, projectId }: { id: string; projectId: string }) => {
+        const { snapshot } = callbackHelpers;
+        const qnaFiles = await snapshot.getPromise(qnaFilesSelectorFamily(projectId));
 
-      const targetQnAFiles = qnaFiles.filter((item) => getBaseName(item.id) === id);
-      if (!targetQnAFiles || targetQnAFiles.length === 0) {
-        throw new Error(`remove qna files ${id} not exist`);
-      }
+        const targetQnAFiles = qnaFiles.filter((item) => getBaseName(item.id) === id);
+        if (!targetQnAFiles || targetQnAFiles.length === 0) {
+          throw new Error(`remove qna files ${id} not exist`);
+        }
 
-      targetQnAFiles.forEach((file) => {
-        qnaFileStatusStorage.removeFileStatus(projectId, file.id);
-      });
-      updateQnaFiles(callbackHelpers, projectId, { deletes: [...targetQnAFiles] });
-    }
+        targetQnAFiles.forEach((file) => {
+          qnaFileStatusStorage.removeFileStatus(projectId, file.id);
+        });
+        updateQnaFiles(callbackHelpers, projectId, { deletes: [...targetQnAFiles] });
+      },
   );
 
   const dismissCreateQnAModal = useRecoilCallback(
-    ({ set }: CallbackInterface) => async ({ projectId }: { projectId: string }) => {
-      set(showCreateQnADialogState(projectId), false);
-    }
+    ({ set }: CallbackInterface) =>
+      async ({ projectId }: { projectId: string }) => {
+        set(showCreateQnADialogState(projectId), false);
+      },
   );
 
   const importQnAFromUrl = useRecoilCallback(
-    (callbackHelpers: CallbackInterface) => async ({
-      containerId,
-      dialogId,
-      url,
-      multiTurn,
-      projectId,
-    }: {
-      containerId: string; // qna container file id: {name}.source.{locale}
-      dialogId: string;
-      url: string;
-      multiTurn: boolean;
-      projectId: string;
-    }) => {
-      const { snapshot } = callbackHelpers;
-      const notification = createNotification(getQnaPendingNotification(url));
-      addNotificationInternal(callbackHelpers, notification);
-
-      let response;
-      try {
-        response = await httpClient.get(`/utilities/qna/parse`, {
-          params: { url: encodeURIComponent(url), multiTurn },
-        });
-        const rootBotProjectId = await snapshot.getPromise(rootBotProjectIdSelector);
-        const notification = createNotification(
-          getQnaSuccessNotification(() => {
-            navigateTo(
-              rootBotProjectId === projectId
-                ? `/bot/${projectId}/knowledge-base/${dialogId}`
-                : `/bot/${rootBotProjectId}/skill/${projectId}/knowledge-base/${dialogId}`
-            );
-            deleteNotificationInternal(callbackHelpers, notification.id);
-          })
-        );
+    (callbackHelpers: CallbackInterface) =>
+      async ({
+        containerId,
+        dialogId,
+        url,
+        multiTurn,
+        projectId,
+      }: {
+        containerId: string; // qna container file id: {name}.source.{locale}
+        dialogId: string;
+        url: string;
+        multiTurn: boolean;
+        projectId: string;
+      }) => {
+        const { snapshot } = callbackHelpers;
+        const notification = createNotification(getQnaPendingNotification(url));
         addNotificationInternal(callbackHelpers, notification);
-      } catch (err) {
-        addNotificationInternal(
-          callbackHelpers,
-          createNotification(getQnaFailedNotification(err.response?.data?.message))
-        );
-        TelemetryClient.track('UpdateKnowledgeBaseError', { error: err.response?.data?.message });
-        return;
-      } finally {
-        deleteNotificationInternal(callbackHelpers, notification.id);
-      }
 
-      const contentForSourceQnA = `> !# @source.url=${url}
+        let response;
+        try {
+          response = await httpClient.get(`/utilities/qna/parse`, {
+            params: { url: encodeURIComponent(url), multiTurn },
+          });
+          const rootBotProjectId = await snapshot.getPromise(rootBotProjectIdSelector);
+          const notification = createNotification(
+            getQnaSuccessNotification(() => {
+              navigateTo(
+                rootBotProjectId === projectId
+                  ? `/bot/${projectId}/knowledge-base/${dialogId}`
+                  : `/bot/${rootBotProjectId}/skill/${projectId}/knowledge-base/${dialogId}`,
+              );
+              deleteNotificationInternal(callbackHelpers, notification.id);
+            }),
+          );
+          addNotificationInternal(callbackHelpers, notification);
+        } catch (err) {
+          addNotificationInternal(
+            callbackHelpers,
+            createNotification(getQnaFailedNotification(err.response?.data?.message)),
+          );
+          TelemetryClient.track('UpdateKnowledgeBaseError', { error: err.response?.data?.message });
+          return;
+        } finally {
+          deleteNotificationInternal(callbackHelpers, notification.id);
+        }
+
+        const contentForSourceQnA = `> !# @source.url=${url}
 > !# @source.multiTurn=${multiTurn}
 ${response.data}
 `;
-      await updateContainerQnAFile({ id: containerId, content: contentForSourceQnA, projectId });
-    }
+        await updateContainerQnAFile({ id: containerId, content: contentForSourceQnA, projectId });
+      },
   );
 
   const createQnAKBFromUrl = useRecoilCallback(
-    (callbackHelpers: CallbackInterface) => async ({
-      id,
-      name,
-      url,
-      locale,
-      multiTurn,
-      projectId,
-    }: {
-      id: string; // dialogId.locale
-      name: string;
-      url: string;
-      locale: string;
-      multiTurn: boolean;
-      projectId: string;
-    }) => {
-      const { snapshot } = callbackHelpers;
-      await dismissCreateQnAModal({ projectId });
-      const notification = createNotification(getQnaPendingNotification(url));
-      addNotificationInternal(callbackHelpers, notification);
-
-      let response;
-      try {
-        response = await httpClient.get(`/utilities/qna/parse`, {
-          params: { url: encodeURIComponent(url), multiTurn },
-        });
-        const rootBotProjectId = await snapshot.getPromise(rootBotProjectIdSelector);
-        const notification = createNotification(
-          getQnaSuccessNotification(() => {
-            navigateTo(
-              rootBotProjectId === projectId
-                ? `/bot/${projectId}/knowledge-base/${getBaseName(id)}`
-                : `/bot/${rootBotProjectId}/skill/${projectId}/knowledge-base/${getBaseName(id)}`
-            );
-            deleteNotificationInternal(callbackHelpers, notification.id);
-          })
-        );
+    (callbackHelpers: CallbackInterface) =>
+      async ({
+        id,
+        name,
+        url,
+        locale,
+        multiTurn,
+        projectId,
+      }: {
+        id: string; // dialogId.locale
+        name: string;
+        url: string;
+        locale: string;
+        multiTurn: boolean;
+        projectId: string;
+      }) => {
+        const { snapshot } = callbackHelpers;
+        await dismissCreateQnAModal({ projectId });
+        const notification = createNotification(getQnaPendingNotification(url));
         addNotificationInternal(callbackHelpers, notification);
-      } catch (err) {
-        addNotificationInternal(
-          callbackHelpers,
-          createNotification(getQnaFailedNotification(err.response?.data?.message))
-        );
-        createQnADialogCancel({ projectId });
-        TelemetryClient.track('AddNewKnowledgeBaseError', { error: err.response?.data?.message });
-        return;
-      } finally {
-        deleteNotificationInternal(callbackHelpers, notification.id);
-      }
 
-      const contentForSourceQnA = `> !# @source.url=${url}
+        let response;
+        try {
+          response = await httpClient.get(`/utilities/qna/parse`, {
+            params: { url: encodeURIComponent(url), multiTurn },
+          });
+          const rootBotProjectId = await snapshot.getPromise(rootBotProjectIdSelector);
+          const notification = createNotification(
+            getQnaSuccessNotification(() => {
+              navigateTo(
+                rootBotProjectId === projectId
+                  ? `/bot/${projectId}/knowledge-base/${getBaseName(id)}`
+                  : `/bot/${rootBotProjectId}/skill/${projectId}/knowledge-base/${getBaseName(id)}`,
+              );
+              deleteNotificationInternal(callbackHelpers, notification.id);
+            }),
+          );
+          addNotificationInternal(callbackHelpers, notification);
+        } catch (err) {
+          addNotificationInternal(
+            callbackHelpers,
+            createNotification(getQnaFailedNotification(err.response?.data?.message)),
+          );
+          createQnADialogCancel({ projectId });
+          TelemetryClient.track('AddNewKnowledgeBaseError', { error: err.response?.data?.message });
+          return;
+        } finally {
+          deleteNotificationInternal(callbackHelpers, notification.id);
+        }
+
+        const contentForSourceQnA = `> !# @source.url=${url}
 > !# @source.multiTurn=${multiTurn}
 ${response.data}
 `;
 
-      await createKBFileByLocaleState(callbackHelpers, {
-        id,
-        name,
-        content: contentForSourceQnA,
-        locale,
-        projectId,
-      });
-
-      await createQnADialogSuccess({ projectId });
-    }
-  );
-
-  const createQnAKBsFromUrls = useRecoilCallback(
-    (callbackHelpers: CallbackInterface) => async ({
-      id,
-      name,
-      urls,
-      locales,
-      multiTurn,
-      projectId,
-    }: {
-      id: string; // dialogId.locale
-      name: string;
-      urls: string[];
-      locales: string[];
-      multiTurn: boolean;
-      projectId: string;
-    }) => {
-      const { snapshot } = callbackHelpers;
-      await dismissCreateQnAModal({ projectId });
-      const pairs: { locale: string; content: string }[] = locales.map((locale) => {
-        return { locale, content: '' };
-      });
-      await Promise.all(
-        urls.map(async (url, index) => {
-          const notification = createNotification(getQnaPendingNotification(url));
-          addNotificationInternal(callbackHelpers, notification);
-
-          let response;
-          try {
-            response = await httpClient.get(`/utilities/qna/parse`, {
-              params: { url: encodeURIComponent(url), multiTurn },
-            });
-            const rootBotProjectId = await snapshot.getPromise(rootBotProjectIdSelector);
-            const notification = createNotification(
-              getQnaSuccessNotification(() => {
-                navigateTo(
-                  rootBotProjectId === projectId
-                    ? `/bot/${projectId}/knowledge-base/${getBaseName(id)}`
-                    : `/bot/${rootBotProjectId}/skill/${projectId}/knowledge-base/${getBaseName(id)}`
-                );
-                deleteNotificationInternal(callbackHelpers, notification.id);
-              })
-            );
-            addNotificationInternal(callbackHelpers, notification);
-          } catch (err) {
-            addNotificationInternal(
-              callbackHelpers,
-              createNotification(getQnaFailedNotification(err.response?.data?.message))
-            );
-            createQnADialogCancel({ projectId });
-            TelemetryClient.track('AddNewKnowledgeBaseError', { error: err.response?.data?.message });
-
-            return;
-          } finally {
-            deleteNotificationInternal(callbackHelpers, notification.id);
-          }
-
-          const contentForSourceQnA = `> !# @source.url=${url}
-          > !# @source.multiTurn=${multiTurn}
-          ${response.data}
-          `;
-          pairs[index].content = contentForSourceQnA;
-        })
-      );
-
-      const { languages } = await snapshot.getPromise(settingsState(projectId));
-
-      const toBeCopiedLocales = languages.filter((l) => {
-        return !locales.includes(l);
-      });
-      toBeCopiedLocales.forEach((locale) => {
-        pairs.push({ locale, content: pairs[0].content });
-      });
-
-      await createKBFileOnLocalesState(callbackHelpers, {
-        id,
-        name,
-        data: pairs,
-        projectId,
-      });
-      await createQnADialogSuccess({ projectId });
-    }
-  );
-
-  const createQnAKBFromQnAMaker = useRecoilCallback(
-    (callbackHelpers: CallbackInterface) => async ({
-      id,
-      name,
-      endpoint,
-      locales,
-      kbId,
-      kbName,
-      subscriptionKey,
-      projectId,
-    }: {
-      id: string; // dialogId.locale
-      name: string;
-      endpoint: string;
-      locales: string[];
-      kbId: string;
-      kbName: string;
-      subscriptionKey: string;
-      projectId: string;
-    }) => {
-      const { snapshot, set } = callbackHelpers;
-      await dismissCreateQnAModal({ projectId });
-      const notification = createNotification(getQnaImportPendingNotification(kbName));
-      addNotificationInternal(callbackHelpers, notification);
-
-      let response;
-      try {
-        response = await httpClient.post(`/utilities/qna/import`, {
-          endpoint: encodeURIComponent(endpoint),
-          kbId,
-          subscriptionKey,
-        });
-        const rootBotProjectId = await snapshot.getPromise(rootBotProjectIdSelector);
-        const currentLocale = await snapshot.getPromise(localeState(projectId));
-        const notification = createNotification(
-          getQnaSuccessNotification(() => {
-            // if created locale is not current authoring locale, switch to target locale.
-            if (currentLocale !== locales[0]) {
-              set(localeState(projectId), locales[0]);
-            }
-
-            navigateTo(
-              rootBotProjectId === projectId
-                ? `/bot/${projectId}/knowledge-base/${getBaseName(id)}`
-                : `/bot/${rootBotProjectId}/skill/${projectId}/knowledge-base/${getBaseName(id)}`
-            );
-            deleteNotificationInternal(callbackHelpers, notification.id);
-          })
-        );
-        addNotificationInternal(callbackHelpers, notification);
-      } catch (err) {
-        addNotificationInternal(
-          callbackHelpers,
-          createNotification(getQnaFailedNotification(err.response?.data?.message))
-        );
-        createQnADialogCancel({ projectId });
-        TelemetryClient.track('AddNewKnowledgeBaseError', { error: err.response?.data?.message });
-        return;
-      } finally {
-        deleteNotificationInternal(callbackHelpers, notification.id);
-      }
-
-      const contentForSourceQnA = `> !# @source.endpoint=${endpoint}
-> !# @source.kbId=${kbId}
-${response.data}
-`;
-
-      for (const locale of locales) {
         await createKBFileByLocaleState(callbackHelpers, {
           id,
           name,
@@ -672,69 +504,235 @@ ${response.data}
           locale,
           projectId,
         });
-      }
 
-      await createQnADialogSuccess({ projectId });
-    }
+        await createQnADialogSuccess({ projectId });
+      },
   );
 
-  const importQnAFromQnAMaker = useRecoilCallback(
-    (callbackHelpers: CallbackInterface) => async ({
-      containerId,
-      dialogId,
-      projectId,
-      endpoint,
-      subscriptionKey,
-      kbId,
-      kbName,
-    }: {
-      containerId: string; // qna container file id: {name}.source.{locale}
-      dialogId: string;
-      projectId: string;
-      endpoint: string;
-      subscriptionKey: string;
-      kbId: string;
-      kbName: string;
-    }) => {
-      const { snapshot } = callbackHelpers;
-      const notification = createNotification(getQnaImportPendingNotification(kbName));
-      addNotificationInternal(callbackHelpers, notification);
-      let response;
-      try {
-        response = await httpClient.post(`/utilities/qna/import`, {
-          endpoint: encodeURIComponent(endpoint),
-          subscriptionKey,
-          kbId,
+  const createQnAKBsFromUrls = useRecoilCallback(
+    (callbackHelpers: CallbackInterface) =>
+      async ({
+        id,
+        name,
+        urls,
+        locales,
+        multiTurn,
+        projectId,
+      }: {
+        id: string; // dialogId.locale
+        name: string;
+        urls: string[];
+        locales: string[];
+        multiTurn: boolean;
+        projectId: string;
+      }) => {
+        const { snapshot } = callbackHelpers;
+        await dismissCreateQnAModal({ projectId });
+        const pairs: { locale: string; content: string }[] = locales.map((locale) => {
+          return { locale, content: '' };
         });
-        const rootBotProjectId = await snapshot.getPromise(rootBotProjectIdSelector);
-        const notification = createNotification(
-          getQnaSuccessNotification(() => {
-            navigateTo(
-              rootBotProjectId === projectId
-                ? `/bot/${projectId}/knowledge-base/${dialogId}`
-                : `/bot/${rootBotProjectId}/skill/${projectId}/knowledge-base/${dialogId}`
-            );
-            deleteNotificationInternal(callbackHelpers, notification.id);
-          })
-        );
-        addNotificationInternal(callbackHelpers, notification);
-      } catch (err) {
-        addNotificationInternal(
-          callbackHelpers,
-          createNotification(getQnaFailedNotification(err.response?.data?.message))
-        );
-        TelemetryClient.track('UpdateKnowledgeBaseError', { error: err.response?.data?.message });
-        return;
-      } finally {
-        deleteNotificationInternal(callbackHelpers, notification.id);
-      }
+        await Promise.all(
+          urls.map(async (url, index) => {
+            const notification = createNotification(getQnaPendingNotification(url));
+            addNotificationInternal(callbackHelpers, notification);
 
-      const contentForSourceQnA = `> !# @source.endpoint=${endpoint}
+            let response;
+            try {
+              response = await httpClient.get(`/utilities/qna/parse`, {
+                params: { url: encodeURIComponent(url), multiTurn },
+              });
+              const rootBotProjectId = await snapshot.getPromise(rootBotProjectIdSelector);
+              const notification = createNotification(
+                getQnaSuccessNotification(() => {
+                  navigateTo(
+                    rootBotProjectId === projectId
+                      ? `/bot/${projectId}/knowledge-base/${getBaseName(id)}`
+                      : `/bot/${rootBotProjectId}/skill/${projectId}/knowledge-base/${getBaseName(id)}`,
+                  );
+                  deleteNotificationInternal(callbackHelpers, notification.id);
+                }),
+              );
+              addNotificationInternal(callbackHelpers, notification);
+            } catch (err) {
+              addNotificationInternal(
+                callbackHelpers,
+                createNotification(getQnaFailedNotification(err.response?.data?.message)),
+              );
+              createQnADialogCancel({ projectId });
+              TelemetryClient.track('AddNewKnowledgeBaseError', { error: err.response?.data?.message });
+
+              return;
+            } finally {
+              deleteNotificationInternal(callbackHelpers, notification.id);
+            }
+
+            const contentForSourceQnA = `> !# @source.url=${url}
+          > !# @source.multiTurn=${multiTurn}
+          ${response.data}
+          `;
+            pairs[index].content = contentForSourceQnA;
+          }),
+        );
+
+        const { languages } = await snapshot.getPromise(settingsState(projectId));
+
+        const toBeCopiedLocales = languages.filter((l) => {
+          return !locales.includes(l);
+        });
+        toBeCopiedLocales.forEach((locale) => {
+          pairs.push({ locale, content: pairs[0].content });
+        });
+
+        await createKBFileOnLocalesState(callbackHelpers, {
+          id,
+          name,
+          data: pairs,
+          projectId,
+        });
+        await createQnADialogSuccess({ projectId });
+      },
+  );
+
+  const createQnAKBFromQnAMaker = useRecoilCallback(
+    (callbackHelpers: CallbackInterface) =>
+      async ({
+        id,
+        name,
+        endpoint,
+        locales,
+        kbId,
+        kbName,
+        subscriptionKey,
+        projectId,
+      }: {
+        id: string; // dialogId.locale
+        name: string;
+        endpoint: string;
+        locales: string[];
+        kbId: string;
+        kbName: string;
+        subscriptionKey: string;
+        projectId: string;
+      }) => {
+        const { snapshot, set } = callbackHelpers;
+        await dismissCreateQnAModal({ projectId });
+        const notification = createNotification(getQnaImportPendingNotification(kbName));
+        addNotificationInternal(callbackHelpers, notification);
+
+        let response;
+        try {
+          response = await httpClient.post(`/utilities/qna/import`, {
+            endpoint: encodeURIComponent(endpoint),
+            kbId,
+            subscriptionKey,
+          });
+          const rootBotProjectId = await snapshot.getPromise(rootBotProjectIdSelector);
+          const currentLocale = await snapshot.getPromise(localeState(projectId));
+          const notification = createNotification(
+            getQnaSuccessNotification(() => {
+              // if created locale is not current authoring locale, switch to target locale.
+              if (currentLocale !== locales[0]) {
+                set(localeState(projectId), locales[0]);
+              }
+
+              navigateTo(
+                rootBotProjectId === projectId
+                  ? `/bot/${projectId}/knowledge-base/${getBaseName(id)}`
+                  : `/bot/${rootBotProjectId}/skill/${projectId}/knowledge-base/${getBaseName(id)}`,
+              );
+              deleteNotificationInternal(callbackHelpers, notification.id);
+            }),
+          );
+          addNotificationInternal(callbackHelpers, notification);
+        } catch (err) {
+          addNotificationInternal(
+            callbackHelpers,
+            createNotification(getQnaFailedNotification(err.response?.data?.message)),
+          );
+          createQnADialogCancel({ projectId });
+          TelemetryClient.track('AddNewKnowledgeBaseError', { error: err.response?.data?.message });
+          return;
+        } finally {
+          deleteNotificationInternal(callbackHelpers, notification.id);
+        }
+
+        const contentForSourceQnA = `> !# @source.endpoint=${endpoint}
 > !# @source.kbId=${kbId}
 ${response.data}
 `;
-      await updateContainerQnAFile({ id: containerId, content: contentForSourceQnA, projectId });
-    }
+
+        for (const locale of locales) {
+          await createKBFileByLocaleState(callbackHelpers, {
+            id,
+            name,
+            content: contentForSourceQnA,
+            locale,
+            projectId,
+          });
+        }
+
+        await createQnADialogSuccess({ projectId });
+      },
+  );
+
+  const importQnAFromQnAMaker = useRecoilCallback(
+    (callbackHelpers: CallbackInterface) =>
+      async ({
+        containerId,
+        dialogId,
+        projectId,
+        endpoint,
+        subscriptionKey,
+        kbId,
+        kbName,
+      }: {
+        containerId: string; // qna container file id: {name}.source.{locale}
+        dialogId: string;
+        projectId: string;
+        endpoint: string;
+        subscriptionKey: string;
+        kbId: string;
+        kbName: string;
+      }) => {
+        const { snapshot } = callbackHelpers;
+        const notification = createNotification(getQnaImportPendingNotification(kbName));
+        addNotificationInternal(callbackHelpers, notification);
+        let response;
+        try {
+          response = await httpClient.post(`/utilities/qna/import`, {
+            endpoint: encodeURIComponent(endpoint),
+            subscriptionKey,
+            kbId,
+          });
+          const rootBotProjectId = await snapshot.getPromise(rootBotProjectIdSelector);
+          const notification = createNotification(
+            getQnaSuccessNotification(() => {
+              navigateTo(
+                rootBotProjectId === projectId
+                  ? `/bot/${projectId}/knowledge-base/${dialogId}`
+                  : `/bot/${rootBotProjectId}/skill/${projectId}/knowledge-base/${dialogId}`,
+              );
+              deleteNotificationInternal(callbackHelpers, notification.id);
+            }),
+          );
+          addNotificationInternal(callbackHelpers, notification);
+        } catch (err) {
+          addNotificationInternal(
+            callbackHelpers,
+            createNotification(getQnaFailedNotification(err.response?.data?.message)),
+          );
+          TelemetryClient.track('UpdateKnowledgeBaseError', { error: err.response?.data?.message });
+          return;
+        } finally {
+          deleteNotificationInternal(callbackHelpers, notification.id);
+        }
+
+        const contentForSourceQnA = `> !# @source.endpoint=${endpoint}
+> !# @source.kbId=${kbId}
+${response.data}
+`;
+        await updateContainerQnAFile({ id: containerId, content: contentForSourceQnA, projectId });
+      },
   );
 
   const createKBFileOnLocalesState = async (
@@ -744,7 +742,7 @@ ${response.data}
       name,
       data,
       projectId,
-    }: { id: string; name: string; data: { content: string; locale: string }[]; projectId: string }
+    }: { id: string; name: string; data: { content: string; locale: string }[]; projectId: string },
   ) => {
     const { snapshot } = callbackHelpers;
     const qnaFiles = await snapshot.getPromise(qnaFilesSelectorFamily(projectId));
@@ -762,272 +760,245 @@ ${response.data}
         }
         const createdQnaFile = (await qnaWorker.parse(createdSourceQnAId, d.content)) as QnAFile;
         changes.push(createdQnaFile);
-      })
+      }),
     );
     updateQnaFiles(callbackHelpers, projectId, { adds: changes });
   };
 
   const createQnAKBFromScratch = useRecoilCallback(
-    (callbackHelpers: CallbackInterface) => async ({
-      id,
-      name,
-      projectId,
-      content = '',
-    }: {
-      id: string;
-      name: string;
-      content?: string;
-      projectId: string;
-    }) => {
-      await dismissCreateQnAModal({ projectId });
+    (callbackHelpers: CallbackInterface) =>
+      async ({
+        id,
+        name,
+        projectId,
+        content = '',
+      }: {
+        id: string;
+        name: string;
+        content?: string;
+        projectId: string;
+      }) => {
+        await dismissCreateQnAModal({ projectId });
 
-      await createKBFileState(callbackHelpers, { id, name, content, projectId });
-      const rootBotProjectId = await callbackHelpers.snapshot.getPromise(rootBotProjectIdSelector);
-      const notification = createNotification(
-        getQnaSuccessNotification(() => {
-          navigateTo(
-            rootBotProjectId === projectId
-              ? `/bot/${projectId}/knowledge-base/${getBaseName(id)}`
-              : `/bot/${rootBotProjectId}/skill/${projectId}/knowledge-base/${getBaseName(id)}`
-          );
-          deleteNotificationInternal(callbackHelpers, notification.id);
-        })
-      );
-      addNotificationInternal(callbackHelpers, notification);
-    }
+        await createKBFileState(callbackHelpers, { id, name, content, projectId });
+        const rootBotProjectId = await callbackHelpers.snapshot.getPromise(rootBotProjectIdSelector);
+        const notification = createNotification(
+          getQnaSuccessNotification(() => {
+            navigateTo(
+              rootBotProjectId === projectId
+                ? `/bot/${projectId}/knowledge-base/${getBaseName(id)}`
+                : `/bot/${rootBotProjectId}/skill/${projectId}/knowledge-base/${getBaseName(id)}`,
+            );
+            deleteNotificationInternal(callbackHelpers, notification.id);
+          }),
+        );
+        addNotificationInternal(callbackHelpers, notification);
+      },
   );
 
   const updateQnAQuestion = useRecoilCallback(
-    (callbackHelpers: CallbackInterface) => async ({
-      id,
-      sectionId,
-      questionId,
-      content,
-      projectId,
-    }: {
-      id: string;
-      sectionId: string;
-      questionId: string;
-      content: string;
-      projectId: string;
-    }) => {
-      const { snapshot } = callbackHelpers;
-      const qnaFiles = await snapshot.getPromise(qnaFilesSelectorFamily(projectId));
-      const qnaFile = qnaFiles.find((temp) => temp.id === id);
-      if (!qnaFile) return qnaFiles;
+    (callbackHelpers: CallbackInterface) =>
+      async ({
+        id,
+        sectionId,
+        questionId,
+        content,
+        projectId,
+      }: {
+        id: string;
+        sectionId: string;
+        questionId: string;
+        content: string;
+        projectId: string;
+      }) => {
+        const { snapshot } = callbackHelpers;
+        const qnaFiles = await snapshot.getPromise(qnaFilesSelectorFamily(projectId));
+        const qnaFile = qnaFiles.find((temp) => temp.id === id);
+        if (!qnaFile) return qnaFiles;
 
-      const updatedFile = qnaUtil.updateQnAQuestion(qnaFile, sectionId, questionId, content);
-      updateQnaFiles(callbackHelpers, projectId, { updates: [updatedFile] });
-    }
+        const updatedFile = qnaUtil.updateQnAQuestion(qnaFile, sectionId, questionId, content);
+        updateQnaFiles(callbackHelpers, projectId, { updates: [updatedFile] });
+      },
   );
 
   const updateQnAAnswer = useRecoilCallback(
-    (callbackHelpers: CallbackInterface) => async ({
-      id,
-      sectionId,
-      content,
-      projectId,
-    }: {
-      id: string;
-      sectionId: string;
-      content: string;
-      projectId: string;
-    }) => {
-      const { snapshot } = callbackHelpers;
-      const qnaFiles = await snapshot.getPromise(qnaFilesSelectorFamily(projectId));
-      const qnaFile = qnaFiles.find((temp) => temp.id === id);
-      if (!qnaFile) return qnaFiles;
+    (callbackHelpers: CallbackInterface) =>
+      async ({
+        id,
+        sectionId,
+        content,
+        projectId,
+      }: {
+        id: string;
+        sectionId: string;
+        content: string;
+        projectId: string;
+      }) => {
+        const { snapshot } = callbackHelpers;
+        const qnaFiles = await snapshot.getPromise(qnaFilesSelectorFamily(projectId));
+        const qnaFile = qnaFiles.find((temp) => temp.id === id);
+        if (!qnaFile) return qnaFiles;
 
-      const updatedFile = qnaUtil.updateQnAAnswer(qnaFile, sectionId, content);
-      updateQnaFiles(callbackHelpers, projectId, { updates: [updatedFile] });
-    }
+        const updatedFile = qnaUtil.updateQnAAnswer(qnaFile, sectionId, content);
+        updateQnaFiles(callbackHelpers, projectId, { updates: [updatedFile] });
+      },
   );
 
   const createQnAQuestion = useRecoilCallback(
-    (callbackHelpers: CallbackInterface) => async ({
-      id,
-      sectionId,
-      content,
-      projectId,
-    }: {
-      id: string;
-      sectionId: string;
-      content: string;
-      projectId: string;
-    }) => {
-      const { snapshot } = callbackHelpers;
-      const qnaFiles = await snapshot.getPromise(qnaFilesSelectorFamily(projectId));
-      const qnaFile = qnaFiles.find((temp) => temp.id === id);
-      if (!qnaFile) return qnaFiles;
+    (callbackHelpers: CallbackInterface) =>
+      async ({
+        id,
+        sectionId,
+        content,
+        projectId,
+      }: {
+        id: string;
+        sectionId: string;
+        content: string;
+        projectId: string;
+      }) => {
+        const { snapshot } = callbackHelpers;
+        const qnaFiles = await snapshot.getPromise(qnaFilesSelectorFamily(projectId));
+        const qnaFile = qnaFiles.find((temp) => temp.id === id);
+        if (!qnaFile) return qnaFiles;
 
-      const updatedFile = qnaUtil.createQnAQuestion(qnaFile, sectionId, content);
-      updateQnaFiles(callbackHelpers, projectId, { updates: [updatedFile] });
-    }
+        const updatedFile = qnaUtil.createQnAQuestion(qnaFile, sectionId, content);
+        updateQnaFiles(callbackHelpers, projectId, { updates: [updatedFile] });
+      },
   );
 
   const removeQnAQuestion = useRecoilCallback(
-    (callbackHelpers: CallbackInterface) => async ({
-      id,
-      sectionId,
-      questionId,
-      projectId,
-    }: {
-      id: string;
-      sectionId: string;
-      questionId: string;
-      projectId: string;
-    }) => {
-      const { snapshot } = callbackHelpers;
-      const qnaFiles = await snapshot.getPromise(qnaFilesSelectorFamily(projectId));
-      const qnaFile = qnaFiles.find((temp) => temp.id === id);
-      if (!qnaFile) return qnaFiles;
+    (callbackHelpers: CallbackInterface) =>
+      async ({
+        id,
+        sectionId,
+        questionId,
+        projectId,
+      }: {
+        id: string;
+        sectionId: string;
+        questionId: string;
+        projectId: string;
+      }) => {
+        const { snapshot } = callbackHelpers;
+        const qnaFiles = await snapshot.getPromise(qnaFilesSelectorFamily(projectId));
+        const qnaFile = qnaFiles.find((temp) => temp.id === id);
+        if (!qnaFile) return qnaFiles;
 
-      const updatedFile = qnaUtil.removeQnAQuestion(qnaFile, sectionId, questionId);
-      updateQnaFiles(callbackHelpers, projectId, { updates: [updatedFile] });
-    }
+        const updatedFile = qnaUtil.removeQnAQuestion(qnaFile, sectionId, questionId);
+        updateQnaFiles(callbackHelpers, projectId, { updates: [updatedFile] });
+      },
   );
 
   const createQnAPairs = useRecoilCallback(
-    (callbackHelpers: CallbackInterface) => async ({
-      id,
-      content,
-      projectId,
-    }: {
-      id: string;
-      content: string;
-      projectId: string;
-    }) => {
-      const { snapshot } = callbackHelpers;
-      const qnaFiles = await snapshot.getPromise(qnaFilesSelectorFamily(projectId));
-      const qnaFile = qnaFiles.find((temp) => temp.id === id);
-      if (!qnaFile) return qnaFiles;
+    (callbackHelpers: CallbackInterface) =>
+      async ({ id, content, projectId }: { id: string; content: string; projectId: string }) => {
+        const { snapshot } = callbackHelpers;
+        const qnaFiles = await snapshot.getPromise(qnaFilesSelectorFamily(projectId));
+        const qnaFile = qnaFiles.find((temp) => temp.id === id);
+        if (!qnaFile) return qnaFiles;
 
-      // insert into head, need investigate
-      const updatedFile = qnaUtil.insertSection(qnaFile, 0, content);
-      updateQnaFiles(callbackHelpers, projectId, { updates: [updatedFile] });
-    }
+        // insert into head, need investigate
+        const updatedFile = qnaUtil.insertSection(qnaFile, 0, content);
+        updateQnaFiles(callbackHelpers, projectId, { updates: [updatedFile] });
+      },
   );
 
   const removeQnAPairs = useRecoilCallback(
-    (callbackHelpers: CallbackInterface) => async ({
-      id,
-      sectionId,
-      projectId,
-    }: {
-      id: string;
-      sectionId: string;
-      projectId: string;
-    }) => {
-      const { snapshot } = callbackHelpers;
-      const qnaFiles = await snapshot.getPromise(qnaFilesSelectorFamily(projectId));
-      const qnaFile = qnaFiles.find((temp) => temp.id === id);
-      if (!qnaFile) return qnaFiles;
+    (callbackHelpers: CallbackInterface) =>
+      async ({ id, sectionId, projectId }: { id: string; sectionId: string; projectId: string }) => {
+        const { snapshot } = callbackHelpers;
+        const qnaFiles = await snapshot.getPromise(qnaFilesSelectorFamily(projectId));
+        const qnaFile = qnaFiles.find((temp) => temp.id === id);
+        if (!qnaFile) return qnaFiles;
 
-      const updatedFile = qnaUtil.removeSection(qnaFile, sectionId);
-      updateQnaFiles(callbackHelpers, projectId, { updates: [updatedFile] });
-    }
+        const updatedFile = qnaUtil.removeSection(qnaFile, sectionId);
+        updateQnaFiles(callbackHelpers, projectId, { updates: [updatedFile] });
+      },
   );
 
   const createQnAImport = useRecoilCallback(
-    (callbackHelpers: CallbackInterface) => async ({
-      id,
-      sourceId,
-      projectId,
-    }: {
-      id: string;
-      sourceId: string;
-      projectId: string;
-    }) => {
-      const { snapshot } = callbackHelpers;
-      const qnaFiles = await snapshot.getPromise(qnaFilesSelectorFamily(projectId));
-      const qnaFile = qnaFiles.find((temp) => temp.id === id);
-      if (!qnaFile) return qnaFiles;
+    (callbackHelpers: CallbackInterface) =>
+      async ({ id, sourceId, projectId }: { id: string; sourceId: string; projectId: string }) => {
+        const { snapshot } = callbackHelpers;
+        const qnaFiles = await snapshot.getPromise(qnaFilesSelectorFamily(projectId));
+        const qnaFile = qnaFiles.find((temp) => temp.id === id);
+        if (!qnaFile) return qnaFiles;
 
-      const updatedFile = qnaUtil.addImport(qnaFile, `${sourceId}.qna`);
-      updateQnaFiles(callbackHelpers, projectId, { updates: [updatedFile] });
-    }
+        const updatedFile = qnaUtil.addImport(qnaFile, `${sourceId}.qna`);
+        updateQnaFiles(callbackHelpers, projectId, { updates: [updatedFile] });
+      },
   );
   const removeQnAImport = useRecoilCallback(
-    (callbackHelpers: CallbackInterface) => async ({
-      id,
-      sourceId,
-      projectId,
-    }: {
-      id: string;
-      sourceId: string;
-      projectId: string;
-    }) => {
-      const { snapshot } = callbackHelpers;
-      const qnaFiles = await snapshot.getPromise(qnaFilesSelectorFamily(projectId));
-      const qnaFile = qnaFiles.find((temp) => temp.id === id);
-      if (!qnaFile) return qnaFiles;
+    (callbackHelpers: CallbackInterface) =>
+      async ({ id, sourceId, projectId }: { id: string; sourceId: string; projectId: string }) => {
+        const { snapshot } = callbackHelpers;
+        const qnaFiles = await snapshot.getPromise(qnaFilesSelectorFamily(projectId));
+        const qnaFile = qnaFiles.find((temp) => temp.id === id);
+        if (!qnaFile) return qnaFiles;
 
-      const updatedFile = qnaUtil.removeImport(qnaFile, `${sourceId}.qna`);
-      updateQnaFiles(callbackHelpers, projectId, { updates: [updatedFile] });
-    }
+        const updatedFile = qnaUtil.removeImport(qnaFile, `${sourceId}.qna`);
+        updateQnaFiles(callbackHelpers, projectId, { updates: [updatedFile] });
+      },
   );
 
   const removeQnAImportOnAllLocales = useRecoilCallback(
-    (callbackHelpers: CallbackInterface) => async ({
-      id, //dialogName
-      sourceId,
-      projectId,
-    }: {
-      id: string;
-      sourceId: string;
-      projectId: string;
-    }) => {
-      const { snapshot } = callbackHelpers;
-      const qnaFiles = await snapshot.getPromise(qnaFilesSelectorFamily(projectId));
-      const targetQnaFiles = qnaFiles.filter((f) => getBaseName(f.id) === id);
-      if (!targetQnaFiles || targetQnaFiles.length === 0) return targetQnaFiles;
+    (callbackHelpers: CallbackInterface) =>
+      async ({
+        id, //dialogName
+        sourceId,
+        projectId,
+      }: {
+        id: string;
+        sourceId: string;
+        projectId: string;
+      }) => {
+        const { snapshot } = callbackHelpers;
+        const qnaFiles = await snapshot.getPromise(qnaFilesSelectorFamily(projectId));
+        const targetQnaFiles = qnaFiles.filter((f) => getBaseName(f.id) === id);
+        if (!targetQnaFiles || targetQnaFiles.length === 0) return targetQnaFiles;
 
-      const updatedFiles = targetQnaFiles.map((f) => {
-        return qnaUtil.removeImport(f, `${sourceId}.qna`);
-      });
-      updateQnaFiles(callbackHelpers, projectId, { updates: [...updatedFiles] });
-    }
+        const updatedFiles = targetQnaFiles.map((f) => {
+          return qnaUtil.removeImport(f, `${sourceId}.qna`);
+        });
+        updateQnaFiles(callbackHelpers, projectId, { updates: [...updatedFiles] });
+      },
   );
 
   const updateQnAImport = useRecoilCallback(
-    (callbackHelpers: CallbackInterface) => async ({
-      id,
-      sourceId,
-      newSourceId,
-      projectId,
-    }: {
-      id: string;
-      sourceId: string;
-      newSourceId: string;
-      projectId: string;
-    }) => {
-      const { snapshot } = callbackHelpers;
-      const qnaFiles = await snapshot.getPromise(qnaFilesSelectorFamily(projectId));
-      const qnaFile = qnaFiles.find((temp) => temp.id === id);
-      if (!qnaFile) return qnaFiles;
+    (callbackHelpers: CallbackInterface) =>
+      async ({
+        id,
+        sourceId,
+        newSourceId,
+        projectId,
+      }: {
+        id: string;
+        sourceId: string;
+        newSourceId: string;
+        projectId: string;
+      }) => {
+        const { snapshot } = callbackHelpers;
+        const qnaFiles = await snapshot.getPromise(qnaFilesSelectorFamily(projectId));
+        const qnaFile = qnaFiles.find((temp) => temp.id === id);
+        if (!qnaFile) return qnaFiles;
 
-      let updatedFile = qnaUtil.removeImport(qnaFile, `${sourceId}.qna`);
-      updatedFile = qnaUtil.addImport(updatedFile, `${newSourceId}.qna`);
-      updateQnaFiles(callbackHelpers, projectId, { updates: [updatedFile] });
-    }
+        let updatedFile = qnaUtil.removeImport(qnaFile, `${sourceId}.qna`);
+        updatedFile = qnaUtil.addImport(updatedFile, `${newSourceId}.qna`);
+        updateQnaFiles(callbackHelpers, projectId, { updates: [updatedFile] });
+      },
   );
   const removeQnAKB = useRecoilCallback(
-    (callbackHelpers: CallbackInterface) => async ({ id, projectId }: { id: string; projectId: string }) => {
-      await removeKBFileState(callbackHelpers, { id, projectId });
-    }
+    (callbackHelpers: CallbackInterface) =>
+      async ({ id, projectId }: { id: string; projectId: string }) => {
+        await removeKBFileState(callbackHelpers, { id, projectId });
+      },
   );
   const renameQnAKB = useRecoilCallback(
-    (callbackHelpers: CallbackInterface) => async ({
-      id,
-      name,
-      projectId,
-    }: {
-      id: string;
-      name: string;
-      projectId: string;
-    }) => {
-      await renameKBFileState(callbackHelpers, { id, name, projectId });
-    }
+    (callbackHelpers: CallbackInterface) =>
+      async ({ id, name, projectId }: { id: string; name: string; projectId: string }) => {
+        await renameKBFileState(callbackHelpers, { id, name, projectId });
+      },
   );
 
   return {

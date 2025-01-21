@@ -39,9 +39,10 @@ const fontSizeStyle = {
 const buttonStyles = {
   root: {
     height: 32,
-    '&:hover .ms-Button-flexContainer i, &:active .ms-Button-flexContainer i, &.is-expanded .ms-Button-flexContainer i': {
-      color: FluentTheme.palette.black,
-    },
+    '&:hover .ms-Button-flexContainer i, &:active .ms-Button-flexContainer i, &.is-expanded .ms-Button-flexContainer i':
+      {
+        color: FluentTheme.palette.black,
+      },
   },
   menuIcon: { fontSize: 8, color: FluentTheme.palette.black },
   label: { ...fontSizeStyle },
@@ -54,7 +55,7 @@ const getCommandBarButton = (tooltipContent: string) =>
 type Props = {
   onDefineEntity: (
     entityType: ToolbarLuEntityType,
-    data: Partial<{ entityName: string; entityDefinition: string }>
+    data: Partial<{ entityName: string; entityDefinition: string }>,
   ) => void;
   disabled?: boolean;
   tooltip?: string;
@@ -88,7 +89,7 @@ export const DefineEntityButton = React.memo((props: Props) => {
           throw `${entityType} is not supported!`;
       }
     },
-    [onDefineEntity]
+    [onDefineEntity],
   );
 
   const filteredPrebuiltEntities = React.useMemo(() => {
@@ -115,7 +116,7 @@ export const DefineEntityButton = React.memo((props: Props) => {
       onRenderMenuList,
       onMenuDismissed: onReset,
     }),
-    [filteredPrebuiltEntities, onReset, onRenderMenuList]
+    [filteredPrebuiltEntities, onReset, onRenderMenuList],
   );
 
   const renderMenuItemHeader = React.useCallback(
@@ -133,7 +134,7 @@ export const DefineEntityButton = React.memo((props: Props) => {
         })}
       />
     ),
-    []
+    [],
   );
 
   const menuItems = React.useMemo(() => {
@@ -161,7 +162,7 @@ export const DefineEntityButton = React.memo((props: Props) => {
       items: menuItems,
       calloutProps: {
         preventDismissOnEvent: (
-          e: Event | React.FocusEvent<Element> | React.KeyboardEvent<Element> | React.MouseEvent<Element, MouseEvent>
+          e: Event | React.FocusEvent<Element> | React.KeyboardEvent<Element> | React.MouseEvent<Element, MouseEvent>,
         ) => {
           /**
            * Due to a bug in Fluent, tooltip in a button menu header dismisses when user clicks a link inside it
@@ -181,9 +182,10 @@ export const DefineEntityButton = React.memo((props: Props) => {
     };
   }, [menuItems]);
 
-  const CommandBarButton = React.useMemo(() => getCommandBarButton(tooltip || formatMessage('Define new entity')), [
-    tooltip,
-  ]);
+  const CommandBarButton = React.useMemo(
+    () => getCommandBarButton(tooltip || formatMessage('Define new entity')),
+    [tooltip],
+  );
 
   const dismissListEntityCreationDialog = React.useCallback(() => {
     setShowListEntityCreationDialog(false);
@@ -196,11 +198,11 @@ export const DefineEntityButton = React.memo((props: Props) => {
         entityName: listEntity.name,
         entityDefinition: getEntityLuDefinition(
           listEntity,
-          entities.map((e) => e.Name)
+          entities.map((e) => e.Name),
         ),
       });
     },
-    [onDefineEntity, dismissListEntityCreationDialog, entities]
+    [onDefineEntity, dismissListEntityCreationDialog, entities],
   );
 
   return (

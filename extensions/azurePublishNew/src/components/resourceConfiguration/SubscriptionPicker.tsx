@@ -31,8 +31,8 @@ export const SubscriptionPicker = React.memo((props: Props) => {
           if (subscriptions.length === 0) {
             setErrorMessage(
               formatMessage(
-                'Your subscription list is empty, please add your subscription, or login with another account.'
-              )
+                'Your subscription list is empty, please add your subscription, or login with another account.',
+              ),
             );
           }
           setSubscriptions(subscriptions);
@@ -51,7 +51,7 @@ export const SubscriptionPicker = React.memo((props: Props) => {
       placeholder: formatMessage('Select subscription'),
       errorMessage,
     }),
-    [errorMessage]
+    [errorMessage],
   );
 
   return (

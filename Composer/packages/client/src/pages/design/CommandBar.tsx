@@ -68,7 +68,7 @@ const CommandBar: React.FC<CommandBarProps> = React.memo(({ projectId }) => {
           };
         })
         .filter((item) => Boolean(item)) as IToolbarItem[],
-    []
+    [],
   );
 
   const toolbarItems: IToolbarItem[] = useMemo(
@@ -179,7 +179,7 @@ const CommandBar: React.FC<CommandBarProps> = React.memo(({ projectId }) => {
         },
       },
     ],
-    [showDisableBtn, showEnableBtn, actionSelected, canUndo, canRedo, debugItems]
+    [showDisableBtn, showEnableBtn, actionSelected, canUndo, canRedo, debugItems],
   );
 
   const addNewBtnRef = useCallback((addNew) => {

@@ -60,7 +60,7 @@ export const IconMenu: React.FC<IconMenuProps> = ({
 
   useEffect(() => {
     if (autoFocus) {
-      buttonRef.current && buttonRef.current.focus();
+      buttonRef.current?.focus?.();
     }
   }, [autoFocus]);
 

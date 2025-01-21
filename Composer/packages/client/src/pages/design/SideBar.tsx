@@ -95,7 +95,7 @@ const SideBar: React.FC<SideBarProps> = React.memo(({ projectId }) => {
   const skillUsedInBotsMap = useRecoilValue(skillUsedInBotsSelector);
   const selected = decodeDesignerPathToArrayPath(
     dialogs.find((x) => x.id === dialogId)?.content,
-    encodedSelected || ''
+    encodedSelected || '',
   );
 
   const setTriggerModalInfo = useSetRecoilState(triggerModalInfoState);
@@ -185,7 +185,7 @@ const SideBar: React.FC<SideBarProps> = React.memo(({ projectId }) => {
     const content = DialogdeleteTrigger(projectDialogsMap[projectId], dialogId, index, async (trigger) => {
       await deleteTrigger(projectId, dialogId, trigger);
       announce(
-        formatMessage(`The trigger {triggerName} has been deleted`, { triggerName: trigger.$designer?.name ?? '' })
+        formatMessage(`The trigger {triggerName} has been deleted`, { triggerName: trigger.$designer?.name ?? '' }),
       );
     });
 

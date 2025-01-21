@@ -41,14 +41,14 @@ const SplitButtonDivider = styled.span(
         disabled
           ? FluentTheme.semanticColors.disabledText
           : primary
-          ? FluentTheme.palette.white
-          : FluentTheme.palette.neutralPrimary
+            ? FluentTheme.palette.white
+            : FluentTheme.palette.neutralPrimary
       };
 
       label: split-button-divider;
     `,
     styles,
-  ]
+  ],
 );
 
 const menuButtonStyles = {
@@ -96,7 +96,7 @@ export const SplitButton: React.FC<SplitButtonProps> = ({
         root: props.styles?.splitButtonMenuButton,
         icon: props.styles?.splitButtonMenuIcon,
       }),
-    [props.styles]
+    [props.styles],
   );
   const dividerStyles = props.styles?.splitButtonDivider as IRawStyle;
   return (

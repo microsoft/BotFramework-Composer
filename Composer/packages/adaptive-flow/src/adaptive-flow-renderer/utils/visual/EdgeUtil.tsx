@@ -78,7 +78,7 @@ export const drawSVGEdge = (
   y: number,
   direction: EdgeDirection,
   length: number,
-  options?: EdgeOptions
+  options?: EdgeOptions,
 ): JSX.Element[] => {
   if (length <= 0) return [];
 

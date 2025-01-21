@@ -83,7 +83,7 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
     const profileName = config.name;
     const botId = project.id;
 
-    if (this.data[botId] && this.data[botId][profileName]) {
+    if (this.data?.[botId]?.[profileName]) {
       const response = this.data[botId][profileName][this.data[botId][profileName].length - 1];
       // return latest status
       return response;
@@ -100,7 +100,7 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
     const profileName = config.name;
     const botId = project.id;
     const result = [];
-    if (this.data[botId] && this.data[botId][profileName]) {
+    if (this.data?.[botId]?.[profileName]) {
       this.data[botId][profileName].map((item) => {
         result.push({
           ...item.result,

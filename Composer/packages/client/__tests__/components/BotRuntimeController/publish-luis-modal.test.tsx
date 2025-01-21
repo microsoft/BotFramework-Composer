@@ -53,7 +53,7 @@ describe('<PublishDialog />', () => {
         onDismiss={onDismiss}
         onPublish={onPublish}
       />,
-      recoilInitState
+      recoilInitState,
     );
 
     expect(getByText('What is the name of your bot?')).not.toBeNull();

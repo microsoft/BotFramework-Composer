@@ -6,7 +6,13 @@ import { useRecoilValue } from 'recoil';
 import { PageNames } from '@bfc/shared';
 import camelCase from 'lodash/camelCase';
 
-import { currentProjectIdState, dispatcherState, featureFlagsState, userSettingsState } from '../recoilModel';
+import {
+  currentProjectIdState,
+  dispatcherState,
+  featureFlagsState,
+  userSettingsState,
+  botBuilderVersionState,
+} from '../recoilModel';
 import { getPageName } from '../utils/getPageName';
 import { useLocation } from '../utils/hooks';
 
@@ -19,12 +25,13 @@ export const useInitializeLogger = () => {
   const rootProjectId = useRecoilValue(currentProjectIdState);
   const { telemetry } = useRecoilValue(userSettingsState);
   const featureFlags = useRecoilValue(featureFlagsState);
+  const botBuilderVersion = useRecoilValue(botBuilderVersionState);
   const reducedFeatureFlags = Object.entries(featureFlags).reduce(
     (acc, [key, { enabled }]) => ({
       ...acc,
       [camelCase(key)]: enabled,
     }),
-    {}
+    {},
   );
 
   const {
@@ -33,7 +40,12 @@ export const useInitializeLogger = () => {
 
   const page = useMemo<PageNames>(() => getPageName(pathname), [pathname]);
 
-  TelemetryClient.setup(telemetry, { rootProjectId, page, ...reducedFeatureFlags });
+  TelemetryClient.setup(telemetry, {
+    rootProjectId,
+    page,
+    sdkPackageVersion: botBuilderVersion,
+    ...reducedFeatureFlags,
+  });
 
   useEffect(() => {
     // Update user settings when the user opens the app to ensure

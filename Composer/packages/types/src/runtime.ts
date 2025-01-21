@@ -72,19 +72,19 @@ export type RuntimeTemplate = {
     componentName: string,
     version: string,
     source: string,
-    project: IBotProject
+    project: IBotProject,
   ) => Promise<string>;
 
   uninstallComponent: (runtimePath: string, componentName: string, project: IBotProject) => Promise<string>;
 
-  identifyManifest: (runtimePath: string, projName?: string) => string;
+  identifyManifest: (runtimePath: string, project: IBotProject) => string;
 
   /** build for deploy method */
   buildDeploy: (
     runtimePath: string,
     project: IBotProject,
     settings: DialogSetting,
-    profileName: string
+    profileName: string,
   ) => Promise<string>;
 
   /** set skill manifest, different folder for different runtime  */
@@ -93,7 +93,7 @@ export type RuntimeTemplate = {
     dstStorage: IFileStorage,
     srcManifestDir: string,
     srcStorage: IFileStorage,
-    mode: string
+    mode: string,
   ) => Promise<void>;
 
   /** path to code template */

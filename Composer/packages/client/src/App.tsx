@@ -35,6 +35,7 @@ export const App: React.FC = () => {
     fetchExtensions,
     fetchFeatureFlags,
     checkNodeVersion,
+    setBotBuilderVersion,
     performAppCleanupOnQuit,
     setMachineInfo,
   } = useRecoilValue(dispatcherState);
@@ -58,6 +59,7 @@ export const App: React.FC = () => {
 
   useEffect(() => {
     checkNodeVersion();
+    setBotBuilderVersion();
     fetchExtensions();
     fetchFeatureFlags();
 

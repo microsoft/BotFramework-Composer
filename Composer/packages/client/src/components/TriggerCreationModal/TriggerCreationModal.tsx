@@ -97,7 +97,7 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props)
     projectId,
     dialogId,
     localeLuFile,
-    setLocaleLuFile
+    setLocaleLuFile,
   );
 
   return (

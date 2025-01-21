@@ -164,7 +164,7 @@ export const TagInput = (props: TagInputProps) => {
     const clonedTags = [...tags];
     const numOccurrencesOfValue = tags.reduce(
       (prev, currentValue, index) => prev + (currentValue === value && index !== i ? 1 : 0),
-      0
+      0,
     );
     if (numOccurrencesOfValue > 0) {
       clonedTags.splice(i, 1);

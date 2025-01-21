@@ -71,47 +71,47 @@ export type PublishPlugin<Config = any> = {
     project: IBotProject,
     metadata: any,
     user?: UserIdentity,
-    getAccessToken?: GetAccessToken
+    getAccessToken?: GetAccessToken,
   ) => Promise<PublishResponse>;
   getStatus?: (
     config: Config,
     project: IBotProject,
     user?: UserIdentity,
-    getAccessToken?: GetAccessToken
+    getAccessToken?: GetAccessToken,
   ) => Promise<PublishResponse>;
   getHistory?: (
     config: Config,
     project: IBotProject,
     user?: UserIdentity,
-    getAccessToken?: GetAccessToken
+    getAccessToken?: GetAccessToken,
   ) => Promise<PublishResult[]>;
   rollback?: (
     config: Config,
     project: IBotProject,
     rollbackToVersion: string,
-    user?: UserIdentity
+    user?: UserIdentity,
   ) => Promise<PublishResponse>;
   pull?: (
     config: Config,
     project: IBotProject,
     user?: UserIdentity,
-    getAccessToken?: GetAccessToken
+    getAccessToken?: GetAccessToken,
   ) => Promise<PullResponse>;
   provision?: (
     config: Config,
     project: IBotProject,
     user?: UserIdentity,
-    getAccessToken?: GetAccessToken
+    getAccessToken?: GetAccessToken,
   ) => Promise<ProcessStatus>;
   getProvisionStatus?: (
     target: string,
     project: IBotProject,
     user?: UserIdentity,
-    jobId?: string
+    jobId?: string,
   ) => Promise<ProcessStatus>;
   getResources?: (
     project: IBotProject,
-    user?: UserIdentity
+    user?: UserIdentity,
   ) => Promise<
     {
       description: string;

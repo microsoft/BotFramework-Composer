@@ -201,7 +201,7 @@ export class PowerVirtualAgentsProvider extends ExternalContentProvider<PowerVir
     }
     if (dialogId && triggerId && actionId) {
       deepLink += `&focused=triggers[${encodeURIComponent(`"${triggerId}"`)}].actions[${encodeURIComponent(
-        `"${actionId}"`
+        `"${actionId}"`,
       )}]`;
     }
     if (clusterCategory) {

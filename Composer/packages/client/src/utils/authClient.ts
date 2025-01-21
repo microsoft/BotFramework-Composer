@@ -50,7 +50,7 @@ async function getAccessToken(options: AuthParameters): Promise<string> {
       if (!idToken) {
         // pop up window if token not exist
         const popup = createPopupWindow(
-          getIdTokenUrl({ clientId: authConfig.clientId, redirectUrl: authConfig.redirectUrl })
+          getIdTokenUrl({ clientId: authConfig.clientId, redirectUrl: authConfig.redirectUrl }),
         );
         if (popup) {
           idToken = await monitorWindowForQueryParam(popup, 'id_token', authConfig.redirectUrl);
@@ -59,7 +59,7 @@ async function getAccessToken(options: AuthParameters): Promise<string> {
       } else if (isTokenExpired(idToken)) {
         // refresh idToken
         const notDisplayFrame = createHiddenIframe(
-          getIdTokenUrl({ clientId: authConfig.clientId, redirectUrl: authConfig.redirectUrl })
+          getIdTokenUrl({ clientId: authConfig.clientId, redirectUrl: authConfig.redirectUrl }),
         );
         idToken =
           notDisplayFrame.contentWindow &&
@@ -70,7 +70,7 @@ async function getAccessToken(options: AuthParameters): Promise<string> {
       // use id token to get access token
       if (typeof idToken === 'string') {
         const notDisplayFrame = createHiddenIframe(
-          getAccessTokenUrl({ clientId: authConfig.clientId, redirectUrl: authConfig.redirectUrl, scopes: scopes })
+          getAccessTokenUrl({ clientId: authConfig.clientId, redirectUrl: authConfig.redirectUrl, scopes: scopes }),
         );
         token =
           notDisplayFrame.contentWindow &&

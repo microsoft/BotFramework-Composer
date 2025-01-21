@@ -20,7 +20,7 @@ describe('<VisualDesigner/>', () => {
         }}
       >
         <AdaptiveFlowEditor />
-      </EditorExtensionContext.Provider>
+      </EditorExtensionContext.Provider>,
     );
     expect(visualDesigner).toBeTruthy();
   });

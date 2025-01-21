@@ -72,7 +72,7 @@ describe('QnA page all up view', () => {
   it('should render QnA page table view', () => {
     const { getByTestId, getByText } = renderWithRecoil(
       <TableView dialogId={'a'} locale={state.locale} projectId={state.projectId} skillId={state.skillId} />,
-      initRecoilState
+      initRecoilState,
     );
     getByTestId('table-view');
     getByText('Question');
@@ -81,7 +81,7 @@ describe('QnA page all up view', () => {
   it('should render QnA page code editor', () => {
     renderWithRecoil(
       <CodeEditor dialogId={'a'} locale={state.locale} projectId={state.projectId} skillId={state.skillId} />,
-      initRecoilState
+      initRecoilState,
     );
   });
 
@@ -98,7 +98,7 @@ describe('QnA page all up view', () => {
         locale={'en-us'}
         onChangeLocale={() => {}}
       />,
-      initRecoilState
+      initRecoilState,
     );
     getByText('English (United States)(Default)');
     getByText('Chinese (Simplified, China)');

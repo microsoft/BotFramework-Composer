@@ -7,15 +7,21 @@ module.exports = {
     'plugin:prettier/recommended',
     'plugin:@typescript-eslint/recommended',
     'plugin:@typescript-eslint/eslint-recommended',
-    'prettier/@typescript-eslint',
     'plugin:@bfc/bfcomposer/recommended',
-    'plugin:security/recommended',
+    'plugin:security/recommended-legacy',
   ],
   plugins: ['import', 'notice', 'security', 'lodash', 'security'],
   env: {
     browser: true,
     es6: true,
     node: true,
+  },
+  parserOptions: {
+    ecmaVersion: 6,
+    sourceType: 'module',
+    ecmaFeatures: {
+      jsx: true,
+    },
   },
   rules: {
     'notice/notice': [
@@ -27,11 +33,11 @@ module.exports = {
     ],
 
     // typescript
-    '@typescript-eslint/ban-ts-ignore': 'warn',
     '@typescript-eslint/explicit-function-return-type': 'off',
     '@typescript-eslint/interface-name-prefix': 'off',
     '@typescript-eslint/no-empty-function': 'off',
     '@typescript-eslint/no-unnecessary-type-assertion': 'off',
+    '@typescript-eslint/no-var-requires': 0,
     '@typescript-eslint/no-use-before-define': 'warn',
     '@typescript-eslint/prefer-optional-chain': 'error',
 

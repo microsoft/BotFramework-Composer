@@ -54,7 +54,7 @@ const ExtensionsPage: React.FC<RouteComponentProps> = () => {
       onSelectionChanged: () => {
         setSelectedExtensions(selection.getSelection() as ExtensionMetadata[]);
       },
-    })
+    }),
   ).current;
 
   const fetchSettings = async () => {

@@ -50,7 +50,7 @@ async function attachPluginAPI(
   bundleId: string,
   type: PluginType,
   shell?: object,
-  settings?: ExtensionSettings
+  settings?: ExtensionSettings,
 ) {
   const api = { ...PluginAPI[type], ...PluginAPI.auth };
 

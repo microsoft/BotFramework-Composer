@@ -23,7 +23,7 @@ const migrateStore = () => {
 
 migrateStore();
 
-export class JsonStore<T = any> {
+export class JsonStore<T extends Record<string, any>> {
   private data: T;
   private filePath: string;
 

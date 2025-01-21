@@ -93,15 +93,18 @@ export const EnumExampleList = (props: Props) => {
   const [activeRowIndex, setActiveRowIndex] = React.useState(-1);
 
   const itemsRecord = React.useMemo<Record<string, ListItemData[]>>(() => {
-    return Object.keys(exampleData).reduce((a, locale) => {
-      a[locale] =
-        Object.keys(exampleData[locale]?.[entityName])?.reduce((b, word) => {
-          b.push({ word, synonyms: exampleData[locale]?.[entityName]?.[word] ?? [] });
-          return b;
-        }, [] as ListItemData[]) ?? [];
+    return Object.keys(exampleData).reduce(
+      (a, locale) => {
+        a[locale] =
+          Object.keys(exampleData[locale]?.[entityName])?.reduce((b, word) => {
+            b.push({ word, synonyms: exampleData[locale]?.[entityName]?.[word] ?? [] });
+            return b;
+          }, [] as ListItemData[]) ?? [];
 
-      return a;
-    }, {} as Record<string, ListItemData[]>);
+        return a;
+      },
+      {} as Record<string, ListItemData[]>,
+    );
   }, [exampleData, entityName]);
 
   const rowChange = (locale: string, idx: number) => (word: string, synonyms: string[]) => {
@@ -118,7 +121,7 @@ export const EnumExampleList = (props: Props) => {
   const deleteLocale = (locale: string) => async () => {
     const confirm = await OpenConfirmModal(
       formatMessage('Delete "{locale}" examples?', { locale }),
-      formatMessage('Are you sure you want to remove examples for "{locale}" locale?', { locale })
+      formatMessage('Are you sure you want to remove examples for "{locale}" locale?', { locale }),
     );
     if (confirm) {
       const newExampleData = { ...exampleData };

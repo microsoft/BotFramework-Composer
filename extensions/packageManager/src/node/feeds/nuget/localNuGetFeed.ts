@@ -26,7 +26,10 @@ export class LocalNuGetFeed implements IFeed {
    * @param composer Composer registration used for logging.
    * @param url Url of the feed, represented usually by the file path to the NuGet file system feed.
    */
-  constructor(private composer: IExtensionRegistration, private url: string) {}
+  constructor(
+    private composer: IExtensionRegistration,
+    private url: string,
+  ) {}
 
   /**
    * Gets packages from local NuGet feed according to query request.
@@ -49,6 +52,7 @@ export class LocalNuGetFeed implements IFeed {
     // * extract only folders from that list
     // * pass each one through the getPackageInfo function, which extracts metadata from the package
     // * return a feed in the form that is used by nuget search API
+    // eslint-disable-next-line security/detect-non-literal-fs-filename
     const packages = await readdir(url, { withFileTypes: true });
 
     const feedPromises: Promise<IPackageDefinition>[] = packages
@@ -69,6 +73,7 @@ export class LocalNuGetFeed implements IFeed {
 
     let versions;
     try {
+      // eslint-disable-next-line security/detect-non-literal-fs-filename
       versions = await readdir(packageDir, { withFileTypes: true });
       versions = versions.filter((f) => f.isDirectory()).map((f) => f.name);
       if (versions.length === 0) {
@@ -77,13 +82,14 @@ export class LocalNuGetFeed implements IFeed {
       versions = semverSort.desc(versions);
     } catch (err) {
       throw new Error(
-        `Could not find versions of local package ${packageName} at ${rootDir}. For more info about setting up a local feed, see here: https://docs.microsoft.com/en-us/nuget/hosting-packages/local-feeds. Error: ${err}`
+        `Could not find versions of local package ${packageName} at ${rootDir}. For more info about setting up a local feed, see here: https://docs.microsoft.com/en-us/nuget/hosting-packages/local-feeds. Error: ${err}`,
       );
     }
 
     // Read from the nuspec file in the latest to get other info.
     try {
       const pathToNuspec = path.join(packageDir, versions[0], `${packageName}.nuspec`);
+      // eslint-disable-next-line security/detect-non-literal-fs-filename
       const xml = await readFile(pathToNuspec, 'utf8');
       const parsed = await parseStringPromise(xml);
 

@@ -10,7 +10,7 @@ describe('CreatePublishProfileDialog', () => {
   it("Call param function when 'Create new publish profile' is clicked", async () => {
     const onShowPublishProfileDialogMock = jest.fn();
     const component = render(
-      <CreatePublishProfileDialog onShowPublishProfileWrapperDialog={onShowPublishProfileDialogMock} />
+      <CreatePublishProfileDialog onShowPublishProfileWrapperDialog={onShowPublishProfileDialogMock} />,
     );
     const createNewBtn = component.getByTestId('addNewPublishProfile');
     await act(async () => {

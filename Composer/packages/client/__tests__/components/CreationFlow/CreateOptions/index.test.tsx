@@ -42,7 +42,7 @@ describe('<CreateOptions/>', () => {
         onJumpToOpenModal={handleJumpToOpenModal}
         onNext={handleCreateNextMock}
         onUpdateLocalTemplatePath={onUpdateLocalTemplatePathMock}
-      />
+      />,
     );
   };
 

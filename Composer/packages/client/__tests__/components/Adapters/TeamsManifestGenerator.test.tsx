@@ -17,7 +17,7 @@ describe('<TeamsManifestGenerator />', () => {
         botDisplayName={mockDisplayName}
         hidden={false}
         onDismiss={jest.fn()}
-      />
+      />,
     );
   }
 

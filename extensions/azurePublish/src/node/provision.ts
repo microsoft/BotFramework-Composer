@@ -127,7 +127,7 @@ export class BotProjectProvision {
           logErrorMsg('App create', err.message);
           throw createCustomizeError(
             ProvisionErrors.CREATE_APP_REGISTRATION,
-            'App create failed! Please file an issue on Github.'
+            'App create failed! Please file an issue on Github.',
           );
         } else {
           await this.sleep(3000);
@@ -170,7 +170,7 @@ export class BotProjectProvision {
           logErrorMsg('Add application password', err.message);
           throw createCustomizeError(
             ProvisionErrors.CREATE_APP_REGISTRATION,
-            'Add application password failed! Please file an issue on Github.'
+            'Add application password failed! Please file an issue on Github.',
           );
         } else {
           await this.sleep(3000);
@@ -199,13 +199,13 @@ export class BotProjectProvision {
     if (!this.accessToken) {
       throw createCustomizeError(
         ProvisionErrors.GET_TENANTID,
-        'Error: Missing access token. Please provide a non-expired Azure access token. Tokens can be obtained by running az account get-access-token'
+        'Error: Missing access token. Please provide a non-expired Azure access token. Tokens can be obtained by running az account get-access-token',
       );
     }
     if (!this.subscriptionId) {
       throw createCustomizeError(
         ProvisionErrors.GET_TENANTID,
-        `Error: Missing subscription Id. Please provide a valid Azure subscription id.`
+        `Error: Missing subscription Id. Please provide a valid Azure subscription id.`,
       );
     }
     try {
@@ -222,7 +222,7 @@ export class BotProjectProvision {
     } catch (err) {
       throw createCustomizeError(
         ProvisionErrors.GET_TENANTID,
-        `Get Tenant Id Failed, details: ${this.getErrorMesssage(err)}`
+        `Get Tenant Id Failed, details: ${this.getErrorMesssage(err)}`,
       );
     }
   }

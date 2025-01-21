@@ -8,9 +8,10 @@ import { clipboardActionsState, visualEditorSelectionState } from '../atoms/appS
 
 export const editorDispatcher = () => {
   const setVisualEditorClipboard = useRecoilCallback(
-    ({ set }: CallbackInterface) => (clipboardActions: any[], projectId: string) => {
-      set(clipboardActionsState(projectId), [...clipboardActions]);
-    }
+    ({ set }: CallbackInterface) =>
+      (clipboardActions: any[], projectId: string) => {
+        set(clipboardActionsState(projectId), [...clipboardActions]);
+      },
   );
 
   const setVisualEditorSelection = useRecoilCallback(({ set }: CallbackInterface) => (selection: string[]) => {

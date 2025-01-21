@@ -39,7 +39,7 @@ export const isItemValueEmpty = (value?: any) =>
 export const getArrayItemProps = <ItemType = unknown>(
   items: ArrayItem<ItemType>[],
   index: number,
-  onChange: ArrayChangeHandler<ItemType>
+  onChange: ArrayChangeHandler<ItemType>,
 ) => {
   const onItemChange = (newValue: ItemType) => {
     const updated = items.map((item, i) => {
@@ -78,7 +78,7 @@ export const getArrayItemProps = <ItemType = unknown>(
 
 export function useArrayItems<ItemType = unknown>(
   items: ItemType[] | undefined,
-  onChange: ChangeHandler<ItemType[]>
+  onChange: ChangeHandler<ItemType[]>,
 ): ArrayItemState<ItemType> {
   const [cache, setCache] = useState(generateArrayItems(items));
 

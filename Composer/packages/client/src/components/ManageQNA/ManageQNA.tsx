@@ -37,7 +37,7 @@ export const ManageQNA = (props: ManageQNAProps) => {
     resourceGroupName: string,
     resourceName: string,
     region: string,
-    tier?: string
+    tier?: string,
   ): Promise<string> => {
     // hide modal
     props.onToggleVisibility(false);
@@ -50,7 +50,7 @@ export const ManageQNA = (props: ManageQNAProps) => {
       resourceGroupName,
       resourceName,
       region,
-      tier || 'free'
+      tier || 'free',
     );
     return '';
   };
@@ -60,7 +60,7 @@ export const ManageQNA = (props: ManageQNAProps) => {
       createServiceInBackground
       createService={createService}
       handoffInstructions={formatMessage(
-        '1. Using the Azure portal, please create a QnAMaker resource on my behalf.\n2. Once provisioned, securely share the resulting credentials with me as described in the link below.\n\nDetailed instructions:\nhttps://aka.ms/bfcomposerhandoffqnamaker'
+        '1. Using the Azure portal, please create a QnAMaker resource on my behalf.\n2. Once provisioned, securely share the resulting credentials with me as described in the link below.\n\nDetailed instructions:\nhttps://aka.ms/bfcomposerhandoffqnamaker',
       )}
       hidden={props.hidden}
       introText={formatMessage('Use Azure QnA Maker to create a simple question-and-answer bot from a website FAQ. ')}

@@ -7,7 +7,7 @@ import { throwNotImplementedError } from '../throwNotImplementedError';
 
 const createBlobStorageService = (token: string, subscriptionId: string) => {
   const tokenCredentials = new TokenCredentials(token);
-  // @ts-expect-error
+  // @ts-expect-error types missmatch
   const storageManagementClient = new StorageManagementClient(tokenCredentials, subscriptionId);
 
   const checkNameAvailability = async () => {

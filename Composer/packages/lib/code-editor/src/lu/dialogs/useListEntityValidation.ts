@@ -29,7 +29,7 @@ export const useListEntityValidation = (listEntity: ListEntity) => {
       missingName: formatMessage('Required'),
       nameFormat: formatMessage('Spaces and special characters are not allowed. Use letters, numbers, -, or _.'),
     }),
-    []
+    [],
   );
 
   // Keeps track of touched inputs
@@ -71,9 +71,9 @@ export const useListEntityValidation = (listEntity: ListEntity) => {
         setNameError('');
       },
       300,
-      { leading: true }
+      { leading: true },
     ),
-    []
+    [],
   );
 
   // Validates entity name
@@ -88,21 +88,24 @@ export const useListEntityValidation = (listEntity: ListEntity) => {
     debounce(
       (items: ListEntityItem[]) => {
         if (items.length) {
-          const itemErrors = items.reduce((acc, item, idx) => {
-            const hasMissingError = !item.normalizedValue;
-            const hasDuplicateError = hasDuplicatesBeforeIndex(
-              item.normalizedValue,
-              items.map((i) => i.normalizedValue),
-              idx
-            );
-            if (hasMissingError) {
-              acc[item.id] = errorMessages.missingNormalizedValue;
-            } else if (hasDuplicateError) {
-              acc[item.id] = errorMessages.duplicateNormalizedValue;
-            }
+          const itemErrors = items.reduce(
+            (acc, item, idx) => {
+              const hasMissingError = !item.normalizedValue;
+              const hasDuplicateError = hasDuplicatesBeforeIndex(
+                item.normalizedValue,
+                items.map((i) => i.normalizedValue),
+                idx,
+              );
+              if (hasMissingError) {
+                acc[item.id] = errorMessages.missingNormalizedValue;
+              } else if (hasDuplicateError) {
+                acc[item.id] = errorMessages.duplicateNormalizedValue;
+              }
 
-            return acc;
-          }, {} as Record<string, string>);
+              return acc;
+            },
+            {} as Record<string, string>,
+          );
 
           setItemErrors(itemErrors);
         } else {
@@ -110,9 +113,9 @@ export const useListEntityValidation = (listEntity: ListEntity) => {
         }
       },
       300,
-      { leading: true }
+      { leading: true },
     ),
-    []
+    [],
   );
 
   // Validates normalized value of each sub list
@@ -120,11 +123,10 @@ export const useListEntityValidation = (listEntity: ListEntity) => {
     validateEntityItems(listEntity.items);
   }, [listEntity]);
 
-  const hasErrors = React.useMemo(() => !!Object.keys(itemErrors).length || !!nameError, [
-    itemErrors,
-    nameError,
-    listEntity.items,
-  ]);
+  const hasErrors = React.useMemo(
+    () => !!Object.keys(itemErrors).length || !!nameError,
+    [itemErrors, nameError, listEntity.items],
+  );
 
   return { hasErrors, itemErrors, nameError, itemsTouched: touchedRef.current };
 };

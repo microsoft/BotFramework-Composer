@@ -83,10 +83,12 @@ export const formDialogSchemaPropertyNamesSelector = selector<string[]>({
  */
 export const formDialogPropertyJsonSelector = selectorFamily<object, string>({
   key: 'FormDialogPropertyJsonSelector',
-  get: (id) => ({ get }) => {
-    const cardData = get(propertyCardDataAtom(id));
-    return spreadCardData(cardData);
-  },
+  get:
+    (id) =>
+    ({ get }) => {
+      const cardData = get(propertyCardDataAtom(id));
+      return spreadCardData(cardData);
+    },
 });
 
 /**
@@ -94,11 +96,13 @@ export const formDialogPropertyJsonSelector = selectorFamily<object, string>({
  */
 export const formDialogPropertyValidSelector = selectorFamily<boolean, string>({
   key: 'FormDialogPropertyValidSelector',
-  get: (id) => ({ get }) => {
-    const templates = get(formDialogTemplatesAtom);
-    const cardData = get(propertyCardDataAtom(id));
-    return validateSchemaPropertyStore(cardData, templates);
-  },
+  get:
+    (id) =>
+    ({ get }) => {
+      const templates = get(formDialogTemplatesAtom);
+      const cardData = get(propertyCardDataAtom(id));
+      return validateSchemaPropertyStore(cardData, templates);
+    },
 });
 
 /**
@@ -129,11 +133,14 @@ export const formDialogSchemaJsonSelector = selector({
     if (propertyCards.length) {
       jsonObject = {
         ...jsonObject,
-        properties: propertyIds.reduce<Record<string, object>>((acc, propId, idx) => {
-          const property = propertyCards[idx];
-          acc[property.name] = get(formDialogPropertyJsonSelector(propId));
-          return acc;
-        }, <Record<string, object>>{}),
+        properties: propertyIds.reduce<Record<string, object>>(
+          (acc, propId, idx) => {
+            const property = propertyCards[idx];
+            acc[property.name] = get(formDialogPropertyJsonSelector(propId));
+            return acc;
+          },
+          <Record<string, object>>{},
+        ),
       };
     }
 

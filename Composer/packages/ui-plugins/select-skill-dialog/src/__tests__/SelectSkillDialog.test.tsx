@@ -26,7 +26,7 @@ const renderSelectSkillDialog = ({ onChange = jest.fn() } = {}) => {
   return render(
     <EditorExtension plugins={{}} projectId="12a.32" shell={{ api: shell, data: shellData }}>
       <SelectSkillDialogField {...props} />
-    </EditorExtension>
+    </EditorExtension>,
   );
 };
 

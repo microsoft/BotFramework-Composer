@@ -26,7 +26,7 @@ export default class TelemetryClient {
 
   public static track<TN extends TelemetryEventName>(
     eventName: TN,
-    properties?: TelemetryEvents[TN] extends undefined ? never : TelemetryEvents[TN]
+    properties?: TelemetryEvents[TN] extends undefined ? never : TelemetryEvents[TN],
   ) {
     this.client?.trackEvent(eventName, { ...this.sharedProperties, ...properties });
   }
@@ -34,7 +34,7 @@ export default class TelemetryClient {
   public static pageView<TN extends TelemetryEventName>(
     eventName: TN,
     url: string,
-    properties?: TelemetryEvents[TN] extends undefined ? never : TelemetryEvents[TN]
+    properties?: TelemetryEvents[TN] extends undefined ? never : TelemetryEvents[TN],
   ) {
     this.client?.logPageView(eventName, url, { ...this.sharedProperties, ...properties });
   }
@@ -56,7 +56,6 @@ export default class TelemetryClient {
       ...this._additionalProperties?.(),
       timestamp: Date.now(),
       composerVersion: process.env.COMPOSER_VERSION || 'unknown',
-      sdkPackageVersion: process.env.SDK_PACKAGE_VERSION || 'unknown',
     };
   }
 }

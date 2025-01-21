@@ -79,7 +79,7 @@ export class PublishStatusPollingUpdater {
     this.fetchPublishStatusData(this.botProjectId, this.publishTargetName, onData);
     this.timerId = window.setInterval(
       async () => this.fetchPublishStatusData(this.botProjectId, this.publishTargetName, onData),
-      this.pollingInterval
+      this.pollingInterval,
     );
   }
 
