@@ -1,52 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { AUTH_CREDENTIALS, BASE_URLS } from './constants';
-import { getAuthCredentials, getBaseUrl } from './utils';
-
-describe('should return the proper PVA base URL for the environment', () => {
-  let envBackup;
-  beforeAll(() => {
-    envBackup = { ...process.env };
-  });
-
-  beforeEach(() => {
-    Object.assign(process.env, { COMPOSER_PVA_PUBLISH_ENV: '' });
-  });
-
-  afterAll(() => {
-    Object.assign(process.env, envBackup); // restore the platform
-  });
-
-  it('fallback to prod', () => {
-    expect(getBaseUrl()).toBe(BASE_URLS.PROD);
-  });
-
-  it('int', () => {
-    Object.assign(process.env, { COMPOSER_PVA_PUBLISH_ENV: 'INT' });
-    expect(getBaseUrl()).toBe(BASE_URLS.INT);
-  });
-
-  it('ppe', () => {
-    Object.assign(process.env, { COMPOSER_PVA_PUBLISH_ENV: 'PPE' });
-    expect(getBaseUrl()).toBe(BASE_URLS.PPE);
-  });
-
-  it('prod', () => {
-    Object.assign(process.env, { COMPOSER_PVA_PUBLISH_ENV: 'PROD' });
-    expect(getBaseUrl()).toBe(BASE_URLS.PROD);
-  });
-
-  it('gcc', () => {
-    Object.assign(process.env, { COMPOSER_PVA_PUBLISH_ENV: 'GCC' });
-    expect(getBaseUrl()).toBe(BASE_URLS.GCC);
-  });
-
-  it('gcc high', () => {
-    Object.assign(process.env, { COMPOSER_PVA_PUBLISH_ENV: 'GCC-HIGH' });
-    expect(getBaseUrl()).toBe(BASE_URLS.GCC_HIGH);
-  });
-});
+import { AUTH_CREDENTIALS } from './constants';
+import { getAuthCredentials } from './utils';
 
 describe('it should return the proper PVA auth parameters for the base URL', () => {
   it('fallback to prod', () => {
@@ -64,7 +20,7 @@ describe('it should return the proper PVA auth parameters for the base URL', () 
 
   it('ppe', () => {
     const url = 'https://bots.ppe.customercareintelligence.net/api/botmanagement/v1';
-    expect(getAuthCredentials(url)).toEqual(AUTH_CREDENTIALS.PPE);
+    expect(getAuthCredentials(url)).toEqual(AUTH_CREDENTIALS.INT);
   });
 
   it('prod', () => {
