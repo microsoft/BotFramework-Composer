@@ -25,6 +25,11 @@
     "react": "16.13.1",
     "react-dom": "16.13.1"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/microsoft/BotFramework-Composer.git",
+    "directory": "Composer/packages/adaptive-form"
+  },
   "devDependencies": {
     "@botframework-composer/test-utils": "*",
     "@fluentui/react": "^8.83.1",

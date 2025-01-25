@@ -32,6 +32,11 @@
     "ext": "ts,js",
     "delay": 2.5
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/microsoft/BotFramework-Composer.git",
+    "directory": "Composer/packages/server"
+  },
   "devDependencies": {
     "@babel/plugin-proposal-class-properties": "7.18.6",
     "@babel/plugin-transform-runtime": "7.24.0",

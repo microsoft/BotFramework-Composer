@@ -15,6 +15,11 @@
     "prepare": "yarn build",
     "watch": "yarn build --watch"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/microsoft/BotFramework-Composer.git",
+    "directory": "Composer/packages/ui-plugins/lg"
+  },
   "keywords": [
     "botframework",
     "composer"

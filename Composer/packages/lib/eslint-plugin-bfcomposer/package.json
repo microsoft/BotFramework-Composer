@@ -5,6 +5,11 @@
   "engines": {
     "node": "14.x"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/microsoft/BotFramework-Composer.git",
+    "directory": "Composer/packages/lib/eslint-plugin-bfcomposer"
+  },
   "devDependencies": {
     "lodash": "^4.17.19"
   }

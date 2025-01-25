@@ -17,6 +17,11 @@
     "typecheck": "tsc --noEmit",
     "typecheck:watch": "tsc --noEmit --watch"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/microsoft/BotFramework-Composer.git",
+    "directory": "Composer/packages/client"
+  },
   "proxy": "http://localhost:5000",
   "dependencies": {
     "@azure/arm-appinsights": "^3.0.0",

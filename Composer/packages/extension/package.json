@@ -12,6 +12,11 @@
     "lint": "eslint --quiet ./src",
     "test": "jest"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/microsoft/BotFramework-Composer.git",
+    "directory": "Composer/packages/extension"
+  },
   "devDependencies": {
     "@botframework-composer/test-utils": "*",
     "@types/express": "4.16.1",
