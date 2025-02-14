@@ -1,5 +1,13 @@
-# PRE-ARCHIVE NOTICE: 
-This project is no longer actively maintained and will be archived in January of 2025.  Functions of this project were superseded by [Microsoft Copilot Studio](https://aka.ms/copilotstudio),
+# ARCHIVE NOTICE: 
+Bot Framework Composer migration to Microsoft Copilot Studio  
+
+We are in the process of archiving the Bot Framework Composer and Bot Framework CLI repositories on GitHub. This means that these projects will no longer be updated or maintained. Customers using these tools will not be disrupted. However, the tools will no longer be supported through service tickets in the Azure portal and will not receive product updates.  
+
+Bot Framework Composer provides a user interface to work with custom code bots built using the Azure Bot Framework. For customers looking to transition away from Bot Framework Composer, consider Microsoft Copilot Studio. Copilot Studio is a SaaS based application that provides a user interface that supports users in building modern agent applications in a similar capacity using topics, messages and other familiar tools that Bot Composer users will be used to. 
+
+Check out the Copilot Studio docs for more information on Getting Started with Copilot Studio, and sign up for a free trial. 
+
+Functions of this project were superseded by [Microsoft Copilot Studio](https://aka.ms/copilotstudio),
 
 Archived projects are still available for use by developers, however they will not be actively maintained or serviced by Microsoft. 
 
