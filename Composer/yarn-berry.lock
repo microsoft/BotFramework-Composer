@@ -6749,7 +6749,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@microsoft/orchestrator-core@npm:~4.14.0":
+"@microsoft/orchestrator-core@npm:^4.14.4":
   version: 4.14.4
   resolution: "@microsoft/orchestrator-core@npm:4.14.4"
   dependencies:

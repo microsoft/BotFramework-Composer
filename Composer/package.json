@@ -34,6 +34,7 @@
     "@types/serve-static": "1.13.2",
     "@microsoft/bf-generate-library/botbuilder-lg": "^4.18.0",
     "@microsoft/bf-generate-library/adaptive-expressions": "^4.18.0",
+    "@microsoft/orchestrator-core": "^4.14.4",
     "plist": "^3.0.6",
     "markdown-it-attrs-es5/terser": "^5.14.2",
     "terser-webpack-plugin/terser": "^4.8.1",
