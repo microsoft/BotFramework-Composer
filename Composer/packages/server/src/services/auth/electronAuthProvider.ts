@@ -34,7 +34,8 @@ export class ElectronAuthProvider extends AuthProvider {
 
   async getAccessToken(params: AuthParameters): Promise<string> {
     const { getAccessToken } = this.electronContext;
-    const { targetResource = '' } = params;
+    const { targetResource = '', authority } = params;
+    const authParams = { targetResource, authority };
 
     if (isLinux()) {
       log('Auth login flow is currently unsupported in Linux.');
@@ -44,7 +45,7 @@ export class ElectronAuthProvider extends AuthProvider {
     log('Getting access token.');
 
     // try to get a cached token
-    const cachedToken = this.getCachedToken(params);
+    const cachedToken = this.getCachedToken(authParams);
     if (!!cachedToken && Date.now() <= cachedToken.expiryTime.valueOf()) {
       log('Returning cached token.');
       return cachedToken.accessToken;
@@ -53,8 +54,8 @@ export class ElectronAuthProvider extends AuthProvider {
     try {
       // otherwise get a fresh token
       log('Did not find cached token. Getting fresh token.');
-      const { accessToken, acquiredAt, expiryTime } = await getAccessToken({ targetResource });
-      this.cacheTokens({ accessToken, acquiredAt, expiryTime }, params);
+      const { accessToken, acquiredAt, expiryTime } = await getAccessToken(authParams);
+      this.cacheTokens({ accessToken, acquiredAt, expiryTime }, authParams);
 
       return accessToken;
     } catch (e) {
@@ -140,6 +141,6 @@ export class ElectronAuthProvider extends AuthProvider {
   }
 
   private getTokenHash(params: AuthParameters): string {
-    return params.targetResource || '';
+    return JSON.stringify(params);
   }
 }
