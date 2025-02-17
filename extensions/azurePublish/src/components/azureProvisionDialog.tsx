@@ -76,6 +76,7 @@ type ProvisionFormData = {
   appServiceOperatingSystem: string;
   enabledResources: ResourcesItem[];
   requiredResources: ResourcesItem[];
+  serviceManagementReference: string;
 };
 
 // ---------- Styles ---------- //
@@ -336,6 +337,7 @@ const getDefaultFormData = (currentProfile, defaults) => {
       currentProfile?.settings?.appServiceOperatingSystem ?? defaults.appServiceOperatingSystem,
     enabledResources: defaults.enabledResources ?? [],
     requiredResources: defaults.requireResources ?? [],
+    serviceManagementReference: '',
   };
 };
 
@@ -625,6 +627,10 @@ export const AzureProvisionDialog: React.FC = () => {
     },
     [checkNameAvailability],
   );
+
+  const newServiceTreeId = useCallback((e, serviceTreeId) => {
+    updateFormData('serviceManagementReference', serviceTreeId);
+  }, []);
 
   const updateCurrentLocation = useCallback(
     (_e, option?: IDropdownOption) => {
@@ -963,6 +969,35 @@ export const AzureProvisionDialog: React.FC = () => {
               }}
             />
           </Stack>
+          <Stack horizontal tokens={configureResourcePropertyStackTokens} verticalAlign="start">
+            <Stack>
+              <Stack
+                horizontal
+                styles={configureResourcePropertyLabelStackStyles}
+                tokens={{ childrenGap: 12 }}
+                verticalAlign="center"
+              >
+                <ConfigureResourcesPropertyLabel>
+                  {formatMessage('Service Tree ID (optional)')}
+                </ConfigureResourcesPropertyLabel>
+                {renderPropertyInfoIcon(
+                  formatMessage(
+                    'Service Tree is a Microsoft tool to keep track of contact information for applications.',
+                  ),
+                )}
+              </Stack>
+              <LearnMoreLink href="https://go.microsoft.com/fwlink/?linkid=2184101" target="_blank">
+                {formatMessage('Learn more')}
+              </LearnMoreLink>
+            </Stack>
+            <TextField
+              disabled={currentConfig?.hostname || currentConfig?.name}
+              placeholder={formatMessage('e.g. 2ff8c055-d9e6-4485-8163-c02a43baaa6f')}
+              styles={configureResourceTextFieldStyles}
+              value={formData.serviceManagementReference}
+              onChange={newServiceTreeId}
+            />
+          </Stack>
         </Stack>
       </form>
     </ScrollablePane>
@@ -1225,6 +1260,7 @@ export const AzureProvisionDialog: React.FC = () => {
                   appServiceOperatingSystem: formData.appServiceOperatingSystem,
                   type: publishType,
                   externalResources: selectedResources,
+                  serviceManagementReference: formData.serviceManagementReference,
                 });
               }}
             />

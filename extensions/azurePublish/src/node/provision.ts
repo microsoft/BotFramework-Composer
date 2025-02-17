@@ -30,6 +30,7 @@ export interface ProvisionConfig {
    */
   workerRuntime?: string;
   choice?: string;
+  serviceManagementReference?: string;
   [key: string]: any;
 }
 
@@ -89,7 +90,10 @@ export class BotProjectProvision {
    * create the applicationId for the bot registration
    * Docs: https://docs.microsoft.com/en-us/graph/api/application-post-applications?view=graph-rest-1.0&tabs=http
    */
-  private async createApp(displayName: string): Promise<{ appId: string; appPassword: string }> {
+  private async createApp(
+    displayName: string,
+    serviceManagementReference: string | undefined,
+  ): Promise<{ appId: string; appPassword: string }> {
     const applicationUri = 'https://graph.microsoft.com/v1.0/applications';
 
     this.logger({
@@ -116,7 +120,14 @@ export class BotProjectProvision {
 
     while (retryCount >= 0) {
       try {
-        const response = await axios.post(applicationUri, { displayName }, appCreateOptions);
+        const response = await axios.post(
+          applicationUri,
+          {
+            displayName,
+            ...(serviceManagementReference && { serviceManagementReference }),
+          },
+          appCreateOptions,
+        );
         appCreated = response.data;
       } catch (err) {
         this.logger({
@@ -295,7 +306,7 @@ export class BotProjectProvision {
           // Create the appId and appPassword - this is usually the first step.
           case AzureResourceTypes.APP_REGISTRATION:
             // eslint-disable-next-line no-case-declarations
-            const { appId, appPassword } = await this.createApp(config.hostname);
+            const { appId, appPassword } = await this.createApp(config.hostname, config.serviceManagementReference);
             provisionResults.appId = appId;
             provisionResults.appPassword = appPassword;
             break;
