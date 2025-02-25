@@ -13,6 +13,11 @@
     "lint": "eslint --quiet --ext .ts,.tsx src",
     "prepare": "yarn build"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/microsoft/BotFramework-Composer.git",
+    "directory": "Composer/packages/ui-plugins/orchestrator"
+  },
   "keywords": [
     "botframework",
     "composer"

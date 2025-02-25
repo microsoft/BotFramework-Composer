@@ -12,6 +12,11 @@
     "lint": "eslint --quiet src",
     "prepublishOnly": "npm run lint && npm run build"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/microsoft/BotFramework-Composer.git",
+    "directory": "Composer/packages/server-workers"
+  },
   "author": "benbro@microsoft.com",
   "license": "MIT",
   "installConfig": {
