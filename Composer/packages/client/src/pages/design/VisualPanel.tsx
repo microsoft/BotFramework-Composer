@@ -56,7 +56,7 @@ const VisualPanel: React.FC<VisualPanelProps> = React.memo(({ projectId }) => {
   const pluginConfig: PluginConfig = useMemo(() => {
     const sdkUISchema = schemas?.ui?.content ?? {};
     const userUISchema = schemas?.uiOverrides?.content ?? {};
-    return mergePluginConfigs({ uiSchema: sdkUISchema }, plugins, { uiSchema: userUISchema });
+    return mergePluginConfigs(plugins, { uiSchema: sdkUISchema }, { uiSchema: userUISchema });
   }, [schemas?.ui?.content, schemas?.uiOverrides?.content]);
 
   const selectedTrigger = currentDialog?.triggers.find((t) => t.id === selected);
