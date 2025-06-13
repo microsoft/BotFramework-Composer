@@ -9,7 +9,7 @@ import { SystemTopicIcon } from './icons/SystemTopicIcon';
 import { HideCommentIcon } from './icons/HideCommentIcon';
 
 export function setupIcons() {
-  initializeIcons(undefined, { disableWarnings: true });
+  initializeIcons(https://res.cdn.office.net/files/fabric-cdn-prod_20240129.001/assets/icons/, { disableWarnings: true });
 
   registerIcons({
     icons: {
